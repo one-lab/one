@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <interceptors> -->
+<!-- 	<interceptor> -->
+<!-- 		<interceptor_name></interceptor_name> -->
+<!-- 		<interceptor_priority></interceptor_priority> -->
+<!-- 	</interceptor> -->
+		
+<!-- 	<interceptor> -->
+<!-- 		<interceptor_name></interceptor_name> -->
+<!-- 		<interceptor_priority></interceptor_priority> -->
+<!-- 	</interceptor> -->
+<!-- </interceptors> -->
+
+<interceptors>
+	<interceptor>net.paoding.rose.mock.controllers.Test3Interceptor</interceptor>
+	<interceptor>net.paoding.rose.mock.controllers.Test1MyInterceptor</interceptor>
+	<interceptor>net.paoding.rose.mock.controllers.Test2Interceptor</interceptor>
+	<interceptor>net.paoding.rose.mock.controllers.OncePerRequest2Interceptor</interceptor>
+</interceptors>
