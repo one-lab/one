@@ -1,6 +1,1 @@
-[submodule "libs/documents"]
-	path = libs/documents
-	url = ../documents
-[submodule "libs/tools"]
-	path = libs/tools
-	url = ../tools
+
