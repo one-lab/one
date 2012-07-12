@@ -24,14 +24,15 @@ import javax.servlet.ServletException;
 import net.paoding.rose.util.SpringUtils;
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.impl.thread.InvocationBean;
-import net.paoding.rose.web.instruction.reply.Reply;
-import net.paoding.rose.web.instruction.reply.ReplyInstruction;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
+
+import com.sinosoft.web.instruction.reply.Reply;
+import com.sinosoft.web.instruction.reply.ReplyInstruction;
 
 
 /**
