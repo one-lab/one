@@ -60,7 +60,6 @@ import com.sinosoft.web.validation.annotation.PastEx;
 import com.sinosoft.web.validation.annotation.PatternEx;
 import com.sinosoft.web.validation.annotation.SizeEx;
 import com.sinosoft.web.validation.annotation.Validation;
-import com.sinosoft.web.validation.enumation.ConfigType;
 
 /**
  * 提供Annotation方式配置的validation实现。
@@ -108,6 +107,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 	}
 	
 	private ConstraintMapping getMapping(Validation configValidation ,Class<?> targetClass) {
+		@SuppressWarnings("deprecation")
 		ConstraintMapping mapping = new ConstraintMapping();
 		this.addConstraction(configValidation,mapping.type(targetClass));
 		return mapping;
@@ -280,8 +280,10 @@ public class AnnotationConfigValidator implements ParamValidator{
 		
 		private final String[] properties;
 
+		@SuppressWarnings("rawtypes")
 		private final ConstraintDef constraintDef;
 		
+		@SuppressWarnings("rawtypes")
 		private ValidationWrapper(final String[] properties,final ConstraintDef constraintDef){
 			this.properties = properties;
 			this.constraintDef = constraintDef;
@@ -291,6 +293,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 			return properties;
 		}
 		
+		@SuppressWarnings("rawtypes")
 		public ConstraintDef getConstraintDef() {
 			return constraintDef;
 		}

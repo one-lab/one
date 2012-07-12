@@ -6,7 +6,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.validation.ConstraintViolation;
-import javax.validation.constraints.Max;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

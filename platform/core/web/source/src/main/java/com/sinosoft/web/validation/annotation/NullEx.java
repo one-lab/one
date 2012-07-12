@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.ElementType.PARAMETER;
 import javax.validation.Constraint;
-import javax.validation.Payload;
 
 /**
  * The annotated element must be <code>null</code>.

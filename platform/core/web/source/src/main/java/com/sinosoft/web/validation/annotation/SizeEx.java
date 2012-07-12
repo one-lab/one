@@ -7,7 +7,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import javax.validation.Constraint;
-import javax.validation.Payload;
 
 /**
  * The annotated element size must be between the specified boundaries (included).

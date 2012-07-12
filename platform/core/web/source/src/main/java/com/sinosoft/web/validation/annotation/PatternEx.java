@@ -24,7 +24,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import javax.validation.Constraint;
-import javax.validation.Payload;
 
 /**
  * The annotated String must match the following regular expression.
