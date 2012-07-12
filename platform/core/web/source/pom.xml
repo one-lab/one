@@ -20,6 +20,7 @@
 		<jackson.version>2.0.4</jackson.version>
 		<xstream.version>1.4.2</xstream.version>
 		<fastjson.version>1.1.21</fastjson.version>
+		<validation.version>1.0.0.GA</validation.version>
 	</properties>
 
 	<dependencies>
@@ -157,6 +158,17 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>${fastjson.version}</version>
+		</dependency>
+		
+		<dependency>
+	      <groupId>javax.validation</groupId>
+	      <artifactId>validation-api</artifactId>
+	      <version>${validation.version}</version>
+	    </dependency>
+	    <dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>4.3.0.Final</version>
 		</dependency>
 	</dependencies>
 	<build>
