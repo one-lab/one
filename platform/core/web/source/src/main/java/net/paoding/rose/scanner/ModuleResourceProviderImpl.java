@@ -48,9 +48,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
 
 /**
- * 
+ *
  * @author 王志亮 [qieqie.wang@gmail.com]
- * 
+ *
  */
 public class ModuleResourceProviderImpl implements ModuleResourceProvider {
 
@@ -144,7 +144,8 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
     }
 
     protected void deepScanImpl(Local local, FileObject root, FileObject target) throws IOException {
-        if (CONTROLLERS.equals(target.getName().getBaseName())) {
+        if (isModuleResource(target)) {
+            logger.debug("[moduleResourceProvideImpl] parentBaseName: "+target.getParent().getName().getBaseName());
             checkModuleResourceCandidate(local, root, target, target);
         } else {
             FileObject[] children = target.getChildren();
@@ -156,8 +157,21 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
         }
     }
 
+    //判断是否为moduleResources
+    private boolean isModuleResource(FileObject target) throws IOException {
+        String name =  target.getName().getBaseName();
+        if (RoseStringUtil.matches(CONTROLLERS,name)) {
+            //特定rose的web包排除
+            if(name.equals("web")&&target.getParent().getName().getBaseName().equals("rose"))
+                return false;
+            else
+                return true;
+        }
+        return false;
+    }
+
     protected void checkModuleResourceCandidate(Local local, FileObject root,
-            FileObject topModuleFile, FileObject candidate) throws IOException {
+                                                FileObject topModuleFile, FileObject candidate) throws IOException {
 
         String relative = topModuleFile.getName().getRelativeName(candidate.getName());
         String mappingPath = null;
@@ -184,14 +198,19 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
             }
 
             mappingPath = p.getProperty(CONF_MODULE_PATH);
+            if (logger.isDebugEnabled()) {
+                logger.debug("[moduleResource] get path form property:"+mappingPath);
+            }
             if (mappingPath != null) {
                 mappingPath = mappingPath.trim();
                 String parentModulePlaceHolder = "${" + CONF_PARENT_MODULE_PATH + "}";
+                //包含parent.model.path
                 if (mappingPath.indexOf(parentModulePlaceHolder) != -1) {
                     String parentModulePath = "";
                     if (candidate.getParent() != null) {
                         parentModulePath = (parentModule == null) ? "" : parentModule
                                 .getMappingPath();
+
                     }
                     mappingPath = mappingPath.replace(parentModulePlaceHolder, parentModulePath);
                 }
@@ -205,6 +224,9 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
                     }
                 }
                 mappingPath = RoseStringUtil.mappingPath(mappingPath);
+                if(logger.isDebugEnabled()){
+                    logger.debug("[modelResourceProvide]mappingPath:" + mappingPath);
+                }
             }
 
             //interceptedAllow、interceptedDeny
@@ -261,7 +283,7 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
     }
 
     protected void handlerModuleResource(Local local, FileObject rootObject, FileObject thisFolder,
-            FileObject resource) throws IOException {
+                                         FileObject resource) throws IOException {
         FileName fileName = resource.getName();
         String bn = fileName.getBaseName();
         if (logger.isDebugEnabled()) {
@@ -278,7 +300,7 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
     }
 
     private void addModuleContext(Local local, FileObject rootObject, FileObject thisFolder,
-            FileObject resource) throws IOException {
+                                  FileObject resource) throws IOException {
         ModuleResource moduleInfo = local.moduleResourceMap.get(thisFolder);
         moduleInfo.addContextResource(resource.getURL());
         if (logger.isDebugEnabled()) {
@@ -288,7 +310,7 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
     }
 
     private void addModuleMessage(Local local, FileObject rootObject, FileObject thisFolder,
-            FileObject resource) throws IOException {
+                                  FileObject resource) throws IOException {
         ModuleResource moduleInfo = local.moduleResourceMap.get(thisFolder);
         String directory = resource.getParent().getURL().toString();
         String messageFileName = resource.getName().getBaseName();
@@ -306,7 +328,7 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
     }
 
     private void addModuleClass(Local local, FileObject rootObject, FileObject thisFolder,
-            FileObject resource) throws IOException {
+                                FileObject resource) throws IOException {
         String className = rootObject.getName().getRelativeName(resource.getName());
         Assert.isTrue(!className.startsWith("/"));
         className = StringUtils.removeEnd(className, ".class");

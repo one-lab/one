@@ -38,8 +38,9 @@ public interface RoseConstants {
 
     /**
      * 控制器需在这个目录下或它的子目录下，一个工程如果有很多controllers，都将被扫描进来
+     * 增加为web的目录也会被扫描
      */
-    public static final String CONTROLLERS = "controllers";
+    public static final String[] CONTROLLERS = new String[]{"controllers","web"};
 
     /**
      * 资源控制器都以其中一个字符串为结尾。

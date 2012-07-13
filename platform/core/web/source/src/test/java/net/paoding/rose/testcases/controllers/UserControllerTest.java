@@ -32,6 +32,10 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals("POST", invoke("/user", "POST", ""));
     }
 
+    public void testPost1REST() throws ServletException, IOException {
+        assertEquals("POST1", invoke("/user/post1", "POST", ""));
+    }
+
     public void testIndex() throws ServletException, IOException {
         assertEquals("index", invoke("/user/index"));
     }
