@@ -100,7 +100,6 @@ class UriReplyMaker extends ReplyMaker implements UriReply {
 		}
 		HttpServletResponse response = inv.getResponse();
 		if (null != redirectUri) {
-			inv.addFlash(name, msg)
 			response.sendRedirect(redirectUri);
 			return;
 		} 

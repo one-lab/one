@@ -3,6 +3,7 @@ package com.sinosoft.web.test.controllers;
 import java.util.Date;
 
 public  class Student {
+	public Student() {}
 	public String getId() {
 		return id;
 	}
@@ -55,5 +56,10 @@ public  class Student {
 
 	public void setIgnoreField(String ignoreField) {
 		this.ignoreField = ignoreField;
+	}
+	
+	@Override
+	public String toString() {
+		return "id:" + id + ", name: " + name;
 	}
 }

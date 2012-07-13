@@ -109,4 +109,10 @@ public class HelloController {
 		inv.addModel("name", "carvin");
         return Replys.saying().forward("/forward.jsp");
     }
+	
+	@Get("/rose/redirect")
+    public String getRoseRedirect(Invocation inv) {
+		inv.addFlash("name", "carvin");
+        return "r:" + inv.getRequest().getContextPath() + "/redirect.jsp";
+    }
 }
