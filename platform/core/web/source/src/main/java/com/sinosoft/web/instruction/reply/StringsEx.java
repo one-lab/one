@@ -4,7 +4,7 @@ package com.sinosoft.web.instruction.reply;
  *
  * @author Dhanji R. Prasanna (dhanji@gmail.com)
  */
-public final class StringsEx {
+final class StringsEx {
 
 	  private StringsEx() {
 	  }

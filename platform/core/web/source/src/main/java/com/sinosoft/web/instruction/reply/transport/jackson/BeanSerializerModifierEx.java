@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 
-public final class BeanSerializerModifierEx extends BeanSerializerModifier {
+final class BeanSerializerModifierEx extends BeanSerializerModifier {
 	private static BeanSerializerModifierEx instance = new BeanSerializerModifierEx();
 	private BeanSerializerModifierEx() {}
 	private String[] propertyNames;
@@ -26,6 +26,8 @@ public final class BeanSerializerModifierEx extends BeanSerializerModifier {
 	public void setType(PropertyFilterType type) {
 		this.type = type;
 	}
+	
+	
 	@Override
 	public List<BeanPropertyWriter> changeProperties(
 			SerializationConfig config, BeanDescription beanDesc,
@@ -41,5 +43,4 @@ public final class BeanSerializerModifierEx extends BeanSerializerModifier {
 		}
 		return super.changeProperties(config, beanDesc, beanProperties);
 	}
-	
 }

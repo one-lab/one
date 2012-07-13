@@ -1,6 +1,5 @@
 package com.sinosoft.web.instruction.reply.transport;
 
-import com.sinosoft.web.instruction.reply.Transport;
 
 /**
  * A raw implementation of Transport where input types are assumed

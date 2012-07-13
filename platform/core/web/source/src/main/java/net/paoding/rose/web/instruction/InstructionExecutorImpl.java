@@ -219,8 +219,7 @@ public class InstructionExecutorImpl implements InstructionExecutor {
         } else if (ins instanceof byte[]) {
             return new InputStreamInstruction(new ByteArrayInputStream((byte[]) ins));
         } else if (ins instanceof Reply) {
-        	System.out.println(ins.toString() + "=============");
-        	return new ReplyInstruction((Reply<?>)ins);
+        	return new ReplyInstruction((Reply)ins);
         } else {
             return Text.text(ins.toString());
         }

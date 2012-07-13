@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import com.sinosoft.util.DateFormatMode;
-import com.sinosoft.web.instruction.reply.Transport;
 
 public abstract class AbstractTransport implements Transport {
 	private String[] excludes;

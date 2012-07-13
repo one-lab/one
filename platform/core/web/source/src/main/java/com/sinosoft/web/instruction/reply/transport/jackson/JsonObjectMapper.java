@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
 
-public class JsonObjectMapper extends ObjectMapper {
-	public void withExcludes(final String[] excludes, Class<?> type)
+class JsonObjectMapper extends ObjectMapper {
+	public void withExcludes(final String[] excludes)
 	        throws IOException, JsonGenerationException, JsonMappingException {
 		BeanSerializerModifierEx excludesBeanSerializerModifierEx = BeanSerializerModifierEx.getInstance();
 		excludesBeanSerializerModifierEx.setPropertyNames(excludes);

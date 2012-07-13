@@ -135,6 +135,39 @@
 			}
 		});
 	}
+	
+	function testSampleSuccess() {
+		$.ajax({
+			url : contextPath + "/hello/sample/success",
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+				alert(data.status + ":" + data.message);
+			}
+		});
+	}
+	
+	function testSampleFail() {
+		$.ajax({
+			url : contextPath + "/hello/sample/fail",
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+				alert(data.status + ":" + data.message);
+			}
+		});
+	}
+	
+	function testSampleException() {
+		$.ajax({
+			url : contextPath + "/hello/sample/exception",
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+				alert(data.status + ":" + data.message);
+			}
+		});
+	}
 </script>
 </head>
 <body>
@@ -149,5 +182,8 @@
 	<input type="button" value="testReplyXmlInclude" onclick="testReplyXmlInclude()"/>
 	<input type="button" value="testReplyXmlList" onclick="testReplyXmlList()"/>
 	<input type="button" value="testReplyXmlMap" onclick="testReplyXmlMap()"/>
+	<input type="button" value="testSampleSuccess" onclick="testSampleSuccess()"/>
+	<input type="button" value="testSampleFail" onclick="testSampleFail()"/>
+	<input type="button" value="testSampleException" onclick="testSampleException()"/>
 </body>
 </html>

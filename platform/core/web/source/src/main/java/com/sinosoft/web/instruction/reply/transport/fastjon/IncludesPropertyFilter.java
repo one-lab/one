@@ -2,7 +2,7 @@ package com.sinosoft.web.instruction.reply.transport.fastjon;
 
 import com.alibaba.fastjson.serializer.PropertyFilter;
 
-public class IncludesPropertyFilter implements PropertyFilter {
+class IncludesPropertyFilter implements PropertyFilter {
 	private String[] includes;
 	
 	public IncludesPropertyFilter(String[] includes) {

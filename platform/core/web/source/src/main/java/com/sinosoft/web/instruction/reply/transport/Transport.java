@@ -1,4 +1,4 @@
-package com.sinosoft.web.instruction.reply;
+package com.sinosoft.web.instruction.reply.transport;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -6,7 +6,8 @@ import java.io.OutputStream;
 /**
  * @author Dhanji R. Prasanna (dhanji@gmail.com)
  */
-interface Transport {
+public interface Transport {
+
   /**
    * Converts a given object into transportable data and writes it to the provided
    * OutputStream.

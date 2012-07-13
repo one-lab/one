@@ -8,9 +8,9 @@ import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.instruction.AbstractInstruction;
 
 public class ReplyInstruction extends AbstractInstruction {
-	private final Reply<?> reply;
-	public ReplyInstruction() {reply = Reply.NO_REPLY;}
-	public ReplyInstruction(Reply<?> reply) {
+	private final Reply reply;
+	public ReplyInstruction() {reply = Replys.NO_REPLY;}
+	public ReplyInstruction(Reply reply) {
 		this.reply = reply;
 	}
 	@Override

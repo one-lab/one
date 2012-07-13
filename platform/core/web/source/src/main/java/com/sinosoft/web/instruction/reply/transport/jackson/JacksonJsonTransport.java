@@ -1,19 +1,18 @@
-package com.sinosoft.web.instruction.reply.transport;
+package com.sinosoft.web.instruction.reply.transport.jackson;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sinosoft.web.instruction.reply.transport.jackson.JsonObjectMapper;
+import com.sinosoft.web.instruction.reply.transport.Json;
 
 /**
  * @author Dhanji R. Prasanna (dhanji@gmail.com)
  */
 //@Component
-public class JacksonJsonTransport extends Json {
+class JacksonJsonTransport extends Json {
 
 	private final JsonObjectMapper objectMapper = new JsonObjectMapper();
 
@@ -25,17 +24,13 @@ public class JacksonJsonTransport extends Json {
 		return objectMapper;
 	}
 
-	public <T> T in(InputStream in, Class<T> type) throws IOException {
-		return objectMapper.readValue(in, type);
-	}
-
-	public <T> void out(OutputStream out, Class<T> type, T data) {
+	public <T> void out(OutputStream out, T data) {
 		objectMapper.setDateFormat(getDateFormat());
 		try {
 			String[] propertyNames = getExcludes();
 			boolean hasPropertyNames = false;
 			if(ArrayUtils.isNotEmpty(propertyNames)) {
-				objectMapper.withExcludes(propertyNames, type);
+				objectMapper.withExcludes(propertyNames);
 				hasPropertyNames = true;
 			} 
 			propertyNames = getIncludes();

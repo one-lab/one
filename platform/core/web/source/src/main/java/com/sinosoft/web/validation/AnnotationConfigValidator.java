@@ -42,7 +42,7 @@ import org.hibernate.validator.cfg.defs.SizeDef;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.Errors;
 
-import com.sinosoft.web.instruction.reply.Reply;
+import com.sinosoft.web.instruction.reply.Replys;
 import com.sinosoft.web.instruction.reply.transport.Json;
 import com.sinosoft.web.validation.annotation.AssertFalseEx;
 import com.sinosoft.web.validation.annotation.AssertTrueEx;
@@ -236,7 +236,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 					jsonMap.put(INVALID_VALUE, cv.getInvalidValue() + "");
 					jsonList.add(jsonMap);
 			}
-			return Reply.with(jsonList).as(Json.class);
+			return Replys.with(jsonList).as(Json.class);
 	}
 	
 	/**

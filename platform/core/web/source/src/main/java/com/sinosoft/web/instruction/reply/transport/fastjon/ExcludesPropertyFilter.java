@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.alibaba.fastjson.serializer.PropertyFilter;
 
-public class ExcludesPropertyFilter implements PropertyFilter {
+class ExcludesPropertyFilter implements PropertyFilter {
 	private String[] excludes;
 	
 	public ExcludesPropertyFilter(String[] excludes) {
