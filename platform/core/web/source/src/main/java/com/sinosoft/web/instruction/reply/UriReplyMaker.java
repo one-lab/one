@@ -100,12 +100,17 @@ class UriReplyMaker extends ReplyMaker implements UriReply {
 		}
 		HttpServletResponse response = inv.getResponse();
 		if (null != redirectUri) {
+			inv.addFlash(name, msg)
 			response.sendRedirect(redirectUri);
 			return;
 		} 
 		if(null != forwardUri) {
 			HttpServletRequest request = inv.getRequest();
 			try {
+				Map<String, Object> attributes = inv.getModel().getAttributes();
+				for(String key : attributes.keySet()) {
+					request.setAttribute(key, attributes.get(key));
+				}
 				request.getRequestDispatcher(forwardUri).forward(request, response);
 			} catch (ServletException e) {
 				log.error("forward exception, the forward uri is " + forwardUri, e);

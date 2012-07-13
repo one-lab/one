@@ -168,6 +168,14 @@
 			}
 		});
 	}
+	
+	function testRedirect() {
+		location.href = contextPath + "/hello/redirect";
+	}
+	
+	function testForward() {
+		location.href = contextPath + "/hello/forward";
+	}
 </script>
 </head>
 <body>
@@ -185,5 +193,7 @@
 	<input type="button" value="testSampleSuccess" onclick="testSampleSuccess()"/>
 	<input type="button" value="testSampleFail" onclick="testSampleFail()"/>
 	<input type="button" value="testSampleException" onclick="testSampleException()"/>
+	<input type="button" value="testRedirect" onclick="testRedirect()"/>
+	<input type="button" value="testForward" onclick="testForward()"/>
 </body>
 </html>

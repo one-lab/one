@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
 import net.paoding.rose.web.annotation.rest.Post;
@@ -97,8 +98,15 @@ public class HelloController {
         return Replys.sample().fail("fail message");
     }
 	
-	@Get("/sample/exception")
-    public Reply getSampleException() {
-        return Replys.sample().exception("exception message");
+	@Get("/redirect")
+    public Reply getRedirect(Invocation inv) {
+		inv.addModel("name", "carvin");
+        return Replys.saying().redirect(inv.getRequest().getContextPath() + "/redirect.jsp");
+    }
+	
+	@Get("/forward")
+    public Reply getForward(Invocation inv) {
+		inv.addModel("name", "carvin");
+        return Replys.saying().forward("/forward.jsp");
     }
 }
