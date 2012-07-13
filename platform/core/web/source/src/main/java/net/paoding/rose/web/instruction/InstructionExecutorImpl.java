@@ -24,14 +24,15 @@ import javax.servlet.ServletException;
 import net.paoding.rose.util.SpringUtils;
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.impl.thread.InvocationBean;
-import net.paoding.rose.web.instruction.reply.Reply;
-import net.paoding.rose.web.instruction.reply.ReplyInstruction;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
+
+import com.sinosoft.web.instruction.reply.Reply;
+import com.sinosoft.web.instruction.reply.ReplyInstruction;
 
 
 /**
@@ -218,8 +219,7 @@ public class InstructionExecutorImpl implements InstructionExecutor {
         } else if (ins instanceof byte[]) {
             return new InputStreamInstruction(new ByteArrayInputStream((byte[]) ins));
         } else if (ins instanceof Reply) {
-        	System.out.println(ins.toString() + "=============");
-        	return new ReplyInstruction((Reply<?>)ins);
+        	return new ReplyInstruction((Reply)ins);
         } else {
             return Text.text(ins.toString());
         }
