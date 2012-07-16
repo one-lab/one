@@ -35,15 +35,12 @@ function RosePipe() {
 	 */
 	this.addWindow = function(params) {
 		var module = new RosePipeWindow(params);
-
 		// 检查依赖模块
 		var requiresLoaded = this.checkRequiresLoaded(module);
-
 		if (requiresLoaded)
 			this.doAddWindow(module);
 		else
 			this.hangedWindows.push(module);
-
 		// 本模块加载完毕，重新检查挂起模块
 		this.doHangedWindows();
 	}

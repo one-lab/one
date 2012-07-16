@@ -101,15 +101,7 @@ public class UserController {
 	
 	@Get("/p1")
 	public String p1(Invocation inv,Window window){ 
-		List<User> users = new ArrayList<User>();
-		for(int i=0;i<10;i++){
-			User user = new User();
-			user.setId(System.currentTimeMillis());
-			user.setLoginName("用户"+i);
-			user.setName("用户"+i);
-			user.setEmail("user"+i+"@sinosoft.com.cn");
-			users.add(user);
-		}
+		List<User> users = accountManager.getAllUser();
 		inv.addModel("users", users);
 		return "userWindow";
 //		return "@ p1***********";

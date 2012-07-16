@@ -31,14 +31,6 @@ public class GroupController {
 	public String list(Invocation inv) {
 		List<Group> groups = accountManager.getAllGroup();
 		inv.addModel("groups", groups);
-//		List<Group> groups = new ArrayList<Group>();
-//		for(int i=0;i<10;i++){
-//			Group group = new Group();
-//			group.setId(System.currentTimeMillis());
-//			group.setName("权限"+i);
-//			groups.add(group);
-//		}
-//		inv.addModel("group", groups);
 		return "groupList";
 	}
 
@@ -66,15 +58,8 @@ public class GroupController {
 	
 	@Get("/p2")
 	public String p2(Invocation inv,Window window){
-		List<Group> groups = new ArrayList<Group>();
-		for(int i=0;i<10;i++){
-			Group group = new Group();
-			group.setId(System.currentTimeMillis());
-			group.setName("权限"+i);
-			groups.add(group);
-		}
-		inv.addModel("group", groups);
+		List<Group> groups = accountManager.getAllGroup();
+		inv.addModel("groups", groups);
 		return "groupWindow";
-//		return "@ p2&&&&&&&&&&&";
 	}
 }

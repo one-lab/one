@@ -55,7 +55,7 @@ public class Group extends IdEntity {
 	}
 
 	
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "acct_group_permission", joinColumns = { @JoinColumn(name = "group_id") })
 	@Column(name = "permission")
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
