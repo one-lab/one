@@ -32,34 +32,34 @@ public @interface Validation {
     
     String errorPath();
     
-    NotBlankEx notBlank() default @NotBlankEx(props = { "" });
+    NotBlankEx notBlank() default @NotBlankEx(props = {});
     
-    NotNullEx notNull() default @NotNullEx(props = { "" });
+    NotNullEx notNull() default @NotNullEx(props = {});
     
-    NotEmptyEx notEmpty() default @NotEmptyEx(props = { "" });
+    NotEmptyEx notEmpty() default @NotEmptyEx(props = {});
     
-    SizeEx size() default @SizeEx(props = { "" });
+    SizeEx size() default @SizeEx(props = {});
     
-    AssertFalseEx assertFalse() default @AssertFalseEx(props = { "" });
+    AssertFalseEx assertFalse() default @AssertFalseEx(props = {});
     
-    AssertTrueEx assertTrue() default @AssertTrueEx(props = { "" });
+    AssertTrueEx assertTrue() default @AssertTrueEx(props = {});
     
-    DecimalMaxEx decimalMax() default @DecimalMaxEx(props = { "" }, value = "");
+    DecimalMaxEx decimalMax() default @DecimalMaxEx(props = {}, value = "");
     
-    DecimalMinEx decimalMin() default @DecimalMinEx(props = { "" }, value = "");
+    DecimalMinEx decimalMin() default @DecimalMinEx(props = {}, value = "");
     
-    DigitsEx digits() default @DigitsEx(fraction = 0, integer = 0, props = { "" });
+    DigitsEx digits() default @DigitsEx(fraction = 0, integer = 0, props = {});
     
-    FutureEx future() default @FutureEx(props = { "" });
+    FutureEx future() default @FutureEx(props = {});
     
-    MaxEx max() default @MaxEx(props = { "" }, value = 0);
+    MaxEx max() default @MaxEx(props = {}, value = 0);
     
-    MinEx min() default @MinEx(props = { "" }, value = 0);
+    MinEx min() default @MinEx(props = {}, value = 0);
     
-    PastEx past() default @PastEx(props = { "" });
+    PastEx past() default @PastEx(props = {});
     
-    PatternEx pattern() default @PatternEx(props = { "" }, regexp = "");
+    PatternEx pattern() default @PatternEx(props = {}, regexp = "");
     
-    NullEx nulls() default @NullEx(props = { "" });
+    NullEx nulls() default @NullEx(props = {});
 }
 
