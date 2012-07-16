@@ -140,22 +140,6 @@ public final class ActionEngine implements Engine {
                 resolverFactory);
     }
 
-    @SuppressWarnings("unchecked")
-    private ParamValidator[] compileValidators() {
-        Class[] parameterTypes = method.getParameterTypes();
-        List<ParamValidator> validators = module.getValidators();
-        ParamValidator[] registeredValidators = new ParamValidator[parameterTypes.length];
-        for (int i = 0; i < parameterTypes.length; i++) {
-            for (ParamValidator validator : validators) {
-                if (validator.supports(methodParameterResolver.getParamMetaDatas()[i])) {
-                    registeredValidators[i] = validator;
-                    break;
-                }
-            }
-        }
-        //
-        return registeredValidators;
-    }
     /**
      * 支持一个param多个validator，的组装。
      * @return

@@ -2,18 +2,18 @@ package com.sinosoft.platform.platformDemo.controllers.user_group;
 
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.portal.Pipe;
+import net.paoding.rose.web.portal.Portal;
 
-@Path("")
+@Path("userGroup")
 public class UserGroupController {
 	
 
-	@Get("/pipe")
-	public String pipeViews(Pipe p){
+	@Get("/portal")
+	public String pipeViews(Portal portal){
 //		p.addWindow("p1", "a:/account/user/list");
 //		p.addWindow("p2", "a:/account/group/list");
-		p.addWindow("p1", "a:/user_group/p1");
-		p.addWindow("p2", "a:/user_group/p2");
+		portal.addWindow("p1", "/account/user/list");
+		portal.addWindow("p2", "/account/group/list");
 		return "user_group_views";
 	}
 	

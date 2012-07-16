@@ -4,7 +4,7 @@ import net.paoding.rose.web.ControllerInterceptorAdapter;
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.annotation.Interceptor;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 //设置oncePerRequest为true，表示如果当前的请求如果是被forward、include转来的，并且之前已经执行了该拦截器，
 //则当前不再过该拦截器，在大部分情况下可以这样理解“一个请求只执行一次”
 @Interceptor

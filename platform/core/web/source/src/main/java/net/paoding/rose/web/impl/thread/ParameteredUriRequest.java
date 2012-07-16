@@ -51,8 +51,8 @@ public class ParameteredUriRequest extends HttpServletRequestWrapper {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Map getParameterMap() {
+    @SuppressWarnings({ "unchecked"})
+    public Map<String, String[]> getParameterMap() {
         Map<String, String[]> map = new HashMap<String, String[]>(super.getParameterMap());
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             if (!map.containsKey(entry.getKey())) {

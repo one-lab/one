@@ -4,11 +4,10 @@
 	<parent>
 		<groupId>com.sinosoft.platform.core</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath>../../parent/pom.xml</relativePath>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>web</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<name>Core :: Web</name>
 	
 	<properties>

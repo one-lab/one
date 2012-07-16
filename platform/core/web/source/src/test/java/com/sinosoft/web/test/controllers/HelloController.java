@@ -1,9 +1,12 @@
 package com.sinosoft.web.test.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.annotation.Path;
@@ -115,4 +118,13 @@ public class HelloController {
 		inv.addFlash("name", "carvin");
         return "r:" + inv.getRequest().getContextPath() + "/redirect.jsp";
     }
+	
+	public static void main(String[] args) throws Exception {
+		Map<String, Object> studentMap = new HashMap<String, Object>();
+		studentMap.put("birthday", new Date());
+		
+		Class<?> clazz = Class.forName("com.sinosoft.web.test.controllers.Student");
+		
+		BeanUtils.populate(clazz.newInstance(), studentMap);
+	}
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="flash" uri="http://rose.paoding.net/tags-core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,6 +9,6 @@
 </head>
 <body>
 this is a redirect test page.
-${name}
+<flash:flash key="name"></flash:flash>
 </body>
 </html>

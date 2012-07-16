@@ -27,6 +27,6 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 	<bean id="localValidationFactoryBean" 
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 		
-	<bean id="annotationConfigValidator" class="com.sinosoft.web.validation.AnnotationConfigValidator"/>
+	<bean id="annotationConfigValidator" class="com.sinosoft.web.validation.AnnotationConfigValidator" />
 
 </beans>
