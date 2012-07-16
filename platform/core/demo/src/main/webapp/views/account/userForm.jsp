@@ -25,26 +25,6 @@
 		$('#inputForm').submit();
 	}
 </script>
-
-	<title>帐号管理</title>
-	<script type="text/javascript">
-	$(document).ready(function() { 
-	    // bind form using 'ajaxForm' 
-	    $('#inputForm').ajaxForm({
-	    	dataType : "json",
-	    	success : function(data) {
-				if(data.status == "success") {
-					alert(data.message);
-					location.href = "${ctx}/account/user/list";
-				}
-			}
-	    }); 
-	}); 
-	function save() {
-		$('#inputForm').submit();
-	}
-	</script>
-	
 </head>
 
 <body>
