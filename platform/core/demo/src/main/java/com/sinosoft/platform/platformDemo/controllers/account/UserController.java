@@ -4,25 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Intercepted;
 import net.paoding.rose.web.annotation.Param;
 import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Delete;
 import net.paoding.rose.web.annotation.rest.Get;
 import net.paoding.rose.web.annotation.rest.Post;
+import net.paoding.rose.web.portal.Window;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sinosoft.platform.platformDemo.controllers.LoginRequired;
 import com.sinosoft.platform.platformDemo.model.account.Group;
 import com.sinosoft.platform.platformDemo.model.account.User;
 import com.sinosoft.platform.platformDemo.service.account.AccountManager;
+import com.sinosoft.web.instruction.reply.Reply;
+import com.sinosoft.web.instruction.reply.Replys;
+import com.sinosoft.web.instruction.reply.transport.Json;
 
 /**
  * Urls:
@@ -68,7 +67,7 @@ public class UserController {
 	}
 
 	@Post("save")
-	public String save(@Param("groupList") List<Long> gids,User user, Invocation inv) {
+	public Reply save(@Param("groupList") List<Long> gids,User user, Invocation inv) {
 		List<Group> groupList = new ArrayList<Group>();
 		for (Long long1 : gids) {
 			Group group = new Group(long1, null);
@@ -77,8 +76,8 @@ public class UserController {
 		user.setGroupList(groupList);
 		user.setId(System.currentTimeMillis());
 		accountManager.saveUser(user);
-		inv.addFlash("message", "创建用户" + user.getLoginName() + "成功");
-		return "r:/platformDemo/account/user/list";
+		//inv.addFlash("message", "创建用户" + user.getLoginName() + "成功");
+		return Replys.sample().success("创建用户" + user.getLoginName() + "成功");
 	}
 
 	@Get("delete/{id}")
@@ -98,5 +97,21 @@ public class UserController {
 		}
 
 		return "@false";
+	}
+	
+	@Get("/p1")
+	public String p1(Invocation inv,Window window){ 
+		List<User> users = new ArrayList<User>();
+		for(int i=0;i<10;i++){
+			User user = new User();
+			user.setId(System.currentTimeMillis());
+			user.setLoginName("用户"+i);
+			user.setName("用户"+i);
+			user.setEmail("user"+i+"@sinosoft.com.cn");
+			users.add(user);
+		}
+		inv.addModel("users", users);
+		return "userWindow";
+//		return "@ p1***********";
 	}
 }
