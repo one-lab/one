@@ -100,6 +100,7 @@
 		</fieldset>
 
 	</form:form>
+	
 	</div>
 		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
 	</div>

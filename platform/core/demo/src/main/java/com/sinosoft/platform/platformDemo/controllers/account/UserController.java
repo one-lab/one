@@ -8,7 +8,6 @@ import net.paoding.rose.web.annotation.Param;
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
 import net.paoding.rose.web.annotation.rest.Post;
-import net.paoding.rose.web.portal.Window;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
@@ -100,7 +99,7 @@ public class UserController {
 	}
 	
 	@Get("/p1")
-	public String p1(Invocation inv,Window window){ 
+	public String p1(Invocation inv){ 
 		List<User> users = accountManager.getAllUser();
 		inv.addModel("users", users);
 		return "userWindow";
