@@ -6,6 +6,23 @@
 <html>
 <head>
 	<title>帐号管理</title>
+	<script type="text/javascript">
+	$(document).ready(function() { 
+	    // bind form using 'ajaxForm' 
+	    $('#inputForm').ajaxForm({
+	    	dataType : "json",
+	    	success : function(data) {
+				if(data.status == "success") {
+					alert(data.message);
+					location.href = "${ctx}/account/user/list";
+				}
+			}
+	    }); 
+	}); 
+	function save() {
+		$('#inputForm').submit();
+	}
+	</script>
 	
 </head>
 
@@ -53,29 +70,11 @@
 				</div>
 			</div>	
 			<div class="form-actions">
-				<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
+				<input id="submit" class="btn btn-primary" type="button" value="提交" onclick="save()"/>&nbsp;	
 				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>
 
 	</form:form>
-	<form id="uploadForm" action="${ctx}/upload" method="post" enctype="application/x-www-form-urlencoded" class="form-horizontal">
-
-			<div class="control-group">
-				<label for="username" class="control-label">名称:</label>
-				<div class="controls">
-					<input type="file" id="loginName" name="files"class="required span2"/>
-				</div>
-			</div>
-			
-			<div class="control-group">
-				<div class="controls">
-				<label class="checkbox inline" for="rememberMe"> <input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
-				<input id="submit" class="btn" type="submit" value="登录"/>
-				<p class="help-block">(文件上传)</p>
-				</div>
-			</div>
-		
-	</form>
 </body>
 </html>
