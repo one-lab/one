@@ -1,10 +1,31 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="d" uri="/WEB-INF/rose.tld" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="d" uri="/WEB-INF/rose.tld"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>帐号管理</title>
+<%@ include file="/WEB-INF/layouts/base.jsp"%>
+<script type="text/javascript">
+	$(document).ready(function() {
+		// bind form using 'ajaxForm' 
+		$('#inputForm').ajaxForm({
+			dataType : "json",
+			success : function(data) {
+				if (data.status == "success") {
+					alert(data.message);
+					location.href = "${ctx}/account/user/list";
+				}
+			}
+		});
+	});
+	function save() {
+		$('#inputForm').submit();
+	}
+</script>
+
 	<title>帐号管理</title>
 	<script type="text/javascript">
 	$(document).ready(function() { 
@@ -27,6 +48,9 @@
 </head>
 
 <body>
+	<div class="container">
+		<%@ include file="/WEB-INF/layouts/header.jsp"%>
+		<div id="content" class="span12">
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post" class="form-horizontal">
 		<input type="hidden" name="id" value="${user.id}"/>
 		<fieldset>
@@ -76,5 +100,9 @@
 		</fieldset>
 
 	</form:form>
+	
+	</div>
+		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+	</div>
 </body>
 </html>

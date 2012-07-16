@@ -4,11 +4,15 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>登录页</title>
-
+<title>登录页</title>
+<%@ include file="/WEB-INF/layouts/base.jsp"%>
 </head>
 
 <body>
+
+	<div class="container">
+		<%@ include file="/WEB-INF/layouts/header.jsp"%>
+		<div id="content" class="span12">
 	<form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
 
 			<div class="control-group">
@@ -32,5 +36,8 @@
 			</div>
 		
 	</form>
+		</div>
+		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+	</div>
 </body>
 </html>

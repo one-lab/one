@@ -97,4 +97,12 @@ public class UserController {
 
 		return "@false";
 	}
+	
+	@Get("/p1")
+	public String p1(Invocation inv){ 
+		List<User> users = accountManager.getAllUser();
+		inv.addModel("users", users);
+		return "userWindow";
+//		return "@ p1***********";
+	}
 }
