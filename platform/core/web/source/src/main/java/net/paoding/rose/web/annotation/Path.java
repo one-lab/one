@@ -39,9 +39,10 @@ public @interface Path {
      * <p>
      * 
      * 特别的，如果不想让一个控制器生效，除了使用@Ignored外(推荐)，还可以使用@Path({}),即使用零长度数组来实现.
-     * 
+     *
+     * add default value by qc 2012-07-13
      * @return
      */
-    String[] value();
+    String[] value() default "";
 
 }

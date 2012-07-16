@@ -5,6 +5,7 @@
 		<groupId>com.sinosoft.platform.core</groupId>
 		<artifactId>parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
+		<relativePath>../../parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>web</artifactId>
 	<version>1.0-SNAPSHOT</version>

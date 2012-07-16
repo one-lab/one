@@ -18,11 +18,7 @@ package net.paoding.rose.web.impl.module;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import net.paoding.rose.web.annotation.AsSuperController;
 import net.paoding.rose.web.annotation.Ignored;
@@ -41,9 +37,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.ClassUtils;
 
 /**
- * 
+ *
  * @author 王志亮 [qieqie.wang@gmail.com]
- * 
+ *
  */
 public class ControllerRef {
 
@@ -61,7 +57,7 @@ public class ControllerRef {
     List<MethodRef> actions;
 
     public ControllerRef(String[] mappingPaths, String controllerName, Object controllerObject,
-            Class<?> controllerClass) {
+                         Class<?> controllerClass) {
         setMappingPaths(mappingPaths);
         setControllerName(controllerName);
         setControllerObject(controllerObject);
@@ -82,6 +78,18 @@ public class ControllerRef {
         List<Method> pastMethods = new LinkedList<Method>();
         while (true) {
             Method[] declaredMethods = clz.getDeclaredMethods();
+
+            //增加如果一个class中有多个同样的ReqMethod，且无value的情况，采用按照字符串的方式排序，并自动将排在第一ReqMethod设置为缺省，其余的自动增加methodName
+            //增加sort排序,按字母顺序进行排序，字母在前的方法排至前面，从0位开始如果相等按第0+1个字母排序,以此类推。完全一致，方法名称短的排在方法名称长的前面
+            Arrays.sort(declaredMethods, new Comparator<Method>() {
+                @Override
+                public int compare(Method o1, Method o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+            //检查是否有多个ReqMethod类型相同且ReqMethod.value均为空的情况
+            Map<ReqMethod,Method> checkReqMethod = new HashMap<ReqMethod, Method>();
+
             for (Method method : declaredMethods) {
                 if (quicklyPass(pastMethods, method, controllerClass)) {
                     continue;
@@ -117,6 +125,19 @@ public class ControllerRef {
                 if (shotcutMappings.size() > 0) {
                     MethodRef methodRef = new MethodRef();
                     for (Map.Entry<ReqMethod, String[]> entry : shotcutMappings.entrySet()) {
+
+                        //处理多个ReqMethod类型相同且ReqMethod.value均为空的情况
+                        if(entry.getValue().length==1&&entry.getValue()[0].equals("")){
+                            if(checkReqMethod.get(entry.getKey())==null){
+                                checkReqMethod.put(entry.getKey(),method);
+                            }else{
+                                entry.setValue(new String[] { "/" + method.getName() });
+                            }
+                        }
+
+                        if(logger.isDebugEnabled()){
+                            logger.debug("[MethodPath] create:"+entry.getKey()+"="+Arrays.toString(entry.getValue()));
+                        }
                         methodRef.addMapping(entry.getKey(), entry.getValue());
                     }
                     methodRef.setMethod(method);
@@ -134,6 +155,7 @@ public class ControllerRef {
         this.actions = actions;
     }
 
+    //获取method上面定义的ReqMethod与ReqMethod.value的键值对应关系，一个method可以有多个ReqMethod
     private Map<ReqMethod, String[]> collectsShotcutMappings(Method method) {
         Map<ReqMethod, String[]> restMethods = new HashMap<ReqMethod, String[]>();
         Annotation[] annotations = method.getAnnotations();
@@ -154,6 +176,7 @@ public class ControllerRef {
                 restMethods.put(ReqMethod.TRACE, ((Trace) annotation).value());
             } else {}
         }
+
         for (String[] paths : restMethods.values()) {
             for (int i = 0; i < paths.length; i++) {
                 if (paths[i].equals("/")) {

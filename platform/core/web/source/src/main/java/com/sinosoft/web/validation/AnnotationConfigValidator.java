@@ -39,6 +39,7 @@ import org.hibernate.validator.cfg.defs.NullDef;
 import org.hibernate.validator.cfg.defs.PastDef;
 import org.hibernate.validator.cfg.defs.PatternDef;
 import org.hibernate.validator.cfg.defs.SizeDef;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.Errors;
 
@@ -78,9 +79,11 @@ public class AnnotationConfigValidator implements ParamValidator{
 	}
 
 	private static Log logger = LogFactory.getLog(AnnotationConfigValidator.class);
-	
+
+    @Autowired
 	private ValidatorFactory validationFactory;
-	
+
+
 	private Validator defaultValidator;
 	
 	@PostConstruct
@@ -92,9 +95,6 @@ public class AnnotationConfigValidator implements ParamValidator{
 	private static final String MSSAGE = "message";
 	private static final String INVALID_VALUE = "invalidValue";
 
-	public void setValidationFactory(ValidatorFactory validationFactory) {
-		this.validationFactory = validationFactory;
-	}
 
 	public Validator getValidator(Validation configValidation ,Class<?> targetClass) {
 		if(isContainsRules(configValidation)) {

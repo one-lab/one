@@ -2,9 +2,15 @@ package net.paoding.rose.mock.controllers;
 
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.annotation.Param;
+import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
 import net.paoding.rose.web.annotation.rest.Post;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Comparator;
+
+@Path("user")
 public class UserController {
 
     @Get( { "", "index" })
@@ -61,6 +67,16 @@ public class UserController {
         return "account_" + id;
     }
 
+    public String accountb1(@Param("id") Integer id) {
+        return "account_" + id;
+    }
+
+    @Post
+    public String post1() {
+        return "POST1";
+    }
+
+
     @Post
     public String post() {
         return "POST";
@@ -77,4 +93,6 @@ public class UserController {
     static interface Interface {
 
     }
+
+
 }

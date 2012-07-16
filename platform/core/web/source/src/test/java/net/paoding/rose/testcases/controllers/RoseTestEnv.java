@@ -42,6 +42,7 @@ public class RoseTestEnv {
         instructionExecutor.setStoresInstructionInRequest(true);
         roseFilter = new RoseFilter();
         roseFilter.setInstructionExecutor(instructionExecutor);
+        roseFilter.setContextConfigLocation("classpath*:/applicationContext*.xml");
         roseFilter.init(new MockFilterConfig(servletContext, "roseFilter"));
     }
 
