@@ -66,7 +66,8 @@ public class UserController {
 	}
 
 	@Post("save")
-	public Reply save(@Param("groupList") List<Long> gids,User user, Invocation inv) {
+	public Reply save(@Param("groupList") List<Long> gids,
+			User user, Invocation inv) {
 		List<Group> groupList = new ArrayList<Group>();
 		for (Long long1 : gids) {
 			Group group = new Group(long1, null);
