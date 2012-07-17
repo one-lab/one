@@ -21,6 +21,10 @@ import com.sinosoft.platform.platformDemo.service.account.AccountManager;
 import com.sinosoft.web.instruction.reply.Reply;
 import com.sinosoft.web.instruction.reply.Replys;
 import com.sinosoft.web.instruction.reply.transport.Json;
+import com.sinosoft.web.validation.annotation.NotEmptyEx;
+import com.sinosoft.web.validation.annotation.NotNullEx;
+import com.sinosoft.web.validation.annotation.SizeEx;
+import com.sinosoft.web.validation.annotation.Validation;
 
 /**
  * Urls:
@@ -51,7 +55,7 @@ public class UserController {
 	}
 	
 	@LoginRequired
-	@Get({"list","","userList"})
+	@Get("list")
 	public String list(Invocation inv) {
 		List<User> users = accountManager.getAllUser();
 		inv.addModel("users", users);
@@ -59,14 +63,20 @@ public class UserController {
 	}
 
 	@Get("create")
+	@Post("errorCreate")
 	public String createForm(Invocation inv) {
 		inv.addModel("user", new User());
 		inv.addModel("allGroups", accountManager.getAllGroup());
 		return "userForm";
 	}
-
+	
+	
 	@Post("save")
-	public Reply save(@Param("groupList") List<Long> gids,User user, Invocation inv) {
+	public String save(@Param("groupList") List<Long> gids,
+			@Validation(errorPath="a:errorCreate", 
+				notEmpty=@NotEmptyEx( props={"loginName","password","email","name"} ) ,
+				size=@SizeEx(max=20,min=4, props={"name","loginName","email"})
+			) User user, Invocation inv) {
 		List<Group> groupList = new ArrayList<Group>();
 		for (Long long1 : gids) {
 			Group group = new Group(long1, null);
@@ -75,8 +85,8 @@ public class UserController {
 		user.setGroupList(groupList);
 		user.setId(System.currentTimeMillis());
 		accountManager.saveUser(user);
-		//inv.addFlash("message", "创建用户" + user.getLoginName() + "成功");
-		return Replys.sample().success("创建用户" + user.getLoginName() + "成功");
+//		return Replys.sample().success("创建用户" + user.getLoginName() + "成功");
+		return "r:/platformDemo/account/user/list";
 	}
 
 	@Get("delete/{id}")
@@ -104,5 +114,14 @@ public class UserController {
 		inv.addModel("users", users);
 		return "userWindow";
 //		return "@ p1***********";
+	}
+	
+	@Post("view/{key1}/{key2}/{id}")
+	public Object view(@Param("key1") Long key1, @Param("key2") Long key2, @Param("id") Long id, Invocation inv){
+		if(key1 == 1 && key2 == 2){
+			User user = accountManager.getUser(id);
+			return Replys.with(user).as(Json.class);
+		}
+		return "@e";
 	}
 }

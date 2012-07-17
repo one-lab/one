@@ -2,14 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="d" uri="/WEB-INF/rose.tld"%>
-<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<%@ taglib prefix="msg" uri="/WEB-INF/errorMsg.tld" %><c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title>帐号管理</title>
 <%@ include file="/WEB-INF/layouts/base.jsp"%>
 <script type="text/javascript">
-	$(document).ready(function() {
+/*	$(document).ready(function() {
 		// bind form using 'ajaxForm' 
 		$('#inputForm').ajaxForm({
 			dataType : "json",
@@ -24,7 +24,7 @@
 	function save() {
 		$('#inputForm').submit();
 	}
-</script>
+	*/</script>
 </head>
 
 <body>
@@ -41,19 +41,19 @@
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
 					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}" class="required"/>
-				</div>
+					<msg:errorMsg property="loginName" />				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
 					<input type="text" id="name" name="name" size="50" value="${user.name}" class="required"/>
-				</div>
+					<msg:errorMsg property="name" />				</div>
 			</div>
 			<div class="control-group">
 				<label for="password" class="control-label">密码:</label>
 				<div class="controls">
 					<input type="password" id="password" name="password" size="50" value="${user.password}" class="required" minlength="3"/>
-				</div>
+					<msg:errorMsg property="password" type="message" />				</div>
 			</div>
 			<div class="control-group">
 				<label for="passwordConfirm" class="control-label">确认密码:</label>
@@ -65,16 +65,16 @@
 				<label for="email" class="control-label">邮箱:</label>
 				<div class="controls">
 					<input type="text" id="email" name="email" size="50" value="${user.email}" class="email"/>
-				</div>
+					<msg:errorMsg property="email" />				</div>
 			</div>
 			<div class="control-group">
 				<label for="groupList" class="control-label">权限组:</label>
 				<div class="controls">
-					<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
+									<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
 				</div>
 			</div>	
 			<div class="form-actions">
-				<input id="submit" class="btn btn-primary" type="button" value="提交" onclick="save()"/>&nbsp;	
+				<input id="submit" class="btn btn-primary" type="submit" value="提交" />&nbsp;	
 				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>
