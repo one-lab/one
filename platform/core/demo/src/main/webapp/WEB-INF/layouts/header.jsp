@@ -17,7 +17,7 @@
 	<div id="menu">
 		<ul class="nav nav-tabs">
 				<li class="active"><a href="${ctx}/login">登录</a></li>
-				<li id="user-tab"><a href="${ctx}/account/user/" >帐号列表</a></li>
+				<li id="user-tab"><a href="${ctx}/account/user/list" >帐号列表</a></li>
 				<li id="group-tab"><a href="${ctx}/account/group/">权限组列表</a></li>
 				<li id="portal-tab"><a href="${ctx}/user_group/portal/main">帐号及权限信息(portal)</a></li>
 				<li id="pipe-tab"><a href="${ctx}/user_group/pipe/main">帐号及权限信息(pipe)</a></li>
