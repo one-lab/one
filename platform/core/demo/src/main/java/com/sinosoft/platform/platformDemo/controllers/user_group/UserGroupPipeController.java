@@ -10,11 +10,17 @@ public class UserGroupPipeController {
 
 	@Get("/main")
 	public String portalViews(Pipe p){
-//		p.addWindow("p1", "/account/user/p1");
-//		p.addWindow("p2", "/account/group/p2");
+		p.addWindow("p1", "/account/user/p1");
+		p.addWindow("p2", "/account/group/p2");
 		
-		p.addWindow("p1", "/user_group/pipe/p1");
-		p.addWindow("p2", "/user_group/pipe/p2");
+//		p.addWindow("p1", "/user_group/pipe/p1");
+//		p.addWindow("p2", "/user_group/pipe/p2");
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "user_group_pipe";
 	}
 	
