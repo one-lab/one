@@ -21,40 +21,36 @@ import org.springside.modules.utils.Collections3;
 import com.google.common.collect.Lists;
 import com.sinosoft.platform.platformDemo.model.IdEntity;
 
-
 /**
  * 用户.
  * 
- * 使用JPA annotation定义ORM关系.
- * 使用Hibernate annotation定义JPA未覆盖的部分.
+ * 使用JPA annotation定义ORM关系. 使用Hibernate annotation定义JPA未覆盖的部分.
  * 
  * @author calvin
  */
 @Entity
-//表名与类名不相同时重新定义表名.
+// 表名与类名不相同时重新定义表名.
 @Table(name = "acct_user")
-//默认的缓存策略.
+// 默认的缓存策略.
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends IdEntity {
 
 	private String loginName;
-	private String password;//为简化演示使用明文保存的密码
+	private String password;// 为简化演示使用明文保存的密码
 	private String name;
 	private String email;
-	private List<Group> groupList = Lists.newArrayList();//有序的关联对象集合
-	
-	//private Date 
-	
+	private List<Group> groupList = Lists.newArrayList();// 有序的关联对象集合
+
+	// private Date
+
 	/*
 	 * 
 	 * 嵌套属性封装 例如私密信息
 	 * 
 	 * 
 	 * 增加date，emun类型
-	 * 
-	 * 
 	 */
-	
+
 	public String getLoginName() {
 		return loginName;
 	}
@@ -87,14 +83,14 @@ public class User extends IdEntity {
 		this.email = email;
 	}
 
-	//多对多定义
+	// 多对多定义
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "acct_user_group", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "group_id") })
-	//Fecth策略定义
+	// Fecth策略定义
 	@Fetch(FetchMode.SUBSELECT)
-	//集合按id排序.
+	// 集合按id排序.
 	@OrderBy("id")
-	//集合中对象id的缓存.
+	// 集合中对象id的缓存.
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<Group> getGroupList() {
 		return groupList;
@@ -107,7 +103,7 @@ public class User extends IdEntity {
 	/**
 	 * 用户拥有的权限组名称字符串, 多个权限组名称用','分隔.
 	 */
-	//非持久化属性.
+	// 非持久化属性.
 	@Transient
 	public String getGroupNames() {
 		return Collections3.extractToString(groupList, "name", ", ");
