@@ -7,7 +7,7 @@
 		<version>1.0.0</version>
 	</parent>
 	<artifactId>web</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>Core :: Web</name>
 	
 	<properties>
@@ -168,40 +168,19 @@
 	    <dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>
-		    <version>4.3.0.Final</version>
+            <version>${hibernate-validator.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<testOutputDirectory>target/test/WEB-INF/classes</testOutputDirectory>
-		<resources>
-			<resource>
-				<directory>${project.build.sourceDirectory}</directory>
-				<excludes>
-					<exclude>.svn</exclude>
-					<exclude>log4j.*</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>src/test/webapp</directory>
-				<targetPath>target/test</targetPath>
-				<filtering>true</filtering>
-			</testResource>
-			<testResource>
-				<directory>src/test/java</directory>
-				<excludes>
-					<exclude>.svn</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
-		<plugins>
-			<plugin>
-				<!-- This plugin is needed for the servlet example -->
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
 	</build>
 </project>

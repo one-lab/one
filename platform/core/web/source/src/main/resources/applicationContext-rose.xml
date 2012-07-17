@@ -24,7 +24,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 	<bean id="afterInterceptorsInterceptor"
 		class="net.paoding.rose.web.impl.thread.AfterInterceptorsInterceptor" />
 		
-	<bean id="localValidationFactoryBean" 
+	<bean id="validationFactory"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 		
 	<bean id="annotationConfigValidator" class="com.sinosoft.web.validation.AnnotationConfigValidator" />
