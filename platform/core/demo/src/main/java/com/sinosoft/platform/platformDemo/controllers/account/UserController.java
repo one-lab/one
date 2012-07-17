@@ -105,7 +105,7 @@ public class UserController {
 			if(multipartFile.getOriginalFilename() == null){
 				continue;
 			}
-			multipartFile.transferTo(new File("D://fileuplode/"+multipartFile.getOriginalFilename()));
+			multipartFile.transferTo(new File(inv.getServletContext().getRealPath("/")+""+multipartFile.getOriginalFilename()));
 		}
 		
 		
