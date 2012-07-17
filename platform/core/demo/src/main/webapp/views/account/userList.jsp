@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="d" uri="/WEB-INF/rose.tld"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,7 +14,10 @@
 		//聚焦第一个输入框 
 		$("#user-tab").addClass("active");
 	});
+	
 </script>
+
+
 </head>
 
 <body>
@@ -47,14 +52,81 @@
 							<td>${user.email}</td>
 							<td>${user.groupNames}</td>
 							<td><a href="update/${user.id}" id="editLink-${user.name}">修改</a>
+								<a href="javascript:void(0);" onClick="viewUser(${user.id});" id="viewLink-${user.name}">查看</a> 
 								<a href="delete/${user.id}">删除</a></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 			<a class="btn" href="create">创建用户</a>
+			
+		</div>
+
+		<div id="view" class="span12" style="display: none">
+
+			<form:form id="inputForm" modelAttribute="user" class="form-horizontal">
+				<input type="hidden" name="id" value="${user.id}" />
+				<fieldset>
+					<legend>
+					<a href="javascript:void(0)" onclick="closeView();" style="float:right;margin-top:14px"><font size="2">关闭&nbsp; </font></a>	
+						<small>用户基本信息</small>
+					</legend>
+
+ 					<div class="control-group"> 
+						<label for="loginName" class="control-label">登录名:</label>
+						<div class="controls">
+							<input type="text" id="loginName" name="loginName" size="50" class="required" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label for="name" class="control-label">用户名:</label>
+						<div class="controls">
+							<input type="text" id="name" name="name" size="50" class="required" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label for="email" class="control-label">邮箱:</label>
+						<div class="controls">
+							<input type="text" id="email" name="email" size="50" class="email" />
+						</div>
+					</div>
+					
+<%-- 					<div class="control-group"> --%>
+<!-- 						<label for="groupList" class="control-label">权限组:</label> -->
+<%-- 						<div class="controls"> --%>
+<%-- 							<form:checkboxes path="groupList" items="${allGroups}" --%>
+<%-- 								itemLabel="name" itemValue="id" /> --%>
+<%-- 						</div> --%>
+<%-- 					</div> --%>
+					
+				</fieldset>
+			</form:form>
+
 		</div>
 		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
 	</div>
+<script type="text/javascript">
+var viewUser=function (uId) {
+		$.ajax({
+			type : "post",
+			url : "${ctx}/account/user/view/1/2/"+uId,
+			dataType : "json",
+			success : function(data) {
+				if(data != null){
+					$("#loginName").val(data.loginName);
+					$("#name").val(data.name);
+					$("#email").val(data.email);
+					$("#view").show();
+				}
+			},
+			error:function(){
+				alert("暂时无法获取用户信息");
+			}
+		});
+	}
+var closeView = function(){
+	$("#view").hide();
+}
+</script>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="${ctx}/static/portal.css" rel="stylesheet" type="text/css"
 	media="all" />
-<title>帐号及权限信息(portal)</title>
+<title>帐号及权限信息(pipe)</title>
 <%@ include file="/WEB-INF/layouts/base.jsp"%>
 <script src="${ctx}/static/rose-pipe/rose-pipe.js"
 	type="text/javascript"></script>
