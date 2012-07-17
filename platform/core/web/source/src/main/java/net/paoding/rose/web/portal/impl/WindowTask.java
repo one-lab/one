@@ -69,7 +69,18 @@ final class WindowTask implements Runnable {
             }
 
             final RequestDispatcher rd = request.getRequestDispatcher(windowPath);
-            request.setAttribute("$$paoding-rose-portal.window", window);
+         //   request.setAttribute("$$paoding-rose-portal.window", window);
+            request.setAttribute("$$paoding-rose-portal.window."+window.getName(), window);
+
+            String list = (String)request.getAttribute("$$paoding-rose-portal.window.names");
+            if(list==null){
+                list = window.getName();
+            }
+            else{
+                list = list+","+window.getName();
+            }
+            request.setAttribute("$$paoding-rose-portal.window.names",list);
+
             if (this.response.isCommitted()) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("onWindowTimeout: response has committed. [" + window.getName()

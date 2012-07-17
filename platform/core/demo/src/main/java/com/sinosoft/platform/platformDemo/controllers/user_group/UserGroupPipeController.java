@@ -4,6 +4,7 @@ package com.sinosoft.platform.platformDemo.controllers.user_group;
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
 import net.paoding.rose.web.portal.Pipe;
+import net.paoding.rose.web.portal.Window;
 
 @Path("pipe")
 public class UserGroupPipeController {
@@ -15,13 +16,9 @@ public class UserGroupPipeController {
 		
 //		p.addWindow("p1", "/user_group/pipe/p1");
 //		p.addWindow("p2", "/user_group/pipe/p2");
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		return "user_group_pipe";
+
 	}
 	
 	@Get("p1")

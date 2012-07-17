@@ -359,21 +359,31 @@ public class RoseFilter extends GenericFilterBean {
     protected void supportsRosepipe(final HttpServletRequest httpRequest) {
         // 这个代码为rosepipe所用，以避免rosepipe的"Cannot forward after response has been committed"异常
         // @see net.paoding.rose.web.portal.impl.PortalWaitInterceptor
-        Object window = httpRequest.getAttribute(RoseConstants.WINDOW_ATTR);
-        if (window != null && window.getClass().getName().startsWith("net.paoding.rose.web.portal")) {
-            httpRequest.setAttribute(RoseConstants.PIPE_WINDOW_IN, Boolean.TRUE);
-            if (logger.isDebugEnabled()) {
-                try {
-                    logger.debug("notify window '"
-                            + httpRequest.getAttribute("$$paoding-rose-portal.window.name") + "'");
-                } catch (Exception e) {
-                    logger.error("", e);
+
+        String windowNames = (String)httpRequest.getAttribute(RoseConstants.WINDOW_ATTR+".names");
+        if(StringUtils.isNotBlank(windowNames)){
+            for(String windowName:StringUtils.split(windowNames,",")){
+
+                Object window = httpRequest.getAttribute(RoseConstants.WINDOW_ATTR+"."+windowName);
+
+                if (window != null && window.getClass().getName().startsWith("net.paoding.rose.web.portal")) {
+                    httpRequest.setAttribute(RoseConstants.PIPE_WINDOW_IN, Boolean.TRUE);
+                    if (logger.isDebugEnabled()) {
+                        try {
+                            logger.debug("notify window '"
+                                    + httpRequest.getAttribute("$$paoding-rose-portal.window.name") + "'");
+                        } catch (Exception e) {
+                            logger.error("", e);
+                        }
+                    }
+                    synchronized (window) {
+                        window.notifyAll();
+                    }
                 }
             }
-            synchronized (window) {
-                window.notifyAll();
-            }
         }
+       // Object window = httpRequest.getAttribute(RoseConstants.WINDOW_ATTR);
+
     }
 
     /**

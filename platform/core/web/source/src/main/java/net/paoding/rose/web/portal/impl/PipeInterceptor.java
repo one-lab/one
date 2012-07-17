@@ -66,6 +66,7 @@ public class PipeInterceptor extends ControllerInterceptorAdapter {
                 deadline = -1;
             }
 
+
             try {
                 for (Window window : pipe.getWindows()) {
                     if (window.get(RoseConstants.PIPE_WINDOW_IN) != Boolean.TRUE) {
