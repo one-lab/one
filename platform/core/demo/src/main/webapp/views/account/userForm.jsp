@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="d" uri="/WEB-INF/rose.tld"%>
-<%@ taglib prefix="msg" uri="/WEB-INF/errorMsg.tld" %><c:set var="ctx" value="${pageContext.request.contextPath}" />
+<%@ taglib prefix="msg" uri="http://sinosoft.com/validation/msg" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -67,18 +68,43 @@
 					<input type="text" id="email" name="email" size="50" value="${user.email}" class="email"/>
 					<msg:errorMsg property="email" />				</div>
 			</div>
+			
+			
 			<div class="control-group">
 				<label for="groupList" class="control-label">权限组:</label>
 				<div class="controls">
-									<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
+						<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
 				</div>
 			</div>	
+			<fieldset>
+			<div class="control-group">
+				<legend>
+						<small>用户隐私信息</small>
+				</legend>
+				<input type="hidden" name="userInfo.id" value="${userInfo.id}"/>
+				<label for="userInfo.phone" class="control-label">手机号码：</label>
+				<div class="controls">
+					<input type="text" name="userInfo.phone" value="${userInfo.phone}" />
+				</div>
+				<br />
+				<label for="userInfo.idcode" class="control-label">身份证号：</label>
+				<div class="controls">
+					<input type="text" name="userInfo.idcode" value="${userInfo.idcode}" />
+				</div>
+				<br />
+				<label for="userInfo.general" class="control-label">性别：     </label>
+				<div class="controls">
+					<input type="radio" value="MALE" name="userInfo.general"  />男性&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" value="FEMALE" name="userInfo.general" />女性
+				</div>
+			</div>
+			</fieldset>
 			<div class="form-actions">
 				<input id="submit" class="btn btn-primary" type="submit" value="提交" />&nbsp;	
 				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>
-
+		
 	</form:form>
 	
 	</div>

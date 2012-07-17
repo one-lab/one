@@ -1,6 +1,7 @@
 package com.sinosoft.platform.platformDemo.controllers.account;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.paoding.rose.web.Invocation;
@@ -52,6 +53,7 @@ public class UserDetailController {
 	@Get("update/{id:[0-9]+}")
 	public String updateForm(@Param("id") long id, Invocation inv) {
 		inv.addModel("user", accountManager.getUser(id));
+		inv.addModel("userInfo", accountManager.findUserInfo(id));
 		inv.addModel("allGroups", accountManager.getAllGroup());
 		return "userForm";
 	}
@@ -66,13 +68,17 @@ public class UserDetailController {
 		}
 		
 		user.setGroupList(groupList);
+		user.setCreateTime(new Date());
 		accountManager.saveUser(user);
+		
+		if(user.getUserInfo().getId() == null){
+			user.getUserInfo().setId(user.getId());
+		}
+		user.getUserInfo().setStrGeneral(user.getUserInfo().getGeneral().name());
+		accountManager.saveUserInfo(user.getUserInfo());
+		
 		inv.addFlash("message", "修改用户" + user.getLoginName() + "成功");
 		return "r:/platformDemo/account/user/list";
 	}
 
-//	@ModelAttribute("user")
-//	public User getAccount(@PathVariable("id") Long id) {
-//		return accountManager.getUser(id);
-//	}
 }

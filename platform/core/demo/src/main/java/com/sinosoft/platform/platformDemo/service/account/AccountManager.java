@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.platform.platformDemo.dao.account.GroupDao;
 import com.sinosoft.platform.platformDemo.dao.account.UserDao;
+import com.sinosoft.platform.platformDemo.dao.account.UserInfoDao;
 import com.sinosoft.platform.platformDemo.model.account.Group;
 import com.sinosoft.platform.platformDemo.model.account.User;
+import com.sinosoft.platform.platformDemo.model.account.UserInfo;
 import com.sinosoft.platform.platformDemo.service.ServiceException;
 
 /**
@@ -32,11 +34,27 @@ public class AccountManager {
 
 	private UserDao userDao;
 	private GroupDao groupDao;
-
+	private UserInfoDao userInfoDao;
 	
 	
-	
-
+	@Transactional(readOnly = false)
+	public void saveUserInfo(UserInfo entity){
+		userInfoDao.save(entity);
+	}
+	@Transactional(readOnly = false)
+	public void deleteUerInfo(Long id){
+		userInfoDao.delete(id);
+		
+	}
+	public UserInfo findUserInfo(Long id){
+		return userInfoDao.findOne(id);
+	}
+	public UserInfo findUserInfoByUserId(long userId){
+		return userInfoDao.findByUserId(userId);
+	}
+    public UserInfo UpdateUseInfo(UserInfo entity){
+    	return userInfoDao.save(entity);
+    }
 	//-- User Manager --//
 	public User getUser(Long id) {
 		return userDao.findOne(id);
@@ -101,6 +119,10 @@ public class AccountManager {
 	@Autowired
 	public void setGroupDao(GroupDao groupDao) {
 		this.groupDao = groupDao;
+	}
+	@Autowired
+	public void setUserInfoDao(UserInfoDao userInfoDao) {
+		this.userInfoDao = userInfoDao;
 	}
 
 }

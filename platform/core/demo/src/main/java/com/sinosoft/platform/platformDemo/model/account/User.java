@@ -1,5 +1,6 @@
 package com.sinosoft.platform.platformDemo.model.account;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -40,8 +41,8 @@ public class User extends IdEntity {
 	private String name;
 	private String email;
 	private List<Group> groupList = Lists.newArrayList();// 有序的关联对象集合
-
-	// private Date
+	private Date createTime;
+	private UserInfo userInfo;
 
 	/*
 	 * 
@@ -50,6 +51,22 @@ public class User extends IdEntity {
 	 * 
 	 * 增加date，emun类型
 	 */
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	@Transient
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
 
 	public String getLoginName() {
 		return loginName;

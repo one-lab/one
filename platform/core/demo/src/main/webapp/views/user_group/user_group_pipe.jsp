@@ -20,10 +20,26 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<div class="content" id="p1"></div>
-<div class="content" id="p2"></div>
+<div class="container">
+		<%@ include file="/WEB-INF/layouts/header.jsp"%>
+		<div id="content" class="span12">
+			<h2>帐号及权限信息：</h2>
+
+			<div class="window">
+				<div class="title">用户</div>
+				<div class="content" id="p1"></div>
+			</div>
+
+			<div class="window">
+				<div class="title">权限</div>
+				<div class="content" id="p2"></div>
+			</div>
+		</div>
+		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+	</div>
+
 </body>
 </html>
 <rosepipe:write>${p1}</rosepipe:write>
-<rosepipe:write>${p2}</rosepipe:write>
 
+<rosepipe:write>${p2}</rosepipe:write>

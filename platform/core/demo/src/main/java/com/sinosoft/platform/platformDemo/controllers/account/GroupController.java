@@ -62,4 +62,11 @@ public class GroupController {
 		inv.addModel("groups", groups);
 		return "groupWindow";
 	}
+	
+	@Get("/pipe2")
+	public String pipe2(Invocation inv,Window window){
+		List<Group> groups = accountManager.getAllGroup();
+		inv.addModel("groups", groups);
+		return "groupListPipe";
+	}
 }

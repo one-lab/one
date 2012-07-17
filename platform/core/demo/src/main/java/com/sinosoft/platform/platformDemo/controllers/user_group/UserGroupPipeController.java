@@ -11,8 +11,8 @@ public class UserGroupPipeController {
 
 	@Get("/main")
 	public String portalViews(Pipe p){
-		p.addWindow("p1", "/account/user/p1");
-		p.addWindow("p2", "/account/group/p2");
+		p.addWindow("p1", "/account/user/pipe1");
+		p.addWindow("p2", "/account/group/pipe2");
 		
 //		p.addWindow("p1", "/user_group/pipe/p1");
 //		p.addWindow("p2", "/user_group/pipe/p2");

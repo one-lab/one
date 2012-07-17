@@ -1,6 +1,9 @@
 package com.sinosoft.platform.platformDemo.controllers.account;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.paoding.rose.web.Invocation;
@@ -13,10 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sinosoft.platform.platformDemo.controllers.LoginRequired;
 import com.sinosoft.platform.platformDemo.model.account.Group;
 import com.sinosoft.platform.platformDemo.model.account.User;
+import com.sinosoft.platform.platformDemo.model.account.UserInfo;
 import com.sinosoft.platform.platformDemo.service.account.AccountManager;
 import com.sinosoft.web.instruction.reply.Reply;
 import com.sinosoft.web.instruction.reply.Replys;
@@ -69,14 +74,20 @@ public class UserController {
 		inv.addModel("allGroups", accountManager.getAllGroup());
 		return "userForm";
 	}
-	
+	@Get("userInfoList/{userId}")
+	public String check(@Param("userId") long userId ,Invocation inv){
+		UserInfo userInfos = accountManager.findUserInfoByUserId(userId);
+		inv.addModel("uesrInfos",userInfos);
+		return "userInfoList";
+	}
 	
 	@Post("save")
 	public String save(@Param("groupList") List<Long> gids,
 			@Validation(errorPath="a:errorCreate", 
 				notEmpty=@NotEmptyEx( props={"loginName","password","email","name"} ) ,
 				size=@SizeEx(max=20,min=4, props={"name","loginName","email"})
-			) User user, Invocation inv) {
+			) User user,@Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {
+		
 		List<Group> groupList = new ArrayList<Group>();
 		for (Long long1 : gids) {
 			Group group = new Group(long1, null);
@@ -84,7 +95,20 @@ public class UserController {
 		}
 		user.setGroupList(groupList);
 		user.setId(System.currentTimeMillis());
+		user.setCreateTime(new Date());
 		accountManager.saveUser(user);
+		
+		user.getUserInfo().setId(user.getId());
+		user.getUserInfo().setStrGeneral(user.getUserInfo().getGeneral().name());
+		accountManager.saveUserInfo(user.getUserInfo());
+		for (MultipartFile multipartFile : docs) {
+			if(multipartFile.getOriginalFilename() != null){
+				continue;
+			}
+			multipartFile.transferTo(new File("D://fileuplode/"+multipartFile.getOriginalFilename()));
+		}
+		
+		
 //		return Replys.sample().success("创建用户" + user.getLoginName() + "成功");
 		return "r:/platformDemo/account/user/list";
 	}
@@ -92,6 +116,7 @@ public class UserController {
 	@Get("delete/{id}")
 	public String delete(@Param("id") Long id, Invocation inv) {
 		accountManager.deleteUser(id);
+		accountManager.deleteUerInfo(id);
 		inv.addFlash("message", "删除用户成功");
 		return "r:/platformDemo/account/user/list";
 	}
@@ -116,12 +141,29 @@ public class UserController {
 //		return "@ p1***********";
 	}
 	
+	@Get("/pipe1")
+	public String pipe1(Invocation inv){ 
+		List<User> users = accountManager.getAllUser();
+		inv.addModel("users", users);
+		return "userListPipe";
+	}
+	
 	@Post("view/{key1}/{key2}/{id}")
-	public Object view(@Param("key1") Long key1, @Param("key2") Long key2, @Param("id") Long id, Invocation inv){
+	public Object view(@Param("key1") Long key1, @Param("key2") Long key2,
+			@Param("id") Long id, Invocation inv){
 		if(key1 == 1 && key2 == 2){
 			User user = accountManager.getUser(id);
+			
 			return Replys.with(user).as(Json.class);
 		}
 		return "@e";
+	}
+	
+	@Post("viewUserInfo/{id:[0-9]+}")
+	public Object viewUserInfo(@Param("id") Long id, Invocation inv){
+		
+		UserInfo userInfo = accountManager.findUserInfo(id);
+		
+		return Replys.with(userInfo).as(Json.class);
 	}
 }

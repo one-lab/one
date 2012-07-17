@@ -10,9 +10,7 @@ function RosePipe() {
 ( function RosePipePrototype() {
 	var head = document.getElementsByTagName('head')[0];
 
-	var $ = function(id) {
-		return document.getElementById(id);
-	}
+	
 
 	this.loadCSS = function(href) {
 		var ele = document.createElement('link');
@@ -77,7 +75,7 @@ function RosePipe() {
 
 	// 添加模块
 	this.doAddWindow = function(module) {
-		$(module.id).innerHTML = module.html;
+		$("#"+module.id).html(module.html);
 
 		// Load CSS
 		if (module.css) {

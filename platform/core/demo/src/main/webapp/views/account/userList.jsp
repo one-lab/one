@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="d" uri="/WEB-INF/rose.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -40,7 +41,8 @@
 						<th>登录名</th>
 						<th>用户名</th>
 						<th>邮箱</th>
-						<th>权限组
+						<th>权限组</th>
+						<th>创建时间</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -51,9 +53,11 @@
 							<td>${user.name}</td>
 							<td>${user.email}</td>
 							<td>${user.groupNames}</td>
+							<td><fmt:formatDate value="${user.createTime }" pattern="yyyy-MM-dd HH:mm:ss" />
 							<td><a href="update/${user.id}" id="editLink-${user.name}">修改</a>
 								<a href="javascript:void(0);" onClick="viewUser(${user.id});" id="viewLink-${user.name}">查看</a> 
-								<a href="delete/${user.id}">删除</a></td>
+								<a href="delete/${user.id}">删除</a>
+								</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -91,14 +95,37 @@
 						</div>
 					</div>
 					
-<%-- 					<div class="control-group"> --%>
-<!-- 						<label for="groupList" class="control-label">权限组:</label> -->
-<%-- 						<div class="controls"> --%>
-<%-- 							<form:checkboxes path="groupList" items="${allGroups}" --%>
-<%-- 								itemLabel="name" itemValue="id" /> --%>
-<%-- 						</div> --%>
-<%-- 					</div> --%>
+					<div class="control-group">
+						<label for="groupList" class="control-label">权限信息:</label>
+						<div  class="controls" id="groupListDiv"></div>
+ 					</div> 
 					
+				</fieldset>
+				
+				<fieldset>
+					<legend>
+					<a href="javascript:void(0)" onclick="closeView();" style="float:right;margin-top:14px"><font size="2">关闭&nbsp; </font></a>	
+						<small>用户隐私信息</small>
+					</legend>
+
+ 					<div class="control-group"> 
+						<label  class="control-label">手机号码:</label>
+						<div class="controls">
+							<input type="text" id="phone"  size="50" class="required" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label  class="control-label">身份证号:</label>
+						<div class="controls">
+							<input type="text" id="idcode" size="50" class="required" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label  class="control-label">性别:</label>
+						<div class="controls">
+							<input type="text" id="general"  size="50" class="email" />
+						</div>
+					</div>
 				</fieldset>
 			</form:form>
 
@@ -116,11 +143,37 @@ var viewUser=function (uId) {
 					$("#loginName").val(data.loginName);
 					$("#name").val(data.name);
 					$("#email").val(data.email);
+					$("#groupListDiv").html("");
+					for (var i=0;i < data.groupList.length;i++){
+					    $("#groupListDiv").append("<span>"+data.groupList[i].permissionNames+"</span>");
+					    
+					}
+					
 					$("#view").show();
 				}
 			},
 			error:function(){
 				alert("暂时无法获取用户信息");
+			}
+		});
+		
+		$.ajax({
+			type : "post",
+			url : "${ctx}/account/user/viewUserInfo/"+uId,
+			dataType : "json",
+			success : function(data) {
+				if(data != null){
+					$("#phone").val(data.phone);
+					$("#idcode").val(data.idcode);
+					var general = data.strGeneral;
+					
+					$("#general").val(general=="MALE" ? "男性":"女性");
+					
+					$("#view").show();
+				}
+			},
+			error:function(){
+				alert("暂时无法获取隐私信息");
 			}
 		});
 	}
