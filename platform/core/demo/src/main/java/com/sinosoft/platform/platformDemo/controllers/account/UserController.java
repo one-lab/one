@@ -86,7 +86,7 @@ public class UserController {
 			@Validation(errorPath="a:errorCreate", 
 				notEmpty=@NotEmptyEx( props={"loginName","password","email","name"} ) ,
 				size=@SizeEx(max=20,min=4, props={"name","loginName","email"})
-			) User user,@Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {
+			) User user, @Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {
 		
 		List<Group> groupList = new ArrayList<Group>();
 		for (Long long1 : gids) {
@@ -102,7 +102,7 @@ public class UserController {
 		user.getUserInfo().setStrGeneral(user.getUserInfo().getGeneral().name());
 		accountManager.saveUserInfo(user.getUserInfo());
 		for (MultipartFile multipartFile : docs) {
-			if(multipartFile.getOriginalFilename() != null){
+			if(multipartFile.getOriginalFilename() == null){
 				continue;
 			}
 			multipartFile.transferTo(new File("D://fileuplode/"+multipartFile.getOriginalFilename()));

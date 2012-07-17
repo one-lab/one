@@ -32,7 +32,9 @@
 	<div class="container">
 		<%@ include file="/WEB-INF/layouts/header.jsp"%>
 		<div id="content" class="span12">
-	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="user" 
+	action="${ctx}/account/user/save/${user.id}" method="post" enctype="multipart/form-data"
+	class="form-horizontal">
 		<input type="hidden" name="id" value="${user.id}"/>
 		<fieldset>
 			<legend><small>管理用户</small></legend>
@@ -67,6 +69,13 @@
 				<div class="controls">
 					<input type="text" id="email" name="email" size="50" value="${user.email}" class="email"/>
 					<msg:errorMsg property="email" />				</div>
+			</div>
+			<div class="control-group">
+				<label for="email" class="control-label">资料上传:</label>
+				<div class="controls">
+					<input type="file" id="doc" name="doc1" />
+					<input type="file" id="doc2" name="doc2" />
+				</div>
 			</div>
 			
 			
