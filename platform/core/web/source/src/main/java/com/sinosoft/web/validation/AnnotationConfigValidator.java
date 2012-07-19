@@ -143,7 +143,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 			ConstraintMapping mapping) {
 		Map<Constraint,ValidationWrapper> constrantMap =this.createConstrantMap(metaData);
 		
-		TypeConstraintMappingContext<?> constraintType = mapping.type(metaData.getParamType());
+		TypeConstraintMappingContext<?> constraintType = mapping.type(metaData.getControllerClass());
 		for (Constraint con : constrantMap.keySet()) {
 			this.innerConstractionMappingForValue(constraintType, constrantMap.get(con));
 		}
@@ -159,7 +159,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 	
 	private void innerConstractionMappingForValue( TypeConstraintMappingContext<?> mappingContext,
 			ValidationWrapper validationWrapper) {
-		mappingContext.property(validationWrapper.getParamName(), ElementType.LOCAL_VARIABLE)
+		mappingContext.property(validationWrapper.getParamName(), ElementType.METHOD)
 			.constraint(validationWrapper.getConstraintDef())
 			.valid();
 	}
@@ -311,13 +311,16 @@ public class AnnotationConfigValidator implements ParamValidator{
 			if(!result.isEmpty())
 				return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
 		} else if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
-//			Set<?> result2 = getValidator(metaData,configValidation).
-//					validateValue(metaData.getParamType(), metaData.getParamName(),target);
-//			
-//			if(!result2.isEmpty()){
-//				
-//			}
-				//return this.isAjaxRequest(inv) ? errorAjaxResponse(result2) : errorCommonResponse(inv,result2,errorPath);
+			
+//			HibernateValidatorConfiguration config = 
+//					javax.validation.Validation.byProvider( HibernateValidator.class ).configure();
+//			ConstraintMapping mapping = new ConstraintMapping();
+//			mapping.type(metaData.getControllerClass())
+//				.method(metaData.getMethod().getName(), metaData.getParamType())
+//				.parameter(0).constraint()
+//			config.addMapping( mapping );
+//			return  config.buildValidatorFactory().getValidator()
+			
 		}
 		
 		
