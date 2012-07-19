@@ -6,7 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.sinosoft.web.validation.enumation.ConfigType;
 
 /**
  * 加上此注解采用默认的验证器验证相关对象
@@ -28,7 +27,6 @@ public @interface Validation {
      * 
      * @author Morgan
      */
-    ConfigType configType() default ConfigType.BEAN;
     
     String errorPath();
     

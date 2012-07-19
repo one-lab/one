@@ -26,6 +26,6 @@ import javax.validation.constraints.NotNull;
 @ReportAsSingleViolation
 @NotNull
 public @interface NotBlankEx {
-	String message() default "{javax.validation.constraints.NotBlank.message}";
+	String message() default "{org.hibernate.validator.constraints.NotBlank.message}";
 	String[] props() ;
 }

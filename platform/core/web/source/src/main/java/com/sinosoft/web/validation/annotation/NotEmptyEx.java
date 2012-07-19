@@ -28,6 +28,6 @@ import javax.validation.constraints.Size;
 @NotNull
 @Size(min = 1)
 public @interface NotEmptyEx {
-	String message() default "{javax.validation.constraints.NotEmpty.message}";
+	String message() default "{org.hibernate.validator.constraints.NotEmpty.message}";
 	String[] props() ;
 }

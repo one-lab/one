@@ -176,9 +176,14 @@
 	function testForward() {
 		location.href = contextPath + "/hello/forward";
 	}
+	
+	function testParamValidate(){
+	   	location.href = contextPath + "/param/validate?id=&name=&ignoreField=";
+	}
 </script>
 </head>
 <body>
+	<input type="button" value="testParamValidate" onclick="testParamValidate()"/>
 	<input type="button" value="testReplyStr" onclick="testReplyStr()"/>
 	<input type="button" value="testReplyJson" onclick="testReplyJson()"/>
 	<input type="button" value="testReplyJsonExclude" onclick="testReplyJsonExclude()"/>

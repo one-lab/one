@@ -12,6 +12,19 @@ import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.ParamValidator;
@@ -39,6 +52,8 @@ import org.hibernate.validator.cfg.defs.NullDef;
 import org.hibernate.validator.cfg.defs.PastDef;
 import org.hibernate.validator.cfg.defs.PatternDef;
 import org.hibernate.validator.cfg.defs.SizeDef;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.Errors;
@@ -74,7 +89,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 	enum Constraint{
 		NotNull,NotEmpty,NotBlank,Min,
 		Max,Null,Past,Pattern,
-		Size,Future,Digist,DecimalMax,
+		Size,Future,Digits,DecimalMax,
 		DecimalMin,AssertFalse,AssertTrue;
 	}
 
@@ -96,24 +111,44 @@ public class AnnotationConfigValidator implements ParamValidator{
 	private static final String INVALID_VALUE = "invalidValue";
 
 
-	public Validator getValidator(Validation configValidation ,Class<?> targetClass) {
-		if(isContainsRules(configValidation)) {
-			HibernateValidatorConfiguration config = javax.validation.Validation.byProvider( HibernateValidator.class ).configure();
-			config.addMapping( getMapping(configValidation,targetClass));
+	private Validator getValidator(ParamMetaData metaData, Validation configValidation ) {
+		
+		if(isContainsRules(configValidation) || 
+				ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())) {
+			HibernateValidatorConfiguration config = 
+					javax.validation.Validation.byProvider( HibernateValidator.class ).configure();
+			config.addMapping( getMapping(configValidation,metaData));
 			return  config.buildValidatorFactory().getValidator();
-		} 
+		}
+		
 		return defaultValidator;
 		
 	}
 	
-	private ConstraintMapping getMapping(Validation configValidation ,Class<?> targetClass) {
+	
+	private ConstraintMapping getMapping(Validation configValidation ,ParamMetaData metaData) {
 		@SuppressWarnings("deprecation")
 		ConstraintMapping mapping = new ConstraintMapping();
-		this.addConstraction(configValidation,mapping.type(targetClass));
+		//针对非基本类型和包装类
+		if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType()) ) {
+			addConstraction(configValidation,mapping.type(metaData.getParamType()));
+		} else {
+			addConstraction(metaData, mapping);
+		}
+		
 		return mapping;
 	}
 	
-	
+	private void addConstraction(ParamMetaData metaData,
+			ConstraintMapping mapping) {
+		Map<Constraint,ValidationWrapper> constrantMap =this.createConstrantMap(metaData);
+		
+		TypeConstraintMappingContext<?> constraintType = mapping.type(metaData.getParamType());
+		for (Constraint con : constrantMap.keySet()) {
+			this.innerConstractionMappingForValue(constraintType, constrantMap.get(con));
+		}
+	}
+
 
 	private void addConstraction(Validation configValidation,TypeConstraintMappingContext<?> mappingContext) {
 		Map<Constraint,ValidationWrapper> constrantMap =this.createConstrantMap(configValidation);
@@ -122,9 +157,15 @@ public class AnnotationConfigValidator implements ParamValidator{
 		}
 	}
 	
-
-	private void innerConstractionMapping(
-			TypeConstraintMappingContext<?> mappingContext, ValidationWrapper validationWrapper) {
+	private void innerConstractionMappingForValue( TypeConstraintMappingContext<?> mappingContext,
+			ValidationWrapper validationWrapper) {
+		mappingContext.property(validationWrapper.getParamName(), ElementType.LOCAL_VARIABLE)
+			.constraint(validationWrapper.getConstraintDef())
+			.valid();
+	}
+	
+	private void innerConstractionMapping( TypeConstraintMappingContext<?> mappingContext,
+			ValidationWrapper validationWrapper) {
 		for(String propertyPath:validationWrapper.getProperties()) {
 		 	mappingContext.property( propertyPath, ElementType.FIELD )
 			 	.constraint(validationWrapper.getConstraintDef())
@@ -132,7 +173,70 @@ public class AnnotationConfigValidator implements ParamValidator{
 		}
 	}
 	
-
+	/**
+	 * 构建单个参数验证用的mapping数据
+	 * @param metaData
+	 * @return
+	 */
+	private Map<Constraint, ValidationWrapper> createConstrantMap(
+			ParamMetaData metaData) {
+		Map<Constraint,ValidationWrapper> constrantMap= new HashMap<AnnotationConfigValidator.Constraint, 
+				ValidationWrapper>();
+		final String paramName = metaData.getParamName();
+		if( metaData.getAnnotation(NotNull.class) != null ) {
+			constrantMap.put(Constraint.NotNull, 
+					ValidationWrapper.createNotNullDef(metaData.getAnnotation(NotNull.class),paramName));
+		}
+		if( metaData.getAnnotation(NotBlank.class) != null ) {
+			constrantMap.put(Constraint.NotBlank, ValidationWrapper.createNotBlankDef(metaData.getAnnotation(NotBlank.class),paramName));
+		}
+		if(  metaData.getAnnotation(NotEmpty.class) != null ) {
+			constrantMap.put(Constraint.NotEmpty, ValidationWrapper.createNotEmptyDef( metaData.getAnnotation(NotEmpty.class),paramName));
+		}
+		if( metaData.getAnnotation(Max.class) != null ) {
+			constrantMap.put(Constraint.Max, ValidationWrapper.createMaxDef(metaData.getAnnotation(Max.class),paramName));
+		}
+		if( metaData.getAnnotation(Min.class) != null ) {
+			constrantMap.put(Constraint.Min, ValidationWrapper.createMinDef(metaData.getAnnotation(Min.class),paramName));
+		}
+		if( metaData.getAnnotation(Pattern.class) != null ) {
+			constrantMap.put(Constraint.Pattern, ValidationWrapper.createPatternDef(metaData.getAnnotation(Pattern.class),paramName));
+		}
+		if( metaData.getAnnotation(Size.class) != null ) {
+			constrantMap.put(Constraint.Size, ValidationWrapper.createSizeDef(metaData.getAnnotation(Size.class),paramName));
+		}
+		if( metaData.getAnnotation(AssertFalse.class) != null ) {
+			constrantMap.put(Constraint.AssertFalse, ValidationWrapper.createAssertFalseDef(metaData.getAnnotation(AssertFalse.class),paramName));
+		}
+		if( metaData.getAnnotation(AssertTrue.class) != null ) {
+			constrantMap.put(Constraint.AssertTrue, ValidationWrapper.createAssertTrueDef(metaData.getAnnotation(AssertTrue.class),paramName));
+		}
+		if( metaData.getAnnotation(DecimalMax.class) != null ) {
+			constrantMap.put(Constraint.DecimalMax, ValidationWrapper.createDecimalMaxDef(metaData.getAnnotation(DecimalMax.class),paramName));
+		}
+		if( metaData.getAnnotation(DecimalMin.class) != null ) {
+			constrantMap.put(Constraint.DecimalMin, ValidationWrapper.createDecimalMinDef(metaData.getAnnotation(DecimalMin.class),paramName));
+		}
+		if( metaData.getAnnotation(Digits.class) != null ) {
+			constrantMap.put(Constraint.Digits, ValidationWrapper.createDigistDef(metaData.getAnnotation(Digits.class),paramName));
+		}
+		if( metaData.getAnnotation(Future.class) != null ) {
+			constrantMap.put(Constraint.Future, ValidationWrapper.createFutureDef(metaData.getAnnotation(Future.class),paramName));
+		}
+		if( metaData.getAnnotation(Past.class) != null ) {
+			constrantMap.put(Constraint.Past, ValidationWrapper.createPastDef(metaData.getAnnotation(Past.class),paramName));
+		}
+		if( metaData.getAnnotation(Null.class) != null ) {
+			constrantMap.put(Constraint.Null, ValidationWrapper.createNullDef(metaData.getAnnotation(Null.class),paramName));
+		}
+		return constrantMap;
+	}
+	
+	/**
+	 * 构建Bean验证用的mapping数据
+	 * @param configValidation
+	 * @return
+	 */
 	private Map<Constraint, ValidationWrapper> createConstrantMap(
 			Validation configValidation) {
 		Map<Constraint,ValidationWrapper> constrantMap= new HashMap<AnnotationConfigValidator.Constraint, 
@@ -141,46 +245,46 @@ public class AnnotationConfigValidator implements ParamValidator{
 			constrantMap.put(Constraint.NotNull, ValidationWrapper.createNotNullDef(configValidation.notNull()));
 		}
 		if(configValidation.notBlank().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createNotBlankDef(configValidation.notBlank()));
+			constrantMap.put(Constraint.NotBlank, ValidationWrapper.createNotBlankDef(configValidation.notBlank()));
 		}
 		if(configValidation.notEmpty().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createNotEmptyDef(configValidation.notEmpty()));
+			constrantMap.put(Constraint.NotEmpty, ValidationWrapper.createNotEmptyDef(configValidation.notEmpty()));
 		}
 		if(configValidation.max().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createMaxDef(configValidation.max()));
+			constrantMap.put(Constraint.Max, ValidationWrapper.createMaxDef(configValidation.max()));
 		}
 		if(configValidation.min().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createMinDef(configValidation.min()));
+			constrantMap.put(Constraint.Min, ValidationWrapper.createMinDef(configValidation.min()));
 		}
 		if(configValidation.pattern().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createPatternDef(configValidation.pattern()));
+			constrantMap.put(Constraint.Pattern, ValidationWrapper.createPatternDef(configValidation.pattern()));
 		}
 		if(configValidation.size().props().length>0) {
 			constrantMap.put(Constraint.Size, ValidationWrapper.createSizeDef(configValidation.size()));
 		}
 		if(configValidation.assertFalse().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createAssertFalseDef(configValidation.assertFalse()));
+			constrantMap.put(Constraint.AssertFalse, ValidationWrapper.createAssertFalseDef(configValidation.assertFalse()));
 		}
 		if(configValidation.assertTrue().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createAssertTrueDef(configValidation.assertTrue()));
+			constrantMap.put(Constraint.AssertTrue, ValidationWrapper.createAssertTrueDef(configValidation.assertTrue()));
 		}
 		if(configValidation.decimalMax().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createDecimalMaxDef(configValidation.decimalMax()));
+			constrantMap.put(Constraint.DecimalMax, ValidationWrapper.createDecimalMaxDef(configValidation.decimalMax()));
 		}
 		if(configValidation.decimalMin().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createDecimalMinDef(configValidation.decimalMin()));
+			constrantMap.put(Constraint.DecimalMin, ValidationWrapper.createDecimalMinDef(configValidation.decimalMin()));
 		}
 		if(configValidation.digits().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createDigistDef(configValidation.digits()));
+			constrantMap.put(Constraint.Digits, ValidationWrapper.createDigistDef(configValidation.digits()));
 		}
 		if(configValidation.future().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createFutureDef(configValidation.future()));
+			constrantMap.put(Constraint.Future, ValidationWrapper.createFutureDef(configValidation.future()));
 		}
 		if(configValidation.past().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createPastDef(configValidation.past()));
+			constrantMap.put(Constraint.Past, ValidationWrapper.createPastDef(configValidation.past()));
 		}
 		if(configValidation.nulls().props().length>0) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createNullDef(configValidation.nulls()));
+			constrantMap.put(Constraint.Null, ValidationWrapper.createNullDef(configValidation.nulls()));
 		}
 		
 		//--
@@ -199,16 +303,26 @@ public class AnnotationConfigValidator implements ParamValidator{
 			logger.debug("[annotation config validate] "+"use validator: "
 					+" to validate "+target);
 		}
-		if( !ClassUtils.isPrimitiveOrWrapper(target.getClass()) ) {
-			Validation configValidation = metaData.getAnnotation(Validation.class);
-			String errorPath = configValidation.errorPath();
-			
-			Set<ConstraintViolation<Object>> result = getValidator(configValidation,target.getClass())
-					.validate(target);
-			
+
+		Validation configValidation = metaData.getAnnotation(Validation.class);
+		String errorPath = configValidation.errorPath();
+		if(isContainsRules(configValidation)){
+			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
 			if(!result.isEmpty())
 				return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
+		} else if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
+//			Set<?> result2 = getValidator(metaData,configValidation).
+//					validateValue(metaData.getParamType(), metaData.getParamName(),target);
+//			
+//			if(!result2.isEmpty()){
+//				
+//			}
+				//return this.isAjaxRequest(inv) ? errorAjaxResponse(result2) : errorCommonResponse(inv,result2,errorPath);
 		}
+		
+		
+	
+		
 		return null;
 	}
 	
@@ -279,6 +393,8 @@ public class AnnotationConfigValidator implements ParamValidator{
 	private static class ValidationWrapper{
 		
 		private final String[] properties;
+		
+		private final String paramName;
 
 		@SuppressWarnings("rawtypes")
 		private final ConstraintDef constraintDef;
@@ -287,8 +403,20 @@ public class AnnotationConfigValidator implements ParamValidator{
 		private ValidationWrapper(final String[] properties,final ConstraintDef constraintDef){
 			this.properties = properties;
 			this.constraintDef = constraintDef;
+			this.paramName = null;
 		}
 		
+		@SuppressWarnings("rawtypes")
+		private ValidationWrapper(final String paramName,final ConstraintDef constraintDef) {
+			this.paramName = paramName;
+			this.constraintDef = constraintDef;
+			this.properties = null;
+		}
+		
+		public String getParamName() {
+			return paramName;
+		}
+
 		public String[] getProperties() {
 			return properties;
 		}
@@ -381,6 +509,90 @@ public class AnnotationConfigValidator implements ParamValidator{
 			def.regexp(ex.regexp());
 			def.message(ex.message());
 			return new ValidationWrapper(ex.props(),def);
+		}
+		public static ValidationWrapper createSizeDef(Size ex,String paramName) {
+			SizeDef def =new SizeDef();
+			def.max(ex.max());
+			def.min(ex.min());
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createNotNullDef(NotNull ex,String paramName) {
+			NotNullDef def = new NotNullDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createAssertFalseDef(AssertFalse ex,String paramName) {
+			AssertFalseDef def = new AssertFalseDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createAssertTrueDef(AssertTrue ex,String paramName) {
+			AssertTrueDef def = new AssertTrueDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createDecimalMaxDef(DecimalMax ex,String paramName) {
+			DecimalMaxDef def = new DecimalMaxDef();
+			def.value(ex.value());
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createDecimalMinDef(DecimalMin ex,String paramName) {
+			DecimalMinDef def = new DecimalMinDef();
+			def.value(ex.value());
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createDigistDef(Digits ex,String paramName) {
+			DigitsDef def = new DigitsDef();
+			def.fraction(ex.fraction());
+			def.integer(ex.integer());
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createFutureDef(Future ex,String paramName) {
+			FutureDef def = new FutureDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createMaxDef(Max ex,String paramName) {
+			MaxDef def = new MaxDef();
+			def.value(ex.value());
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createMinDef(Min ex,String paramName) {
+			MinDef def = new MinDef();
+			def.value(ex.value());
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createNotBlankDef(NotBlank ex,String paramName) {
+			NotBlankDef def = new NotBlankDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createNotEmptyDef(NotEmpty ex,String paramName) {
+			NotEmptyDef def = new NotEmptyDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createNullDef(Null ex,String paramName) {
+			NullDef def = new NullDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createPastDef(Past ex,String paramName) {
+			PastDef def = new PastDef();
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
+		}
+		public static ValidationWrapper createPatternDef(Pattern ex,String paramName) {
+			PatternDef def = new PatternDef();
+			def.regexp(ex.regexp());
+			def.message(ex.message());
+			return new ValidationWrapper(paramName,def);
 		}
 		
 	}
