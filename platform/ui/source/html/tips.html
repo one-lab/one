@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../css/base.css" rel="stylesheet" type="text/css" />
+<link href="../css/tips.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="../js/jquery-1.7.1.js"></script>
+<script language="javascript" src="../js/tips.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#news > p > span").tips({type:"toolTip",tipPostion:"left"});
+	$("#news > p > img").tips({type:"customTip",width:300,tipPostion:"left",autoHide:false,closeBtn:true,
+		content:function(){
+			return '<p>这是函数返回内容</p><img src="../images/other/nick.gif" width="16" height="16" />'
+		}
+	});
+	$("#customTip").tips({type:"customTip",width:300,title:"自定义提示内容",autoHide:false,closeBtn:true,tipPostion:"top",
+	content:'<p>这个示例，通过hover触发提示层，close关闭层显示，如折叠的 <i style="color:#69F">用户登录信息</i> 应用等，支持自定HTML。</p><div class="example">输入框：<br /><input name="" type="text" class="text_ex" /><br /><br />图片：<br /><img src="../images/other/nick.gif" width="16" height="16" /><img src="../images/other/fail.gif" width="16" height="16" /></div>'
+	});
+	$("#next_news").tips({type:"windowTip",wight:220,title:"新邮件到达",content:'<p class="email_ex">您有一封新邮件，<a href="#">点击查看</a></p>',closeBtn:true,autoHide:true,hideTime:5000,winTipSite:"rightTop"});	
+});
+</script>
+<style>
+body{padding:20px;}
+/*toolTip*/
+#news{width:450px;margin:0 auto}
+#news p{padding:10px 0;line-height:22px;}
+.img_ex01{float:right}
+#news span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:60px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+<div style="width:1500px">
+<div id="news">
+	<h3>取代浏览器默认Alt、Title</h3>
+    <p style="padding:400px 0">
+    <img src="../images/example/example01.png" class="img_ex01" alt="手机特价，疯狂秒杀，心动不如行动！" /> 6月29日，<span title="和田位于新疆维吾尔自治区最南端。南枕昆仑山和喀喇昆仑山，北部深入塔克拉玛干大沙漠腹地。">和田</span>发生一起以劫机为手段的极其严重的暴力恐怖事件。当天上午，从和田飞往乌鲁木齐的<span alt="天津航空有限责任公司">天津航空</span>(微博)GS7554航班起飞不久，机上6名暴徒突然暴力冲击驾驶舱，持械袭击乘客，图谋劫持飞机，制造暴力<span tip="反恐为国际社会共同关注的问题">恐怖事件</span>。危急时刻，机组人员以及各族乘客人人置生死于不顾，毫不畏惧地与暴徒展开了搏斗，迅速将6名暴徒全部制服，成功粉碎了暴徒的劫机图谋。当飞机安全降落时，机上所有乘客高呼<span id="customTip">"团结就是力量！我们胜利了！"</span></p>
+    <a ajax="java.js" href="" href="javascript:;" id="next_news">下一条</a>
+</div>
+</div>
+</body>
+</html>
