@@ -3,10 +3,10 @@ package com.sinosoft.platform.platformDemo.controllers.windows;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.portal.Window;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.portal.Window;
 
 @Path("win2")
 public class Window2Controller {

@@ -28,7 +28,6 @@ public @interface Validation {
      * 
      * @author Morgan
      */
-    ConfigType configType() default ConfigType.BEAN;
     
     String errorPath();
     

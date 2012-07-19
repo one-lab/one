@@ -25,16 +25,15 @@ public  class Student {
 	private String name;
 	private Date birthday;
 	private String ignoreField;
-	private Address address = new Address("1", "北京");
+	private Address address;
 	
+
 	public Address getAddress() {
 		return address;
 	}
-
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-
 	public Student(String id, String name) {
 		this.id = id;
 		this.name = name;
@@ -62,4 +61,5 @@ public  class Student {
 	public String toString() {
 		return "id:" + id + ", name: " + name + ", birthday:" + birthday;
 	}
+	
 }

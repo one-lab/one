@@ -2,12 +2,12 @@ package com.sinosoft.platform.platformDemo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Intercepted;
-import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.annotation.rest.Post;
-import net.paoding.rose.web.annotation.rest.Put;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Intercepted;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.annotation.rest.Put;
 
 import com.sinosoft.platform.platformDemo.model.account.User;
 import com.sinosoft.platform.platformDemo.service.account.AccountManager;

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Param;
-import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.annotation.rest.Post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
