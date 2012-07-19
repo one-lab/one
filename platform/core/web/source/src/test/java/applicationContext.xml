@@ -14,7 +14,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 default-autowire="byName"
 	-->
 	<bean id="autowireBean"
-		class="net.paoding.rose.testcases.controllers.autowire.AutowireBean" />
+		class="com.sinosoft.one.mvc.testcases.controllers.autowire.AutowireBean" />
 	<bean id="autowireBean2"
-		class="net.paoding.rose.testcases.controllers.autowire.AutowireBean2" />
+		class="com.sinosoft.one.mvc.testcases.controllers.autowire.AutowireBean2" />
 </beans>
