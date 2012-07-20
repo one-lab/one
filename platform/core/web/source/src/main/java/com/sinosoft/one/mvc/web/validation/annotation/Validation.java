@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.sinosoft.one.mvc.web.validation.enumation.ConfigType;
-
 /**
  * 加上此注解采用默认的验证器验证相关对象
  * @author Morgan
@@ -18,17 +16,7 @@ import com.sinosoft.one.mvc.web.validation.enumation.ConfigType;
 @Documented
 public @interface Validation {
     String value() default "";
-    /**
-     * 配置类型<br>
-     * default <code>ConfigType.BEAN</code><br>
-     * <code>ConfigType.BEAN</code> 代表采用Bean中的注解验证属性<br>
-     * 
-     * <code>ConfigType.ANNOTATION</code> 代表采用Validation中的注解验证属性
-     * @return
-     * 
-     * @author Morgan
-     */
-    
+
     String errorPath();
     
     NotBlankEx notBlank() default @NotBlankEx(props = {});

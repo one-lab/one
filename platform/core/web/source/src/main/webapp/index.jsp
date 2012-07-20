@@ -178,7 +178,7 @@
 	}
 	
 	function testParamValidate(){
-	   	location.href = contextPath + "/param/validate?id=&name=&ignoreField=";
+	   	location.href = contextPath + "/param/validate?id=11&name=aa&ignoreField=";
 	}
 </script>
 </head>
