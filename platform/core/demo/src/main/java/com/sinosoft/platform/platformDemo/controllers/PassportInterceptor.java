@@ -1,8 +1,8 @@
 package com.sinosoft.platform.platformDemo.controllers;
 
-import net.paoding.rose.web.ControllerInterceptorAdapter;
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Interceptor;
+import com.sinosoft.one.mvc.web.ControllerInterceptorAdapter;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Interceptor;
 
 import org.apache.commons.lang3.StringUtils;
 //设置oncePerRequest为true，表示如果当前的请求如果是被forward、include转来的，并且之前已经执行了该拦截器，

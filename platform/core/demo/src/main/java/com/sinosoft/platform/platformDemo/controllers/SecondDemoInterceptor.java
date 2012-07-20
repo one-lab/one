@@ -2,9 +2,9 @@ package com.sinosoft.platform.platformDemo.controllers;
 
 import java.lang.annotation.Annotation;
 
-import net.paoding.rose.web.ControllerInterceptorAdapter;
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.InvocationChain;
+import com.sinosoft.one.mvc.web.ControllerInterceptorAdapter;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.InvocationChain;
 
 public class SecondDemoInterceptor extends ControllerInterceptorAdapter {
 

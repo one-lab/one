@@ -3,7 +3,7 @@
     xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     id="WebApp_ID" version="2.5">
-    <display-name>rose-example</display-name>
+    <display-name>mvc-example</display-name>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
@@ -23,11 +23,11 @@
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
     <filter>
-        <filter-name>roseFilter</filter-name>
-        <filter-class>net.paoding.rose.RoseFilter</filter-class>
+        <filter-name>mvcFilter</filter-name>
+        <filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>
     </filter> 
     <filter-mapping>
-        <filter-name>roseFilter</filter-name>
+        <filter-name>mvcFilter</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
