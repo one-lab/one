@@ -64,11 +64,11 @@
 	
 	
     <filter>
-        <filter-name>roseFilter</filter-name>
-        <filter-class>net.paoding.rose.RoseFilter</filter-class>
+        <filter-name>mvcFilter</filter-name>
+        <filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>
     </filter> 
     <filter-mapping>
-        <filter-name>roseFilter</filter-name>
+        <filter-name>mvcFilter</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>

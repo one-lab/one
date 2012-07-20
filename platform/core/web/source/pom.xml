@@ -2,62 +2,26 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sinosoft.platform.core</groupId>
+		<groupId>com.sinosoft.one</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>web</artifactId>
+	<artifactId>mvc</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
-	<name>Core :: Web</name>
+	<name>one :: mvc</name>
 	
-	<properties>
-		<servlet-api.version>2.4</servlet-api.version>
-		<jsp-api.version>2.0</jsp-api.version>
-		<commons-fileupload.version>1.2.2</commons-fileupload.version>
-		<velocity.engine.version>1.7</velocity.engine.version>
-		<velocity.tools.version>2.0</velocity.tools.version>
-		<guava.version>12.0</guava.version>
-		<jackson.version>2.0.4</jackson.version>
-		<xstream.version>1.4.2</xstream.version>
-		<fastjson.version>1.1.21</fastjson.version>
-		<validation.version>1.0.0.GA</validation.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.mail</groupId>
-					<artifactId>mail</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.jms</groupId>
-					<artifactId>jms</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>${servlet-api.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>${jsp-api.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -86,92 +50,52 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>javax.persistence</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>${commons-fileupload.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
-			<version>${velocity.engine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity-tools</artifactId>
-			<version>${velocity.tools.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>sslext</groupId>
-					<artifactId>sslext</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>struts</groupId>
-					<artifactId>struts</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>velocity</groupId>
-					<artifactId>velocity</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.struts</groupId>
-					<artifactId>struts-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.struts</groupId>
-					<artifactId>struts-taglib</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.struts</groupId>
-					<artifactId>struts-tiles</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.thoughtworks.xstream</groupId>
-			<artifactId>xstream</artifactId>
-			<version>${xstream.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>${jackson.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
 		</dependency>
 		
-		<dependency>
-	      <groupId>javax.validation</groupId>
-	      <artifactId>validation-api</artifactId>
-	      <version>${validation.version}</version>
-	    </dependency>
 	    <dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

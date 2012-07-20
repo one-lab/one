@@ -1,8 +1,8 @@
 package com.sinosoft.platform.platformDemo.controllers.windows;
 
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
 
 @Path("win1")
 public class Window1Controller {

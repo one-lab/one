@@ -5,9 +5,9 @@ import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
-import net.paoding.rose.web.ControllerInterceptorAdapter;
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.InvocationChain;
+import com.sinosoft.one.mvc.web.ControllerInterceptorAdapter;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.InvocationChain;
 
 public class FristDemoInterceptor extends ControllerInterceptorAdapter {
 

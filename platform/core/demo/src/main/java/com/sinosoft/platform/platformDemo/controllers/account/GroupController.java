@@ -3,13 +3,13 @@ package com.sinosoft.platform.platformDemo.controllers.account;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Param;
-import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Delete;
-import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.annotation.rest.Post;
-import net.paoding.rose.web.portal.Window;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Delete;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.portal.Window;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

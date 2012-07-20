@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+<<<<<<< HEAD
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -15,6 +16,13 @@ import net.paoding.rose.web.annotation.Param;
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
 import net.paoding.rose.web.annotation.rest.Post;
+=======
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.annotation.rest.Post;
+>>>>>>> d6d57803c75471bb06539ddea0883c6861bb5177
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,13 +35,13 @@ import com.sinosoft.platform.platformDemo.model.account.Group;
 import com.sinosoft.platform.platformDemo.model.account.User;
 import com.sinosoft.platform.platformDemo.model.account.UserInfo;
 import com.sinosoft.platform.platformDemo.service.account.AccountManager;
-import com.sinosoft.web.instruction.reply.Reply;
-import com.sinosoft.web.instruction.reply.Replys;
-import com.sinosoft.web.instruction.reply.transport.Json;
-import com.sinosoft.web.validation.annotation.NotEmptyEx;
-import com.sinosoft.web.validation.annotation.NotNullEx;
-import com.sinosoft.web.validation.annotation.SizeEx;
-import com.sinosoft.web.validation.annotation.Validation;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+import com.sinosoft.one.mvc.web.validation.annotation.NotEmptyEx;
+import com.sinosoft.one.mvc.web.validation.annotation.NotNullEx;
+import com.sinosoft.one.mvc.web.validation.annotation.SizeEx;
+import com.sinosoft.one.mvc.web.validation.annotation.Validation;
 
 /**
  * Urls:

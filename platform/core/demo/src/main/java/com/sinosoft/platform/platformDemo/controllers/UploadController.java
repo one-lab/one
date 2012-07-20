@@ -3,14 +3,14 @@ package com.sinosoft.platform.platformDemo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Intercepted;
-import net.paoding.rose.web.annotation.Param;
-import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.annotation.rest.Post;
-import net.paoding.rose.web.annotation.rest.Put;
-import net.paoding.rose.web.paramresolver.ResolverFactoryImpl.MultipartFileResolver;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Intercepted;
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.annotation.rest.Put;
+import com.sinosoft.one.mvc.web.paramresolver.ResolverFactoryImpl.MultipartFileResolver;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.sinosoft.platform.platformDemo.model.account.User;
