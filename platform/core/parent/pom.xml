@@ -16,7 +16,6 @@
 		<log4j.version>1.2.17</log4j.version>
 		<javax.persistence.version>2.0.0</javax.persistence.version>
 		<junit.version>4.10</junit.version>
-        <hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
         <jetty.version>7.6.3.v20120416</jetty.version>
 
         <!-- Plugin的属性定义  -->
