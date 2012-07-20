@@ -11,15 +11,10 @@ import com.sinosoft.one.mvc.web.validation.enumation.ErrorMessageType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-<<<<<<< HEAD:platform/core/web/source/src/main/java/com/sinosoft/web/taglibs/ErrorMessageTag.java
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.InvocationUtils;
-import org.hibernate.validator.method.MethodConstraintViolation;
-
-=======
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.InvocationUtils;
->>>>>>> d6d57803c75471bb06539ddea0883c6861bb5177:platform/core/web/source/src/main/java/com/sinosoft/one/mvc/web/taglibs/ErrorMessageTag.java
+import org.hibernate.validator.method.MethodConstraintViolation;
+
 /**
  * jsp页面的<code><errorMessage /></code>标签
  * @author Morgan
