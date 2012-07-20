@@ -1,0 +1,1 @@
+在网页要显示程序源代码的地方插入以下代码，若是HTML类型的话，用XML（其它的如class="js"表示以js语法显示源代码，其他可设定的class值分别为c#、css、c、elphi、java、js、php、python、ruby、sql、vb、xml）
