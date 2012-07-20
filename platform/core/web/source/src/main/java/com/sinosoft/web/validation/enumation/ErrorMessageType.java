@@ -7,7 +7,8 @@ package com.sinosoft.web.validation.enumation;
  * @author Morgan
  *
  */
-public enum ConfigType {
-	BEAN,
-	ANNOTATION
+public enum ErrorMessageType {
+    ERROR_MESSAGE_TYPE_BEAN,
+    ERROR_MESSAGE_TYPE_METHOD,
+    ERROR_MESSAGE_TYPE_SUFFIX
 }

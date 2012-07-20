@@ -1,6 +1,7 @@
 package com.sinosoft.web.validation;
 
 import java.lang.annotation.ElementType;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,7 +26,9 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.validation.metadata.ConstraintDescriptor;
 
+import com.sinosoft.web.validation.enumation.ErrorMessageType;
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.ParamValidator;
 import net.paoding.rose.web.paramresolver.ParamMetaData;
@@ -54,6 +57,11 @@ import org.hibernate.validator.cfg.defs.PatternDef;
 import org.hibernate.validator.cfg.defs.SizeDef;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.method.MethodConstraintViolation;
+import org.hibernate.validator.method.MethodValidator;
+import org.hibernate.validator.method.metadata.MethodDescriptor;
+import org.hibernate.validator.method.metadata.ParameterDescriptor;
+import org.hibernate.validator.method.metadata.TypeDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.Errors;
@@ -85,7 +93,7 @@ import com.sinosoft.web.validation.annotation.Validation;
  *
  */
 public class AnnotationConfigValidator implements ParamValidator{
-	
+
 	enum Constraint{
 		NotNull,NotEmpty,NotBlank,Min,
 		Max,Null,Past,Pattern,
@@ -113,8 +121,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 
 	private Validator getValidator(ParamMetaData metaData, Validation configValidation ) {
 		
-		if(isContainsRules(configValidation) || 
-				ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())) {
+		if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())) {
 			HibernateValidatorConfiguration config = 
 					javax.validation.Validation.byProvider( HibernateValidator.class ).configure();
 			config.addMapping( getMapping(configValidation,metaData));
@@ -130,25 +137,11 @@ public class AnnotationConfigValidator implements ParamValidator{
 		@SuppressWarnings("deprecation")
 		ConstraintMapping mapping = new ConstraintMapping();
 		//针对非基本类型和包装类
-		if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType()) ) {
-			addConstraction(configValidation,mapping.type(metaData.getParamType()));
-		} else {
-			addConstraction(metaData, mapping);
-		}
-		
+		addConstraction(configValidation,mapping.type(metaData.getParamType()));
+
 		return mapping;
 	}
 	
-	private void addConstraction(ParamMetaData metaData,
-			ConstraintMapping mapping) {
-		Map<Constraint,ValidationWrapper> constrantMap =this.createConstrantMap(metaData);
-		
-		TypeConstraintMappingContext<?> constraintType = mapping.type(metaData.getControllerClass());
-		for (Constraint con : constrantMap.keySet()) {
-			this.innerConstractionMappingForValue(constraintType, constrantMap.get(con));
-		}
-	}
-
 
 	private void addConstraction(Validation configValidation,TypeConstraintMappingContext<?> mappingContext) {
 		Map<Constraint,ValidationWrapper> constrantMap =this.createConstrantMap(configValidation);
@@ -172,66 +165,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 			 	.valid();
 		}
 	}
-	
-	/**
-	 * 构建单个参数验证用的mapping数据
-	 * @param metaData
-	 * @return
-	 */
-	private Map<Constraint, ValidationWrapper> createConstrantMap(
-			ParamMetaData metaData) {
-		Map<Constraint,ValidationWrapper> constrantMap= new HashMap<AnnotationConfigValidator.Constraint, 
-				ValidationWrapper>();
-		final String paramName = metaData.getParamName();
-		if( metaData.getAnnotation(NotNull.class) != null ) {
-			constrantMap.put(Constraint.NotNull, 
-					ValidationWrapper.createNotNullDef(metaData.getAnnotation(NotNull.class),paramName));
-		}
-		if( metaData.getAnnotation(NotBlank.class) != null ) {
-			constrantMap.put(Constraint.NotBlank, ValidationWrapper.createNotBlankDef(metaData.getAnnotation(NotBlank.class),paramName));
-		}
-		if(  metaData.getAnnotation(NotEmpty.class) != null ) {
-			constrantMap.put(Constraint.NotEmpty, ValidationWrapper.createNotEmptyDef( metaData.getAnnotation(NotEmpty.class),paramName));
-		}
-		if( metaData.getAnnotation(Max.class) != null ) {
-			constrantMap.put(Constraint.Max, ValidationWrapper.createMaxDef(metaData.getAnnotation(Max.class),paramName));
-		}
-		if( metaData.getAnnotation(Min.class) != null ) {
-			constrantMap.put(Constraint.Min, ValidationWrapper.createMinDef(metaData.getAnnotation(Min.class),paramName));
-		}
-		if( metaData.getAnnotation(Pattern.class) != null ) {
-			constrantMap.put(Constraint.Pattern, ValidationWrapper.createPatternDef(metaData.getAnnotation(Pattern.class),paramName));
-		}
-		if( metaData.getAnnotation(Size.class) != null ) {
-			constrantMap.put(Constraint.Size, ValidationWrapper.createSizeDef(metaData.getAnnotation(Size.class),paramName));
-		}
-		if( metaData.getAnnotation(AssertFalse.class) != null ) {
-			constrantMap.put(Constraint.AssertFalse, ValidationWrapper.createAssertFalseDef(metaData.getAnnotation(AssertFalse.class),paramName));
-		}
-		if( metaData.getAnnotation(AssertTrue.class) != null ) {
-			constrantMap.put(Constraint.AssertTrue, ValidationWrapper.createAssertTrueDef(metaData.getAnnotation(AssertTrue.class),paramName));
-		}
-		if( metaData.getAnnotation(DecimalMax.class) != null ) {
-			constrantMap.put(Constraint.DecimalMax, ValidationWrapper.createDecimalMaxDef(metaData.getAnnotation(DecimalMax.class),paramName));
-		}
-		if( metaData.getAnnotation(DecimalMin.class) != null ) {
-			constrantMap.put(Constraint.DecimalMin, ValidationWrapper.createDecimalMinDef(metaData.getAnnotation(DecimalMin.class),paramName));
-		}
-		if( metaData.getAnnotation(Digits.class) != null ) {
-			constrantMap.put(Constraint.Digits, ValidationWrapper.createDigistDef(metaData.getAnnotation(Digits.class),paramName));
-		}
-		if( metaData.getAnnotation(Future.class) != null ) {
-			constrantMap.put(Constraint.Future, ValidationWrapper.createFutureDef(metaData.getAnnotation(Future.class),paramName));
-		}
-		if( metaData.getAnnotation(Past.class) != null ) {
-			constrantMap.put(Constraint.Past, ValidationWrapper.createPastDef(metaData.getAnnotation(Past.class),paramName));
-		}
-		if( metaData.getAnnotation(Null.class) != null ) {
-			constrantMap.put(Constraint.Null, ValidationWrapper.createNullDef(metaData.getAnnotation(Null.class),paramName));
-		}
-		return constrantMap;
-	}
-	
+
 	/**
 	 * 构建Bean验证用的mapping数据
 	 * @param configValidation
@@ -299,6 +233,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 	@Override
 	public Object validate(ParamMetaData metaData, Invocation inv,
 			Object target, Errors errors) {
+
 		if(logger.isDebugEnabled()){
 			logger.debug("[annotation config validate] "+"use validator: "
 					+" to validate "+target);
@@ -308,36 +243,65 @@ public class AnnotationConfigValidator implements ParamValidator{
 		String errorPath = configValidation.errorPath();
 		if(isContainsRules(configValidation)){
 			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
-			if(!result.isEmpty())
-				return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
+			if(!result.isEmpty()) {
+                return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
+            }
+
 		} else if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
-			
-//			HibernateValidatorConfiguration config = 
-//					javax.validation.Validation.byProvider( HibernateValidator.class ).configure();
-//			ConstraintMapping mapping = new ConstraintMapping();
-//			mapping.type(metaData.getControllerClass())
-//				.method(metaData.getMethod().getName(), metaData.getParamType())
-//				.parameter(0).constraint()
-//			config.addMapping( mapping );
-//			return  config.buildValidatorFactory().getValidator()
-			
+
+            MethodValidator methodValidator = javax.validation.Validation.byProvider(HibernateValidator.class).configure()
+                    .buildValidatorFactory().getValidator().unwrap(MethodValidator.class);
+
+            Set<MethodConstraintViolation<Object>> result =
+                    methodValidator.validateAllParameters(inv.getController(), inv.getMethod(), inv.getMethodParameters());
+
+            if(!result.isEmpty()){
+                return this.isAjaxRequest(inv) ? methodErrorAjaxResponse(result, inv.getMethodParameterNames()) :
+                        methodErrorCommonResponse(inv, result, errorPath, inv.getMethodParameterNames());
+            }
 		}
-		
-		
-	
-		
+
 		return null;
 	}
 	
 	
 	private String errorCommonResponse(Invocation inv,Set<ConstraintViolation<Object>> result,String errorPath){
-		for(Iterator<ConstraintViolation<Object>> it = result.iterator(); it.hasNext();) {
+		inv.addModel(ErrorMessageType.ERROR_MESSAGE_TYPE_BEAN.name(),"true");
+        for(Iterator<ConstraintViolation<Object>> it = result.iterator(); it.hasNext();) {
 			ConstraintViolation<Object> cv = it.next();
-			inv.addModel(cv.getPropertyPath()+"ErrorMsg",cv);
+			inv.addModel(cv.getPropertyPath()+ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX.name(),cv);
 		}
 		return errorPath;
 	}
-	
+
+    private String methodErrorCommonResponse(Invocation inv
+            , Set<MethodConstraintViolation<Object>> result, String errorPath, String[] paramNames) {
+        inv.addModel(ErrorMessageType.ERROR_MESSAGE_TYPE_METHOD.name(),"true");
+        for(Iterator<MethodConstraintViolation<Object>> it = result.iterator(); it.hasNext();) {
+            MethodConstraintViolation<Object> cv = it.next();
+            inv.addModel(paramNames[cv.getParameterIndex()]+ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX.name(),cv);
+        }
+        return errorPath;
+    }
+
+    private Object methodErrorAjaxResponse(Set<MethodConstraintViolation<Object>> result, String[] paramNames) {
+        List<Map<String, String>> jsonList = new ArrayList<Map<String,String>>();
+
+        for(Iterator<MethodConstraintViolation<Object>> it = result.iterator(); it.hasNext();) {
+            MethodConstraintViolation<Object> cv = it.next();
+            if(logger.isDebugEnabled()) {
+                logger.debug("[annotation config validate] "+cv.getPropertyPath()+
+                        cv.getMessage()+"  : "+cv.getInvalidValue());
+            }
+            Map<String, String> jsonMap = new HashMap<String, String>();
+            jsonMap.put(PROPERTY_PATH, paramNames[cv.getParameterIndex()]);
+            jsonMap.put(MSSAGE, cv.getMessage());
+            jsonMap.put(INVALID_VALUE, cv.getInvalidValue() + "");
+            jsonList.add(jsonMap);
+        }
+        return Replys.with(jsonList).as(Json.class);
+    }
+
 	private Object errorAjaxResponse(Set<ConstraintViolation<Object>> result){
 			List<Map<String, String>> jsonList = new ArrayList<Map<String,String>>();
 			
@@ -358,7 +322,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 	
 	/**
 	 * 判断Validation是否包含验证规则的定义。
-	 * @param validation
+	 * @param configValidation
 	 * @return
 	 */
 	private boolean isContainsRules(Validation configValidation) {
@@ -513,90 +477,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 			def.message(ex.message());
 			return new ValidationWrapper(ex.props(),def);
 		}
-		public static ValidationWrapper createSizeDef(Size ex,String paramName) {
-			SizeDef def =new SizeDef();
-			def.max(ex.max());
-			def.min(ex.min());
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createNotNullDef(NotNull ex,String paramName) {
-			NotNullDef def = new NotNullDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createAssertFalseDef(AssertFalse ex,String paramName) {
-			AssertFalseDef def = new AssertFalseDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createAssertTrueDef(AssertTrue ex,String paramName) {
-			AssertTrueDef def = new AssertTrueDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createDecimalMaxDef(DecimalMax ex,String paramName) {
-			DecimalMaxDef def = new DecimalMaxDef();
-			def.value(ex.value());
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createDecimalMinDef(DecimalMin ex,String paramName) {
-			DecimalMinDef def = new DecimalMinDef();
-			def.value(ex.value());
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createDigistDef(Digits ex,String paramName) {
-			DigitsDef def = new DigitsDef();
-			def.fraction(ex.fraction());
-			def.integer(ex.integer());
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createFutureDef(Future ex,String paramName) {
-			FutureDef def = new FutureDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createMaxDef(Max ex,String paramName) {
-			MaxDef def = new MaxDef();
-			def.value(ex.value());
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createMinDef(Min ex,String paramName) {
-			MinDef def = new MinDef();
-			def.value(ex.value());
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createNotBlankDef(NotBlank ex,String paramName) {
-			NotBlankDef def = new NotBlankDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createNotEmptyDef(NotEmpty ex,String paramName) {
-			NotEmptyDef def = new NotEmptyDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createNullDef(Null ex,String paramName) {
-			NullDef def = new NullDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createPastDef(Past ex,String paramName) {
-			PastDef def = new PastDef();
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
-		public static ValidationWrapper createPatternDef(Pattern ex,String paramName) {
-			PatternDef def = new PatternDef();
-			def.regexp(ex.regexp());
-			def.message(ex.message());
-			return new ValidationWrapper(paramName,def);
-		}
+
 		
 	}
 	

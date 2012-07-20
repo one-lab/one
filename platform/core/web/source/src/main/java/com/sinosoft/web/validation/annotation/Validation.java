@@ -17,17 +17,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Validation {
     String value() default "";
-    /**
-     * 配置类型<br>
-     * default <code>ConfigType.BEAN</code><br>
-     * <code>ConfigType.BEAN</code> 代表采用Bean中的注解验证属性<br>
-     * 
-     * <code>ConfigType.ANNOTATION</code> 代表采用Validation中的注解验证属性
-     * @return
-     * 
-     * @author Morgan
-     */
-    
+
     String errorPath();
     
     NotBlankEx notBlank() default @NotBlankEx(props = {});

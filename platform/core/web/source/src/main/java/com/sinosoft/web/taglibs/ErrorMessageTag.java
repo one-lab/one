@@ -7,11 +7,14 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.validation.ConstraintViolation;
 
+import com.sinosoft.web.validation.enumation.ErrorMessageType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.InvocationUtils;
+import org.hibernate.validator.method.MethodConstraintViolation;
+
 /**
  * jsp页面的<code><errorMessage /></code>标签
  * @author Morgan
@@ -48,36 +51,68 @@ public class ErrorMessageTag extends TagSupport{
 		Invocation invocation = InvocationUtils.getCurrentThreadInvocation();
 		
 		if(invocation != null){
-			@SuppressWarnings("unchecked")
-			ConstraintViolation<Object> cv = (ConstraintViolation<Object>) 
-					invocation.getModel(this.property+"ErrorMsg");
-			if(cv != null){
-				JspWriter out = pageContext.getOut();
-				
-				if (logger.isDebugEnabled()) {
-	                logger.debug("getErrorMessage: " + property + "=" + cv);
-	            }
-				try {
-					if(type == null){
-						out.print("错误的值:" + cv.getInvalidValue() + "  " + cv.getMessage());
-					} else if(type.equalsIgnoreCase("propertyPath")){
-						out.print(cv.getPropertyPath());
-					} else if(type.equalsIgnoreCase("message")){
-						out.print(cv.getMessage());
-					} else if(type.equalsIgnoreCase("invalidValue")){
-						out.print(cv.getInvalidValue());
-					}
-				} catch (IOException e) {
-					logger.error(e);
-				}
-				
-			}
+            if(invocation.getModel(ErrorMessageType.ERROR_MESSAGE_TYPE_BEAN.name()) != null) {
+                @SuppressWarnings("unchecked")
+                ConstraintViolation<Object> cv = (ConstraintViolation<Object>)
+                        invocation.getModel(this.property+ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX);
+                this.writeBeanErrorMsg(cv);
+            } else if (invocation.getModel(ErrorMessageType.ERROR_MESSAGE_TYPE_METHOD.name()) != null) {
+                @SuppressWarnings("unchecked")
+                MethodConstraintViolation<Object> cv = (MethodConstraintViolation<Object>)
+                        invocation.getModel(this.property+ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX);
+                this.writeMethodErrorMsg(cv);
+            }
 		}
 		return super.doStartTag();
 	}
+
+    private void writeMethodErrorMsg(MethodConstraintViolation<Object> cv) {
+        if(cv != null){
+            JspWriter out = pageContext.getOut();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("getErrorMessage: " + property + "=" + cv);
+            }
+            try {
+                if(type == null){
+                    out.print("错误的值:" + cv.getInvalidValue() + "  " + cv.getMessage());
+                } else if(type.equalsIgnoreCase("propertyPath")){
+                    out.print(cv.getParameterName());
+                } else if(type.equalsIgnoreCase("message")){
+                    out.print(cv.getMessage());
+                } else if(type.equalsIgnoreCase("invalidValue")){
+                    out.print(cv.getInvalidValue());
+                }
+            } catch (IOException e) {
+                logger.error(e);
+            }
+
+        }
+    }
 	
-	
-	
+    private void writeBeanErrorMsg(ConstraintViolation<Object> cv) {
+        if(cv != null){
+            JspWriter out = pageContext.getOut();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("getErrorMessage: " + property + "=" + cv);
+            }
+            try {
+                if(type == null){
+                    out.print("错误的值:" + cv.getInvalidValue() + "  " + cv.getMessage());
+                } else if(type.equalsIgnoreCase("propertyPath")){
+                    out.print(cv.getPropertyPath());
+                } else if(type.equalsIgnoreCase("message")){
+                    out.print(cv.getMessage());
+                } else if(type.equalsIgnoreCase("invalidValue")){
+                    out.print(cv.getInvalidValue());
+                }
+            } catch (IOException e) {
+                logger.error(e);
+            }
+
+        }
+    }
 	
 	
 
