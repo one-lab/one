@@ -127,9 +127,7 @@ public class AnnotationConfigValidator implements ParamValidator{
 			config.addMapping( getMapping(configValidation,metaData));
 			return  config.buildValidatorFactory().getValidator();
 		}
-		
 		return defaultValidator;
-		
 	}
 	
 	
