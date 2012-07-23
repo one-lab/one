@@ -13,5 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TestGetWebServiceInfo {
 	@Test
     public void findUser(){
+		
 	}
 }

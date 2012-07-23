@@ -22,7 +22,7 @@ public class RmsAnnotationAspect {
 
 
     @Around("execution(* com.sinosoft.ebusiness..*.*(..))&&@annotation(DataAuthority)")
-    void register(ProceedingJoinPoint pjp) throws Throwable {
+    Object register(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method m = signature.getMethod();
         if( Proxy.isProxyClass(pjp.getThis().getClass())) {
@@ -30,6 +30,6 @@ public class RmsAnnotationAspect {
         }
         DataAuthority dataAuthority = m.getAnnotation(DataAuthority.class);
         EnvContext.setDataAuthorityTaskId(dataAuthority.value());
-        pjp.proceed();
+        return pjp.proceed();
     }
 }

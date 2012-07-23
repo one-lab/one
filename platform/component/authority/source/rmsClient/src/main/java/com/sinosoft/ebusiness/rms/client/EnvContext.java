@@ -1,11 +1,10 @@
 package com.sinosoft.ebusiness.rms.client;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-//import com.sinosoft.ebusiness.rms.client.cxf.Employe;
-//import com.sinosoft.ebusiness.rms.client.model.LoginInfoDTO;
+import com.sinosoft.ebusiness.rms.client.cxf.WebServiceDTO;
+import com.sinosoft.ebusiness.rms.client.model.LoginInfoDO;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,14 +16,14 @@ import java.util.Map;
 public class EnvContext {
 
 
-    private static ThreadLocal<Map>  threadLocal  = new ThreadLocal<Map>();
+	private static ThreadLocal<Map>  threadLocal  = new ThreadLocal<Map>();
 
     private static final String DATA = "DATA";
     
     private static final String EMPLOYE="EMPLOYE";
-    
+
     public static void setDataAuthorityTaskId(String value) {
-        Map<String,Object>  context = threadLocal.get();
+		Map<String,Object>  context = threadLocal.get();
         if(context == null){
             context = new HashMap<String,Object>();
             threadLocal.set(context);
@@ -38,18 +37,18 @@ public class EnvContext {
         return (String)threadLocal.get().get(DATA);
     }
     
-//    public static void setLoginInfo(LoginInfoDTO employeInfo) {
-//        Map<String,LoginInfoDTO>  loginInfo = threadLocal.get();
-//        if(loginInfo == null){
-//        	loginInfo = new HashMap<String,LoginInfoDTO>();
-//            threadLocal.set(loginInfo);
-//        }
-//        loginInfo.put(EMPLOYE,employeInfo) ;
-//    }
-//    
-//    public static LoginInfoDTO getLoginInfo() {
-//        if(threadLocal.get() == null)
-//            return null;
-//        return (LoginInfoDTO)threadLocal.get().get(EMPLOYE);
-//    }
+    public static void setLoginInfo(LoginInfoDO loginInfoDO) {
+        Map<String,LoginInfoDO>  loginInfo = threadLocal.get();
+        if(loginInfo == null){
+        	loginInfo = new HashMap<String,LoginInfoDO>();
+            threadLocal.set(loginInfo);
+        }
+        loginInfo.put(EMPLOYE,loginInfoDO) ;
+    }
+    
+    public static LoginInfoDO getLoginInfo() {
+        if(threadLocal.get() == null)
+            return null;
+        return (LoginInfoDO)threadLocal.get().get(EMPLOYE);
+    }
 }

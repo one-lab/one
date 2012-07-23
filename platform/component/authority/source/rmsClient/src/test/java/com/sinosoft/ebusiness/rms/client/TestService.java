@@ -1,5 +1,7 @@
 package com.sinosoft.ebusiness.rms.client;
 
+import ins.framework.common.Page;
+
 import java.util.List;
 
 /**
@@ -12,4 +14,8 @@ import java.util.List;
 public interface TestService {
     
     List findUser();
+    
+    Page findUser(int pageNo, int pageSize);
+    
+    Page find(int pageNo,int pageSize);
 }
