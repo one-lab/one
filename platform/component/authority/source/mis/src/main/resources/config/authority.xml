@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<total>
+<!-- 权限ACTION拦截配置，id对应数据库task功能ID name对应该模块下的ACTION请求-->
+<!-- 功能授权部分-->
+<authority id="005">
+<action name="taskAuth"/>
+<action name="loadtaskAuth"/>
+</authority>
+
+<!-- 角色管理部分-->
+<authority id="003">
+<action name="prepareAddRole"/>
+<action name="queryRole"/>
+<action name="saveRole"/>
+<action name="updateRole"/>
+<action name="prepareUpdata"/>
+<action name="deleteRole"/>
+<action name="designate"/>
+<action name="loadRole"/>
+</authority>
+
+<!-- 用户组管理部分-->
+<authority id="002">
+<action name="prepareAddGroup"/>
+<action name="queryGroup"/>
+<action name="saveGroup"/>
+<action name="preparUpdata"/>
+<action name="updataGroup"/>
+<action name="deleteGroup"/>
+<action name="loadGroup"/>
+</authority>
+
+<!-- 人员配置部分-->
+<authority id="004">
+<action name="findIntroduced"/>
+<action name="findNoIntroduced"/>
+<action name="loadGroupInfo"/>
+<action name="saveUserPower"/>
+<action name="deleteUserPower"/>
+<action name="findBusPower"/>
+<action name="findBusPowerInfo"/>
+<action name="prepareAddBusPower"/>
+<action name="saveBusPower"/> 
+<action name="deleteBusPower"/>
+<action name="loadEmployeesConfig"/>
+</authority>
+
+<!-- 套餐配置管理部分 start  -->
+<!-- 套餐配置定义  -->
+<authority id="2010">
+<action name="comboAction_home"/>
+<action name="comboAction_query"/>
+<action name="comboAction_addUI"/>
+<action name="comboAction_save"/>
+<action name="comboAction_editUI"/>
+<action name="comboAction_generalComboEdit"/>
+<action name="comboAction_update"/>
+<action name="comboAction_delete"/>
+<action name="comboAction_viewCombo"/>
+<action name="comboAction_submitApprovalCombo"/>
+</authority>
+
+<!-- 套餐审核  -->
+<authority id="2011">
+<action name="comboAction_examHome"/>
+<action name="comboAction_examQuery"/>
+<action name="comboAction_approvalCombo"/>
+<action name="comboAction_viewCombo"/>
+</authority>
+
+<!-- 套餐配置  -->
+<authority id="2012">
+<action name="comboAction_areaHome"/>
+<action name="comboAction_viewCombo"/>
+<action name="comboAction_areaQuery"/>
+<action name="comboAction_areaAddHome"/>
+<action name="comboAction_areaSave"/>
+<action name="comboAction_prepareViewComboArea"/>
+<action name="comboAction_prepareEditComboArea"></action>
+</authority>
+<!-- 套餐配置管理部分 end  -->
+
+<!-- 客服专员部分 start  -->
+<!-- 客服专员配置  -->
+
+
+<!-- 客服专员配发布 -->
+
+<!-- 客服专员部分 end  -->
+
+</total>

@@ -1,0 +1,50 @@
+/*整体背景、字体样式、边距和滚动条颜色*/
+
+body,td,th {
+	font-size: 9pt;
+	color: #333333;
+	background-position: left;
+}
+body {
+	background-color: #eef2fb;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	SCROLLBAR-FACE-COLOR: #e2e7ef;
+	SCROLLBAR-HIGHLIGHT-COLOR: #ffffff;
+	SCROLLBAR-SHADOW-COLOR: #112535;
+	SCROLLBAR-3DLIGHT-COLOR: #ffffff;
+	SCROLLBAR-ARROW-COLOR: #112535;
+	SCROLLBAR-TRACK-COLOR: #ffffff;
+	SCROLLBAR-DARKSHADOW-COLOR: #bfbfbf;
+	SCROLLBAR-BASE-COLOR: #112535;
+}
+
+/*用户名白色字体*/
+.size1 {
+	font-size: 9pt;
+	color: #FFFFFF;
+}
+
+/*修改密码和帮助*/
+.size2 {
+	font-size: 9pt;
+	color: #2c5784;
+	padding-top: 4px;
+	vertical-align: top;
+}
+
+/*链接*/
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:active {
+	text-decoration: none;
+}

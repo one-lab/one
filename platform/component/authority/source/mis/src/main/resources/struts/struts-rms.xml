@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="taskAuth" extends="Interceptor" namespace="/rms/taskAuth">
+		<action name="treeComCode" class="taskAuthAction" method="treeComCode">
+		</action>
+		<action name="taskTree" class="taskAuthAction" method="taskTree">
+		</action>
+		<action name="taskAuth" class="taskAuthAction" method="taskAuth">
+			<result name="success">/web/rms/taskAuth/taskAuth.jsp</result>
+		</action>
+		<action name="loadtaskAuth" class="taskAuthAction" method="loadtaskAuth">
+			<result name="success">/web/rms/taskAuth/taskAuth.jsp</result>
+		</action>
+	</package>
+	
+	<package name="task" extends="struts-default" namespace="/rms/task">
+		<action name="taskTree" class="taskAction" method="taskTree">
+		</action>
+		<action name="findTaskInfo" class="taskAction" method="prepareUpdata">
+			<result name="success">/web/rms/task/taskInfo.jsp</result>
+		</action>
+		<action name="prepareUpdata" class="taskAction" method="prepareUpdata">
+			<result name="success">/web/rms/task/updateTask.jsp</result>
+		</action>
+		<action name="prepareAddTask" class="taskAction" method="prepareAddTask">
+			<result name="success">/web/rms/task/addTask.jsp</result>
+		</action>
+		<action name="saveTask" class="taskAction" method="saveTask">
+			<result name="success" type="redirectAction">
+				<param name="actionName">loadtask</param>
+			</result>
+		</action>
+		<action name="updataTask" class="taskAction" method="updataTask">
+			<result name="success" type="redirectAction">
+				<param name="actionName">loadTask</param>
+			</result>
+		</action>
+		<action name="loadtask" class="taskAction" method="loadtask">
+			<result name="success">/web/rms/task/queryTask.jsp</result>
+		</action>
+	</package>
+	
+	
+	<package name="role" extends="Interceptor" namespace="/rms/role">
+		<action name="prepareAddRole" class="roleAction" method="prepareAddRole">
+			<result name="success">/web/rms/role/roleAdd.jsp</result>
+		</action>
+		<action name="queryRole" class="roleAction" method="queryRole">
+			<result name="success">/web/rms/role/roleQuery.jsp</result>
+		</action>
+		<action name="saveRole" class="roleAction" method="saveRole">
+			<result name="success" >/web/rms/role/susses.jsp</result>
+		</action>
+		<action name="updateRole" class="roleAction" method="updateRole">
+				<result name="success" >/web/rms/role/susses.jsp</result>
+		</action>
+		<action name="prepareUpdata" class="roleAction" method="prepareUpdata">
+			<result name="success">/web/rms/role/roleUpdata.jsp</result>
+		</action>
+		<action name="queryRoleInfo" class="roleAction" method="prepareUpdata">
+			<result name="success">/web/rms/role/roleInfo.jsp</result>
+		</action>
+		<action name="deleteRole" class="roleAction" method="deleteRole">
+			<result name="success" type="redirectAction">
+				<param name="actionName">queryRole</param>
+			</result>
+		</action>
+		<action name="designate" class="roleAction" method="designate">
+			<result name="success">/web/rms/role/roleDesignate.jsp</result>
+		</action>
+		<action name="querydesignate" class="roleAction" method="querydesignate">
+			<result name="success">/web/rms/role/queryDesignate.jsp</result>
+		</action>
+		<action name="taskTree" class="roleAction" method="taskTree">
+		</action>
+		<action name="treeComCode" class="roleAction" method="treeComCode">
+		</action>
+		<action name="loadRole" class="roleAction" method="loadRole">
+			<result name="success" type="redirectAction">
+				<param name="actionName">queryRole</param>
+			</result>
+		</action>
+		<action name="loadroleDesignate" class="roleAction" method="loadroleDesignate">
+			<result name="success">/web/rms/role/roleDesignate.jsp</result>
+		</action>
+	</package>
+
+	<package name="group" extends="Interceptor" namespace="/rms/group">
+		<action name="prepareAddGroup" class="groupAction" method="prepareAddGroup">
+			<result name="success">/web/rms/group/groupAdd.jsp</result>
+		</action>
+		<action name="queryGroup" class="groupAction" method="queryGroup">
+			<result name="success">/web/rms/group/groupQuery.jsp</result>
+		</action>
+		<action name="saveGroup" class="groupAction" method="saveGroup">
+			<result name="success" >/web/rms/group/susses.jsp</result>
+		</action>
+		<action name="preparUpdata" class="groupAction" method="prepareUpdata">
+			<result name="success">/web/rms/group/groupUpdata.jsp</result>
+		</action>
+		<action name="deleteGroup" class="groupAction" method="deleteGroup">
+			<result name="success" type="redirectAction">
+				<param name="actionName">queryGroup</param>
+			</result>
+		</action>
+		<action name="updataGroup" class="groupAction" method="updataGroup">
+			<result name="success" >/web/rms/group/susses.jsp</result>
+		</action>
+		<action name="findGroupUser" class="groupAction" method="findGroupUser">
+			<result name="success">/web/rms/group/findGroupUser.jsp</result>
+		</action>
+		<action name="findGroupUserInfo" class="groupAction" method="findGroupUserInfo">
+			<result name="success">/web/rms/group/employeeInfo.jsp</result>
+		</action>
+		<action name="deleteGroupUser" class="groupAction" method="deleteGroupUser">
+			<result name="success">/web/rms/group/findGroupUser.jsp</result>
+		</action>
+		<action name="findNIntroduced" class="groupAction" method="findNIntroduced">
+			<result name="success">/web/rms/group/findNIntroduced.jsp</result>
+		</action>
+		<action name="addGroupUser" class="groupAction" method="addGroupUser">
+		</action>
+		<action name="userTaskTree" class="groupAction" method="userTaskTree">
+		</action>
+		<action name="loadGroup" class="groupAction" method="loadGroup">
+			<result name="success" type="redirectAction">
+				<param name="actionName">queryGroup</param>
+			</result>
+		</action>
+	</package>
+	
+	<package name="login" extends="struts-default" namespace="/rms/login">
+		<action name="checkUser" class="loginAction" method="checkUser">
+			<result name="success">/web/login.jsp</result>
+		</action>
+		<action name="subMitUserInfo" class="loginAction" method="subMitUserInfo">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/rms/main</param>
+				<param name="actionName">login</param>
+			</result>
+		</action>
+		<action name="logout" class="loginAction" method="logout">
+			<result type="redirect" name="success">/web/login.jsp</result>
+		</action>
+	</package>
+	
+	<package name="main" extends="Interceptor" namespace="/rms/main">
+		<action name="login" class="loginAction" method="login">
+			<result name="success">/web/main.jsp</result>  
+		</action>
+	</package>
+	
+	<package name="employeesConfig" extends="Interceptor" namespace="/rms/employeesConfig">
+		<action name="findIntroduced" class="employeesConfigAction" method="findIntroduced">
+			<result name="success">/web/rms/employeeConfig/findIntroduced.jsp
+			</result>
+		</action>
+		<action name="findNoIntroduced" class="employeesConfigAction" method="findNoIntroduced">
+			<result name="success">/web/rms/employeeConfig/findIntroduced.jsp
+			</result>
+		</action>
+		<action name="findGroupByUser" class="employeesConfigAction" method="findGroupByUser">
+			<result name="success">/web/rms/employeeConfig/groupInfo.jsp
+			</result>
+		</action>
+		<action name="loadGroupInfo" class="employeesConfigAction" method="loadGroupInfo">
+			<result name="success">/web/rms/employeeConfig/roleAndTaskInfo.jsp
+			</result>
+		</action>
+		<action name="saveUserPower" class="employeesConfigAction" method="saveUserPower">
+		</action>
+		<action name="deleteUserPower" class="employeesConfigAction" method="deleteUserPower">
+		</action>
+		<action name="findBusPower" class="employeesConfigAction" method="findBusPower">
+			<result name="success">/web/rms/employeeConfig/busPowerTaskTree.jsp</result>
+		</action>
+		<action name="findBusPowerInfo" class="employeesConfigAction" method="findBusPowerInfo">
+			<result name="success">/web/rms/employeeConfig/busPowerInfo.jsp</result>
+		</action>
+		<action name="prepareAddBusPower" class="employeesConfigAction" method="prepareAddBusPower">
+			<result name="success">/web/rms/employeeConfig/busPowerInfo.jsp</result>
+		</action>
+		<action name="saveBusPower" class="employeesConfigAction" method="saveBusPower">
+			<result name="success">/web/rms/employeeConfig/busPowerInfo.jsp</result>
+		</action>
+		<action name="deleteBusPower" class="employeesConfigAction" method="deleteBusPower">
+		</action>
+		<action name="taskTree" class="employeesConfigAction" method="taskTree">
+		</action>
+		<action name="busPowertaskTree" class="employeesConfigAction" method="busPowertaskTree">
+		</action>
+		<action name="treeComCode" class="employeesConfigAction" method="treeComCode">
+		</action>
+		<action name="loadEmployeesConfig" class="employeesConfigAction" method="loadEmployeesConfig">
+			<result name="success">/web/rms/employeeConfig/employeeConfig.jsp</result>
+		</action>
+	</package>
+
+</struts>
