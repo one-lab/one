@@ -1,0 +1,80 @@
+2012-07-13 11:59:03,531 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 12:18:59,359 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 14:17:22,406 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 14:21:45,406 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 14:25:29,156 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 14:46:55,109 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 14:59:40,015 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 15:06:43,968 [main] ERROR [org.springframework.test.context.TestContextManager] - Caught exception while allowing TestExecutionListener [org.springframework.test.context.support.DependencyInjectionTestExecutionListener@14a18d] to prepare test instance [com.sinosoft.ebusiness.rms.client.AnnotationTestServiceTest@7a4489]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'com.sinosoft.ebusiness.rms.client.AnnotationTestServiceTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.sinosoft.ebusiness.rms.client.TestService com.sinosoft.ebusiness.rms.client.AnnotationTestServiceTest.annotationTestService; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'annotationTestService' defined in file [D:\workspaces\newRmsClient\newRmsClient\target\test-classes\com\sinosoft\ebusiness\rms\client\AnnotationTestService.class]: Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sessionFactory' defined in class path resource [spring/applicationContext-test.xml]: Cannot resolve reference to bean 'lobHandler' while setting bean property 'lobHandler'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'lobHandler' is defined
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:285)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1074)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireBeanProperties(AbstractAutowireCapableBeanFactory.java:374)
+	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:110)
+	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.prepareTestInstance(DependencyInjectionTestExecutionListener.java:75)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:321)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.createTest(SpringJUnit4ClassRunner.java:220)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner$1.runReflectiveCall(SpringJUnit4ClassRunner.java:301)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.methodBlock(SpringJUnit4ClassRunner.java:303)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:240)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:70)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:180)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:49)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.sinosoft.ebusiness.rms.client.TestService com.sinosoft.ebusiness.rms.client.AnnotationTestServiceTest.annotationTestService; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'annotationTestService' defined in file [D:\workspaces\newRmsClient\newRmsClient\target\test-classes\com\sinosoft\ebusiness\rms\client\AnnotationTestService.class]: Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sessionFactory' defined in class path resource [spring/applicationContext-test.xml]: Cannot resolve reference to bean 'lobHandler' while setting bean property 'lobHandler'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'lobHandler' is defined
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:502)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:84)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:282)
+	... 26 more
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'annotationTestService' defined in file [D:\workspaces\newRmsClient\newRmsClient\target\test-classes\com\sinosoft\ebusiness\rms\client\AnnotationTestService.class]: Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sessionFactory' defined in class path resource [spring/applicationContext-test.xml]: Cannot resolve reference to bean 'lobHandler' while setting bean property 'lobHandler'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'lobHandler' is defined
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:527)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:456)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:291)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:288)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:190)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:844)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:786)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:703)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:474)
+	... 28 more
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sessionFactory' defined in class path resource [spring/applicationContext-test.xml]: Cannot resolve reference to bean 'lobHandler' while setting bean property 'lobHandler'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'lobHandler' is defined
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:106)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1325)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1086)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:517)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:456)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:291)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:288)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:190)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByName(AbstractAutowireCapableBeanFactory.java:1104)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1054)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:517)
+	... 37 more
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'lobHandler' is defined
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:527)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getMergedLocalBeanDefinition(AbstractBeanFactory.java:1083)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:274)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:190)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:322)
+	... 49 more
+2012-07-13 15:07:28,765 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 15:21:43,796 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 15:23:48,734 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 15:26:44,328 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
+2012-07-13 15:47:07,640 [main] ERROR [org.hibernate.property.BasicPropertyAccessor] - IllegalArgumentException in class: com.sinosoft.ebusiness.rms.client.model.Company, getter method of property: comCode
