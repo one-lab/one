@@ -6,23 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-<<<<<<< HEAD
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.annotation.Param;
-import net.paoding.rose.web.annotation.Path;
-import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.annotation.rest.Post;
-=======
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
->>>>>>> d6d57803c75471bb06539ddea0883c6861bb5177
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
@@ -95,7 +85,7 @@ public class UserController {
 	
 	@Post("save")
 	public String save(@Param("groupList") List<Long> gids,
-			@Validation(errorPath="a:errorCreate", 
+			@Validation(errorPath="a:errorCreate",
 				notEmpty=@NotEmptyEx( props={"loginName","password","email","name"} ) ,
 				size=@SizeEx(max=20,min=4, props={"name","loginName","email"})
 			) User user, @Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {
