@@ -3,8 +3,6 @@ package com.sinosoft.ebusiness.rms.client;
 
 import ins.framework.common.Page;
 
-import com.sinosoft.ebusiness.rms.client.operation.ClientOperation;
-import com.sinosoft.ebusiness.rms.client.operation.GroovyService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,33 +28,17 @@ public class AnnotationTestServiceTest {
     @Autowired
     private TestService annotationTestService;
     @Autowired
-    private GroovyService say;
-    @Test
-    public void findUser(){
-        ClientOperation clientOperation =new ClientOperation();
-		clientOperation.getLoginUserInfoByClient();
-    }
-    
     @Test
     public void findUserToPage(){
-        ClientOperation clientOperation =new ClientOperation();
-		clientOperation.getLoginUserInfoByClient();
-		Page page=new Page();
-		page= annotationTestService.findUser(1,10);
     }
 
     @Test
     public void findTest(){
-        ClientOperation clientOperation =new ClientOperation();
-		clientOperation.getLoginUserInfoByClient();
-		Page page=new Page();
-		annotationTestService.find(1, 10);
     }
     
     
     @Test
     public void groovy(){
-    	say.SayHello();
     }
     
 	public TestService getAnnotationTestService() {
