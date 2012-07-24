@@ -15,7 +15,7 @@ atlassian-ide-plugin.xml
 .classpath
 .project
 .settings/
-
+.metadata/
 # Svn
 .svn/
 

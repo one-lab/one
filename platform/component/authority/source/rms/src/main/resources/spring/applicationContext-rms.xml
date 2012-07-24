@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	default-autowire="byName" default-lazy-init="true">
+
+	<bean id="roleService" class="com.sinosoft.ebusiness.rms.service.spring.RoleServiceSpringImpl" />
+	
+	<bean id="rmstaskService" class="com.sinosoft.ebusiness.rms.service.spring.TaskServiceSpringImpl"></bean>
+    
+    <bean id="groupService" class="com.sinosoft.ebusiness.rms.service.spring.GroupServiceSpringImpl"></bean>
+    
+    <bean id="rmsService" class="com.sinosoft.ebusiness.rms.service.spring.RmsServiceSpringImpl"></bean>
+   
+    <bean id="userpowerSerivce" class="com.sinosoft.ebusiness.rms.service.spring.UserPowerService"></bean>
+    
+    <bean id="companyService" class="com.sinosoft.ebusiness.rms.service.spring.CompanyService"></bean>
+    
+    <bean id="employeService" class="com.sinosoft.ebusiness.rms.service.spring.EmployeService"></bean>
+     
+    <bean id="dataRuleService" class="com.sinosoft.ebusiness.rms.service.spring.DataRuleServiceSpringImpl"></bean>
+    
+    <bean id="RMSWebServerService" class="com.sinosoft.ebusiness.rms.service.webService.spring.RMSWebServiceSpirngImpl"></bean>
+    
+</beans> 
