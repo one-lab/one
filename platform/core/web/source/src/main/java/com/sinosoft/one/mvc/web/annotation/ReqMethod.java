@@ -42,10 +42,6 @@ public enum ReqMethod {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(ReqMethod.ALL.parse());
-    }
-
     public static ReqMethod parse(String method) {
         if ("GET".equalsIgnoreCase(method)) {
             return GET;

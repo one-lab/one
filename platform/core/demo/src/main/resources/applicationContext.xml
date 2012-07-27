@@ -26,6 +26,7 @@
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/> 
 		<property name="jpaProperties">
 			<props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
 				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
 				<prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache-hibernate-local.xml</prop>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
@@ -55,8 +56,7 @@
 	<!-- production/local development环境 -->
  	<beans profile="production,development">
  		<context:property-placeholder ignore-unresolvable="true"
-			location="classpath*:/application.properties,
-          			  classpath*:/application.local.properties" />	
+			location="classpath*:/application.properties" />
 		
 		<!-- 数据源配置, 使用DBCP数据库连接池 -->
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

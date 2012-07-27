@@ -90,4 +90,6 @@ public interface MvcConstants {
 
     public static final String WINDOW_ATTR = "$$one-mvc-portal.window";
 
+    public static final String WINDOW_REQUEST_URI = "$$one-mvc-portal.window.uri";
+
 }

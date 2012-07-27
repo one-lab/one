@@ -16,10 +16,10 @@
 package com.sinosoft.one.mvc.web.portal.impl;
 
 import java.util.concurrent.ExecutorService;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
+import com.sinosoft.one.mvc.MvcConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 final class WindowTask implements Runnable {
+
 
     private static final Log logger = LogFactory.getLog(WindowTask.class);
 
@@ -68,7 +69,7 @@ final class WindowTask implements Runnable {
                 windowPath = requestUri + windowPath;
             }
 
-            final RequestDispatcher rd = request.getRequestDispatcher(windowPath);
+
          //   request.setAttribute("$$one-mvc-portal.window", window);
             request.setAttribute("$$one-mvc-portal.window."+window.getName(), window);
 
@@ -89,6 +90,9 @@ final class WindowTask implements Runnable {
                 window.getContainer().onWindowTimeout(window);
                 return;
             }
+
+            final RequestDispatcher rd = request.getRequestDispatcher(windowPath);
+            request.setAttribute(MvcConstants.WINDOW_REQUEST_URI, request.getContextPath() + windowPath);
             rd.forward(request, this.response);
 
             // done!

@@ -138,20 +138,4 @@ public class RegexMapping implements Mapping {
     public String toString() {
         return "RegexMappingMapping[" + this.definition + ", regex=" + pattern + "]";
     }
-
-    public static void main(String[] args) {
-        Pattern p = Pattern.compile("^[0-9]+");
-        Matcher matcher = p.matcher("56789/asd");
-        System.out.println(matcher.find());
-        //        if (!matcher.find()) {
-        //            System.out.println("false");
-        //            return ;
-        //        }
-        String value = matcher.group();
-        while (value.length() > 0 && value.charAt(value.length() - 1) == '/') {
-            value = value.substring(0, value.length() - 1);
-        }
-        System.out.println("value=" + value);
-    }
-
 }

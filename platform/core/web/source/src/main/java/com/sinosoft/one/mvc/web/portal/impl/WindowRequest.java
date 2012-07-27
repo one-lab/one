@@ -193,5 +193,4 @@ class WindowRequest extends HttpServletRequestWrapper {
         }
         return session;
     }
-
 }
