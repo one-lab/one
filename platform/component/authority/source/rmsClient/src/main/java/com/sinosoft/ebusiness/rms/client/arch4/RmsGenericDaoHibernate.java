@@ -22,7 +22,7 @@ import com.sinosoft.ebusiness.rms.client.model.LoginInfoDO;
  * Date: 3/22/12
  * Time: 11:07 AM
  */
-public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends java.io.Serializable> extends GenericDaoHibernate<T , PK> {
+public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends java.io.Serializable> extends GenericDaoHibernate<T, PK> {
 	String  EditqueryRule(){
 		String rule="";
 		String newRule="";
@@ -32,31 +32,31 @@ public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends 
 			List<BusPower> busPowers = loginInfoDO.getBusPowers();
 			for (BusPower busPower : busPowers) {
 				if (busPower.getTask().getTaskID().toString().equals(taskID)) {
-					if (StringUtils.isNotBlank(busPower.getDataRule().getRule())) {
+//				if (StringUtils.isNotBlank(busPower.getDataRule().getRule())) {
 						rule=busPower.getDataRule().getRule();
-						//获得SQL中'号出现的位置
+//                      获得SQL中'号出现的位置
 //				    	Matcher slashMatcher = Pattern.compile("'").matcher(rule);
 //				    	String[]con=rule.split("'");
 //				    	int mIdx = 0;
 //				    	for (int i = 0; i < con.length-1; i++) {
 //				    		 mIdx=i;
 //				    		while(slashMatcher.find()) {
-//				    			//SQL中'号在偶数位置开始替换''号的内容
+//			    			//SQL中'号在偶数位置开始替换''号的内容
 //				    			if (mIdx%2==0) {
 ////									rule.substring(slashMatcher.start()+1, slashMatcher.start()+rule.substring(slashMatcher.start()+1).indexOf("'")+1);
-//									String val=rule.substring(slashMatcher.start(), slashMatcher.start()+rule.substring(slashMatcher.start()+1).indexOf("'")+2);
-//									if( Pattern.compile(val).matcher(rule).find()){
-//										if(StringUtils.isNotBlank(busPower.getDataRuleParam()))
-//											newRule=rule.replace(val, "'"+busPower.getDataRuleParam()+"'");
-//										else{
-//											newRule=rule.replace(val, "'"+loginInfoDO.getLoginComCode()+"'");
-//										}
-//									}
-//								}
-//				    			break;
+////									String val=rule.substring(slashMatcher.start(), slashMatcher.start()+rule.substring(slashMatcher.start()+1).indexOf("'")+2);
+////									if( Pattern.compile(val).matcher(rule).find()){
+////										if(StringUtils.isNotBlank(busPower.getDataRuleParam()))
+////											newRule=rule.replace(val, "'"+busPower.getDataRuleParam()+"'");
+////										else{
+////											newRule=rule.replace(val, "'"+loginInfoDO.getLoginComCode()+"'");
+////										}
+////									}
+////								}
+////				    			break;
 //				    		}
 //						}
-					}
+//					}
 				}
 			}
 		}
