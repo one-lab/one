@@ -62,30 +62,10 @@ class CompanyService extends GenericDaoHibernate<Company, String> {
     	QueryRule querycom = QueryRule.getInstance();
     	querycom.addLike("comCode", ""+comCode+"%D0");
     	return super.find(querycom);
-    } 
+    }
+    
+	public Company findCompanyByComCode(String comCode) {
+		return super.get(comCode);
+	} 
   
-//    /**
-//     * 添加数据库数据
-//     * @param str
-//     */
-//    void addData(List<String> str,int i){
-//    	Session session = super.getSession();
-//    	Company company=new Company();
-//		company.setComCode(convert(str.get(0)));
-//		company.setComCName(convert(str.get(2)));
-//		company.setComEName(convert(str.get(1)));
-//		company.setUpperComCode(convert(str.get(3)));
-//		company.setComType(convert(str.get(4)));
-//		company.setValidStatus(convert(str.get(5)));
-//		session.save(company);
-////		if (i % 10 == 0) {
-////			session.flush();
-////			session.clear();
-////		}
-//    }
-//    
-//    public String convert(String str) {
-//    	String str1 = str.replace('"', ' ');
-//    	return str1.trim();
-//    }
 }

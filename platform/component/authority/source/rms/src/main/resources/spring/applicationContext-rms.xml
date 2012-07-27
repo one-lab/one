@@ -24,6 +24,8 @@
      
     <bean id="dataRuleService" class="com.sinosoft.ebusiness.rms.service.spring.DataRuleServiceSpringImpl"></bean>
     
-    <bean id="RMSWebServerService" class="com.sinosoft.ebusiness.rms.service.webService.spring.RMSWebServiceSpirngImpl"></bean>
+    <bean id="clientService" class="com.sinosoft.ebusiness.rms.service.spring.ClientServiceSpringImpl"></bean>
+    
+    <bean id="rmsClientService" class="com.sinosoft.ebusiness.rms.clientService.facade.RmsClientServiceImpl"></bean>
     
 </beans> 
