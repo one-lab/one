@@ -10,9 +10,7 @@ import ins.framework.dao.GenericDaoHibernate;
 import ins.framework.utils.StringUtils;
 
 import com.sinosoft.ebusiness.rms.client.EnvContext;
-import com.sinosoft.ebusiness.rms.client.cxf.BusPower;
-import com.sinosoft.ebusiness.rms.client.cxf.WebServiceDTO;
-import com.sinosoft.ebusiness.rms.client.model.LoginInfoDO;
+import com.sinosoft.ebusiness.rms.client.webservice.User;
 
 
 /**
@@ -26,14 +24,14 @@ public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends 
 	String  EditqueryRule(){
 		String rule="";
 		String newRule="";
-		LoginInfoDO loginInfoDO=EnvContext.getLoginInfo();
-		if (loginInfoDO != null) {
-			String taskID=EnvContext.getDataAuthorityTaskId();
-			List<BusPower> busPowers = loginInfoDO.getBusPowers();
-			for (BusPower busPower : busPowers) {
-				if (busPower.getTask().getTaskID().toString().equals(taskID)) {
+//		LoginInfoDO loginInfoDO=EnvContext.getLoginInfo();
+//		if (loginInfoDO != null) {
+//			String taskID=EnvContext.getDataAuthorityTaskId();
+//			List<BusPower> busPowers = loginInfoDO.getBusPowers();
+//			for (BusPower busPower : busPowers) {
+//				if (busPower.getTask().getTaskID().toString().equals(taskID)) {
 //				if (StringUtils.isNotBlank(busPower.getDataRule().getRule())) {
-						rule=busPower.getDataRule().getRule();
+//						rule=busPower.getDataRule().getRule();
 //                      获得SQL中'号出现的位置
 //				    	Matcher slashMatcher = Pattern.compile("'").matcher(rule);
 //				    	String[]con=rule.split("'");
@@ -57,9 +55,9 @@ public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends 
 //				    		}
 //						}
 //					}
-				}
-			}
-		}
+//				}
+//			}
+//		}
 		return newRule;
 	}
 	
