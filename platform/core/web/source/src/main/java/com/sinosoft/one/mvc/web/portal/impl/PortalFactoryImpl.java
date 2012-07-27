@@ -42,7 +42,6 @@ import org.springframework.util.Assert;
  * 
  * 创建 {@link PortalFactoryImpl}实例后，应该通过
  * {@link #setExecutorService(ExecutorService)} 或
- * {@link #setExecutorServiceBySpring(ThreadPoolTaskExecutor)}
  * 设置执行器，用于执行Portal下的每个“窗口请求”。
  * <p>
  * 

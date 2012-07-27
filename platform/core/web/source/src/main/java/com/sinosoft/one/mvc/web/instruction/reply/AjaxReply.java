@@ -32,7 +32,7 @@ public interface AjaxReply<E> extends Reply {
 	/**
 	 * When parse as json.class or xml.class include some fields
 	 * 
-	 * @param excludeFields
+	 * @param includeFields
 	 *            to include fields<br />
 	 *            the fields format is "firstField,secondField,...,lastField"
 	 * @return
@@ -51,7 +51,7 @@ public interface AjaxReply<E> extends Reply {
 	/**
 	 * When as json.class or xml.class exclude some fields
 	 * 
-	 * @param excludeFields
+	 * @param includeFields
 	 *            to exclude fields array
 	 * @return
 	 */
@@ -70,9 +70,9 @@ public interface AjaxReply<E> extends Reply {
 	/**
 	 * When parse as json.class or xml.class set the special date format
 	 * 
-	 * @param dateFormatString
-	 *            date format string eg. "yyyy-MM-dd HH:mm:ss"<br/>
-	 *            the default format is "yyyy-MM-dd HH:mm:ss"
+	 * @param dateFormatMode
+	 *            date format mode eg. DateFormatMode.YYYYMMDDHHMMSS<br/>
+	 *            the default format is DateFormatMode.YYYYMMDDHHMMSS
 	 * @return
 	 */
 	AjaxReply<E> dateFormatMode(DateFormatMode dateFormatMode);

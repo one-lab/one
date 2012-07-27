@@ -10,8 +10,6 @@ public class UserGroupPortalController {
 
 	@Get("/main")
 	public String portalViews(Portal p){
-
-        System.out.println("-------p="+p);
 		p.addWindow("p1", "/account/user/p1");
 		p.addWindow("p2", "/account/group/p2");
 		return "user_group_portal";

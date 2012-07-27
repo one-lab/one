@@ -15,8 +15,7 @@
  */
 package com.sinosoft.one.mvc.web.portal.impl;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +23,7 @@ import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Charsets;
 import com.sinosoft.one.mvc.web.portal.Portal;
 import com.sinosoft.one.mvc.web.portal.Window;
 
@@ -58,7 +58,9 @@ class WindowImpl implements Window {
 
     private String path;
 
-    private StringBuilder buffer;
+    private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+    private String charset;
 
     private Throwable throwable;
 
@@ -177,47 +179,29 @@ class WindowImpl implements Window {
 
     @Override
     public int getContentLength() {
-        return buffer == null ? -1 : buffer.length();
+        return byteArrayOutputStream.size() == 0 ? -1 : byteArrayOutputStream.size();
     }
 
     @Override
     public String getContent() {
-        return buffer == null ? "" : buffer.toString();
+        try {
+            return new String(byteArrayOutputStream.toByteArray(), getCharacterEncoding());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void appendContent(int b) {
+        byteArrayOutputStream.write(b);
+    }
+
+    public void appendContent(byte[] b) throws IOException {
+        byteArrayOutputStream.write(b);
     }
 
     @Override
     public void clearContent() {
-        if (buffer != null) {
-            buffer.setLength(0);
-        }
-    }
-
-    void appendContent(String content) {
-        if (buffer == null) {
-            buffer = new StringBuilder();
-        }
-        this.buffer.append(content);
-    }
-
-    void appendContent(CharSequence content) {
-        if (buffer == null) {
-            buffer = new StringBuilder();
-        }
-        this.buffer.append(content);
-    }
-
-    void appendContent(char[] content) {
-        if (buffer == null) {
-            buffer = new StringBuilder();
-        }
-        this.buffer.append(content);
-    }
-
-    void appendContent(char[] content, int offset, int len) {
-        if (buffer == null) {
-            buffer = new StringBuilder();
-        }
-        this.buffer.append(content, offset, len);
+        byteArrayOutputStream.reset();
     }
 
     public boolean isDone() {
@@ -307,4 +291,11 @@ class WindowImpl implements Window {
         return mayInterruptIfRunning;
     }
 
+    public String getCharacterEncoding() {
+        return charset != null ? charset : Charsets.UTF_8.displayName();
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
 }
