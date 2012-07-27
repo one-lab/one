@@ -2,7 +2,6 @@ package com.sinosoft.ebusiness.rms.client;
 
 import com.sinosoft.ebusiness.rms.client.annotation.DataAuthority;
 import com.sinosoft.ebusiness.rms.client.arch4.RmsGenericDaoHibernate;
-import com.sinosoft.ebusiness.rms.client.model.Employe;
 
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
@@ -18,16 +17,13 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Component
-public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String> implements TestService{
+public class AnnotationTestService extends RmsGenericDaoHibernate<String,String> implements TestService{
 
 
     @Override
     @DataAuthority(value = "004")
-    public List<Employe>  findUser() {
-        QueryRule queryRule = QueryRule.getInstance();
-        queryRule.addEqual("company.comCode", "00");
-        List<Employe> employes= super.find(queryRule);
-        return employes;
+    public List  findUser() {
+        return null;
     }
 
 	@Override
