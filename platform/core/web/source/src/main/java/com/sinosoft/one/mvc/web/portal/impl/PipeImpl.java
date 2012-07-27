@@ -218,10 +218,6 @@ public class PipeImpl extends GenericWindowContainer implements Pipe {
         } finally {
             latch.countDown();
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug(//
-                    "firing '" + window.getName() + "' : done  content=" + window.getContent());
-        }
     }
 
     //-------------实现toString()---------------F
