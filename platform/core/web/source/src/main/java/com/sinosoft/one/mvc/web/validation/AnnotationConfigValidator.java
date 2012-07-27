@@ -121,7 +121,8 @@ public class AnnotationConfigValidator implements ParamValidator{
 
 	private Validator getValidator(ParamMetaData metaData, Validation configValidation ) {
 		
-		if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())) {
+		if( isContainsRules(configValidation) &&
+                ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType()) ) {
 			HibernateValidatorConfiguration config = 
 					javax.validation.Validation.byProvider( HibernateValidator.class ).configure();
 			config.addMapping( getMapping(configValidation,metaData));
@@ -239,13 +240,14 @@ public class AnnotationConfigValidator implements ParamValidator{
 
 		Validation configValidation = metaData.getAnnotation(Validation.class);
 		String errorPath = configValidation.errorPath();
-		if(isContainsRules(configValidation)){
+        //针对JavaBean的校验
+		if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType()) ){
 			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
 			if(!result.isEmpty()) {
                 return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
             }
 
-		} else if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
+		} else {//针对简单参数的校验
 
             MethodValidator methodValidator = javax.validation.Validation.byProvider(HibernateValidator.class).configure()
                     .buildValidatorFactory().getValidator().unwrap(MethodValidator.class);
