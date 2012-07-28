@@ -84,6 +84,9 @@ public class ViewInstruction extends AbstractInstruction {
 
             if (!Thread.interrupted()) {
                 inv.addModel(MVC_INVOCATION, inv);
+                if(request.getAttribute(MvcConstants.IS_WINDOW_REQUEST) != null) {
+                    request.setAttribute(MvcConstants.WINDOW_REQUEST_URI, request.getContextPath() + viewPath);
+                }
                 view.render(inv.getModel().getAttributes(), request, response);
             } else {
                 logger.info("interrupted");

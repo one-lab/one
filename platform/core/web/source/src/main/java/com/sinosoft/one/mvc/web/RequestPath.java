@@ -79,8 +79,10 @@ public class RequestPath {
             if(request.getAttribute(MvcConstants.WINDOW_REQUEST_URI) != null) {
                 uri = (String)request.getAttribute(MvcConstants.WINDOW_REQUEST_URI);
                 request.removeAttribute(MvcConstants.WINDOW_REQUEST_URI);
+                request.setAttribute(MvcConstants.IS_WINDOW_REQUEST, "1");
             } else {
                 uri = request.getRequestURI();
+                request.removeAttribute(MvcConstants.IS_WINDOW_REQUEST);
             }
 
             this.setMvcPath(request.getServletPath());
