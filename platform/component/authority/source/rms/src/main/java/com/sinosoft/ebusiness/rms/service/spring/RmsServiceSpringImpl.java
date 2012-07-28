@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.xwork.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import com.sinosoft.ebusiness.rms.model.Company;
 import com.sinosoft.ebusiness.rms.model.Employe;
@@ -146,106 +147,119 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Task> findTaskByUserCode(String userCode, String comCode) {
-		String key = cacheManager.generateCacheKey("userTask", comCode+userCode);
+		String key = cacheManager.generateCacheKey("userTask", comCode
+				+ userCode);
 		Object resut = cacheManager.getCache(key);
 		if (resut != null) {
 			return (List<Task>) resut;
 		}
-		UserPower userPower =new UserPower();
-		userPower=	userpowerSerivce.findUserPowerByComUser(userCode, comCode);
-		List<UserGroup>userGroups=new  ArrayList<UserGroup>();
-		userGroups=userPower.getUserGroups();
-		List<Group> groups=new ArrayList<Group>();
-		for (UserGroup usergroup : userGroups) {
-			//用户组的过滤
-			if(usergroup.getIsValidate().toString().equals("1".toString())){
-				if(usergroup.getGroup().getComCode().toString().equals(comCode)){
-					groups.add(usergroup.getGroup());
+		List<Task> userTasksResult = new ArrayList<Task>();
+		UserPower userPower = new UserPower();
+		userPower = userpowerSerivce.findUserPowerByComUser(userCode, comCode);
+		List<UserGroup> userGroups = new ArrayList<UserGroup>();
+		if (userPower != null) {
+			userGroups = userPower.getUserGroups();
+			List<Group> groups = new ArrayList<Group>();
+			for (UserGroup usergroup : userGroups) {
+				// 用户组的过滤
+				if (usergroup.getIsValidate().toString().equals("1".toString())) {
+					if (usergroup.getGroup().getComCode().toString()
+							.equals(comCode)) {
+						groups.add(usergroup.getGroup());
+					}
 				}
 			}
-		}
-		List<GroupRole>groupRoles=new ArrayList<GroupRole>();
-		for (Group group :groups) {
-			groupRoles.addAll(group.getGroupRoles());
-		}
-		//根据机构获得指派的信息 取得roleID 过滤用户组关联的角色
-		List<RoleDesignate> roleDesignates=new ArrayList<RoleDesignate>();
-		QueryRule queryRole = QueryRule.getInstance();
-		queryRole.addIn("id.comCode",comCode);
-		roleDesignates=super.find(RoleDesignate.class, queryRole);
-		//根据获得的指派角色信息获得角色ID
-		List<String> roleids=new ArrayList<String>();
-		for (RoleDesignate roleDesignate : roleDesignates) {
-			for (GroupRole groupRole : groupRoles) {
-				if (roleDesignate.getId().getRoleID().toString()
-						.equals(groupRole.getRole().getRoleID().toString())) {
-					roleids.add(roleDesignate.getId().getRoleID());
+			List<GroupRole> groupRoles = new ArrayList<GroupRole>();
+			for (Group group : groups) {
+				groupRoles.addAll(group.getGroupRoles());
+			}
+			// 根据机构获得指派的信息 取得roleID 过滤用户组关联的角色
+			List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
+			QueryRule queryRole = QueryRule.getInstance();
+			queryRole.addIn("id.comCode", comCode);
+			roleDesignates = super.find(RoleDesignate.class, queryRole);
+			// 根据获得的指派角色信息获得角色ID
+			List<String> roleids = new ArrayList<String>();
+			for (RoleDesignate roleDesignate : roleDesignates) {
+				for (GroupRole groupRole : groupRoles) {
+					if (roleDesignate.getId().getRoleID().toString()
+							.equals(groupRole.getRole().getRoleID().toString())) {
+						roleids.add(roleDesignate.getId().getRoleID());
+					}
 				}
 			}
-		}
-		StringBuffer taskIDSQL=new StringBuffer();
-		List<String> taskIDs = new ArrayList<String>();
-		if (roleids.size() > 0) {
-			// 根据角色ID获得 角色关联的功能id集合
+			StringBuffer taskIDSQL = new StringBuffer();
+			List<String> taskIDs = new ArrayList<String>();
+			if (roleids.size() > 0) {
+				// 根据角色ID获得 角色关联的功能id集合
+				taskIDSQL
+						.append(" select taskid from ge_rms_task_auth where taskauthid in (");
+				taskIDSQL
+						.append(" select taskauthid from ge_rms_roletask g where g.isvalidate='1' ");
+				taskIDSQL.append("and g.roleid in (");
+				for (String string : roleids) {
+					taskIDSQL.append(" '" + string + "',");
+				}
+				taskIDSQL.delete(taskIDSQL.length() - 1, taskIDSQL.length());
+				taskIDSQL.append(")");
+				taskIDSQL.append(")");
+				taskIDs = (List<String>) getSession().createSQLQuery(
+						taskIDSQL.toString()).list();
+			}
+			taskIDSQL.setLength(0);
+			// 获取该机构的功能ID
 			taskIDSQL
-					.append(" select taskid from ge_rms_task_auth where taskauthid in (");
-			taskIDSQL
-					.append(" select taskauthid from ge_rms_roletask g where g.isvalidate='1' ");
-			taskIDSQL.append("and g.roleid in (");
-			for (String string : roleids) {
-				taskIDSQL.append(" '" + string + "',");
-			}
-			taskIDSQL.delete(taskIDSQL.length() - 1, taskIDSQL.length());
-			taskIDSQL.append(")");
-			taskIDSQL.append(")");
-			taskIDs = (List<String>) getSession().createSQLQuery(taskIDSQL.toString()).list();
-		}
-		taskIDSQL.setLength(0);
-		//获取该机构的功能ID
-		taskIDSQL.append("select taskid from ge_rms_task_auth where comcode='"+comCode+"'");
-		List<String> comtaskIDs=new ArrayList<String>();
-		comtaskIDs=(List<String>)getSession().createSQLQuery(taskIDSQL.toString()).list();
-		List<String> resultTaskIDs=new ArrayList<String>();
-		//两功能ID集合去重
-		for (String com_TaskID : comtaskIDs) {
-			for (String role_TaskID : taskIDs) {
-				if(com_TaskID.toString().equals(role_TaskID.toString())){
-					resultTaskIDs.add(com_TaskID);
-					break;
+					.append("select taskid from ge_rms_task_auth where comcode='"
+							+ comCode + "'");
+			List<String> comtaskIDs = new ArrayList<String>();
+			comtaskIDs = (List<String>) getSession().createSQLQuery(
+					taskIDSQL.toString()).list();
+			List<String> resultTaskIDs = new ArrayList<String>();
+			// 两功能ID集合去重
+			for (String com_TaskID : comtaskIDs) {
+				for (String role_TaskID : taskIDs) {
+					if (com_TaskID.toString().equals(role_TaskID.toString())) {
+						resultTaskIDs.add(com_TaskID);
+						break;
+					}
 				}
 			}
-		}
-		//获得功能对象
-		Set<Task>tasks=new HashSet<Task>();
-		if (resultTaskIDs.size() > 0) {
-			QueryRule queryTask = QueryRule.getInstance();
-			queryTask.addIn("taskID", resultTaskIDs);
-			queryTask.addEqual("isValidate", "1");
-			tasks.addAll(super.find(Task.class, queryTask));
-		}
-		//获得除外权限
-		Set<Task> excTasks = new HashSet<Task>();
-		for (ExcPower excpower : userPower.getExcPowers()) {
-			excTasks.add(excpower.getTask());
-		}
-		Set<Task> result = new HashSet<Task>();
-		//除外权限和获得的权限过滤
-		for (Task task : tasks) {
-			int i = 0;
-			for (Task etask : excTasks) {
-				if (task.getTaskID().toString()
-						.equals(etask.getTaskID().toString()))
-					i = i + 1;
+			// 获得功能对象
+			Set<Task> tasks = new HashSet<Task>();
+			if (resultTaskIDs.size() > 0) {
+				QueryRule queryTask = QueryRule.getInstance();
+				queryTask.addIn("taskID", resultTaskIDs);
+				queryTask.addEqual("isValidate", "1");
+				tasks.addAll(super.find(Task.class, queryTask));
 			}
-			if (i == 0) {
-				result.add(task);
+			// 获得除外权限 
+			Set<Task> excTasks = new HashSet<Task>();
+			if (userPower != null) {
+				for (ExcPower excpower : userPower.getExcPowers()) {
+					excTasks.add(excpower.getTask());
+				}
 			}
+			Set<Task> result = new HashSet<Task>();
+			// 除外权限和获得的权限过滤
+			for (Task task : tasks) {
+				int i = 0;
+				for (Task etask : excTasks) {
+					if (task.getTaskID().toString()
+							.equals(etask.getTaskID().toString()))
+						i = i + 1;
+				}
+				if (i == 0) {
+					result.add(task);
+				}
+			}
+			Set<Task> ts = new HashSet<Task>();
+			iterateTask(ts, result);
+			userTasksResult = taskArrange(ts);
+			cacheManager.putCache(key, userTasksResult);
+			return userTasksResult;
+		} else {
+			return userTasksResult;
 		}
-		Set<Task> ts = new HashSet<Task>();
-		iterateTask(ts, result);
-		List<Task> userTasksResult=taskArrange(ts);
-		cacheManager.putCache(key, userTasksResult);
-		return taskArrange(ts);
 	}
 	
 	/**
@@ -426,6 +440,12 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		return employeService.findUserByComCode(comCode);
 	}
 
+	public Company findCompanyByComCode(String comCode){
+		Assert.hasText(comCode);
+		return companyService.findCompanyByComCode(comCode);
+	}
+	
+	
 	public Set<Task> findTaskByUserCodeNoDesinate(String userCode,
 			String comCode) {
 		// TODO Auto-generated method stub

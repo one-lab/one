@@ -12,7 +12,6 @@ import org.junit.Test;
  */
 public class EnvContextTest {
 
-    @Test
     public void contextTest() throws Exception {
          TT  tt = new TT("aa");
          TT  t2 = new TT("bb");

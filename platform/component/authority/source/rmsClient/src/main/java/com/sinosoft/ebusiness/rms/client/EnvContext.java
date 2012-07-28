@@ -3,8 +3,6 @@ package com.sinosoft.ebusiness.rms.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sinosoft.ebusiness.rms.client.cxf.WebServiceDTO;
-import com.sinosoft.ebusiness.rms.client.model.LoginInfoDO;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,18 +35,18 @@ public class EnvContext {
         return (String)threadLocal.get().get(DATA);
     }
     
-    public static void setLoginInfo(LoginInfoDO loginInfoDO) {
-        Map<String,LoginInfoDO>  loginInfo = threadLocal.get();
-        if(loginInfo == null){
-        	loginInfo = new HashMap<String,LoginInfoDO>();
-            threadLocal.set(loginInfo);
-        }
-        loginInfo.put(EMPLOYE,loginInfoDO) ;
-    }
-    
-    public static LoginInfoDO getLoginInfo() {
-        if(threadLocal.get() == null)
-            return null;
-        return (LoginInfoDO)threadLocal.get().get(EMPLOYE);
-    }
+//    public static void setLoginInfo(LoginInfoDO loginInfoDO) {
+//        Map<String,LoginInfoDO>  loginInfo = threadLocal.get();
+//        if(loginInfo == null){
+//        	loginInfo = new HashMap<String,LoginInfoDO>();
+//            threadLocal.set(loginInfo);
+//        }
+//        loginInfo.put(EMPLOYE,loginInfoDO) ;
+//    }
+//    
+//    public static LoginInfoDO getLoginInfo() {
+//        if(threadLocal.get() == null)
+//            return null;
+//        return (LoginInfoDO)threadLocal.get().get(EMPLOYE);
+//    }
 }
