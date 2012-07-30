@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MenuItems>
+	<MenuItem id="mingling" text="编辑命令列表" href="http://www.baidu.com" targ="_blank">	
+	</MenuItem>
+	<MenuItem id="suojin" text="缩进">	
+	</MenuItem>
+	<group></group>
+	<MenuItem id="shuxing" text="所选属性" icon="../images/example/icon02.gif">
+		<MenuItem id="all" text="全选" icon="../images/example/icon03.gif">
+		</MenuItem>	
+		<MenuItem callback="diyFn()" id="fubiao" text="选择父标签" selected="true">
+		</MenuItem>	
+		<group></group>
+		<MenuItem id="shitu" text="视图选项" icon="../images/example/icon03.gif">
+			<MenuItem id="hb221" text="合并" icon="../images/example/icon.gif" href="http://www.baidu.com" >	
+			</MenuItem>		
+			<MenuItem id="gshi" text="格式">
+				<MenuItem id="xml21" text="xml" icon="../images/example/icon.gif" href="http://www.baidu.com" >	
+				</MenuItem>		
+				<MenuItem id="json42" text="json">
+				</MenuItem>
+				<MenuItem id="htmlo" text="html">
+				</MenuItem>
+			</MenuItem>
+			<MenuItem id="zdianpo" text="站点">
+			</MenuItem>
+		</MenuItem>
+	</MenuItem>
+	<MenuItem id="chaifen" text="拆分代码" icon="../images/example/icon.gif" href="http://www.baidu.com" >	
+	</MenuItem>		
+	<MenuItem id="shuaxin" text="刷新设计视图">
+	</MenuItem>
+	<MenuItem id="APIkuozhan" text="获取API扩展名">
+	</MenuItem>
+	
+</MenuItems>
