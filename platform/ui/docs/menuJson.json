@@ -25,7 +25,7 @@
 				{ "id":"1-2","selected":"true","text":"命令说明"}
 			]
 		},
-		{ "id":"2", "text":"主目录", "icon":"../images/example/icon02.gif",
+		{ "id":"2", "text":"主目录", "icon":"./images/example/icon02.gif",
 			"MenuItems":[
 				{"id":"2-1", "text":"用户文件", "icon":"./images/example/icon.gif", "href":"http://www.baidu.com"},
 				{"id":"2-2", "text":"图像", "icon":"./images/example/icon03.gif", "group":"true"},
