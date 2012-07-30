@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
@@ -83,7 +85,7 @@ public class UserController {
 	
 	@Post("save")
 	public String save(@Param("groupList") List<Long> gids,
-			@Validation(errorPath="a:errorCreate", 
+			@Validation(errorPath="a:errorCreate",
 				notEmpty=@NotEmptyEx( props={"loginName","password","email","name"} ) ,
 				size=@SizeEx(max=20,min=4, props={"name","loginName","email"})
 			) User user, @Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {

@@ -18,10 +18,12 @@ package com.sinosoft.one.mvc.web.instruction;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -54,10 +56,10 @@ public class ViewInstruction extends AbstractInstruction {
 
     protected static Log logger = LogFactory.getLog(ViewInstruction.class);
 
-    public static final String ROSE_INVOCATION = "mvcInvocation";
+    public static final String MVC_INVOCATION = "mvcInvocation";
 
     // 视图名称到视图地址的映射(缓存这个映射避免重复计算视图地址)
-    private static Map<String, ViewPathCache> globalViewPathCaches = new HashMap<String, ViewPathCache>();
+    private static Map<String, ViewPathCache> globalViewPathCaches = new ConcurrentHashMap<String, ViewPathCache>();
 
     // 视图名称，不包含路径，一般没有后缀名
     private final String name;
@@ -81,7 +83,10 @@ public class ViewInstruction extends AbstractInstruction {
             View view = viewResolver.resolveViewName(inv, viewPath, request.getLocale());
 
             if (!Thread.interrupted()) {
-                inv.addModel(ROSE_INVOCATION, inv);
+                inv.addModel(MVC_INVOCATION, inv);
+                if(request.getAttribute(MvcConstants.IS_WINDOW_REQUEST) != null) {
+                    request.setAttribute(MvcConstants.WINDOW_REQUEST_URI, request.getContextPath() + viewPath);
+                }
                 view.render(inv.getModel().getAttributes(), request, response);
             } else {
                 logger.info("interrupted");
@@ -118,8 +123,13 @@ public class ViewInstruction extends AbstractInstruction {
         ViewPathCache viewPathCache = globalViewPathCaches.get(viewRelativePath);
         if (viewPathCache == null) {
             String directoryPath = MvcConstants.VIEWS_PATH + viewRelativePath;
-            File directoryFile = new File(inv.getServletContext().getRealPath(directoryPath));
-            if (!directoryFile.exists()) {
+            File directFile = null;
+            try {
+                directFile = getDirectoryFile(inv, directoryPath);
+            } catch (Exception e) {
+               throw new IOException(e);
+            }
+            if (directFile == null || !directFile.exists()) {
                 String msg = "404: view directory not found, you need to create it in your webapp:"
                         + directoryPath;
                 logger.error(msg);
@@ -178,11 +188,20 @@ public class ViewInstruction extends AbstractInstruction {
 
             if (viewName.charAt(0) == '/') {
                 directoryPath = viewName.substring(0, viewNameIndex);
-                directoryFile = new File(inv.getServletContext().getRealPath(directoryPath));
+                try {
+                    directoryFile = getDirectoryFile(inv, directoryPath);
+                } catch (Exception e) {
+                    throw new IOException(e);
+                }
             } else {
                 directoryPath = viewPathCache.getDirectoryPath();
                 String subDirPath = viewName.substring(0, viewNameIndex);
-                File tempHome = new File(inv.getServletContext().getRealPath(directoryPath));
+                File tempHome = null;
+                try {
+                    tempHome = new File(inv.getServletContext().getResource(directoryPath).toURI());
+                } catch (URISyntaxException e) {
+                    throw new IOException(e);
+                }
                 if (!tempHome.exists()) {
                     directoryFile = null;
                 } else {
@@ -197,7 +216,11 @@ public class ViewInstruction extends AbstractInstruction {
         } else {
             directoryPath = viewPathCache.getDirectoryPath();
             notDirectoryViewName = viewName;
-            directoryFile = new File(inv.getServletContext().getRealPath(directoryPath));
+            try {
+                directoryFile = getDirectoryFile(inv, directoryPath);
+            } catch (Exception e) {
+                throw new IOException(e);
+            }
         }
         if (directoryFile == null || !directoryFile.exists()) {
             logger.error("not found directoryPath '" + directoryPath + "' for directoryFile '"
@@ -334,5 +357,14 @@ public class ViewInstruction extends AbstractInstruction {
             }
             return (ViewDispatcher) SpringUtils.getBean(applicationContext, viewDispatcherName);
         }
+    }
+
+    private File getDirectoryFile(Invocation inv, String dirctoryFile) throws Exception{
+        ServletContext sc = inv.getServletContext();
+        String realPath = sc.getRealPath(dirctoryFile);
+        if(realPath != null) {
+             return new File(realPath);
+        }
+        return new File(sc.getResource(dirctoryFile).toURI());
     }
 }

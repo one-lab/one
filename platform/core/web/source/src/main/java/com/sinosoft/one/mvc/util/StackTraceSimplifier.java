@@ -59,21 +59,4 @@ public class StackTraceSimplifier {
 	private static boolean isSimplifyStackTrace() {
 		return !logger.isDebugEnabled();
 	}
-
-	public static void main(String[] args) {
-
-		String[] ss = {
-				"com.sinosoft.one.mvc.web.impl.thread.ActionEngine$InvocationChainImpl.doNext(ActionEngine.java:468)",
-				"com.sinosoft.one.mvc.web.InterceptorDelegate.roundInvocation(InterceptorDelegate.java:106)",
-				"com.sinosoft.one.mvc.web.OncePerRequestInterceptorDelegate.roundInvocation(OncePerRequestInterceptorDelegate.java:67)",
-				"com.sinosoft.one.mvc.web.ControllerInterceptorAdapter.round(ControllerInterceptorAdapter.java:136)" };
-
-		for (int i = 0; i < ss.length; i++) {
-			if (!EXCLUDED_STACK_TRACE.matcher(ss[i]).matches()) {
-				System.out.println(ss[i]);
-			}
-		}
-		System.out.println("done");
-	}
-
 }

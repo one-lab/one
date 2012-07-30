@@ -84,9 +84,6 @@ public class InstructionExecutorImpl implements InstructionExecutor {
     }
 
     protected Object parseInstruction(Invocation inv, Object ins) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("parset instruction:" + ins.getClass().getName() + ": '" + ins + "'");
-        }
         if (ClassUtils.isPrimitiveOrWrapper(ins.getClass())) {
             return Text.text(ins);
         } else if (ins instanceof CharSequence) {

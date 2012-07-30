@@ -15,10 +15,7 @@
  */
 package com.sinosoft.one.mvc.web.portal.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;
@@ -55,22 +52,13 @@ class WindowResponse extends HttpServletResponseWrapper {
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
         if (out == null) {
+            window.setCharset(getCharacterEncoding());
             this.out = new ServletOutputStream() {
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream(getBufferSize());
 
                 @Override
                 public void write(int b) throws IOException {
-                    baos.write(b);
+                    window.appendContent(b);
                 }
-
-                @Override
-                public void flush() throws IOException {
-                    byte[] bytes = baos.toByteArray();
-                    baos.reset();
-                    window.appendContent(new String(bytes, getCharacterEncoding()));
-                }
-
             };
         }
         return out;
@@ -78,6 +66,7 @@ class WindowResponse extends HttpServletResponseWrapper {
 
     @Override
     public PrintWriter getWriter() throws IOException {
+        window.setCharset(getCharacterEncoding());
         if (this.writer == null) {
             this.writer = new PrintWriter(new Writer() {
 
@@ -92,7 +81,8 @@ class WindowResponse extends HttpServletResponseWrapper {
 
                 @Override
                 public void write(char[] cbuf, int offset, int len) throws IOException {
-                    WindowResponse.this.window.appendContent(cbuf, offset, len);
+                    String tempString = new String(cbuf, offset, len);
+                    window.appendContent(tempString.getBytes(getCharacterEncoding()));
                 }
             });
         }

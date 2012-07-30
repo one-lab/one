@@ -20,6 +20,7 @@ import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sinosoft.one.mvc.MvcConstants;
 import com.sinosoft.one.mvc.web.annotation.ReqMethod;
 
 import org.apache.commons.logging.Log;
@@ -75,7 +76,15 @@ public class RequestPath {
                     .getAttribute(WebUtils.INCLUDE_CONTEXT_PATH_ATTRIBUTE));
             setMvcPath((String) request.getAttribute(WebUtils.INCLUDE_SERVLET_PATH_ATTRIBUTE));
         } else {
-            uri = request.getRequestURI();
+            if(request.getAttribute(MvcConstants.WINDOW_REQUEST_URI) != null) {
+                uri = (String)request.getAttribute(MvcConstants.WINDOW_REQUEST_URI);
+                request.removeAttribute(MvcConstants.WINDOW_REQUEST_URI);
+                request.setAttribute(MvcConstants.IS_WINDOW_REQUEST, "1");
+            } else {
+                uri = request.getRequestURI();
+                request.removeAttribute(MvcConstants.IS_WINDOW_REQUEST);
+            }
+
             this.setMvcPath(request.getServletPath());
             if (request.getAttribute(WebUtils.FORWARD_REQUEST_URI_ATTRIBUTE) == null) {
                 this.setDispatcher(Dispatcher.REQUEST);

@@ -39,7 +39,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * {@link ServerPortal} 的实现类，Portal 框架的核心类。
+ * Portal 框架的核心类。
  * 
  *
  * 
