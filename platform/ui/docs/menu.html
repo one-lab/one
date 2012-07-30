@@ -1,0 +1,442 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>使用手册模板</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+<link href="css/menu.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJScript.js"></script>
+<script language="javascript" src="js/menu.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#jsonMenu").menu({dataType:"json", url:"menuJson.json",eventType:"mousemove"});
+	$("#xmlMenu").menu({dataType:"xml", url:"menuXml.xml",eventType:"mousemove"});
+	$("#htmlMenu").menu({dataType:"html", url:"menuHtml.html",eventType:"mousemove"});
+	var callBackMenu = $("#callback").menu({dataType:"xml", url:"menuXmlDemo.xml",eventType:"mousemove"});
+	callBackMenu.addcallback(diyFn);
+	function diyFn(){
+		alert("数据返回事件")
+	}
+});
+
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+	var i = 1;
+	$("li.on_off").each(function(){		
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	$("li.on_off").click(function(){
+		var conID = $(this).attr("id").substring(6,7);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	})
+})
+</script>
+<style>
+.new{padding:10px;line-height:22px;}
+.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+.new span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+<div class="header">
+	<h1 class="logo"><b>Sinosoft</b> UI Menu Plugin</h1>
+</div>
+<div class="content">
+    <div class="title">
+        Menu - 控件说明
+    </div>
+</div>
+<div class="content">
+    <div class="introduce">
+        <p>Menu插件能让您只需要写几个html标签即可制作出功能强大，界面美观，支持IE、firefox、ChromeDev等常用浏览器的菜单。它可以读取xml格式、json格式、html格式的数据来生成菜单，而且还可给某个菜单绑定您所要处理的事件。</p>
+    </div>
+	<div class="title">
+        Menu - 插件引用
+    </div>
+    <div class="introduce">
+        <textarea name="code" class="xml" >
+        <head>
+        <link href="../css/sinosoft.base.css" rel="stylesheet" type="text/css" />    <!--核心样式表-->
+        <link href="../css/sinosoft.menu.css" rel="stylesheet" type="text/css" />    <!--Menu样式表-->
+        <script language="javascript" src="../js/jquery-1.7.1.js"></script>          <!--jquery核心库-->
+        <script language="javascript" src="../js/sinosoft.menu.js"></script>         <!--Menu控件-->
+        </head> 
+        </textarea>
+    </div>
+    <div class="title">
+        Menu - 参数配置
+    </div>
+    <table width="100%" border="0" cellspacing="1" cellpadding="0" class="API" id="API">
+      <tr>
+        <th>参数名</th>
+        <th>描述</th>
+        <th>默认值</th>
+        <th>可选址</th>
+      </tr>
+      <tr>
+        <td>dataType</td>
+        <td>数据类型</td>
+        <td>"JSON"</td>
+        <td>JSON | XML | HTML</td>
+      </tr>
+	  <tr>
+        <td>url</td>
+        <td>请求路径</td>
+        <td>""</td>
+        <td></td>
+      </tr>
+	  <tr>
+        <td>type</td>
+        <td>请求方式</td>
+        <td>"GET"</td>
+        <td>GET | POST</td>
+      </tr>
+	  <tr>
+        <td>loadText</td>
+        <td>加载提示</td>
+        <td>"加载中，请稍后..."</td>
+        <td></td>
+      </tr>
+	  <tr>
+        <td>width</td>
+        <td>弹出的菜单的宽度</td>
+        <td>110</td>
+        <td>int类型的数据</td>
+      </tr>
+	  <tr>
+        <td>eventType</td>
+        <td>菜单弹出所需要的事件</td>
+        <td>"click"</td>
+        <td>clikc | mousemove</td>
+      </tr>
+	  <tr>
+        <td>animation</td>
+        <td></td>
+        <td>"toggle"</td>
+        <td>toggle | slideToggle | fadeToggle</td>
+      </tr>
+    </table>
+    <div class="title">
+        Menu - 演示及代码
+    </div>
+</div>
+
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>Json数据菜单演示<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">    	
+
+        <div class="jsonMenu" id="jsonMenu" style="border-bottom:#8db2e3 1px solid"></div>
+
+        <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+				$(function(){
+					$("#htmlMenu").menu({dataType:"json", url:"menuJson.json",eventType:"mousemove"});
+				});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="html" >
+				<div class="htmlMenu" id="htmlMenu" style="border-bottom:#8db2e3 1px solid"></div>
+            </textarea>
+			<h3>JSON数据</h3>
+        	<textarea name="code" class="html" >
+				{
+					"MenuItems":[
+						{
+							"id":"bianji",
+							"callback":"diyFn()",
+							"text":"文件编辑",
+							"href":"http://www.baidu.com",
+							"MenuItems":[
+								{ 
+									"id":"aaa", "text":"修改格式",
+									"callback":"diyFn()",					
+									"MenuItems":[
+										{"id":"3333", "text":"表格", "icon":"./images/example/icon03.gif", 
+											"href":"http://www.baidu.com"},
+										{"id":"skj2", "text":"作为模板", "href":"http://www.baidu.com"},
+										{"id":"shengc2", "text":"生成", "href":"http://www.baidu.com",
+											"MenuItems":[
+													{"id":"2euy", "text":"json格式"},
+													{"id":"asdsj2", "text":"xml格式", "group":"true"},
+													{"id":"kangsw2", "text":"html"}
+											]						
+										},
+										{"id":"1daoc", "text":"导出", "href":"http://www.baidu.com"}
+									]
+								},
+								{ "id":"1-2","selected":"true","text":"命令说明"}
+							]
+						},
+						{ "id":"2", "text":"主目录", "icon":"images/example/icon02.gif",
+							"MenuItems":[
+								{"id":"2-1", "text":"用户文件", "icon":"./images/example/icon.gif", "href":"http://www.baidu.com"},
+								{"id":"2-2", "text":"图像", "icon":"images/example/icon03.gif", "group":"true"},
+								{"id":"2-3", "text":"数据格式",
+									"MenuItems":[
+										{"id":"2-3-1", "text":"json格式"},
+										{"id":"2-3-2", "text":"xml格式", "group":"true"},
+										{"id":"2-3-3", "text":"html格式", "href":"http://www.baidu.com"}
+									]
+								}
+							]
+						},
+						{ "id":"3", "text":"站点帮助窗口",
+							"MenuItems":[
+								{"id":"shs", "text":"插入", "icon":"images/example/icon02.gif", "href":"http://www.baidu.com"},
+								{"id":"djhe", "text":"AP元素", "group":"true"},
+								{"id":"oue", "text":"命令",
+									"MenuItems":[
+										{"id":"we", "text":"开始录制", "group":"true", "icon":"images/example/icon03.gif"},
+										{"id":"hellow", "text":"扩展管理(L)"}
+									]
+								}
+							]
+						}
+					]	
+				}
+            </textarea>		
+        </div>
+    </div>
+    </div>
+</div>	
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>XML数据菜单演示<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">
+		<div class="xmlMenu" id="xmlMenu" style="border-bottom:#8db2e3 1px solid"></div>
+        
+		<div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+				$(function(){
+					$("#xmlMenu").menu({dataType:"json", url:"menuJson.json",eventType:"mousemove"});
+				});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="html" >
+				<div class="xmlMenu" id="xmlMenu" style="border-bottom:#8db2e3 1px solid"></div>
+            </textarea>
+			
+			<h3>XML数据</h3>
+        	<textarea name="code" class="xml" >
+				<?xml version="1.0" encoding="utf-8"?>
+					<MenuItems>
+						<MenuItem id="mingling" text="编辑命令列表" href="http://www.baidu.com" targ="_blank">	
+						</MenuItem>
+						<MenuItem id="suojin" text="缩进">	
+						</MenuItem>
+						<group></group>
+						<MenuItem id="shuxing" text="所选属性" icon="../images/example/icon02.gif">
+							<MenuItem id="all" text="全选" icon="../images/example/icon03.gif">
+							</MenuItem>	
+							<MenuItem callback="diyFn()" id="fubiao" text="选择父标签" selected="true">
+							</MenuItem>	
+							<group></group>
+							<MenuItem id="shitu" text="视图选项" icon="../images/example/icon03.gif">
+								<MenuItem id="hb221" text="合并" icon="../images/example/icon.gif" href="http://www.baidu.com" >	
+								</MenuItem>		
+								<MenuItem id="gshi" text="格式">
+									<MenuItem id="xml21" text="xml" icon="../images/example/icon.gif" href="http://www.baidu.com" >
+									</MenuItem>		
+									<MenuItem id="json42" text="json">
+									</MenuItem>
+									<MenuItem id="htmlo" text="html">
+									</MenuItem>
+								</MenuItem>
+								<MenuItem id="zdianpo" text="站点">
+								</MenuItem>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem id="chaifen" text="拆分代码" icon="../images/example/icon.gif" href="http://www.baidu.com" >	
+						</MenuItem>		
+						<MenuItem id="shuaxin" text="刷新设计视图">
+						</MenuItem>
+						<MenuItem id="APIkuozhan" text="获取API扩展名">
+						</MenuItem>
+					</MenuItems>
+            </textarea>		
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>HTML数据菜单演示<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">
+		<div class="htmlMenu" id="htmlMenu" style="border-bottom:#8db2e3 1px solid"></div>
+        
+		<div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+				$(function(){
+					var menu = $("#htmlMenu").menu({dataType:"html", url:"menuHtml.html",eventType:"mousemove"});
+				});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="html" >
+				<div class="callback" id="callback" style="border-bottom:#8db2e3 1px solid"></div>
+            </textarea>
+				<h3>HTML数据</h3>
+        	<textarea name="code" class="html" >
+				<ul>
+					<li id="1">
+						<a href="#">文件编辑</a>
+						<ul>
+							<li id="1-1"><img src="../images/example/icon03.gif" /><a href="http://www.baidu.com">1-1</a></li>
+							<li id="1-2"><img src="../images/example/icon.gif" /><a href="http://www.sina.com">1-2</a></li>
+							<li id="1-3"><img src="../images/example/icon03.gif" /><a href="http://www.163.com">1-3</a></li>
+						</ul>
+					</li>
+					<li id="2">
+						 <img src="../images/example/icon02.gif" /><a>修改格式</a>
+						 <ul>
+							<li id="2-1">
+								<a>2-1</a>
+								<ul>
+									<li id="2-1-1"><a>2-1-1</a>
+										<ul>
+											<li id="32d"><a>三级菜单</a></li>
+											<li id="fr4"><a>测试菜单</a>
+												<ul>
+													<li id="siji"><a>四级菜单</a></li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+									<li id="2-1-2"><a>2-1-2</a></li>
+								</ul>    
+							</li>
+							<li id="2-2"><img src="../images/example/icon.gif" /><a>2-2</a></li>
+							<li id="2-3">
+								<img src="../images/example/icon.gif" /><a>2-3</a>
+								<ul>
+									<li id="2-3-1"><a>2-3-1</a>
+										<ul>
+											<li id="sss"><a>2-3-1</a>
+												<ul>
+													<li id="3wwq2"><a>三级菜单</a></li>
+													<li id="uyw7"><a>测试菜单</a>
+														<ul>
+															<li id="iiuu8"><a>四级菜单</a></li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+											<li id="vvv"><a>2-3-2</a></li>
+											<div class="menu_part"><span></span></div>
+											<li id="sdsa"><a>2-3-3</a>
+												<ul>
+													<li id="tte6"><a>三级菜单</a></li>
+													<li id="uyy77"><a>测试菜单</a></li>
+													<li id="or8j"><a>四级菜单</a></li>
+													<li id="hri7"><a>修改</a></li>
+													<li id="helod"><a>!帮助</a></li>
+												</ul>
+											</li>                            
+										</ul>
+									</li>
+									<li id="2-3-2"><a>2-3-2</a></li>
+									<div class="menu_part"><span></span></div>
+									<li id="2-3-3"><a>2-3-3</a></li>
+								</ul>
+							</li>
+							<li id="hdhhw"><a>三级菜单</a></li>
+							<li id="83js77"><a>测试菜单</a></li>
+							<li id="xmb3"><a>四级菜单</a></li>
+							<li id="cmcn2"  selected="true" callback="diyFn()"><a>修改</a></li>
+							<li id="2-4"><a>测试</a>
+								<ul>
+									<li id="ggshh21"><a>三级菜单</a></li>
+									<li id="mncv86"><a>测试菜单</a></li>
+									<li id="hhgas7"><a>四级菜单</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li id="3">
+						<a href="#">站点帮助窗口</a>
+					</li>
+				</ul>
+            </textarea> 	
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>菜单CallBack方法演示<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">
+		<div class="callback" id="callback" style="border-bottom:#8db2e3 1px solid"></div>
+        
+		<div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+				$(function(){
+					var menu = $("#callback").menu({dataType:"html", url:"menuHtml.html",eventType:"mousemove"});
+					menu.addcallback(diyFn);
+				});
+				function diyFn(){
+					alert("数据返回事件")
+				}
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+				<div class="callback" id="callback" style="border-bottom:#8db2e3 1px solid"></div>
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+
+
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>
