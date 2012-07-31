@@ -72,10 +72,8 @@
 			function changeNeedlePosition() {
 				//先取到当前列的位置
 				var headPosition = $(this).offset();
-				//var headWidht = $
-				//alert(headPosition.left);
-				
-				//$(".grid_head .needle")	
+				var positionMove = headPosition.left + $(this).width() - 20;
+				$(".grid_head .needle").css({left:positionMove})	
 			};
 			
 			
