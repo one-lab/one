@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>One-UI Plugin Demo</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJScript.js"></script>
+<script type="text/javascript">
+$(function(){
+	var bodyTop = $(window).height()/2;
+	$(window).scroll(function(){
+		var offsetTop = bodyTop + $(window).scrollTop() +"px";
+		$("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+		if($(window).scrollTop() > 10){
+			$("#toTop").show();
+		}else{
+			$("#toTop").hide();
+		}
+	});
+	$("#toTop").click(function(){toTop()});
+});
+function toTop(){
+	$("#toTop").hide();
+	$("html,body").animate({scrollTop: $("body").offset().top},500);
+};
+</script>
+<style>
+</style>
+</head>
+
+<body>
+<div class="header">	
+	<h1 class="logo"><b>Sinosoft</b> One-UI Plugin(V1.0.0)</h1></br>
+  <h2 class="author">Author ONE-Platform WorkTeam</h2>
+</div>
+
+<div class="content">
+    <div class="title">
+        DEMO目录
+  </div>
+    <hr/>
+    <div class="introduce">
+        <ul class="demo_list">
+        	<li>
+            	<a href="menu.html">
+                	<b>MENU<span class="new"></span></b>
+               		<img src="images/example/menu.gif" />
+                </a>
+                <a href="tips.html">
+                	<b>TIP<span class="new"></span></b>
+               		<img src="images/example/tips.gif" />
+                </a>
+                <a href="#" class="list_last">
+                	<b>MESSAGES<span class="new"></span></b>
+               		<img src="images/example/time.gif" />
+                </a>
+            </li>
+            <li>
+            	<a href="javascript:;">
+                	<b>GRID</b>
+               		<img src="images/example/time.gif" />
+                </a>
+                <a href="javascript:;">
+                	<b>TOOLBAR</b>
+               		<img src="images/example/time.gif" />
+                </a>
+               
+            </li>
+        </ul>
+    </div>
+	<hr/>
+</div>
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

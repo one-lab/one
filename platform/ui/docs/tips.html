@@ -5,12 +5,12 @@
 <title>使用手册模板</title>
 <link href="css/templet.css" rel="stylesheet" type="text/css" />
 <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
-<link href="css/tips.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.tips.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="js/jquery-1.7.1.js"></script>
 <script language="javascript" src="js/code/shCore.js"></script>
 <script language="javascript" src="js/code/shBrushXml.js"></script>
 <script language="javascript" src="js/code/shBrushJScript.js"></script>
-<script language="javascript" src="js/tips.js"></script>
+<script language="javascript" src="js/sinosoft.tips.js"></script>
 <script type="text/javascript">
 $(function(){
 	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
@@ -43,8 +43,23 @@ $(function(){
 		var theId = $("#code_cont" + conID);
 		$(this).toggleClass("select");
 		theId.slideToggle("normal")
-	})
-})
+	});
+	var bodyTop = $(window).height()/2;
+	$(window).scroll(function(){
+		var offsetTop = bodyTop + $(window).scrollTop() +"px";
+		$("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+		if($(window).scrollTop() > 10){
+			$("#toTop").show();
+		}else{
+			$("#toTop").hide();
+		}
+	});
+	$("#toTop").click(function(){toTop()})
+});
+function toTop(){
+	$("#toTop").hide();
+	$("html,body").animate({scrollTop: $("body").offset().top},500);
+}
 </script>
 <style>
 .new{padding:10px;line-height:22px;}
@@ -70,7 +85,7 @@ $(function(){
 </div>
 <div class="content">
     <div class="introduce">
-        <p>Tips插件方便您为链接或其它元素添加提示标签功能，它可以附在任意元素（标签）之上，并定制展示方式与位置,支持多种浏览器，可定制。功能分为三种：toolTip、customTip、windowTip</p>
+        <p>Tips控件方便您为链接或其它元素添加提示标签功能，它可以附在任意元素（标签）之上，并定制展示方式与位置,支持多种浏览器，可定制。功能分为三种：toolTip、customTip、windowTip</p>
         <ul>
             <li>toolTip：当元素包括title或alt属性时，它的内容将自动变成tip的内容。</li>
             <li>customTip：用户可自定义Tips显示的内容，支持HTML，这使得其易于定制。触发获取，便于更新动态内容。</li>
@@ -78,7 +93,7 @@ $(function(){
         </ul>
     </div>
 	<div class="title">
-        Tips - 插件引用
+        Tips - 控件引用
     </div>
     <div class="introduce">
         <textarea name="code" class="xml" >
@@ -275,5 +290,6 @@ $(function(){
 <div class="footer">
 Designed by <b>Sinosoft</b>
 </div>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:;"></a>
 </body>
 </html>

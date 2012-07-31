@@ -4,11 +4,10 @@
 	</MenuItem>
 	<MenuItem id="suojin" text="缩进">	
 	</MenuItem>
-	<group></group>
 	<MenuItem id="shuxing" text="所选属性" icon="./images/example/icon02.gif">
 		<MenuItem id="all" text="全选" icon="./images/example/icon03.gif">
 		</MenuItem>	
-		<MenuItem callback="diyFn()" id="fubiao" text="选择父标签" selected="true">
+		<MenuItem id="fubiao" text="选择父标签" selected="true">
 		</MenuItem>	
 		<group></group>
 		<MenuItem id="shitu" text="视图选项" icon="./images/example/icon03.gif">

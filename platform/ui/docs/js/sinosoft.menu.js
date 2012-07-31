@@ -8,11 +8,10 @@
 	 $.fn.extend({
 		menu: function(opts){
 			var defaults = {
-				dataType  : "" ,     //后台传送过来的数据类型
+				dataType  : "json" ,     //后台传送过来的数据类型
 				url       : "" ,        //ajax请求的路径
 				type      : "get" ,     //ajax请求的方式
-				loadText  : "加载中,请稍候…",  //加载提示
-				error	  : "error",    //这个先不管，要往里边传值该怎么传？
+				loadText  : "加载中,请稍候…",  //加载提示？
 				width     : 110,
 				eventType : "click",    //mousemove/click
 				animation : "toggle"   //toggle/slideToggle/fadeToggle
@@ -464,7 +463,7 @@
 						tempId = "";
 					}
 				}else{
-					alert("回调参数不能为空！")
+					alert("参数不能为空或非函数参数！")
 				};
 			 }, 
 			 id : function(id) {
