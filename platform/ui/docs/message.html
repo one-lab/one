@@ -1,0 +1,791 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>使用手册模板</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.base.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="js/code/shCore.js"></script>
+<script type="text/javascript" src="js/code/shBrushXml.js"></script>
+<script type="text/javascript" src="js/code/shBrushJScript.js"></script>
+<script type="text/javascript" src="js/sinosoft.tips.js"></script>
+<script type="text/javascript" src="js/sinosoft.message.js"></script>
+<script type="text/javascript">
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = '../js/code/clipboard.swf';
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+
+	$( "pre a.show" ).live('click', function() {
+		$( this ).html("隐藏源代码").removeClass("show").addClass("hide").next("code").show();
+		return false;
+	});
+	$( "pre a.hide" ).live('click', function() {
+		$( this ).html("显示源代码").removeClass("hide").addClass("show").next("code:visible").hide();
+		return false;
+	});
+
+	$( "#simpleAlert" ).messager();
+
+	$( "#extendsMethodAlert" ).bind('click', function() {
+		msgAlert("警告", "一个简单的Alert对话框.");
+		return false;
+	});
+
+	$( "#extendsMethodConfirm" ).bind('click', function() {
+		msgConfirm("操作确认", "一个简单的Confirm对话框.");
+		return false;
+	});
+
+	$( "#extendsMethodSuccess" ).bind('click', function() {
+		msgSuccess("操作成功", "一个简单的Success对话框.");
+		return false;
+	});
+
+	$( "#extendsMethodFailed" ).bind('click', function() {
+		msgFailed("操作失败", "一个简单的Failed对话框.");
+		return false;
+	});
+
+	$( "#linkAlert" ).messager({
+		'title': "Simple link Alert",
+		'html': "为<strong>超链接</strong>绑定一个简单的Alert对话框."
+	});
+
+	$( "#inputButtonAlert, #buttonAlert" ).messager({
+		'title': "inputButtonAlert",
+		'html': "使用一个按钮创建一个简单的Message控件"
+	});
+
+	$( "#testNoTagAlert" ).bind('click', function() {
+		msgAlert("Method call a Alert", "在自定义方法中调用$.fn.messager()方法创建的Alert.");
+	});
+
+	$( "#testSubmit" ).messager({
+		'confirm': true,
+		'title': "密码修改警告！",
+		'html': "您确定要修改当前密码吗？",
+		'btnsRight': {
+			'确定': function() {
+				$( "#testForm" ).submit();
+			}
+		}
+	});
+
+	$( "#delRecd01, #delRecd02, #delRecd03, #delRecd04" ).bind('click', function() {
+		var trigger = this;
+
+		msgConfirm("操作确认！", "确认要删除该条记录吗？本操作无法回复！", function() { $( trigger ).parents("tr").remove(); });
+	});
+
+	$( "#alertWithoutTitle" ).messager({
+		'header': false,
+		'html': "配置参数，无抬头栏"
+	});
+
+	$( "#closeAlertByContentLink" ).messager({
+		'linkToClose': true,
+		'title': "Close Alert by content link",
+		'html': "操作执行成功，点击链接<a href='#'>查看详细信息</a>"
+	});
+
+	var i = 1;
+	$("li.on_off").each(function(){
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	$("li.on_off").click(function(){
+		/*var conID = $(this).attr("id").substring(6,7);*/
+        var conID = $(this).attr("id").substring(6,$(this).attr("id").length);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	});
+	$("#toTop").tips({type:"toolTip",tipPostion:"right"});
+	var bodyTop = $(window).height()/2
+	$(window).scroll(function(){
+		var offsetTop = bodyTop + $(window).scrollTop() +"px";
+		$("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+		if($(window).scrollTop() > 10){
+			$("#toTop").show();
+		}else{
+			$("#toTop").hide();
+		}
+	});
+	$("#toTop").click(function(){toTop()})
+})
+function toTop(){
+	$("#toTop").hide();
+	$("html,body").animate({scrollTop: $("body").offset().top},500);
+}
+</script>
+<style type="text/css">
+    .record_table { width: 790px; margin: 15px 0; border: 1px solid #ccc; border-collapse: collapse; }
+    .record_table thead { line-height: 30px; font-size: 14px; text-align: center; }
+    .record_table tbody td { line-height: 24px; padding: 0 5px; }
+</style>
+</head>
+
+<body>
+<div class="header">
+	<h1 class="logo"><b>Sinosoft</b> UI Message Plugin</h1>
+</div>
+<div class="content bread_crumb">
+	<a href="index.html">首页</a>
+    >
+    <span class="select">关于响应</span>
+</div>
+<div class="content">
+    <div class="title">
+        UI Message - 控件说明
+    </div>
+</div>
+<div class="content">
+    <div class="introduce">
+        <p>UI Message 用于创建可以覆盖整个页面的模式对话框,如Alert, Confirm等消息框。为了实现更好的界面效果，模拟系统的消息提示框实现了该组件。在外观上可以通过css进行完全的控制。使用方便，支持对话框拖拽。</p>
+        <!--<ul>
+            <li>toolTip：当元素包括title或alt属性时，它的内容将自动变成tip的内容。</li>
+            <li>customTip：用户可自定义Tips显示的内容，支持HTML，这使得其易于定制。触发获取，便于更新动态内容。</li>
+            <li>windowTip：主要用于系统反馈信息提示，支持HTML，可以指定tips与触发元素之前的距离、汽泡自动消失时间，tips窗宽度等。</li>
+        </ul>-->
+    </div>
+	<div class="title">
+        UI Message - 插件引用
+    </div>
+    <div class="introduce">
+        <label>
+        <textarea name="code" class="xml" >
+        &lt;head&gt;
+        &lt;link href="../css/sinosoft.base.css" rel="stylesheet" type="text/css" /&gt;             <!--核心样式表-->
+        &lt;link href="../css/sinosoft.messager.css" rel="stylesheet" type="text/css" /&gt;         <!--message样式表-->
+        &lt;script type="text/javascript" src="../js/jquery-1.7.1.js"&gt;&lt;/script&gt;            <!--jquery核心库-->
+        &lt;script type="text/javascript" src="../js/sinosoft.messager.js"&gt;&lt;/script&gt;       <!--message控件-->
+        &lt;/head>
+        </textarea>
+        </label>
+    </div>
+    <div class="title">
+        UI Message - 参数配置
+    </div>
+    <table width="100%" border="0" cellspacing="1" cellpadding="0" class="API" id="API">
+      <tr>
+        <th>参数名</th>
+        <th>描述</th>
+        <th>默认值</th>
+        <th>可选址</th>
+      </tr>
+        <tr>
+            <td class="align_center">'draggable'</td>
+            <td>对话框可拖拽</td>
+            <td>true</td>
+            <td>true | false</td>
+        </tr>
+        <tr>
+            <td class="align_center">'header'</td>
+            <td>对话框显示抬头栏</td>
+            <td>true</td>
+            <td>true | false</td>
+        </tr>
+        <tr>
+            <td class="align_center">'headerText'</td>
+            <td>对话框显示抬头栏文字</td>
+            <td>"网页对话框"</td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td class="align_center">'headerCloser'</td>
+            <td>对话框显示抬头栏关闭按钮，Confirm模式无效</td>
+            <td>true</td>
+            <td>true | false</td>
+        </tr>
+        <tr>
+            <td class="align_center">'confirm'</td>
+            <td>Confirm模式，同时显示默认确定，取消按钮</td>
+            <td>false</td>
+            <td>true | false</td>
+        </tr>
+        <tr>
+            <td class="align_center">'opacity'</td>
+            <td>模态背景透明度</td>
+            <td>0.8</td>
+            <td>0-1</td>
+        </tr>
+        <tr>
+            <td class="align_center">'width'</td>
+            <td>自定义对话框宽度</td>
+            <td>420</td>
+            <td>Integer</td>
+        </tr>
+        <tr>
+            <td class="align_center">'height'</td>
+            <td>自定义对话框高度</td>
+            <td>"auto"</td>
+            <td>Integer</td>
+        </tr>
+        <tr>
+            <td class="align_center">'zIndex'</td>
+            <td>自定义对话框zIndex</td>
+            <td>1000</td>
+            <td>Max z-index in page</td>
+        </tr>
+        <tr>
+            <td class="align_center">'left'</td>
+            <td>自定义对话框位置：左边距</td>
+            <td>"center"</td>
+            <td>Integer</td>
+        </tr>
+        <tr>
+            <td class="align_center">'top'</td>
+            <td>自定义对话框位置：上边距</td>
+            <td>"center"</td>
+            <td>Integer</td>
+        </tr>
+        <tr>
+            <td class="align_center">'title'</td>
+            <td>自定义对话框内容标题</td>
+            <td>"Alert!"</td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td class="align_center">'html'</td>
+            <td>自定义对话框内容文字或HTML代码</td>
+            <td>"操作成功！"</td>
+            <td>String or HTML code</td>
+        </tr>
+        <tr>
+            <td class="align_center">'linkToClose'</td>
+            <td>内容中的链接点击后关闭当前对话框</td>
+            <td>true</td>
+            <td>true | false</td>
+        </tr>
+        <tr>
+            <td class="align_center">'btnsLeft'</td>
+            <td>自定义对话框按钮组(左对齐)</td>
+            <td>null</td>
+            <td>A customize Object</td>
+        </tr>
+        <tr>
+            <td class="align_center">'btnsRight'</td>
+            <td>自定义对话框按钮组(右对齐)</td>
+            <td>null</td>
+            <td>A customize function</td>
+        </tr>
+    </table>
+    <div class="title">
+        UI Message - 演示及代码
+    </div>
+</div>
+
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">    	
+
+        一个简单的Alert对话框<br>
+        <a href="." id="simpleAlert">A simple Alert</a>
+
+        <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#simpleAlert" ).messager();
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="." id="simpleAlert"&gt;A simple Alert&lt;/a&gt;
+            </textarea>            
+        </div>
+    </div>
+    </div>
+</div>	
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">
+    	自定义方法调用扩展的msgAlert方法<br>
+        <a href="javascript:void(0)" id="extendsMethodAlert">Extends Method Alert</a><br />
+        
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+    $( "#extendsMethodAlert" ).bind('click', function() {
+        msgAlert("Alert", "一个简单的Alert对话框.");
+        return false;
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="javascript:void(0)" id="extendsMethodAlert"&gt;Extends Method Alert&lt;/a&gt;
+            </textarea>            
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">
+    	自定义方法调用扩展的msgConfirm方法<br>
+        <a href="javascript:void(0)" id="extendsMethodConfirm">Extends Method Confirm</a>
+        
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#extendsMethodConfirm" ).bind('click', function() {
+        msgConfirm("Confirm", "一个简单的Confirm对话框.");
+        return false;
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="javascript:void(0)" id="extendsMethodConfirm"&gt;Extends Method Confirm&lt;/a&gt;
+            </textarea>            
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	自定义方法调用扩展的msgSuccess方法<br>
+        <a href="javascript:void(0)" id="extendsMethodSuccess">Extends Method Success</a>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#extendsMethodSuccess" ).bind('click', function() {
+        msgSuccess("Success", "一个简单的Success对话框.");
+        return false;
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="javascript:void(0)" id="extendsMethodSuccess"&gt;Extends Method Success&lt;/a&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	自定义方法调用扩展的msgFailed方法<br>
+        <a href="javascript:void(0)" id="extendsMethodFailed">Extends Method Failed</a>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#extendsMethodFailed" ).bind('click', function() {
+        msgFailed("Failed", "一个简单的Failed对话框.");
+        return false;
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="javascript:void(0)" id="extendsMethodFailed"&gt;Extends Method Failed&lt;/a&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	为<strong>超链接</strong>绑定一个简单的Alert对话框<br>
+        <a href="." id="linkAlert">Simple link Alert</a>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#linkAlert" ).messager({
+        'title': "Simple link Alert",
+        'html': "为<strong>超链接</strong>绑定一个简单的Alert对话框"
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="." id='"linkAlert"'&gt;Simple link Alert&lt;/a&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	为<strong>按钮</strong>绑定一个简单的Message控件<br>
+        <input type="button" id="inputButtonAlert" value="Simple input button Alert" />
+        <button id="buttonAlert">Simple button Alert</button>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#inputButtonAlert, #buttonAlert" ).messager({
+        'title': "Simple button Alert",
+        'html': "使用一个按钮创建一个简单的Message控件."
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;input type="button" id="inputButtonAlert" value="Simple input button Alert" /&gt;
+&lt;button id="buttonAlert"&gt;Simple button Alert&lt;/button&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	在自定义方法中调用$.fn.messager()方法创建的Alert.<br>
+        <a href="javascript:void(0)" id="testNoTagAlert">Method call a Alert</a>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#testNoTagAlert" ).bind('click', function() {
+        $.fn.messager({
+            'title': "Method call a Alert",
+            'html': "在自定义方法中调用$.fn.messager()方法创建的Alert."
+        });
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="javascript:void(0)" id="testNoTagAlert"&gt;Method call a Alert&lt;/a&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	用SUBMIT按钮在提交FORM时创建一个Confirm对话框<br>
+        <form id="testForm" action=".">
+        <label for="testUsername">Old password: </label><input id="testUsername" type="password" /><br />
+        <label for="testPassword">New Password: </label><input id="testPassword" type="password" /><br />
+        <input type="submit" value="Submit with confirm" id="testSubmit" />
+        <input type="submit" value="Submit directly" id="testFormSubmit" />
+        </form>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#testSubmit" ).messager({
+        'confirm': true,
+        'title': "密码修改警告！",
+        'html': "您确定要修改当前密码吗？",
+        'btnConfirm': function() {
+            $( "#testForm" ).submit();
+        }
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;label for="testUsername"&gt;Old password: &lt;/label>&lt;input id="testUsername" type="password" /&gt;
+&lt;label for="testPassword"&gt;new Password: &lt;/label>&lt;input id="testPassword" type="password" /&gt;
+&lt;input type="submit" value="Submit with confirm" id="testSubmit" /&gt;
+&lt;input type="submit" value="Submit directly" id="testFormSubmit" /&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	创建一个删除数据确认Confirm对话框<br>
+        <table border="1" cellpadding="0" cellspacing="0" class="record_table">
+            <thead>
+            <tr>
+                <td>序号</td>
+                <td>名称</td>
+                <td>数量</td>
+                <td>价格</td>
+                <td>日期</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>显示器</td>
+                <td>5</td>
+                <td>1200.00</td>
+                <td>2013-05-14</td>
+                <td>
+                    <a href="javascript:void(0)" id="delRecd01">删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>电源</td>
+                <td>50</td>
+                <td>300.00</td>
+                <td>2013-05-14</td>
+                <td>
+                    <a href="javascript:void(0)" id="delRecd02">删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>CPU</td>
+                <td>20</td>
+                <td>2000.00</td>
+                <td>2013-05-14</td>
+                <td>
+                    <a href="javascript:void(0)" id="delRecd03">删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>硬盘</td>
+                <td>50</td>
+                <td>450.00</td>
+                <td>2013-05-14</td>
+                <td>
+                    <a href="javascript:void(0)" id="delRecd04">删除</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+    //为每个操作按钮/链接定义ID，也可以使用相同的ClassName，如：
+    //$( ".delRecord" ).bind('click', ......);
+	$( "#delRecd01, #delRecd02, #delRecd03, #delRecd04" ).bind('click', function() {
+        var trigger = this;
+
+        $.fn.messager({
+            'confirm': true,
+            'title': "操作确认！",
+            'html': "确认要删除该条记录吗？",
+            'btnsRight': {
+                '确定': function(event, msgTrigger) {
+                    $( trigger ).parents("tr").remove();
+                }
+            }
+        });
+
+        return false;
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+
+&lt;table border="1" cellpadding="0" cellspacing="0" class="record_table"&gt;
+    &lt;thead&gt;
+    &lt;tr&gt;
+        &lt;td&gt;序号&lt;/td&gt;
+        &lt;td&gt;名称&lt;/td&gt;
+        &lt;td&gt;数量&lt;/td&gt;
+        &lt;td&gt;价格&lt;/td&gt;
+        &lt;td&gt;日期&lt;/td&gt;
+        &lt;td&gt;操作&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td&gt;1&lt;/td&gt;
+        &lt;td&gt;显示器&lt;/td&gt;
+        &lt;td&gt;5&lt;/td&gt;
+        &lt;td&gt;1200.00&lt;/td&gt;
+        &lt;td&gt;2013-05-14&lt;/td&gt;
+        &lt;td&gt;
+            &lt;a href="javascript:void(0)" id="delRecd01"&gt;删除&lt;/a&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;2&lt;/td&gt;
+        &lt;td&gt;电源&lt;/td&gt;
+        &lt;td&gt;50&lt;/td&gt;
+        &lt;td&gt;300.00&lt;/td&gt;
+        &lt;td&gt;2013-05-14&lt;/td&gt;
+        &lt;td&gt;
+            &lt;a href="javascript:void(0)" id="delRecd02"&gt;删除&lt;/a&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;3&lt;/td&gt;
+        &lt;td&gt;CPU&lt;/td&gt;
+        &lt;td&gt;20&lt;/td&gt;
+        &lt;td&gt;2000.00&lt;/td&gt;
+        &lt;td&gt;2013-05-14&lt;/td&gt;
+        &lt;td&gt;
+            &lt;a href="javascript:void(0)" id="delRecd03"&gt;删除&lt;/a&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;4&lt;/td&gt;
+        &lt;td&gt;硬盘&lt;/td&gt;
+        &lt;td&gt;50&lt;/td&gt;
+        &lt;td&gt;450.00&lt;/td&gt;
+        &lt;td&gt;2013-05-14&lt;/td&gt;
+        &lt;td&gt;
+            &lt;a href="javascript:void(0)" id="delRecd04"&gt;删除&lt;/a&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	配置参数，无抬头栏<br>
+        <a href="." id="alertWithoutTitle">Alert without title</a>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#alertWithoutTitle" ).messager({
+        <span class="importent">'header': false,</span>
+        'html': "配置参数，无抬头栏"
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="." id="alertWithoutTitle"&gt;Alert without title&lt;/a&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>UI Message<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">
+	<div class="info">
+    <div class="content">
+    	使用内容文字中的超链接关闭当前对话框(默认为true)<br>
+        <a href="." id="closeAlertByContentLink">Close Alert by content link</a>
+
+      <div class="code_cont">
+        	<h3>JS</h3>
+            <textarea name="code" class="js" >
+$(function(){
+	$( "#closeAlertByContentLink" ).messager({
+        <span class="importent">'linkToClose': true,</span>
+        'title': "Close Alert by content link",
+        'html': "操作执行成功，点击链接&lt;a href='#'&gt;查看详细信息&lt;/a&gt;"
+    });
+});
+            </textarea>
+        	<h3>HTML</h3>
+        	<textarea name="code" class="xml" >
+&lt;a href="." id="closeAlertByContentLink"&gt;Close Alert by content link&lt;/a&gt;
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:;"></a>
+</body>
+</html>

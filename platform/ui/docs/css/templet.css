@@ -1,8 +1,3 @@
-*{margin:0;padding:0;}
-table{border-collapse:separate;}
-table,td,th{vertical-align:middle;}
-a img{border:none}
-ul{list-style:none;}
 html,body{font-size:12px;font-family:Gerogia,Tahoma, Geneva,Microsoft Yahei,Verdana,"HelveticaNeue",Helvetica,Arial;color:#333;background:#f1efef url(../images/center_bg.jpg) no-repeat center 0}
 .header,.content,.tabs,.footer{width:900px;margin:0 auto}
 .header{padding:48px 0 50px}
@@ -36,3 +31,19 @@ line-height:22px;}
 .code_cont{display:none}
 .footer{padding-bottom:30px;text-align:right;letter-spacing: -1px;text-shadow: 1px 1px 1px #FFFFFF;font-family:Helvetica,Arial,sans-serif;color:#555}
 .footer b{font-family:Arial, Helvetica, sans-serif;text-transform: uppercase;}
+.toTop{position:absolute;width:34px;height:34px;right:0;top:50%;background:url(../images/to_top.gif) no-repeat;display:none}
+.toTop:hover{background-position:0 bottom}
+.bread_crumb{padding-bottom:10px;margin-bottom:25px;}
+.bread_crumb a,.bread_crumb span{font-size:14px;border:#c2c2c2 1px dotted;background:url(../images/tabs.gif) repeat-x 0 -15px;padding:6px 10px;color:#333;text-decoration:none;}
+.bread_crumb .select{background-position:0 -30px;border-style:solid}
+.bread_crumb a:hover{color:#10307A;font-weight:bold;border-color:#069;}
+.introduce .directory{list-style:decimal;line-height:26px;padding-top:10px;}
+.directory a{color:#10307A;text-decoration:none;border-bottom:#10307A 1px inset}
+h2.author{color:#10307a;float:right;font-size:14px;}
+.introduce .demo_list{list-style:none;padding:10px 0;}
+.introduce .demo_list a{display:block;background:url(../images/list_bg.gif) no-repeat;width:294px;height:210px;text-align:center;text-decoration:none;color:#069;font-size:16px;float:left;margin: 0 9px 10px 0;}
+.introduce .demo_list a:hover{color:#000;margin-top:-5px;border-bottom:#999 1px dotted}
+.introduce .demo_list b{display:block;padding:20px 0 10px}
+.introduce .demo_list li,hr{clear:both;}
+.introduce .demo_list .list_last{margin-right:0;}
+.introduce .demo_list span.new{padding-left:40px;background:url(../images/example/new.gif) no-repeat right center;}

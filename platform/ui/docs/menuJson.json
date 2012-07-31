@@ -2,13 +2,11 @@
 	"MenuItems":[
 		{
 			"id":"bianji",
-			"callback":"diyFn()",
 			"text":"文件编辑",
 			"href":"http://www.baidu.com",
 			"MenuItems":[
 				{ 
-					"id":"aaa", "text":"修改格式",
-					"callback":"diyFn()",					
+					"id":"aaa", "text":"修改格式",				
 					"MenuItems":[
 						{"id":"3333", "text":"表格…", "icon":"./images/example/icon03.gif", "href":"http://www.baidu.com"},
 						{"id":"skj2", "text":"作为模板", "href":"http://www.baidu.com"},
