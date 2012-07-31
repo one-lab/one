@@ -1,8 +1,3 @@
-*{margin:0;padding:0;}
-table{border-collapse:separate;}
-table,td,th{vertical-align:middle;}
-a img{border:none}
-ul{list-style:none;}
 html,body{font-size:12px;font-family:Gerogia,Tahoma, Geneva,Microsoft Yahei,Verdana,"HelveticaNeue",Helvetica,Arial;color:#333;background:#f1efef url(../images/center_bg.jpg) no-repeat center 0}
 .header,.content,.tabs,.footer{width:900px;margin:0 auto}
 .header{padding:48px 0 50px}
@@ -44,7 +39,7 @@ line-height:22px;}
 .bread_crumb a:hover{color:#10307A;font-weight:bold;border-color:#069;}
 .introduce .directory{list-style:decimal;line-height:26px;padding-top:10px;}
 .directory a{color:#10307A;text-decoration:none;border-bottom:#10307A 1px inset}
-h2.author{color:#10307a;float:right;font-size:14px;padding-top:30px;}
+h2.author{color:#10307a;float:right;font-size:14px;}
 .introduce .demo_list{list-style:none;padding:10px 0;}
 .introduce .demo_list a{display:block;background:url(../images/list_bg.gif) no-repeat;width:294px;height:210px;text-align:center;text-decoration:none;color:#069;font-size:16px;float:left;margin: 0 9px 10px 0;}
 .introduce .demo_list a:hover{color:#000;margin-top:-5px;border-bottom:#999 1px dotted}
