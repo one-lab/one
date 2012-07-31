@@ -12,8 +12,6 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.annotation.rest.Put;
 import com.sinosoft.one.mvc.web.paramresolver.ResolverFactoryImpl.MultipartFileResolver;
 
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.sinosoft.platform.platformDemo.model.account.User;
 import com.sinosoft.platform.platformDemo.service.account.AccountManager;
 
 /**
