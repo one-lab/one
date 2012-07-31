@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sinosoft.one.mvc.MvcConstants;
+import com.sinosoft.one.mvc.util.MvcPathUtil;
 import com.sinosoft.one.mvc.util.SpringUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.impl.thread.InvocationBean;
@@ -125,7 +126,7 @@ public class ViewInstruction extends AbstractInstruction {
             String directoryPath = MvcConstants.VIEWS_PATH + viewRelativePath;
             File directFile = null;
             try {
-                directFile = getDirectoryFile(inv, directoryPath);
+                directFile = MvcPathUtil.getDirectoryFile(inv, directoryPath);
             } catch (Exception e) {
                throw new IOException(e);
             }
@@ -189,7 +190,7 @@ public class ViewInstruction extends AbstractInstruction {
             if (viewName.charAt(0) == '/') {
                 directoryPath = viewName.substring(0, viewNameIndex);
                 try {
-                    directoryFile = getDirectoryFile(inv, directoryPath);
+                    directoryFile = MvcPathUtil.getDirectoryFile(inv, directoryPath);
                 } catch (Exception e) {
                     throw new IOException(e);
                 }
@@ -217,7 +218,7 @@ public class ViewInstruction extends AbstractInstruction {
             directoryPath = viewPathCache.getDirectoryPath();
             notDirectoryViewName = viewName;
             try {
-                directoryFile = getDirectoryFile(inv, directoryPath);
+                directoryFile = MvcPathUtil.getDirectoryFile(inv, directoryPath);
             } catch (Exception e) {
                 throw new IOException(e);
             }
@@ -357,14 +358,5 @@ public class ViewInstruction extends AbstractInstruction {
             }
             return (ViewDispatcher) SpringUtils.getBean(applicationContext, viewDispatcherName);
         }
-    }
-
-    private File getDirectoryFile(Invocation inv, String dirctoryFile) throws Exception{
-        ServletContext sc = inv.getServletContext();
-        String realPath = sc.getRealPath(dirctoryFile);
-        if(realPath != null) {
-             return new File(realPath);
-        }
-        return new File(sc.getResource(dirctoryFile).toURI());
     }
 }
