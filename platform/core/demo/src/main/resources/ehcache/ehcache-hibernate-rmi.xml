@@ -12,7 +12,7 @@
 		overflowToDisk="true" maxEntriesLocalDisk="100000" />
 
 	<!-- Special objects setting. -->
-	<cache name="com.sinosoft.platform.platformDemo.model.GoodsModel" maxEntriesLocalHeap="1000" eternal="true"
+	<cache name="com.sinosoft.one.demo.model.GoodsModel" maxEntriesLocalHeap="1000" eternal="true"
 		overflowToDisk="true" maxEntriesLocalDisk="10000">
 		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
 			properties="replicatePuts=false,replicateUpdatesViaCopy=false" />
