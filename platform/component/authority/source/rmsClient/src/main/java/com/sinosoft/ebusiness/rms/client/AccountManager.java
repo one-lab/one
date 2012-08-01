@@ -1,5 +1,7 @@
 package com.sinosoft.ebusiness.rms.client;
 
+import com.sinosoft.ebusiness.rms.clientService.User;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ChengQi
@@ -8,6 +10,6 @@ package com.sinosoft.ebusiness.rms.client;
  * To change this template use File | Settings | File Templates.
  */
 public interface AccountManager {
-
-    User findUserByLoginName(String loginName,String password,String comCode);
+	
+    User findUserByLoginName(String loginName,String comCode);
 }

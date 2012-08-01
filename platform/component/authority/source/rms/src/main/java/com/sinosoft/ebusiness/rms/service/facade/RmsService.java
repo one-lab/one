@@ -138,26 +138,11 @@ public interface RmsService {
 	 */
 	public List<Company>findLevFourCom(String comCode);
 	
-	
-	
-	
 	/**
-	 * 根据员工代码机构代码配置权限 userPower 同时配置除外功能 （根据addType添加到固定用户组）
-	 * @param userCode
-	 * @param comCode
-	 * @param addType 0-5
-	 * @param excTaskIDs
-	 */
-	public void addUserPower(String userCode, String comCode,String addType, List<String> excTaskIDs);
-	
-	/**
-	 * (无角色指派方式)获取功能集合
-	 * @param userCode
+	 * 根据机构代码获取机构
 	 * @param comCode
 	 * @return
 	 */
-	public Set<Task> findTaskByUserCodeNoDesinate(String userCode, String comCode);
-	
-	public void addEmploye(Employe employe);
+	public Company findCompanyByComCode(String comCode);
 	
 }

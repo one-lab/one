@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MenuItems>
+	<MenuItem id="zehngti3" text="menu整体事件" href="http://www.baidu.com" targ="_blank">	
+	</MenuItem>
+	<MenuItem id="ehngti884" text="menu整体事件" icon="./images/example/icon02.gif">
+		<MenuItem id="thisId746" text="指定id事件绑定" icon="./images/example/icon03.gif">
+		</MenuItem>	
+		<MenuItem callback="xmlCallback()" id="shuju766" text="通过数据返回的事件" selected="true">
+		</MenuItem>	
+	</MenuItem>	
+</MenuItems>

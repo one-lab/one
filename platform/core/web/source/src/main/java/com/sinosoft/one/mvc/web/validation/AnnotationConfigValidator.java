@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Configuration;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -31,6 +32,7 @@ import javax.validation.metadata.ConstraintDescriptor;
 
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.ParamValidator;
+import com.sinosoft.one.mvc.web.validation.OneTraversableResolver;
 import com.sinosoft.one.mvc.web.paramresolver.ParamMetaData;
 import com.sinosoft.one.mvc.web.validation.enumation.ErrorMessageType;
 import org.apache.commons.logging.Log;
@@ -57,6 +59,7 @@ import org.hibernate.validator.cfg.defs.PatternDef;
 import org.hibernate.validator.cfg.defs.SizeDef;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.internal.engine.resolver.DefaultTraversableResolver;
 import org.hibernate.validator.method.MethodConstraintViolation;
 import org.hibernate.validator.method.MethodValidator;
 import org.hibernate.validator.method.metadata.MethodDescriptor;
@@ -121,12 +124,16 @@ public class AnnotationConfigValidator implements ParamValidator{
 
 	private Validator getValidator(ParamMetaData metaData, Validation configValidation ) {
 		
-		if( isContainsRules(configValidation) &&
-                ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType()) ) {
-			HibernateValidatorConfiguration config = 
-					javax.validation.Validation.byProvider( HibernateValidator.class ).configure();
-			config.addMapping( getMapping(configValidation,metaData));
-			return  config.buildValidatorFactory().getValidator();
+		if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())) {
+            OneTraversableResolver traversableResolver = new OneTraversableResolver();
+            Configuration<?> config =
+					javax.validation.Validation.byProvider(HibernateValidator.class).configure();
+            config.traversableResolver(traversableResolver);
+            if(config instanceof  HibernateValidatorConfiguration) {
+                ((HibernateValidatorConfiguration)config).addMapping(getMapping(configValidation,metaData));
+            }
+
+		    return  config.buildValidatorFactory().getValidator();
 		}
 		return defaultValidator;
 	}
@@ -147,13 +154,6 @@ public class AnnotationConfigValidator implements ParamValidator{
 		for (Constraint con : constrantMap.keySet()) {
 			this.innerConstractionMapping(mappingContext,constrantMap.get(con));
 		}
-	}
-	
-	private void innerConstractionMappingForValue( TypeConstraintMappingContext<?> mappingContext,
-			ValidationWrapper validationWrapper) {
-		mappingContext.property(validationWrapper.getParamName(), ElementType.METHOD)
-			.constraint(validationWrapper.getConstraintDef())
-			.valid();
 	}
 	
 	private void innerConstractionMapping( TypeConstraintMappingContext<?> mappingContext,
@@ -240,14 +240,13 @@ public class AnnotationConfigValidator implements ParamValidator{
 
 		Validation configValidation = metaData.getAnnotation(Validation.class);
 		String errorPath = configValidation.errorPath();
-        //针对JavaBean的校验
-		if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType()) ){
+		if(isContainsRules(configValidation)){
 			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
 			if(!result.isEmpty()) {
                 return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
             }
 
-		} else {//针对简单参数的校验
+		} else if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
 
             MethodValidator methodValidator = javax.validation.Validation.byProvider(HibernateValidator.class).configure()
                     .buildValidatorFactory().getValidator().unwrap(MethodValidator.class);

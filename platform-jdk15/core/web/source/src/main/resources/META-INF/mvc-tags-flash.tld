@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		CTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library
+		1.2//EN" </sp
+	-->
+<taglib>
+	<tlib-version>1.2</tlib-version>
+	<jspversion>1.1</jspversion>
+	<short-name>flash</short-name>
+	<uri>http://mvc.one.sinosoft.com/tags/flash
+	</uri>
+	<tag>
+		<name>flash</name>
+		<tag-class>com.sinosoft.one.mvc.web.taglibs.FlashTag
+        </tag-class>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>key</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>prefix</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>suffix</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

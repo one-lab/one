@@ -1,0 +1,52 @@
+{
+	"MenuItems":[
+		{
+			"id":"bianji",
+			"text":"文件编辑",
+			"href":"http://www.baidu.com",
+			"MenuItems":[
+				{ 
+					"id":"aaa", "text":"修改格式",				
+					"MenuItems":[
+						{"id":"3333", "text":"表格…", "icon":"./images/example/icon03.gif", "href":"http://www.baidu.com"},
+						{"id":"skj2", "text":"作为模板", "href":"http://www.baidu.com"},
+						{"id":"shengc2", "text":"生成", "href":"http://www.baidu.com",
+							"MenuItems":[
+									{"id":"2euy", "text":"json格式"},
+									{"id":"asdsj2", "text":"xml格式", "group":"true"},
+									{"id":"kangsw2", "text":"html"}
+							]						
+						},
+						{"id":"1daoc", "text":"导出", "href":"http://www.baidu.com"}
+					]
+				},
+				{ "id":"1-2","selected":"true","text":"命令说明"}
+			]
+		},
+		{ "id":"2", "text":"主目录", "icon":"./images/example/icon02.gif",
+			"MenuItems":[
+				{"id":"2-1", "text":"用户文件", "icon":"./images/example/icon.gif", "href":"http://www.baidu.com"},
+				{"id":"2-2", "text":"图像", "icon":"./images/example/icon03.gif", "group":"true"},
+				{"id":"2-3", "text":"数据格式",
+					"MenuItems":[
+						{"id":"2-3-1", "text":"json格式"},
+						{"id":"2-3-2", "text":"xml格式", "group":"true"},
+						{"id":"2-3-3", "text":"html格式", "href":"http://www.baidu.com"}
+					]
+				}
+			]
+		},
+		{ "id":"3", "text":"站点帮助窗口",
+			"MenuItems":[
+				{"id":"shs", "text":"插入", "icon":"./images/example/icon02.gif", "href":"http://www.baidu.com"},
+				{"id":"djhe", "text":"AP元素", "group":"true"},
+				{"id":"oue", "text":"命令",
+					"MenuItems":[
+						{"id":"we", "text":"开始录制", "group":"true", "icon":"./images/example/icon03.gif"},
+						{"id":"hellow", "text":"扩展管理(L)"}
+					]
+				}
+			]
+		}
+	]	
+}

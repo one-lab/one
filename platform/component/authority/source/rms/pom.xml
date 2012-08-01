@@ -13,10 +13,6 @@
  
 
 	<dependencies> 
-		<dependency> 
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -144,7 +140,6 @@
             <artifactId>cxf-rt-transports-http</artifactId>
         </dependency>
 		<!-- CXF end -->
-		 
 		 <dependency>
 			<groupId>com.sinosoft</groupId>
 			<artifactId>arch4</artifactId>
@@ -153,11 +148,19 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
 		</dependency>
+		
+		<!-- Test begin -->
 		<dependency>
 			<groupId>com.sinosoft.ebusiness</groupId>
 			<artifactId>util</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
+		<dependency> 
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		
 		
 	</dependencies>
 </project>

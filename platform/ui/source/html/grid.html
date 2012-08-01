@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../css/base.css" rel="stylesheet" type="text/css" />
+<link href="../css/grid.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+<title>无标题文档</title>
+<script type="text/javascript">
+$().ready(function(){
+	$("#listinfo").Grid({
+		url : ".json",
+		datatype: "json",
+		height: 250,
+		width: "auto",
+		colNames:['名称','状态', '版本号','操作'],
+		colModel:[
+			{name:'',width:'',index:'',align:'',color:''},
+			{name:'',width:'',index:'',align:'',color:''},
+			{name:'',width:'',index:'',align:'',color:''},
+			{name:'',width:'',index:'',align:'',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager:$('#pager2'),
+		number:true,
+		multiselect: true
+	});
+});
+</script>
+<style type="text/css">
+body{padding:20px;}
+</style>
+</head>
+
+<body>
+<div class="grid_box">
+    <div class="grid_head">
+    	<div class="gird_head_column multiple">
+    		<input type="checkbox" value="" name="all_sec" class="chex" />
+    	</div>
+    	<div class="gird_head_column" style="width:110px">
+        	<div class="grid_menu clk"></div>
+    		<span class="down">序号</span>
+    	</div>
+        <div class="gird_head_column hover inner" style="width:120px">
+        	<div class="grid_menu clk"></div>
+    		<span class="down">名称</span>
+    	</div>
+        <div class="gird_head_column" style="width:90px">
+        	<div class="grid_menu clk"></div>
+    		<span class="down">状态</span>
+    	</div>
+        <div class="gird_head_column" style="width:210px;">
+        	<div class="grid_menu clk"></div>
+    		<span class="down">版本号</span>
+    	</div>
+        <div class="gird_head_column" style="width:110px">
+        	<div class="grid_menu clk"></div>
+    		<span class="down">操作</span>
+    	</div>
+        <div class="needle"></div>
+    </div>
+    <div class="grid_view">
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>1</td>
+            <td>test1</td>
+            <td>有效</td>
+            <td>V1.6</td>
+            <td>
+            	<a href="#" title="编辑"><img src="../images/example/edd.gif" width="16" height="16" /></a>
+                <a href="#" title="删除"><img src="../images/example/del.gif" width="16" height="16" /></a>
+                <a href="#" title="查看"><img src="../images/example/veiw.gif" width="16" height="16" /></a>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>2</td>
+            <td>test2</td>
+            <td>有效</td>
+            <td>V1.5</td>
+            <td>
+            	<a href="#" title="编辑"><img src="../images/example/edd.gif" width="16" height="16" /></a>
+                <a href="#" title="删除"><img src="../images/example/del.gif" width="16" height="16" /></a>
+                <a href="#" title="查看"><img src="../images/example/veiw.gif" width="16" height="16" /></a>
+            </td>
+          </tr>
+          <tr>
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>3</td>
+            <td>test3</td>
+            <td>有效</td>
+            <td>V1.5</td>
+            <td>
+            	<a href="#" title="编辑"><img src="../images/example/edd.gif" width="16" height="16" /></a>
+                <a href="#" title="删除"><img src="../images/example/del.gif" width="16" height="16" /></a>
+                <a href="#" title="查看"><img src="../images/example/veiw.gif" width="16" height="16" /></a>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>4</td>
+            <td>test4</td>
+            <td>有效</td>
+            <td>V1.5</td>
+            <td>
+            	<a href="#" title="编辑"><img src="../images/example/edd.gif" width="16" height="16" /></a>
+                <a href="#" title="删除"><img src="../images/example/del.gif" width="16" height="16" /></a>
+                <a href="#" title="查看"><img src="../images/example/veiw.gif" width="16" height="16" /></a>
+            </td>
+          </tr>
+          <tr>
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>5</td>
+            <td>test5</td>
+            <td>有效</td>
+            <td>V1.4</td>
+            <td><a href="#">编辑</a> | <a href="#">删除</a> | <a href="#">查看</a></td>
+          </tr>
+          <tr class="odd">
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>6</td>
+            <td>test6</td>
+            <td>失效</td>
+            <td>V1.3</td>
+            <td><a href="#">编辑</a> | <a href="#">删除</a> | <a href="#">查看</a></td>
+          </tr>
+          <tr class="select">
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>7</td>
+            <td>test7</td>
+            <td>有效</td>
+            <td>V1.3</td>
+            <td><a href="#">编辑</a> | <a href="#">删除</a> | <a href="#">查看</a></td>
+          </tr>
+          <tr class="odd hover">
+            <td class="multiple"><input name="" type="checkbox" value="" /></td>
+            <td>8</td>
+            <td>test8</td>
+            <td>失效</td>
+            <td>V1.2</td>
+            <td><a href="#">编辑</a> | <a href="#">删除</a> | <a href="#">查看</a></td>
+          </tr>
+        </table>
+    </div>
+    <div class="grid_page">
+    <div class="grid_page_box">
+        <div class="grid_entry">
+        	<select name="">
+        	  <option>1</option>
+        	  <option>2</option>
+        	  <option>3</option>
+        	</select>
+        </div>
+        <div class="prick"></div>
+        <span><b class="grid_page_fist"></b></span>
+        <span><b class="grid_page_prev"></b></span>
+        <div class="prick"></div>
+        <div class="grid_note">
+        	<input name="" type="text" class="page_nub" />页 共3页
+        </div>
+        <div class="prick"></div>
+        <span><b class="grid_page_next"></b></span>
+        <span><b class="grid_page_last"></b></span>
+        <div class="prick"></div>
+        <span><b class="grid_refresh"></b></span>
+        <div class="prick"></div>
+        <div class="grid_info">每页显示 10 条数据 共 123 条数据</div>
+    </div>
+    </div>
+	<div class="grid_head_menu">     	
+        <ul>
+            <li><div><span class="up"></span>升序排序</div></li>
+            <li><div><span class="down"></span>降序排序</div></li>
+            <li class="parting">
+                <div class="hover"><b class="parent"></b><span class="veiw"></span>列显示   
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="grid_head_menusha" style="width:126px;height:78px;left:546px;top:100px;"></div>
+</div>
+</body>
+</html>
