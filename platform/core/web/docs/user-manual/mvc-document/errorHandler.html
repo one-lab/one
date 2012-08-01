@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>异常处理</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css"/>
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css"/>
+    <link href="css/tips.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            var i = 1;
+            $("li.on_off").each(function () {
+                var theID = "on_off" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            i = 1
+            $("div.code_cont").each(function () {
+                var theID = "code_cont" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            $("li.on_off").click(function () {
+                var conID = $(this).attr("id").substring(6, 7);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+            var bodyTop = $(window).height()/2
+            $(window).scroll(function(){
+                var offsetTop = bodyTop + $(window).scrollTop() +"px";
+                $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+                if($(window).scrollTop() > 10){
+                    $("#toTop").show();
+                }else{
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function(){toTop()});
+        });
+        function toTop(){
+            $("#toTop").hide();
+            $("html,body").animate({scrollTop: $("body").offset().top},500);
+        }
+    </script>
+    <style>
+        .new {
+            padding: 10px;
+            line-height: 22px;
+        }
+
+        .img_ex01 {
+            float: right;
+            border: #ccc 1px solid;
+            margin-left: 10px;
+        }
+
+        .new span {
+            color: #F30;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        #next_news {
+            border: #72a89a 1px solid;
+            line-height: 24px;
+            height: 24px;
+            display: block;
+            width: 120px;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            background: #72b0a1
+        }
+
+            /*customTip*/
+        .example {
+            border-top: #DFDFDF 1px solid;
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+
+        .text_ex {
+            border: #DFDFDF 1px solid;
+            line-height: 18px;
+            height: 18px;
+            padding: 2px;
+            width: 79%
+        }
+
+        .email_ex {
+            padding: 4px 6px;
+            text-align: center;
+            color: #333
+        }
+
+        .email_ex a {
+            color: #005590
+        }
+    </style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="header">
+    <h1 class="logo"><b>Sinosoft</b>ONE-MVC (V1.0.0)</h1>
+    <h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">异常处理：ErrorHandler</span>
+</div>
+<div class="content">
+    <div class="title">
+        异常处理：ErrorHandler
+    </div>
+    <div class="introduce">
+        <ul>
+            <li>一般来说传统的编程都会到处去try，特别是java里，try来try去的。</li>
+            <li>如果打开你的项目，每个java文件中的代码都有一堆的try，那这时候就是ErrorHandle上阵的时候了。</li>
+            <li>ErrorHanler致力于：统一捕捉和处理各种异常，可区分对待和返回；统一的出错体验。</li>
+            <li>非常类似做web开发时的500统一出错页面这样的东西。</li>
+            <li>controllers包自己或其子包下都可以拥有独立的ControllerErrorHandler。</li>
+            <li>可以将异常让渡给上级模块的错误处理器处理</li>
+        </ul>
+
+    </div>
+    <div class="title">
+        最简单的
+    </div>
+    <h3>Java代码</h3>
+    <textarea name="code" class="java">
+        //// 直接放在controllers包或其子包下
+        public class ErrorHandler implements ControllerErrorHandler {
+            public Object onError(Invocation inv, Throwable ex) throws Throwable {
+                // TODO logger.error("handle err:", ex); 记录错误日志
+                return "@error";
+            }
+        }
+
+    </textarea>
+    <p>&nbsp;</p>
+</div>
+
+<div class="content">
+    <div class="title">
+        放在哪里才能生效？
+    </div>
+    <div class="introduce">
+        <ul>
+            <li>放在controllers目录下，和controller们在一起。</li>
+            <li>一般来讲，ErrorHandler都是用在web项目里，在最快层起作用。</li>
+            <li>所有的方法都可以尽情地向处throws Exception了。</li>
+            <li>不需要再try了。</br>
+        </ul>
+    </div>
+    <h3>Java代码</h3>
+    <textarea name="code" class="java">
+
+        @Path("")
+        public class HelloController {
+            @Get("")
+            public String index2() throws Exception {
+                return "@hello world";
+            }
+        }
+
+    </textarea>
+    <p>&nbsp;</p>
+</div>
+<div class="content">
+    <div class="title">区分异常类型的</div>
+    <div class="introduce">
+        <h3>Java代码</h3>
+        <textarea name="code" class="java">
+            public class ErrorHandler implements ControllerErrorHandler {
+
+                @Override
+                public Object onError(Invocation inv, Throwable ex) {
+                    if (ex instanceof BizException) {
+                        BizException bizEx = (BizException) ex;
+                        String code = bizEx.getCode();
+                        // 在控制器所在的package中或WEB-INF目录下配置messages.xml，或者messages.property
+                        // 可配置多个，优先找控制器自己package的，然后是父package的，最后是WEB-INF的
+                        // messages.xml格式参考在下面
+                        MessageSource msgSource = inv.getApplicationContext();
+                        String msg = msgSource.getMessage(code, bizEx.getArgs(), inv.getRequest().getLocale());
+                        // 在jsp中使用${errorMsg}输出该错误
+                        inv.addModel("errorMsg", msg);
+                        return "/views/biz-500.jsp";
+                    }
+                    Log logger = LogFactory.getLog(inv.getControllerClass());
+                    logger.error("", ex);
+                    // forward to webapp/views/500.jsp
+                    return "/views/500.jsp";
+                }
+            }
+
+        </textarea>
+        <p>在控制器所在的package中或WEB-INF目录下配置messages.xml，或者messages.property</p>
+        <p>可配置多个，优先找控制器自己package的，然后是父package的，最后是WEB-INF的</p>
+        <h3>messages.xml格式参考</h3>
+        <textarea name="code" class="xml">
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+            <properties>
+                <comment>Rhyme</comment>
+                <entry key="seven-eight">lay them straight</entry>
+                <entry key="five-six">pick up sticks</entry>
+                <entry key="nine-ten">a big, fat hen</entry>
+                <entry key="three-four">shut the door</entry>
+                <entry key="one-two">buckle my shoe</entry>
+            </properties>
+        </textarea>
+    </div>
+    <div class="title">
+        更好的区分不同的异常类型
+    </div>
+    <div class="introduce">
+        <h3>Java代码</h3>
+        <textarea name="code" class="java">
+
+            package com.sinosoft.controllers;
+
+            import net.sinosoft.one.web.ControllerErrorHandler;
+            import net.sinosoft.one.web.Invocation;
+
+            public class ErrorHandler implements ControllerErrorHandler {
+
+                // 把方法第2个参数换上具体的异常类...这个onError就只处理所声明的这类异常
+                public Object onError(Invocation inv, BizException bizEx) {
+                    // 略去具体的处理代码......
+                    return "/views/biz-500.jsp";
+                }
+                ...
+                // 通用onError方法，处理其他onError无法处理的异常
+                @Override
+                public Object onError(Invocation inv, Throwable ex) {
+                    // 略去具体的处理代码......
+                    return "/views/500.jsp";
+                }
+            }
+
+        </textarea>
+    </div>
+    <div class="title">
+        将异常让渡给上级模块的错误处理器处理
+    </div>
+    <div class="introduce">
+        <p>controllers自己或其子package下都可以拥有独立的ControllerErrorHandler。
+            如果在web调用过程中，控制器、拦截器等发生异常时，如果给定的module含有自己ControllerErrorHanlder时，
+            则由他处理；如果自己没有则调用上级的ControllerErrorHandler处理。</p>
+        <p>但是如果所在的module有ControllerErrorHandler，如何在有必要的时候将异常抛给上级的ControllerErrorHandler呢？</p>
+        <h3>Java代码</h3>
+        <textarea name="code" class="java">
+            public class ErrorHandler implements ControllerErrorHandler {
+                // 声明ParentErrorHandler,注意，这里不是ControllerErrorHandler
+                // 万一上级没有ControllerErrorHandler, 这个字段也不会为空
+                @Autowired
+                ParentErrorHandler parent;
+
+                // 处理这个处理器只想处理的
+                public Object onError(Invocation inv, RuntimeException ex) throws Throwable {
+                    inv.getResponse().getWriter().write("<pre>RuntimeException<br>");
+                    ex.printStackTrace(inv.getResponse().getWriter());
+                    inv.getResponse().getWriter().write("</pre>");
+                    return "";
+                }
+
+                // 通用的异常抛给上级ControllerErrorHanlder或上级的上级去处理
+                @Override
+                public Object onError(Invocation inv, Throwable ex) throws Throwable {
+                    return parent.onError(inv, ex);
+                }
+            }
+        </textarea>
+    </div>
+    <div class="title">
+        异常处理的Adapter
+    </div>
+    <div class="introduce">
+        <p>以上parentErrorHanlder的逻辑，One-MVC提供的ErrorHandlerAdpater类已经封装了</p>
+        <p><span style="color: green;">建议您通过extends ErrorHandlerAdapter</span> 实现错误处理器，而非直接实现ControllerErrorHandler</p>
+        <ul>
+            <li>处理这个处理器只想处理的</li>
+            <li>通用的默认就会抛给上级模块的错误处理器处理</li>
+        </ul>
+        <h3>Java代码</h3>
+        <textarea name="code" class="java">
+            public class ErrorHandler extends ErrorHandlerAdapter {
+
+            public Object onError(Invocation inv, RuntimeException ex) throws Throwable {
+
+                    inv.getResponse().getWriter().write("<pre>RuntimeException<br>");
+                    ex.printStackTrace(inv.getResponse().getWriter());
+                    inv.getResponse().getWriter().write("</pre>");
+                    return "";
+                }
+            }
+        </textarea>
+    </div>
+</div>
+
+</body>
+</html>

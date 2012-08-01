@@ -8,7 +8,6 @@ class IncludesPropertyFilter implements PropertyFilter {
 	public IncludesPropertyFilter(String[] includes) {
 		this.includes = includes;
 	}
-	@Override
 	public boolean apply(Object source, String name, Object value) {
 		for(String include : includes) {
 			if(include.trim().indexOf(name) == 0) {

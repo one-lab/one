@@ -67,7 +67,6 @@ public class RedirectInstruction extends AbstractInstruction {
     public RedirectInstruction module(final String module) {
         this.preInstruction = new Instruction() {
 
-            @Override
             public void render(Invocation inv) throws IOException, ServletException, Exception {
                 String ctxpath = inv.getRequestPath().getCtxpath();
                 if (module.length() == 0) {
@@ -89,7 +88,6 @@ public class RedirectInstruction extends AbstractInstruction {
     public RedirectInstruction controller(final String controller) {
         this.preInstruction = new Instruction() {
 
-            @Override
             public void render(Invocation inv) throws IOException, ServletException, Exception {
                 String controllerPath = controller;
                 if (controller.length() > 0 && controller.charAt(0) != '/') {
@@ -105,7 +103,6 @@ public class RedirectInstruction extends AbstractInstruction {
     public RedirectInstruction action(final String action) {
         this.preInstruction = new Instruction() {
 
-            @Override
             public void render(Invocation inv) throws IOException, ServletException, Exception {
                 String actionPath = action;
                 if (action.length() > 0 && action.charAt(0) != '/') {

@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>portal支持</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css"/>
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css"/>
+    <link href="css/tips.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            var i = 1;
+            $("li.on_off").each(function () {
+                var theID = "on_off" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            i = 1
+            $("div.code_cont").each(function () {
+                var theID = "code_cont" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            $("li.on_off").click(function () {
+                var conID = $(this).attr("id").substring(6, 7);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+            var bodyTop = $(window).height()/2
+            $(window).scroll(function(){
+
+                var offsetTop = bodyTop + $(window).scrollTop() +"px";
+                $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+                if($(window).scrollTop() > 10){
+
+                    $("#toTop").show();
+                }else{
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function(){toTop()});
+        });
+        function toTop(){
+            $("#toTop").hide();
+            $("html,body").animate({scrollTop: $("body").offset().top},500);
+        }
+    </script>
+    <style>
+        .new {
+            padding: 10px;
+            line-height: 22px;
+        }
+
+        .img_ex01 {
+            float: right;
+            border: #ccc 1px solid;
+            margin-left: 10px;
+        }
+
+        .new span {
+            color: #F30;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        #next_news {
+            border: #72a89a 1px solid;
+            line-height: 24px;
+            height: 24px;
+            display: block;
+            width: 120px;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            background: #72b0a1
+        }
+
+            /*customTip*/
+        .example {
+            border-top: #DFDFDF 1px solid;
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+
+        .text_ex {
+            border: #DFDFDF 1px solid;
+            line-height: 18px;
+            height: 18px;
+            padding: 2px;
+            width: 79%
+        }
+
+        .email_ex {
+            padding: 4px 6px;
+            text-align: center;
+            color: #333
+        }
+
+        .email_ex a {
+            color: #005590
+        }
+    </style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="header">
+    <h1 class="logo"><b>Sinosoft</b>ONE-MVC(V1.0.0)</h1>
+    <h2 align="right"><font size="3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">Portal</span>
+</div>
+<div class="content">
+    <div class="title">
+        什么是portal?
+    </div>
+    <div class="introduce">
+        <ul>
+            <li>字面意思，做门户用的。</li>
+            <li>简单来说，把一个网页分成了N个区域，每个区域由不同的action去执行，多线程并行提高cpu使用率。</li>
+        </ul>
+
+    </div>
+    <p>要使用portal，必须先在web.xml里声明所使用的线程池大小</p>
+
+    <h3>XML代码 </h3>
+
+    <textarea name="code" class="xml">
+        <context-param>
+            <param-name>portalExecutorCorePoolSize</param-name>
+            <param-value>1024</param-value>
+        </context-param>
+
+    </textarea>
+
+    <h3>Java代码</h3>
+    <textarea name="code" class="java">
+        @Get("/portal")
+        public String portal(Portal portal) {
+        portal.addWindow("p1", "/wp1");
+        portal.addWindow("p2", "/wp2");
+        return "portal";
+        }
+
+        @Get("/wp1")
+        public String portal1() {
+        return "@this is p1";
+        }
+
+        @Get("/wp2")
+        public String portal2() {
+        return "@this is p2";
+        }
+
+
+    </textarea>
+    <p>然后在第一个action中的portal.jsp中写到：</p>
+    <h3>JSP代码</h3>
+    <textarea name="code" class="xml">
+        <%@ page contentType="text/html;charset=UTF-8"%>
+        portal演示信息：
+        <br/>
+        ${p1}
+        <br/>
+        ${p2}
+    </textarea>
+</div>
+<div class="content">
+    <div class="title">
+        这样子做的好处
+    </div>
+    <div class="introduce">
+        <ul>
+            <li>更加充分地使用多核cpu。</li>
+            <li>更加方便多人协作时对项目进行模块划分，搞的时候，按照url一分，一个url一个模块，所有的页面都可以切成小的豆腐块。</li>
+        </ul>
+
+    </div>
+</div>
+<div class="footer">
+    Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

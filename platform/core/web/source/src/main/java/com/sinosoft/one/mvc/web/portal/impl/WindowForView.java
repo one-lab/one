@@ -38,7 +38,7 @@ public class WindowForView implements Window {
         this.inner = window;
     }
 
-    @Override
+    
     public String toString() {
         StringWriter sw = new StringWriter(getContentLength() >= 0 ? getContentLength() : 16);
         PrintWriter out = new PrintWriter(sw);
@@ -51,122 +51,122 @@ public class WindowForView implements Window {
         return sw.getBuffer().toString();
     }
 
-    @Override
+    
     public void render(Writer out) throws IOException {
         this.inner.render(out);
     }
 
-    @Override
+    
     public void clearContent() {
         inner.clearContent();
     }
 
-    @Override
+    
     public Object get(String key) {
         return inner.get(key);
     }
 
-    @Override
+    
     public Map<String, Object> getAttributes() {
         return inner.getAttributes();
     }
 
-    @Override
+    
     public GenericWindowContainer getContainer() {
         return inner.getContainer();
     }
 
-    @Override
+    
     public String getContent() {
         return inner.getContent();
     }
 
-    @Override
+    
     public int getContentLength() {
         return inner.getContentLength();
     }
 
-    @Override
+    
     public Future<?> getFuture() {
         return inner.getFuture();
     }
 
-    @Override
+    
     public String getName() {
         return inner.getName();
     }
 
-    @Override
+    
     public String getPath() {
         return inner.getPath();
     }
 
-    @Override
+    
     public Portal getPortal() {
         return inner.getPortal();
     }
 
-    @Override
+    
     public int getStatusCode() {
         return inner.getStatusCode();
     }
 
-    @Override
+    
     public String getStatusMessage() {
         return inner.getStatusMessage();
     }
 
-    @Override
+    
     public Throwable getThrowable() {
         return inner.getThrowable();
     }
 
-    @Override
+    
     public Object getTitle() {
         return inner.getTitle();
     }
 
-    @Override
+    
     public boolean isCancelled() {
         return inner.isCancelled();
     }
 
-    @Override
+    
     public boolean isDone() {
         return inner.isDone();
     }
 
-    @Override
+    
     public boolean isSuccess() {
         return inner.isSuccess();
     }
 
-    @Override
+    
     public boolean mayInterruptIfRunning() {
         return inner.mayInterruptIfRunning();
     }
 
-    @Override
+    
     public void remove(String key) {
         inner.remove(key);
     }
 
-    @Override
+    
     public void set(String key, Object value) {
         inner.set(key, value);
     }
 
-    @Override
+    
     public void setMayInterruptIfRunning(boolean mayInterruptIfRunning) {
         inner.setMayInterruptIfRunning(mayInterruptIfRunning);
     }
 
-    @Override
+    
     public void setThrowable(Throwable throwable) {
         inner.setThrowable(throwable);
     }
 
-    @Override
+    
     public void setTitle(Object title) {
         inner.setTitle(title);
     }

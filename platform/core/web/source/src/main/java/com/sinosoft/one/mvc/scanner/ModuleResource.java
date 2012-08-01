@@ -148,7 +148,6 @@ public class ModuleResource implements Comparable<ModuleResource> {
     /**
      * 使父级别的模块资源比子模块资源比较起来更小
      */
-    @Override
     public int compareTo(ModuleResource o) {
         return (moduleUrl.toString().length() - o.moduleUrl.toString().length());
     }

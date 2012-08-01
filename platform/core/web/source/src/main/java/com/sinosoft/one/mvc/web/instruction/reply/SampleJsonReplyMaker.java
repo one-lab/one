@@ -15,32 +15,26 @@ class SampleJsonReplyMaker extends ReplyMaker implements
 		SampleJsonReply {
 	private String sampleResultStatus = "success";
 	private String sampleResultMessage = "";
-	@Override
 	public SampleJsonReply success() {
 		return success("");
 	}
 
-	@Override
 	public SampleJsonReply success(String successMessage) {
 		return sampleResult("success", successMessage);
 	}
 
-	@Override
 	public SampleJsonReply fail() {
 		return fail("");
 	}
 
-	@Override
 	public SampleJsonReply fail(String failMessage) {
 		return this.sampleResult("fail", failMessage);
 	}
 
-	@Override
 	public SampleJsonReply exception() {
 		return exception("");
 	}
 
-	@Override
 	public SampleJsonReply exception(String exceptionMessage) {
 		return sampleResult("exception", exceptionMessage);
 	}
@@ -51,19 +45,16 @@ class SampleJsonReplyMaker extends ReplyMaker implements
 		return this;
 	}
 	
-	@Override
 	public SampleJsonReply type(String mediaType) {
 		setType(mediaType);
 		return this;
 	}
 
-	@Override
 	public SampleJsonReply headers(Map<String, String> headers) {
 		setHeaders(headers);
 		return this;
 	}
 
-	@Override
 	public SampleJsonReply status(int code) {
 		setStatus(code);
 		return this;

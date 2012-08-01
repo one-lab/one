@@ -53,7 +53,6 @@ public final class NestedWindowRender implements WindowRender {
         return innerRender;
     }
 
-    @Override
     public void render(Writer out, Window w) throws IOException {
         WindowRender render = this.innerRender;
         if (render == null) {
