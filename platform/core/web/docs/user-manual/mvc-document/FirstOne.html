@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>One-MVC使用手册</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+<link href="css/tips.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJScript.js"></script>
+<script language="javascript" src="js/tips.js"></script>
+<script type="text/javascript">
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+	var i = 1;
+	$("li.on_off").each(function(){		
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	$("li.on_off").click(function(){
+		var conID = $(this).attr("id").substring(6,7);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	});
+    $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+    var bodyTop = $(window).height()/2
+    $(window).scroll(function(){
+
+        var offsetTop = bodyTop + $(window).scrollTop() +"px";
+        $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+        if($(window).scrollTop() > 10){
+
+            $("#toTop").show();
+        }else{
+            $("#toTop").hide();
+        }
+    });
+    $("#toTop").click(function(){toTop()});
+});
+function toTop(){
+    $("#toTop").hide();
+    $("html,body").animate({scrollTop: $("body").offset().top},500);
+}
+</script>
+<style>
+.new{padding:10px;line-height:22px;}
+.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+.new span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+	<h1 class="logo"><b>Sinosoft</b> One-MVC(V1.0.0)</h1>
+    <h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">第一支程序Hello One</span>
+</div>
+<div class="content">
+    <div class="introduce">
+        <p>下面以一个小程序为例介绍One-MVC</p>
+        <p>首先建立一个Maven项目,在pom.xml中添加依赖</p>
+        <p>使用MVC只需要在web.xml中添加过滤器 com.sinosoft.one.mvc.MvcFilter</p>
+        <p>再写一个简单的控制器( 类似Struts的Action )和JSP页面，小例子就完成了。</p>
+        <p><span style="color: red;">需要注意的是</span>，你需要在webapp下创建views目录,也就是views目录要和WEB-INF同级别，这个不能错了，否则会404; </p>
+        <p>这里需要引入一个 <span style="color: green; font-weight: bold;">视图仓库</span> 的概念:视图仓库就是每个控制器(或者模块)所拥有的视图的集合</p>
+
+		<ul>
+            <li>controllers下的控制器对应的视图仓库是views</li>
+            <li>controllers.book、controllers.user、controllers.logs对应的视图仓库是views/book、views/user、views/logs</li>
+            <li>即视图相对于views与控制器相对于controllers的路径是相同的</li>
+		</ul>
+	</div>
+	<div class="title">
+        第一支程序Hello One
+    </div>
+	<p><font size="3">示例代码(以maven项目为例)</font></p></br>
+
+
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>添加Maven依赖<font>Example</font></span><span></span></li>
+    <li class="on_off select"><span class="name"><font></font>查看</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content"> 
+	
+	    <p id="news" class="new">
+        	 在maven项目中的pom.xml中添加如下依赖即可
+        </p>
+
+        <div class="code_cont" style="display:block">
+        	
+			<h3>pom.xml文件</h3>
+			<textarea name="code" class="xml" >
+					  <dependency>
+						  <groupId>com.sinosoft.one</groupId>
+						  <artifactId>mvc</artifactId>
+						  <version>1.0.2-SNAPSHOT</version>
+					  </dependency>
+			</textarea>
+            <p class="new" style="color: green; font-size: 14px;">如果想要直接拷贝Jar包的话可以在根目录下lib文件夹找到所需Jar包</p>
+        </div>
+    </div>
+    </div>
+</div>	
+</div>
+
+
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>创建web.xml<font>Example</font></span><span></span></li>
+	<li class="on_off select"><span class="name"><font></font>查看</span></li> 
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">
+	
+        <p id="news" class="new">
+        	 在WebConten/WEB-INF下创建web.xml,并配置MvcFilter<br/>
+        </p>
+		<div class="code_cont" style="display:block">
+			<textarea name="code" class="xml" >
+                <?xml version="1.0" encoding="UTF-8"?>
+                <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                         xmlns="http://java.sun.com/xml/ns/javaee"
+                         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+                         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+                         id="WebApp_ID" version="2.5">
+                    <display-name>Hello One</display-name>
+                    <filter>
+                        <filter-name>MvcFilter</filter-name>
+                        <filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>
+                    </filter>
+
+                    <filter-mapping>
+                        <filter-name>MvcFilter</filter-name>
+                        <url-pattern>/*</url-pattern>
+                        <dispatcher>REQUEST</dispatcher>
+                        <dispatcher>FORWARD</dispatcher>
+                        <dispatcher>INCLUDE</dispatcher>
+                    </filter-mapping>
+
+                </web-app>
+			</textarea>
+        </div>
+    </div>
+    </div>
+</div>	
+</div>
+
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>控制器代码<font>Example</font></span><span></span></li>
+    <li class="on_off select"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">    	
+
+        <p id="news" class="new">
+        	 在src下创建com.sinosoft.<span title="One-MVC会自动扫描所有在controllers包下的控制器">controllers(或web).home</span>包，在包下创建一个控制器<span title="One-MVC会识别包下所有类名以“Controller”结尾的类为控制器">RelaxController</span><br/>
+        </p>
+        <p class="new">注意RelaxController所在的包</p>
+        <div class="code_cont" style="display:block">
+
+        	<h3>Java代码</h3>
+            <textarea name="code" class="js" >
+				package com.sinosoft.controllers.hello;
+
+				import com.sinosoft.one.mvc.web.Invocation;
+				import com.sinosoft.one.mvc.web.annotation.Path;
+				import com.sinosoft.one.mvc.web.annotation.rest.Get;
+
+				@Path("relax")
+				public class RelaxController {
+
+					@Get("one")
+					public String one( Invocation inv ){
+						inv.addModel("now","This is the frist one!");
+						return "Hello-Relax";
+					}
+				}
+            </textarea>
+        </div>
+    </div>
+    </div>
+</div>	
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>JSP代码<font>Example</font></span><span></span></li>
+    <li class="on_off select"><span class="name"><font></font>查看源代码</span></li>
+</ul>
+<div class="code_box">
+<div class="intr_line">	
+	<div class="info">
+    <div class="content">    	
+
+        <p id="news" class="new">
+        	 在WebContent下创建views/hello文件夹，在包下创建一个JSP文件<span title="这就是一个普通的JSP文件，但请保持和Controllers下相同的目录结构">Hello-Relax.jsp</span><br/>
+        </p>
+
+        <div class="code_cont"  style="display:block">
+        	<h3>JSP代码</h3>
+            <textarea name="code" class="js" >
+				<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+				<html>
+				<head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+				<title>The First One MVC</title>
+				</head>
+				<body>
+				 <h1>${now}</h1>
+				</body>
+				</html>
+            </textarea>        
+        </div>
+    </div>
+    </div>
+</div>	
+</div>
+<div class="content">
+    <div class="introduce">
+        <p>在web容器上运行一下(假设项目名为oneMvc)：<span style="color: green;">访问http://localhost:8080/oneMvc/hello/relax/one</span></p>
+    </div>
+</div>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

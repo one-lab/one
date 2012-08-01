@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ONE MVC 使用手册</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJava.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+	
+	
+	var i = 1;
+	$("li.on_off").each(function(){		
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	
+	$("li.on_off").click(function(){
+		var conID = $(this).attr("id").substring(6,7);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	})
+})
+</script>
+<style>
+.new{padding:10px;line-height:22px;}
+.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+.new span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+<div class="header">
+    <a href="index.html">首页</a>/<a href="#">控制器和URI映射</a>
+	<h1 class="logo"><b>Sinosoft</b> ONE MVC(1.0.0)</h1>
+    <h2>控制器和URI映射</h2>
+</div>
+<div class="content">
+    <div class="title">
+        什么是控制器？
+    </div>
+</div>
+<div class="content">
+    <div class="introduce">
+        <p>控制器相当于Struts中的Action,他负责调用模型和视图，控制跳转等。</p>
+        <p>控制器应该满足以下条件：</p>
+      <ul style="list-style-type:decimal">
+            <li>在controllers或者web包及其子包下面。</li>
+            <li>以Controller结尾的类。</li>
+          
+      </ul>
+    </div>
+	<div class="title">
+        一个简单的控制器
+    </div>
+    <div class="introduce">
+    <p>简单的控制器没有URI映射的配置，采用'包名'/'控制器名'/'方法名'来映射</p>
+        <textarea name="code" class="java" >
+            package com.test.controllers.home;
+
+            //控制器的访问路径为 http://localhost/WebAppName/home/test/hello
+            public class TestController {
+
+                public String hello() {
+                    return "hello";
+                }
+            }
+        </textarea>
+    </div>
+</div>
+<div class="content">
+    <div class="title">
+        什么是URI映射
+    </div>
+    <div class="introduce">
+        所谓URI映射就是把控制器和控制器的方法以URI的形式表现。
+    </div>
+</div>
+<div class="content">
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>URI映射<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="introduce">
+                        <ul style="list-style-type:decimal">
+                            <li>以@Path("uri")注解来标注控制器类</li>
+                            <li>以@Get("uri")或者@Post("uri")来标注方法,分别对应HTTP的GET和POST请求</li>
+                            <li>一个映射配置上可以配置多个路径</li>
+                            <li>控制器或方法上可以配置多个映射</li>
+                        </ul>
+                    </div>
+
+
+                    <div class="code_cont">
+                        <h3>JAVA代码</h3>
+                        <textarea name="code" class="java" >
+                            //假设WebAppName为mvc,该控制器在...controllers.home包下
+                            @Path("path")
+                            public class UriController {
+
+                                //此方法的访问为 GET或POST  localhost//mvc/home/path/add
+                                public String add() {
+                                    return "@add";
+                                }
+                                //此方法的访问为 GET localhost//mvc/home/path/indexed
+                                @Get("indexed")
+                                public String index() {
+                                    return "@index";
+                                }
+                                //可以将多个路径配置到一个方法
+                                //此方发的访问为 POST localhost//mvc/home/path/del
+                                @Post({"del","delete"})
+                                public String delete() {
+                                    return "@delete";
+                                }
+
+                                //可以再方法上面配置多个映射
+                                //此方法的访问为 GET localhost//mvc/home/path/getUpdate 或者 POST localhost//mvc/home/path/postUpdate
+                                @Get("getUpdate")
+                                @Post("postUpdate")
+                                public String update() {
+                                    return "@update";
+                                }
+                            }
+                        </textarea>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="title">
+        URI映射上值得注意的地方
+    </div>
+    <div class="introduce">
+        <ul style="list-style-type: decimal;">
+            <li>如果控制器类是IndexController/HomeController/WelcomeController一定要在控制器上
+                <span style="color: red; ">明确标注</span>@Path("")</li>
+            <li>如果控制器在controller或者web的子包，默认情况下<span style="color: red; ">包名</span>
+                会被加在控制器的映射前( .../packageName/controllerMapping/... )</li>
+        </ul>
+
+    </div>
+</div>
+<div class="content">
+    <div class="title">
+        URI上的参数
+    </div>
+    <div class="introduce">
+        <p>MVC支持将URL上一定格式的字符串转换成与之格式匹配的参数</p>
+    </div>
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>URI上的参数<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="introduce">
+                        <ul style="list-style-type:decimal">
+                            <li>在@Path("path/{id}")或@Get("find/{name}")的uri参数中以{}包括的部分作为参数</li>
+                            <li>参数可以用正则表达式修饰</li>
+                            <li>获取参数可以在控制器的方法上增加对应类型的参数并以@Param("paramName")修饰</li>
+                            <li>可以同时将多个参数放到URL上面</li>
+                        </ul>
+                    </div>
+                    <div class="code_cont">
+                        <h3>JAVA代码</h3>
+                        <textarea name="code" class="java" >
+                            //访问此控制器的URL local//mvc/packageName/ctrl/name参数
+                            @Path("ctrl/{name}")
+                            public class ParamController {
+
+                                //此控制器的访问URL local//mvc/packageName/ctrl/name参数/find/id参数
+                                @Get("find/{id}")
+                                public String find(@Param("name") String bookName, @Param("id") long id) {
+
+                                    return "@find";
+                                }
+
+                                //此控制器的访问URL local//mvc/packageName/ctrl/name/delete/id参数   id是由数字组成的
+                                @Post("delete/{id:[0-9]+}")
+                                public String delete(@Param("id") Long id) {
+
+                                    return "@delete";
+                                }
+
+                                //多个参数可以同时放在URL上面
+                                @Post("param/{p1:[a-z]*}/{p2}/none/{p3:[0-9]+}")
+                                public String mutpleParam(@Param("p1") String param1, @Param("p2") String param2,
+                                                            @Param("p3") Long param3) {
+                                    return "@param";
+                                }
+
+                            }
+                        </textarea>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="title">
+        URI映射的详细规则
+    </div>
+    <div class="introduce">
+        <ul style="list-style-type: decimal;">
+            <li>URI的映射路径从controllers包的子包开始</li>
+            <li>如果控制器有映射注释则依照映射的配置，否则采用控制器名(首字母小写去掉Controller后缀)作为映射</li>
+            <li>控制器名如果是index,home,welcome则必须以@Path("")注释</li>
+            <li>如果方法上有映射注释则依照映射的配置，否则采用方法名作为映射(HTTP的请求类型不区分GET和POST)</li>
+            <li>路径上的参数作为最低优先级处理。即如果遇到参数内容和映射路径相同则认为是映射路径而不是参数</li>
+
+        </ul>
+        <p><span style="color: green;">关于URI映射的更多内容请关注后续章节</span></p>
+    </div>
+</div>
+
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>文件上传</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css"/>
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css"/>
+    <link href="css/tips.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            var i = 1;
+            $("li.on_off").each(function () {
+                var theID = "on_off" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            i = 1
+            $("div.code_cont").each(function () {
+                var theID = "code_cont" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            $("li.on_off").click(function () {
+                var conID = $(this).attr("id").substring(6, 7);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip", tipPostion:"right"});
+            var bodyTop = $(window).height() / 2
+            $(window).scroll(function () {
+
+                var offsetTop = bodyTop + $(window).scrollTop() + "px";
+                $("#toTop").animate({top:offsetTop }, { duration:600, queue:false });
+                if ($(window).scrollTop() > 10) {
+
+                    $("#toTop").show();
+                } else {
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function () {
+                toTop()
+            });
+        });
+        function toTop() {
+            $("#toTop").hide();
+            $("html,body").animate({scrollTop:$("body").offset().top}, 500);
+        }
+    </script>
+    <style>
+        .new {
+            padding: 10px;
+            line-height: 22px;
+        }
+
+        .img_ex01 {
+            float: right;
+            border: #ccc 1px solid;
+            margin-left: 10px;
+        }
+
+        .new span {
+            color: #F30;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        #next_news {
+            border: #72a89a 1px solid;
+            line-height: 24px;
+            height: 24px;
+            display: block;
+            width: 120px;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            background: #72b0a1
+        }
+
+            /*customTip*/
+        .example {
+            border-top: #DFDFDF 1px solid;
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+
+        .text_ex {
+            border: #DFDFDF 1px solid;
+            line-height: 18px;
+            height: 18px;
+            padding: 2px;
+            width: 79%
+        }
+
+        .email_ex {
+            padding: 4px 6px;
+            text-align: center;
+            color: #333
+        }
+
+        .email_ex a {
+            color: #005590
+        }
+    </style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="header">
+    <h1 class="logo"><b>Sinosoft</b>ONE-MVC(V1.0.0)</h1>
+    <h2 align="right"><font size="3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">文件上传</span>
+</div>
+<div class="content">
+    <div class="title">
+        对HTML表单的要求
+    </div>
+    <div class="introduce">
+        <ul style="list-style-type: decimal;">
+            <li>在页面上，上传表单要写上enctype="multipart/form-data",method="POST" 两个属性。</li>
+            <li>要有type为file的input用于选择文件，file类型的input个数不限</li>
+        </ul>
+    </div>
+    <div class="title">
+        单个文件的上传
+    </div>
+    <div class="introduce">
+        <p>单个文件的上传只要form中有file类型的input，并且不同的input name不同</p>
+    </div>
+    <p><font color="red" size="3">注意form必须添加enctype="multipart/form-data"</font></p>
+    <h3>单文件的Form表单</h3>
+    <textarea name="code" class="xml">
+            <form name="" action="uploade/save" method="post" enctype="multipart/form-data">
+                <label>资料上传:</label>
+                <div class="controls">
+                    <input type="file" id="doc" name="fileName1"/>
+                    <input type="file" id="doc2" name="fileName2"/>
+                </div>
+            </form>
+    </textarea>
+    <h3>控制器代码</h3>
+    <textarea name="code" class="java">
+        import org.springframework.web.multipart.MultipartFile;
+
+        //@Param的参数和input的name相同
+        @Post("save")
+        public String save(@Param("fileName1") MultipartFile file,
+                            @Param("fileName2") MultipartFile file2, Invocation inv)
+                throws IllegalStateException, IOException  {
+            //MultipartFile 提供了常用的文件操作方法
+            file.getInputStream();
+            file.getBytes();
+            file.getName();
+            file.transferTo(); //Transfer the received file to the given destination file.
+            return "@upload success";
+        }
+
+    </textarea>
+    <div class="title">
+        多文件上传
+    </div>
+    <div class="introduce">
+        <p>多文件的上传是依靠file类型的input 的name属性的前缀来区分的例如 name=doc1和name=doc2 可以用@Param("doc")同时获取</p>
+    </div>
+    <h3>多文件的Form表单</h3>
+    <textarea name="code" class="xml">
+            <form name="" action="uploade/save" method="post" enctype="multipart/form-data">
+                <label>资料上传:</label>
+                <div class="controls">
+                    <input type="file" id="doc" name="doc1"/>
+                    <input type="file" id="doc2" name="doc2"/>
+                    <input type="file" id="doc3" name="filea"/>
+                    <input type="file" id="doc4" name="fileb"/>
+                </div>
+            </form>
+    </textarea>
+    <h3>多文件的控制器代码</h3>
+    <textarea name="code" class="java">
+        @Post("save")
+        public String save(@Param("doc") MultipartFile[] docs,//获取doc开头的多个文件
+            @Param("file") MultipartFile files )//获取file开头的多个文件
+                throws IllegalStateException, IOException  {
+                ...
+                return "@upload success";
+        }
+
+    </textarea>
+
+</div>
+
+</div>
+<div class="content">
+    <div class="title">
+        混合模式
+    </div>
+    <div class="introduce">
+        <p>混合模式就是上面两种上传的综合，只需要将两个方法的参数累加到一起，将form合并到一起即可</p>
+    </div>
+    <div class="title">
+        上传所有文件
+    </div>
+    <div class="introduce">
+        <p>上传所有文件的方法为不在控制器的MultipartFile参数增加@Param注解</p>
+    </div>
+    <h3>上传所有文件的控制器代码</h3>
+    <textarea name="code" class="java">
+        @Post("save")
+        public String save( MultipartFile[] files //不加@Param注解获取所有file类型的input )
+                throws IllegalStateException, IOException  {
+            ...
+            return "@upload success";
+        }
+
+    </textarea>
+</div>
+<div class="footer">
+    Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

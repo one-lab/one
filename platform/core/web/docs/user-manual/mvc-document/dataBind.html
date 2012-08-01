@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>数据绑定</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css"/>
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css"/>
+    <link href="css/tips.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            var i = 1;
+            $("li.on_off").each(function () {
+                var theID = "on_off" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            i = 1
+            $("div.code_cont").each(function () {
+                var theID = "code_cont" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            $("li.on_off").click(function () {
+                var conID = $(this).attr("id").substring(6, 7);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+            var bodyTop = $(window).height()/2
+            $(window).scroll(function(){
+
+                var offsetTop = bodyTop + $(window).scrollTop() +"px";
+                $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+                if($(window).scrollTop() > 10){
+
+                    $("#toTop").show();
+                }else{
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function(){toTop()});
+        });
+        function toTop(){
+            $("#toTop").hide();
+            $("html,body").animate({scrollTop: $("body").offset().top},500);
+        }
+    </script>
+    <style>
+        .new {
+            padding: 10px;
+            line-height: 22px;
+        }
+
+        .img_ex01 {
+            float: right;
+            border: #ccc 1px solid;
+            margin-left: 10px;
+        }
+
+        .new span {
+            color: #F30;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        #next_news {
+            border: #72a89a 1px solid;
+            line-height: 24px;
+            height: 24px;
+            display: block;
+            width: 120px;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            background: #72b0a1
+        }
+
+            /*customTip*/
+        .example {
+            border-top: #DFDFDF 1px solid;
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+
+        .text_ex {
+            border: #DFDFDF 1px solid;
+            line-height: 18px;
+            height: 18px;
+            padding: 2px;
+            width: 79%
+        }
+
+        .email_ex {
+            padding: 4px 6px;
+            text-align: center;
+            color: #333
+        }
+
+        .email_ex a {
+            color: #005590
+        }
+    </style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="header">
+    <h1 class="logo"><b>Sinosoft</b>ONE MVC(1.0.0)</h1>
+
+    <h2 align="right"><font size="3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">方法参数的自动数据绑定</span>
+</div>
+<div class="content">
+    <div class="title">
+        数据绑定分类
+    </div>
+    <div class="introduce">
+        <p>数据绑定主要分为常用数据类型的数据绑定，和JavaBean的数据绑定</p>
+    </div>
+
+    <div class="title">
+        常用数据类型的数据绑定
+    </div>
+    <div class="introduce">
+        <p>常用的数据类型主要包括</p>
+        <ul>
+            <li>基本类型和包装类</li>
+            <li>数组和List类型</li>
+            <li>Enum类型</li>
+            <li>Map类型</li>
+        </ul>
+    </div>
+
+</div>
+<div class="content">
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>常用类型数据绑定<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="introduce">
+                        <ul style="list-style-type:decimal">
+                            <li>创建一个Enum类型的CourseType</li>
+                            <li>在controllers.bind下创建DataBindController类</li>
+                        </ul>
+                    </div>
+
+
+                    <div class="code_cont">
+                        <h3>JAVA代码 CourseType</h3>
+                        <textarea name="code" class="java" >
+                            public enum CourseType {
+                                MATH,ENGLISH,OTHER
+                            }
+                        </textarea>
+                        <h3>JAVA代码 DataBindController</h3>
+                        <textarea name="code" class="java" >
+                            //控制器在controllers.bind包下
+                            @Path("")
+                            public class DataBindController {
+
+                                //基础数据类型的绑定
+
+                                //POST  http://local/mvc/bind/simple?id=2012&score=95.5  对应@Param("id") int id,@Param("score") Float score,
+                                @Post("simple1")
+                                public String simpleBind1( @Param("id") int id, @Param("score") Float score) {
+                                    //@TODO display this param
+                                    return "simpleBind";
+                                }
+
+                                //POST  http://local/mvc/bind/simple?names=a,b,c,d,e  对应@Param("names") List<String> names 或者
+                                //POST  http://local/mvc/bind/simple?names=a&names=b&names=c&names=d
+                                @Post("simple2")
+                                public String simpleBind2( @Param("names") List<String> names ) {
+                                    //@TODO display this param
+                                    return "simpleBind";
+                                }
+
+                                //POST  http://local/mvc/bind/simple?mapa:math=98&mapa:english=89.5&mapa:art=99
+                                    //对应 @Param("mapa") Map<String,Float> map
+                                @Post("simple3")
+                                public String simpleBind3( @Param("mapa") Map<String,Float> map ) {
+                                    //@TODO display this param
+                                    return "simpleBind";
+                                }
+
+                                //POST  http://local/mvc/bind/simple?enum=ENGLISH  对应 @Param("enum") CourseType type
+                                @Post("simple4")
+                                public String simpleBind4( @Param("enum") CourseType type) {
+                                    //@TODO display this param
+                                    return "simpleBind";
+                                }
+                            }
+                        </textarea>
+                        <p>通过浏览器对simpleBind的各个方法请求测试一下(安装注释的url路径)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="content">
+    <div class="title">
+        JavaBean的数据绑定
+    </div>
+    <div class="introduce">
+        <p>MVC可以根据参数名称自动匹配和转化成相应类型的JavaBean的对应的属性</p>
+        <p>支持JavaBean的嵌套</p>
+    </div>
+</div>
+<div class="content">
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>JavaBean数据绑定<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="introduce">
+                        <ul style="list-style-type:decimal">
+                            <li>创建JavaBean Student类和Course类</li>
+                            <li>在views/bind下创建simpleBind.jsp页面</li>
+                            <li>在controllers.bind下创建DataBindController类</li>
+                        </ul>
+                    </div>
+
+
+                    <div class="code_cont">
+                        <h3>JAVA代码 Student&Course</h3>
+                        <textarea name="code" class="java" >
+                            public class Student {
+
+                                private Long id;
+
+                                private String name;
+
+                                private Integer age;
+
+                                private Date birthday;
+
+                                private Course mathCourse;
+
+                                private Course englishCourse;
+
+                                private List<Course> otherCourses;
+                                //@todo getter and setter
+                            }
+
+                            public class Course {
+
+                                private CourseType type;
+
+                                private String name;
+
+                                private Float score;
+
+                                //@todo getter and setter
+                            }
+                        </textarea>
+
+                        <h3>JSP代码 simpleBind.jsp</h3>
+                        <p><font color="red" size="3">注意数学成绩和英语成绩的写法,还要注意 ‘其他成绩X’ 的写法看看"List< Course >类型是如何对应的</font></p>
+                        <textarea name="code" class="xml" >
+                            <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+                            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                            <html xmlns="http://www.w3.org/1999/xhtml">
+
+                            <head>
+                                <title>JavaBean的数据绑定</title>
+                                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            </head>
+
+                            <body>
+
+                            <h4>${message}</h4>
+                            <form name="form" action="/bind/bean" method="post">
+                                编号：<input name="id" id="id" type="text" /><br/>
+                                姓名：<input name="name" id="name" type="text" /><br/>
+                                年龄：<input name="age" id="age" type="text" /><br/>
+                                出生日期：<input name="birthday" id="birthday" type="text" /><br/>
+                                数学成绩：<input name="mathCourse.score" id="mathScore" type="text" /><br/>
+                                英语成绩：<input name="englishCourse.score" id="englishScore" type="text" /><br/>
+                                <hr/>
+                                其他成绩1：<input name="otherCourses[0].score"  type="text" /><br/>
+                                其他成绩2：<input name="otherCourses[1].score" type="text" /><br/>
+                                其他成绩3：<input name="otherCourses[2].score"  type="text" /><br/>
+                                其他成绩4：<input name="otherCourses[3].score"  type="text" /><br/>
+                                <input type="submit" value="Form提交" />
+
+                            </form>
+
+                            </body>
+
+                            </html>
+                        </textarea>
+
+                        <h3>JAVA代码 DataBindController</h3>
+                        <textarea name="code" class="java" >
+                            @Path("")
+                            public class DataBindController {
+
+                                //JavaBean的绑定
+                                /*
+                                mvc会自动根据表单的name属性匹配Student的属性。
+                                对于嵌套属性只需要用'.'来表示嵌套关系即可 例如 mathCourse.score
+                                对于List< Course >类型还要加上属性的下标 例如 courses[0].score
+                                如果form表单只是一个JavaBean的映射可以不用@Param()注解，
+                                如果form表单是多个JavaBean的映射那就必须增加@Param("beanName")注解，并且在input的name属性增加对于的'beanName.'前缀
+                                */
+                                @Post("bean")
+                                public String beanBind(Student student) {
+                                    //@TODO display student
+                                    return "simpleBind";
+                                }
+                            }
+                        </textarea>
+                        <p>通过浏览器对simpleBind方法请求测试一下</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="content">
+    <div class="title">
+        JavaBean的数据绑定的说明
+    </div>
+    <div class="introduce">
+        <ul style="list-style-type: decimal;">
+            <li>mvc会自动根据表单的name属性匹配JavaBean的属性名</li>
+            <li>嵌套属性需要用'.'来表示嵌套关系</li>
+            <li>如果嵌套的是一个集合类型并且集合里面还是JavaBean，需要增加下标以区分集合的元素 如courses[0].score courses[0].name</li>
+            <li>如果form表单只是一个JavaBean的映射可以不用@Param()注解</li>
+            <li>如果form表单是多个JavaBean的映射那就必须增加@Param("beanName")注解，并且在input的name属性增加对于的'beanName.'前缀</li>
+
+        </ul>
+    </div>
+</div>
+<div class="footer">
+    Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>
