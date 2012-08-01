@@ -12,14 +12,8 @@ import java.lang.annotation.ElementType;
  * user OneTraversableResolver's isReachable method to prevent jpaTraversableResolver was not null
  */
 public class OneTraversableResolver extends DefaultTraversableResolver {
-    private static Log logger = LogFactory.getLog(OneTraversableResolver.class);
     @Override
     public boolean isReachable(Object traversableObject, Path.Node traversableProperty, Class<?> rootBeanType, Path pathToTraversableObject, ElementType elementType) {
-        try {
-            return super.isReachable(traversableObject, traversableProperty, rootBeanType, pathToTraversableObject, elementType);
-        } catch (Throwable e) {
-            logger.warn("user OneTraversableResolver's isReachable method to prevent jpaTraversableResolver was not null.");
-            return true;
-        }
+        return true;
     }
 }
