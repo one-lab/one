@@ -18,7 +18,7 @@ public class OneTraversableResolver extends DefaultTraversableResolver {
         try {
             return super.isReachable(traversableObject, traversableProperty, rootBeanType, pathToTraversableObject, elementType);
         } catch (Throwable e) {
-            logger.warn("user OneTraversableResolver's isReachable method to prevent jpaTraversableResolver was not null  ",e);
+            logger.warn("user OneTraversableResolver's isReachable method to prevent jpaTraversableResolver was not null.");
             return true;
         }
     }
