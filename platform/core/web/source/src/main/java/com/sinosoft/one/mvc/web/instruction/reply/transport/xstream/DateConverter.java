@@ -12,11 +12,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * DateConverter for xStream
+ * Created with IntelliJ IDEA.
  * User: carvin
  * Date: 12-7-31
  * Time: 下午8:15
- * .
+ * To change this template use File | Settings | File Templates.
  */
 class DateConverter implements Converter {
     public DateConverter() {

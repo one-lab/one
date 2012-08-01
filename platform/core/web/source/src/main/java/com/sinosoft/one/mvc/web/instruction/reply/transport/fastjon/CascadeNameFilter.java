@@ -9,7 +9,6 @@ class CascadeNameFilter implements NameFilter {
 		this.propertyNames = propertyNames;
 	}
 
-	@Override
 	public String process(Object source, String name, Object value) {
 		StringBuffer strBuffer = new StringBuffer();
 		for(String propertyName : propertyNames) {

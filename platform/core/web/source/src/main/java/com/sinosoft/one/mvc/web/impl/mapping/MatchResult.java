@@ -39,7 +39,6 @@ public interface MatchResult {
     /**
      * 返回从结果字符串中得到的资源参数名(如果该资源使用了使用了参数化的映射地址)
      * 
-     * @param name
      * @return
      */
     public String getParameterName();

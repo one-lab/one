@@ -38,7 +38,6 @@ public class PortalResolver implements ParamResolver {
         return portalFactory;
     }
 
-    @Override
     public boolean supports(ParamMetaData paramMetaData) {
         if (portalFactory == null) {
             return false;
@@ -46,7 +45,6 @@ public class PortalResolver implements ParamResolver {
         return paramMetaData.getParamType() == Portal.class;
     }
 
-    @Override
     public Portal resolve(Invocation inv, ParamMetaData paramMetaData) throws Exception {
         return portalFactory.createPortal(inv);
     }

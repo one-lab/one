@@ -32,8 +32,13 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-    
-    
+    <!--<servlet>
+        <servlet-name>StartServlet</servlet-name>
+        <servlet-class>com.sinosoft.platform.platformDemo.web.StartServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>-->
+
+
     <!-- Open Entity Manager in View filter -->
 	<filter>
 		<filter-name>openEntityManagerInViewFilter</filter-name>

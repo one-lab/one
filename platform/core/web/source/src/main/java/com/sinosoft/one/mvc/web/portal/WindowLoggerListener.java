@@ -27,28 +27,24 @@ public class WindowLoggerListener implements WindowListener {
 
     private Log logger = LogFactory.getLog(WindowLoggerListener.class);
 
-    @Override
     public void onWindowAdded(Window window) {
         if (logger.isDebugEnabled()) {
             logger.debug("onWindowAdded: [" + window.getName() + "]@" + window.getContainer());
         }
     }
 
-    @Override
     public void onWindowCanceled(Window window) {
         if (logger.isDebugEnabled()) {
             logger.debug("onWindowCanceled: [" + window.getName() + "]@" + window.getContainer());
         }
     }
 
-    @Override
     public void onWindowDone(Window window) {
         if (logger.isDebugEnabled()) {
             logger.debug("onWindowDone: [" + window.getName() + "]@" + window.getContainer());
         }
     }
 
-    @Override
     public void onWindowError(Window window) {
         if (logger.isDebugEnabled()) {
             logger.debug("onWindowError: [" + window.getName() + "]@" + window.getContainer(),
@@ -56,14 +52,12 @@ public class WindowLoggerListener implements WindowListener {
         }
     }
 
-    @Override
     public void onWindowStarted(Window window) {
         if (logger.isDebugEnabled()) {
             logger.debug("onWindowStarted: [" + window.getName() + "]@" + window.getContainer());
         }
     }
 
-    @Override
     public void onWindowTimeout(Window window) {
         if (logger.isDebugEnabled()) {
             logger.debug("onWindowTimeout: [" + window.getName() + "]@" + window.getContainer());

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 
+import com.sinosoft.one.mvc.util.MvcPathUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -107,7 +108,8 @@ public class UserController {
 			if(multipartFile.getOriginalFilename() == null){
 				continue;
 			}
-			multipartFile.transferTo(new File(inv.getServletContext().getRealPath("/")+""+multipartFile.getOriginalFilename()));
+
+			multipartFile.transferTo(new File(MvcPathUtil.getDirectoryPath(inv, "/")+multipartFile.getOriginalFilename()));
 		}
 		
 		

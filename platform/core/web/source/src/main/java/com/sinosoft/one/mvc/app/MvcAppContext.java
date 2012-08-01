@@ -31,7 +31,6 @@ public class MvcAppContext extends com.sinosoft.one.mvc.scanning.context.MvcAppC
     /**
      * 创建 MvcAppContext.
      * 
-     * @param contextConfigLocation - 配置加载路径
      */
     public MvcAppContext() {
         super();

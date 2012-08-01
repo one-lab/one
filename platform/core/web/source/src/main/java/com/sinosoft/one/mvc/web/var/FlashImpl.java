@@ -165,30 +165,25 @@ public class FlashImpl implements Flash {
         }
     }
 
-    @Override
     public boolean contains(String name) {
         readLastMessages();
         return last.containsKey(name);
     }
 
-    @Override
     public String get(String name) {
         readLastMessages();
         return last.get(name);
     }
 
-    @Override
     public Collection<String> getMessageNames() {
         readLastMessages();
         return last.keySet();
     }
 
-    @Override
     public Map<String, String> getMessages() {
         return Collections.unmodifiableMap(last);
     }
 
-    @Override
     public Flash add(String name, String flashMessage) {
         Assert.notNull(name, "Flash attribute name must not be null");
         flashMessage = PlaceHolderUtils.resolve(flashMessage, invocation);
@@ -202,12 +197,10 @@ public class FlashImpl implements Flash {
         return this;
     }
 
-    @Override
     public Collection<String> getNewMessageNames() {
         return next.keySet();
     }
 
-    @Override
     public Map<String, String> getNewMessages() {
         return Collections.unmodifiableMap(next);
     }

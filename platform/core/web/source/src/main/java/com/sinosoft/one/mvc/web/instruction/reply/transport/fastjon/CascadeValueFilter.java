@@ -15,7 +15,6 @@ class CascadeValueFilter implements ValueFilter {
 		this.propertyNameMap = propertyNameMap;
 	}
 
-	@Override
 	public Object process(Object source, String name, Object value) {
 		if(propertyNameMap.containsKey(name)) {
 			List<String> subNames = propertyNameMap.get(name);

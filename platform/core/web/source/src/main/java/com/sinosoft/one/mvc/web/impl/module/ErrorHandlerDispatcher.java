@@ -83,7 +83,6 @@ public class ErrorHandlerDispatcher implements ControllerErrorHandler {
         }
         Collections.sort(delegates, new Comparator<ErrorHandlerDelegate>() {
 
-            @Override
             public int compare(ErrorHandlerDelegate o1, ErrorHandlerDelegate o2) {
                 if (o1.getMethod().getParameterTypes()[THROWABLE_INDEX].isAssignableFrom(o2
                         .getMethod().getParameterTypes()[THROWABLE_INDEX])) {
@@ -99,7 +98,6 @@ public class ErrorHandlerDispatcher implements ControllerErrorHandler {
         });
     }
 
-    @Override
     public Object onError(Invocation inv, Throwable ex) throws Throwable {
         for (ErrorHandlerDelegate delegate : delegates) {
             if (delegate.getMethod().getParameterTypes()[THROWABLE_INDEX].isAssignableFrom(ex

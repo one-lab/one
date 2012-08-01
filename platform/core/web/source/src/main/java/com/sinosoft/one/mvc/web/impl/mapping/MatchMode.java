@@ -36,13 +36,13 @@ public enum MatchMode {
 
                     final Pattern pattern = Pattern.compile("^" + conf + "($|/)");
 
-                    @Override
+
                     public java.util.regex.MatchResult match(CharSequence path) {
                         Matcher matcher = pattern.matcher(path);
                         return matcher.find() ? matcher : null;
                     }
 
-                    @Override
+
                     public String toString() {
                         return pattern.toString();
                     }
@@ -53,7 +53,7 @@ public enum MatchMode {
 
                     private final SimpleMatchResult simpleMatchResult = new SimpleMatchResult(conf);
 
-                    @Override
+
                     public java.util.regex.MatchResult match(CharSequence path) {
                         boolean matched = MvcStringUtil.startsWith(path, conf);
                         if (!matched
@@ -81,7 +81,7 @@ public enum MatchMode {
 
                     final Pattern pattern = Pattern.compile("^" + conf + "/?$");
 
-                    @Override
+
                     public java.util.regex.MatchResult match(CharSequence path) {
                         Matcher matcher = pattern.matcher(path);
                         return matcher.find() ? matcher : null;
@@ -97,7 +97,7 @@ public enum MatchMode {
 
                     private final SimpleMatchResult simpleMatchResult = new SimpleMatchResult(conf);
 
-                    @Override
+
                     public java.util.regex.MatchResult match(CharSequence inputPath) {
                         if (inputPath.length() > conf.length()) {
                             if (inputPath.length() == conf.length() + 1) {
@@ -113,7 +113,7 @@ public enum MatchMode {
                         return conf.equals(inputPath) ? simpleMatchResult : null;
                     }
 
-                    @Override
+
                     public String toString() {
                         return conf;
                     }
@@ -139,37 +139,37 @@ public enum MatchMode {
             this.conf = conf;
         }
 
-        @Override
+
         public String group() {
             return conf;
         }
 
-        @Override
+
         public String group(int group) {
             return conf;
         }
 
-        @Override
+
         public int end() {
             return 0;
         }
 
-        @Override
+
         public int end(int group) {
             return 0;
         }
 
-        @Override
+
         public int groupCount() {
             return 0;
         }
 
-        @Override
+
         public int start() {
             return 0;
         }
 
-        @Override
+
         public int start(int group) {
             return 0;
         }

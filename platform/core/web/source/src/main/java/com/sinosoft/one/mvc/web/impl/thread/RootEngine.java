@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  * {@link RootEngine}从{@link com.sinosoft.one.mvc.MvcFilter}接收web请求，并按照Mvc规则进行处理.
  * <p>
  * {@link RootEngine}会判断该web请求是否是本{@link RootEngine}
- * 应该处理的，如果是进行后续的委派和处理，如果不是则{@link #match(InvocationBean)}返回false给上层.
+ * 应该处理的，如果是进行后续的委派和处理，如果不是则match(InvocationBean)返回false给上层.
  * <p>
  * 
  *
@@ -58,9 +58,8 @@ public class RootEngine implements Engine {
     /**
      * 构造能够将请求正确转发到所给modules的 {@link RootEngine}对象.
      * <p>
-     * 此构造子将调用 {@link #initMappings(List)}进行初始化，需要时，子类可以覆盖提供新的实现
+     * 此构造子将调用 initMappings(List)进行初始化，需要时，子类可以覆盖提供新的实现
      * 
-     * @param modules 模块的集合，非空，对排序无要求； 如果集合的元素为null，该空元素将被忽略
      * @throws Exception
      * @throws NullPointerException 如果所传入的模块集合为null时
      */
@@ -72,7 +71,6 @@ public class RootEngine implements Engine {
 
     // ------------------------------------------------------------
 
-    @Override
     public int isAccepted(HttpServletRequest mvc) {
         return 1;
     }
@@ -81,13 +79,10 @@ public class RootEngine implements Engine {
      * {@link RootEngine} 接口.调用此方法判断并处理请求.如果本引擎能够找到该请求相应的控制器方法处理，则启动整个调用过程，
      * 并最终渲染页面到客户端;
      * 
-     * @param request
-     * @param response
      * @return
      * @throws ServletException
      */
 
-    @Override
     public Object execute(Mvc mvc) throws Throwable {
 
         InvocationBean inv = mvc.getInvocation();
@@ -110,7 +105,6 @@ public class RootEngine implements Engine {
             // 恢复include请求前的各种请求属性(包括Model对象)
             mvc.addAfterCompletion(new AfterCompletion() {
 
-                @Override
                 public void afterCompletion(Invocation inv, Throwable ex) throws Exception {
                     restoreRequestAttributesAfterInclude(inv);
                 }
@@ -141,7 +135,6 @@ public class RootEngine implements Engine {
         return instruction;
     }
 
-    @Override
     public void destroy() {
     }
 
@@ -166,8 +159,6 @@ public class RootEngine implements Engine {
     /**
      * Restore the request attributes after an include.
      * 
-     * @param request current HTTP request
-     * @param attributesSnapshot the snapshot of the request attributes
      *        before the include
      */
     private void restoreRequestAttributesAfterInclude(Invocation inv) {

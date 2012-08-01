@@ -75,7 +75,6 @@ public class PipeImpl extends GenericWindowContainer implements Pipe {
         }
     }
 
-    @Override
     public void addCssTo(String windowName, String css) {
         for (Window window : windows) {
             if (window.getName().equals(windowName)) {
@@ -95,7 +94,6 @@ public class PipeImpl extends GenericWindowContainer implements Pipe {
         list.add(css);
     }
 
-    @Override
     public void addJsTo(String windowName, String js) {
         for (Window window : windows) {
             if (window.getName().equals(windowName)) {

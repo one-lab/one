@@ -12,12 +12,12 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.sinosoft.platform.platformDemo.utils.Collections3;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springside.modules.utils.Collections3;
 
 import com.google.common.collect.Lists;
 import com.sinosoft.platform.platformDemo.model.IdEntity;

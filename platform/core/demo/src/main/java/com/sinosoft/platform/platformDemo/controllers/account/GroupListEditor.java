@@ -4,12 +4,12 @@ import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sinosoft.platform.platformDemo.utils.Collections3;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.sinosoft.platform.platformDemo.model.account.Group;
 import com.sinosoft.platform.platformDemo.service.account.AccountManager;
-import org.springside.modules.utils.Collections3;
 
 /**
  * 用于转换用户表单中复杂对象Group的checkbox的关联。

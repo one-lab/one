@@ -182,7 +182,7 @@ public class MvcScanner {
                 try {
                     file = new File(urlObject.toURI());
                 } catch (URISyntaxException e) {
-                    throw new IOException(e);
+                    throw new IOException(e.getLocalizedMessage());
                 }
                 if (file.isFile()) {
                     if (logger.isDebugEnabled()) {
