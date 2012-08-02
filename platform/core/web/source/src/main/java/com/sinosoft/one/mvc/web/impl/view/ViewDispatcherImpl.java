@@ -68,7 +68,6 @@ public class ViewDispatcherImpl implements ViewDispatcher, ApplicationContextAwa
     public ViewDispatcherImpl() {
     }
 
-    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = (ConfigurableWebApplicationContext) applicationContext;
         SpringUtils.autowire(internalResourceViewResolver, applicationContext);
@@ -78,7 +77,6 @@ public class ViewDispatcherImpl implements ViewDispatcher, ApplicationContextAwa
         return applicationContext;
     }
 
-    @Override
     public View resolveViewName(Invocation inv, String viewPath, Locale locale) throws Exception {
         ViewResolver viewResolver = getSpringViewResolver(inv, viewPath);
         if (logger.isDebugEnabled()) {

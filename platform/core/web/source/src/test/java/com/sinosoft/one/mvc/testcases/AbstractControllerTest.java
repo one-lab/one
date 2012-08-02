@@ -47,7 +47,6 @@ public abstract class AbstractControllerTest extends TestCase {
             public RequestDispatcher getRequestDispatcher(final String path) {
                 return new RequestDispatcher() {
 
-                    @Override
                     public void forward(ServletRequest request, ServletResponse response)
                             throws ServletException, IOException {
                         WebUtils.exposeForwardRequestAttributes((HttpServletRequest) request);
@@ -65,7 +64,6 @@ public abstract class AbstractControllerTest extends TestCase {
                         AbstractControllerTest.filter.doFilter(request, response, chain);
                     }
 
-                    @Override
                     public void include(ServletRequest request, ServletResponse response)
                             throws ServletException, IOException {
                         throw new UnsupportedOperationException();

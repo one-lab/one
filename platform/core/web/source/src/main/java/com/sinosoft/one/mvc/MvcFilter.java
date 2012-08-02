@@ -28,6 +28,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sinosoft.one.mvc.adapter.ArraysEx;
 import com.sinosoft.one.mvc.scanner.ModuleResource;
 import com.sinosoft.one.mvc.scanner.ModuleResourceProvider;
 import com.sinosoft.one.mvc.scanner.ModuleResourceProviderImpl;
@@ -231,7 +232,7 @@ public class MvcFilter extends GenericFilterBean {
                 }
             }
         }
-        IgnoredPath[] ignoredPaths = Arrays.copyOf(this.ignoredPaths, this.ignoredPaths.length
+        IgnoredPath[] ignoredPaths = ArraysEx.copyOf(this.ignoredPaths, this.ignoredPaths.length
                 + list.size());
         for (int i = this.ignoredPaths.length; i < ignoredPaths.length; i++) {
             ignoredPaths[i] = list.get(i - this.ignoredPaths.length);
@@ -308,7 +309,6 @@ public class MvcFilter extends GenericFilterBean {
      * 接收所有进入 MvcFilter 的请求进行匹配，如果匹配到有相应的处理类处理它则由这个类来处理他、渲染并响应给客户端。
      * 如果没有找到匹配的处理器，Mvc将把请求转交给整个过滤链的下一个组件，让web容器的其他组件来处理它。
      */
-    @Override
     public void doFilter(ServletRequest request, final ServletResponse response,
             final FilterChain filterChain) throws IOException, ServletException {
         // cast

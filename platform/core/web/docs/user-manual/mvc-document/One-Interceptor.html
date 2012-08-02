@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>One-MVC-Interceptor使用手册</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css"/>
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css"/>
+    <link href="css/tips.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            $("#API > tbody > tr:odd").addClass("even");
+            var i = 1;
+            $("li.on_off").each(function () {
+                var theID = "on_off" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            i = 1
+            $("div.code_cont").each(function () {
+                var theID = "code_cont" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            $("li.on_off").click(function () {
+                var conID = $(this).attr("id").substring(6, 7);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip", tipPostion:"right"});
+            var bodyTop = $(window).height() / 2
+            $(window).scroll(function () {
+
+                var offsetTop = bodyTop + $(window).scrollTop() + "px";
+                $("#toTop").animate({top:offsetTop }, { duration:600, queue:false });
+                if ($(window).scrollTop() > 10) {
+
+                    $("#toTop").show();
+                } else {
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function () {
+                toTop()
+            });
+        });
+        function toTop() {
+            $("#toTop").hide();
+            $("html,body").animate({scrollTop:$("body").offset().top}, 500);
+        }
+    </script>
+    <style>
+        .new {
+            padding: 10px;
+            line-height: 22px;
+        }
+
+        .img_ex01 {
+            float: right;
+            border: #ccc 1px solid;
+            margin-left: 10px;
+        }
+
+        .new span {
+            color: #F30;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        #next_news {
+            border: #72a89a 1px solid;
+            line-height: 24px;
+            height: 24px;
+            display: block;
+            width: 120px;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            background: #72b0a1
+        }
+
+            /*customTip*/
+        .example {
+            border-top: #DFDFDF 1px solid;
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+
+        .text_ex {
+            border: #DFDFDF 1px solid;
+            line-height: 18px;
+            height: 18px;
+            padding: 2px;
+            width: 79%
+        }
+
+        .email_ex {
+            padding: 4px 6px;
+            text-align: center;
+            color: #333
+        }
+
+        .email_ex a {
+            color: #005590
+        }
+    </style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+
+<div class="header">
+
+    <h1 class="logo"><b>Sinosoft</b> One-MVC(V1.0.0)</h1>
+
+    <h2 align="right"><font size="3" color="#10307a">Author ONE-MVC WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">简单方便的拦截器</span>
+</div>
+<div class="content">
+<div class="title">
+    拦截器的作用
+</div>
+
+<div class="introduce">
+    <ul style="list-style-type:decimal">
+        <li>面向切面编程（AOP）方法可以让一个项目更加关注核心逻辑</li>
+        <li>拦截器目标是在controllers层提供各种在控制器执行前、执行后的代码切入，以达到各种可AOP的目标。</li>
+    </ul>
+</div>
+
+<div class="title">
+    拦截器的几个重要行为（织入点）
+</div>
+
+<div class="introduce">
+    <p>拦截器有4个重要的方法分别处理控制器方法执行的前、中、后</p>
+    <ul style="list-style-type:decimal">
+        <li>before：在controller执行前执行。</li>
+        <li>after：在controller执行中（后）执行，如果一个返回抛出了异常，则不会进来。</li>
+        <li>round：这才是真正的controller执行中执行，不过用得很少。</li>
+        <li>afterCompletion：在controller执行后执行，不论是否异常，都会进来。</li>
+    </ul>
+
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>拦截器的4个方法<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看</span></li>
+</ul>
+<div class="code_box">
+    <div class="intr_line">
+        <div class="info">
+            <div class="content">
+
+                <div class="code_cont">
+                    <h3>拦截器代码</h3>
+                    <textarea name="code" class="java">
+
+                        import com.sinosoft.one.mvc.web.ControllerInterceptorAdapter;
+                        import com.sinosoft.one.mvc.web.Invocation;
+                        import com.sinosoft.one.mvc.web.InvocationChain;
+
+                        public class FristDemoInterceptor extends ControllerInterceptorAdapter {
+
+                            //在controller执行前执行
+                            @Override
+                            protected Object before(Invocation inv) throws Exception {
+                                Date date = new Date();
+                                String dateStr = DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss");
+                                inv.addModel("date", dateStr);
+                                return super.before(inv);
+                            }
+
+                            //这才是真正的controller执行中执行，不过用得很少。
+                            @Override
+                            protected Object round(Invocation inv, InvocationChain chain)
+                                        throws Exception {
+                                return super.round(inv, chain);
+                            }
+
+                            //在controller执行中（后）执行，如果一个返回抛出了异常，则不会进来。
+                            @Override
+                            protected Object after(Invocation inv, Object instruction) throws Exception {
+                                String loginUserName = (String)inv.getRequest().getSession().getAttribute("loginUserName");
+                                if(loginUserName != null){
+                                    inv.addModel("welInfo", "您好，"+loginUserName+"先生，今天天气不错！");
+                                }
+                                return super.after(inv, instruction);
+                            }
+
+                            //在controller执行后执行，不论是否异常，都会进来。
+                            @Override
+                            public void afterCompletion(Invocation inv, Throwable ex) throws Exception {
+                                super.afterCompletion(inv, ex);
+                            }
+
+                        }
+                    </textarea>
+
+                    <div class="introduce">
+                        <p>需要注意几点：</p>
+                        <ul style="list-style-type:decimal">
+                            <li>拦截器要放在controllers下</li>
+                            <li>继承om.sinosoft.one.mvc.web.ControllerInterceptorAdapter</li>
+                            <li>按照实现的方法名，在controller执行前、中、后执行：</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="title">
+    拦截器放在哪里？
+</div>
+<div class="introduce">
+    <p>拦截器和控制器是分不开的，拦截器的拦截对象就是控制器</p>
+
+    <p>所以拦截器和控制器是在一起的，哪里有控制器，哪里就可以有拦截器</p>
+
+    <p>具体的说就是在controllers和子包下实现了ControllerInterceptorAdapter 的类都是拦截器。</p>
+</div>
+
+<div class="title">
+    拦截器的拦截条件是什么？
+</div>
+<div class="introduce">
+    <p style="color: red;">拦截器是可以配置拦截条件的</p>
+
+    <p>我们可以通过重写ControllerInterceptorAdapter的一些方法达到条件性的拦截，具体的拦截条件如下：</p>
+    <ul>
+        <li>getRequiredAnnotationClass：返回一个Annotation类型，表示这个拦截器只对此Annotation标注过的controller才生效。</li>
+        <li>isForAction：定义满足某条件的才会被拦截。</li>
+        <li>isForDispatcher：根据响应的情况判断是否拦截，比如说是正常请求、内部forward、还是include 不常用</li>
+    </ul>
+</div>
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>拦截器的拦截条件<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看</span></li>
+</ul>
+<div class="code_box">
+    <div class="intr_line">
+        <div class="info">
+            <div class="content">
+                <div class="code_cont">
+                    <p>这个Annotation可以创建在任意的包下，只是起到一个标示作用。</p>
+
+                    <h3>Annotation文件</h3>
+                    <textarea name="code" class="js">
+                        /**
+                        * 这是一个annotation，所谓annotation就是一个“标签”，他的职责是“表明”
+                        */
+                        @Inherited
+                        @Target( { ElementType.TYPE, ElementType.METHOD })
+                        @Retention(RetentionPolicy.RUNTIME)
+                        @Documented
+                        public @interface InterceptorFlag {
+
+                        }
+                    </textarea>
+
+                    <h3>拦截器代码</h3>
+                    <textarea name="code" class="js">
+                        package com.sinosoft.test.controllers;
+
+                        import java.lang.annotation.Annotation;
+
+                        import com.sinosoft.one.mvc.web.ControllerInterceptorAdapter;
+                        import com.sinosoft.one.mvc.web.Invocation;
+                        /**
+                        * 类名以Interceptor结尾并且继承了ControllerInterceptorAdapter类的 ，那么,这就是一个拦截器
+                        */
+                        public class SimpleInterceptor extends ControllerInterceptorAdapter {
+                            public FristDemoInterceptor() {
+                                //设置优先级，在拦截器的顺序里面会提到
+                                setPriority(190);
+                            }
+                            // 不覆盖这个方法，默认拦截所有的控制器和方法
+                            // 覆盖这个方法返回一个注解类，使得只有注解了该annotation的方法才会被起作用(注解在控制器类或方法上均有效)
+                            // 还有一个相反功能的方法：getDenyAnnotationClass，表示注解了某个annotatioin后，拦截器不要拦截他
+                            @Override
+                            protected Class<? extends Annotation> getRequiredAnnotationClass() {
+                                return InterceptorFlag.class;
+                            }
+
+                            //只针对部分的控制器和方法拦截
+                            @Override
+                            protected boolean isForAction(Method actionMethod, Class<?> controllerClazz) {
+                                if( controllerClazz.equals(LoginController.class) ) {
+                                    if(actionMethod.getName() == "method1"){
+                                    //只拦截LoginController 的 method1方法
+                                    }
+                                }
+                                return super.isForAction(actionMethod, controllerClazz);
+                            }
+
+                            @Override
+                            protected Object after(Invocation inv, Object instruction) throws Exception {
+                                // 控制器方法调用之后，可以在这里做些你想做的
+                                String now = inv.getModel("now")+" use wonderful!";
+                                inv.addModel("now", now);
+                                return super.after(inv, instruction);
+                            }
+                        }
+                    </textarea>
+
+                    <div class="introduce">
+                        <p>需要注意几点：</p>
+                        <ul style="list-style-type:decimal">
+                            <li>getRequiredAnnotationClass：只有标注了该方法返回值类型的Annotation的控制器或方法才会被拦截器拦截</li>
+                            <li>isForAction：拦截指定的控制器或方法</li>
+                        </ul>
+                    </div>
+
+                    <h3>控制器代码</h3>
+                    <textarea name="code" class="js">
+
+                        @InterceptorFlag//标注了这个Annotation，才会被SimpleInterceptor拦截
+                        @Path("relax")
+                        public class RelaxController {
+
+                            @Get("one")
+                            public String One( Invocation inv ){
+                                inv.addModel("now","This is the frist one!");
+                                return "Hello-Relax";
+                            }
+                        }
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="title">
+    拦截器的顺序
+</div>
+<div class="introduce">
+    <p>拦截器可以通过两种方式定义顺序</p>
+    <ul style="list-style-type: decimal;">
+        <li>通过在拦截器的构造方法中设置拦截器的优先级setPriority(int);</li>
+        <li>通过增加interceptors-order.xml配置文件统一配置拦截器的顺序</li>
+    </ul>
+
+</div>
+
+<ul class="tabs">
+    <li class="select"><span class="name"><b></b>interceptors-order.xml的格式<font>Example</font></span><span></span></li>
+    <li class="on_off"><span class="name"><font></font>查看</span></li>
+</ul>
+<div class="code_box">
+    <div class="intr_line">
+        <div class="info">
+            <div class="content">
+
+                <p id="news" class="new">
+
+                <div class="introduce">
+                    <p>注: 对于某个控制器，当有多个拦截器可对其进行拦截的时候，可通过以下两种方式设置拦截器的优先级:</p>
+                    <ul style="list-style-type:decimal">
+                        <li>在拦截器的构造方法中调用父类的setPriority(int priority)方法设置优先级</li>
+                        <li>也可通过在resources下创建interceptors-order.xml文件，在这里统一规划拦截器的优先级，如在这里配置过，优先级大于之前的方式</li>
+                        <li>interceptors-order.xml文件中，拦截器的顺序从上到下</li>
+                    </ul>
+                </div>
+                </p>
+                <div class="code_cont">
+                    <h3>interceptors-order.xml(格式样例)</h3>
+                    <textarea name="code" class="xml">
+                        <?xml version="1.0" encoding="UTF-8"?>
+                        <interceptors>
+                            <interceptor>
+                                <com class="sinos"></com>oft.platform.platformDemo.controllers.SecondDemoInterceptor</interceptor>
+                            <interceptor>com.sinosoft.platform.platformDemo.controllers.FristDemoInterceptor</interceptor>
+                        </interceptors>
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="introduce">
+        <p style="color: green;">关于拦截器的更多内容请关注后续章节</p>
+    </div>
+</div>
+</div>
+
+<div class="footer">
+    Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

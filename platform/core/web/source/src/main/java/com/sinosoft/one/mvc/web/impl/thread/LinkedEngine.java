@@ -55,12 +55,10 @@ public final class LinkedEngine implements Engine {
         return target;
     }
 
-    @Override
     public int isAccepted(HttpServletRequest request) {
         return target.isAccepted(request);
     }
 
-    @Override
     public Object execute(Mvc mvc) throws Throwable {
         if (Thread.currentThread().isInterrupted()) {
             logger.info("stop to call the next engine: thread is interrupted");
@@ -69,7 +67,6 @@ public final class LinkedEngine implements Engine {
         return target.execute(mvc);
     }
 
-    @Override
     public void destroy() {
         target.destroy();
     }

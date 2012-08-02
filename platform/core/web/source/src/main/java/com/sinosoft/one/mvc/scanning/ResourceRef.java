@@ -191,7 +191,6 @@ public class ResourceRef implements Comparable<ResourceRef> {
         return "file";
     }
 
-    @Override
     public int compareTo(ResourceRef o) {
         try {
             return this.resource.getURI().compareTo(o.resource.getURI());

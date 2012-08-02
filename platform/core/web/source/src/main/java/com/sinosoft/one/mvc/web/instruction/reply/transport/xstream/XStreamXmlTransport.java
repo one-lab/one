@@ -2,6 +2,7 @@ package com.sinosoft.one.mvc.web.instruction.reply.transport.xstream;
 
 import com.google.common.base.Charsets;
 import com.sinosoft.one.mvc.util.MvcObjectUtils;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.AbstractTransport;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Xml;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang3.ArrayUtils;

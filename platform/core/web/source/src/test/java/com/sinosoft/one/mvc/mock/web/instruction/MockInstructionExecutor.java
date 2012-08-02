@@ -40,7 +40,6 @@ public class MockInstructionExecutor implements InstructionExecutor {
         return storesInstructionInRequest;
     }
 
-    @Override
     public Object render(Invocation inv, Object instruction) throws Exception {
         // 设置到request中，使测试用例可以从request对象取回instruction对象
         if (storesInstructionInRequest) {

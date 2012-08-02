@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import javax.servlet.ServletContext;
 
+import com.sinosoft.one.mvc.adapter.ArraysEx;
 import com.sinosoft.one.mvc.scanning.LoadScope;
 import com.sinosoft.one.mvc.scanning.context.core.MvcResources;
 
@@ -149,7 +150,7 @@ public class MvcWebAppContext extends XmlWebApplicationContext {
                     + "'/WEB-INF/messages'");
         }
 
-        messageBasenames = Arrays.copyOf(messageBasenames, messageBasenames.length + 1);
+        messageBasenames = ArraysEx.copyOf(messageBasenames, messageBasenames.length + 1);
         messageBasenames[messageBasenames.length - 1] = "/WEB-INF/messages";
 
         return messageBasenames;

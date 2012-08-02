@@ -5,7 +5,6 @@ import com.sinosoft.one.mvc.web.Invocation;
 
 public class ErrorHandler implements ControllerErrorHandler {
 
-    @Override
     public Object onError(Invocation inv, Throwable ex) {
         return ex;
     }

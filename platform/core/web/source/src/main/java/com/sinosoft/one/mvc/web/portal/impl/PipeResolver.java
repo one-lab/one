@@ -38,7 +38,6 @@ public class PipeResolver implements ParamResolver {
         return portalFactory;
     }
 
-    @Override
     public boolean supports(ParamMetaData paramMetaData) {
         if (portalFactory == null) {
             return false;
@@ -46,7 +45,6 @@ public class PipeResolver implements ParamResolver {
         return paramMetaData.getParamType() == Pipe.class;
     }
 
-    @Override
     public Pipe resolve(Invocation inv, ParamMetaData paramMetaData) throws Exception {
         return portalFactory.createPipe(inv, true);
     }

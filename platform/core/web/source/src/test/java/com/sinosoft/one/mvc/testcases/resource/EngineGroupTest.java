@@ -34,17 +34,14 @@ public class EngineGroupTest extends TestCase {
 
     private Engine getEngine = new Engine() {
 
-        @Override
         public int isAccepted(HttpServletRequest mvc) {
             return 1;
         }
 
-        @Override
         public Object execute(Mvc mvc) throws Throwable {
             return null;
         }
 
-        @Override
         public void destroy() {
 
         }
@@ -57,17 +54,14 @@ public class EngineGroupTest extends TestCase {
 
     private Engine postEngine = new Engine() {
 
-        @Override
         public int isAccepted(HttpServletRequest mvc) {
             return 1;
         }
 
-        @Override
         public Object execute(Mvc mvc) throws Throwable {
             return null;
         }
 
-        @Override
         public void destroy() {
 
         }
@@ -80,17 +74,14 @@ public class EngineGroupTest extends TestCase {
 
     private Engine defEngine = new Engine() {
 
-        @Override
         public int isAccepted(HttpServletRequest mvc) {
             return 1;
         }
 
-        @Override
         public Object execute(Mvc mvc) throws Throwable {
             return null;
         }
 
-        @Override
         public void destroy() {
 
         }

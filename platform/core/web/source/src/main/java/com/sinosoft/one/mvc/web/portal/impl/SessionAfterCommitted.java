@@ -36,88 +36,71 @@ class SessionAfterCommitted implements HttpSession {
         this.exception = exception;
     }
 
-    @Override
     public Object getAttribute(String arg0) {
         return null;
     }
 
     @SuppressWarnings("unchecked")
-    @Override
     public Enumeration getAttributeNames() {
         return new Enumerator(Collections.emptyList());
     }
 
-    @Override
     public long getCreationTime() {
         return -1;
     }
 
-    @Override
     public String getId() {
         return "-1";
     }
 
-    @Override
     public long getLastAccessedTime() {
         return -1;
     }
 
-    @Override
     public int getMaxInactiveInterval() {
         return -1;
     }
 
-    @Override
     public ServletContext getServletContext() {
         throw new IllegalStateException(exception);
     }
 
     @SuppressWarnings("deprecation")
-    @Override
     public javax.servlet.http.HttpSessionContext getSessionContext() {
         throw new IllegalStateException(exception);
     }
 
-    @Override
     public Object getValue(String arg0) {
         return null;
     }
 
-    @Override
     public String[] getValueNames() {
         return new String[0];
     }
 
-    @Override
     public void invalidate() {
     }
 
-    @Override
     public boolean isNew() {
         return false;
     }
 
-    @Override
     public void putValue(String arg0, Object arg1) {
         throw new IllegalStateException(exception);
     }
 
-    @Override
     public void removeAttribute(String arg0) {
         throw new IllegalStateException(exception);
     }
 
-    @Override
     public void removeValue(String arg0) {
         throw new IllegalStateException(exception);
     }
 
-    @Override
     public void setAttribute(String arg0, Object arg1) {
         throw new IllegalStateException(exception);
     }
 
-    @Override
     public void setMaxInactiveInterval(int arg0) {
         throw new IllegalStateException(exception);
     }

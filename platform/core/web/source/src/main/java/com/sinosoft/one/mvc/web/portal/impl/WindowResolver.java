@@ -29,12 +29,10 @@ import com.sinosoft.one.mvc.web.portal.Window;
  */
 public class WindowResolver implements ParamResolver {
 
-    @Override
     public boolean supports(ParamMetaData paramMetaData) {
         return Window.class == paramMetaData.getParamType();
     }
 
-    @Override
     public Object resolve(Invocation inv, ParamMetaData paramMetaData) throws Exception {
         return PortalUtils.getWindow(inv);
     }

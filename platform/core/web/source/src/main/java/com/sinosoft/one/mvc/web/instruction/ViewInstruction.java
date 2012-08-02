@@ -128,7 +128,7 @@ public class ViewInstruction extends AbstractInstruction {
             try {
                 directFile = MvcPathUtil.getDirectoryFile(inv, directoryPath);
             } catch (Exception e) {
-               throw new IOException(e);
+               throw new IOException(e.getLocalizedMessage());
             }
             if (directFile == null || !directFile.exists()) {
                 String msg = "404: view directory not found, you need to create it in your webapp:"
@@ -192,7 +192,7 @@ public class ViewInstruction extends AbstractInstruction {
                 try {
                     directoryFile = MvcPathUtil.getDirectoryFile(inv, directoryPath);
                 } catch (Exception e) {
-                    throw new IOException(e);
+                    throw new IOException(e.getLocalizedMessage());
                 }
             } else {
                 directoryPath = viewPathCache.getDirectoryPath();
@@ -201,7 +201,7 @@ public class ViewInstruction extends AbstractInstruction {
                 try {
                     tempHome = new File(inv.getServletContext().getResource(directoryPath).toURI());
                 } catch (URISyntaxException e) {
-                    throw new IOException(e);
+                    throw new IOException(e.getLocalizedMessage());
                 }
                 if (!tempHome.exists()) {
                     directoryFile = null;
@@ -220,7 +220,7 @@ public class ViewInstruction extends AbstractInstruction {
             try {
                 directoryFile = MvcPathUtil.getDirectoryFile(inv, directoryPath);
             } catch (Exception e) {
-                throw new IOException(e);
+                throw new IOException(e.getLocalizedMessage());
             }
         }
         if (directoryFile == null || !directoryFile.exists()) {
@@ -267,7 +267,6 @@ public class ViewInstruction extends AbstractInstruction {
             if (!file.exists()) {
                 String[] candidates = tempHome.list(new FilenameFilter() {
 
-                    @Override
                     public boolean accept(File dir, String name) {
                         if (name.equalsIgnoreCase(subDir)) {
                             return true;
@@ -300,7 +299,6 @@ public class ViewInstruction extends AbstractInstruction {
             final boolean ignoreCase) {
         String[] viewFiles = directoryFile.list(new FilenameFilter() {
 
-            @Override
             public boolean accept(File dir, String fileName) {
                 String _notDirectoryViewName = fileNameToFind;
                 String _fileName = fileName;

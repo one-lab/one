@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ONE MVC 使用手册</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJScript.js"></script>
+<script language="javascript" src="js/code/shBrushJava.js"></script>
+<script language="javascript" src="js/tips.js"></script>
+<script type="text/javascript">
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+	
+	
+	var i = 1;
+	$("li.on_off").each(function(){		
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	
+	$("li.on_off").click(function(){
+		var conID = $(this).attr("id").substring(6,7);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	});
+    $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+    var bodyTop = $(window).height()/2
+    $(window).scroll(function(){
+
+        var offsetTop = bodyTop + $(window).scrollTop() +"px";
+        $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+        if($(window).scrollTop() > 10){
+
+            $("#toTop").show();
+        }else{
+            $("#toTop").hide();
+        }
+    });
+    $("#toTop").click(function(){toTop()});
+});
+function toTop(){
+    $("#toTop").hide();
+    $("html,body").animate({scrollTop: $("body").offset().top},500);
+}
+</script>
+<style>
+.new{padding:10px;line-height:22px;}
+.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+.new span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="header">
+	<h1 class="logo"><b>Sinosoft</b> ONE MVC (1.0.0)</h1>
+    <h2 align="right"><font size="3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">数据校验</span>
+</div>
+<div class="content">
+    <div class="title">
+        后端数据校验
+    </div>
+    <div class="introduce">
+        <p>后端数据校验能够避免在前段校验被失效的前提下保障系统数数据的可靠和稳定</p>
+        <p>数据校验的对象是控制器方法的参数：</p>
+        <ul style="list-style-type:decimal">
+            <li>参数可以是一个简单类型或者包装类。</li>
+            <li>参数也可以是JavaBean。</li>
+        </ul>
+        <p>使用MVC提供的数据校验只需要在控制器方法的参数上标注@Validation()</p>
+        <p>对于请求的类型MVC会自动识别Ajax或普通Http的请求，并进行不同的响应</p>
+        <p>MVC提供了一系列的校验条件和对应的消息，校验的消息可以自己指定</p>
+    </div>
+</div>
+<div class="content">
+
+	<div class="title">
+        参数是简单类型或包装类的校验
+    </div>
+    <div class="introduce">
+        <ul style="list-style-type:decimal">
+            <li>用@Param("paramName")指定参数的名字</li>
+            <li>用@Validation()标注代表该方法的参数需要校验</li>
+        </ul>
+    </div>
+
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>简单类型校验例子<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="introduce">
+                        <ul style="list-style-type:decimal">
+                            <li>在controllers包下创建validate包并创建校验用的ValidateController</li>
+                            <li>在webapp增加views文件夹</li>
+                            <li>在views文件夹床架validate(和控制器包名相同)并新建validateParam.jsp</li>
+                            <li>增加errorMsg标签的引用</li>
+                        </ul>
+                    </div>
+                    <div class="code_cont">
+                        <h3>JAVA代码 ValidateController</h3>
+                        <textarea name="code" class="java" >
+                            //ValidateController在...controllers.validate包下
+                            //将控制器直接映射为空即可直接访问方法的映射
+                            @Path("")
+                            public class ValidateController {
+
+                                //跳转到validateParam.jsp用.在浏览器访问 local://WebAppName/validate/param
+                                @Get("param")
+                                public String toParamJsp() {
+                                    return "validateParam";
+                                }
+
+                                /*
+                                用@Param("paramName")取得request的参数
+                                用@Validation(errorPath = "validateParam")表示验证validateParam方法的参数。
+                                errorPath参数用来指定验证错误信息的显示页面。一般和参数的提交页面是同一个。
+                                @NotNull @Min(2012) 。。。表示验证的条件。
+                                验证条件的message属性可以自己指定。
+                                */
+                                @Post("param")
+                                public String validateParam(@Validation(errorPath = "validateParam")
+                                        @Param("id") @NotNull @Min(2012)  Long id,
+                                        @Param("name") @NotEmpty
+                                        @Size(max=10,min=2,message = "参数的长度应该在{max},{min}之间") String name,
+                                        Invocation inv) {
+                                    inv.addModel("message", "操作成功");
+                                    return "validateParam";
+                                }
+
+                            }
+                        </textarea>
+                        <h3>JSP代码 validateParam.jsp</h3>
+                        <textarea name="code" class="xml">
+                            <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+                            <%@ taglib prefix="mvc" uri="http://mvc.one.sinosoft.com/validation/msg" %>
+                            这里使用了MVC提供的errorMsg标签，用以显示验证过后的错误信息
+                            <html>
+                            <head>
+                                <title>对Param的数据校验</title>
+                            </head>
+                            <body>
+                            <h4>${message}</h4>
+                            <p>单个参数的验证</p>
+                            <form name="paramForm" action="/validate/param" method="post">
+                                编号：<input name="id" type="text" /><mvc:errorMsg property="id" /><br/>
+                                姓名：<input name="name" type="text" /><mvc:errorMsg property="name"/><br/>
+                                <input type="submit" value="Form提交" />
+                            </form>
+                            </body>
+                            </html>
+
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="content">
+    <div class="title">
+        参数是JavaBean的校验
+    </div>
+    <div class="introduce">
+        <p>对于JavaBean的校验条件可以直接写在JavaBean的属性上，也可以在@Validation中配置</p>
+    </div>
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>JavaBean校验<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="introduce">
+                        <ul style="list-style-type:decimal">
+                            <li>创建一个Student的JavaBean</li>
+                            <li>给Student的属性增加校验条件</li>
+                            <li>给ValidateController增加Bean校验的事例方法</li>
+                            <li>在views/validate下创建Bean信息提交和显示的页面validateBean.jsp</li>
+                            <li>在jsp页面编写form和Ajax方式提交的代码</li>
+                        </ul>
+                    </div>
+                    <div class="code_cont">
+                        <h3>JAVA代码 Student</h3>
+                        <textarea name="code" class="java" >
+                            public class Student {
+
+                                //学生id不能为空并且最小2012
+                                @NotNull
+                                @Min(2012)
+                                private Long id;
+                                //学生姓名长度最小为2最大10，并且不能是空串
+                                //可以自己指定错误消息，而不采用默认的消息
+                                @NotEmpty
+                                @Size( min = 2, max = 10 ,message = "名字的长度应该在{min} - {max}之间")
+                                private String name;
+                                @Max(22)
+                                @Min(12)
+                                private Integer age;
+
+                                private Float mathScore;
+
+                                private Float englishScore;
+
+                                private Date birthday;
+
+                                //@TODO add Getter Setter *****
+                            }
+                        </textarea>
+                        <h3>JAVA代码 ValidateController</h3>
+                        <textarea name="code" class="java" >
+                            //ValidateController在...controllers.validate包下
+                            @Path("")
+                            public class ValidateController {
+
+                                //跳转到validateParam.jsp用
+                                @Get("param")
+                                public String toParamJsp() {
+                                    return "validateParam";
+                                }
+
+                                /*
+                                用@Param("paramName")取得request的参数
+                                用@Validation(errorPath = "validateParam")表示验证validateParam方法的参数。
+                                errorPath参数用来指定验证错误信息的显示页面。一般和参数的提交页面是同一个。
+                                @NotNull @Min(2012) 。。。表示验证的条件。
+                                */
+                                @Post("param")
+                                public String validateParam(@Validation(errorPath = "validateParam")
+                                        @Param("id") @NotNull @Min(2012)  Long id,
+                                        @Param("name") @NotEmpty @Size(max=10,min=2) String name,
+                                        Invocation inv) {
+                                    inv.addModel("message", "操作成功");
+                                    return "validateParam";
+                                }
+
+                                //跳转到validateBean.jsp用
+                                @Get("bean")
+                                public String toBeanJsp() {
+
+                                    return "validateBean";
+                                }
+
+                                //验证的条件采用Student中的配置
+                                @Post("bean")
+                                public String validateBean1( @Validation(errorPath = "validateBean") Student stu,
+                                        Invocation inv) {
+                                    inv.addModel("message", "操作成功");
+                                    return "validateBean";
+                                }
+
+                                //验证的条件是临时指定的在@Validation配置，同时Student的验证条件依然生效
+                                @Post("config")
+                                public String validateBean2( @Validation(errorPath = "validateBean",
+                                        notNull = @NotNullEx(props = {"age","birthday"}),
+                                        max = @MaxEx(props = {"mathScore","englishScore"},value = 100),
+                                        min = @MinEx(props = {"mathScore","englishScore"},value = 0),
+                                        past = @PastEx(props = "birthday") ) Student stu,
+                                        Invocation inv) {
+
+                                    inv.addModel("message","操作成功");
+                                    return "validateBean";
+                                }
+
+                            }
+                        </textarea>
+                        <h3>JSP代码 validateBean.jsp</h3>
+                        <textarea name="code" class="xml" >
+                            <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+                            <%@ taglib prefix="mvc" uri="http://mvc.one.sinosoft.com/validation/msg" %>
+                            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                            <html xmlns="http://www.w3.org/1999/xhtml">
+                            <head>
+                                <title>对JavaBean的数据校验</title>
+                                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                                <script type="text/javascript" src="../../js/jquery-1.7.1.js" ></script>
+                                <script type="text/javascript">
+                                    $(function(){
+                                        $("#ajaxCommit").bind("click",function () {
+                                            //form表单的ajax方式提交
+                                            $.ajax({
+                                                url : "/validate/bean",
+                                                type : "POST",
+                                                data : {
+                                                    id:$("#id").val(),
+                                                    name:$("#name").val(),
+                                                    age:$("#age").val(),
+                                                    birthday:$("#birthday").val(),
+                                                    mathScore:$("#mathScore").val(),
+                                                    englishScore:$("#englishScore").val()
+                                                },
+                                                dataType : "json",
+                                                success : function (data) {
+                                                    $("#ajaxMessage").html("");
+                                                    for(var i=0;i<data.length;i++){
+                                                        $("#ajaxMessage").append(data[i].propertyPath +":"+data[i].message+"<br/>");
+                                                    }
+                                                },
+                                                error : function () {
+                                                    alert("error");
+                                                }
+                                            });
+                                        })
+                                    });
+                                </script>
+                            </head>
+
+                            <body>
+
+                            <h4>${message}</h4>
+                            <form name="form" action="/validate/config" method="post">
+                                编号：<input name="id" id="id" type="text" /><mvc:errorMsg property="id" type="message" /><br/>
+                                姓名：<input name="name" id="name" type="text" /><mvc:errorMsg property="name"/><br/>
+                                年龄：<input name="age" id="age" type="text" /><mvc:errorMsg property="age"/><br/>
+                                出生日期：<input name="birthday" id="birthday" type="text" /><mvc:errorMsg property="birthday"/><br/>
+                                数学成绩：<input name="mathScore" id="mathScore" type="text" /><mvc:errorMsg property="mathScore"/><br/>
+                                英语成绩：<input name="englishScore" id="englishScore" type="text" /><mvc:errorMsg property="englishScore"/><br/>
+                                <input type="submit" value="Form提交" />
+                                <input id="ajaxCommit" type="button" value="Ajax提交" />
+                            </form>
+
+                            <div id="ajaxMessage"></div>
+
+                            </body>
+
+                            </html>
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="title">
+        HTTP的请求类型是Ajax的几点说明
+    </div>
+    <div class="introduce">
+        <ul >
+            <li>MVC的Validation会自动识别出Ajax的请求，不需要额外的配置</li>
+            <li>Ajax的验证错误信息是<span style="color: red;">JSON数组格式</span>的</li>
+            <li>具体的格式如下:</li>
+            <li>{invalidValue:表示错误的值, message:表示错误信息, propertyPath:表示被校验的属性名称或参数名称}</li>
+            <li>例如：[{"invalidValue":"","message":"不能为空","propertyPath":"name"},<br/>
+                {"invalidValue":"null","message":"不能为null","propertyPath":"id"},<br/>
+                {"invalidValue":"","message":"名字的长度应该在2 - 10之间","propertyPath":"name"}]</li>
+
+        </ul>
+
+    </div>
+</div>
+<div class="content">
+    <div class="title">
+        errorMsg标签的使用
+    </div>
+    <div class="introduce">
+        <ul >
+            <li>有property和type两个属性</li>
+            <li>property是必须填写的，表示显示哪个属性或参数的错误信息</li>
+            <li>type表示显示的类型有propertyPath、message、invalidValue三种</li>
+            <li>type的三个值分别对应于Ajax中提到的JSON数据的属性</li>
+
+        </ul>
+        <p><span style="color: green;">关于自定义的数据校验请关注后续章节</span></p>
+    </div>
+</div>
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

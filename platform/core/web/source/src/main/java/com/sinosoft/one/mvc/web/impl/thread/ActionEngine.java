@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sinosoft.one.mvc.MvcVersion;
+import com.sinosoft.one.mvc.adapter.ArraysEx;
 import com.sinosoft.one.mvc.util.MvcStringUtil;
 import com.sinosoft.one.mvc.web.ControllerInterceptor;
 import com.sinosoft.one.mvc.web.InterceptorDelegate;
@@ -153,7 +154,7 @@ public final class ActionEngine implements Engine {
     		int multipleIndex = 0;
             for (ParamValidator validator : validators) {
                 if (validator.supports(methodParameterResolver.getParamMetaDatas()[i])) {
-                	registeredValidators[i] = Arrays.copyOf(registeredValidators[i], multipleIndex+1);
+                	registeredValidators[i] = ArraysEx.copyOf(registeredValidators[i], multipleIndex + 1);
                 	registeredValidators[i][multipleIndex++] = validator;
                 }
             }
@@ -263,7 +264,6 @@ public final class ActionEngine implements Engine {
 
                     final String paramName = term.trim();
 
-                    @Override
                     public int check(Map<String, String[]> params) {
                         String[] paramValues = params.get(paramName);
                         if (logger.isDebugEnabled()) {
@@ -295,7 +295,6 @@ public final class ActionEngine implements Engine {
                     final Pattern pattern = tmpPattern; //转成final的
                     checkers.add(new ParamExistenceChecker() {
 
-                        @Override
                         public int check(Map<String, String[]> params) {
                             String[] paramValues = params.get(paramName);
                             if (logger.isDebugEnabled()) {
@@ -318,7 +317,6 @@ public final class ActionEngine implements Engine {
                 } else { //expected是常量字符串，包括空串""
                     checkers.add(new ParamExistenceChecker() {
 
-                        @Override
                         public int check(Map<String, String[]> params) {
                             String[] paramValues = params.get(paramName);
                             if (logger.isDebugEnabled()) {
@@ -344,7 +342,6 @@ public final class ActionEngine implements Engine {
         return checkers.toArray(new ParamExistenceChecker[] {});
     }
 
-    @Override
     public int isAccepted(HttpServletRequest request) {
         if (paramExistenceChecker.length == 0) { //没有约束条件，返回1
             return 1;
@@ -392,13 +389,12 @@ public final class ActionEngine implements Engine {
         if (values == null) {
             values = new String[] { value };
         } else {
-            values = Arrays.copyOf(values, values.length + 1);
+            values = ArraysEx.copyOf(values, values.length + 1);
             values[values.length - 1] = value;
         }
         map.put(key, values);
     }
 
-    @Override
     public Object execute(Mvc mvc) throws Throwable {
         try {
             return innerExecute(mvc);
@@ -500,7 +496,6 @@ public final class ActionEngine implements Engine {
             this.mvc = mvc;
         }
 
-        @Override
         public Object doNext() throws Exception {
             if (++index < interceptors.length) { // ++index 用于将-1转化为0
                 InterceptorDelegate interceptor = interceptors[index];

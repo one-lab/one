@@ -87,12 +87,10 @@ public class ParameteredUriRequest extends HttpServletRequestWrapper {
             final Iterator<String> matchResultParamNames = new ArrayList<String>(parameters
                     .keySet()).iterator();
 
-            @Override
             public boolean hasMoreElements() {
                 return matchResultParamNames.hasNext() || requestParamNames.hasMoreElements();
             }
 
-            @Override
             public String nextElement() {
                 if (matchResultParamNames.hasNext()) {
                     return matchResultParamNames.next();

@@ -42,7 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 public class InvocationLocalImpl implements InvocationLocal {
 
-    @Override
+    
     public Invocation getCurrent(boolean required) {
         Invocation inv = InvocationUtils.getInvocation(InvocationUtils.getCurrentThreadRequest());
         if (inv == null && required) {
@@ -55,190 +55,190 @@ public class InvocationLocalImpl implements InvocationLocal {
         return getCurrent(true);
     }
 
-    @Override
+    
     public void addModel(Object value) {
         required().addModel(value);
     }
 
-    @Override
+    
     public void addModel(String name, Object value) {
         required().addModel(name, value);
     }
 
-    @Override
+    
     public void changeMethodParameter(int index, Object newValue) {
         required().changeMethodParameter(index, newValue);
 
     }
 
-    @Override
+    
     public void changeMethodParameter(String name, Object newValue) {
         required().changeMethodParameter(name, newValue);
 
     }
     
-    @Override
+    
     public void changeMethodParameter(ParamMetaData paramMeta, Object newValue) {
         required().changeMethodParameter(paramMeta, newValue);
     }
 
-    @Override
+    
     public WebApplicationContext getApplicationContext() {
         return required().getApplicationContext();
     }
 
-    @Override
+    
     public Object getAttribute(String name) {
         return required().getAttribute(name);
     }
 
-    @Override
+    
     public Set<String> getAttributeNames() {
         return required().getAttributeNames();
     }
 
-    @Override
+    
     public BindingResult getBindingResult(String bean) {
         return required().getBindingResult(bean);
     }
 
-    @Override
+    
     public List<String> getBindingResultNames() {
         return required().getBindingResultNames();
     }
 
-    @Override
+    
     public List<BindingResult> getBindingResults() {
         return required().getBindingResults();
     }
 
-    @Override
+    
     public Object getController() {
         return required().getController();
     }
 
-    @Override
+    
     public Class<?> getControllerClass() {
         return required().getControllerClass();
     }
 
-    @Override
+    
     public void addFlash(String name, String msg) {
         required().addFlash(name, msg);
     }
 
-    @Override
+    
     public Flash getFlash() {
         return required().getFlash();
     }
 
-    @Override
+    
     public Method getMethod() {
         return required().getMethod();
     }
 
-    @Override
+    
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return required().isAnnotationPresent(annotationClass);
     }
 
-    @Override
+    
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
         return required().getAnnotation(annotationClass);
     }
 
-    @Override
+    
     public Object getMethodParameter(String name) {
         return required().getMethodParameter(name);
     }
 
-    @Override
+    
     public String[] getMethodParameterNames() {
         return required().getMethodParameterNames();
     }
 
-    @Override
+    
     public Object[] getMethodParameters() {
         return required().getMethodParameters();
     }
 
-    @Override
+    
     public Model getModel() {
         return required().getModel();
     }
 
-    @Override
+    
     public Object getModel(String name) {
         return required().getModel(name);
     }
 
-    @Override
+    
     public String getParameter(String name) {
         return required().getParameter(name);
     }
 
-    @Override
+    
     public BindingResult getParameterBindingResult() {
         return required().getParameterBindingResult();
     }
 
-    @Override
+    
     public HttpServletRequest getRequest() {
         return required().getRequest();
     }
 
-    @Override
+    
     public RequestPath getRequestPath() {
         return required().getRequestPath();
     }
 
-    @Override
+    
     public HttpServletResponse getResponse() {
         return required().getResponse();
     }
 
-    @Override
+    
     public ServletContext getServletContext() {
         return required().getServletContext();
     }
 
-    @Override
+    
     public void removeAttribute(String name) {
         required().removeAttribute(name);
 
     }
 
-    @Override
+    
     public Invocation setAttribute(String name, Object value) {
         return required().setAttribute(name, value);
     }
 
-    @Override
+    
     public void setRequest(HttpServletRequest request) {
         required().setRequest(request);
     }
 
-    @Override
+    
     public Flash getFlash(boolean create) {
         return required().getFlash(create);
     }
 
-    @Override
+    
     public Invocation getPreInvocation() {
         return required().getPreInvocation();
     }
 
-    @Override
+    
     public Invocation getHeadInvocation() {
         return required().getHeadInvocation();
     }
 
-    @Override
+    
     public String getResourceId() {
         return required().getResourceId();
     }
 
-    @Override
+    
     public void addAfterCompletion(AfterCompletion afterComletion) {
         required().addAfterCompletion(afterComletion);
     }

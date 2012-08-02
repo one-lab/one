@@ -50,12 +50,10 @@ public class PortalBeanPostProcessor implements BeanPostProcessor, ApplicationCo
 
     private ApplicationContext applicationContext;
 
-    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
-    @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
             throws BeansException {
 
@@ -125,7 +123,6 @@ public class PortalBeanPostProcessor implements BeanPostProcessor, ApplicationCo
         return bean;
     }
 
-    @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
             throws BeansException {
         return bean;

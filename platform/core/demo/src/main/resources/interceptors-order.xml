@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <interceptors>
-	<interceptor>com.sinosoft.platform.platformDemo.controllers.SecondDemoInterceptor</interceptor>
-	<interceptor>com.sinosoft.platform.platformDemo.controllers.FristDemoInterceptor</interceptor>
+	<interceptor>com.sinosoft.one.demo.controllers.SecondDemoInterceptor</interceptor>
+	<interceptor>com.sinosoft.one.demo.controllers.FristDemoInterceptor</interceptor>
 	
 </interceptors>

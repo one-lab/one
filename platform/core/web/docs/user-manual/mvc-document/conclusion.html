@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>One-MVC使用手册</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+<link href="css/tips.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJScript.js"></script>
+<script language="javascript" src="js/tips.js"></script>
+<script type="text/javascript">
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+
+	var i = 1;
+	$("li.on_off").each(function(){		
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	$("li.on_off").click(function(){
+		var conID = $(this).attr("id").substring(6,7);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	})
+})
+</script>
+<style>
+.new{padding:10px;line-height:22px;}
+.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+.new span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+<div class="header">
+	<h1 class="logo"><b>Sinosoft</b> One-MVC(V1.0.0)</h1>
+	<h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">结束语</span>
+</div>
+<div class="content">
+    <div class="introduce">
+		<div id="prepare" class="title">
+			结束语
+		</div>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;经过近一个月左右时间的齐心协力，我们的MVC框架One-MVC已经可以交付使用，综合了目前主流的一些MVC框架的实际应用体验，提供了如上所述的功能应用。</p>
+		<p>第一个版本(包括框架和此手册)，本着简单，易用，丰富，高效的原则设计实现，在以后的版本升级中，会充分根据诸位同仁在实际使用中的反馈意见完善我们的MVC。</p>
+		<p>平台组成员:</p>
+		<table>
+			<tr>
+				<td>启&nbsp;&nbsp;&nbsp;程</td>
+				<td>&nbsp;</td>
+				<td>杨&nbsp;&nbsp;&nbsp;明</td>
+			</tr>
+			<tr>
+				<td>黄杨俊</td>
+				<td>&nbsp;</td>
+				<td>陈雄喜</td>
+			</tr>
+			<tr>
+				<td>左立文</td>
+				<td>&nbsp;</td>
+				<td>阴长治</td>
+			</tr>
+			<tr>
+				<td>杨明光</td>
+				<td>&nbsp;</td>
+				<td>韩春亮</td>
+			</tr>
+			<tr>
+				<td>刘玉宏</td>
+				<td>&nbsp;</td>
+				<td>邱金龙</td>
+			</tr>
+		</table>
+		<p>欢迎诸位同仁在实际使用中批评指正。如有任何意见和建议，欢迎联系：</p>
+		<ul>
+			<li>qicheng@sinosoft.com.cn</li>
+			<li>huangyangjun@sinosoft.com.cn</li>
+			<li>zuoliwen@sinosoft.com.cn</li>
+		</ul> 
+    </div>
+</div>
+
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>

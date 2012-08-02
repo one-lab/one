@@ -31,13 +31,11 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 		this.entity = entity;
 	}
 	
-	@Override
 	public AjaxReply<E> type(String mediaType) {
 		super.setType(mediaType);
 		return this;
 	}
 
-	@Override
 	public AjaxReply<E> headers(Map<String, String> headers) {
 		this.headers.putAll(headers);
 		return this;
@@ -93,15 +91,13 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 					transport.setIncludes(null);
 					transport.setExcludes(null);
 				}
-				// TODO(dhanji): This feels wrong to me. We need a better way to
-				// obtain the entity type.
+
 				transport.out(response.getOutputStream(),
 						entity);
 			}
 		}
 	}
 
-	@Override
 	public AjaxReply<E> as(Class<? extends AbstractTransport> transport) {
 		Preconditions.checkArgument(null != transport,
 				"Transport class cannot be null!");
@@ -109,19 +105,16 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 		return this;
 	}
 
-	@Override
 	public AjaxReply<E> excludes(String excludeFields) {
 		Preconditions.checkNotNull(excludeFields, "The exclude fields cannot be null.");
 		return excludes(excludeFields.split(","));
 	}
 
-	@Override
 	public AjaxReply<E> includes(String includeFields) {
 		Preconditions.checkNotNull(includeFields, "The include fields cannot be null.");
 		return includes(includeFields.split(","));
 	}
 
-	@Override
 	public AjaxReply<E> dateFormatString(String dateFormatString) {
 		if(Strings.isNullOrEmpty(dateFormatString)) {
 			this.dateFormatString = DateFormatMode.YYYYMMDDHHMMSS.toString();
@@ -131,7 +124,6 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 		return this;
 	}
 
-	@Override
 	public AjaxReply<E> dateFormatMode(DateFormatMode dateFormatMode) {
 		if(dateFormatMode == null) {
 			this.dateFormatMode = DateFormatMode.YYYYMMDDHHMMSS;
@@ -142,21 +134,18 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 		return this;
 	}
 
-	@Override
 	public AjaxReply<E> excludes(String... excludeFields) {
 		Preconditions.checkState(ArrayUtils.isEmpty(this.includes), "Invoked includes method, cannot inovke the excludes method at the same time.");
 		this.excludes = excludeFields;
 		return this;
 	}
 
-	@Override
 	public AjaxReply<E> includes(String... includeFields) {
 		Preconditions.checkState(ArrayUtils.isEmpty(this.excludes), "Invoked excludes method, cannot inovke the inlcudes method at the same time.");
 		this.includes = includeFields;
 		return this;
 	}
 
-	@Override
 	public AjaxReply<E> status(int code) {
 		setStatus(code);
 		return this;
