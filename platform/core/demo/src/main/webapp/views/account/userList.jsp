@@ -122,7 +122,7 @@
 					<div class="control-group">
 						<label  class="control-label">性别:</label>
 						<div class="controls">
-							<input type="text" id="general"  size="50" class="email" />
+							<input type="text" id="gender"  size="50" class="email" />
 						</div>
 					</div>
 				</fieldset>
@@ -164,9 +164,9 @@ var viewUser=function (uId) {
 				if(data != null){
 					$("#phone").val(data.phone);
 					$("#idcode").val(data.idcode);
-					var general = data.strGeneral;
+					var gender = data.strGender;
 					
-					$("#general").val(general=="MALE" ? "男性":"女性");
+					$("#gender").val(gender=="MALE" ? "男性":"女性");
 					
 					$("#view").show();
 				}

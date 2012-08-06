@@ -101,7 +101,7 @@ public class UserController {
 		accountManager.saveUser(user);
 		
 		user.getUserInfo().setId(user.getId());
-		user.getUserInfo().setStrGeneral(user.getUserInfo().getGeneral().name());
+		user.getUserInfo().setStrGender(user.getUserInfo().getGender().name());
 		accountManager.saveUserInfo(user.getUserInfo());
 		for (MultipartFile multipartFile : docs) {
 			if(StringUtils.isEmpty(multipartFile.getOriginalFilename())){

@@ -1,6 +1,5 @@
 package com.sinosoft.one.demo.controllers.account;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.sinosoft.one.mvc.web.Invocation;

@@ -42,7 +42,7 @@
     ID      NUMBER(19) not null,
     PHONE   VARCHAR2(255) not null,
     IDCODE  VARCHAR2(255) not null,
-    GENERAL VARCHAR2(255),
+    GENDER VARCHAR2(255),
     USER_ID NUMBER(19),
     primary key (id)
   );

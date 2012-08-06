@@ -5,7 +5,6 @@ import java.util.List;
 import com.sinosoft.one.demo.dao.account.GroupDao;
 import com.sinosoft.one.demo.dao.account.UserDao;
 import com.sinosoft.one.demo.dao.account.UserInfoDao;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +70,6 @@ public class AccountManager {
 	@Transactional(readOnly = false)
 	public void deleteUser(Long id) {
 		if (isSupervisor(id)) {
-			logger.warn("操作员{}尝试删除超级管理员用户", SecurityUtils.getSubject().getPrincipal());
 			throw new ServiceException("不能删除超级管理员用户");
 		}
 		userDao.delete(id);
