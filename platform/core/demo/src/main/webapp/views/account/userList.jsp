@@ -144,7 +144,7 @@ var viewUser=function (uId) {
 					$("#email").val(data.email);
 					$("#groupListDiv").html("");
 					for (var i=0;i < data.groupList.length;i++){
-					    $("#groupListDiv").append("<span>"+data.groupList[i].permissionNames+"</span>");
+					    $("#groupListDiv").append("<span>["+data.groupList[i].permissionNames+"]</span><br/>");
 					    
 					}
 					

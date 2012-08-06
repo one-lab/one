@@ -78,7 +78,7 @@ public class UserDetailController {
 		accountManager.saveUserInfo(user.getUserInfo());
 		
 		inv.addFlash("message", "修改用户" + user.getLoginName() + "成功");
-		return "r:/platformDemo/account/user/list";
+		return "r:/account/user/list";
 	}
 
 }

@@ -18,6 +18,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -103,7 +104,7 @@ public class UserController {
 		user.getUserInfo().setStrGeneral(user.getUserInfo().getGeneral().name());
 		accountManager.saveUserInfo(user.getUserInfo());
 		for (MultipartFile multipartFile : docs) {
-			if(multipartFile.getOriginalFilename() == null){
+			if(StringUtils.isEmpty(multipartFile.getOriginalFilename())){
 				continue;
 			}
 
@@ -112,7 +113,7 @@ public class UserController {
 		
 		
 //		return Replys.sample().success("创建用户" + user.getLoginName() + "成功");
-		return "r:/platformDemo/account/user/list";
+		return "r:/account/user/list";
 	}
 
 	@Get("delete/{id}")
@@ -120,7 +121,7 @@ public class UserController {
 		accountManager.deleteUser(id);
 		accountManager.deleteUerInfo(id);
 		inv.addFlash("message", "删除用户成功");
-		return "r:/platformDemo/account/user/list";
+		return "r:/account/user/list";
 	}
 
 	@Post("checkLoginName")

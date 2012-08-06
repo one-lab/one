@@ -11,15 +11,15 @@
     <packaging>war</packaging>
 	<name>One :: Demo</name>
     <properties>
-        <jdbc.driver.groupId>mysql</jdbc.driver.groupId>
-        <jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
-        <jdbc.driver.version>5.1.13</jdbc.driver.version>
+        <jdbc.driver.groupId>oracle</jdbc.driver.groupId>
+        <jdbc.driver.artifactId>ojdbc</jdbc.driver.artifactId>
+        <jdbc.driver.version>5</jdbc.driver.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.sinosoft.one</groupId>
             <artifactId>mvc</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
