@@ -250,7 +250,7 @@ public class MethodParameterResolverTest extends AbstractControllerTest {
 
         assertTrue("unexpected type " + parameters[1].getClass().getName(),
                 parameters[1] instanceof Set);
-        assertTrue(Arrays.equals(new Integer[] { 4, 6, 5 }, ((Set<?>) parameters[1])
+        assertTrue(Arrays.equals(new Integer[] { 4, 5, 6 }, ((Set<?>) parameters[1])
                 .toArray((new Integer[0]))));
 
         assertNotNull(parameters[2]);

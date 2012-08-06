@@ -16,7 +16,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
  * @author kylin
  */
 @LoginRequired
-@Path("")
+@Path
 public class LoginController {
 
 	@Autowired

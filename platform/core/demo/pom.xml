@@ -10,12 +10,16 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 	<name>One :: Demo</name>
-
+    <properties>
+        <jdbc.driver.groupId>mysql</jdbc.driver.groupId>
+        <jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
+        <jdbc.driver.version>5.1.13</jdbc.driver.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.sinosoft.one</groupId>
             <artifactId>mvc</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -108,11 +112,15 @@
         <!-- SPRING end -->
 
         <!-- PERSISTENCE begin -->
+
+
         <!-- hibernate -->
+        <!-- jdbc driver -->
         <dependency>
-            <groupId>oracle</groupId>
-            <artifactId>ojdbc</artifactId>
-            <version>5</version>
+            <groupId>${jdbc.driver.groupId}</groupId>
+            <artifactId>${jdbc.driver.artifactId}</artifactId>
+            <version>${jdbc.driver.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>

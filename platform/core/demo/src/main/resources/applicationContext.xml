@@ -39,7 +39,6 @@
                 <constructor-arg ref="dataSource"/>
             </bean>
         </property>
-        <property name="showSql" value="true"></property>
     </bean>
 
 	<!-- Spring Data Jpa配置 -->
@@ -59,7 +58,7 @@
 			location="classpath*:/application.properties" />
 		
 		<!-- 数据源配置, 使用DBCP数据库连接池 -->
-		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 			<!-- Connection Info -->
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
@@ -77,7 +76,13 @@
 		
 		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
 		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
+
+         <!-- 调整sql的时候请加上-->
+         <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+             <constructor-arg ref="dataSourceSpied"/>
+         </bean>
+
 	</beans>
-	
+
 
 </beans>
