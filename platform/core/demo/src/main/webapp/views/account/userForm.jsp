@@ -102,8 +102,8 @@
 				<br />
 				<label for="userInfo.general" class="control-label">性别：     </label>
 				<div class="controls">
-					<input type="radio" value="MALE" name="userInfo.general"  />男性&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" value="FEMALE" name="userInfo.general" />女性
+					<input type="radio" value="MALE" name="userInfo.general"  ${userInfo.strGeneral eq "MALE" || null == userInfo.strGeneral ? "checked='checked'" : ''}/>男性&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" value="FEMALE" name="userInfo.general" ${userInfo.strGeneral eq "FEMALE" ? "checked='checked'" : ''}/>女性
 				</div>
 			</div>
 			</fieldset>

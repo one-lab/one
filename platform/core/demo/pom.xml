@@ -266,11 +266,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.lazyluke</groupId>
             <artifactId>log4jdbc-remix</artifactId>
             <version>0.2.7</version>
-        </dependency>
+        </dependency>-->
         <!-- LOGGING end -->
 
         <!-- GENERAL UTILS begin -->
