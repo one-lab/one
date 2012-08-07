@@ -1,6 +1,6 @@
 package com.sinosoft.ebusiness.rms.client;
 
-import com.sinosoft.ebusiness.rms.client.annotation.DataAuthority;
+import com.sinosoft.one.rms.client.annotation.DataAuthority;
 
 /**
  * Created by IntelliJ IDEA.

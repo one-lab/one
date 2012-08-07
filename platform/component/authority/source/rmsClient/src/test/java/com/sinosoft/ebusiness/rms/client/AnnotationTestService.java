@@ -1,7 +1,7 @@
 package com.sinosoft.ebusiness.rms.client;
 
-import com.sinosoft.ebusiness.rms.client.annotation.DataAuthority;
-import com.sinosoft.ebusiness.rms.client.arch4.RmsGenericDaoHibernate;
+import com.sinosoft.one.rms.client.annotation.DataAuthority;
+import com.sinosoft.one.rms.client.arch4.RmsGenericDaoHibernate;
 
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
@@ -20,13 +20,11 @@ import java.util.List;
 public class AnnotationTestService extends RmsGenericDaoHibernate<String,String> implements TestService{
 
 
-    @Override
     @DataAuthority(value = "004")
     public List  findUser() {
         return null;
     }
 
-	@Override
 	@DataAuthority(value = "004")
 	public Page findUser(int pageNo, int pageSize) {
 		QueryRule queryRule = QueryRule.getInstance();
@@ -36,7 +34,6 @@ public class AnnotationTestService extends RmsGenericDaoHibernate<String,String>
 		return page;
 	}
 
-	@Override
 	@DataAuthority(value = "004")
 	public Page find(int pageNo, int pageSize) {
 		StringBuffer hql=new StringBuffer();

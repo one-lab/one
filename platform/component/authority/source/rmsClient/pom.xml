@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.sinosoft.one</groupId>
-		<artifactId>parent</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<artifactId>parent</artifactId> 
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>rmsClient</artifactId>
 	<packaging>jar</packaging>
@@ -14,9 +14,9 @@
 	<dependencies>
 		<!--rms Logcal -->
 		<dependency>
-			<groupId>com.sinosoft.ebusiness</groupId>
+			<groupId>com.sinosoft.one</groupId>
 			<artifactId>rms</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.1.2-SNAPSHOT</version>
 		</dependency>
 		<!-- j2ee web spec -->
 		<dependency>
@@ -81,7 +81,6 @@
 			<artifactId>shiro-ehcache</artifactId>
 		</dependency>
 
-
 		<!-- CXF begin -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -107,7 +106,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
