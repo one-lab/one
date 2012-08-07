@@ -1,6 +1,5 @@
 package com.sinosoft.one.demo.controllers.account;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.sinosoft.one.mvc.web.Invocation;
@@ -42,14 +41,14 @@ public class GroupController {
 		group.setId(System.currentTimeMillis());
 		accountManager.saveGroup(group);
 		inv.addFlash("message", "创建权限组" + group.getName() + "成功");
-		return "r:/platformDemo/account/group/";
+		return "r:/account/group/";
 	}
 
 	@Get("delete/{id}")
 	public String delete(@Param("id") Long id, Invocation inv) {
 		accountManager.deleteGroup(id);
 		inv.addFlash("message", "删除权限组成功");
-		return "r:/platformDemo/account/group/";
+		return "r:/account/group/";
 	}
 	
 	@Get("/p2")

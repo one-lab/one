@@ -16,7 +16,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
  * @author kylin
  */
 @LoginRequired
-@Path("")
+@Path
 public class LoginController {
 
 	@Autowired
@@ -39,7 +39,7 @@ public class LoginController {
 			return "r:account/user/list";
 		} else {
 			inv.addFlash("message", "用户名或者密码不对");
-			return "r:/platformDemo/login";
+			return "r:/login";
 		}
 		
 	}
