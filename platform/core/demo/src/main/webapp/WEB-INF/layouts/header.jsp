@@ -7,7 +7,7 @@
 	<div id="title">
 			<a href="${ctx}/logout" style="float:right;margin-top:14px"><font size="2">退出登录&nbsp; </font></a>
 	    	<h1>
-	    	platformDemo<small>--CRUD管理界面演示
+	    	MVCDemo<small>--CRUD管理界面演示
 	    	</small></h1>
 	    	
 <%-- 	    	<span align="left"><a href="${ctx}/logout"><small>退出登录</small></a></span> --%>

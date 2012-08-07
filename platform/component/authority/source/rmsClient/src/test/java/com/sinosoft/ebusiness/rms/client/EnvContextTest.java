@@ -3,6 +3,8 @@ package com.sinosoft.ebusiness.rms.client;
 import junit.framework.Assert;
 import org.junit.Test;
 
+import com.sinosoft.one.rms.client.EnvContext;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ChengQi

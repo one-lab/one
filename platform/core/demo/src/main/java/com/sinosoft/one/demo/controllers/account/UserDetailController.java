@@ -74,11 +74,11 @@ public class UserDetailController {
 		if(user.getUserInfo().getId() == null){
 			user.getUserInfo().setId(user.getId());
 		}
-		user.getUserInfo().setStrGeneral(user.getUserInfo().getGeneral().name());
+		user.getUserInfo().setStrGender(user.getUserInfo().getGender().name());
 		accountManager.saveUserInfo(user.getUserInfo());
 		
 		inv.addFlash("message", "修改用户" + user.getLoginName() + "成功");
-		return "r:/platformDemo/account/user/list";
+		return "r:/account/user/list";
 	}
 
 }

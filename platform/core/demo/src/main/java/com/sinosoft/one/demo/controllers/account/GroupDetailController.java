@@ -31,7 +31,7 @@ public class GroupDetailController {
 		accountManager.saveGroup(group);
 		inv.addFlash("messagea", "修改权限组" + group.getName() + "成功");
 		//inv.addModel("message", "修改权限组" + group.getName() + "成功");
-		return "r:/platformDemo/account/group/";
+		return "r:/account/group/";
 	}
 
 	@Get("group")
