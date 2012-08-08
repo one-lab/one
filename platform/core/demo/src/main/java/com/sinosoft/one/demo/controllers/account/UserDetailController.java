@@ -69,14 +69,8 @@ public class UserDetailController {
 		
 		user.setGroupList(groupList);
 		user.setCreateTime(new Date());
-		accountManager.saveUser(user);
-		
-		if(user.getUserInfo().getId() == null){
-			user.getUserInfo().setId(user.getId());
-		}
-		user.getUserInfo().setStrGender(user.getUserInfo().getGender().name());
-		accountManager.saveUserInfo(user.getUserInfo());
-		
+		accountManager.updateUser(user);
+
 		inv.addFlash("message", "修改用户" + user.getLoginName() + "成功");
 		return "r:/account/user/list";
 	}

@@ -60,8 +60,11 @@ public class AccountManager {
 	}
 
 	@Transactional(readOnly = false)
-	public void saveUser(User entity) {
-		userDao.save(entity);
+	public void saveUser(User user) {
+		userDao.save(user);
+        user.getUserInfo().setId(user.getId());
+        user.getUserInfo().setStrGender(user.getUserInfo().getGender().name());
+        userInfoDao.save(user.getUserInfo());
 	}
 
 	/**
@@ -73,7 +76,21 @@ public class AccountManager {
 			throw new ServiceException("不能删除超级管理员用户");
 		}
 		userDao.delete(id);
+        userInfoDao.delete(id);
 	}
+
+    /**
+     * 修改用户.
+     */
+    @Transactional(readOnly = false)
+    public void updateUser(User user) {
+        userDao.save(user);
+        if(user.getUserInfo().getId() == null){
+            user.getUserInfo().setId(user.getId());
+        }
+        user.getUserInfo().setStrGender(user.getUserInfo().getGender().name());
+        userInfoDao.save(user.getUserInfo());
+    }
 
 	/**
 	 * 判断是否超级管理员.

@@ -99,10 +99,6 @@ public class UserController {
 		user.setId(System.currentTimeMillis());
 		user.setCreateTime(new Date());
 		accountManager.saveUser(user);
-		
-		user.getUserInfo().setId(user.getId());
-		user.getUserInfo().setStrGender(user.getUserInfo().getGender().name());
-		accountManager.saveUserInfo(user.getUserInfo());
 		for (MultipartFile multipartFile : docs) {
 			if(StringUtils.isEmpty(multipartFile.getOriginalFilename())){
 				continue;
@@ -119,7 +115,6 @@ public class UserController {
 	@Get("delete/{id}")
 	public String delete(@Param("id") Long id, Invocation inv) {
 		accountManager.deleteUser(id);
-		accountManager.deleteUerInfo(id);
 		inv.addFlash("message", "删除用户成功");
 		return "r:/account/user/list";
 	}
