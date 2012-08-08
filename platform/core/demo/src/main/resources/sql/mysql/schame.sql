@@ -31,8 +31,8 @@ CREATE TABLE `acct_user` (
   `email` varchar(255) DEFAULT NULL,
   `login_name` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_name` (`login_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1343915760944 DEFAULT CHARSET=utf8;
