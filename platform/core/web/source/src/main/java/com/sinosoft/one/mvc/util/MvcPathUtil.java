@@ -29,13 +29,16 @@ public final class MvcPathUtil {
         return new File(getDirectoryPath(inv, directoryPath));
     }
 
-    public static  String getDirectoryPath(final Invocation inv, final String directoryPath) {
+    public static  String getDirectoryPath(final Invocation inv, String directoryPath) {
         ServletContext sc = inv.getServletContext();
         String realPath = sc.getRealPath(directoryPath);
         if(realPath != null) {
             return realPath;
         }
         try {
+            if(!directoryPath.startsWith("/")) {
+                directoryPath = "/" + directoryPath;
+            }
             realPath =  sc.getResource(directoryPath).toURI().getPath();
         } catch (Exception e) {
             logger.error("get directory path exception. directory path is " + directoryPath, e);
