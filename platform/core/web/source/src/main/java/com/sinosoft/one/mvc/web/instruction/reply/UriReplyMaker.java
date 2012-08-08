@@ -27,6 +27,11 @@ class UriReplyMaker extends ReplyMaker implements UriReply {
 		super.setHeaders(headers);
 		return this;
 	}
+
+    public UriReply header(String key, String value) {
+        addHeader(key, value);
+        return this;
+    }
 //	@Override
 //	public UriReply seeOther(String uri) {
 //		redirectUri = uri;

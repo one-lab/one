@@ -16,7 +16,7 @@ public class ReplyInstruction extends AbstractInstruction {
 	@Override
 	protected void doRender(Invocation inv) throws IOException,
 			ServletException, Exception {
-		reply.populate(inv);
+		((ReplyMaker)reply).populate(inv);
 	}
 
 }

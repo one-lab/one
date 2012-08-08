@@ -1,11 +1,12 @@
 package com.sinosoft.one.mvc.web.instruction.reply;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Charsets;
 import com.sinosoft.one.mvc.web.Invocation;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -18,7 +19,7 @@ import com.sinosoft.one.mvc.util.DateFormatMode;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.AbstractTransport;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Text;
 
-class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
+class EntityReplyMaker<E> extends ReplyMaker implements EntityReply<E> {
 	private Class<? extends AbstractTransport> transport = Text.class;
 	private E entity;
 
@@ -27,45 +28,46 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 	private DateFormatMode dateFormatMode;
 	private String dateFormatString;
 	
-	public AjaxReplyMaker(E entity) {
+	public EntityReplyMaker(E entity) {
 		this.entity = entity;
 	}
 	
-	public AjaxReply<E> type(String mediaType) {
+	public EntityReply<E> type(String mediaType) {
 		super.setType(mediaType);
 		return this;
 	}
 
-	public AjaxReply<E> headers(Map<String, String> headers) {
-		this.headers.putAll(headers);
+	public EntityReply<E> headers(Map<String, String> headers) {
+		setHeaders(headers);
 		return this;
 	}
 
-	@Override
+    public EntityReply<E> header(String key, String value) {
+        addHeader(key, value);
+        return this;
+    }
+
+    public EntityReply<E> downloadFileName(String fileName) {
+        StringsEx.nonEmpty(fileName, "file name cannot be null or empty!");
+        String tempFileName = fileName;
+        try {
+            tempFileName = new String(tempFileName.getBytes("GBK"),"ISO8859-1");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        addHeader("Content-disposition", "attachment; filename=\"" + tempFileName + "\"");
+        return this;
+    }
+
+    @Override
 	public void populate(Invocation inv) throws IOException {
 		HttpServletResponse response = inv.getResponse();
 		// This is where we take all the builder values and encode them in the
 		// response.
 		AbstractTransport transport = inv.getApplicationContext().getBean(
 				this.transport);
+        setResponse(response, transport.contentType());
 
-		// Set any headers (we do this first, so we can override any cheekily
-		// set headers).
-		if (!headers.isEmpty()) {
-			for (Map.Entry<String, String> header : headers.entrySet()) {
-				response.setHeader(header.getKey(), header.getValue());
-			}
-		}
-
-		// If the content type was already set, do nothing.
-		if (response.getContentType() == null) {
-			// By default we use the content type of the transport.
-			if (null == contentType) {
-				response.setContentType(transport.contentType());
-			} else {
-				response.setContentType(contentType);
-			}
-		}
 		if (null != entity) {
 			if (entity instanceof InputStream) {
 				// Stream the response rather than marshalling it through a
@@ -76,7 +78,17 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 				} finally {
 					inputStream.close();
 				}
-			} else {
+			} else if(entity instanceof byte[]) {
+                transport.out(response.getOutputStream(),
+                        entity);
+            } else if(entity instanceof File) {
+                InputStream inputStream = new FileInputStream((File)entity);
+                try {
+                    ByteStreams.copy(inputStream, response.getOutputStream());
+                } finally {
+                    inputStream.close();
+                }
+            }else {
 				if(StringUtils.isEmpty(dateFormatString)) {
 					dateFormatString = DateFormatMode.YYYYMMDDHHMMSS.toString();
 				}
@@ -98,24 +110,24 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 		}
 	}
 
-	public AjaxReply<E> as(Class<? extends AbstractTransport> transport) {
+	public EntityReply<E> as(Class<? extends AbstractTransport> transport) {
 		Preconditions.checkArgument(null != transport,
 				"Transport class cannot be null!");
 		this.transport = transport;
 		return this;
 	}
 
-	public AjaxReply<E> excludes(String excludeFields) {
+	public EntityReply<E> excludes(String excludeFields) {
 		Preconditions.checkNotNull(excludeFields, "The exclude fields cannot be null.");
 		return excludes(excludeFields.split(","));
 	}
 
-	public AjaxReply<E> includes(String includeFields) {
+	public EntityReply<E> includes(String includeFields) {
 		Preconditions.checkNotNull(includeFields, "The include fields cannot be null.");
 		return includes(includeFields.split(","));
 	}
 
-	public AjaxReply<E> dateFormatString(String dateFormatString) {
+	public EntityReply<E> dateFormatString(String dateFormatString) {
 		if(Strings.isNullOrEmpty(dateFormatString)) {
 			this.dateFormatString = DateFormatMode.YYYYMMDDHHMMSS.toString();
 		} else {
@@ -124,7 +136,7 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 		return this;
 	}
 
-	public AjaxReply<E> dateFormatMode(DateFormatMode dateFormatMode) {
+	public EntityReply<E> dateFormatMode(DateFormatMode dateFormatMode) {
 		if(dateFormatMode == null) {
 			this.dateFormatMode = DateFormatMode.YYYYMMDDHHMMSS;
 		} else {
@@ -134,21 +146,20 @@ class AjaxReplyMaker<E> extends ReplyMaker implements AjaxReply<E> {
 		return this;
 	}
 
-	public AjaxReply<E> excludes(String... excludeFields) {
+	public EntityReply<E> excludes(String... excludeFields) {
 		Preconditions.checkState(ArrayUtils.isEmpty(this.includes), "Invoked includes method, cannot inovke the excludes method at the same time.");
 		this.excludes = excludeFields;
 		return this;
 	}
 
-	public AjaxReply<E> includes(String... includeFields) {
+	public EntityReply<E> includes(String... includeFields) {
 		Preconditions.checkState(ArrayUtils.isEmpty(this.excludes), "Invoked excludes method, cannot inovke the inlcudes method at the same time.");
 		this.includes = includeFields;
 		return this;
 	}
 
-	public AjaxReply<E> status(int code) {
+	public EntityReply<E> status(int code) {
 		setStatus(code);
 		return this;
 	}
-
 }

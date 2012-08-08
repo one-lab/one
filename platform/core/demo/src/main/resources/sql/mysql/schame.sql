@@ -60,7 +60,7 @@ CREATE TABLE `acct_userinfo` (
   `PHONE` varchar(255),
   `IDCODE` varchar(255),
   `GENDER` varchar(255),
-  `USER_ID` bigint(20) NOT NULL,
+  `USER_ID` bigint(20),
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

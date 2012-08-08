@@ -111,7 +111,7 @@ public class UserController {
 			multipartFile.transferTo(new File(MvcPathUtil.getDirectoryPath(inv, "/")+multipartFile.getOriginalFilename()));
 		}
 		
-		
+
 //		return Replys.sample().success("创建用户" + user.getLoginName() + "成功");
 		return "r:/account/user/list";
 	}

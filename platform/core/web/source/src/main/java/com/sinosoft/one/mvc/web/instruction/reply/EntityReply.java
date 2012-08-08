@@ -5,7 +5,7 @@ import java.util.Map;
 import com.sinosoft.one.mvc.util.DateFormatMode;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.AbstractTransport;
 
-public interface AjaxReply<E> extends Reply {
+public interface EntityReply<E> extends Reply {
 	/**
 	 * Directs sitebricks to use the given Guice key as a transport to marshall
 	 * the provided entity to the client. Example:
@@ -17,7 +17,7 @@ public interface AjaxReply<E> extends Reply {
 	 * Will marhall the given Person object into XML using the Guice Key bound
 	 * to [Xml.class] (by default this is an XStream based XML transport).
 	 */
-	AjaxReply<E> as(Class<? extends AbstractTransport> transport);
+	EntityReply<E> as(Class<? extends AbstractTransport> transport);
 
 	/**
 	 * When as json.class or xml.class exclude some fields
@@ -27,7 +27,7 @@ public interface AjaxReply<E> extends Reply {
 	 *            the fields format is "firstField,secondField,...,lastField"
 	 * @return
 	 */
-	AjaxReply<E> excludes(String excludeFields);
+	EntityReply<E> excludes(String excludeFields);
 
 	/**
 	 * When parse as json.class or xml.class include some fields
@@ -37,7 +37,7 @@ public interface AjaxReply<E> extends Reply {
 	 *            the fields format is "firstField,secondField,...,lastField"
 	 * @return
 	 */
-	AjaxReply<E> includes(String includeFields);
+	EntityReply<E> includes(String includeFields);
 
 	/**
 	 * When parse as json.class or xml.class exclude some fields
@@ -46,7 +46,7 @@ public interface AjaxReply<E> extends Reply {
 	 *            to exclude fields array
 	 * @return
 	 */
-	AjaxReply<E> excludes(String... excludeFields);
+	EntityReply<E> excludes(String... excludeFields);
 
 	/**
 	 * When as json.class or xml.class exclude some fields
@@ -55,7 +55,7 @@ public interface AjaxReply<E> extends Reply {
 	 *            to exclude fields array
 	 * @return
 	 */
-	AjaxReply<E> includes(String... includeFields);
+	EntityReply<E> includes(String... includeFields);
 
 	/**
 	 * When parse as json.class or xml.class set the special date format
@@ -65,7 +65,7 @@ public interface AjaxReply<E> extends Reply {
 	 *            the default format is "yyyy-MM-dd HH:mm:ss"
 	 * @return
 	 */
-	AjaxReply<E> dateFormatString(String dateFormatString);
+	EntityReply<E> dateFormatString(String dateFormatString);
 
 	/**
 	 * When parse as json.class or xml.class set the special date format
@@ -75,22 +75,32 @@ public interface AjaxReply<E> extends Reply {
 	 *            the default format is DateFormatMode.YYYYMMDDHHMMSS
 	 * @return
 	 */
-	AjaxReply<E> dateFormatMode(DateFormatMode dateFormatMode);
+	EntityReply<E> dateFormatMode(DateFormatMode dateFormatMode);
 
 	/**
 	 * The media type of the response data to send to the client. I.e. the
 	 * mime-type. Example {@code "application/json"} for JSON responses.
 	 */
-	AjaxReply<E> type(String mediaType);
+	EntityReply<E> type(String mediaType);
 
 	/**
 	 * A Map of headers to set directly on the response.
 	 */
-	AjaxReply<E> headers(Map<String, String> headers);
+	EntityReply<E> headers(Map<String, String> headers);
+
+    /**
+     * a header to set directly on the response.
+     */
+    EntityReply<E> header(String key, String value);
+
+    /**
+     * a header to set directly on the response.
+     */
+    EntityReply<E> downloadFileName(String fileName);
 	
 	/**
 	 * Set a custom status code (call this last, it will be overridden if other
 	 * response code directives are called afterward).
 	 */
-	AjaxReply<E> status(int code);
+	EntityReply<E> status(int code);
 }

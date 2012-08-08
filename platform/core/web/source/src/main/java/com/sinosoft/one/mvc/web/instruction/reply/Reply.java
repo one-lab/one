@@ -5,6 +5,5 @@ import java.io.IOException;
 import com.sinosoft.one.mvc.web.Invocation;
 
 public interface Reply {
-	void populate(Invocation inv) throws IOException;
 
 }
