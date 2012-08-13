@@ -45,7 +45,7 @@
         <commons-beanutils.version>1.8.3</commons-beanutils.version>
         <commons-codec.version>1.6</commons-codec.version>
         <commons-fileupload.version>1.2.2</commons-fileupload.version>
-        <commons-jexl.version>2.1.1</commons-jexl.version>
+        <commons-jexl.version>1.1</commons-jexl.version>
         <httpclient.version>4.2.1</httpclient.version>
         <async-http-client.version>1.7.4</async-http-client.version>
         <joda-time.version>2.1</joda-time.version>
@@ -734,7 +734,7 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.commons</groupId>
+                <groupId>commons-jexl</groupId>
                 <artifactId>commons-jexl</artifactId>
                 <version>${commons-jexl.version}</version>
             </dependency>
