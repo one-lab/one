@@ -41,7 +41,7 @@ public class ChoiceUnit implements ExqlUnit {
         this.unitIfFalse = unitIfFalse;
     }
 
-    @Override
+
     public boolean isValid(ExprResolver exprResolver) {
 
         // 解释表达式内容
@@ -62,7 +62,7 @@ public class ChoiceUnit implements ExqlUnit {
         return true;
     }
 
-    @Override
+
     public void fill(ExqlContext exqlContext, ExprResolver exprResolver) throws Exception {
 
         // 解释表达式内容

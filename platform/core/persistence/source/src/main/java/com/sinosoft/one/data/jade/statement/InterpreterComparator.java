@@ -26,7 +26,7 @@ import java.util.Comparator;
  */
 public class InterpreterComparator implements Comparator<Interpreter> {
 
-    @Override
+
     public int compare(Interpreter thees, Interpreter that) {
         Order thessOrder = thees.getClass().getAnnotation(Order.class);
         Order thatOrder = that.getClass().getAnnotation(Order.class);

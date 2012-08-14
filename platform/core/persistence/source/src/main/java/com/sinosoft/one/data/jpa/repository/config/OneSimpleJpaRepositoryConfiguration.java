@@ -59,7 +59,7 @@ public class OneSimpleJpaRepositoryConfiguration extends
 	 * org.springframework.data
 	 * .jpa.repository.config.CommonRepositoryInformation)
 	 */
-	@Override
+
 	public JpaRepositoryConfiguration createSingleRepositoryConfigInformationFor(Element element) {
 
 		return new ManualJpaRepositoryConfigInformation(element, this);

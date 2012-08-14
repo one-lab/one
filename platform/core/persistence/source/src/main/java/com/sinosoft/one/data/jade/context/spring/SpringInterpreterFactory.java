@@ -43,12 +43,12 @@ public class SpringInterpreterFactory implements InterpreterFactory, Application
         this.beanFactory = beanFactory;
     }
 
-    @Override
+
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.beanFactory = applicationContext;
     }
 
-    @Override
+
     public Interpreter[] getInterpreters(StatementMetaData metaData) {
         if (interpreterFactory == null) {
             init();

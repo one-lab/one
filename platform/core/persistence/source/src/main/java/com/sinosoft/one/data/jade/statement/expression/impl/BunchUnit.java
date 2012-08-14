@@ -24,7 +24,7 @@ public class BunchUnit implements ExqlUnit {
         this.units = units;
     }
 
-    @Override
+
     public boolean isValid(ExprResolver exprResolver) {
 
         // 顺序检查子单元
@@ -39,7 +39,7 @@ public class BunchUnit implements ExqlUnit {
         return true;
     }
 
-    @Override
+
     public void fill(ExqlContext exqlContext, ExprResolver exprResolver) throws Exception {
 
         // 顺序输出子单元

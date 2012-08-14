@@ -49,7 +49,7 @@ class OneJpaRepositoryConfigDefinitionParser extends
 	 * (non-Javadoc)
 	 * @see org.springframework.data.repository.config.AbstractRepositoryConfigDefinitionParser#getGlobalRepositoryConfigInformation(org.w3c.dom.Element)
 	 */
-	@Override
+
 	protected OneSimpleJpaRepositoryConfiguration getGlobalRepositoryConfigInformation(Element element) {
 
 		return new OneSimpleJpaRepositoryConfiguration(element);
@@ -59,7 +59,7 @@ class OneJpaRepositoryConfigDefinitionParser extends
 	 * (non-Javadoc)
 	 * @see org.springframework.data.repository.config.AbstractRepositoryConfigDefinitionParser#postProcessBeanDefinition(org.springframework.data.repository.config.SingleRepositoryConfigInformation, org.springframework.beans.factory.support.BeanDefinitionBuilder, org.springframework.beans.factory.support.BeanDefinitionRegistry, java.lang.Object)
 	 */
-	@Override
+
 	protected void postProcessBeanDefinition(JpaRepositoryConfiguration ctx, BeanDefinitionBuilder builder,
 			BeanDefinitionRegistry registry, Object beanSource) {
 
@@ -102,7 +102,7 @@ class OneJpaRepositoryConfigDefinitionParser extends
 	 * @param registry
 	 * @param source
 	 */
-	@Override
+
 	protected void registerBeansForRoot(BeanDefinitionRegistry registry, Object source) {
 
 		super.registerBeansForRoot(registry, source);

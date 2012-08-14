@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 package com.sinosoft.one.data.jade.statement;
+import com.sinosoft.one.data.adapter.exception.BadSqlGrammarException;
+import com.sinosoft.one.data.adapter.exception.SQLSyntaxErrorException;
 import com.sinosoft.one.data.jade.statement.expression.ExqlPattern;
 import com.sinosoft.one.data.jade.statement.expression.impl.ExqlContextImpl;
 import com.sinosoft.one.data.jade.statement.expression.impl.ExqlPatternImpl;
-import org.springframework.jdbc.BadSqlGrammarException;
 
-import java.sql.SQLSyntaxErrorException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +29,8 @@ import java.util.Map;
  */
 public class SystemInterpreter implements Interpreter {
 
-    @Override
-    public void interpret(StatementRuntime runtime) {
+
+    public void interpret(StatementRuntime runtime) throws BadSqlGrammarException {
         // 转换语句中的表达式
         ExqlPattern pattern = ExqlPatternImpl.compile(runtime.getSQL());
         ExqlContextImpl context = new ExqlContextImpl(runtime.getSQL().length() + 32);

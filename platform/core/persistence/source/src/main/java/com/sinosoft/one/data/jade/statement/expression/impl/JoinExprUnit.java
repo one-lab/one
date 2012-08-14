@@ -23,7 +23,7 @@ public class JoinExprUnit implements ExqlUnit {
         this.expr = expr;
     }
 
-    @Override
+
     public boolean isValid(ExprResolver exprResolver) {
 
         // 解释表达式内容
@@ -33,7 +33,7 @@ public class JoinExprUnit implements ExqlUnit {
         return ExqlUtils.isValid(obj);
     }
 
-    @Override
+
     public void fill(ExqlContext exqlContext, ExprResolver exprResolver) throws Exception {
 
         // 解释表达式内容

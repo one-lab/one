@@ -71,14 +71,14 @@ public class ExqlPatternImpl implements ExqlPattern {
         return compiledPattern;
     }
 
-    @Override
+
     public String execute(ExqlContext context, Map<String, ?> map) throws Exception {
 
         // 执行转换
         return execute(context, new ExprResolverImpl(map));
     }
 
-    @Override
+
     public String execute(ExqlContext context, Map<String, ?> mapVars, Map<String, ?> mapConsts)
             throws Exception {
 

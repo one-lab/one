@@ -11,13 +11,13 @@ import com.sinosoft.one.data.jade.statement.expression.ExqlUnit;
  */
 public class EmptyUnit implements ExqlUnit {
 
-    @Override
+
     public boolean isValid(ExprResolver exprResolver) {
         // Empty unit is always valid.
         return true;
     }
 
-    @Override
+
     public void fill(ExqlContext exqlContext, ExprResolver exprResolver) throws Exception {
         // Do nothing.
     }

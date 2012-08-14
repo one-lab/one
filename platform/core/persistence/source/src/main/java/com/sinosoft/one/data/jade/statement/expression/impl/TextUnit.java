@@ -22,14 +22,14 @@ public class TextUnit implements ExqlUnit {
         this.text = text;
     }
 
-    @Override
+
     public boolean isValid(ExprResolver exprResolver) {
 
         // 文本始终有效
         return true;
     }
 
-    @Override
+
     public void fill(ExqlContext exqlContext, ExprResolver exprResolver) throws Exception {
 
         // 输出未经转义的文本

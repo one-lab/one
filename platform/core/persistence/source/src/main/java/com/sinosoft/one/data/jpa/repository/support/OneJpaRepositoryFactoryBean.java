@@ -98,7 +98,7 @@ public class OneJpaRepositoryFactoryBean<T extends Repository<S, ID>, S, ID exte
 	 * @see org.springframework.data.repository.support.
 	 * TransactionalRepositoryFactoryBeanSupport#doCreateRepositoryFactory()
 	 */
-	@Override
+
 	protected OneRepositoryFactorySupport doCreateRepositoryFactory() {
         OneRepositoryFactorySupport oneRepositoryFactorySupport = createRepositoryFactory(entityManager);
         JadeInvocationHandler handler = new JadeInvocationHandler(new DAOMetaData(getObjectType()),
@@ -123,7 +123,7 @@ public class OneJpaRepositoryFactoryBean<T extends Repository<S, ID>, S, ID exte
 	 * @see
 	 * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
-	@Override
+
 	public void afterPropertiesSet() {
 
 		Assert.notNull(entityManager, "EntityManager must not be null!");

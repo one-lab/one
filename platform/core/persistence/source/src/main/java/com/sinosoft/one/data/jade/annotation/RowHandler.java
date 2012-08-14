@@ -55,7 +55,7 @@ public @interface RowHandler {
 
     class ByDefault implements RowMapper {
 
-        @Override
+
         public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
             return null;
         }

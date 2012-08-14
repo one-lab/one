@@ -63,7 +63,7 @@ public class MapEntryRowMapper implements RowMapper {
         this.mapper = mapper;
     }
 
-    @Override
+
     public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
         if (rowNum == 0) {
             if (StringUtils.isNotEmpty(keyColumn)) {

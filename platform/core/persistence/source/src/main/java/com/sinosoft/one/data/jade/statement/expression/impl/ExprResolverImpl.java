@@ -114,7 +114,7 @@ public class ExprResolverImpl implements ExprResolver {
         mapConsts.putAll(map);
     }
 
-    @Override
+
     public Object executeExpr(final String expression) throws Exception {
 
         // 从缓存中获取解析的表达式
@@ -205,12 +205,12 @@ public class ExprResolverImpl implements ExprResolver {
         return expr.evaluate(context);
     }
 
-    @Override
+
     public Object getVar(String variant) {
         return mapVars.get(variant);
     }
 
-    @Override
+
     public void setVar(String variant, Object value) {
         mapVars.put(variant, value);
     }

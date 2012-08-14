@@ -60,7 +60,7 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
 
     private Map<String, RowMapper> rowMappers = new HashMap<String, RowMapper>();
 
-    @Override
+
     public RowMapper getRowMapper(StatementMetaData modifier) {
         RowHandler rowHandler = modifier.getAnnotation(RowHandler.class);
         if (rowHandler != null) {

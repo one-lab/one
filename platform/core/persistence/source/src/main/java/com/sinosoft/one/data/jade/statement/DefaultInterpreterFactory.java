@@ -15,9 +15,9 @@
  */
 package com.sinosoft.one.data.jade.statement;
 
+import com.sinosoft.one.data.adapter.ArraysEx;
 import org.apache.commons.lang.ArrayUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,15 +46,15 @@ public class DefaultInterpreterFactory implements InterpreterFactory {
 
     public synchronized void addInterpreter(Interpreter interpreter) {
         if (!ArrayUtils.contains(this.interpreters, interpreter)) {
-            Interpreter[] interpreters = Arrays.copyOf(this.interpreters,
-                    this.interpreters.length + 1);
+            Interpreter[] interpreters = ArraysEx.copyOf(this.interpreters,
+					this.interpreters.length + 1);
             interpreters[this.interpreters.length] = interpreter;
-            Arrays.sort(interpreters, new InterpreterComparator());
+            ArraysEx.sort(interpreters, new InterpreterComparator());
             this.interpreters = interpreters;
         }
     }
 
-    @Override
+
     public Interpreter[] getInterpreters(StatementMetaData metaData) {
         return interpreters;
     }

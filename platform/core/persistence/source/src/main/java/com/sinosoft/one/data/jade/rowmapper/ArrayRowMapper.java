@@ -36,7 +36,7 @@ public class ArrayRowMapper implements RowMapper {
         this.componentType = returnType.getComponentType();
     }
 
-    @Override
+
     public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
         int columnSize = rs.getMetaData().getColumnCount();
         Object array = Array.newInstance(componentType, columnSize);

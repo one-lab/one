@@ -102,7 +102,7 @@ public final class OneJpaQueryLookupStrategy {
 			super(em, extractor);
 		}
 
-		@Override
+
 		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
 
 			try {
@@ -127,7 +127,7 @@ public final class OneJpaQueryLookupStrategy {
 			super(em, extractor);
 		}
 
-		@Override
+
 		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
 
 			RepositoryQuery query = getSpringDataJpaAdapter().simpleJpaQueryFromQueryAnnotation(method, em);
@@ -174,7 +174,7 @@ public final class OneJpaQueryLookupStrategy {
             this.jadeStrategy = new OneJadeQueryLookupStrategy(em, extractor);
 		}
 
-		@Override
+
 		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
             try {
                 this.jadeStrategy.setMethod(getMethod());
@@ -196,7 +196,7 @@ public final class OneJpaQueryLookupStrategy {
             super(em, extractor);
         }
 
-        @Override
+
         protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
 
             RepositoryQuery query = OneJadeRepositoryQuery.fromSQLAnnotation(new OneJadeQueryMethod(getMethod(), getMetadata()), em);

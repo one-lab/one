@@ -88,7 +88,7 @@ public class JadeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
         }
         return "none".equals(cacheProviderName) ? null : cacheProviderName;
     }
-    @Override
+
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         String[] beanNames = beanFactory.getBeanNamesForType(OneJpaRepositoryFactoryBean.class, true, false);
         for(String beanName : beanNames) {

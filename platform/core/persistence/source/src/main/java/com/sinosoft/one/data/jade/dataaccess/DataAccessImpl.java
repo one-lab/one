@@ -144,7 +144,7 @@ public class DataAccessImpl implements DataAccess {
     }
 
     //    //TODO: 实现批量更新
-    //    @Override
+    //
     //    public int[] batchUpdate(String sql, StatementMetaData modifier,
     //            List<Map<String, Object>> parametersList) {
     //        // 以com.xiaonei.in.dao为试点测试真正的批量插入、更新，不支持返回可能的自增主键

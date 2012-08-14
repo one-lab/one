@@ -63,7 +63,7 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 	 * org.springframework.data.repository.support.RepositoryFactorySupport#
 	 * getTargetRepository(java.lang.Class)
 	 */
-	@Override
+
 	protected Object getTargetRepository(RepositoryMetadata metadata) {
 
 		return getTargetRepository(metadata, entityManager);
@@ -99,7 +99,7 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 	 * org.springframework.data.repository.support.RepositoryFactorySupport#
 	 * getRepositoryBaseClass()
 	 */
-	@Override
+
 	protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata) {
 
 		if (isQueryDslExecutor(metadata.getRepositoryInterface())) {
@@ -128,7 +128,7 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 	 * getQueryLookupStrategy
 	 * (org.springframework.data.repository.query.QueryLookupStrategy.Key)
 	 */
-	@Override
+
 	protected QueryLookupStrategy getQueryLookupStrategy(Key key) {
 
 		return OneJpaQueryLookupStrategy.create(entityManager, key, extractor);
@@ -141,7 +141,7 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 	 * org.springframework.data.repository.support.RepositoryFactorySupport#
 	 * getEntityInformation(java.lang.Class)
 	 */
-	@Override
+
 	@SuppressWarnings("unchecked")
 	public <T, ID extends Serializable> JpaEntityInformation<T, ID> getEntityInformation(Class<T> domainClass) {
 
