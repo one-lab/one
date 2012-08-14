@@ -39,5 +39,7 @@
     	<property name="securityManager" ref="securityManager"/>
 	</bean>
 	
-	<bean id="accountManager" class="com.sinosoft.one.rms.client.AccountManagerLocalImpl"></bean>
+	<bean id="accountManager" class="com.sinosoft.one.rms.client.AccountManagerLocalImpl">
+		<property name="rmsClientService" ref="rmsClientService"></property>
+	</bean>
 </beans>
