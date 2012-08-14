@@ -21,9 +21,6 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 	@Autowired
 	private AccountManager accountManager;
 
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
-	}
 
 	public ShiroDbRealm(){
 		super();
