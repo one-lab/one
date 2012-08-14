@@ -14,7 +14,6 @@ import com.sinosoft.one.rms.clientService.facade.RmsClientService;
  * Time: 6:09 PM
  * To change this template use File | Settings | File Templates.
  */
-@Component
 public class AccountManagerLocalImpl implements AccountManager{
 	
 	//引用的本地接口
