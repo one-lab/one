@@ -34,10 +34,10 @@ public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends 
 			if (dataPower.getTaskId().toString()
 					.equals(EnvContext.getDataAuthorityTaskId().toString())) {
 //				rule = dataPower.getRuleId();// rule即为Beanid
-				DynamicLoadBeanByGroovyPath groovyPath=new DynamicLoadBeanByGroovyPath();
-																	//测试类型1  简单query方式查询 拼接SQL  无别名
-				rule=groovyPath.creatGroovyClass(dataPower.getRule()).creatHQL(sqlOrHql, dataPower.getParam(), user.getLoginComCode(), "Employe.company","ge_rms_company","e");
-				System.out.println(rule);
+//				DynamicLoadBeanByGroovyPath groovyPath=new DynamicLoadBeanByGroovyPath();
+//																	//测试类型1  简单query方式查询 拼接SQL  无别名
+//				rule=groovyPath.creatGroovyClass(dataPower.getRule()).creatHQL(sqlOrHql, dataPower.getParam(), user.getLoginComCode(), "Employe.company","ge_rms_company","e");
+//				System.out.println(rule);
 			}
 		}
 		return rule;
