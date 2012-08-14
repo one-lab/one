@@ -5,7 +5,7 @@ import java.util.List;
 import groovy.sql.Sql;
 
 
-public class queryRuleAccordComAndNextCom implements com.sinosoft.one.rms.client.GroovyService {
+public class queryRuleAccordComAndNextCom  {
  
   public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String tableAlias){
   		String tempSqlOrHQl=""
@@ -108,13 +108,13 @@ public class queryRuleAccordComAndNextCom implements com.sinosoft.one.rms.client
 		int offset=0
 		StringBuffer comCodesSQL = new StringBuffer();
 		comCodesSQL.append(""+tableAlias+"comCode in (");
-	  	sql.eachRow("select comCode from "+comPanyTableName+" start with comCode = '"+comCode+"' connect by prior comCode = upperComCode" ) { row ->
+	  	sql.eachRow("select comCode from "+comPanyTableName+" start with comCode = '"+11+"' connect by prior comCode = upperComCode" ) { row ->
  			offset++
  			comCodesSQL.append(" '" + row.comCode + "',");
 			if(offset%999==0&&offset>=999){
 				comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
 				comCodesSQL.append(")");
-				comCodesSQL.append(" or comCode in(");
+				comCodesSQL.append(" or "+tableAlias+"comCode in(");
 			}
  		}
  		comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
