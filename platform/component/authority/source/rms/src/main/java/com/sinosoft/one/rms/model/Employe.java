@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 
 /**
  * POJO类employe
@@ -76,7 +79,7 @@ public class Employe implements java.io.Serializable {
 	/**
 	 * 属性company的getter方法
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COMCODE")
 	public Company getCompany() {
 		return this.company;

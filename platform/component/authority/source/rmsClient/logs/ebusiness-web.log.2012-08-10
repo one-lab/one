@@ -1,0 +1,91 @@
+2012-08-10 09:38:37,171 [main] ERROR [org.hibernate.hql.PARSER] - line 1:139: unexpected token: with
+2012-08-10 10:00:58,203 [main] ERROR [org.hibernate.hql.PARSER] - line 1:42: unexpected token: with
+2012-08-10 10:03:56,015 [main] ERROR [org.hibernate.hql.PARSER] - line 1:42: unexpected token: with
+2012-08-10 10:07:41,125 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 900, SQLState: 42000
+2012-08-10 10:07:41,125 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - ORA-00900: 无效 SQL 语句
+
+2012-08-10 10:11:50,015 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 900, SQLState: 42000
+2012-08-10 10:11:50,015 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - ORA-00900: 无效 SQL 语句
+
+2012-08-10 10:13:42,609 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 900, SQLState: 42000
+2012-08-10 10:13:42,609 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - ORA-00900: 无效 SQL 语句
+
+2012-08-10 10:15:07,296 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:15:07,296 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:15:07,296 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:15:07,296 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:15:07,296 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:15:07,296 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:18:12,031 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:18:12,031 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:18:12,031 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:18:12,031 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:18:12,031 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:18:12,031 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:24:37,000 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:24:37,000 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:24:37,000 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:24:37,000 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:24:37,000 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:24:37,000 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:26:21,156 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:26:21,156 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:26:21,156 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:26:21,156 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:26:21,156 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:26:21,156 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:28:02,593 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:28:02,593 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:28:02,593 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:28:02,593 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:28:02,593 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:28:02,593 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:30:35,250 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:30:35,250 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:30:35,250 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:30:35,250 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:30:35,250 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:30:35,250 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:32:52,625 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:32:52,625 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:32:52,640 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:32:52,640 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:32:52,640 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:32:52,640 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:34:10,968 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:34:10,968 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:34:10,968 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:34:10,968 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:34:10,968 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:34:10,968 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:38:42,375 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:38:42,375 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:38:42,375 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:38:42,375 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:38:42,375 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:38:42,375 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:52:52,546 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:52:52,546 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:52:52,546 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:52:52,546 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 10:52:52,546 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 10:52:52,546 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 11:49:32,781 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 11:49:32,796 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 11:49:32,796 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 11:49:32,796 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 11:49:32,796 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 11:49:32,796 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 11:51:55,687 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 11:51:55,687 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 11:51:55,687 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 11:51:55,687 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 11:51:55,687 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 17410, SQLState: 08000
+2012-08-10 11:51:55,687 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - 无法从套接字读取更多的数据
+2012-08-10 19:27:23,640 [main] ERROR [org.hibernate.hql.PARSER] - line 1:71: unexpected token: comCode
+2012-08-10 20:39:13,781 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 942, SQLState: 42000
+2012-08-10 20:39:13,796 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - ORA-00942: 表或视图不存在
+
+2012-08-10 20:54:22,828 [main] WARN  [org.hibernate.util.JDBCExceptionReporter] - SQL Error: 942, SQLState: 42000
+2012-08-10 20:54:22,828 [main] ERROR [org.hibernate.util.JDBCExceptionReporter] - ORA-00942: 表或视图不存在
+

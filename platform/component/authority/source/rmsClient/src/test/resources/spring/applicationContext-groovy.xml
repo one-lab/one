@@ -28,4 +28,5 @@
 	<!--<bean id="say" class="org.springframework.scripting.groovy.GroovyScriptFactory">
         <constructor-arg value="classpath*:groovy/sayhello.groovy"/>
     </bean>
---></beans>
+-->
+</beans>

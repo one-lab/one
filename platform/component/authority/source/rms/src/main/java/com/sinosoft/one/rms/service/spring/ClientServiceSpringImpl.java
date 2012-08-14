@@ -13,10 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import com.sinosoft.one.rms.clientService.DataPower;
 import com.sinosoft.one.rms.clientService.Menu;
 import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.model.BusPower;
 import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.ExcPower;
@@ -28,44 +31,46 @@ import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
 import com.sinosoft.one.rms.service.facade.ClientService;
-import com.sinosoft.one.rms.service.facade.GroupService;
-import com.sinosoft.one.rms.service.facade.RmsService;
-import com.sinosoft.one.rms.service.facade.RoleService;
 
-public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String> implements ClientService{
+@Service
+public class ClientServiceSpringImpl extends
+		GenericDaoHibernate<Employe, String> implements ClientService {
 
-//	 private RmsService rmsService;
-//	 private RoleService  roleService;
-//	 private GroupService groupService;
+	// private RmsService rmsService;
+	// private RoleService roleService;
+	// private GroupService groupService;
 
-	 
-	public User getUserByUserCodeComCode(String userCode,String comCode) {
+	/**
+	 * 创建USER对象
+	 */
+	public User getUserByUserCodeComCode(String userCode, String comCode) {
 		Employe employe = findUserByCode(userCode);
-		UserPower userPower=findUserPowerByComUser(userCode, comCode);
+		UserPower userPower = findUserPowerByComUser(userCode, comCode);
 		Assert.notNull(userPower);
-		Company company= findCompanyByComCode(comCode);
+		Company company = findCompanyByComCode(comCode);
 		Assert.notNull(company);
-		List<Group> grouplist =findGroupByUser(userCode);
-		List<String>groupIdList=new ArrayList<String>();
+		List<Group> grouplist = findGroupByUser(userCode);
+		List<String> groupIdList = new ArrayList<String>();
 		for (Group group : grouplist) {
 			groupIdList.add(group.getGroupID());
 		}
-		Set<Role> roles= findRoleByGroup(groupIdList, comCode);
-		List<String> roleIdList=new ArrayList<String>();
+		Set<Role> roles = findRoleByGroup(groupIdList, comCode);
+		List<String> roleIdList = new ArrayList<String>();
 		for (Role role : roles) {
 			roleIdList.add(role.getRoleID());
 		}
-		List<Task> tasklist=findTaskByUserCode(userCode, comCode);
-		List<String>taskIdList=new ArrayList<String>();
+		List<Task> tasklist = findTaskByUserCode(userCode, comCode);
+		List<String> taskIdList = new ArrayList<String>();
 		for (Task task : tasklist) {
 			taskIdList.add(task.getTaskID());
 		}
-		
+
 		List<Menu> menulist = new ArrayList<Menu>();
 		List<Task> topList = new ArrayList<Task>();
 		Map<String, Task> filter = new HashMap<String, Task>();
 		for (Task task : tasklist) {
-			if(StringUtils.isNotBlank(task.getIsAsMenu())&&task.getIsAsMenu().toString().equals("1")){
+			if (StringUtils.isNotBlank(task.getIsAsMenu())
+					&& task.getIsAsMenu().toString().equals("1")) {
 				filter.put(task.getTaskID(), task);
 				if (task.getParent() == null) {
 					topList.add(task);
@@ -73,17 +78,27 @@ public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String
 			}
 		}
 		craeteList(topList, menulist, filter);
-		return new User(employe.getUserCode(),employe.getPassword(),employe.getUserName(),company.getComCode(),company.getComCName(), roleIdList,taskIdList,menulist);
+		List<DataPower> dataPowers = new ArrayList<DataPower>();
+		creatDataPowerList(dataPowers,userPower.getBusPowers());
+		return new User(employe.getUserCode(), employe.getPassword(),
+				employe.getUserName(), company.getComCode(),
+				company.getComCName(), roleIdList, taskIdList, menulist, dataPowers);
 	}
 
-
+	/**
+	 * 组织树状数据
+	 * @param list
+	 * @param dest
+	 * @param filter
+	 */
 	private void craeteList(List<Task> list, List<Menu> dest,
 			Map<String, Task> filter) {
 		for (Iterator<Task> iter = list.iterator(); iter.hasNext();) {
 			Task task = iter.next();
 			if (!filter.containsKey(task.getTaskID()))
 				continue;
-			Menu menu =new Menu(task.getTaskID(),task.getMenuURL(),task.getName());
+			Menu menu = new Menu(task.getTaskID(), task.getMenuURL(),
+					task.getName());
 			if (!task.getChildren().isEmpty()) {
 				List<Menu> ls = new ArrayList<Menu>();
 				menu.setChildren(ls);
@@ -91,66 +106,80 @@ public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String
 			}
 			dest.add(menu);
 		}
-		
+
+	}
+	
+	private void creatDataPowerList(List<DataPower> dataPowers,List<BusPower>busPowers){
+		for (BusPower busPower : busPowers) {
+			if(StringUtils.isNotBlank(busPower.getDataRuleParam())&&busPower.getDataRule()!=null){
+				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(), busPower.getDataRule().getDataRuleID(), busPower.getDataRuleParam(), busPower.getDataRule().getRule());
+				dataPowers.add(dataPower);
+			}else if(busPower.getDataRule()!=null){
+				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(),busPower.getDataRule().getDataRuleID(), null, busPower.getDataRule().getRule());
+				dataPowers.add(dataPower);
+			}
+		}
 	}
 
-
 	/**
-	 * 客户端远程调用 选择机构
+	 *  选择机构
 	 */
-	public List<Company> findCompanysByUserCodeAnyPassword(String userCode, String passWord) {
-		List<Company> companies=new ArrayList<Company>();
+	public List<Company> findCompanysByUserCodeAnyPassword(String userCode,
+			String passWord) {
+		List<Company> companies = new ArrayList<Company>();
 		Employe employe = findUserByCode(userCode);
-		if (employe == null&&(!EncryptUtils.md5(employe.getPassword()).toString().equals(passWord))) {
+		if (employe == null
+				&& (!EncryptUtils.md5(employe.getPassword()).toString()
+						.equals(passWord))) {
 			return companies;
 		} else {
-			 companies=findComByUserCode(userCode);
+			companies = findComByUserCode(userCode);
 		}
 		return companies;
 	}
-	
-	
-	//---------------------------------------------------------------//
 
+//----------------------------------------------------------------------------------------------------//
 
-	Employe findUserByCode(String userCode){
+	Employe findUserByCode(String userCode) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("userCode", userCode);
 		queryRule.addEqual("validStatus", "1");
-		Employe employe = super.findUnique(Employe.class, queryRule);
+		Employe employe =new Employe();
+		employe=super.findUnique(Employe.class, queryRule);
 		return employe;
 	}
-	
+
 	/**
 	 * 根据用户代码机构代码查询权限
+	 * 
 	 * @param userCode
 	 * @param comCode
 	 * @return
 	 */
-	UserPower findUserPowerByComUser(String userCode,String comCode){
+	UserPower findUserPowerByComUser(String userCode, String comCode) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("userCode", userCode);
 		queryRule.addEqual("comCode", comCode);
 		queryRule.addEqual("isValidate", "1");
 		return super.findUnique(UserPower.class, queryRule);
 	}
-	
+
 	Company findCompanyByComCode(String comCode) {
 		Assert.hasText(comCode);
-		return super.get(Company.class,comCode);
-	} 
-	
+		return super.get(Company.class, comCode);
+	}
+
 	List<Group> findGroupByUser(String userCode) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("userCode", userCode);
 		queryRule.addEqual("isValidate", "1");
-		List<UserPower> userPowers=new ArrayList<UserPower>();
-		userPowers=	super.find(UserPower.class, queryRule);
-		List<Group> groups=new ArrayList<Group>();
-		if(userPowers!=null){
+		List<UserPower> userPowers = new ArrayList<UserPower>();
+		userPowers = super.find(UserPower.class, queryRule);
+		List<Group> groups = new ArrayList<Group>();
+		if (userPowers != null) {
 			for (UserPower userPower : userPowers) {
-				List<UserGroup> userGroups=userPower.getUserGroups();
-				if(userGroups!=null){
+				List<UserGroup> userGroups = userPower.getUserGroups();
+				if (userGroups != null) {
 					for (UserGroup userGroup : userGroups) {
 						groups.add(userGroup.getGroup());
 					}
@@ -159,24 +188,24 @@ public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String
 		}
 		return groups;
 	}
-	
+
 	/**
 	 * 根据用户组查询关联的角色
 	 */
-	Set<Role> findRoleByGroup(List<String> groupIDs ,String comCode) {
+	Set<Role> findRoleByGroup(List<String> groupIDs, String comCode) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addIn("groupID", groupIDs);
 		List<Group> groups = super.find(Group.class, queryRule);
 		if (groups == null) {
-			//异常
+			// 异常
 		}
 		Set<GroupRole> groupRoles = new HashSet<GroupRole>();
 		for (Group group : groups) {
 			groupRoles.addAll(group.getGroupRoles());
 		}
-		//根据机构获得指派的信息 取得roleID 过滤用户组关联的角色
-		List<RoleDesignate> roleDesignates=new ArrayList<RoleDesignate>();
-		if(StringUtils.isNotBlank(groupIDs.get(0))){
+		// 根据机构获得指派的信息 取得roleID 过滤用户组关联的角色
+		List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
+		if (StringUtils.isNotBlank(groupIDs.get(0))) {
 			QueryRule queryRole = QueryRule.getInstance();
 			List<String> comCodes = new ArrayList<String>();
 			comCodes.add(comCode);
@@ -185,27 +214,27 @@ public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String
 			queryRole.addIn("id.comCode", comCodes);
 			roleDesignates = super.find(RoleDesignate.class, queryRole);
 		}
-		List<String> roleids=new ArrayList<String>();
+		List<String> roleids = new ArrayList<String>();
 		Set<Role> roles = new HashSet<Role>();
 		for (RoleDesignate roleDesignate : roleDesignates) {
 			roleids.add(roleDesignate.getId().getRoleID());
-			//判断如果是全可见类型的‘*’ 则直接使用
-			if(roleDesignate.getId().getComCode().toString().equals("*")){
+			// 判断如果是全可见类型的‘*’ 则直接使用
+			if (roleDesignate.getId().getComCode().toString().equals("*")) {
 				roles.add(roleDesignate.getRole());
 			}
 		}
-		//根据指派获得的ID过滤用户组角色  获得角色集合
-		for (GroupRole groupRole : groupRoles){
-			for (String roleid : roleids){
-				if(groupRole.getRole().getRoleID().toString().equals(roleid.toString())){
+		// 根据指派获得的ID过滤用户组角色 获得角色集合
+		for (GroupRole groupRole : groupRoles) {
+			for (String roleid : roleids) {
+				if (groupRole.getRole().getRoleID().toString()
+						.equals(roleid.toString())) {
 					roles.add(groupRole.getRole());
 				}
 			}
 		}
 		return roles;
 	}
-	
-	
+
 	/**
 	 * 获得员工在机构下有效权限集合
 	 */
@@ -216,7 +245,7 @@ public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String
 		queryRule.addEqual("userCode", userCode);
 		queryRule.addEqual("comCode", comCode);
 		queryRule.addEqual("isValidate", "1");
-		userPower= super.findUnique(UserPower.class, queryRule);
+		userPower = super.findUnique(UserPower.class, queryRule);
 		List<UserGroup> userGroups = new ArrayList<UserGroup>();
 		if (userPower != null) {
 			userGroups = userPower.getUserGroups();
@@ -293,7 +322,7 @@ public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String
 				queryTask.addEqual("isValidate", "1");
 				tasks.addAll(super.find(Task.class, queryTask));
 			}
-			// 获得除外权限 
+			// 获得除外权限
 			Set<Task> excTasks = new HashSet<Task>();
 			if (userPower != null) {
 				for (ExcPower excpower : userPower.getExcPowers()) {
@@ -321,64 +350,64 @@ public class ClientServiceSpringImpl extends GenericDaoHibernate<Employe, String
 			return userTasksResult;
 		}
 	}
-	
-	
+
 	/**
 	 * 循环获得父节点功能
 	 */
-	public void iterateTask(Set<Task> tsks,Set<Task> tasks){
+	void iterateTask(Set<Task> tsks, Set<Task> tasks) {
 		for (Task task : tasks) {
 			this.getSuppTask(tsks, task);
 		}
 	}
-	 void getSuppTask(Set<Task> result,Task task){
-		 if(task.getIsValidate().toString().equals("1")){
-			 result.add(task);
-		 }
-		if (task.getParent()!=null) {
-			getSuppTask(result,task.getParent());
+
+	void getSuppTask(Set<Task> result, Task task) {
+		if (task.getIsValidate().toString().equals("1")) {
+			result.add(task);
+		}
+		if (task.getParent() != null) {
+			getSuppTask(result, task.getParent());
 		}
 	}
-	
-	//对功能集合排序
-	public List<Task> taskArrange(Set<Task> ts){
-		List<String>ids=new ArrayList<String>();
+
+	// 对功能集合排序
+	List<Task> taskArrange(Set<Task> ts) {
+		List<String> ids = new ArrayList<String>();
 		for (Task task : ts) {
 			ids.add(task.getTaskID());
 		}
-		List<Task> tasks=new ArrayList<Task>();
-		if(ids.size()>0){
+		List<Task> tasks = new ArrayList<Task>();
+		if (ids.size() > 0) {
 			QueryRule queryRule = QueryRule.getInstance();
 			queryRule.addIn("taskID", ids);
 			queryRule.addAscOrder("taskID");
-			tasks=super.find(Task.class, queryRule);
+			tasks = super.find(Task.class, queryRule);
 		}
 		return tasks;
 	}
-	
+
 	/**
 	 * 根据用户代码 获取机构列表(引入机构,登陆时已引入机构)
 	 */
-	 List<Company> findComByUserCode(String userCode){
+	List<Company> findComByUserCode(String userCode) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("userCode", userCode);
 		List<UserPower> userPower = super.find(UserPower.class, queryRule);
 		if (userPower == null || userPower.isEmpty()) {
-			//异常
+			// 异常
 		}
 		List<String> comCodes = new ArrayList<String>();
 		for (Iterator<UserPower> iter = userPower.iterator(); iter.hasNext();) {
 			comCodes.add(iter.next().getComCode());
 		}
-		List<Company> companies=new ArrayList<Company>();
-		if(comCodes.size()>0){ 
-			QueryRule queryRuleComcode=QueryRule.getInstance();
+		List<Company> companies = new ArrayList<Company>();
+		if (comCodes.size() > 0) {
+			QueryRule queryRuleComcode = QueryRule.getInstance();
 			queryRuleComcode.addIn("comCode", comCodes);
-			companies=super.find(Company.class, queryRuleComcode);
+			companies = super.find(Company.class, queryRuleComcode);
 		}
-//		QueryRule queryComCode = QueryRule.getInstance();
-//		queryComCode.addIn("comCode", comCodes);
+		// QueryRule queryComCode = QueryRule.getInstance();
+		// queryComCode.addIn("comCode", comCodes);
 		return companies;
 	}
-	
+
 }

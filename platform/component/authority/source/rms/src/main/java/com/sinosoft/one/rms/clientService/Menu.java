@@ -2,6 +2,7 @@ package com.sinosoft.one.rms.clientService;
 
 import java.util.List;
 
+
 public class Menu {
 	
 	private final String url;

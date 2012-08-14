@@ -91,6 +91,13 @@
 			<artifactId>cxf-rt-transports-http</artifactId>
 		</dependency>
 		<!-- CXF end -->
+		
+		<!-- JSON begin -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+		
 		<!-- log begin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -116,18 +123,27 @@
 			<artifactId>arch4</artifactId>
 			<version>4.2.7</version>
 		</dependency>
+		
 
+		<!-- test begin -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<scope>provided</scope>
+			<version>3.3.2.GA</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>
+			<version>3.3.2.GA</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- test begin -->
+		<dependency>
+			<groupId>oracle</groupId>
+			<artifactId>ojdbc</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 
 		<dependency>
 			<groupId>junit</groupId>

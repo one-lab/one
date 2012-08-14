@@ -2,8 +2,8 @@ package com.sinosoft.one.rms.clientService;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.springframework.util.Assert;
+
 
 /** 
  * webService服务端传输对象
@@ -30,11 +30,13 @@ public class User {
 	
 	private List<Menu> menuList;
 	
+	private List<DataPower> dataPowers;
+	
 	public User(){
 	}
 
 	public User(final String userCode,final String passWord,final String userName,final String loginComCode,final String loginComName,
-		final List<String> roleIdList,final List<String> taskIdList,final List<Menu> menuList){
+		final List<String> roleIdList,final List<String> taskIdList,final List<Menu> menuList, final List<DataPower> dataPowers){
 		Assert.hasText(userCode);
 		Assert.hasText(userName);
 		Assert.hasText(passWord);
@@ -49,6 +51,7 @@ public class User {
 		this.roleIdList = roleIdList;
 		this.taskIdList=taskIdList;
 		this.menuList=menuList;
+		this.dataPowers=dataPowers;
 	}
 
 	public String getLoginComCode() {
@@ -83,6 +86,8 @@ public class User {
 		return Collections.unmodifiableList(menuList);
 	}
 
-
+	public List<DataPower> getDataPowers() {
+		return dataPowers;
+	}
 	
 }

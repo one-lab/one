@@ -249,7 +249,7 @@ public class Group implements java.io.Serializable {
 	/**
 	 * 属性groupRoles的getter方法
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "group")
 	@Fetch(FetchMode.SUBSELECT)
 	public List<GroupRole> getGroupRoles() {
 		return this.groupRoles;
