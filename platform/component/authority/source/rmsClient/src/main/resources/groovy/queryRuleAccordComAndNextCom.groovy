@@ -63,7 +63,7 @@ public class queryRuleAccordComAndNextCom  {
 		}else{
 			tempSqlOrHQl=sqlOrHql+"and "
 		}
-		sqlOrHql =tempSqlOrHQl+"comCode in (select comCode from "+comPanyTableName+" start with comCode = '00' connect by prior comCode = upperComCode)"+orderBy
+		sqlOrHql =tempSqlOrHQl+"comCode in (select comCode from "+comPanyTableName+" start with comCode = '"+comCode+"' connect by prior comCode = upperComCode)"+orderBy
 		return sqlOrHql
   }
   
@@ -71,26 +71,27 @@ public class queryRuleAccordComAndNextCom  {
   
   public String creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String comPanyTableName,String tableAlias){
   		String tempSqlOrHQl=""
-  		tableAlias=tableAlias+"."
+  		if(StringUtils.isNotBlank(tableAlias)){
+  			tableAlias=tableAlias+"."
+  		}else{
+  			tableAlias=""
+  		}
   		String comPanyModelName=""
   		String orderBy=""
-  		String comCode; 
+  		String comCode
   		comCode=loginComCode
-  		String ModelName="Employe.company";
-		String comPanyModelName="";
 		if(StringUtils.isNotBlank(ModelName)&&ModelName.contains(".")){
-			comPanyModelName=ModelName.split(".")[1].toString();
+			comPanyModelName=ModelName.split("\\.")[1].toString();
 			comPanyModelName=comPanyModelName.substring(0, 1).toLowerCase()+comPanyModelName.substring(1, comPanyModelName.length())+".";
-		}else(
+		}else{
 			comPanyModelName=ModelName.substring(0, 1).toLowerCase()+ModelName.substring(1, ModelName.length())+".";
-	
-		)
+		}
 		if(StringUtils.isNotBlank(param)){
   			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
   			comCode=tempMap.get("comCode")
   		}
 		def sql=Sql.newInstance("jdbc:oracle:thin:@localhost:1521:orcl","localcic","localcic","oracle.jdbc.driver.OracleDriver")
-		if(sql.firstRow("select upperComCode from "+comPanyTableName+" where comCode='"+00+"'")==null){
+		if(sql.firstRow("select upperComCode from "+comPanyTableName+" where comCode='"+11+"'")==null){
 			return sqlOrHql
 		}
 		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
@@ -106,14 +107,14 @@ public class queryRuleAccordComAndNextCom  {
 		}
 		int offset=0
 		StringBuffer comCodesSQL = new StringBuffer();
-		comCodesSQL.append("comCode in (");
+		comCodesSQL.append(""+tableAlias+"comCode in (");
 	  	sql.eachRow("select comCode from "+comPanyTableName+" start with comCode = '"+comCode+"' connect by prior comCode = upperComCode" ) { row ->
  			offset++
  			comCodesSQL.append(" '" + row.comCode + "',");
 			if(offset%999==0&&offset>=999){
 				comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
 				comCodesSQL.append(")");
-				comCodesSQL.append(" or uppercomcode in(");
+				comCodesSQL.append(" or comCode in(");
 			}
  		}
  		comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
@@ -125,9 +126,9 @@ public class queryRuleAccordComAndNextCom  {
   
   
   
-  public String creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String ModelNerComParamName){
-  
-  		return sqlOrHql
+  public String creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String comPanyTableName){
+  			
+  		return creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String comPanyTableName,String tableAlias)
   }
   
   
