@@ -5,7 +5,7 @@ import java.util.List;
 import groovy.sql.Sql;
 
 
-public class queryRuleAccordComAndNextCom  {
+public class queryRuleAccordComAndNextCom implements com.sinosoft.one.rms.client.GroovyService {
  
   public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String tableAlias){
   		String tempSqlOrHQl=""
@@ -128,7 +128,7 @@ public class queryRuleAccordComAndNextCom  {
   
   public String creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String comPanyTableName){
   			
-  		return creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String comPanyTableName,String tableAlias)
+  		return creatHQL(sqlOrHql,param,loginComCode,ModelName,comPanyTableName,tableAlias)
   }
   
   
