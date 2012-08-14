@@ -9,7 +9,7 @@
 	<artifactId>rms</artifactId>
 	<version>0.1.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>rms</name>
+	<name>one:rmsCore</name>
 
 
 	<dependencies>
@@ -95,6 +95,7 @@
 			<artifactId>hibernate-annotations</artifactId>
 			<version>3.4.0.GA</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>

@@ -23,13 +23,13 @@ public class TestDataRule {
 
 	@Test
 	public void testGroovyClass() {
-		DynamicLoadBeanByGroovyPath groov = new DynamicLoadBeanByGroovyPath();
-		// //
-		String str = "{comCode:'00'}";
-		System.out.println(groov.creatGroovyClass(
-				"groovy/queryRuleAccordCompany.groovy").creatSQL("",str, "00", "c"));
-	//	System.out.println(groov.creatGroovyClass("groovy/bythisCom.groovy")
-		//		.creatSQL(str, "00"));
+//		DynamicLoadBeanByGroovyPath groov = new DynamicLoadBeanByGroovyPath();
+//		// //
+//		String str = "{comCode:'00'}";
+//		System.out.println(groov.creatGroovyClass(
+//				"groovy/queryRuleAccordCompany.groovy").creatSQL("",str, "00", "c"));
+//	//	System.out.println(groov.creatGroovyClass("groovy/bythisCom.groovy")
+//		//		.creatSQL(str, "00"));
 	}
 
 	@Test

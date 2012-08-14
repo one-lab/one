@@ -7,7 +7,6 @@ import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.framework.utils.StringUtils;
 
-import com.sinosoft.one.rms.client.DynamicLoadBeanByGroovyPath;
 import com.sinosoft.one.rms.client.EnvContext;
 import com.sinosoft.one.rms.clientService.DataPower;
 import com.sinosoft.one.rms.clientService.User;

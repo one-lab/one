@@ -9,10 +9,7 @@
      http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<description>Shiro Configuration</description>
-	
-	<bean id="accountManager" class="com.sinosoft.one.rms.client.AccountManagerLocalImpl">
-		<property name="rmsClientService" ref="rmsClientService"></property>
-	</bean>
+
 	
 	<!-- Shiro's main business-tier object for web-enabled applications -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -42,5 +39,7 @@
 	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
     	<property name="securityManager" ref="securityManager"/>
 	</bean>
-	
+
+    <bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor"/>
+
 </beans>

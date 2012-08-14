@@ -19,7 +19,12 @@
 
     <description>Spring测试环境配置文件</description>
 
+
+    <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
+    <context:component-scan base-package="com.sinosoft.one" />
+
     <context:annotation-config />
+
     <!-- 使用annotation定义Aspect -->
 	<aop:aspectj-autoproxy/> 
 
@@ -44,8 +49,7 @@
 	<bean id="lobHandler" lazy-init="true"
 		class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 	
-    <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
-    <context:component-scan base-package="com.sinosoft.one" />
+
     
     <!-- 
         SpringContextHolder定义 <bean class="org.springside.modules.utils.spring.SpringContextHolder" 
@@ -91,5 +95,9 @@
     
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="defaultTransactionManager"  />
-    
+
+    <bean id="accountManager" class="com.sinosoft.one.rms.client.AccountManagerLocalImpl">
+        <property name="rmsClientService" ref="rmsClientService"></property>
+    </bean>
+
 </beans>
