@@ -12,6 +12,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.rms.client.AccountManager;
+import com.sinosoft.one.rms.client.EnvContext;
 import com.sinosoft.one.rms.clientService.User;
 
 
@@ -21,7 +22,6 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 	private AccountManager accountManager;
 
 	public void setAccountManager(AccountManager accountManager) {
-		System.out.println("account Manager:"+accountManager);
 		this.accountManager = accountManager;
 	}
 
@@ -34,7 +34,10 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 			AuthenticationToken authcToken) throws AuthenticationException {
 		LoginToken token = (LoginToken) authcToken;
 		User user = accountManager.findUserByLoginName(token.getUserCode(),token.getComCode());
-		
+		//此处做处理信息提交前     初始化该用户所有的动态数据规则BEAN
+		//-----------------------------------------------------
+		//
+		EnvContext.setLoginInfo(user);
 		if (user != null) {
 			return new SimpleAuthenticationInfo(user,user.getPassWord(),getName());
 		} else {
@@ -49,10 +52,6 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			info.addRoles(user.getRoleIdList());
 			info.addStringPermissions(user.getTaskIdList());
-//			for (Group group : user.getGroupList()) {
-//				//基于Permission的权限信息
-//				info.addStringPermissions(group.getPermissionList());
-//			}
 			return info;
 		} else {
 			return null;

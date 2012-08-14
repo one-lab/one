@@ -3,6 +3,8 @@ package com.sinosoft.one.rms.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sinosoft.one.rms.clientService.User;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,18 +37,18 @@ public class EnvContext {
         return (String)threadLocal.get().get(DATA);
     }
     
-//    public static void setLoginInfo(LoginInfoDO loginInfoDO) {
-//        Map<String,LoginInfoDO>  loginInfo = threadLocal.get();
-//        if(loginInfo == null){
-//        	loginInfo = new HashMap<String,LoginInfoDO>();
-//            threadLocal.set(loginInfo);
-//        }
-//        loginInfo.put(EMPLOYE,loginInfoDO) ;
-//    }
-//    
-//    public static LoginInfoDO getLoginInfo() {
-//        if(threadLocal.get() == null)
-//            return null;
-//        return (LoginInfoDO)threadLocal.get().get(EMPLOYE);
-//    }
+    public static void setLoginInfo(User loginUser) {
+        Map<String,User>  loginInfo = threadLocal.get();
+        if(loginInfo == null){
+        	loginInfo = new HashMap<String,User>();
+            threadLocal.set(loginInfo);
+        }
+        loginInfo.put(EMPLOYE,loginUser) ;
+    }
+    
+    public static User getLoginInfo() {
+        if(threadLocal.get() == null)
+            return null;
+        return (User)threadLocal.get().get(EMPLOYE);
+    }
 }

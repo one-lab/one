@@ -22,7 +22,7 @@ import java.lang.reflect.Proxy;
 public class RmsAnnotationAspect {
 
 
-    @Around("execution(* com.sinosoft.ebusiness..*.*(..))&&@annotation(DataAuthority)")
+    @Around("execution(* com.sinosoft.one..*.*(..))&&@annotation(DataAuthority)")
     Object register(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method m = signature.getMethod();

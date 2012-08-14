@@ -2,6 +2,7 @@ package com.sinosoft.one.rms.client;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.rms.clientService.User;
 import com.sinosoft.one.rms.clientService.facade.RmsClientService;
@@ -13,6 +14,7 @@ import com.sinosoft.one.rms.clientService.facade.RmsClientService;
  * Time: 6:09 PM
  * To change this template use File | Settings | File Templates.
  */
+@Component
 public class AccountManagerLocalImpl implements AccountManager{
 	
 	//引用的本地接口
@@ -25,7 +27,6 @@ public class AccountManagerLocalImpl implements AccountManager{
 
 	@Autowired
 	public void setRmsClientService(RmsClientService rmsClientService) {
-		System.out.println("11111111");
 		this.rmsClientService = rmsClientService;
 	}
 

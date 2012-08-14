@@ -2,7 +2,7 @@
 <html>
 <script >
 function login(){
-window.location.href='${pageContext.request.contextPath }'+'/web/login.jsp';
+window.location.href='${pageContext.request.contextPath }'+'/login.jsp';
 }
 </script>
 <body onload="login();">

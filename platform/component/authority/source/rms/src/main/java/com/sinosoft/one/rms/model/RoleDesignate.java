@@ -71,7 +71,7 @@ public class RoleDesignate implements java.io.Serializable {
 	/**
 	 * 属性role的getter方法
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ROLEID", nullable = false, insertable = false, updatable = false)
 	public Role getRole() {
 		return this.role;

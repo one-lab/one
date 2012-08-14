@@ -295,7 +295,7 @@ public class Task implements java.io.Serializable {
 		this.children = children;
 	}
 
-	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "PARENTID")
 	@JsonIgnore
 	@XmlTransient
