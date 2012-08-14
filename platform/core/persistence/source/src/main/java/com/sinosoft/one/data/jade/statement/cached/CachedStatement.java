@@ -85,12 +85,12 @@ public class CachedStatement implements Statement {
         }
     }
 
-    @Override
+
     public StatementMetaData getMetaData() {
         return realStatement.getMetaData();
     }
 
-    @Override
+
     public Object execute(Map<String, Object> parameters) {
         Object value = null;
         if (cacheAnnotation == null) {

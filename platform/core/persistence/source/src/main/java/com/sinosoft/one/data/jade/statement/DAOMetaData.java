@@ -60,7 +60,7 @@ public class DAOMetaData {
         return (T) constants.get(fieldName);
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (obj instanceof DAOMetaData) {
             DAOMetaData other = (DAOMetaData) obj;
@@ -69,12 +69,12 @@ public class DAOMetaData {
         return false;
     }
 
-    @Override
+
     public int hashCode() {
         return daoClass.hashCode() * 13;
     }
 
-    @Override
+
     public String toString() {
         return daoClass.getName();
     }

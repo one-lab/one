@@ -52,7 +52,7 @@ public class MockCache implements CacheInterface {
         this.maxSize = maxSize;
     }
 
-    @Override
+
     public Object get(String key) {
 
         Object value = map.get(key);
@@ -64,7 +64,7 @@ public class MockCache implements CacheInterface {
         return value;
     }
 
-    @Override
+
     public boolean set(String key, Object value, int expiry) {
 
         if (logger.isDebugEnabled()) {
@@ -79,7 +79,7 @@ public class MockCache implements CacheInterface {
         return true;
     }
 
-    @Override
+
     public boolean delete(String key) {
 
         if (logger.isDebugEnabled()) {

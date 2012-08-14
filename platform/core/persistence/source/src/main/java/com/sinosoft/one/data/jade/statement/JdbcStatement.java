@@ -76,13 +76,13 @@ public class JdbcStatement implements Statement {
         }
     }
 
-    @Override
+
     public StatementMetaData getMetaData() {
         return metaData;
     }
 
     // TODO: 批量的处理！
-    @Override
+
     public Object execute(Map<String, Object> parameters) {
         if (batchUpdate) {
             //

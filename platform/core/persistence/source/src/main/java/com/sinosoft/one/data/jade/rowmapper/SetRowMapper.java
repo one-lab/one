@@ -32,7 +32,7 @@ public class SetRowMapper extends AbstractCollectionRowMapper {
         super(modifier);
     }
 
-    @Override
+
     @SuppressWarnings("unchecked")
     protected Collection createCollection(int columnSize) {
         return new HashSet(columnSize * 2);

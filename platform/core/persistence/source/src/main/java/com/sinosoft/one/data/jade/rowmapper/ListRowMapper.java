@@ -32,7 +32,7 @@ public class ListRowMapper extends AbstractCollectionRowMapper {
         super(modifier);
     }
 
-    @Override
+
     @SuppressWarnings("unchecked")
     protected Collection createCollection(int columnSize) {
         return new ArrayList(columnSize);

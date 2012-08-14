@@ -73,7 +73,7 @@ public class JadeInvocationHandler implements InvocationHandler {
             ":7", ":8", ":9", ":10", ":11", ":12", ":13", ":14", ":15", ":16", ":17", ":18", ":19",
             ":20", ":21", ":22", ":23", ":24", ":25", ":26", ":27", ":28", ":29", ":30", };
 
-    @Override
+
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         final boolean debugEnabled = logger.isDebugEnabled();
         if (debugEnabled) {
@@ -184,7 +184,7 @@ public class JadeInvocationHandler implements InvocationHandler {
                 + method.getName());
     }
 
-    @Override
+
     public String toString() {
         DAO dao = daoMetaData.getDAOClass().getAnnotation(DAO.class);
         String toString = daoMetaData.getDAOClass().getName()//

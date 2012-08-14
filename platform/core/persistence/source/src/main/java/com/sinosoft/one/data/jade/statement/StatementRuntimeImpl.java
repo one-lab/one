@@ -42,37 +42,37 @@ public class StatementRuntimeImpl implements StatementRuntime {
         this.sql = metaData.getSQL();
     }
 
-    @Override
+
     public StatementMetaData getMetaData() {
         return metaData;
     }
 
-    @Override
+
     public Map<String, Object> getParameters() {
         return this.parameters;
     }
 
-    @Override
+
     public void setSQL(String sql) {
         this.sql = sql;
     }
 
-    @Override
+
     public String getSQL() {
         return sql;
     }
 
-    @Override
+
     public Object[] getArgs() {
         return args;
     }
 
-    @Override
+
     public void setArgs(Object[] args) {
         this.args = args;
     }
 
-    @Override
+
     public Map<String, Object> getProperties() {
         if (properties == null) {
             return Collections.emptyMap();
@@ -80,7 +80,7 @@ public class StatementRuntimeImpl implements StatementRuntime {
         return Collections.unmodifiableMap(this.properties);
     }
 
-    @Override
+
     public void setProperty(String name, Object value) {
         if (properties == null) {
             properties = new HashMap<String, Object>();
@@ -89,7 +89,7 @@ public class StatementRuntimeImpl implements StatementRuntime {
     }
 
     @SuppressWarnings("unchecked")
-    @Override
+
     public <T> T getProperty(String name) {
         return (T) (properties == null ? null : properties.get(name));
     }

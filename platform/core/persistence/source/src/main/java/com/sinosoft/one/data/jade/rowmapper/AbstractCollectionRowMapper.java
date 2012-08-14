@@ -42,7 +42,7 @@ public abstract class AbstractCollectionRowMapper implements RowMapper {
         elementType = genericTypes[0];
     }
 
-    @Override
+
     @SuppressWarnings("unchecked")
     public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
         int columnSize = rs.getMetaData().getColumnCount();

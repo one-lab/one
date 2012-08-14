@@ -31,7 +31,7 @@ public class ForEachUnit implements ExqlUnit {
         this.unit = unit;
     }
 
-    @Override
+
     public boolean isValid(ExprResolver exprResolver) {
 
         // 解释表达式内容
@@ -45,7 +45,7 @@ public class ForEachUnit implements ExqlUnit {
         return false;
     }
 
-    @Override
+
     public void fill(ExqlContext exqlContext, ExprResolver exprResolver) throws Exception {
 
         // 解释表达式内容

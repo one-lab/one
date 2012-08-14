@@ -34,7 +34,7 @@ public class SimpleInterpreter implements Interpreter {
 
     private static final Pattern NAMED_PARAM_PATTERN = Pattern.compile("(\\:([a-zA-Z0-9_\\.]+))");
 
-    @Override
+
     public void interpret(StatementRuntime runtime) {
 
         final List<Object> parametersAsList = new LinkedList<Object>();

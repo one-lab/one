@@ -127,7 +127,7 @@ public class StatementMetaData {
         return method.getAnnotation(annotationClass);
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (obj instanceof StatementMetaData) {
             StatementMetaData modifier = (StatementMetaData) obj;
@@ -136,12 +136,12 @@ public class StatementMetaData {
         return false;
     }
 
-    @Override
+
     public int hashCode() {
         return daoMetaData.hashCode() ^ method.hashCode();
     }
 
-    @Override
+
     public String toString() {
         return daoMetaData.getDAOClass().getName() + '#' + method.getName();
     }

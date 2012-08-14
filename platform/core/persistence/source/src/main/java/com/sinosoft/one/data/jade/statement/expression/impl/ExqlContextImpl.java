@@ -37,24 +37,24 @@ public class ExqlContextImpl implements ExqlContext {
         builder = new StringBuilder(capacity);
     }
 
-    @Override
+
     public Object[] getParams() {
         return params.toArray();
     }
 
-    @Override
+
     public void fillChar(char ch) {
         builder.append(ch);
     }
 
-    @Override
+
     public void fillText(String string) {
 
         // 直接输出字符串
         builder.append(string);
     }
 
-    @Override
+
     public void fillValue(Object obj) {
 
         if (obj instanceof Collection<?>) {
@@ -77,12 +77,12 @@ public class ExqlContextImpl implements ExqlContext {
         }
     }
 
-    @Override
+
     public String flushOut() {
         return builder.toString();
     }
 
-    @Override
+
     public String toString() {
         return flushOut();
     }

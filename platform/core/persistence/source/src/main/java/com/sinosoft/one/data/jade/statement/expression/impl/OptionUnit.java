@@ -17,7 +17,7 @@ public class OptionUnit implements ExqlUnit {
         this.unit = unit;
     }
 
-    @Override
+
     public boolean isValid(ExprResolver exprResolver) {
 
         // 条件单元始终有效, 因为若子单元无效
@@ -25,7 +25,7 @@ public class OptionUnit implements ExqlUnit {
         return true;
     }
 
-    @Override
+
     public void fill(ExqlContext exqlContext, ExprResolver exprResolver) throws Exception {
 
         // 当且仅当子单元有效时输出

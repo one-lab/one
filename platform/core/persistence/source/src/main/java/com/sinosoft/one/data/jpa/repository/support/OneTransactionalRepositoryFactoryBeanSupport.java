@@ -57,7 +57,7 @@ public abstract class OneTransactionalRepositoryFactoryBeanSupport<T extends Rep
 	 *
 	 * @see OneRepositoryFactorySupport #createRepositoryFactory()
 	 */
-	@Override
+
 	protected final OneRepositoryFactorySupport createRepositoryFactory() {
 
 		OneRepositoryFactorySupport factory = doCreateRepositoryFactory();
