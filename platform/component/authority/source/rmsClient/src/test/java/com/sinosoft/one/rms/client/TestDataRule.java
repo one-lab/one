@@ -1,7 +1,5 @@
 package com.sinosoft.one.rms.client;
 
-import ins.framework.utils.StringUtils;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,17 +7,13 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.sinosoft.one.rms.clientService.User;
-import com.sinosoft.one.rms.service.facade.ClientService;
-
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/spring/applicationContext-test.xml"})
+@ContextConfiguration(locations = { "/spring/applicationContext-test.xml",
+        "/spring/applicationContext-shiro.xml","/spring/applicationContext-rms.xml" })
 public class TestDataRule {
 	@Autowired
 	private TestService testService;
-	@Autowired
-	private ClientService clientService;
 
 	@Test
 	public void testGroovyClass() {
@@ -49,10 +43,10 @@ public class TestDataRule {
 //		System.out.println(sqlOrHql.lastIndexOf(orderBy));
 //		System.out.println(tempSqlOrHQl+" ----- "+orderBy);
 //		System.out.println(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")&&(sqlOrHql.length()-sqlOrHql.lastIndexOf("order by")<10));
-		User user = clientService.getUserByUserCodeComCode("admin", "00");
-		EnvContext.setLoginInfo(user);
+//		User user = clientService.getUserByUserCodeComCode("admin", "00");
+//		EnvContext.setLoginInfo(user);
 //      testService.findUser();
-		testService.findBySql();
+		testService.findbyHql(1, 10);
 //		testService.find(1,10);
 //		testService.findUser();
 //		testService.findUser(1, 10);
@@ -60,12 +54,12 @@ public class TestDataRule {
 //		String comPanyModelName="company";
 //	  	comPanyModelName=comPanyModelName.substring(0, 1).toUpperCase()+comPanyModelName.substring(1, comPanyModelName.length())+".";
 //	  	System.out.println(comPanyModelName);
-		String ModelName="Employe.company";
-		String comPanyModelName="";
-		if(StringUtils.isNotBlank(ModelName)&&ModelName.contains(".")){
-			comPanyModelName=ModelName.split(".")[1].toString();
-			comPanyModelName=comPanyModelName.substring(0, 1).toLowerCase()+comPanyModelName.substring(1, comPanyModelName.length())+".";
-		}
+//		String ModelName="Employe.company";
+//		String comPanyModelName="";
+//		if(StringUtils.isNotBlank(ModelName)&&ModelName.contains(".")){
+//			comPanyModelName=ModelName.split(".")[1].toString();
+//			comPanyModelName=comPanyModelName.substring(0, 1).toLowerCase()+comPanyModelName.substring(1, comPanyModelName.length())+".";
+//		}
 		
 	}
 	
