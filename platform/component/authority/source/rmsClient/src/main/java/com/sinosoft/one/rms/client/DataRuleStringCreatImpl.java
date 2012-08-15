@@ -19,12 +19,16 @@ public class DataRuleStringCreatImpl implements DataRuleStringCreat {
 	
 	private static String comCodeColumnName;
 	
+	private static String superComColumnName;
+	
 	private static String hqlModelClassName;
+	
 	
 	public String editSqlQueryRule(String sql){
 		User user = EnvContext.getLoginInfo();
 		companyTableName=EnvContext.getComPanyTableName();
 		comCodeColumnName=EnvContext.getComCodeColumnName();
+		superComColumnName=EnvContext.getSuperComCulName();
 		String str="";
 		if(StringUtils.isNotBlank(sql)){
 			str=sql;
@@ -34,10 +38,9 @@ public class DataRuleStringCreatImpl implements DataRuleStringCreat {
 					.equals(EnvContext.getDataAuthorityTaskId().toString())) {
 				if(StringUtils.isNotBlank(EnvContext.getTableAlias())){
 					tableAlias=EnvContext.getTableAlias();
-					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(str, dataPower.getParam(), user.getLoginComCode(), companyTableName, comCodeColumnName, tableAlias);
+					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(str, dataPower.getParam(), user.getLoginComCode(), companyTableName, comCodeColumnName, superComColumnName, tableAlias);
 				}else{
-					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(str, dataPower.getParam(), user.getLoginComCode(), companyTableName,comCodeColumnName);
-						
+					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(str, dataPower.getParam(), user.getLoginComCode(), companyTableName, comCodeColumnName, superComColumnName);
 				}
 				
 			}
@@ -49,16 +52,15 @@ public class DataRuleStringCreatImpl implements DataRuleStringCreat {
 		User user = EnvContext.getLoginInfo();
 		companyTableName=EnvContext.getComPanyTableName();
 		hqlModelClassName=EnvContext.getHqlModelClassName();
+		comCodeColumnName=EnvContext.getComCodeColumnName();
 		for (DataPower dataPower : user.getDataPowers()) {
 			if (dataPower.getTaskId().toString()
 					.equals(EnvContext.getDataAuthorityTaskId().toString())) {
 				if(StringUtils.isNotBlank(EnvContext.getTableAlias())){
 					tableAlias=EnvContext.getTableAlias();
-					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatHQL(hql,  dataPower.getParam(), user.getLoginComCode(), hqlModelClassName, companyTableName, hql);
+					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatHQL(hql,  dataPower.getParam(), user.getLoginComCode(), hqlModelClassName, companyTableName,comCodeColumnName,tableAlias);
 				}else{
-					
-					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatHQL(hql,  dataPower.getParam(), user.getLoginComCode(), hqlModelClassName, companyTableName);
-						
+					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatHQL(hql,  dataPower.getParam(), user.getLoginComCode(), hqlModelClassName, companyTableName,comCodeColumnName);
 				}
 				
 			}

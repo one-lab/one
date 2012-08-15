@@ -29,6 +29,8 @@ public class EnvContext {
     private static final String TABLEALIAS="TABLEALIAS";
     
     private static final String COMLUMNNAME="COMLUMNNAME";
+    
+    private static final String SUPERCOMCULNAME="SUPERCOMCULNAME";
 
     public static void setDataAuthorityTaskId(String value) {
 		Map<String,Object>  context = threadLocal.get();
@@ -118,5 +120,20 @@ public class EnvContext {
     	if(threadLocal.get() == null)
     		 return null;
     	return (String) threadLocal.get().get(COMLUMNNAME);
+    }
+	
+	public static void setSuperComCulName(String superComClomnName){
+		Map<String, String> superClomnName = threadLocal.get();
+		if (superClomnName == null) {
+			superClomnName = new HashMap<String, String>();
+			threadLocal.set(superClomnName);
+		}
+		superClomnName.put(SUPERCOMCULNAME, superComClomnName);
+	}
+	
+	public static String getSuperComCulName(){
+    	if(threadLocal.get() == null)
+    		 return null;
+    	return (String) threadLocal.get().get(SUPERCOMCULNAME);
     }
 }

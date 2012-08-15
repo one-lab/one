@@ -15,7 +15,7 @@ public interface DataRuleScript {
 	 * @param tableAlias 自定义SQL时 主查询的表别名（select * from tablename tableAlias where tableAlias.column ）
 	 * @return
 	 */
-	public String creatSQL(String sql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName,String tableAlias);
+	public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName,String upperColumnName,String tableAlias);
 	
 	/**
 	 * 创建规则SQL 无别名时调用
@@ -24,7 +24,7 @@ public interface DataRuleScript {
 	 * @param comPanyTableName 项目对应的的机构表 表名
 	 * @return
 	 */
-	public String creatSQL(String sql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName);
+	public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName,String upperColumnName);
 	
 	
 	/**
@@ -35,7 +35,7 @@ public interface DataRuleScript {
 	 * @param tableAlias 
 	 * @return
 	 */
-	public String creatHQL(String hql,String param,String loginComCode,String ModelName,String comPanyTableName,String tableAlias);
+	public String creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String comPanyTableName,String comCodeColumnName,String tableAlias);
 	
 	/**
 	 * 创建规则SQL 无别名时调用
@@ -44,6 +44,6 @@ public interface DataRuleScript {
 	 * @param comPanyModelName HQL查询时 需要传入的机构MODEL类名
 	 * @return
 	 */
-	public String creatHQL(String hql,String param,String loginComCode,String ModelName,String comPanyTableName);
+	public String creatHQL(String sqlOrHql,String param,String loginComCode,String ModelName,String comPanyTableName,String comCodeColumnName);
 	
 }
