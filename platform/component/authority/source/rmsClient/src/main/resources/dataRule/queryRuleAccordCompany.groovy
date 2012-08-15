@@ -1,13 +1,18 @@
 import com.alibaba.fastjson.JSON;
 import ins.framework.utils.StringUtils;
+import com.sinosoft.one.rms.client.DataRuleScript;
 
-public class queryRuleAccordCompany  {
+public class queryRuleAccordCompany implements DataRuleScript {
  	
-  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String tableAlias){
+  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName,String upperColumnName,String tableAlias){
   		String tempSqlOrHQl=""
   		String orderBy=""
   		String comCode 
   		tableAlias=tableAlias+"."
+  		String comColeCloName="comCode"
+  		if(StringUtils.isNotBlank(comCodeColumnName)){
+  			comColeCloName=comCodeColumnName
+  		}
   		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
 			if(sqlOrHql.contains(")")&&(sqlOrHql.substring(sqlOrHql.lastIndexOf(")"), sqlOrHql.length()).contains("order by"))){
 				tempSqlOrHQl=sqlOrHql.substring(0, sqlOrHql.lastIndexOf(")")+1);
@@ -20,19 +25,22 @@ public class queryRuleAccordCompany  {
 		if(StringUtils.isNotBlank(param)){
 			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
 			comCode=tempMap.get("comCode")
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+"comCode='"+comCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+""+comCodeColumnName+"='"+comCode+"'"+orderBy
 			return sqlOrHql
 		}else{
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+"comCode='"+loginComCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+""+comCodeColumnName+"='"+loginComCode+"'"+orderBy
 			return sqlOrHql
 		}
   }
   
-  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName){
+  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName,String upperColumnName){
 		String tempSqlOrHQl=""
   		String orderBy=""
   		String comCode 
-  		tableAlias=tableAlias+"."
+  		String comColeCloName="comCode"
+  		if(StringUtils.isNotBlank(comCodeColumnName)){
+  			comColeCloName=comCodeColumnName
+  		}
   		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
 			if(sqlOrHql.contains(")")&&(sqlOrHql.substring(sqlOrHql.lastIndexOf(")"), sqlOrHql.length()).contains("order by"))){
 				tempSqlOrHQl=sqlOrHql.substring(0, sqlOrHql.lastIndexOf(")")+1);
@@ -45,10 +53,10 @@ public class queryRuleAccordCompany  {
 		if(StringUtils.isNotBlank(param)){
 			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
 			comCode=tempMap.get("comCode")
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+"comCode='"+comCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+" and "+comColeCloName+"='"+comCode+"'"+orderBy
 			return sqlOrHql
 		}else{
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+"comCode='"+loginComCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+" and "+comColeCloName+"='"+loginComCode+"'"+orderBy
 			return sqlOrHql
 		}
   }

@@ -27,7 +27,8 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
     @Test
     public void getDataRule(){
         //Assert.assertEquals(hello.say(),"hello" )   ;
-        Assert.assertEquals(dataRuleFactoryPostProcessor.getScript("helloWorld").rule(), "hello");
+//        Assert.assertEquals(dataRuleFactoryPostProcessor.getScript("helloWorld").rule(), "hello");
+    	Assert.assertEquals(dataRuleFactoryPostProcessor.getScript("helloWorld"), "hello");
     }
 
 }

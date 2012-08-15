@@ -12,12 +12,6 @@
 	<name>one:rmsClient</name>
 	<description>2221277676,2573168189,416975086</description>
 	<dependencies>
-		<!--rms Logcal -->
-		<dependency>
-			<groupId>com.sinosoft.one</groupId>
-			<artifactId>rms</artifactId>
-			<version>0.1.2-SNAPSHOT</version>
-		</dependency>
 		<!-- j2ee web spec -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -48,6 +42,10 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-groovy</artifactId>
+        </dependency>
 		<!-- spring aop -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -104,7 +102,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
@@ -119,19 +116,6 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.sinosoft</groupId>
-			<artifactId>arch4</artifactId>
-			<version>4.2.7</version>
-		</dependency>
-
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-groovy</artifactId>
-        </dependency>
-
-		
-
 		<!-- test begin -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -145,33 +129,40 @@
 			<version>3.3.2.GA</version>
 			<scope>test</scope>
 		</dependency>
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>3.3.2.GA</version>
             <scope>test</scope>
         </dependency>
-
 		<dependency>
 			<groupId>oracle</groupId>
 			<artifactId>ojdbc</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		<!-- test end -->
+		<!--dependency model -->
+		<!--rms Logcal -->
+		<dependency>
+			<groupId>com.sinosoft.one</groupId>
+			<artifactId>rms</artifactId>
+			<version>0.1.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sinosoft</groupId>
+			<artifactId>arch4</artifactId>
+			<version>4.2.7</version>
+		</dependency>
 	</dependencies>
 
 

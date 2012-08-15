@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String>implements TestService  {
 
 
-    @DataAuthority(value = "RMS012")
+    @DataAuthority(value = "RMS012" )
     public List  findUser() {
     	QueryRule queryRule=QueryRule.getInstance();
     	queryRule.addEqual("validStatus", "1");

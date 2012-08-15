@@ -31,6 +31,9 @@ public class RmsAnnotationAspect {
         }
         DataAuthority dataAuthority = m.getAnnotation(DataAuthority.class);
         EnvContext.setDataAuthorityTaskId(dataAuthority.value());
+        EnvContext.setComPanyTableName(dataAuthority.comPanyTableName());
+        EnvContext.setHqlModelClassName(dataAuthority.hqlModelClassName());
+        EnvContext.setTableAlias(dataAuthority.tableAlias());
         return pjp.proceed();
     }
 }

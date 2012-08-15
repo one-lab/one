@@ -14,5 +14,9 @@ import java.lang.annotation.Target;
 @Target(value={ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface DataAuthority {
-    String value() default "[unassigned]"; ;
+    String value() default "[unassigned]"; 
+    String tableAlias() default "[unassigned]";
+    String comPanyTableName() default "[unassigned]";
+    String hqlModelClassName() default "[unassigned]";
+    String comCodeColumnName()  default "[unassigned]";
 }

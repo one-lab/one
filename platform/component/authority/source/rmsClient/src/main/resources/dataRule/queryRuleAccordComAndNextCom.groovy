@@ -1,24 +1,34 @@
+import com.sinosoft.one.rms.client.DataRuleScript
 import com.alibaba.fastjson.JSON;
 import ins.framework.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import groovy.sql.Sql;
+import com.sinosoft.one.rms.service.facade.RmsService;
 
-
-public class queryRuleAccordComAndNextCom  {
+public class queryRuleAccordComAndNextCom implements DataRuleScript {
+	 	
+  pirvate RmsService rmsService;
  
-  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String tableAlias){
+  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName,String upperColumnName,String tableAlias){
   		String tempSqlOrHQl=""
   		String orderBy=""
   		String comCode; 
+  		String upperComCodeCloName="upperComCode"
+  		String comColeCloName="comCode"
   		comCode=loginComCode
   		tableAlias=tableAlias+"."
   		if(StringUtils.isNotBlank(param)){
   			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
   			comCode=tempMap.get("comCode")
   		}
-  		def sql=Sql.newInstance("jdbc:oracle:thin:@localhost:1521:orcl","localcic","localcic","oracle.jdbc.driver.OracleDriver")
-		if(sql.firstRow("select upperComCode from "+comPanyTableName+" where comCode='"+11+"'")==null){
+  		if(StringUtils.isNotBlank(upperColumnName)){
+  			upperComCodeCloName=upperColumnName
+  		}
+  		if(StringUtils.isNotBlank(comCodeColumnName)){
+  			comColeCloName=comCodeColumnName
+  		}
+		if(!rmsService.isExtSubCom(comCode)){
 			return sqlOrHql
 		}
 		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
@@ -32,24 +42,31 @@ public class queryRuleAccordComAndNextCom  {
 		}else{
 			tempSqlOrHQl=sqlOrHql+"and "
 		}
-		sqlOrHql =tempSqlOrHQl+""+tableAlias+"comCode in (select comCode from "+comPanyTableName+" start with comCode = '"+comCode+"' connect by prior comCode = upperComCode)"+orderBy
+		sqlOrHql =tempSqlOrHQl+""+tableAlias+""+comColeCloName+" in (select "+comColeCloName+" from "+comPanyTableName+" start with "+comColeCloName+" = '"+comCode+"' connect by prior "+comColeCloName+" = "+upperComCodeCloName+")"+orderBy
 		return sqlOrHql
   }
   
   
   
   
-  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName){
+  public String creatSQL(String sqlOrHql,String param,String loginComCode,String comPanyTableName,String comCodeColumnName,String upperColumnName){
    		String tempSqlOrHQl=""
   		String orderBy=""
   		String comCode; 
+		String upperComCodeCloName="upperComCode"
+  		String comColeCloName="comCode"
   		comCode=loginComCode
+  		if(StringUtils.isNotBlank(upperColumnName)){
+  			upperComCode=upperColumnName
+  		}
+  		if(StringUtils.isNotBlank(comCodeColumnName)){
+  			comColeCloName=comCodeColumnName
+  		}
   		if(StringUtils.isNotBlank(param)){
   			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
   			comCode=tempMap.get("comCode")
   		}
-  		def sql=Sql.newInstance("jdbc:oracle:thin:@localhost:1521:orcl","localcic","localcic","oracle.jdbc.driver.OracleDriver")
-		if(sql.firstRow("select upperComCode from "+comPanyTableName+" where comCode='"+11+"'")==null){
+  		if(!rmsService.isExtSubCom(comCode)){
 			return sqlOrHql
 		}
 		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
@@ -63,7 +80,7 @@ public class queryRuleAccordComAndNextCom  {
 		}else{
 			tempSqlOrHQl=sqlOrHql+"and "
 		}
-		sqlOrHql =tempSqlOrHQl+"comCode in (select comCode from "+comPanyTableName+" start with comCode = '"+comCode+"' connect by prior comCode = upperComCode)"+orderBy
+		sqlOrHql =tempSqlOrHQl+""+comColeCloName+" in (select "+comColeCloName+" from "+comPanyTableName+" start with "+comColeCloName+" = '"+comCode+"' connect by prior "+comColeCloName+" = "+upperComCodeCloName+")"+orderBy
 		return sqlOrHql
   }
   
@@ -90,8 +107,7 @@ public class queryRuleAccordComAndNextCom  {
   			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
   			comCode=tempMap.get("comCode")
   		}
-		def sql=Sql.newInstance("jdbc:oracle:thin:@localhost:1521:orcl","localcic","localcic","oracle.jdbc.driver.OracleDriver")
-		if(sql.firstRow("select upperComCode from "+comPanyTableName+" where comCode='"+11+"'")==null){
+		if(!rmsService.isExtSubCom(comCode)){
 			return sqlOrHql
 		}
 		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
