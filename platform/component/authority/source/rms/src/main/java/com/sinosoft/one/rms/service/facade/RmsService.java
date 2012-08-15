@@ -143,4 +143,10 @@ public interface RmsService {
 	 */
 	public Company findCompanyByComCode(String comCode);
 	
+	/**
+	 * 查询机构及其下级所有机构
+	 * @param comCode
+	 * @return
+	 */
+	public List<Company> findAllNextLevelCompanyByComCode(String comCode);
 }
