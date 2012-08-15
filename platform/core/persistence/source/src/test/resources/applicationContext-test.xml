@@ -26,11 +26,14 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+    <bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="url" value="jdbc:oracle:thin:@192.168.18.154:1521:orcl"/>
         <property name="username" value="testaccount" />
         <property name="password" value="testpassword" />
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
     </bean>
     <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
+    <bean id="dataSource" class="com.sinosoft.one.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSourceSpied"/>
+    </bean>
 </beans>
