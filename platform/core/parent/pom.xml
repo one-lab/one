@@ -12,6 +12,7 @@
         <servlet-api.version>2.5</servlet-api.version>
         <jsp-api.version>2.0</jsp-api.version>
         <jstl.version>1.2</jstl.version>
+        <jsr.version>1.0</jsr.version>
         <spring.version>3.1.1.RELEASE</spring.version>
         <spring-integration.version>2.1.3.RELEASE</spring-integration.version>
         <spring-data-jpa.version>1.1.0.RELEASE</spring-data-jpa.version>
@@ -404,6 +405,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>jstl</artifactId>
                 <version>${jstl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>jsr250-api</artifactId>
+                <version>${jsr.version}</version>
             </dependency>
             <!-- WEB end -->
 
