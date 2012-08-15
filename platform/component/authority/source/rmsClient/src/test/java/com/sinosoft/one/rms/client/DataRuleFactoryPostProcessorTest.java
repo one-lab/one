@@ -31,9 +31,9 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
 //    	Assert.assertEquals(dataRuleFactoryPostProcessor.getScript("queryRuleAccordComAndNextCom.groovy").creatSQL(sql, param, loginComCode, comPanyTableName, comCodeColumnName), "hello");
 //    	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("", "{comCode:'00'}", "11", "ge_rms_company", "comCode", "upperComCode"));
 //    	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("", null, "11", "", "comCode", "upperComCode","c"));
-//    	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("select *from ge_rms_pany where isvalidate='1'", "{comCode:'00'}", "11", "", "comCode", "upperComCode"));
+    	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("select *from ge_rms_pany where isvalidate='1'", "{comCode:'00'}", "11", "", "comCode", "upperComCode"));
 //    	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatHQL("from Employe where usercode='admin'", null, "11", "Employe.company", "ge_rms_company" ,"comCode"));
-     	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatHQL("from Employe where usercode='admin'", null, "11", null, "ge_rms_company" ,"comCode"));
+//     	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatHQL("from Employe where usercode='admin'", null, "11", null, "ge_rms_company" ,"comCode"));
     }
 
     
