@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
  * To change this template use File | Settings | File Templates.
  */
 public interface SuiteDataSourcePageSql {
-   String suiteSql(String sql,Pageable pageable);
+   String suiteSql(String sql, Pageable pageable);
 }

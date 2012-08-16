@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbscripts namespace="notice" xmlns="http://www.vmars.org/dbscript"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.vmars.org/dbscript ../../../../dbscript.xsd ">
+	<typeAlias alias="Notice" type="com.sinosoft.emergency.model.authorization.Notice"/>
+	<dbscript type="sql" id="selectAllNotices" resultClass="Notice">
+		select * from sys_t_notice t where t.state = '1'
+	</dbscript>
+	<dbscript type="sql" id="selectPublishedNotice" resultClass="Notice">
+		select * from sys_t_notice t where t.state = '1' and published='1'
+	</dbscript>
+	<dbscript type="sql" id="countAllNotices">
+		select count(id) as count from sys_t_notice t where t.state = '1'
+	</dbscript>
+</dbscripts>

@@ -42,7 +42,10 @@
             <groupId>oracle</groupId>
             <artifactId>ojdbc</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <!-- test -->
         <dependency>
             <groupId>org.springframework</groupId>

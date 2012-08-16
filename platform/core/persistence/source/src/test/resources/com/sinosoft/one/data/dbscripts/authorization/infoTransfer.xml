@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbscripts namespace="infoTransfer" xmlns="http://www.vmars.org/dbscript" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vmars.org/dbscript ../../../../../../../../bin/src/main/resources/dbscript.xsd ">
+<typeAlias alias="bmjbxxModel_auth" type="com.sinosoft.emergency.model.authorization.Bmjbxx"/>
+<typeAlias alias="orgnizationModel" type="com.sinosoft.emergency.model.authorization.Orgnization"/>
+<typeAlias alias="employeeModel" type=" com.sinosoft.emergency.model.authorization.Employee"/>
+<dbscript type="sql" id="isLeafBmjbxx">
+	select count(id) as count from t_bs_gy_bmjbxx where parent_id=?
+</dbscript>
+<dbscript type="hql"  id="selectBmjbxx" resultClass="bmjbxxModel_auth">
+	select new com.sinosoft.emergency.model.authorization.Bmjbxx(id,mc) from com.sinosoft.emergency.model.authorization.Bmjbxx a where a.parent_id in (?)
+</dbscript>
+<dbscript type="sql" id="selectOrgnization" resultClass="orgnizationModel">
+	select * from sys_t_orgnization where 1=1
+	<ifNotNullCondition property="key">
+		and parent_id in (#key#)
+	</ifNotNullCondition>
+	<elseCondition>
+		and parent_id is NULL
+	</elseCondition>
+</dbscript>
+<dbscript type="hql" id="selectEmployee" resultClass="employeeModel">
+	select new Employee(ID,ID_BMJBXX,XB,MC,MZ,SFZH,CS_RQ,CJGZ_RQ,JRXT_RQ,YGZT_BZ,SFHR_BZ,CSZY,YGXZ_DM,BG_DZ) from Employee a where a.ID_BMJBXX=?
+</dbscript>
+<dbscript type="sql" id="selectEmployeeNum">
+	select count(id) as count from t_bs_gy_ryjbxx t where t.id_bmjbxx=?
+</dbscript>
+</dbscripts>

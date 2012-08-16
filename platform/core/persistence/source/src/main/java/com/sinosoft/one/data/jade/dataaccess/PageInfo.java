@@ -5,6 +5,7 @@ import java.util.List;
 public class PageInfo<T> {
 	private List<T> content;
 	private Long total;
+	public PageInfo(){}
 	public PageInfo(List<T> content,Long total) {
 		this.content = content;
 		this.total = total;
