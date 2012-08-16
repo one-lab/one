@@ -22,6 +22,7 @@ import com.sinosoft.one.data.jade.dataaccess.PageInfo;
 import com.sinosoft.one.data.jade.statement.Querier;
 import com.sinosoft.one.data.jade.statement.StatementMetaData;
 import com.sinosoft.one.data.jade.statement.StatementRuntime;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.domain.Page;
@@ -73,9 +74,8 @@ public class SelectQuerier implements Querier {
         	args = (Object[]) mp.get("args");
         	
         	String countSql = parseCountSql(sql);
-        	String newSql = parsePageSql(sql);
-        	
-        	PageInfo<?> pageInfo = dataAccess.selectByPage(newSql, countSql, args, rowMapper);
+
+        	PageInfo<?> pageInfo = dataAccess.selectByPage(pageable,sql, countSql, args, rowMapper);
         	listResult = pageInfo.getContent();
         	Page page = new PageImpl(listResult, pageable, pageInfo.getTotal());
     		return page;
@@ -183,9 +183,11 @@ public class SelectQuerier implements Querier {
 		mp.put("args", args1);
 	}
 	private String parseCountSql(String sql) {
-		return null;
+        sql = StringUtils.lowerCase(sql);
+        int end = StringUtils.countMatches(sql,"from");
+        String s = StringUtils.substring(sql,end);
+
+		return "select count(1) " + s;
 	}
-	private String parsePageSql(String sql) {
-		return null;
-	}
+
 }

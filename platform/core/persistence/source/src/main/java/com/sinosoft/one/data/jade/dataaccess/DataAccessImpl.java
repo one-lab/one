@@ -15,8 +15,11 @@
  */
 package com.sinosoft.one.data.jade.dataaccess;
 
+import com.sinosoft.one.data.jade.statement.pageExpression.PageSqlFactory;
+import com.sinosoft.one.data.jade.statement.pageExpression.SuiteDataSourcePageSql;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -50,9 +53,13 @@ public class DataAccessImpl implements DataAccess {
     /**
      * 分页查询 2012-08-16
      */
-    public<T> PageInfo<T> selectByPage(String sql,String countSql, Object[] args, RowMapper rowMapper) {
+    public<T> PageInfo<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper rowMapper) {
     	List<T> countList = select(countSql,args,rowMapper);
     	Long total = (Long) countList.get(0);
+        Session session = em.unwrap(Session.class);
+        PageSqlWork psw = new PageSqlWork(sql,pageable) ;
+        session.doWork(psw);
+        sql = psw.getSql();
     	List<T> content = select(sql,args,rowMapper);
     	PageInfo<T> pageInfo = new PageInfo<T>(content, total);
     	return pageInfo;
@@ -143,4 +150,22 @@ public class DataAccessImpl implements DataAccess {
 			number = ps.executeUpdate();
 		}
     }
+    private class PageSqlWork implements Work {
+        private String sql;
+        private Pageable pageable;
+
+        public String getSql(){
+            return sql;
+        }
+        PageSqlWork(String sql,Pageable pageable){
+            this.sql = sql;
+            this.pageable = pageable;
+        }
+        public void execute(Connection con) throws SQLException {
+            String URl = con.getMetaData().getURL();
+            SuiteDataSourcePageSql dps = PageSqlFactory.createPageSql(URl);
+            sql = dps.suiteSql(sql,pageable);
+        }
+    }
+
 }

@@ -15,6 +15,7 @@
  */
 package com.sinosoft.one.data.jade.dataaccess;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -46,7 +47,7 @@ public interface DataAccess {
      * @param rowMapper
      * @return
      */
-    <T> PageInfo<T> selectByPage(String sql,String countSql, Object[] args, RowMapper rowMapper);
+    <T> PageInfo<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper rowMapper);
     /**
      * 写访问（更新或插入）
      * 
