@@ -435,14 +435,11 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		return employeService.findUserByComCode(comCode);
 	}
 
-	/**
-	 * 查询根据机构代码机构
-	 */
 	public Company findCompanyByComCode(String comCode){
 		Assert.hasText(comCode);
 		return companyService.findCompanyByComCode(comCode);
 	}
-	
+
 	/**
 	 * 查询机构及其下级所有机构
 	 * @param comCode
@@ -458,5 +455,4 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		Assert.hasText(comType);
 		return companyService.findCompanyBySuperAndType(SuppercomCode, comType);
 	}
-	
 }

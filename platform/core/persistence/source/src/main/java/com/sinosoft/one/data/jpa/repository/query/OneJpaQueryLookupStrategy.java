@@ -18,9 +18,8 @@ package com.sinosoft.one.data.jpa.repository.query;
 import org.springframework.data.jpa.repository.query.*;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.data.repository.query.QueryLookupStrategy;
-import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 import org.springframework.data.repository.query.RepositoryQuery;
+
 
 import javax.persistence.EntityManager;
 import java.lang.reflect.Method;
@@ -40,7 +39,7 @@ public final class OneJpaQueryLookupStrategy {
 	}
 
 	/**
-	 * Base class for {@link org.springframework.data.repository.query.QueryLookupStrategy} implementations that need access to an {@link javax.persistence.EntityManager}.
+	 * Base class for {@link QueryLookupStrategy} implementations that need access to an {@link javax.persistence.EntityManager}.
 	 *
 	 * @author Oliver Gierke
 	 */
@@ -81,13 +80,13 @@ public final class OneJpaQueryLookupStrategy {
 		 * org.springframework.data.repository.core.RepositoryMetadata,
 		 * org.springframework.data.repository.core.NamedQueries)
 		 */
-		public final RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, NamedQueries namedQueries) {
+		public final RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, NamedQueries namedQueries, SqlQueries sqlQueries) {
             this.method = method;
             this.metadata = metadata;
-			return resolveQuery(new JpaQueryMethod(method, metadata, provider), em, namedQueries);
+			return resolveQuery(new JpaQueryMethod(method, metadata, provider), em, namedQueries,sqlQueries);
 		}
 
-		protected abstract RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries);
+		protected abstract RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries, SqlQueries sqlQueries);
 	}
 
 	/**
@@ -103,7 +102,7 @@ public final class OneJpaQueryLookupStrategy {
 		}
 
 
-		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
+		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries,SqlQueries sqlQueries) {
 
 			try {
 				return new PartTreeJpaQuery(method, em);
@@ -128,7 +127,7 @@ public final class OneJpaQueryLookupStrategy {
 		}
 
 
-		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
+		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries, SqlQueries sqlQueries) {
 
 			RepositoryQuery query = getSpringDataJpaAdapter().simpleJpaQueryFromQueryAnnotation(method, em);
 
@@ -175,16 +174,16 @@ public final class OneJpaQueryLookupStrategy {
 		}
 
 
-		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
+		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries, SqlQueries sqlQueries) {
             try {
                 this.jadeStrategy.setMethod(getMethod());
                 this.jadeStrategy.setMetadata(getMetadata());
-                return jadeStrategy.resolveQuery(method, em, namedQueries);
+                return jadeStrategy.resolveQuery(method, em, namedQueries, sqlQueries);
             } catch (IllegalStateException e) {
                 try {
-                    return strategy.resolveQuery(method, em, namedQueries);
+                    return strategy.resolveQuery(method, em, namedQueries, sqlQueries);
                 } catch (IllegalStateException e1) {
-                    return createStrategy.resolveQuery(method, em, namedQueries);
+                    return createStrategy.resolveQuery(method, em, namedQueries, sqlQueries);
                 }
             }
 		}
@@ -197,9 +196,9 @@ public final class OneJpaQueryLookupStrategy {
         }
 
 
-        protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries) {
+        protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries, SqlQueries sqlQueries) {
 
-            RepositoryQuery query = OneJadeRepositoryQuery.fromSQLAnnotation(new OneJadeQueryMethod(getMethod(), getMetadata()), em);
+            RepositoryQuery query = OneJadeRepositoryQuery.fromSQLAnnotation(new OneJadeQueryMethod(getMethod(), getMetadata()), em, sqlQueries);
 
             if (null != query) {
                 return query;
@@ -216,7 +215,7 @@ public final class OneJpaQueryLookupStrategy {
 	 * @param key
 	 * @return
 	 */
-	public static QueryLookupStrategy create(EntityManager em, Key key, QueryExtractor extractor) {
+	public static QueryLookupStrategy create(EntityManager em, QueryLookupStrategy.Key key, QueryExtractor extractor) {
 
 		if (key == null) {
 			return new OneCreateIfNotFoundQueryLookupStrategy(em, extractor);

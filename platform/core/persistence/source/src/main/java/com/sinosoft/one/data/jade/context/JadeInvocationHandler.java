@@ -16,23 +16,21 @@
 package com.sinosoft.one.data.jade.context;
 
 import com.sinosoft.one.data.jade.annotation.DAO;
-import com.sinosoft.one.data.jade.annotation.SQLParam;
 import com.sinosoft.one.data.jade.annotation.SQLType;
 import com.sinosoft.one.data.jade.rowmapper.RowMapperFactory;
 import com.sinosoft.one.data.jade.statement.*;
 import com.sinosoft.one.data.jade.statement.cached.CacheProvider;
 import com.sinosoft.one.data.jade.statement.cached.CachedStatement;
+import com.sinosoft.one.data.jpa.repository.query.SqlQueries;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.persistence.EntityManager;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -45,6 +43,8 @@ public class JadeInvocationHandler implements InvocationHandler {
     private static final Log logger = LogFactory.getLog(JadeInvocationHandler.class);
 
     private final ConcurrentHashMap<Method, Statement> statements = new ConcurrentHashMap<Method, Statement>();
+
+	private final Map<String,String> daoSqlQueries = new HashMap<String, String>();
 
     private final DAOMetaData daoMetaData;
 
@@ -69,9 +69,9 @@ public class JadeInvocationHandler implements InvocationHandler {
         this.cacheProvider = cacheProvider;
     }
 
-    private static final String[] INDEX_NAMES = new String[] { ":1", ":2", ":3", ":4", ":5", ":6",
-            ":7", ":8", ":9", ":10", ":11", ":12", ":13", ":14", ":15", ":16", ":17", ":18", ":19",
-            ":20", ":21", ":22", ":23", ":24", ":25", ":26", ":27", ":28", ":29", ":30", };
+    private static final String[] INDEX_NAMES = new String[] { "?1", "?2", "?3", "?4", "?5", "?6",
+            "?7", "?8", "?9", "?10", "?11", "?12", "?13", "?14", "?15", "?16", "?17", "?18", "?19",
+            "?20", "?21", "?22", "?23", "?24", "?25", "?26", "?27", "?28", "?29", "?30", };
 
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -96,7 +96,7 @@ public class JadeInvocationHandler implements InvocationHandler {
             parameters = new HashMap<String, Object>(args.length * 2 + 4);
             for (int i = 0; i < args.length; i++) {
                 parameters.put(INDEX_NAMES[i], args[i]);
-                SQLParam sqlParam = statemenetMetaData.getSQLParamAt(i);
+				Param sqlParam = statemenetMetaData.getSQLParamAt(i);
                 if (sqlParam != null) {
                     parameters.put(sqlParam.value(), args[i]);
                 }
@@ -144,7 +144,8 @@ public class JadeInvocationHandler implements InvocationHandler {
             synchronized (method) {
                 statement = statements.get(method);
                 if (statement == null) {
-                    StatementMetaData smd = new StatementMetaData(daoMetaData, method);
+                    StatementMetaData smd = new StatementMetaData(daoMetaData, method,
+							this.daoSqlQueries.get(this.daoMetaData.getDAOClass().toString().split(" ")[1]+ "." + method.getName()));
                     SQLType sqlType = smd.getSQLType();
                     Querier querier;
                     if (sqlType == SQLType.READ) {
@@ -184,6 +185,16 @@ public class JadeInvocationHandler implements InvocationHandler {
                 + method.getName());
     }
 
+	public void setDaoSqlQueriesByDaoName(SqlQueries sqlQueries) {
+		final String daoName = this.daoMetaData.getDAOClass().toString().split(" ")[1];
+		Enumeration<String> propertyNames = sqlQueries.getPropertyNames();
+		while (propertyNames.hasMoreElements()){
+			final String name = propertyNames.nextElement();
+			if(name.contains(daoName)) {
+				this.daoSqlQueries.put(name,sqlQueries.getQuery(name));
+			}
+		}
+	}
 
     public String toString() {
         DAO dao = daoMetaData.getDAOClass().getAnnotation(DAO.class);

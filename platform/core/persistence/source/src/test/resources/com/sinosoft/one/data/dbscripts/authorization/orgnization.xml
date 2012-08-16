@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbscripts namespace="orgnization" xmlns="http://www.vmars.org/dbscript" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vmars.org/dbscript ../../../../dbscript.xsd ">
+	<typeAlias alias="Orgnization" type="com.sinosoft.emergency.model.authorization.Orgnization"/>
+	<typeAlias alias="Station" type="com.sinosoft.emergency.model.authorization.Station"/>
+	<dbscript type="sql" id="countOrgnizationByParentId">
+		SELECT count(id) as count FROM sys_t_orgnization WHERE state='1' and parent_id=? 
+		<inCondition property="ids">
+			and id not in #ids#
+		</inCondition>
+	</dbscript>
+	<dbscript type="sql" id="selectOrgnizationsByParentId" resultClass="Orgnization">
+		SELECT * FROM sys_t_orgnization WHERE parent_id=? and state='1' order by id desc
+	</dbscript>
+	<dbscript type="sql" id="selectStationsByOrgnizationId" resultClass="Station">
+		SELECT * FROM sys_t_station WHERE orgnization_id=? and state='1'
+	</dbscript>
+	<dbscript type="sql" id="selectStationsByNameAndOrgId" resultClass="Station">
+		SELECT * FROM sys_t_station WHERE orgnization_id=? and state='1'
+		<ifNotNullCondition property="name">
+		 and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="deleteOrgnization">
+		update sys_t_orgnization set state='0' where id=?
+	</dbscript>
+	<dbscript type="sql" id="deleteStation">
+		update sys_t_station set state='0' where id=?
+	</dbscript>
+	<dbscript type="sql" id="countStationByOrgnizationId">
+		select (SELECT COUNT(id)
+          FROM sys_t_station
+         WHERE orgnization_id = ?
+           and state = '1') + (select count(id)
+                                 from sys_t_orgnization
+                                where parent_id = ?
+                                  and state = '1') as count
+  from dual
+	</dbscript>
+	<dbscript type="sql" id="selectParentOrgnizationById" resultClass="Orgnization">
+		select o.id, o.name, o.code, o.type, o.state, o.parent_id, o.description, o.leaf, o.creator_id, o.create_time, o.modifier_id, o.modify_time from sys_t_orgnization o where o.state='1' start with o.id=? 
+      	connect by PRIOR o.parent_id = o.id
+	</dbscript>
+	<dbscript type="sql" id="selectOrgnizationsByUserId" resultClass="Orgnization">
+		select distinct o.id, o.name, o.code, o.type, o.state, o.parent_id, o.description, o.leaf, o.creator_id, o.create_time, o.modifier_id, o.modify_time
+		 from sys_t_orgnization o, sys_t_user_station us, sys_t_station s where us.station_id=s.id and o.id=s.orgnization_id and us.user_id=? and s.state='1' and o.state='1' order by o.code asc 
+	</dbscript>
+	<dbscript type="sql" id="selectStationsByUserId" resultClass="Station">
+		SELECT s.id, s.name, s.orgnization_id, s.description, s.type, s.state, s.creator_id, s.create_time, s.modifier_id, s.modify_time FROM sys_t_station s, sys_t_user_station us WHERE s.id=us.station_id and us.user_id=? and s.state='1'
+	</dbscript>
+	<dbscript type="sql" id="selectOrgnizationsByNameAndUserId" resultClass="Orgnization">
+		select distinct o.id, o.name, o.code, o.type, o.state, o.parent_id, o.description, o.leaf, o.creator_id, o.create_time, o.modifier_id, o.modify_time
+		 from sys_t_orgnization o, sys_t_user_station us, sys_t_station s where us.station_id=s.id and o.id=s.orgnization_id and us.user_id=? and o.state='1' and s.state='1'
+		<ifNotNullCondition property="name">
+			and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	
+	<dbscript type="sql" id="countOrgnizationsByNameAndUserId">
+		select count(distinct o.id) as count
+		 from sys_t_orgnization o, sys_t_user_station us, sys_t_station s where us.station_id=s.id and o.id=s.orgnization_id and us.user_id=? and o.state='1' and s.state='1'
+		 <ifNotNullCondition property="name">
+			and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="countStationsByNameAndOrgId">
+		SELECT COUNT(id) AS count FROM sys_t_station WHERE orgnization_id=? and state='1'
+		<ifNotNullCondition property="name">
+			and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	
+	<dbscript type="sql" id="selectOrgnizationsByNameAndParentId" resultClass="Orgnization">
+		select o.id, o.name, o.code, o.type, o.state, o.parent_id, o.description, o.leaf, o.creator_id, o.create_time, o.modifier_id, o.modify_time
+		 from sys_t_orgnization o where o.state='1'
+		 <ifNotNullCondition property="parentId">
+		 	and o.parent_id=#parentId#
+		 </ifNotNullCondition>
+		 <elseCondition>
+		 	and o.parent_id is null
+		 </elseCondition>
+		 <ifNotNullCondition property="name">
+			and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="countOrgnizationsByNameAndParentId">
+		select count(o.id) as count
+		 from sys_t_orgnization o where o.state='1'
+		 <ifNotNullCondition property="parentId">
+		 	and o.parent_id=#parentId#
+		 </ifNotNullCondition>
+		 <elseCondition>
+		 	and o.parent_id is null
+		 </elseCondition>
+		 <ifNotNullCondition property="name">
+			and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="selectOrgnizationCodeByParentId">
+		select to_char(max(code)) from sys_t_orgnization where 
+		<ifNotNullCondition property="parentId">
+			parent_id=#parentId#
+		</ifNotNullCondition>
+		<elseCondition>
+			parent_id is NULL
+		</elseCondition>
+	</dbscript>
+	<dbscript type="sql" id="selectUserStationNamesByUserId" resultClass="String">
+		select o.name || '-' || s.name as station_name from sys_t_orgnization o, sys_t_station s, sys_t_user_station us where s.orgnization_id=o.id and us.station_id=s.id and us.user_id=?
+	</dbscript>
+	<dbscript type="sql" id="deleteStationRole">
+		DELETE FROM sys_t_station_role WHERE station_id=? and role_id=?
+	</dbscript>
+	<dbscript type="sql" id="deleteStationRoles">
+		DELETE FROM sys_t_station_role WHERE 1!=1 
+		<inCondition property="stationIds">
+			or station_id in #stationIds#
+		</inCondition>
+	</dbscript>
+	<dbscript type="sql" id="selectOrgnizationByCodes" resultClass="Orgnization">
+		select * from sys_t_orgnization t where state='1'
+		<inCondition property="codes">
+			and t.code in #codes#
+		</inCondition>
+	</dbscript>
+</dbscripts>

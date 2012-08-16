@@ -21,6 +21,7 @@ import com.sinosoft.one.data.jade.rowmapper.RowMapperFactory;
 import com.sinosoft.one.data.jade.statement.DAOMetaData;
 import com.sinosoft.one.data.jade.statement.InterpreterFactory;
 import com.sinosoft.one.data.jade.statement.cached.CacheProvider;
+import com.sinosoft.one.data.jpa.repository.query.SqlQueries;
 import org.springframework.data.repository.Repository;
 import org.springframework.util.Assert;
 

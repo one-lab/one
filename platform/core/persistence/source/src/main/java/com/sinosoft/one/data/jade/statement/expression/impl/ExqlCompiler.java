@@ -38,7 +38,7 @@ public class ExqlCompiler {
 
     // 正则表达式
     private static final Pattern PATTERN_KEYWORD = Pattern.compile( // NL
-            "\\:\\:|([\\:\\$]{1}[a-zA-Z0-9_\\.]+)|\\{([^\\{\\}]+)\\}\\?|#(#|!|if|for)?");
+            "\\:\\:|([\\:\\?\\$]{1}[a-zA-Z0-9_\\.]+)|\\{([^\\{\\}]+)\\}\\?|#(#|!|if|for)?");
 
     private static final Pattern PATTERN_IN = Pattern.compile(// NL
             "([a-zA-Z0-9_]*)\\s+in\\s+(.+)");
@@ -438,11 +438,17 @@ public class ExqlCompiler {
     // 进行简单测试
     public static void main(String... args) throws Exception {
 
-        String string = "SELECT :expr1, #($expr2.class),"
-                + " WHERE #if(:expr3) {e = $expr3} #else {e IS NULL}"
-                + "#for(variant in $expr4.bytes) { AND c = :variant}" // NL
-                + " {AND d = :expr5}? {AND f = $expr6}?" // NL
-                + " BY #!(:expr7) ASC";
+        String string = "SELECT ?expr1, #($expr2.class),"
+                + " WHERE #if(?expr3) {e = $expr3} #else {e IS NULL}"
+                + "#for(variant in $expr4.bytes) { AND c = ?variant}" // NL
+                + " {AND d = ?expr5}? {AND f = $expr6}?" // NL
+                + " BY #!(?expr7) ASC";
+
+//		String string = "SELECT :expr1, #($expr2.class),"
+//				+ " WHERE #if(:expr3) {e = $expr3} #else {e IS NULL}"
+//				+ "#for(variant in $expr4.bytes) { AND c = :variant}" // NL
+//				+ " {AND d = :expr5}: {AND f = $expr6}:" // NL
+//				+ " BY #!(:expr7) ASC";
 
         // 在输入中查找  PREFIX 字符
         Matcher matcher = PATTERN_KEYWORD.matcher(string);
@@ -483,7 +489,7 @@ public class ExqlCompiler {
         map.put("expr3", "expr3");
         map.put("expr4", "expr4");
         map.put("expr5", "expr5");
-        // map.put("expr6", "expr6");
+       	map.put("expr6", "expr6");
         map.put("expr7", "expr7");
 
         System.out.println(pattern.execute(context, map, map));

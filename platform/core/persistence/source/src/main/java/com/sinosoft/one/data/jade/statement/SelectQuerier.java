@@ -18,11 +18,16 @@ package com.sinosoft.one.data.jade.statement;
 import com.sinosoft.one.data.jade.annotation.SQLType;
 import com.sinosoft.one.data.jade.dataaccess.DataAccess;
 import com.sinosoft.one.data.jade.dataaccess.DataAccessImpl;
+import com.sinosoft.one.data.jade.dataaccess.PageInfo;
 import com.sinosoft.one.data.jade.statement.Querier;
 import com.sinosoft.one.data.jade.statement.StatementMetaData;
 import com.sinosoft.one.data.jade.statement.StatementRuntime;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.persistence.EntityManager;
@@ -37,107 +42,152 @@ import java.util.*;
  */
 public class SelectQuerier implements Querier {
 
-    private final RowMapper rowMapper;
+	private final RowMapper rowMapper;
 
-    private final Class<?> returnType;
+	private final Class<?> returnType;
 
-    private final EntityManager em;
+	private final EntityManager em;
 
-    public SelectQuerier(EntityManager em, StatementMetaData metaData,
-                         RowMapper rowMapper) {
-        this.em = em;
-        this.returnType = metaData.getMethod().getReturnType();
-        this.rowMapper = rowMapper;
-    }
+	public SelectQuerier(EntityManager em, StatementMetaData metaData,
+						 RowMapper rowMapper) {
+		this.em = em;
+		this.returnType = metaData.getMethod().getReturnType();
+		this.rowMapper = rowMapper;
+	}
 
-    public Object execute(SQLType sqlType, StatementRuntime... runtimes) {
-        return execute(sqlType, (StatementRuntime) runtimes[0]);
-    }
+	public Object execute(SQLType sqlType, StatementRuntime... runtimes) {
 
-    public Object execute(SQLType sqlType, StatementRuntime runtime) {
-        DataAccess dataAccess = new DataAccessImpl(em);
-        // 执行查询
-        List<?> listResult = dataAccess.select(runtime.getSQL(), runtime.getArgs(), rowMapper);
-        final int sizeResult = listResult.size();
+		return execute(sqlType, (StatementRuntime) runtimes[0]);
+	}
 
-        // 将 Result 转成方法的返回类型
-        if (returnType.isAssignableFrom(List.class)) {
+	public Object execute(SQLType sqlType, StatementRuntime runtime) {
+		String sql = runtime.getSQL();
+		Object[] args = runtime.getArgs();
+		DataAccess dataAccess = new DataAccessImpl(em);
+		// 执行查询
+		List<?> listResult = null;
+		if(returnType == Page.class ){
+			Map<String, Object> mp = new HashMap<String, Object>();
 
-            // 返回  List 集合
-            return listResult;
+			splitArgs(mp,args);
+			Pageable pageable = (Pageable) mp.get("pageable");
+			args = (Object[]) mp.get("args");
 
-        } else if (returnType.isArray() && byte[].class != returnType) {
-            Object array = Array.newInstance(returnType.getComponentType(), sizeResult);
-            if (returnType.getComponentType().isPrimitive()) {
-                int len = listResult.size();
-                for (int i = 0; i < len; i++) {
-                    Array.set(array, i, listResult.get(i));
-                }
-            } else {
-                listResult.toArray((Object[]) array);
-            }
-            return array;
+			String countSql = parseCountSql(sql);
 
-        } else if (Map.class.isAssignableFrom(returnType)) {
-            // 将返回的  KeyValuePair 转换成  Map 对象
-            // 因为entry.key可能为null，所以使用HashMap
-            Map<Object, Object> map;
-            if (returnType.isAssignableFrom(HashMap.class)) {
+			PageInfo<?> pageInfo = dataAccess.selectByPage(pageable,sql, countSql, args, rowMapper);
+			listResult = pageInfo.getContent();
+			Page page = new PageImpl(listResult, pageable, pageInfo.getTotal());
+			return page;
+		}
+		else {
+			listResult = dataAccess.select(sql, args, rowMapper);
+			final int sizeResult = listResult.size();
 
-                map = new HashMap<Object, Object>(listResult.size() * 2);
+			// 将 Result 转成方法的返回类型
+			if (returnType.isAssignableFrom(List.class)) {
 
-            } else if (returnType.isAssignableFrom(Hashtable.class)) {
+				// 返回  List 集合
+				return listResult;
 
-                map = new Hashtable<Object, Object>(listResult.size() * 2);
+			} else if (returnType.isArray() && byte[].class != returnType) {
+				Object array = Array.newInstance(returnType.getComponentType(), sizeResult);
+				if (returnType.getComponentType().isPrimitive()) {
+					int len = listResult.size();
+					for (int i = 0; i < len; i++) {
+						Array.set(array, i, listResult.get(i));
+					}
+				} else {
+					listResult.toArray((Object[]) array);
+				}
+				return array;
 
-            } else {
+			} else if (Map.class.isAssignableFrom(returnType)) {
+				// 将返回的  KeyValuePair 转换成  Map 对象
+				// 因为entry.key可能为null，所以使用HashMap
+				Map<Object, Object> map;
+				if (returnType.isAssignableFrom(HashMap.class)) {
 
-                throw new Error(returnType.toString());
-            }
-            for (Object obj : listResult) {
-                if (obj == null) {
-                    continue;
-                }
+					map = new HashMap<Object, Object>(listResult.size() * 2);
 
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) obj;
+				} else if (returnType.isAssignableFrom(Hashtable.class)) {
 
-                if (map.getClass() == Hashtable.class && entry.getKey() == null) {
-                    continue;
-                }
+					map = new Hashtable<Object, Object>(listResult.size() * 2);
 
-                map.put(entry.getKey(), entry.getValue());
-            }
+				} else {
 
-            return map;
+					throw new Error(returnType.toString());
+				}
+				for (Object obj : listResult) {
+					if (obj == null) {
+						continue;
+					}
 
-        } else if (returnType.isAssignableFrom(HashSet.class)) {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>) obj;
 
-            // 返回  Set 集合
-            return new HashSet<Object>(listResult);
+					if (map.getClass() == Hashtable.class && entry.getKey() == null) {
+						continue;
+					}
 
-        } else {
+					map.put(entry.getKey(), entry.getValue());
+				}
 
-            if (sizeResult == 1) {
-                // 返回单个  Bean、Boolean等类型对象
-                return listResult.get(0);
+				return map;
 
-            } else if (sizeResult == 0) {
+			} else if (returnType.isAssignableFrom(HashSet.class)) {
 
-                // 基础类型的抛异常，其他的返回null
-                if (returnType.isPrimitive()) {
-                    String msg = "Incorrect result size: expected 1, actual " + sizeResult + ": "
-                            + runtime.getMetaData();
-                    throw new EmptyResultDataAccessException(msg, 1);
-                } else {
-                    return null;
-                }
+				// 返回  Set 集合
+				return new HashSet<Object>(listResult);
 
-            } else {
-                // IncorrectResultSizeDataAccessException
-                String msg = "Incorrect result size: expected 0 or 1, actual " + sizeResult + ": "
-                        + runtime.getMetaData();
-                throw new IncorrectResultSizeDataAccessException(msg, 1, sizeResult);
-            }
-        }
-    }
+			} else {
+
+				if (sizeResult == 1) {
+					// 返回单个  Bean、Boolean等类型对象
+					return listResult.get(0);
+
+				} else if (sizeResult == 0) {
+
+					// 基础类型的抛异常，其他的返回null
+					if (returnType.isPrimitive()) {
+						String msg = "Incorrect result size: expected 1, actual " + sizeResult + ": "
+								+ runtime.getMetaData();
+						throw new EmptyResultDataAccessException(msg, 1);
+					} else {
+						return null;
+					}
+
+				} else {
+					// IncorrectResultSizeDataAccessException
+					String msg = "Incorrect result size: expected 0 or 1, actual " + sizeResult + ": "
+							+ runtime.getMetaData();
+					throw new IncorrectResultSizeDataAccessException(msg, 1, sizeResult);
+				}
+			}
+		}
+	}
+
+	private void splitArgs(Map<String, Object> mp, Object[] args) {
+		int len = args.length;
+		Object[] args1 = new Object[len-1];
+		if(len>0){
+			for(int i=0,j=0;i<len;i++,j++){
+				if(args[i] instanceof Pageable){
+					mp.put("pageable", args[i]);
+					j--;
+				}
+				else{
+					args1[j] = args[i];
+				}
+			}
+		}
+		mp.put("args", args1);
+	}
+	private String parseCountSql(String sql) {
+		sql = StringUtils.lowerCase(sql);
+		int end = StringUtils.countMatches(sql,"from");
+		String s = StringUtils.substring(sql,end);
+
+		return "select count(1) " + s;
+	}
+
 }

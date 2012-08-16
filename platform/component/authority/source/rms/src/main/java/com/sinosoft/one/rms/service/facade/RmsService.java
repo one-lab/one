@@ -1,4 +1,4 @@
-package com.sinosoft.one.rms.service.facade;
+﻿package com.sinosoft.one.rms.service.facade;
 
 import ins.framework.common.Page;
 
@@ -157,5 +157,5 @@ public interface RmsService {
 	 * @return
 	 */
 	public List<Company>findCompanyBySuperAndType(String SuppercomCode,String comType);
-	
+
 }

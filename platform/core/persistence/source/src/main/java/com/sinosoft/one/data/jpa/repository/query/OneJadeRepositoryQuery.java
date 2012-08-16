@@ -47,11 +47,15 @@ public class OneJadeRepositoryQuery implements RepositoryQuery {
         return null;
     }
 
-    public static RepositoryQuery fromSQLAnnotation(OneJadeQueryMethod queryMethod, EntityManager em) {
+    public static RepositoryQuery fromSQLAnnotation(OneJadeQueryMethod queryMethod, EntityManager em, SqlQueries sqlQueries) {
         LOG.debug("Looking up query for method {}", queryMethod.getName());
-
-        String sql = queryMethod.getAnnotatedSQL();
-
+		String sqlQueryName = queryMethod.getSqlQueryName();
+		String sql = null;
+		if( sqlQueries.hasQuery(sqlQueryName) ) {
+			sql = sqlQueries.getQuery(sqlQueryName);
+		} else {
+			sql = queryMethod.getAnnotatedSQL();
+		}
         return sql == null ? null : new OneJadeRepositoryQuery(queryMethod, em, sql);
     }
 }

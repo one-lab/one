@@ -29,5 +29,4 @@
     
     <bean id="rmsClientService" class="com.sinosoft.one.rms.clientService.facade.RmsClientServiceImpl"></bean>
     
-
 </beans> 

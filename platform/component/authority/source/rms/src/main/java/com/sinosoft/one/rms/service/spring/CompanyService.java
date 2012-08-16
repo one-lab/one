@@ -65,10 +65,11 @@ class CompanyService extends GenericDaoHibernate<Company, String> {
     	return super.find(querycom);
     }
     
-	Company findCompanyByComCode(String comCode) {
+	public Company findCompanyByComCode(String comCode) {
 		return super.get(comCode);
 	} 
   
+
 	List<Company> findAllNextLevelCompanybyComCode(String comCode){
 		StringBuffer sql=new StringBuffer();
 		sql.append("select comCode from ge_rms_company start with comCode='"+comCode+"' connect by prior comcode=upperComcode");

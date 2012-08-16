@@ -2,6 +2,8 @@ package com.sinosoft.one.data.adapter.exception;
 
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 
+import java.sql.*;
+
 public class BadSqlGrammarException extends InvalidDataAccessResourceUsageException {
 
 	private String sql;

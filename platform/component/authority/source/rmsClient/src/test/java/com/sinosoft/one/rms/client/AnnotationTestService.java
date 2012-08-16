@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String>implements TestService  {
 
 
-    @DataAuthority(value = "RMS012" )
+    @DataAuthority(value = "RMS012")
     public List  findUser() {
     	QueryRule queryRule=QueryRule.getInstance();
     	queryRule.addEqual("validStatus", "1");
@@ -47,10 +47,10 @@ public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String
 		return null;
 	}
 	
-//	@DataAuthority(value = "RMS012" )
+	@DataAuthority(value = "RMS012" )
 	public Page findbyHql(int pageNo, int pageSize) {
 		StringBuffer hql=new StringBuffer();
-		hql.append("from Employe where userCode='admin' and  company.comCode ='11'");
+		hql.append("from Group  where comCode='00' order by comCode");
 		return super.findByHql(hql.toString(), pageNo, pageSize);
 	}
 	

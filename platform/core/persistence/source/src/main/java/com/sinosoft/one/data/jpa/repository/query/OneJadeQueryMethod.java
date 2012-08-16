@@ -47,4 +47,8 @@ public class OneJadeQueryMethod extends QueryMethod {
         return method;
     }
 
+	public String getSqlQueryName() {
+		return method.getDeclaringClass().toString().split(" ")[1]+ "." + method.getName();
+	}
+
 }

@@ -17,6 +17,10 @@ package com.sinosoft.one.data.jpa.repository.support;
 
 import com.sinosoft.one.data.jpa.repository.query.OneJadeRepositoryQuery;
 import com.sinosoft.one.data.jade.context.JadeInvocationHandler;
+import com.sinosoft.one.data.jpa.repository.query.PropertiesBasedSqlQueries;
+import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy;
+import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy.Key;
+import com.sinosoft.one.data.jpa.repository.query.SqlQueries;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
@@ -27,8 +31,6 @@ import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.*;
-import org.springframework.data.repository.query.QueryLookupStrategy;
-import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.data.repository.util.ClassUtils;
@@ -56,6 +58,7 @@ public abstract class OneRepositoryFactorySupport {
 	private Key queryLookupStrategyKey;
 	private List<QueryCreationListener<?>> queryPostProcessors = new ArrayList<QueryCreationListener<?>>();
 	private NamedQueries namedQueries = PropertiesBasedNamedQueries.EMPTY;
+	private SqlQueries sqlQueries = PropertiesBasedSqlQueries.EMPTY;
     protected JadeInvocationHandler handler;
 
 
@@ -86,6 +89,17 @@ public abstract class OneRepositoryFactorySupport {
 	 */
 	public void setNamedQueries(NamedQueries namedQueries) {
 		this.namedQueries = namedQueries == null ? PropertiesBasedNamedQueries.EMPTY : namedQueries;
+	}
+
+	public SqlQueries getSqlQueries() {
+		return sqlQueries;
+	}
+
+	public void setSqlQueries(SqlQueries sqlQueries) {
+		this.sqlQueries = sqlQueries == null ? PropertiesBasedSqlQueries.EMPTY : sqlQueries;
+		if(this.handler != null) {
+			this.handler.setDaoSqlQueriesByDaoName(this.sqlQueries);
+		}
 	}
 
 	/**
@@ -216,7 +230,7 @@ public abstract class OneRepositoryFactorySupport {
 	 * Returns the {@link org.springframework.data.repository.query.QueryLookupStrategy} for the given {@link org.springframework.data.repository.query.QueryLookupStrategy.Key}.
 	 *
 	 * @param key can be {@literal null}
-	 * @return the {@link org.springframework.data.repository.query.QueryLookupStrategy} to use or {@literal null} if no queries should be looked up.
+	 * @return the {@link QueryLookupStrategy} to use or {@literal null} if no queries should be looked up.
 	 */
 	protected QueryLookupStrategy getQueryLookupStrategy(Key key) {
 		return null;
@@ -285,7 +299,7 @@ public abstract class OneRepositoryFactorySupport {
 			}
 
 			for (Method method : queryMethods) {
-				RepositoryQuery query = lookupStrategy.resolveQuery(method, repositoryInformation, namedQueries);
+				RepositoryQuery query = lookupStrategy.resolveQuery(method, repositoryInformation, namedQueries, sqlQueries);
                 if(query instanceof OneJadeRepositoryQuery) {
                     ((OneJadeRepositoryQuery)query).setHandler(handler);
                 }

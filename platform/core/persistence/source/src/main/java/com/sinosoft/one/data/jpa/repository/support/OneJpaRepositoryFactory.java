@@ -16,13 +16,13 @@
 package com.sinosoft.one.data.jpa.repository.support;
 
 import com.sinosoft.one.data.jpa.repository.query.OneJpaQueryLookupStrategy;
+import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy;
+import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy.Key;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.QueryExtractor;
 import org.springframework.data.jpa.repository.support.*;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.data.repository.query.QueryLookupStrategy;
-import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
