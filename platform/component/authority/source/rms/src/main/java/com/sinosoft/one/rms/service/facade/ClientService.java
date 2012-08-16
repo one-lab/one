@@ -20,7 +20,7 @@ public interface ClientService {
 	  */
 	 public User getUserByUserCodeComCode(String userCode,String comCode);
 	 /**
-	  * 客户端远程调用 获得机构
+	  * 客户端调用 获得机构
 	  * @param userCode
 	  * @param passWord
 	  * @return

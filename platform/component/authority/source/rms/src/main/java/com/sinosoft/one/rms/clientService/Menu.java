@@ -2,18 +2,26 @@ package com.sinosoft.one.rms.clientService;
 
 import java.util.List;
 
+import org.springframework.util.Assert;
+
 
 public class Menu {
 	
-	private final String url;
+	private  String url;
 	
-	private final String id;
+	private  String id;
 	
-	private final String name;
+	private  String name;
 	
 	private List<Menu> children;
 	
-	public  Menu(final String id,final String url,final String name){
+	public Menu(){
+		
+	}
+	
+	public Menu(final String id,final String url,final String name){
+		Assert.hasText(id);
+		Assert.hasText(name);
 		this.url=url;
 		this.id=id;
 		this.name=name;
@@ -39,4 +47,24 @@ public class Menu {
 	public List<Menu> getChildren() {
 		return children;
 	}
+
+	public void setUrl(String url) {
+		if(this.url==null){
+			this.url = url;
+		}
+	}
+
+	public void setId(String id) {
+		if(this.id ==null){
+			this.id = id;
+		}
+	}
+
+	public void setName(String name) {
+		if(this.name ==null){
+			this.name = name;
+		}
+	}
+	
+	
 }

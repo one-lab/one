@@ -83,11 +83,6 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <lang:groovy id="pdfGenerator"
-            script-source="classpath:rms/HelloWorld.groovy" refresh-check-delay="1000">
-    </lang:groovy>
-    
-    
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="defaultTransactionManager"  />
     

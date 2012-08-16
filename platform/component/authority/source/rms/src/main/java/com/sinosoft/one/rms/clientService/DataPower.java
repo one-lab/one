@@ -6,14 +6,17 @@ import ins.framework.utils.StringUtils;
 
 public class DataPower  {
 	
-	private final String taskId;
+	private  String taskId;
 	
-	private final String ruleId;
+	private  String ruleId;
 	
-	private final String rule;
+	private  String rule;
 	
-	private final String param;
+	private  String param;
 	
+	public DataPower(){
+		
+	}
 	
 	public  DataPower(final String taskId,final String ruleId,final String param,final String rule){
 		Assert.hasText(taskId);
@@ -43,4 +46,30 @@ public class DataPower  {
 	public String getRule() {
 		return rule;
 	}
+
+	public void setTaskId(String taskId) {
+		if(this.taskId ==null){
+			this.taskId = taskId;
+		}
+	}
+
+	public void setRuleId(String ruleId) {
+		if(this.ruleId ==null){
+			this.ruleId = ruleId;
+		}
+	}
+
+	public void setRule(String rule) {
+		if(this.rule ==null){
+			this.rule = rule;
+		}
+	}
+
+	public void setParam(String param) {
+		if(this.param ==null){
+			this.param = param;
+		}
+	}
+	
+	
 }

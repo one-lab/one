@@ -452,4 +452,11 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		Assert.hasText(comCode);
 		return companyService.findAllNextLevelCompanybyComCode(comCode);
 	}
+	
+	public List<Company>findCompanyBySuperAndType(String SuppercomCode,String comType){
+		Assert.hasText(SuppercomCode);
+		Assert.hasText(comType);
+		return companyService.findCompanyBySuperAndType(SuppercomCode, comType);
+	}
+	
 }

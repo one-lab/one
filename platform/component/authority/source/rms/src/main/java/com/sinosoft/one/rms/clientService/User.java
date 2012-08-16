@@ -89,5 +89,61 @@ public class User {
 	public List<DataPower> getDataPowers() {
 		return dataPowers;
 	}
+
+	public void setUserCode(String userCode) {
+		if (this.userCode==null) {
+			this.userCode = userCode;
+		}
+	}
+
+	public void setUserName(String userName) {
+		if(this.userName==null){
+			this.userName = userName;
+		}
+	}
+
+	public void setPassWord(String passWord) {
+		if(this.passWord ==null){
+			this.passWord = passWord;
+		}
+	}
+
+	public void setLoginComCode(String loginComCode) {
+		if(this.loginComCode==null){
+			this.loginComCode = loginComCode;
+		}
+		
+	}
+
+	public void setLoginComName(String loginComName) {
+		if(this.loginComName==null){
+			this.loginComName = loginComName;
+		}
+		
+	}
+
+	public void setRoleIdList(List<String> roleIdList) {
+		if(	this.roleIdList==null){
+			this.roleIdList = roleIdList;
+		}
+	}
+
+	public void setTaskIdList(List<String> taskIdList) {
+		if(	this.taskIdList==null){
+			this.taskIdList = taskIdList;
+		}
+	}
+
+	public void setMenuList(List<Menu> menuList) {
+		if(this.menuList ==null){
+			this.menuList = menuList;
+		}
+	}
+
+	public void setDataPowers(List<DataPower> dataPowers) {
+		if(this.dataPowers ==null){
+			this.dataPowers = dataPowers;
+		}
+	}
 	
 }

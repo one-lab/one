@@ -149,4 +149,13 @@ public interface RmsService {
 	 * @return
 	 */
 	public List<Company> findAllNextLevelCompanyByComCode(String comCode);
+	
+	/**
+	 * 根据父类机构和机构类型 获得机构集合
+	 * @param SuppercomCode
+	 * @param comType
+	 * @return
+	 */
+	public List<Company>findCompanyBySuperAndType(String SuppercomCode,String comType);
+	
 }
