@@ -39,7 +39,14 @@ public interface DataAccess {
      * @return
      */
     <T>List<T> select(String sql, Object[] args, RowMapper rowMapper);
-
+    /**
+     * 分页查询
+     * @param sql
+     * @param args
+     * @param rowMapper
+     * @return
+     */
+    <T> PageInfo<T> selectByPage(String sql,String countSql, Object[] args, RowMapper rowMapper);
     /**
      * 写访问（更新或插入）
      * 
