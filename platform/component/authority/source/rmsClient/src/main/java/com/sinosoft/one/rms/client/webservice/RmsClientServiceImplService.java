@@ -16,7 +16,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "RmsClientServiceImplService", targetNamespace = "http://facade.clientService.rms.ebusiness.sinosoft.com/", wsdlLocation = "http://localhost:9001/mis/services/RMSWebService?wsdl")
+@WebServiceClient(name = "RmsClientServiceImplService", targetNamespace = "http://facade.clientService.rms.one.sinosoft.com/", wsdlLocation = "http://localhost:8080/mis/services/RMSWebService?wsdl")
 public class RmsClientServiceImplService
     extends Service
 {
@@ -26,7 +26,7 @@ public class RmsClientServiceImplService
     static {
         URL url = null;
         try {
-            url = new URL("http://localhost:9001/mis/services/RMSWebService?wsdl");
+            url = new URL("http://localhost:8080/mis/services/RMSWebService?wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class RmsClientServiceImplService
     }
 
     public RmsClientServiceImplService() {
-        super(RMSCLIENTSERVICEIMPLSERVICE_WSDL_LOCATION, new QName("http://facade.clientService.rms.ebusiness.sinosoft.com/", "RmsClientServiceImplService"));
+        super(RMSCLIENTSERVICEIMPLSERVICE_WSDL_LOCATION, new QName("http://facade.clientService.rms.one.sinosoft.com/", "RmsClientServiceImplService"));
     }
 
     /**
@@ -48,7 +48,7 @@ public class RmsClientServiceImplService
      */
     @WebEndpoint(name = "RmsClientServiceImplPort")
     public RmsClientService getRmsClientServiceImplPort() {
-        return (RmsClientService)super.getPort(new QName("http://facade.clientService.rms.ebusiness.sinosoft.com/", "RmsClientServiceImplPort"), RmsClientService.class);
+        return (RmsClientService)super.getPort(new QName("http://facade.clientService.rms.one.sinosoft.com/", "RmsClientServiceImplPort"), RmsClientService.class);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RmsClientServiceImplService
      */
     @WebEndpoint(name = "RmsClientServiceImplPort")
     public RmsClientService getRmsClientServiceImplPort(WebServiceFeature... features) {
-        return (RmsClientService)super.getPort(new QName("http://facade.clientService.rms.ebusiness.sinosoft.com/", "RmsClientServiceImplPort"), RmsClientService.class, features);
+        return (RmsClientService)super.getPort(new QName("http://facade.clientService.rms.one.sinosoft.com/", "RmsClientServiceImplPort"), RmsClientService.class, features);
     }
 
 }

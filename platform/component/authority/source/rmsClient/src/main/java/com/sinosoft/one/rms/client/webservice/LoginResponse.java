@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://facade.clientService.rms.ebusiness.sinosoft.com/}user" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://facade.clientService.rms.one.sinosoft.com/}user" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

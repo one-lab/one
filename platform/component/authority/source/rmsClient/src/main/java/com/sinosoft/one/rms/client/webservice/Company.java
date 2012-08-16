@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="faxNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="flag" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="insurerName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="isinSured" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="manager" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="newComCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="phoneNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -57,6 +58,7 @@ import javax.xml.bind.annotation.XmlType;
     "faxNumber",
     "flag",
     "insurerName",
+    "isinSured",
     "manager",
     "newComCode",
     "phoneNumber",
@@ -79,6 +81,7 @@ public class Company {
     protected String faxNumber;
     protected String flag;
     protected String insurerName;
+    protected String isinSured;
     protected String manager;
     protected String newComCode;
     protected String phoneNumber;
@@ -373,6 +376,30 @@ public class Company {
      */
     public void setInsurerName(String value) {
         this.insurerName = value;
+    }
+
+    /**
+     * Gets the value of the isinSured property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIsinSured() {
+        return isinSured;
+    }
+
+    /**
+     * Sets the value of the isinSured property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIsinSured(String value) {
+        this.isinSured = value;
     }
 
     /**

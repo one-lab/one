@@ -17,7 +17,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "RmsClientService", targetNamespace = "http://facade.clientService.rms.ebusiness.sinosoft.com/")
+@WebService(name = "RmsClientService", targetNamespace = "http://facade.clientService.rms.one.sinosoft.com/")
 @XmlSeeAlso({
     ObjectFactory.class
 })
@@ -29,12 +29,12 @@ public interface RmsClientService {
      * @param arg1
      * @param arg0
      * @return
-     *     returns com.sinosoft.ebusiness.rms.client.webservice.User
+     *     returns com.sinosoft.one.rms.client.webservice.User
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "login", targetNamespace = "http://facade.clientService.rms.ebusiness.sinosoft.com/", className = "com.sinosoft.ebusiness.rms.client.webservice.Login")
-    @ResponseWrapper(localName = "loginResponse", targetNamespace = "http://facade.clientService.rms.ebusiness.sinosoft.com/", className = "com.sinosoft.ebusiness.rms.client.webservice.LoginResponse")
+    @RequestWrapper(localName = "login", targetNamespace = "http://facade.clientService.rms.one.sinosoft.com/", className = "com.sinosoft.one.rms.client.webservice.Login")
+    @ResponseWrapper(localName = "loginResponse", targetNamespace = "http://facade.clientService.rms.one.sinosoft.com/", className = "com.sinosoft.one.rms.client.webservice.LoginResponse")
     public User login(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0,
@@ -46,12 +46,12 @@ public interface RmsClientService {
      * @param arg1
      * @param arg0
      * @return
-     *     returns java.util.List<com.sinosoft.ebusiness.rms.client.webservice.Company>
+     *     returns java.util.List<com.sinosoft.one.rms.client.webservice.Company>
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "findCompanysByUserCodeAndPassword", targetNamespace = "http://facade.clientService.rms.ebusiness.sinosoft.com/", className = "com.sinosoft.ebusiness.rms.client.webservice.FindCompanysByUserCodeAndPassword")
-    @ResponseWrapper(localName = "findCompanysByUserCodeAndPasswordResponse", targetNamespace = "http://facade.clientService.rms.ebusiness.sinosoft.com/", className = "com.sinosoft.ebusiness.rms.client.webservice.FindCompanysByUserCodeAndPasswordResponse")
+    @RequestWrapper(localName = "findCompanysByUserCodeAndPassword", targetNamespace = "http://facade.clientService.rms.one.sinosoft.com/", className = "com.sinosoft.one.rms.client.webservice.FindCompanysByUserCodeAndPassword")
+    @ResponseWrapper(localName = "findCompanysByUserCodeAndPasswordResponse", targetNamespace = "http://facade.clientService.rms.one.sinosoft.com/", className = "com.sinosoft.one.rms.client.webservice.FindCompanysByUserCodeAndPasswordResponse")
     public List<Company> findCompanysByUserCodeAndPassword(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0,
