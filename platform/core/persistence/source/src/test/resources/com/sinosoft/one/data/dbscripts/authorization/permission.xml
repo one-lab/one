@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbscripts namespace="permission" xmlns="http://www.vmars.org/dbscript" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vmars.org/dbscript ../../../../dbscript.xsd ">
+	<typeAlias alias="Permission" type="com.sinosoft.emergency.model.authorization.Permission"/>
+	<typeAlias alias="VUserPermission" type="com.sinosoft.emergency.model.authorization.VUserPermission"/>
+	<dbscript type="sql" id="selectPermissionsByModuleId" resultClass="Permission">
+		SELECT * FROM sys_t_permission WHERE state='1' and module_id=?
+	</dbscript>
+	<dbscript type="sql" id="selectPermissionsByConditions" resultClass="Permission">
+		SELECT * FROM sys_t_permission WHERE state='1'
+		<ifNotNullCondition property="moduleId">
+			and module_id = #moduleId#
+		</ifNotNullCondition>
+		<elseCondition>
+			and module_id is null
+		</elseCondition>
+		<ifNotNullCondition property="name">
+			and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="selectVUserPermissionsByUserIdAndRoleId" resultClass="VUserPermission">
+		select * from sys_v_user_permission up 
+		where up.user_id=? 
+		<ifNotNullCondition property="moduleId">
+		and module_id=#moduleId#
+		</ifNotNullCondition>
+		<elseCondition>
+		and module_id is null
+		</elseCondition>
+		<simpleNode>
+		and up.id not in (select t.permission_id from sys_v_role_permissions t where t.role_id=?)
+		</simpleNode>
+	</dbscript>
+	<dbscript type="sql" id="selectVUserPermissionsByUserId" resultClass="VUserPermission">
+		select * from sys_v_user_permission up 
+		where up.user_id=? 
+	</dbscript>
+	
+	<dbscript type="sql" id="countPermissionsByModuleId">
+		SELECT count(id) as count FROM sys_t_permission WHERE state='1' and module_id=?
+	</dbscript>
+	<dbscript type="sql" id="countPermissionsByPermissionId">
+		SELECT count(id) as count FROM sys_t_role_permission WHERE permission_id=?
+	</dbscript>
+	<dbscript type="sql" id="countPermissionsByConditions">
+		SELECT count(id) as count FROM sys_t_permission WHERE state='1'
+		<ifNotNullCondition property="moduleId">
+			and module_id = #moduleId#
+		</ifNotNullCondition>
+		<elseCondition>
+			and module_id is null
+		</elseCondition>
+		<ifNotNullCondition property="name">
+			and name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="deletePermissionById">
+		DELETE FROM sys_t_permission WHERE id=?
+	</dbscript>
+</dbscripts>

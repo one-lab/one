@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbscripts namespace="user" xmlns="http://www.vmars.org/dbscript"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.vmars.org/dbscript ../../../../dbscript.xsd ">
+	<typeAlias alias="User" type="com.sinosoft.emergency.model.authorization.User"/>
+	<typeAlias alias="EmDeptUser" type="com.sinosoft.emergency.model.emdeptmanage.EmDeptUser"/>
+	<dbscript type="sql" id="selectUserByUsername" resultClass="User">
+		SELECT * FROM sys_t_user WHERE (username=? or hr_id=?) and state='1' 
+	</dbscript>
+	<dbscript type="sql" id="countUsersByUsername">
+		SELECT count(t.id) as count FROM sys_t_user t where t.username=?
+	</dbscript>
+	<dbscript type="sql" id="countUsersByStationId">
+		SELECT count(u.id) as count FROM sys_t_user_station us, sys_t_user u WHERE us.user_id=u.id and station_id=? and u.state='1' 
+	</dbscript>
+	<dbscript type="sql" id="selectUsersByStationId" resultClass="User">
+		SELECT * FROM sys_t_user WHERE station_id=?  and state='1'
+	</dbscript>
+	<dbscript type="sql" id="selectUsersByOrgnizationId" resultClass="User">
+		SELECT * FROM sys_t_user WHERE orgnization_id=?  and state='1'
+	</dbscript>
+	<dbscript type="sql" id="selectUsersByConditions" resultClass="User">
+		SELECT distinct u.id, u.username, u.password, u.name, u.gender, u.birthday, u.email, u.telephone, u.orgnization_id, u.state, u.creator_id, u.create_time, u.modifier_id, u.modify_time,u.hr_id, u.is_handle_contacter FROM sys_t_user u WHERE u.orgnization_id=?  and u.state='1'
+		<ifNotNullCondition property="username">
+			and u.username like %username%
+		</ifNotNullCondition>
+		<ifNotNullCondition property="name">
+			and u.name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="countUsersByOrgnizationId">
+		SELECT count(id) as count FROM sys_t_user WHERE orgnization_id=? and state='1' 
+	</dbscript>
+	<dbscript type="sql" id="countUsersByConditions">
+		SELECT count(distinct u.id) as count FROM sys_t_user u WHERE u.orgnization_id=?  and u.state='1'
+		<ifNotNullCondition property="username">
+			and u.username like %username%
+		</ifNotNullCondition>
+		<ifNotNullCondition property="name">
+			and u.name like %name%
+		</ifNotNullCondition>
+	</dbscript>
+	<dbscript type="sql" id="selectUsersByEmDeptId" resultClass="User">
+		SELECT * FROM sys_t_user u , t_em_dept_user edu 
+			WHERE u.id=edu.user_id
+			AND u.state='1'
+			AND	edu.em_dept_id=?
+	</dbscript>
+	<dbscript type="sql" id="deleteUser">
+		update sys_t_user set state='0' where id=?
+	</dbscript>
+	<dbscript type="sql" id="deleteUserStationsByUserId">
+		delete from sys_t_user_station where user_id=?
+	</dbscript>
+	<dbscript type="sql" id="deleteUserStations">
+		delete from sys_t_user_station where user_id=?
+		<inCondition property="stations">
+		and station_id in #stations#
+		</inCondition>
+	</dbscript>
+	<dbscript type="sql" id="deleteEmDeptUsers">
+		delete from t_em_dept_user where user_id=?
+		<inCondition property="emDeptIds">
+		and em_dept_id in #emDeptIds#
+		</inCondition> 
+	</dbscript>
+	<dbscript type="sql" id="selectHRInfoByName">
+		select r.id as id, r.mc as name, b.mc_j as deptName,z.mc as positionName, r.xb as gender, to_char(r.cs_rq, 'yyyy-mm-dd') as birthday from t_bs_gy_ryjbxx r, t_bs_gy_bmjbxx b,T_BS_DM_ZW z where r.id_bmjbxx=b.id(+) and r.zw_dm=z.id(+) and r.mc=? and r.jl_zt='Y' and b.jl_zt='Y' order by r.id
+	</dbscript>
+	<dbscript type="sql" id="resetPassword">
+		update sys_t_user t set t.password = ?, t.modify_time=to_date(?, 'yyyy-mm-dd HH24:MI:ss'), t.modifier_id=?
+		<inCondition property="ids">
+		where t.id in #ids#
+		</inCondition>
+	</dbscript>
+	<dbscript type="sql" id="selectEmDeptUsersByUserId" resultClass="EmDeptUser">
+		select * from t_em_dept_user t where t.user_id=?
+	</dbscript>
+</dbscripts>

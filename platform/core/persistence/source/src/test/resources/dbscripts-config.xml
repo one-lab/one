@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbscript-files>
+	<dbscript-location value="/com/sinosoft/emergency/dbscripts/">
+		<list path="authorization">
+			<value>infoTransfer.xml</value>
+			<value>module.xml</value>
+			<value>orgnization.xml</value>
+			<value>permission.xml</value>
+			<value>role.xml</value>
+			<value>user.xml</value>
+			<value>notice.xml</value>
+		</list>
+		<!-- gaoxiang  -->
+		<list path="graph">
+			<value>graph.xml</value>
+			<value>ptgraph.xml</value>
+		</list>
+		<list path="plan">
+			<value>plan.xml</value>
+		</list>
+		<list path="plan">
+			<value>subPlan.xml</value>
+		</list>
+		<list path="plan_exc">
+			<value>plan_exc.xml</value>
+		</list>
+		<!-- zhou xiao yan -->
+		<list path="sbgl/sb01">
+			<value>bgd.xml</value>
+		</list>
+		<list path="sbgl/sb02">
+			<value>sblx.xml</value>
+		</list>
+		<list path="sbgl/sb05">
+			<value>sbfbtj.xml</value>
+		</list>
+		<!-- end of zhou xiao yan -->
+
+		<!-- yang ming  -->
+		<list path="leader_checklist">
+			<value>leader_checklist.xml</value>
+		</list>
+		<list path="bmrygl/xt01">
+			<value>ryxxgl.xml</value>
+		</list>
+		<list path="bmrygl/xt02">
+			<value>deptInfo.xml</value>
+		</list>
+		<list path="bmrygl/xt03">
+			<value>dwxxgl.xml</value>
+		</list>
+		<list path="emdeptmanage">
+			<value>emdeptmanage.xml</value>
+		</list>
+		<list path="emstaffmanage">
+			<value>emstaffmanage.xml</value>
+		</list>
+		<list path="queryemstaff">
+			<value>queryemstaff.xml</value>
+		</list>
+
+		<list path="smstemplate">
+			<value>smstemplate.xml</value>
+		</list>
+
+		<list path="expertMaintain">
+			<value>expertMaintain.xml</value>
+			<value>expert_craft_type.xml</value>
+		</list>
+		<list path="planReplay">
+			<value>planReplay.xml</value>
+		</list>
+		<list path="resendSMS">
+			<value>resendSMS.xml</value>
+		</list>
+		<!-- end of yang ming -->
+
+		<!--   begin of songcl		-->
+		<list path="sbgl/sb03">
+			<value>sbztgl.xml</value>
+		</list>
+		<list path="sbgl/sb04">
+			<value>equitmentInfo.xml</value>
+		</list>
+		<list path="emergency_person_info_manage">
+			<value>expertInfo.xml</value>
+			<value>succorInfo.xml</value>
+			<value>addressListInfo.xml</value>
+		</list>
+		<list path="check_list">
+			<value>checklist.xml</value>
+		</list>
+		<list path="manual_manage">
+			<value>manual_manage.xml</value>
+			<value>manual_examine.xml</value>
+			<value>manual_commen.xml</value>
+			<value>manual_issuance.xml</value>
+		</list>
+		<list path="material_manage">
+			<value>material_manage.xml</value>
+		</list>
+		<!--   end of songcl        -->
+		<!-- houzhaowei  -->
+		<list path="ninja_file">
+			<value>file_management.xml</value>
+		</list>
+
+		<list path="sys_interface">
+			<value>hr.xml</value>
+			<value>planClassify.xml</value>
+			<value>fgos.xml</value>
+			<value>flight.xml</value>
+			<value>fltFxd.xml</value>
+			<value>manifest.xml</value>
+			<value>mq.xml</value>
+		</list>
+		<!-- end of houzhaowei -->
+
+		<!-- messageinfo 2010-10-12 yangmingguang -->
+		<list path="messageinfo">
+			<value>messageinfo.xml</value>
+		</list>
+		<list path="codetable">
+			<value>codetable.xml</value>
+		</list>
+		<list path="datacol">
+			<value>datacol.xml</value>
+		</list>
+		<list path="practice">
+			<value>practice.xml</value>
+		</list>
+		<list path="plan_reconstruction">
+			<value>plan_reconstruction.xml</value>
+		</list>
+		<list path="planreconstruction">
+			<value>planreconstruction.xml</value>
+			<value>plandatareconstruction.xml</value>
+		</list>
+		<!-- end of messageinfo -->
+		<!-- begin model_algorithm  author by gaoxiang -->
+		<list path="model_algorithm">
+			<value>plan_rebuild.xml</value>
+		</list>
+		<!-- end model_algorithm  author by gaoxiang -->
+		<list path="largedelays">
+			<value>largedelays.xml</value>
+			<value>largedelayscn.xml</value>
+			<value>psggrid.xml</value>
+			<value>delayssum.xml</value>
+			<value>delayssum_international.xml</value>
+			<value>delayssum_cn.xml</value>
+			<value>postpone.xml</value>
+			<value>deice.xml</value>
+			<value>fardistanceairport.xml</value>
+			<value>fltcurfew.xml</value>
+			<value>monitor.xml</value>
+			<value>monitor_detail_out.xml</value>
+			<value>monitor_detail_in.xml</value>
+			<value>monitor_detail_graph.xml</value>
+		</list>
+		<!--	start of dmj	-->
+		<list path="dmj">
+			<value>flt.xml</value>
+			<value>apt.xml</value>
+			<value>pas.xml</value>
+			<value>cls.xml</value>
+			<value>stacdtbl.xml</value>
+			<value>csgl.xml</value>
+			<value>qjgc.xml</value>
+			<value>dataImport.xml</value>
+		</list>
+		<!--	end of dmj	-->
+		<!--	领导排序	-->
+		<list path="user_sorting">
+			<value>dept_user_sorting.xml</value>
+			<value>user_sorting.xml</value>
+		</list>
+		<!-- 综合查询 -->
+		<list path="general_search">
+			<value>general_search.xml</value>
+		</list>
+		<!-- 培训及HR人员信息管理 -->
+		<list path="training">
+			<value>user_enter.xml</value>
+			<value>user_HR.xml</value>
+			<value>course.xml</value>
+			<value>trainingplan.xml</value>
+			<value>traininguser.xml</value>
+		</list>
+		<list path="branchcompany">
+			<value>branchcompany.xml</value>
+		</list>
+		<list path="smswarning">
+			<value>SmsWarning.xml</value>
+			<value>TheNewSmsWarning.xml</value>
+		</list>
+		<list path="weathersms">
+			<value>WeatherSms.xml</value>
+		</list>
+		<!-- the end -->
+		<!-- 运力 -->
+		<list path="transportCapacity">
+			<value>transportCapacity.xml</value>
+		</list>
+	</dbscript-location>
+</dbscript-files>

@@ -27,9 +27,16 @@
 				<xsd:extension base="repository:repositories">
 					<xsd:sequence>
 						<xsd:element name="repository" minOccurs="0" maxOccurs="unbounded" type="jpa-repository" />
-					</xsd:sequence>
+                    </xsd:sequence>
 					<xsd:attributeGroup ref="repository:transactional-repository-attributes" />
 					<xsd:attribute name="entity-manager-factory-ref" type="entityManagerFactoryRef" />
+                    <xsd:attribute name="sql-queries-location" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[
+				Defines the location to look for a Properties file containing externally defined queries.
+				]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
 				</xsd:extension>
 			</xsd:complexContent>
 		</xsd:complexType>

@@ -15,6 +15,7 @@
  */
 package com.sinosoft.one.data.jpa.repository.support;
 
+import com.sinosoft.one.data.jpa.repository.query.SqlQueries;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
@@ -24,7 +25,7 @@ import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryFactoryInformation;
-import org.springframework.data.repository.query.QueryLookupStrategy.Key;
+import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy.Key;
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.util.Assert;
 
@@ -47,6 +48,7 @@ public abstract class OneRepositoryFactoryBeanSupport<T extends Repository<S, ID
 	private Class<? extends T> repositoryInterface;
 	private Object customImplementation;
 	private NamedQueries namedQueries;
+	private SqlQueries sqlQueries;
 
 	/**
 	 * Setter to inject the repository interface to implement.
@@ -88,6 +90,12 @@ public abstract class OneRepositoryFactoryBeanSupport<T extends Repository<S, ID
 	public void setNamedQueries(NamedQueries namedQueries) {
 		this.namedQueries = namedQueries;
 	}
+
+	public void setSqlQueries(SqlQueries sqlQueries) {
+		this.sqlQueries = sqlQueries;
+	}
+
+
 
 	/*
 	 * (non-Javadoc)
@@ -151,6 +159,7 @@ public abstract class OneRepositoryFactoryBeanSupport<T extends Repository<S, ID
 		this.factory = createRepositoryFactory();
 		this.factory.setQueryLookupStrategyKey(queryLookupStrategyKey);
 		this.factory.setNamedQueries(namedQueries);
+		this.factory.setSqlQueries(sqlQueries);
 	}
 
 	/**

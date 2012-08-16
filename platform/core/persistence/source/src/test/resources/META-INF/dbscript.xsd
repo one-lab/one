@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbs:schema targetNamespace="http://www.vmars.org/dbscript"
+	elementFormDefault="qualified" xmlns:dbs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.vmars.org/dbscript">
+	<dbs:element name="dbscripts">
+		<dbs:complexType>
+			<dbs:sequence>
+				<dbs:element name="typeAlias" minOccurs="0" maxOccurs="unbounded">
+					<dbs:complexType>
+						<dbs:attribute name="type" use="required">
+							<dbs:simpleType>
+								<dbs:restriction base="dbs:string">
+									<dbs:minLength value="0" />
+								</dbs:restriction>
+							</dbs:simpleType>
+						</dbs:attribute>
+						<dbs:attribute name="alias" use="required">
+							<dbs:simpleType>
+								<dbs:restriction base="dbs:string">
+									<dbs:minLength value="0" />
+								</dbs:restriction>
+							</dbs:simpleType>
+						</dbs:attribute>
+					</dbs:complexType>
+				</dbs:element>
+
+				<dbs:element name="dbscript" minOccurs="0" maxOccurs="unbounded">
+					<dbs:complexType mixed="true">
+						<dbs:choice  minOccurs="0" maxOccurs="unbounded">
+							<dbs:sequence id="conditionSeq">
+								<dbs:choice minOccurs="0" maxOccurs="unbounded">
+									<dbs:element name="inCondition" minOccurs="0" maxOccurs="unbounded">
+										<dbs:complexType mixed="true">
+											<dbs:attribute name="property" use="required">
+												<dbs:simpleType>
+													<dbs:restriction base="dbs:string">
+														<dbs:minLength value="0" />
+													</dbs:restriction>
+												</dbs:simpleType>
+											</dbs:attribute>
+										</dbs:complexType>
+									</dbs:element>
+									<dbs:sequence>
+										<dbs:element name="ifCondition" minOccurs="0">
+											<dbs:complexType>
+												<dbs:attribute name="property" use="required">
+													<dbs:simpleType>
+														<dbs:restriction base="dbs:string">
+															<dbs:minLength value="0" />
+														</dbs:restriction>
+													</dbs:simpleType>
+												</dbs:attribute>
+												<dbs:attribute name="operator" use="required">
+													<dbs:simpleType>
+														<dbs:restriction base="dbs:string">
+															<dbs:minLength value="0" />
+														</dbs:restriction>
+													</dbs:simpleType>
+												</dbs:attribute>
+												<dbs:attribute name="value" use="required">
+													<dbs:simpleType>
+														<dbs:restriction base="dbs:string">
+															<dbs:minLength value="0" />
+														</dbs:restriction>
+													</dbs:simpleType>
+												</dbs:attribute>
+											</dbs:complexType>
+										</dbs:element>
+										<dbs:element name="elseIfCondition" minOccurs="0">
+											<dbs:complexType>
+												<dbs:attribute name="property" use="required">
+													<dbs:simpleType>
+														<dbs:restriction base="dbs:string">
+															<dbs:minLength value="0" />
+														</dbs:restriction>
+													</dbs:simpleType>
+												</dbs:attribute>
+												<dbs:attribute name="operator" use="required">
+													<dbs:simpleType>
+														<dbs:restriction base="dbs:string">
+															<dbs:minLength value="0" />
+														</dbs:restriction>
+													</dbs:simpleType>
+												</dbs:attribute>
+												<dbs:attribute name="value" use="required">
+													<dbs:simpleType>
+														<dbs:restriction base="dbs:string">
+															<dbs:minLength value="0" />
+														</dbs:restriction>
+													</dbs:simpleType>
+												</dbs:attribute>
+											</dbs:complexType>
+										</dbs:element>
+									</dbs:sequence>
+									<dbs:element name="ifNotNullCondition" minOccurs="0">
+										<dbs:complexType mixed="true">
+											<dbs:attribute name="property" use="required">
+												<dbs:simpleType>
+													<dbs:restriction base="dbs:string">
+														<dbs:minLength value="0" />
+													</dbs:restriction>
+												</dbs:simpleType>
+											</dbs:attribute>
+										</dbs:complexType>
+									</dbs:element>
+								</dbs:choice>
+								<dbs:element name="elseCondition" minOccurs="0">
+								</dbs:element>
+								<!-- simple condition , used for simply adding the characters under the node. -->
+								<dbs:element name="simpleNode" minOccurs="0">									
+								</dbs:element>
+							</dbs:sequence>
+						</dbs:choice>
+						<dbs:attribute name="type" use="required">
+							<dbs:simpleType>
+								<dbs:restriction base="dbs:string">
+									<dbs:enumeration value="hql" />
+									<dbs:enumeration value="sql" />
+								</dbs:restriction>
+							</dbs:simpleType>
+						</dbs:attribute>
+						<dbs:attribute name="id" use="required">
+							<dbs:simpleType>
+								<dbs:restriction base="dbs:string">
+									<dbs:minLength value="0" />
+								</dbs:restriction>
+							</dbs:simpleType>
+						</dbs:attribute>
+						<dbs:attribute name="resultClass" type="dbs:string" />
+					</dbs:complexType>
+				</dbs:element>
+			</dbs:sequence>
+			<dbs:attribute name="namespace" use="required">
+				<dbs:simpleType>
+					<dbs:restriction base="dbs:string">
+						<dbs:minLength value="0" />
+					</dbs:restriction>
+				</dbs:simpleType>
+			</dbs:attribute>
+		</dbs:complexType>
+	</dbs:element>
+</dbs:schema>

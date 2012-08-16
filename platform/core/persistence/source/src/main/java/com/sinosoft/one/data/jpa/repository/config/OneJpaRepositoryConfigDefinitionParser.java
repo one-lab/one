@@ -39,7 +39,7 @@ import org.w3c.dom.Element;
  * @author Gil Markham
  */
 class OneJpaRepositoryConfigDefinitionParser extends
-		AbstractRepositoryConfigDefinitionParser<OneSimpleJpaRepositoryConfiguration, JpaRepositoryConfiguration> {
+		OneAbstractRepositoryConfigDefinitionParser<OneSimpleJpaRepositoryConfiguration, JpaRepositoryConfiguration> {
 
 	private static final Class<?> PAB_POST_PROCESSOR = PersistenceAnnotationBeanPostProcessor.class;
 	private static final Class<?> PET_POST_PROCESSOR = PersistenceExceptionTranslationPostProcessor.class;

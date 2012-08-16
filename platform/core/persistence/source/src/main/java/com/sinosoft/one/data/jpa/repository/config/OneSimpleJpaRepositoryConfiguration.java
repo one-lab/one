@@ -74,7 +74,11 @@ public class OneSimpleJpaRepositoryConfiguration extends
 	 */
 	public String getNamedQueriesLocation() {
 
-		return "classpath*:META-INF/jpa-named-queries.properties";
+		return "classpath*:META-INF/jpa-sql-queries.properties";
+	}
+
+	public String getSqlQueriesLocation() {
+		return "classpath*:META-INF/sql-queries.properties";
 	}
 
 	/**
@@ -105,6 +109,10 @@ public class OneSimpleJpaRepositoryConfiguration extends
 
 			return getParent().getEntityManagerFactoryRef();
 		}
+
+		public String getSqlQueriesLocation() {
+			return getParent().getSqlQueriesLocation();
+		}
 	}
 
 	private static class ManualJpaRepositoryConfigInformation extends
@@ -126,10 +134,16 @@ public class OneSimpleJpaRepositoryConfiguration extends
 
 			return getAttribute(ENTITY_MANAGER_FACTORY_REF);
 		}
+
+		public String getSqlQueriesLocation() {
+			return getParent().getSqlQueriesLocation();
+		}
 	}
 
 	interface JpaRepositoryConfiguration extends SingleRepositoryConfigInformation<OneSimpleJpaRepositoryConfiguration> {
 
 		String getEntityManagerFactoryRef();
+
+		String getSqlQueriesLocation();
 	}
 }

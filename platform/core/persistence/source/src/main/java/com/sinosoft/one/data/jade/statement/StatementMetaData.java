@@ -16,9 +16,9 @@
 package com.sinosoft.one.data.jade.statement;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
-import com.sinosoft.one.data.jade.annotation.SQLParam;
 import com.sinosoft.one.data.jade.annotation.SQLType;
 import com.sinosoft.one.data.jade.annotation.ShardBy;
+import org.springframework.data.repository.query.Param;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -58,7 +58,7 @@ public class StatementMetaData {
      * <p>
      * 此数组的长度为方法的参数个数，如果对应位置的方法参数没有注解 ,该位置的元素值为null
      */
-    private final SQLParam[] sqlParams;
+    private final Param[] sqlParams;
 
     /**
      * <code>@{@link com.sinosoft.one.data.jade.annotation.ShardBy}</code>标注在哪个参数上？(从0开始，负数代表无)－从method中获取并缓存
@@ -69,16 +69,16 @@ public class StatementMetaData {
 
     // --------------------------------------------
 
-    public StatementMetaData(DAOMetaData daoMetaData, Method method) {
+    public StatementMetaData(DAOMetaData daoMetaData, Method method, String sqlQuerie) {
         this.daoMetaData = daoMetaData;
         this.method = method;
-        this.sql = method.getAnnotation(SQL.class).value();
+        this.sql = sqlQuerie == null ? method.getAnnotation(SQL.class).value() : sqlQuerie;
 
         this.genericReturnTypes = GenericUtils.getActualClass(method.getGenericReturnType());
 
         Annotation[][] annotations = method.getParameterAnnotations();
         this.parameterCount = annotations.length;
-        this.sqlParams = new SQLParam[annotations.length];
+        this.sqlParams = new Param[annotations.length];
         int shardByIndex = -1;
         for (int index = 0; index < annotations.length; index++) {
             for (Annotation annotation : annotations[index]) {
@@ -87,8 +87,8 @@ public class StatementMetaData {
                         throw new IllegalArgumentException("duplicated @" + ShardBy.class.getName());
                     }
                     shardByIndex = index;
-                } else if (annotation instanceof SQLParam) {
-                    this.sqlParams[index] = (SQLParam) annotation;
+                } else if (annotation instanceof Param) {
+                    this.sqlParams[index] = (Param) annotation;
                 }
             }
         }
@@ -111,7 +111,7 @@ public class StatementMetaData {
         return parameterCount;
     }
 
-    public SQLParam getSQLParamAt(int argIndex) {
+    public Param getSQLParamAt(int argIndex) {
         return sqlParams[argIndex];
     }
 
@@ -159,7 +159,13 @@ public class StatementMetaData {
     public SQLType getSQLType() {
         if (sqlType == null) {
             SQL sql = method.getAnnotation(SQL.class);
-            SQLType sqlType = sql.type();
+			SQLType sqlType ;
+			if(sql == null) {
+				sqlType = SQLType.AUTO_DETECT;
+			} else {
+				sqlType = sql.type();
+			}
+
             if (sqlType == SQLType.AUTO_DETECT) {
                 for (int i = 0; i < SELECT_PATTERNS.length; i++) {
                     // 用正则表达式匹配  SELECT 语句

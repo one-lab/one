@@ -26,7 +26,7 @@ public class ExprResolverImpl implements ExprResolver {
 
     // 正则表达式
     private static final Pattern PREFIX_PATTERN = Pattern.compile( // NL
-            "(\\:|\\$)([a-zA-Z0-9_]+)(\\.[a-zA-Z0-9_]+)*");
+            "(\\:|\\?|\\$)([a-zA-Z0-9_]+)(\\.[a-zA-Z0-9_]+)*");
 
     private static final Pattern MAP_PATTERN = Pattern.compile( // NL
             "\\[([\\.a-zA-Z0-9_]+)\\]");
@@ -159,7 +159,25 @@ public class ExprResolverImpl implements ExprResolver {
 
                 String prefix = matcher.group(1);
                 String name = matcher.group(2);
-                if (":".equals(prefix)) {
+				if ("?".equals(prefix)) {
+					boolean isDigits = NumberUtils.isDigits(name);
+					if (isDigits) {
+						// 按顺序访问变量
+						name = '?' + name;
+					}
+
+					if (!mapVars.containsKey(name)) {
+						throw new IllegalArgumentException("Variable \'" + name
+								+ "\' not defined in DAO method");
+					}
+
+					// 按名称访问变量
+					builder.append(VAR_PREFIX);
+					builder.append("['");
+					builder.append(name);
+					builder.append("']");
+
+				}else if (":".equals(prefix)) {
                     boolean isDigits = NumberUtils.isDigits(name);
                     if (isDigits) {
                         // 按顺序访问变量

@@ -1,6 +1,8 @@
 package com.sinosoft.one.data.test;
 
 import com.sinosoft.one.data.test.dao.StudentDao;
+import com.sinosoft.one.data.test.model.User;
+import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,17 @@ public class JpaJadeTest {
 
     @Test
     public void testJade() {
-        System.out.println(studentDao.selectUser() + "=============");
+        Assert.assertNotNull(studentDao.selectUser());
+		Assert.assertNotNull(studentDao.selectUser2());
+		Assert.assertNotNull(studentDao.selectUser3());
+		Assert.assertNotNull(studentDao.findAll());
+		Assert.assertNotNull(studentDao.getSSS());
+		Assert.assertNotNull(studentDao.sqlQuery1());
+		Assert.assertNotNull(studentDao.sqlQuery2("123") );
+
+		Assert.assertNotNull(studentDao.sqlQuery3("123") );
+		User user = new User();
+		user.setId("123");
+		Assert.assertNotNull(studentDao.sqlQuery4(user) );
     }
 }
