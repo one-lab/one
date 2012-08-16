@@ -11,7 +11,6 @@
 	<description>Shiro Configuration</description>
 	<!-- 項目自定义的Realm -->
 	<bean id="accountManager" class="com.sinosoft.one.rms.client.AccountManagerLocalImpl">
-		<property name="rmsClientService" ref="rmsClientService"></property>
 	</bean>
 	
 	<!-- Shiro's main business-tier object for web-enabled applications -->
