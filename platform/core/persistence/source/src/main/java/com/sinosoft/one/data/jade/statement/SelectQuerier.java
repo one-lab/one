@@ -18,7 +18,6 @@ package com.sinosoft.one.data.jade.statement;
 import com.sinosoft.one.data.jade.annotation.SQLType;
 import com.sinosoft.one.data.jade.dataaccess.DataAccess;
 import com.sinosoft.one.data.jade.dataaccess.DataAccessImpl;
-import com.sinosoft.one.data.jade.dataaccess.PageInfo;
 import com.sinosoft.one.data.jade.statement.Querier;
 import com.sinosoft.one.data.jade.statement.StatementMetaData;
 import com.sinosoft.one.data.jade.statement.StatementRuntime;
@@ -26,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -42,14 +40,14 @@ import java.util.*;
  */
 public class SelectQuerier implements Querier {
 
-	private final RowMapper rowMapper;
+	private final RowMapper<?> rowMapper;
 
 	private final Class<?> returnType;
 
 	private final EntityManager em;
 
 	public SelectQuerier(EntityManager em, StatementMetaData metaData,
-						 RowMapper rowMapper) {
+						 RowMapper<?> rowMapper) {
 		this.em = em;
 		this.returnType = metaData.getMethod().getReturnType();
 		this.rowMapper = rowMapper;
@@ -67,17 +65,16 @@ public class SelectQuerier implements Querier {
 		// 执行查询
 		List<?> listResult = null;
 		if(returnType == Page.class ){
-			Map<String, Object> mp = new HashMap<String, Object>();
-
-			splitArgs(mp,args);
-			Pageable pageable = (Pageable) mp.get("pageable");
-			args = (Object[]) mp.get("args");
-
+			Pageable pageable = null;
+			Map<String, Object> paramMap = runtime.getParameters();
+			for(String key : paramMap.keySet()){
+				if(paramMap.get(key) instanceof Pageable){
+					pageable = (Pageable) paramMap.get(key);
+				}
+			}
 			String countSql = parseCountSql(sql);
 
-			PageInfo<?> pageInfo = dataAccess.selectByPage(pageable,sql, countSql, args, rowMapper);
-			listResult = pageInfo.getContent();
-			Page page = new PageImpl(listResult, pageable, pageInfo.getTotal());
+			Page<?> page = dataAccess.selectByPage(pageable, sql, countSql, args, rowMapper);
 			return page;
 		}
 		else {
@@ -166,27 +163,10 @@ public class SelectQuerier implements Querier {
 		}
 	}
 
-	private void splitArgs(Map<String, Object> mp, Object[] args) {
-		int len = args.length;
-		Object[] args1 = new Object[len-1];
-		if(len>0){
-			for(int i=0,j=0;i<len;i++,j++){
-				if(args[i] instanceof Pageable){
-					mp.put("pageable", args[i]);
-					j--;
-				}
-				else{
-					args1[j] = args[i];
-				}
-			}
-		}
-		mp.put("args", args1);
-	}
 	private String parseCountSql(String sql) {
 		sql = StringUtils.lowerCase(sql);
-		int end = StringUtils.countMatches(sql,"from");
+		int end = StringUtils.indexOf(sql, "from");
 		String s = StringUtils.substring(sql,end);
-
 		return "select count(1) " + s;
 	}
 

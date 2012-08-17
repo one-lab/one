@@ -13,6 +13,6 @@ public class SuiteMySql implements SuiteDataSourcePageSql{
 
     public String suiteSql(String sql,Pageable pageable) {
 
-        return null;
+    	throw new UnsupportedOperationException("this method is not implements now!");
     }
 }

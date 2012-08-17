@@ -19,11 +19,15 @@ import com.sinosoft.one.data.jade.statement.pagesqlsuite.PageSqlFactory;
 import com.sinosoft.one.data.jade.statement.pagesqlsuite.SuiteDataSourcePageSql;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.persistence.EntityManager;
+
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +47,7 @@ public class DataAccessImpl implements DataAccess {
 	/**
 	 * 普通查询 2012-08-16
 	 */
-	public<T> List<T> select(String sql,Object[] args,RowMapper rowMapper) {
+	public<T> List<T> select(String sql,Object[] args,RowMapper<?> rowMapper) {
 		Session session = em.unwrap(Session.class);
 		SelectWork<T> work = new SelectWork<T>(sql,args,rowMapper);
 		session.doWork(work);
@@ -53,17 +57,17 @@ public class DataAccessImpl implements DataAccess {
 	/**
 	 * 分页查询 2012-08-16
 	 */
-	public<T> PageInfo<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper rowMapper) {
+	public<T> Page<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper<?> rowMapper) {
 
 		Session session = em.unwrap(Session.class);
-		SingleColumnRowMapper<Long> scrm = new SingleColumnRowMapper<Long>();
-		List<Long> totals = select(countSql,args,scrm);
+		SingleColumnRowMapper<BigDecimal> scrm = new SingleColumnRowMapper<BigDecimal>();
+		List<BigDecimal> totals = select(countSql,args,scrm);
 		PageSqlWork psw = new PageSqlWork(sql,pageable) ;
 		session.doWork(psw);
 		sql = psw.getSql();
 		List<T> content = select(sql,args,rowMapper);
-		PageInfo<T> pageInfo = new PageInfo<T>(content,totals.get(0));
-		return pageInfo;
+		Page<T> page = new PageImpl<T>(content, pageable, totals.get(0).longValue());
+		return page;
 	}
 
 	/**
@@ -108,13 +112,14 @@ public class DataAccessImpl implements DataAccess {
 	private class SelectWork<T> implements Work {
 		public String sql;
 		public Object[] args;
-		public RowMapper rowMapper;
+		public RowMapper<?> rowMapper;
 		List<T> results = new ArrayList<T>();
-		public SelectWork(String sql,Object[] args,RowMapper rowMapper){
+		public SelectWork(String sql,Object[] args,RowMapper<?> rowMapper){
 			this.sql = sql;
 			this.args = args;
 			this.rowMapper = rowMapper;
 		}
+		@SuppressWarnings("unchecked")
 		public void execute(Connection con) throws SQLException {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = null;

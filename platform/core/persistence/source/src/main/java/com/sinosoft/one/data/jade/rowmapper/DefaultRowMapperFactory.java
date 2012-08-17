@@ -28,6 +28,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanInstantiationException;
+import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -101,7 +102,7 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
         }
         // 返回多列的，用Bean对象、集合、映射、数组来表示每一行的
         else {
-            if (rowType == Map.class) {
+        	if (rowType == Map.class) {
                 rowMapper = new ColumnMapRowMapper();
             } else if (rowType.isArray()) {
                 rowMapper = new ArrayRowMapper(rowType);
@@ -110,7 +111,7 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
             } else if (rowType == Set.class) {
                 rowMapper = new SetRowMapper(modifier);
             } else {
-                boolean checkColumns = (rowHandler == null) ? true : rowHandler.checkColumns();
+                boolean checkColumns = (rowHandler == null) ? false : rowHandler.checkColumns();
                 boolean checkProperties = (rowHandler == null) ? false : rowHandler
                         .checkProperties();
                 String key = rowType.getName() + "[checkColumns=" + checkColumns
@@ -137,7 +138,7 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
     // 获得返回的集合元素类型
     private static Class<?> getRowType(StatementMetaData statementMetaData) {
         Class<?> returnClassType = statementMetaData.getMethod().getReturnType();
-        if (Collection.class.isAssignableFrom(returnClassType)) {
+        if (Collection.class.isAssignableFrom(returnClassType) || Page.class.isAssignableFrom(returnClassType)) {
             return getRowTypeFromCollectionType(statementMetaData, returnClassType);
         } else if (Map.class == returnClassType) {
             return getRowTypeFromMapType(statementMetaData, returnClassType);
@@ -168,7 +169,7 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
         Class<?> rowType;
         // 仅支持  List / Collection / Set
         if ((returnClassType != List.class) && (returnClassType != Collection.class)
-                && (returnClassType != Set.class)) {
+                && (returnClassType != Set.class) && (returnClassType != Page.class)) {
             throw new IllegalArgumentException("error collection type " + returnClassType.getName()
                     + "; only support List, Set, Collection");
         }

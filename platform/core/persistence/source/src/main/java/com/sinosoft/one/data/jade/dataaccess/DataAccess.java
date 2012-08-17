@@ -15,6 +15,7 @@
  */
 package com.sinosoft.one.data.jade.dataaccess;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.KeyHolder;
@@ -39,7 +40,7 @@ public interface DataAccess {
 	 * @param rowMapper 行映射器
 	 * @return
 	 */
-	<T>List<T> select(String sql, Object[] args, RowMapper rowMapper);
+	<T> List<?> select(String sql, Object[] args, RowMapper<?> rowMapper);
 	/**
 	 * 分页查询
 	 * @param sql
@@ -47,7 +48,7 @@ public interface DataAccess {
 	 * @param rowMapper
 	 * @return
 	 */
-	<T> PageInfo<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper rowMapper);
+	<T> Page<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper<?> rowMapper);
 	/**
 	 * 写访问（更新或插入）
 	 *
