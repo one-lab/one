@@ -26,17 +26,18 @@ public class JpaJadeTest {
 
     @Test
     public void testJade() {
-        Assert.assertNotNull(studentDao.selectUser() + "selectUser=============");
-		Assert.assertNotNull(studentDao.selectUser2() + "selectUser2=============");
-		Assert.assertNotNull(studentDao.selectUser3() + "selectUser3=============");
-		Assert.assertNotNull(studentDao.findAll() + "findAll=============");
-		Assert.assertNotNull(studentDao.getSSS() + "getSSS=============");
-		Assert.assertNotNull(studentDao.sqlQuery1() + ".sqlQuery1()=============");
-		Assert.assertNotNull(studentDao.sqlQuery2("123") + "sqlQuery2()=============");
+        Assert.assertNotNull(studentDao.selectUser());
+		Assert.assertNotNull(studentDao.selectUser2());
+		Assert.assertNotNull(studentDao.selectUser3());
+		Assert.assertNotNull(studentDao.findAll());
+		Assert.assertNotNull(studentDao.getSSS());
+		Assert.assertNotNull(studentDao.sqlQuery1());
+		Assert.assertNotNull(studentDao.sqlQuery2("123"));
 
-		Assert.assertNotNull(studentDao.sqlQuery3("123") + "sqlQuery3()=============");
+		Assert.assertNotNull(studentDao.sqlQuery3("123"));
 		User user = new User();
 		user.setId("123");
-		Assert.assertNotNull(studentDao.sqlQuery4(user) + "sqlQuery3()=============");
+		Assert.assertNotNull(studentDao.sqlQuery4(user,user));
+		//System.out.println(studentDao.sqlQuery4(user,user)+"================================");
     }
 }

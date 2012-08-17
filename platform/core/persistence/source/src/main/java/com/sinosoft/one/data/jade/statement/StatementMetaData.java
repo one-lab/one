@@ -72,7 +72,7 @@ public class StatementMetaData {
     public StatementMetaData(DAOMetaData daoMetaData, Method method, String sqlQuerie) {
         this.daoMetaData = daoMetaData;
         this.method = method;
-        this.sql = sqlQuerie == null ? method.getAnnotation(SQL.class).value() : sqlQuerie;
+        this.sql = method.getAnnotation(SQL.class) == null ? sqlQuerie : method.getAnnotation(SQL.class).value() ;
 
         this.genericReturnTypes = GenericUtils.getActualClass(method.getGenericReturnType());
 
