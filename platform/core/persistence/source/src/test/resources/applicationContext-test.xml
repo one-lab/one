@@ -30,10 +30,10 @@
     </bean>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="jdbc:mysql://localhost:3306/lib"/>
-        <property name="username" value="root" />
-        <property name="password" value="mysql" />
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:oracle:thin:@192.168.18.157:1521:orcl"/>
+        <property name="username" value="kylin" />
+        <property name="password" value="kylin" />
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
     </bean>
     <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
 </beans>
