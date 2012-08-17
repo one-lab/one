@@ -1,15 +1,4 @@
-package com.sinosoft.one.data.jade.statement.pageExpression;
-
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
-import org.hibernate.dialect.H2Dialect;
-import org.hibernate.dialect.MySQL5InnoDBDialect;
-import org.hibernate.dialect.Oracle10gDialect;
-import org.hibernate.jdbc.Work;
-
-import javax.persistence.EntityManager;
-import java.sql.Connection;
-import java.sql.SQLException;
+package com.sinosoft.one.data.jade.statement.pagesqlsuite;
 
 /**
  * Created with IntelliJ IDEA.

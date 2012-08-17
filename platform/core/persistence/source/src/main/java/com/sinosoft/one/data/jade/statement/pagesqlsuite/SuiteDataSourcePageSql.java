@@ -1,4 +1,4 @@
-package com.sinosoft.one.data.jade.statement.pageExpression;
+package com.sinosoft.one.data.jade.statement.pagesqlsuite;
 
 import org.springframework.data.domain.Pageable;
 

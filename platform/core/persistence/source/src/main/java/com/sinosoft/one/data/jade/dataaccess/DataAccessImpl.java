@@ -15,8 +15,8 @@
  */
 package com.sinosoft.one.data.jade.dataaccess;
 
-import com.sinosoft.one.data.jade.statement.pageExpression.PageSqlFactory;
-import com.sinosoft.one.data.jade.statement.pageExpression.SuiteDataSourcePageSql;
+import com.sinosoft.one.data.jade.statement.pagesqlsuite.PageSqlFactory;
+import com.sinosoft.one.data.jade.statement.pagesqlsuite.SuiteDataSourcePageSql;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.springframework.data.domain.Pageable;
