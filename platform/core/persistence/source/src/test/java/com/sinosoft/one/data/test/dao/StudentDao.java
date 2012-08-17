@@ -37,7 +37,7 @@ public interface StudentDao extends CrudRepository<Student, String> {
 	List<User> sqlQuery2(String id);
 	@Transactional(readOnly = true)
 	List<User> sqlQuery3(@Param("id") String id);
-	@SQL("select * from t_student")
+	@SQL("select * from t_student where id=:user.id")
 	@Transactional(readOnly = true)
 	List<User> sqlQuery4(@Param("user") User user,@Param("user2") User user2);
 	List<User> getSSS();

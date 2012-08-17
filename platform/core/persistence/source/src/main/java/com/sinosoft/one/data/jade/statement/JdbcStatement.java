@@ -86,13 +86,13 @@ public class JdbcStatement implements Statement {
     public Object execute(Map<String, Object> parameters) {
         if (batchUpdate) {
             //
-            List<?> list = (List<?>) parameters.get(":1");
+            List<?> list = (List<?>) parameters.get("?1");
             StatementRuntime[] runtimes = new StatementRuntime[list.size()];
             for (int i = 0; i < list.size(); i++) {
                 Object arg = list.get(i);
                 HashMap<String, Object> clone = new HashMap<String, Object>(parameters);
                 // 更新执行参数
-                clone.put(":1", arg);
+                clone.put("?1", arg);
                 if (metaData.getSQLParamAt(0) != null) {
                     clone.put(metaData.getSQLParamAt(0).value(), arg);
                 }

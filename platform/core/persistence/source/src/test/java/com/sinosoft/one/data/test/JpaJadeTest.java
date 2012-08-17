@@ -1,6 +1,7 @@
 package com.sinosoft.one.data.test;
 
 import com.sinosoft.one.data.test.dao.StudentDao;
+import com.sinosoft.one.data.test.dao.TeacherDao;
 import com.sinosoft.one.data.test.model.User;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -24,6 +25,9 @@ public class JpaJadeTest {
     @Autowired
     private StudentDao studentDao;
 
+	@Autowired
+	private TeacherDao teacherDao;
+
     @Test
     public void testJade() {
         Assert.assertNotNull(studentDao.selectUser());
@@ -37,7 +41,17 @@ public class JpaJadeTest {
 		Assert.assertNotNull(studentDao.sqlQuery3("123"));
 		User user = new User();
 		user.setId("123");
-		Assert.assertNotNull(studentDao.sqlQuery4(user,user));
+		Assert.assertNotNull(studentDao.sqlQuery4(user, user));
 		//System.out.println(studentDao.sqlQuery4(user,user)+"================================");
     }
+
+	@Test
+	public void testTeacher() {
+		Assert.assertNotNull("teacherDao.getSSS()===",teacherDao.getSSS());
+		Assert.assertNotNull("teacherDao.getSSS2()===",teacherDao.getSSS2());
+		Assert.assertNotNull("teacherDao.findById(\"123\")===",teacherDao.findById("123"));
+		Assert.assertNotNull("teacherDao.sqlQueryName1()===",teacherDao.sqlQueryName1());
+		Assert.assertNotNull("teacherDao.sqlQueryName2(\"1\")===",teacherDao.sqlQueryName2("1"));
+		Assert.assertNotNull("teacherDao.sqlQueryName3(\"2\")===",teacherDao.sqlQueryName3("2"));
+	}
 }
