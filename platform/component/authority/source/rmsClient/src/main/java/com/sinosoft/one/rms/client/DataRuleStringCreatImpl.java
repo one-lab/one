@@ -42,7 +42,6 @@ public class DataRuleStringCreatImpl implements DataRuleStringCreat {
 				}else{
 					rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(str, dataPower.getParam(), user.getLoginComCode(), companyTableName, comCodeColumnName, superComColumnName);
 				}
-				
 			}
 		}
 		return rule;
@@ -65,7 +64,6 @@ public class DataRuleStringCreatImpl implements DataRuleStringCreat {
 				
 			}
 		}
-		
 		return rule;
 	}
 }
