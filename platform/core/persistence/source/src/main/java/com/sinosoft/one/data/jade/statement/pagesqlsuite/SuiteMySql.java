@@ -12,7 +12,10 @@ import org.springframework.data.domain.Pageable;
 public class SuiteMySql implements SuiteDataSourcePageSql{
 
     public String suiteSql(String sql,Pageable pageable) {
-
-    	throw new UnsupportedOperationException("this method is not implements now!");
+    	StringBuilder newSql = new StringBuilder();
+    	newSql.append(sql).append(" limit ")
+    	.append((pageable.getPageNumber()-1)*pageable.getPageSize())
+    	.append(",").append(pageable.getPageSize());
+    	return newSql.toString();
     }
 }

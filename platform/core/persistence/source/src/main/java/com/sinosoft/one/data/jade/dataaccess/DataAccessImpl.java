@@ -66,7 +66,12 @@ public class DataAccessImpl implements DataAccess {
 		session.doWork(psw);
 		sql = psw.getSql();
 		List<T> content = select(sql,args,rowMapper);
-		Page<T> page = new PageImpl<T>(content, pageable, totals.get(0).longValue());
+		if(content == null){
+			content = new ArrayList<T>();
+		}
+		Object o = totals.get(0);
+		Number num = (Number)o;
+		Page<T> page = new PageImpl<T>(content, pageable, num.longValue());
 		return page;
 	}
 

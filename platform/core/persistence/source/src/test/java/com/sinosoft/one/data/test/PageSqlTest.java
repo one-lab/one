@@ -33,6 +33,23 @@ public class PageSqlTest {
 
     @Test
     public void testJade() {
+    	//testMysql();
+    	testOracle();
+    }
+    private void testMysql() {
+    	Pageable pageable = new PageRequest(1, 10);
+    	Page<User> page= userDao.selectUser(pageable);
+		Assert.assertNotNull(page);
+		Assert.assertEquals(10, page.getSize());
+		Assert.assertEquals(14L, page.getTotalElements());
+		Assert.assertEquals(2, page.getTotalPages());
+		Assert.assertEquals(1, page.getNumber());
+		List<User> users = page.getContent();
+		User user = users.get(9);
+		Assert.assertEquals("aab010", user.getId());
+		Assert.assertEquals("content10", user.getName());
+    }
+    private void testOracle() {
     	Pageable pageable = new PageRequest(2, 10);
     	Page<User> page= userDao.selectUser(pageable);
 		Assert.assertNotNull(page);
