@@ -110,7 +110,7 @@ class OneTransactionalRepositoryProxyPostProcessor implements RepositoryProxyPos
 	 *
 	 * <p>
 	 * This class reads Spring's JDK 1.5+ {@link org.springframework.transaction.annotation.Transactional} annotation and exposes corresponding transaction
-	 * attributes to Spring's transaction infrastructure. Also supports EJB3's {@link javax.ejb.TransactionAttribute}
+	 * attributes to Spring's transaction infrastructure. Also supports EJB3's javax.ejb.TransactionAttribute
 	 * annotation (if present). This class may also serve as base class for a custom TransactionAttributeSource, or get
 	 * customized through {@link org.springframework.transaction.annotation.TransactionAnnotationParser} strategies.
 	 *
@@ -136,7 +136,7 @@ class OneTransactionalRepositoryProxyPostProcessor implements RepositoryProxyPos
 
 		/**
 		 * Create a default AnnotationTransactionAttributeSource, supporting public methods that carry the
-		 * <code>Transactional</code> annotation or the EJB3 {@link javax.ejb.TransactionAttribute} annotation.
+		 * <code>Transactional</code> annotation or the EJB3 javax.ejb.TransactionAttribute annotation.
 		 */
 		public OneCustomAnnotationTransactionAttributeSource(SqlQueries sqlQueries) {
 			this(true);
@@ -145,7 +145,7 @@ class OneTransactionalRepositoryProxyPostProcessor implements RepositoryProxyPos
 
 		/**
 		 * Create a custom AnnotationTransactionAttributeSource, supporting public methods that carry the
-		 * <code>Transactional</code> annotation or the EJB3 {@link javax.ejb.TransactionAttribute} annotation.
+		 * <code>Transactional</code> annotation or the EJB3 javax.ejb.TransactionAttribute annotation.
 		 *
 		 * @param publicMethodsOnly whether to support public methods that carry the <code>Transactional</code> annotation
 		 *          only (typically for use with proxy-based AOP), or protected/private methods as well (typically used with
