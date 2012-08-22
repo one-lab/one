@@ -48,7 +48,7 @@ public abstract class OneRepositoryFactoryBeanSupport<T extends Repository<S, ID
 	private Class<? extends T> repositoryInterface;
 	private Object customImplementation;
 	private NamedQueries namedQueries;
-	private SqlQueries sqlQueries;
+	protected SqlQueries sqlQueries;
 
 	/**
 	 * Setter to inject the repository interface to implement.

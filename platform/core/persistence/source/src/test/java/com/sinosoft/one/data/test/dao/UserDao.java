@@ -24,7 +24,6 @@ import java.util.List;
 public interface UserDao extends CrudRepository<Student, String> {
 
     @SQL("select * from t_user")
-    @Transactional(readOnly = true)
     Page<User> selectUser(Pageable pageable);
 
 }

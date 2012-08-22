@@ -26,6 +26,7 @@ import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 
 import static org.springframework.data.querydsl.QueryDslUtils.QUERY_DSL_PRESENT;
