@@ -23,25 +23,21 @@ import java.util.List;
 public interface StudentDao extends CrudRepository<Student, String> {
 
     @SQL("select * from t_student")
-    @Transactional(readOnly = true)
     List<User> selectUser();
 
 	@Query(value = "select s.id,s.name from Student s")
-	@Transactional(readOnly = true)
 	List<User> selectUser3();
 
 	@Query(value = "select * from t_student",nativeQuery = true)
-	@Transactional(readOnly = true)
 	List<User> selectUser2();
-	@Transactional(readOnly = true)
-	List<User> sqlQuery1();
-	@Transactional(readOnly = true)
+	int sqlQuery1(String id, String name);
 	List<User> sqlQuery2(String id);
-	@Transactional(readOnly = true)
 	List<User> sqlQuery3(@Param("id") String id);
 	@SQL("select * from t_student where id=:user.id")
-	@Transactional(readOnly = true)
 	List<User> sqlQuery4(@Param("user") User user,@Param("user2") User user2);
 	List<User> getSSS();
+
+    @SQL("insert into t_student values(?1, ?2)")
+    int saveStudent(String id, String name);
 
 }

@@ -83,7 +83,7 @@ public abstract class OneTransactionalRepositoryFactoryBeanSupport<T extends Rep
 
 		Assert.isInstanceOf(ListableBeanFactory.class, beanFactory);
 
-		this.txPostProcessor = SpringDataJpaCoreSupportAdapter.getInstance().newTransactionalRepositoryProxyPostProcessor((ListableBeanFactory) beanFactory,
-                transactionManagerName);
+//		this.txPostProcessor = new OneTransactionalRepositoryProxyPostProcessor((ListableBeanFactory) beanFactory,
+//                transactionManagerName, sqlQueries);
 	}
 }

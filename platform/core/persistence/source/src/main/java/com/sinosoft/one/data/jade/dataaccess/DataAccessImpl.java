@@ -22,10 +22,13 @@ import org.hibernate.jdbc.Work;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.Repository;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -37,7 +40,8 @@ import java.util.List;
  * @author 王志亮 [qieqie.wang@gmail.com]
  * @author 廖涵 [in355hz@gmail.com]
  */
-public class DataAccessImpl implements DataAccess {
+@Transactional(readOnly = true)
+public class DataAccessImpl implements DataAccess, Repository {
 
 	private final EntityManager em;
 	public DataAccessImpl(EntityManager em) {
@@ -58,7 +62,6 @@ public class DataAccessImpl implements DataAccess {
 	 * 分页查询 2012-08-16
 	 */
 	public<T> Page<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper<?> rowMapper) {
-
 		Session session = em.unwrap(Session.class);
 		SingleColumnRowMapper<BigDecimal> scrm = new SingleColumnRowMapper<BigDecimal>();
 		List<BigDecimal> totals = select(countSql,args,scrm);
@@ -78,8 +81,9 @@ public class DataAccessImpl implements DataAccess {
 	/**
 	 * 更新 2012-08-16
 	 */
+    @Transactional
 	public int update(String sql, Object[] args, KeyHolder generatedKeyHolder) {
-		Session session = (Session) em.getDelegate();
+		Session session = em.unwrap(Session.class);
 		UpdateWork work = new UpdateWork(sql, args, generatedKeyHolder);
 		session.doWork(work);
 		return work.number;
