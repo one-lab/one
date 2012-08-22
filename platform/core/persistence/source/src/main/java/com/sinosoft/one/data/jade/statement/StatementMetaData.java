@@ -146,7 +146,7 @@ public class StatementMetaData {
         return daoMetaData.getDAOClass().getName() + '#' + method.getName();
     }
 
-    private static Pattern[] SELECT_PATTERNS = new Pattern[] {
+    public static Pattern[] SELECT_PATTERNS = new Pattern[] {
             //
             Pattern.compile("^\\s*SELECT\\s+", Pattern.CASE_INSENSITIVE), //
             Pattern.compile("^\\s*SHOW\\s+", Pattern.CASE_INSENSITIVE), //

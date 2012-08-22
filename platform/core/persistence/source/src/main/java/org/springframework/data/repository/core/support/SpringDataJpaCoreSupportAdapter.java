@@ -22,8 +22,4 @@ public final class SpringDataJpaCoreSupportAdapter {
                                                                   Class<?> customImplementationClass) {
         return new DefaultRepositoryInformation(metadata, repositoryBaseClass, customImplementationClass);
     }
-
-    public TransactionalRepositoryProxyPostProcessor newTransactionalRepositoryProxyPostProcessor(ListableBeanFactory beanFactory, String transactionManagerName) {
-        return new TransactionalRepositoryProxyPostProcessor(beanFactory, transactionManagerName);
-    }
 }

@@ -27,13 +27,29 @@
     <bean id="entityManaegerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
         <property name="persistenceUnitName" value="oracleNormalPU"/>
         <property name="dataSource" ref="dataSource" />
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+            </props>
+        </property>
     </bean>
 
+<!--      <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"> -->
+<!--         <property name="url" value="jdbc:oracle:thin:@192.168.18.157:1521:orcl"/> -->
+<!--         <property name="username" value="kylin" /> -->
+<!--         <property name="password" value="kylin" /> -->
+<!--         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" /> -->
+<!--     </bean>  -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="jdbc:oracle:thin:@192.168.18.157:1521:orcl"/>
-        <property name="username" value="kylin" />
-        <property name="password" value="kylin" />
-        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+        <property name="url" value="jdbc:mysql://192.168.18.151:3306/mini-web"/>
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+<!--         <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/> -->
+<!--         <property name="username" value="testaccount" /> -->
+<!--         <property name="password" value="testpassword" /> -->
+<!--         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" /> -->
     </bean>
     <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
 </beans>
