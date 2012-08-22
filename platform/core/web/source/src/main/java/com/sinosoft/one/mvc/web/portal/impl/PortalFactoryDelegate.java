@@ -37,7 +37,6 @@ public class PortalFactoryDelegate implements PortalFactory, ApplicationContextA
 
     private ApplicationContext applicationContext;
 
-    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -46,12 +45,10 @@ public class PortalFactoryDelegate implements PortalFactory, ApplicationContextA
         this.portalFactoryName = portalFactoryName;
     }
 
-    @Override
     public Portal createPortal(Invocation inv) {
         return getPortalFactory().createPortal(inv);
     }
 
-    @Override
     public Pipe createPipe(Invocation inv, boolean create) {
         return getPortalFactory().createPipe(inv, create);
     }

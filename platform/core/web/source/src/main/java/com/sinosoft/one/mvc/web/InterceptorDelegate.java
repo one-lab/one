@@ -61,7 +61,6 @@ public class InterceptorDelegate implements Ordered, Named, ControllerIntercepto
         return interceptor;
     }
 
-    @Override
     public String getName() {
         if (interceptor instanceof Named) {
             name = ((Named) interceptor).getName();
@@ -69,7 +68,6 @@ public class InterceptorDelegate implements Ordered, Named, ControllerIntercepto
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
         if (interceptor instanceof Named) {
@@ -77,7 +75,6 @@ public class InterceptorDelegate implements Ordered, Named, ControllerIntercepto
         }
     }
 
-    @Override
     public int getPriority() {
         if (interceptor instanceof Ordered) {
             return ((Ordered) interceptor).getPriority();
@@ -85,7 +82,6 @@ public class InterceptorDelegate implements Ordered, Named, ControllerIntercepto
         return 0;
     }
 
-    @Override
     public boolean isForAction(Class<?> controllerClazz, Method actionMethod) {
         if (interceptor instanceof ActionSelector) {
             return ((ActionSelector) interceptor).isForAction(controllerClazz, actionMethod);
@@ -93,7 +89,6 @@ public class InterceptorDelegate implements Ordered, Named, ControllerIntercepto
         return true;
     }
 
-    @Override
     public boolean isForDispatcher(Dispatcher dispatcher) {
         if (isDispatcherSelector) {
             return ((DispatcherSelector) interceptor).isForDispatcher(dispatcher);
@@ -101,19 +96,16 @@ public class InterceptorDelegate implements Ordered, Named, ControllerIntercepto
         return true;
     }
 
-    @Override
     public Object roundInvocation(Invocation inv, InvocationChain chain) throws Exception {
         return interceptor.roundInvocation(inv, chain);
     }
 
-    @Override
     public void afterCompletion(Invocation inv, Throwable ex) throws Exception {
         if (isAfterCompletion) {
             ((AfterCompletion) interceptor).afterCompletion(inv, ex);
         }
     }
 
-    @Override
     public int compareTo(InterceptorDelegate o) {
         if (o == this) {
             return 0;

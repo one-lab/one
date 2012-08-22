@@ -108,7 +108,6 @@ public final class InvocationBean implements Invocation {
         return methodParameters != UN_INITIATED_ARRAY;
     }
 
-    @Override
     public WebApplicationContext getApplicationContext() {
         return getModule().getApplicationContext();
     }
@@ -117,13 +116,11 @@ public final class InvocationBean implements Invocation {
         this.methodParameters = methodParameters;
     }
 
-    @Override
     public Object getController() {
         ControllerEngine engine = getControllerEngine();
         return engine.getController();
     }
 
-    @Override
     public Class<?> getControllerClass() {
         ControllerEngine engine = getControllerEngine();
         return engine.getControllerClass();
@@ -141,18 +138,15 @@ public final class InvocationBean implements Invocation {
         this.viewModule = viewModule;
     }
 
-    @Override
     public Method getMethod() {
         return getActionEngine().getMethod();
     }
 
-    @Override
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getMethod().isAnnotationPresent(annotationClass)
                 || getControllerClass().isAnnotationPresent(annotationClass);
     }
 
-    @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
         T t = getMethod().getAnnotation(annotationClass);
         if (t == null) {
@@ -193,17 +187,14 @@ public final class InvocationBean implements Invocation {
         throw new Error("cannot found " + engineClass.getName());
     }
 
-    @Override
     public String[] getMethodParameterNames() {
         return (String[]) ArrayUtils.clone(getActionEngine().getParameterNames());
     }
 
-    @Override
     public Object[] getMethodParameters() {
         return methodParameters;
     }
 
-    @Override
     public Object getMethodParameter(String name) {
         if (!isMethodParametersInitiated()) {
             throw new IllegalStateException();
@@ -217,12 +208,10 @@ public final class InvocationBean implements Invocation {
         return null;
     }
 
-    @Override
     public String getParameter(String name) {
         return request.getParameter(name);
     }
 
-    @Override
     public void changeMethodParameter(int index, Object newValue) {
         if (!isMethodParametersInitiated()) {
             throw new IllegalStateException();
@@ -258,22 +247,18 @@ public final class InvocationBean implements Invocation {
         }
     }
 
-    @Override
     public void changeMethodParameter(ParamMetaData paramMeta, Object newValue) {
         changeMethodParameter(paramMeta.getIndex(), newValue);
     }
 
-    @Override
     public void addModel(Object value) {
         getModel().add(value);
     }
 
-    @Override
     public void addModel(String name, Object value) {
         getModel().add(name, value);
     }
 
-    @Override
     public Model getModel() {
         if (this.model != null) {
             return this.model;
@@ -293,12 +278,10 @@ public final class InvocationBean implements Invocation {
         return this.model;
     }
 
-    @Override
     public Object getModel(String name) {
         return getModel().get(name);
     }
 
-    @Override
     public synchronized Object getAttribute(String name) {
         if (attributes == null) {
             return null;
@@ -306,14 +289,12 @@ public final class InvocationBean implements Invocation {
         return attributes.get(name);
     }
 
-    @Override
     public synchronized void removeAttribute(String name) {
         if (attributes != null) {
             attributes.remove(name);
         }
     }
 
-    @Override
     public synchronized Set<String> getAttributeNames() {
         if (attributes == null) {
             return Collections.emptySet();
@@ -321,7 +302,6 @@ public final class InvocationBean implements Invocation {
         return attributes.keySet();
     }
 
-    @Override
     public synchronized Invocation setAttribute(String name, Object value) {
         if (attributes == null) {
             attributes = new HashMap<String, Object>();
@@ -333,12 +313,10 @@ public final class InvocationBean implements Invocation {
         return this;
     }
 
-    @Override
     public void addFlash(String name, String msg) {
         getFlash(true).add(name, msg);
     }
 
-    @Override
     public Flash getFlash() {
         return getFlash(true);
     }
@@ -355,17 +333,14 @@ public final class InvocationBean implements Invocation {
         return this.flash = flash;
     }
 
-    @Override
     public RequestPath getRequestPath() {
         return requestPath;
     }
 
-    @Override
     public HttpServletRequest getRequest() {
         return this.request;
     }
 
-    @Override
     public HttpServletResponse getResponse() {
         return response;
     }
@@ -387,7 +362,6 @@ public final class InvocationBean implements Invocation {
         }
     }
 
-    @Override
     public ServletContext getServletContext() {
         return getModule().getApplicationContext().getServletContext();
     }
@@ -408,7 +382,6 @@ public final class InvocationBean implements Invocation {
         this.preInvocation = preInvocation;
     }
 
-    @Override
     public Invocation getHeadInvocation() {
         Invocation inv = this;
         while (inv.getPreInvocation() != null) {
@@ -425,25 +398,21 @@ public final class InvocationBean implements Invocation {
         return multiPartRequest;
     }
 
-    @Override
     public List<BindingResult> getBindingResults() {
         fetchBindingResults();
         return this.bindingResults;
     }
 
-    @Override
     public List<String> getBindingResultNames() {
         fetchBindingResults();
         return this.bindingResultNames;
     }
 
-    @Override
     public BindingResult getParameterBindingResult() {
         return (BindingResult) this.getModel().get(
                 BindingResult.MODEL_KEY_PREFIX + ParameterBindingResult.OBJECT_NAME);
     }
 
-    @Override
     public BindingResult getBindingResult(String name) {
         Assert.notNull(name);
         if (name instanceof String) {
@@ -479,7 +448,6 @@ public final class InvocationBean implements Invocation {
         }
     }
 
-    @Override
     public String getResourceId() {
         StringBuilder sb = new StringBuilder(255);
         sb.append(getRequest().getContextPath());
@@ -489,7 +457,6 @@ public final class InvocationBean implements Invocation {
         return sb.toString();
     }
 
-    @Override
     public void addAfterCompletion(AfterCompletion afterComletion) {
         mvc.addAfterCompletion(afterComletion);
     }

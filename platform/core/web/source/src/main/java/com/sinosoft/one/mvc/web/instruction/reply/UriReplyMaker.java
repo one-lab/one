@@ -18,17 +18,20 @@ class UriReplyMaker extends ReplyMaker implements UriReply {
 	private final Log log = LogFactory.getLog(getClass());
 	private String forwardUri;
 	private String redirectUri;
-	@Override
 	public UriReply type(String mediaType) {
 		super.setType(mediaType);
 		return this;
 	}
 
-	@Override
 	public UriReply headers(Map<String, String> headers) {
 		super.setHeaders(headers);
 		return this;
 	}
+
+    public UriReply header(String key, String value) {
+        addHeader(key, value);
+        return this;
+    }
 //	@Override
 //	public UriReply seeOther(String uri) {
 //		redirectUri = uri;
@@ -58,7 +61,6 @@ class UriReplyMaker extends ReplyMaker implements UriReply {
 //	}
 
 
-	@Override
 	public UriReply redirect(String url) {
 		StringsEx.nonEmpty(url, "Redirect URL must be non empty!");
 		this.redirectUri = url;
@@ -118,14 +120,12 @@ class UriReplyMaker extends ReplyMaker implements UriReply {
 		}
 	}
 
-	@Override
 	public UriReply forward(String url) {
 		StringsEx.nonEmpty(url, "Redirect URL must be non empty!");
 		this.forwardUri = url;
 		return this;
 	}
 
-	@Override
 	public UriReply status(int code) {
 		super.setStatus(code);
 		return this;

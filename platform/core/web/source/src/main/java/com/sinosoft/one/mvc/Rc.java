@@ -59,7 +59,6 @@ public class Rc {
      * 
      * @return
      * @throws NullPointerException 如果当前线程中没有绑定请求对象时
-     * @see PrivateVar#getInvocation()
      */
     public static Invocation invocation() {
         return InvocationUtils.getInvocation(request());

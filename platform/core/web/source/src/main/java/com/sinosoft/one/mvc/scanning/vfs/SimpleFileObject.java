@@ -53,12 +53,10 @@ public class SimpleFileObject implements FileObject {
         this.fileName = new FileNameImpl(this, file.getName());
     }
 
-    @Override
     public FileObject getChild(final String child) throws IOException {
         return fs.resolveFile(urlString + child);
     }
 
-    @Override
     public FileObject[] getChildren() throws MalformedURLException, IOException {
         File[] files = file.listFiles();
         FileObject[] children = new FileObject[files.length];
@@ -72,26 +70,22 @@ public class SimpleFileObject implements FileObject {
         return children;
     }
 
-    @Override
     public FileContent getContent() throws IOException {
         if (!file.canRead()) {
             throw new IOException("can not read");
         }
         return new FileContent() {
 
-            @Override
             public InputStream getInputStream() throws IOException {
                 return new FileInputStream(file);
             }
         };
     }
 
-    @Override
     public FileName getName() {
         return fileName;
     }
 
-    @Override
     public FileObject getParent() throws MalformedURLException, IOException {
         File parent = file.getParentFile();
         if (parent == null) {
@@ -100,7 +94,6 @@ public class SimpleFileObject implements FileObject {
         return fs.resolveFile(parent.toURI().toURL());
     }
 
-    @Override
     public FileType getType() {
         if (file.isFile()) {
             return FileType.FILE;
@@ -110,12 +103,10 @@ public class SimpleFileObject implements FileObject {
         return FileType.UNKNOWN;
     }
 
-    @Override
     public URL getURL() throws MalformedURLException {
         return url;
     }
 
-    @Override
     public boolean exists() throws IOException {
         return file.exists();
     }

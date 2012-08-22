@@ -100,12 +100,10 @@ public class ModuleEngine implements Engine {
         return multipartResolver;
     }
 
-    @Override
     public int isAccepted(HttpServletRequest mvc) {
         return 1;
     }
 
-    @Override
     public Object execute(Mvc mvc) throws Throwable {
         Invocation inv = mvc.getInvocation();
 
@@ -232,7 +230,6 @@ public class ModuleEngine implements Engine {
             } else {
                 inv.addAfterCompletion(new AfterCompletion() {
 
-                    @Override
                     public void afterCompletion(Invocation inv, Throwable ex) throws Exception {
                         ModuleEngine.this.multipartResolver.cleanupMultipart(request);
                     }

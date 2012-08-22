@@ -27,7 +27,6 @@ public interface BeforeInterceptors {
     /**
      * 
      * @param inv
-     * @param instruction
      * @throws Exception
      */
     public void doBeforeInterceptors(Invocation inv) throws Exception;

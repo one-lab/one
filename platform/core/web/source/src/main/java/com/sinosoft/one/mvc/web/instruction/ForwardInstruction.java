@@ -42,7 +42,6 @@ public class ForwardInstruction extends AbstractInstruction {
     public ForwardInstruction module(final String module) {
         this.preInstruction = new Instruction() {
 
-            @Override
             public void render(Invocation inv) throws IOException, ServletException, Exception {
                 String modulePath = module;
                 if (module.length() > 0 && module.charAt(0) != '/') {
@@ -57,7 +56,6 @@ public class ForwardInstruction extends AbstractInstruction {
     public ForwardInstruction controller(final String controller) {
         this.preInstruction = new Instruction() {
 
-            @Override
             public void render(Invocation inv) throws IOException, ServletException, Exception {
                 String controllerPath = controller;
                 if (controller.length() > 0 && controller.charAt(0) != '/') {
@@ -72,7 +70,6 @@ public class ForwardInstruction extends AbstractInstruction {
     public ForwardInstruction action(final String action) {
         this.preInstruction = new Instruction() {
 
-            @Override
             public void render(Invocation inv) throws IOException, ServletException, Exception {
                 String actionPath = action;
                 if (action.length() > 0 && action.charAt(0) != '/') {

@@ -40,12 +40,10 @@ public class MatchResultImpl implements MatchResult {
         this.value = value;
     }
 
-    @Override
     public MappingNode getMappingNode() {
         return mappingNode;
     }
 
-    @Override
     public String getValue() {
         return value;
     }
@@ -54,7 +52,6 @@ public class MatchResultImpl implements MatchResult {
         this.parameterName = name;
     }
 
-    @Override
     public String getParameterName() {
         return parameterName;
     }

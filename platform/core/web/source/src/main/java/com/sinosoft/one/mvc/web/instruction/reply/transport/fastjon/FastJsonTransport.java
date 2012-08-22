@@ -20,13 +20,12 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 @Component
 class FastJsonTransport extends Json {
 
-	@Override
 	public <T> void out(OutputStream out, T data)
 			throws IOException {
 
         try {
             if(MvcObjectUtils.isPrimitiveOrString(data.getClass())) {
-                out.write(String.valueOf(data).getBytes(Charsets.UTF_8));
+                out.write(String.valueOf(data).getBytes(Charsets.UTF_8.displayName()));
                 return;
             }
             SerializeWriter writer = new SerializeWriter();
@@ -50,7 +49,7 @@ class FastJsonTransport extends Json {
 
             serializer.write(data);
             String text = serializer.toString();
-            out.write(text.getBytes(Charsets.UTF_8));
+            out.write(text.getBytes(Charsets.UTF_8.displayName()));
         } finally {
             if(out != null) {
                 out.close();

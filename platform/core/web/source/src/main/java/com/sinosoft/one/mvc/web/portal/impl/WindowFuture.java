@@ -49,7 +49,6 @@ class WindowFuture<T> implements Future<T> {
         return cancelRequested;
     }
 
-    @Override
     public boolean cancel(final boolean mayInterruptIfRunning) {
         this.cancelRequested = true;
         // when mayInterruptIfRunning is false
@@ -78,23 +77,19 @@ class WindowFuture<T> implements Future<T> {
         }
     }
 
-    @Override
     public T get() throws InterruptedException, ExecutionException {
         return future.get();
     }
 
-    @Override
     public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException,
             TimeoutException {
         return future.get(timeout, unit);
     }
 
-    @Override
     public boolean isCancelled() {
         return future.isCancelled();
     }
 
-    @Override
     public boolean isDone() {
         return future.isDone();
     }

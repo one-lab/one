@@ -11,7 +11,6 @@ public class IgnoredPathEquals implements IgnoredPath {
         this.path = path;
     }
 
-    @Override
     public boolean hit(RequestPath requestPath) {
         return requestPath.getMvcPath().equals(path);
     }

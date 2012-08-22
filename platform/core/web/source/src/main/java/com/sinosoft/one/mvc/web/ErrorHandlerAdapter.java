@@ -27,7 +27,6 @@ public class ErrorHandlerAdapter implements ControllerErrorHandler {
     @Autowired
     protected ParentErrorHandler parentHandler;
 
-    @Override
     public Object onError(Invocation inv, Throwable ex) throws Throwable {
         return parentHandler.onError(inv, ex);
     }

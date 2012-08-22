@@ -215,7 +215,6 @@ public class MappingNode implements Comparable<MappingNode> {
         return ammountOfRegexChildren;
     }
 
-    @Override
     public int compareTo(MappingNode target) {
         return this.getMapping().compareTo(target.getMapping());
     }

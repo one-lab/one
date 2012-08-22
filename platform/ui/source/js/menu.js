@@ -53,39 +53,41 @@
 				$menuHtml = $('<div class="side_menu"></div>');
 			};*/
 			
+			var url = defaults.url;
+			var dataType = defaults.dataType;
+			var type = defaults.type;
 			
 			$.ajax({
-				url: defaults.url,
-            	dataType: defaults.dataType,
-            	type: defaults.type,
+				url: url,
+            	dataType: dataType,
+            	type: type,
 				async:false,
 				processData: false,
 				beforeSend : function(){loading()},
-				success: function(data){
-							$load.hide();							
-							if(defaults.dataType == "xml") {
-								analyseXML(data);
-							} else if(defaults.dataType == "json") {
-								analyseJson(data);	
-							} else if(defaults.dataType == "html"){
-								analyseHtml(data);	
-							};							
-							$menuHtml.children("div:not(.side_inner)").bind(defaults.eventType,openMenu);														
-							$("div.sub_inner > div.sub")
-								.bind("click",selected)
-								.bind(defaults.eventType,openMenu)								
-								.bind({
-									mouseover:function(){$(this).addClass("hover")},
-									mouseout:function(){$(this).removeClass("hover")}
-							});
-							/*if(defaults.silder){
-								$switch.bind("click",sildswitch)
-							};*/
-						},
 				error: function (XMLHttpRequest,errorThrown) {
 					alert("数据加载出错！" + errorThrown);
 				},
-				
+				success: function(data){
+					$load.hide();							
+					if(defaults.dataType == "xml") {
+						analyseXML(data);
+					} else if(defaults.dataType == "json") {
+						analyseJson(data);	
+					} else if(defaults.dataType == "html"){
+						analyseHtml(data);	
+					};							
+					$menuHtml.children("div:not(.side_inner)").bind(defaults.eventType,openMenu);														
+					$("div.sub_inner > div.sub")
+						.bind("click",selected)
+						.bind(defaults.eventType,openMenu)								
+						.bind({
+							mouseover:function(){$(this).addClass("hover")},
+							mouseout:function(){$(this).removeClass("hover")}
+					});
+					/*if(defaults.silder){
+						$switch.bind("click",sildswitch)
+					};*/
+				}
 			});	
 			//ajax调用结束
 			

@@ -10,7 +10,6 @@ class ExcludesPropertyFilter implements PropertyFilter {
 	public ExcludesPropertyFilter(String[] excludes) {
 		this.excludes = excludes;
 	}
-	@Override
 	public boolean apply(Object source, String name, Object value) {
 		if(ArrayUtils.contains(excludes, name)) {
 			return false;

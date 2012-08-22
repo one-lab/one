@@ -27,7 +27,6 @@ import com.sinosoft.one.mvc.web.impl.thread.InvocationBean;
  */
 public class ParentErrorHandlerImpl implements ParentErrorHandler {
 
-    @Override
     public Object onError(Invocation inv, Throwable ex) throws Throwable {
         InvocationBean invb = (InvocationBean) inv;
         Module module = invb.getModule();

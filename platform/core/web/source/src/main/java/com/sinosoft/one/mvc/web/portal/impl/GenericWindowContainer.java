@@ -78,7 +78,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         return timeout;
     }
 
-    @Override
+    
     public Invocation getInvocation() {
         return invocation;
     }
@@ -88,22 +88,22 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
      * 来完成 现在是2010-08-04，正常情况下2010国庆后将去掉此代码
      */
     @Deprecated
-    @Override
+    
     public void addModel(String name, Object value) {
         getInvocation().addModel(name, value);
     }
 
-    @Override
+    
     public HttpServletRequest getRequest() {
         return invocation.getRequest();
     }
 
-    @Override
+    
     public HttpServletResponse getResponse() {
         return invocation.getResponse();
     }
 
-    @Override
+    
     public void addListener(WindowListener l) {
         if (l == null) {
             return;
@@ -117,18 +117,18 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         }
     }
 
-    @Override
+    
     public Window addWindow(String name, String windowPath) {
         return this.addWindow(name, windowPath, (WindowCallback) null);
     }
 
-    @Override
+    
     public Window addWindow(String name, String windowPath, final Map<String, Object> attributes) {
         WindowCallback callback = null;
         if (attributes != null && attributes.size() > 0) {
             callback = new WindowCallback() {
 
-                @Override
+                
                 public void beforeSubmit(Window window) {
                     synchronized (attributes) {
                         for (Map.Entry<String, Object> entry : attributes.entrySet()) {
@@ -141,7 +141,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         return this.addWindow(name, windowPath, callback);
     }
 
-    @Override
+    
     public Window addWindow(String name, String windowPath, WindowCallback callback) {
         // 创建 窗口对象
         WindowImpl window = new WindowImpl(this, name, windowPath);
@@ -182,17 +182,17 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         return window;
     }
 
-    @Override
+    
     public List<Window> getWindows() {
         return windows;
     }
 
-    @Override
+    
     public WindowRender getWindowRender() {
         return render.getInnerRender();
     }
 
-    @Override
+    
     public void setWindowRender(WindowRender render) {
         if (render == null) {
             this.render = singletonRender;
@@ -211,21 +211,21 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         return new WindowFuture(future, task.getWindow());
     }
 
-    @Override
+    
     public void render(Writer out, Window window) throws IOException {
         render.render(out, window);
     }
 
     //-------------实现toString()---------------F
 
-    @Override
+    
     public String toString() {
         return "aggregate ['" + invocation.getRequestPath().getUri() + "']";
     }
 
     //------------ 以下代码是PortalListener和Invocation的实现代码 --------------------------------
 
-    @Override
+    
     public void onWindowAdded(Window window) {
         if (windowListeners != null) {
             try {
@@ -236,7 +236,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         }
     }
 
-    @Override
+    
     public void onWindowStarted(Window window) {
         if (windowListeners != null) {
             try {
@@ -247,7 +247,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         }
     }
 
-    @Override
+    
     public void onWindowCanceled(Window window) {
         if (windowListeners != null) {
             try {
@@ -258,7 +258,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         }
     }
 
-    @Override
+    
     public void onWindowDone(Window window) {
         if (windowListeners != null) {
             try {
@@ -269,7 +269,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         }
     }
 
-    @Override
+    
     public void onWindowError(Window window) {
         if (windowListeners != null) {
             try {
@@ -280,7 +280,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         }
     }
 
-    @Override
+    
     public void onWindowTimeout(Window window) {
         if (windowListeners != null) {
             try {

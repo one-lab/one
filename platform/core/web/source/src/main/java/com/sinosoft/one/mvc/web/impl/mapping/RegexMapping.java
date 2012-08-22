@@ -62,27 +62,22 @@ public class RegexMapping implements Mapping {
         return regex;
     }
 
-    @Override
     public MappingNode getMappingNode() {
         return mappingNode;
     }
 
-    @Override
     public void setMappingNode(MappingNode mappingNode) {
         this.mappingNode = mappingNode;
     }
 
-    @Override
     public String getParameterName() {
         return paramName;
     }
 
-    @Override
     public String getDefinition() {
         return definition;
     }
 
-    @Override
     public MatchResult match(CharSequence path) {
         Matcher matcher = pattern.matcher(path);
         // TODO find? matches?
@@ -99,7 +94,6 @@ public class RegexMapping implements Mapping {
 
     }
 
-    @Override
     public int compareTo(Mapping o) {
         if (o instanceof ConstantMapping) {
             return -((ConstantMapping) o).compareTo(this);

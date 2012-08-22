@@ -15,6 +15,8 @@
  */
 package com.sinosoft.one.mvc.web.paramresolver;
 
+import com.sinosoft.one.mvc.adapter.ArraysEx;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -52,12 +54,12 @@ class ParamMetaDataImpl implements ParamMetaData {
         this.annotations = method.getParameterAnnotations()[index];
     }
 
-    @Override
+    
     public int getIndex() {
         return index;
     }
 
-    @Override
+    
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
         for (Annotation annotation : annotations) {
             if (annotationClass.isInstance(annotation)) {
@@ -67,12 +69,12 @@ class ParamMetaDataImpl implements ParamMetaData {
         return null;
     }
 
-    @Override
+    
     public <T extends Annotation> boolean isAnnotationPresent(Class<T> annotationClass) {
         return getAnnotation(annotationClass) != null;
     }
 
-    @Override
+    
     public synchronized void setUserObject(Object key, Object userObject) {
         if (this.userObjectMap == null) {
             this.userObjectMap = new HashMap<Object, Object>();
@@ -84,7 +86,7 @@ class ParamMetaDataImpl implements ParamMetaData {
         }
     }
 
-    @Override
+    
     public synchronized Object getUserObject(Object key) {
         return userObjectMap == null ? null : userObjectMap.get(key);
     }
@@ -121,13 +123,13 @@ class ParamMetaDataImpl implements ParamMetaData {
         if (paramNames[1] == null) {
             paramNames[1] = aliasParamName;
         } else {
-            String[] newArray = Arrays.copyOf(paramNames, paramNames.length + 1);
+            String[] newArray = ArraysEx.copyOf(paramNames, paramNames.length + 1);
             newArray[paramNames.length] = aliasParamName;
             this.paramNames = newArray;
         }
     }
 
-    @Override
+
     public String[] getParamNames() {
         return paramNames;
     }
@@ -136,7 +138,7 @@ class ParamMetaDataImpl implements ParamMetaData {
         paramNames[0] = paramName;
     }
 
-    @Override
+    
     public String toString() {
         return this.controllerClass.getName() + "#" + this.method.getName() + "@" + index;
     }

@@ -89,12 +89,10 @@ public class JarFileObject implements FileObject {
         }
     }
 
-    @Override
     public FileObject getChild(String name) throws IOException {
         return fs.resolveFile(urlString + name);
     }
 
-    @Override
     public FileObject[] getChildren() throws IOException {
         List<FileObject> children = new LinkedList<FileObject>();
         Enumeration<JarEntry> e = jarFile.entries();
@@ -113,26 +111,22 @@ public class JarFileObject implements FileObject {
         return children.toArray(new FileObject[0]);
     }
 
-    @Override
     public FileContent getContent() throws IOException {
         if (getType() != FileType.FILE) {
             throw new IOException("can not read");
         }
         return new FileContent() {
 
-            @Override
             public InputStream getInputStream() throws IOException {
                 return getURL().openStream();
             }
         };
     }
 
-    @Override
     public FileName getName() throws IOException {
         return fileName;
     }
 
-    @Override
     public FileObject getParent() throws IOException {
         if (entry == null) {
             return null;
@@ -155,17 +149,14 @@ public class JarFileObject implements FileObject {
         return fs.resolveFile(root.urlString + parentEntryName);
     }
 
-    @Override
     public FileType getType() throws IOException {
         return (entry == null || entry.isDirectory()) ? FileType.FOLDER : FileType.FILE;
     }
 
-    @Override
     public URL getURL() throws IOException {
         return url;
     }
 
-    @Override
     public boolean exists() throws IOException {
         return root == this || entry != null;
     }

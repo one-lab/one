@@ -29,34 +29,28 @@ public class ConstantMapping implements Mapping {
         this.definition = definition;
     }
 
-    @Override
     public MappingNode getMappingNode() {
         return mappingNode;
     }
 
-    @Override
     public void setMappingNode(MappingNode mappingNode) {
         this.mappingNode = mappingNode;
     }
 
-    @Override
     public String getDefinition() {
         return definition;
     }
 
-    @Override
     public String getParameterName() {
         // 没有参数
         return null;
     }
 
-    @Override
     public MatchResult match(CharSequence input) {
         boolean matched = MvcStringUtil.startsWith(input, definition);
         return !matched ? null : new MatchResultImpl(mappingNode, definition);
     }
 
-    @Override
     public int compareTo(Mapping o) {
         if (o instanceof ConstantMapping) {
             String opath = ((ConstantMapping) o).definition;

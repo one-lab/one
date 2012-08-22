@@ -64,7 +64,6 @@ public class ModelImpl implements Model {
         return Collections.unmodifiableMap(cloneAndFiltered);
     }
 
-    @Override
     public Model add(String name, Object value) {
         Assert.notNull(name, "Model attribute name must not be null");
         if (value instanceof String) {
@@ -79,7 +78,6 @@ public class ModelImpl implements Model {
         return this;
     }
 
-    @Override
     public Model add(Object value) {
         if (value != null) {
             if (value instanceof Collection) {
@@ -93,21 +91,18 @@ public class ModelImpl implements Model {
         return this;
     }
 
-    @Override
     public boolean contains(String name) {
         synchronized (mutex) {
             return map.containsKey(name);
         }
     }
 
-    @Override
     public Object get(String name) {
         synchronized (mutex) {
             return map.get(name);
         }
     }
 
-    @Override
     public Model merge(Map<String, Object> attributes) {
         if (attributes != null) {
             for (Map.Entry<String, Object> entry : attributes.entrySet()) {
@@ -120,7 +115,6 @@ public class ModelImpl implements Model {
         return this;
     }
 
-    @Override
     public Model remove(String name) {
         if (name == null) {
             return this;

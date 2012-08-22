@@ -28,7 +28,6 @@ import com.sinosoft.one.mvc.web.portal.WindowRender;
  */
 public class SimpleWindowRender implements WindowRender {
 
-    @Override
     public void render(Writer out, Window window) throws IOException {
         out.write(window.getContent());
     }

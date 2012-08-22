@@ -73,12 +73,10 @@ public class ControllerEngine implements Engine {
         return proxiedController;
     }
 
-    @Override
     public int isAccepted(HttpServletRequest mvc) {
         return 1;
     }
 
-    @Override
     public Object execute(Mvc mvc) throws Throwable {
         return mvc.doNext();
     }

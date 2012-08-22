@@ -82,7 +82,6 @@ public class ControllerRef {
             //增加如果一个class中有多个同样的ReqMethod，且无value的情况，采用按照字符串的方式排序，并自动将排在第一ReqMethod设置为缺省，其余的自动增加methodName
             //增加sort排序,按字母顺序进行排序，字母在前的方法排至前面，从0位开始如果相等按第0+1个字母排序,以此类推。完全一致，方法名称短的排在方法名称长的前面
             Arrays.sort(declaredMethods, new Comparator<Method>() {
-                @Override
                 public int compare(Method o1, Method o2) {
                     return o1.getName().compareTo(o2.getName());
                 }

@@ -100,10 +100,10 @@
 					<input type="text" name="userInfo.idcode" value="${userInfo.idcode}" />
 				</div>
 				<br />
-				<label for="userInfo.general" class="control-label">性别：     </label>
+				<label for="userInfo.gender" class="control-label">性别：     </label>
 				<div class="controls">
-					<input type="radio" value="MALE" name="userInfo.general"  />男性&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" value="FEMALE" name="userInfo.general" />女性
+					<input type="radio" value="MALE" name="userInfo.gender"  ${userInfo.strGender eq "MALE" || null == userInfo.strGender ? "checked='checked'" : ''}/>男性&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" value="FEMALE" name="userInfo.gender" ${userInfo.strGender eq "FEMALE" ? "checked='checked'" : ''}/>女性
 				</div>
 			</div>
 			</fieldset>

@@ -12,7 +12,6 @@ public class IgnoredPathRegexMatch implements IgnoredPath {
         this.path = Pattern.compile(path);
     }
 
-    @Override
     public boolean hit(RequestPath requestPath) {
         return path.matcher(requestPath.getMvcPath()).matches();
     }

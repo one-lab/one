@@ -35,7 +35,6 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class DefaultPipeRender implements WindowRender {
 
-    @Override
     public void render(Writer out, Window window) throws IOException {
 
         JSONObject json = new JSONObject();

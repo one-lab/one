@@ -63,7 +63,6 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
         Map<FileObject, ModuleResource> moduleResourceMap = new HashMap<FileObject, ModuleResource>();
     }
 
-    @Override
     public List<ModuleResource> findModuleResources(LoadScope scope) throws IOException {
 
         Local local = new Local();

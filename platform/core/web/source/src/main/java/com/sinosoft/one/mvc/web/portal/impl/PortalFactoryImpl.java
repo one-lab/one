@@ -79,13 +79,11 @@ public class PortalFactoryImpl implements PortalFactory, InitializingBean {
         return windowListener;
     }
 
-    @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(windowListener);
         Assert.notNull(executorService);
     }
 
-    @Override
     public Portal createPortal(Invocation inv) {
         PortalImpl portal = (PortalImpl) inv
                 .getAttribute("$$one-mvc-portal.portal");
@@ -146,7 +144,6 @@ public class PortalFactoryImpl implements PortalFactory, InitializingBean {
         return portal;
     }
 
-    @Override
     public Pipe createPipe(Invocation inv, boolean create) {
         PipeImpl pipe = (PipeImpl) inv.getHeadInvocation().getAttribute(
                 "$$one-mvc-portal.pipe");

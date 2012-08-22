@@ -33,17 +33,14 @@ public class FileNameImpl implements FileName {
         this.baseName = baseName;
     }
 
-    @Override
     public String getBaseName() {
         return baseName;
     }
 
-    @Override
     public FileObject getFileObject() {
         return fileObject;
     }
 
-    @Override
     public String getRelativeName(FileName subFileName) throws IOException {
         String basePath = fileObject.getURL().getPath();
         String subPath = subFileName.getFileObject().getURL().getPath();

@@ -155,7 +155,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
             this.inner = inner;
         }
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             if (inner.supports(metaData)) {
                 addIndexAliasParamNameIfNeccessary(metaData);
@@ -164,7 +163,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
             return false;
         }
 
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) throws Exception {
             return inner.resolve(inv, metaData);
         }
@@ -185,7 +183,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
         customerResolvers.add(new IndexAliasResolver(resolver));
     }
 
-    @Override
     public ParamResolver supports(ParamMetaData metaData) {
         for (ParamResolver resolver : customerResolvers) {
             if (resolver.supports(metaData)) {
@@ -204,12 +201,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class InvocationResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return Invocation.class == metaData.getParamType();
         }
 
-        @Override
         public Invocation resolve(Invocation inv, ParamMetaData metaData) {
             return inv;
         }
@@ -217,13 +212,11 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class ApplicationContextResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return ApplicationContext.class == metaData.getParamType()
                     || WebApplicationContext.class == metaData.getParamType();
         }
 
-        @Override
         public ApplicationContext resolve(Invocation inv, ParamMetaData metaData) {
             return inv.getApplicationContext();
         }
@@ -231,12 +224,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class MessageSourceResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return MessageSource.class == metaData.getParamType();
         }
 
-        @Override
         public MessageSource resolve(Invocation inv, ParamMetaData metaData) {
             return inv.getApplicationContext();
         }
@@ -244,13 +235,11 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class RequestResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return HttpServletRequest.class == metaData.getParamType()
                     || ServletRequest.class == metaData.getParamType();
         }
 
-        @Override
         public HttpServletRequest resolve(Invocation inv, ParamMetaData metaData) {
             return inv.getRequest();
         }
@@ -258,13 +247,11 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class ResponseResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return HttpServletResponse.class == metaData.getParamType()
                     || ServletResponse.class == metaData.getParamType();
         }
 
-        @Override
         public ServletResponse resolve(Invocation inv, ParamMetaData metaData) {
             return inv.getResponse();
         }
@@ -272,12 +259,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class ServletContextResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return ServletContext.class == metaData.getParamType();
         }
 
-        @Override
         public ServletContext resolve(Invocation inv, ParamMetaData metaData) {
             return inv.getServletContext();
         }
@@ -285,12 +270,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class HttpSessionResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return HttpSession.class == metaData.getParamType();
         }
 
-        @Override
         public HttpSession resolve(Invocation inv, ParamMetaData metaData) {
             boolean create = true;
             Create createAnnotation = metaData.getAnnotation(Create.class);
@@ -303,12 +286,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class ModelResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return Model.class == metaData.getParamType();
         }
 
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) {
             return inv.getModel();
         }
@@ -316,12 +297,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class FlashResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return Flash.class == metaData.getParamType();
         }
 
-        @Override
         public Flash resolve(Invocation inv, ParamMetaData metaData) {
             return inv.getFlash();
         }
@@ -329,12 +308,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class ModuleResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return Module.class == metaData.getParamType();
         }
 
-        @Override
         public Module resolve(Invocation inv, ParamMetaData metaData) {
             return ((InvocationBean) inv).getModule();
         }
@@ -342,12 +319,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class StringResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return String.class == metaData.getParamType();
         }
 
-        @Override
         public String resolve(Invocation inv, ParamMetaData metaData) {
             for (String paramName : metaData.getParamNames()) {
                 if (paramName != null) {
@@ -363,13 +338,11 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class MultipartRequestResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return MultipartRequest.class == metaData.getParamType()
                     || MultipartHttpServletRequest.class == metaData.getParamType();
         }
 
-        @Override
         public MultipartRequest resolve(Invocation inv, ParamMetaData metaData) {
             if (inv.getRequest() instanceof MultipartRequest) {
                 return (MultipartRequest) inv.getRequest();
@@ -385,12 +358,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class MultipartHttpServletRequestResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return MultipartHttpServletRequest.class == metaData.getParamType();
         }
 
-        @Override
         public MultipartRequest resolve(Invocation inv, ParamMetaData metaData) {
             if (inv.getRequest() instanceof MultipartHttpServletRequest) {
                 return (MultipartHttpServletRequest) inv.getRequest();
@@ -406,12 +377,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class MultipartResolverResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return MultipartResolver.class == metaData.getParamType();
         }
 
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) throws Exception {
             return ((InvocationBean) inv).getModuleEngine().getMultipartResolver();
         }
@@ -419,12 +388,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class MultipartFileResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return MultipartFile.class == metaData.getParamType();
         }
 
-        @Override
         public MultipartFile resolve(Invocation inv, ParamMetaData metaData) {
             MultipartFile multipartFile = null;
             if (inv.getRequest() instanceof MultipartRequest) {
@@ -465,7 +432,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class MvcResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             boolean result = metaData.getParamType() == Mvc.class;
             if (result) {
@@ -477,7 +443,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
             return result;
         }
 
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) throws Exception {
             return ((InvocationBean) inv).getMvc();
         }
@@ -485,14 +450,12 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class EnumResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return metaData.getParamType().isEnum();
 
         }
 
         @SuppressWarnings("unchecked")
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) {
             for (String paramName : metaData.getParamNames()) {
                 if (paramName != null) {
@@ -508,13 +471,11 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class BeanResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return !Modifier.isAbstract(metaData.getParamType().getModifiers());
 
         }
 
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) {
             Object bean = MvcBeanUtils.instantiateClass(metaData.getParamType());
             ServletRequestDataBinder binder;
@@ -533,13 +494,11 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class BindingResultResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return BindingResult.class == metaData.getParamType()
                     || Errors.class == metaData.getParamType();
         }
 
-        @Override
         public BindingResult resolve(Invocation inv, ParamMetaData metaData) {
             if (metaData.getParamName() != null) {
                 return inv.getBindingResult(metaData.getParamName());
@@ -606,12 +565,10 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     static final class ArrayResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return metaData.getParamType().isArray();
         }
 
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) {
             return resolveArray(inv, metaData, metaData.getParamType().getComponentType());
         }
@@ -620,7 +577,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     static abstract class CollectionResolver<T extends Collection<?>> implements ParamResolver {
 
-        @Override
         public final boolean supports(ParamMetaData metaData) {
             if (innerSupports(metaData)) {
                 Class<?>[] generics = compileGenericParameterTypesDetail(metaData.getMethod(),
@@ -639,7 +595,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
         public abstract boolean innerSupports(ParamMetaData metaData);
 
-        @Override
         @SuppressWarnings("unchecked")
         public Object resolve(Invocation inv, ParamMetaData metaData) throws Exception {
             Object array = resolveArray(inv, metaData, (Class<?>) metaData.getUserObject(this));
@@ -717,7 +672,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     static final class MapResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             boolean supports = Map.class == metaData.getParamType()
                     || HashMap.class == metaData.getParamType();
@@ -735,7 +689,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
             return supports;
         }
 
-        @Override
         public Map<?, ?> resolve(Invocation inv, ParamMetaData metaData) {
             if (StringUtils.isNotEmpty(metaData.getParamName())) {
                 Class<?>[] genericTypes = (Class[]) metaData.getUserObject(this);
@@ -861,7 +814,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     static final class DateResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             return Date.class == metaData.getParamType()
                     || java.sql.Date.class == metaData.getParamType()
@@ -869,7 +821,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
                     || java.sql.Timestamp.class == metaData.getParamType();
         }
 
-        @Override
         public Date resolve(Invocation inv, ParamMetaData metaData) throws Exception {
             String text = null;
             for (String paramName : metaData.getParamNames()) {
@@ -931,7 +882,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     static final class EditorResolver implements ParamResolver {
 
-        @Override
         public boolean supports(ParamMetaData metaData) {
             if (ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())) {
                 return true;
@@ -942,7 +892,6 @@ public class ResolverFactoryImpl implements ResolverFactory {
                     || simpleTypeConverter.getDefaultEditor(metaData.getParamType()) != null;
         }
 
-        @Override
         public Object resolve(Invocation inv, ParamMetaData metaData) {
             String toConvert = null;
             // 

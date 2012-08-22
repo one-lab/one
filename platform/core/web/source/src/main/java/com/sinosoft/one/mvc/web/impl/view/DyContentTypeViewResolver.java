@@ -37,7 +37,6 @@ public class DyContentTypeViewResolver implements ViewResolver {
         this.contentType = contentType;
     }
 
-    @Override
     public View resolveViewName(String viewName, Locale locale) throws Exception {
         View view = viewResolver.resolveViewName(viewName, locale);
         if (contentType != null && view instanceof AbstractView) {

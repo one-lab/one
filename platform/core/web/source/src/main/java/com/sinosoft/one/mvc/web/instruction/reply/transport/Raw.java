@@ -7,7 +7,7 @@ package com.sinosoft.one.mvc.web.instruction.reply.transport;
  *
  * @author dhanji@google.com (Dhanji R. Prasanna)
  */
-public abstract class Raw implements Transport {
+public abstract class Raw  extends AbstractTransport {
 
   public String contentType() {
     return "application/octet-stream";

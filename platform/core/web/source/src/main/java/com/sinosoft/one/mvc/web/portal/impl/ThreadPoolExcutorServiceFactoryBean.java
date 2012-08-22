@@ -34,18 +34,15 @@ public class ThreadPoolExcutorServiceFactoryBean implements FactoryBean {
 		this.threadPoolTaskExecutor = threadPoolTaskExecutor;
 	}
 	
-	@Override
 	public Object getObject() throws Exception {
 		return threadPoolTaskExecutor.getThreadPoolExecutor();
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public Class getObjectType() {
 		return ThreadPoolExecutor.class;
 	}
 
-	@Override
 	public boolean isSingleton() {
 		return true;
 	}

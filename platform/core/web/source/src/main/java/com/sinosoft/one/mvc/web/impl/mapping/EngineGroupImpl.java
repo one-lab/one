@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.sinosoft.one.mvc.adapter.ArraysEx;
 import com.sinosoft.one.mvc.web.annotation.ReqMethod;
 import com.sinosoft.one.mvc.web.impl.thread.Engine;
 import com.sinosoft.one.mvc.web.impl.thread.LinkedEngine;
@@ -58,9 +59,6 @@ public class EngineGroupImpl implements EngineGroup {
 
     //-----------------------------------
 
-    /**
-     * @param simpleName 资源相对于上级的资源的名称
-     */
     public EngineGroupImpl() {
         LinkedEngine[][] engines = new LinkedEngine[ARRAY_SIZE][];
         Arrays.fill(engines, emptyEngines);
@@ -79,7 +77,7 @@ public class EngineGroupImpl implements EngineGroup {
             if (methodEngines.length == 0) {
                 methodEngines = new LinkedEngine[] { engine };
             } else {
-                methodEngines = Arrays.copyOf(methodEngines, methodEngines.length + 1);
+                methodEngines = ArraysEx.copyOf(methodEngines, methodEngines.length + 1);
                 methodEngines[methodEngines.length - 1] = engine;
             }
             engines[md.ordinal()] = methodEngines;
@@ -88,7 +86,6 @@ public class EngineGroupImpl implements EngineGroup {
         clearCache();
     }
 
-    @Override
     public int size() {
         return engineCount;
     }
@@ -100,7 +97,6 @@ public class EngineGroupImpl implements EngineGroup {
      *        实例；可以为null
      * @return
      */
-    @Override
     public LinkedEngine[] getEngines(ReqMethod method) {
         if (method == null) {
             return emptyEngines;

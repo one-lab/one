@@ -53,7 +53,6 @@ final class WindowTask implements Runnable {
         return window;
     }
 
-    @Override
     public void run() {
         try {
             // started

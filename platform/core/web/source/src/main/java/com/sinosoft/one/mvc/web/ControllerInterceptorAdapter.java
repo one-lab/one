@@ -44,17 +44,14 @@ public class ControllerInterceptorAdapter implements Named, Ordered, ControllerI
 
     protected int priority;
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public int getPriority() {
         return priority;
     }
@@ -63,7 +60,6 @@ public class ControllerInterceptorAdapter implements Named, Ordered, ControllerI
         this.priority = priority;
     }
 
-    @Override
     public final boolean isForAction(Class<?> controllerClazz, Method actionMethod) {
         // 返回false，表示控制器或其方法没有标注本拦截器所要求的注解
         if (!checkRequiredAnnotations(controllerClazz, actionMethod)) {
@@ -80,12 +76,10 @@ public class ControllerInterceptorAdapter implements Named, Ordered, ControllerI
         return true;
     }
 
-    @Override
     public boolean isForDispatcher(Dispatcher dispatcher) {
         return true;
     }
 
-    @Override
     public final Object roundInvocation(Invocation inv, InvocationChain chain) throws Exception {
         // before
         Object instruction = this.before(inv);
@@ -151,7 +145,6 @@ public class ControllerInterceptorAdapter implements Named, Ordered, ControllerI
         return instruction;
     }
 
-    @Override
     public void afterCompletion(Invocation inv, Throwable ex) throws Exception {
     }
 
