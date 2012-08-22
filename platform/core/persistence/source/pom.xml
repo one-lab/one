@@ -65,11 +65,11 @@
             <groupId>commons-jexl</groupId>
             <artifactId>commons-jexl</artifactId>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>com.54chen</groupId>
             <artifactId>bmwutils</artifactId>
             <version>0.0.2</version>
-        </dependency>-->
+        </dependency>
     </dependencies>
 
     <build>
