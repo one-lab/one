@@ -20,7 +20,6 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.support.RepositoryProxyPostProcessor;
-import org.springframework.data.repository.core.support.SpringDataJpaCoreSupportAdapter;
 import org.springframework.data.repository.util.TxUtils;
 import org.springframework.util.Assert;
 
