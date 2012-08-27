@@ -6,11 +6,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.sinosoft.one.rms.client.webservice.Menu;
-import com.sinosoft.one.rms.client.webservice.RmsClientService;
-import com.sinosoft.one.rms.client.webservice.RmsClientServiceImplService;
-import com.sinosoft.one.rms.client.webservice.User;
-
 
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)

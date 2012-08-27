@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 import ins.framework.cache.CacheManager;
 import ins.framework.cache.CacheService;
@@ -14,12 +16,15 @@ import ins.framework.utils.StringUtils;
 
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.TaskAuth;
+import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
 import com.sinosoft.one.rms.service.facade.TaskService;
 
 public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String>
 		 implements TaskService{
 	private static CacheService cacheManager = CacheManager.getInstance("Task");
 	
+	@Autowired
+	private CompanyServiceInterface comService;
 	/**
 	 * 为机构授权操作
 	 */
@@ -184,24 +189,26 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 		delteComCodeSQL.append(")");
 		getSession().createSQLQuery(delteComCodeSQL.toString()).executeUpdate();
 		// 然后进行查询下一级机构
-		StringBuffer comCodesSQL = new StringBuffer();
-		comCodesSQL.append("select comCode from ge_rms_company where uppercomcode in (");
-		List<String> subcomCodes = new ArrayList<String>();
-		i=0;
-		for (i = 0; i < comCodes.size(); i++) {
-			comCodesSQL.append(" '" + comCodes.get(i) + "',");
-			//每如果到了1000则用OR处理
-			if(i%999==0&&i>=999){
-				System.out.println(i+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-				comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
-				comCodesSQL.append(")");
-				comCodesSQL.append(" or uppercomcode in(");
-			}
-		}
-		comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
-		comCodesSQL.append(")");
-		//是否要删除OR语句的结尾
-		subcomCodes = (List<String>) getSession().createSQLQuery(comCodesSQL.toString()).list();
+		//下面部分交予comService 
+//		StringBuffer comCodesSQL = new StringBuffer();
+//		comCodesSQL.append("select comCode from ge_rms_company where uppercomcode in (");
+//		List<String> subcomCodes = new ArrayList<String>();
+//		i=0;
+//		for (i = 0; i < comCodes.size(); i++) {
+//			comCodesSQL.append(" '" + comCodes.get(i) + "',");
+//			//每如果到了1000则用OR处理
+//			if(i%999==0&&i>=999){
+//				System.out.println(i+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//				comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
+//				comCodesSQL.append(")");
+//				comCodesSQL.append(" or uppercomcode in(");
+//			}
+//		}
+//		comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
+//		comCodesSQL.append(")");
+//		//是否要删除OR语句的结尾
+//		subcomCodes = (List<String>) getSession().createSQLQuery(comCodesSQL.toString()).list();
+		List<String> subcomCodes = comService.findComCodebySuperComCode(comCodes);
 		if (subcomCodes.size() > 0) {
 			iteraterComCode(subcomCodes, taskIds);
 		}

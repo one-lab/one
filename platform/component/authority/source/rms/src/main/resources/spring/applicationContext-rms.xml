@@ -12,7 +12,6 @@
 	
 	<bean id="rmstaskService" class="com.sinosoft.one.rms.service.spring.TaskServiceSpringImpl"></bean>
     
-    
     <bean id="groupService" class="com.sinosoft.one.rms.service.spring.GroupServiceSpringImpl"></bean>
     
     <bean id="rmsService" class="com.sinosoft.one.rms.service.spring.RmsServiceSpringImpl"></bean>
@@ -28,5 +27,9 @@
     <bean id="clientService" class="com.sinosoft.one.rms.service.spring.ClientServiceSpringImpl"></bean>
     
     <bean id="rmsClientService" class="com.sinosoft.one.rms.clientService.facade.RmsClientServiceImpl"></bean>
+    
+    <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
+    
+    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>
     
 </beans> 

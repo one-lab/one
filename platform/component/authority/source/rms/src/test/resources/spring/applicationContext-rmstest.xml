@@ -81,5 +81,8 @@
 
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="defaultTransactionManager"  />
+    <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
+    
+    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>
     
 </beans>

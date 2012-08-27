@@ -52,6 +52,7 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			info.addRoles(user.getRoleIdList());
 			info.addStringPermissions(user.getTaskIdList());
+			info.addStringPermission(user.getLoginComCode());
 			return info;
 		} else {
 			return null;

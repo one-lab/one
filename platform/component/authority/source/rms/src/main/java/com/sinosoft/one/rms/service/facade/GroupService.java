@@ -82,4 +82,6 @@ public interface GroupService {
 	public void deleteGroup(String GroupId);
 	
 	public Page findNEmployeByGroup(String groupId, String comCode, String userName,String usCode,int pageSize,int pageNo);
+	
+	public boolean checkGroupName(String groupName);
 }

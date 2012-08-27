@@ -8,7 +8,6 @@ package com.sinosoft.one.rms.client;
  * To change this template use File | Settings | File Templates.
  */
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;

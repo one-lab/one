@@ -22,7 +22,7 @@ import java.lang.reflect.Proxy;
 public class RmsAnnotationAspect {
 
 
-    @Around("execution(* com.sinosoft.one..*.*(..))&&@annotation(DataAuthority)")
+    @Around("execution(* com.sinosoft.*..*.*(..))&&@annotation(DataAuthority)")
     Object register(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method m = signature.getMethod();
@@ -31,9 +31,11 @@ public class RmsAnnotationAspect {
         }
         DataAuthority dataAuthority = m.getAnnotation(DataAuthority.class);
         EnvContext.setDataAuthorityTaskId(dataAuthority.value());
-        EnvContext.setComPanyTableName(dataAuthority.comPanyTableName());
-        EnvContext.setHqlModelClassName(dataAuthority.hqlModelClassName());
-        EnvContext.setTableAlias(dataAuthority.tableAlias());
+        EnvContext.setComPanyTableName(dataAuthority.depTab());
+        EnvContext.setHqlModelClassName(dataAuthority.hqlMod());
+        EnvContext.setSuperComCulName(dataAuthority.pdepCodeCol());
+        EnvContext.setComCodeColumnName(dataAuthority.depCodeCol());
+        EnvContext.setTableAlias(dataAuthority.tabAlias());
         return pjp.proceed();
     }
 }

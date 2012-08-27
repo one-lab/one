@@ -13,7 +13,9 @@ public class RoleDesignateInfo {
 	private Role role;
 
 	/** 属性指派机构*/
-	private Company company;
+	private String comCode;
+	
+	private String comCName;
 	
 	/** 属性创建日期(CreateTime) */
 	private Date createTime;
@@ -33,12 +35,13 @@ public class RoleDesignateInfo {
 	public RoleDesignateInfo(){
 		
 	}
-	public Company getCompany() {
-		return company;
+	
+	public String getComCode() {
+		return comCode;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setComCode(String comCode) {
+		this.comCode = comCode;
 	}
 
 	public Role getRole() {
@@ -87,6 +90,14 @@ public class RoleDesignateInfo {
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getComCName() {
+		return comCName;
+	}
+
+	public void setComCName(String comCName) {
+		this.comCName = comCName;
 	}
 	
 }

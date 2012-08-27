@@ -63,9 +63,7 @@ public class DataPower {
      *     
      */
     public void setParam(String value) {
-    	if(this.param==null){
-    		this.param = value;
-    	}
+        this.param = value;
     }
 
     /**
@@ -89,9 +87,7 @@ public class DataPower {
      *     
      */
     public void setRule(String value) {
-    	if(this.rule ==null){
-    		  this.rule = value;
-    	}
+        this.rule = value;
     }
 
     /**
@@ -115,9 +111,7 @@ public class DataPower {
      *     
      */
     public void setRuleId(String value) {
-    	if(this.ruleId ==null){
-    		this.ruleId = value;
-    	}
+        this.ruleId = value;
     }
 
     /**

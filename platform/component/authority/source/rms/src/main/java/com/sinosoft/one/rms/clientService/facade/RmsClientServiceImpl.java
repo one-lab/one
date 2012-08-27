@@ -15,11 +15,6 @@ public class RmsClientServiceImpl implements RmsClientService{
 	public User login(String userCode, String comCode) {
 		return clientService.getUserByUserCodeComCode(userCode, comCode);
 	}
-	
-	public List<Company> findCompanysByUserCodeAndPassword(String userCode,
-			String passWord) {
-		return clientService.findCompanysByUserCodeAnyPassword(userCode, passWord);
-	}
 
 	public ClientService getClientService() {
 		return clientService;

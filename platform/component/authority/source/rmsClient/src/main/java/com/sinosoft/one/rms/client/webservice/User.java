@@ -114,9 +114,7 @@ public class User {
      *     
      */
     public void setLoginComCode(String value) {
-    	if(this.loginComCode==null){
-    		this.loginComCode = value;
-    	}
+        this.loginComCode = value;
     }
 
     /**
@@ -140,9 +138,7 @@ public class User {
      *     
      */
     public void setLoginComName(String value) {
-    	if(this.loginComName==null){
-    		this.loginComName = value;
-    	}
+        this.loginComName = value;
     }
 
     /**
@@ -195,9 +191,7 @@ public class User {
      *     
      */
     public void setPassWord(String value) {
-    	if( this.passWord ==null){
-    		this.passWord = value;
-    	}
+        this.passWord = value;
     }
 
     /**
@@ -279,9 +273,7 @@ public class User {
      *     
      */
     public void setUserCode(String value) {
-    	if(this.userCode==null){
-    		this.userCode = value;
-    	}
+        this.userCode = value;
     }
 
     /**
@@ -305,9 +297,7 @@ public class User {
      *     
      */
     public void setUserName(String value) {
-    	if(this.userName==null){
-    		 this.userName = value;
-    	}
+        this.userName = value;
     }
 
 }

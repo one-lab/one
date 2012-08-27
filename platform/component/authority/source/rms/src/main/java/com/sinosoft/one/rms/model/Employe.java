@@ -11,9 +11,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import com.sinosoft.one.rms.model.service.CompanyModelInterface;
+import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 
 
 /**
@@ -21,7 +25,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @Entity
 @Table(name = "GE_RMS_EMPLOYE")
-public class Employe implements java.io.Serializable {
+public class Employe implements EmployeModelInterface {
 	private static final long serialVersionUID = 1L;
 
 	/** 属性员工代码(UserCode) */
@@ -218,6 +222,101 @@ public class Employe implements java.io.Serializable {
 	 */
 	public void setFlag(String flag) {
 		this.flag = flag;
+	}
+	@Transient
+	public CompanyModelInterface getPrpDcompanyBycomCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public CompanyModelInterface getPrpDcompanyBymakeCom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getUserEname() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getSeal() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public Date getPasswordSetDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public Date getPasswordExpireDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getAccountCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getPhone() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getMobile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getAddress() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getPostCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getUserFlag() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getLoginsystem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getPosterminalNo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getUsertype() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getBindingFlag() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public String getProfessionalNo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Transient
+	public CompanyModelInterface getPrpDcaompany() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

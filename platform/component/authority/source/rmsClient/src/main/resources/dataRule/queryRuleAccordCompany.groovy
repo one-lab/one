@@ -17,24 +17,28 @@ public class queryRuleAccordCompany implements DataRuleScript {
   		if(StringUtils.isNotBlank(comCodeColumnName)){
   			comColeCloName=comCodeColumnName
   		}
-  		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
-			if(sqlOrHql.contains(")")&&(sqlOrHql.substring(sqlOrHql.lastIndexOf(")"), sqlOrHql.length()).contains("order by"))){
-				tempSqlOrHQl=sqlOrHql.substring(0, sqlOrHql.lastIndexOf(")")+1);
-				orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf(")")+1, sqlOrHql.length());
-			}else{
-				tempSqlOrHQl=sqlOrHql.substring(0,sqlOrHql.lastIndexOf("order by"));
-				orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf("order by"), sqlOrHql.length());
-			}
+  		if(StringUtils.isNotBlank(sqlOrHql)){
+  			if(sqlOrHql.contains("order by")){
+  				if(sqlOrHql.contains(")")&&(sqlOrHql.substring(sqlOrHql.lastIndexOf(")"), sqlOrHql.length()).contains("order by"))){
+					tempSqlOrHQl=sqlOrHql.substring(0, sqlOrHql.lastIndexOf(")")+1)+" and ";
+					orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf(")")+1, sqlOrHql.length());
+				}else{
+					tempSqlOrHQl=sqlOrHql.substring(0,sqlOrHql.lastIndexOf("order by"))+" and ";
+					orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf("order by"), sqlOrHql.length());
+				}
+  			}else{
+  				tempSqlOrHQl=sqlOrHql+" and "
+  			}
 		}else{
 			tempSqlOrHQl=sqlOrHql
 		}
 		if(StringUtils.isNotBlank(param)){
 			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
 			comCode=tempMap.get("comCode")
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+""+comCodeColumnName+"='"+comCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+tableAlias+""+comCodeColumnName+"='"+comCode+"'"+orderBy
 			return sqlOrHql
 		}else{
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+""+comCodeColumnName+"='"+loginComCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+tableAlias+""+comCodeColumnName+"='"+loginComCode+"'"+orderBy
 			return sqlOrHql
 		}
   }
@@ -61,24 +65,28 @@ public class queryRuleAccordCompany implements DataRuleScript {
 				comPanyModelName=ModelName.substring(0, 1).toLowerCase()+ModelName.substring(1, ModelName.length())+".";
 			}
 		}
-		if(StringUtils.isNotBlank(sqlOrHql)&&sqlOrHql.contains("order by")){
-			if(sqlOrHql.contains(")")&&(sqlOrHql.substring(sqlOrHql.lastIndexOf(")"), sqlOrHql.length()).contains("order by"))){
-				tempSqlOrHQl=sqlOrHql.substring(0, sqlOrHql.lastIndexOf(")")+1);
-				orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf(")")+1, sqlOrHql.length());
-			}else{
-				tempSqlOrHQl=sqlOrHql.substring(0,sqlOrHql.lastIndexOf("order by"));
-				orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf("order by"), sqlOrHql.length());
-			}
+		if(StringUtils.isNotBlank(sqlOrHql)){
+  			if(sqlOrHql.contains("order by")){
+  				if(sqlOrHql.contains(")")&&(sqlOrHql.substring(sqlOrHql.lastIndexOf(")"), sqlOrHql.length()).contains("order by"))){
+					tempSqlOrHQl=sqlOrHql.substring(0, sqlOrHql.lastIndexOf(")")+1)+" and ";
+					orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf(")")+1, sqlOrHql.length());
+				}else{
+					tempSqlOrHQl=sqlOrHql.substring(0,sqlOrHql.lastIndexOf("order by"))+" and ";
+					orderBy=sqlOrHql.substring(sqlOrHql.lastIndexOf("order by"), sqlOrHql.length());
+				}
+  			}else{
+  				tempSqlOrHQl=sqlOrHql+" and "
+  			}
 		}else{
 			tempSqlOrHQl=sqlOrHql
 		}
 		if(StringUtils.isNotBlank(param)){
 			Map<String,String> tempMap = (Map<String, String>)JSON.parse(param);
 			comCode=tempMap.get("comCode")
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+""+comPanyModelName+""+comCodeColumnName+" ='"+comCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+tableAlias+""+comPanyModelName+""+comCodeColumnName+" ='"+comCode+"'"+orderBy
 			return sqlOrHql
 		}else{
-			sqlOrHql =tempSqlOrHQl+" and "+tableAlias+""+comPanyModelName+""+comCodeColumnName+" ='"+loginComCode+"'"+orderBy
+			sqlOrHql =tempSqlOrHQl+tableAlias+""+comPanyModelName+""+comCodeColumnName+" ='"+loginComCode+"'"+orderBy
 			return sqlOrHql
 		}
   }

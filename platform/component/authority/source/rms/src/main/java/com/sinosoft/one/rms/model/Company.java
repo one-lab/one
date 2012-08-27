@@ -11,14 +11,18 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
+
+import com.sinosoft.one.rms.model.service.CompanyModelInterface;
+import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 
 /**
  * POJO类company
  */
 @Entity
 @Table(name = "GE_RMS_COMPANY")
-public class Company implements java.io.Serializable {
+public class Company implements CompanyModelInterface {
 	private static final long serialVersionUID = 1L;
 
 	/** 属性机构代码(ComCode) */
@@ -424,5 +428,19 @@ public class Company implements java.io.Serializable {
 	public void setEmployes(List<Employe> employes) {
 		this.employes = employes;
 	}
+
+	@Transient
+	public List<? extends EmployeModelInterface> getPrpDusersFormakeCom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Transient
+	public List<? extends EmployeModelInterface> getPrpDusersForcomCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

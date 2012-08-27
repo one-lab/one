@@ -1,10 +1,10 @@
-﻿package com.sinosoft.one.rms.service.facade;
+package com.sinosoft.one.rms.service.facade;
 
 import ins.framework.common.Page;
 
 import java.util.List;
 import java.util.Set;
-
+ 
 
 import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.Employe;

@@ -42,8 +42,8 @@
     	<property name="securityManager" ref="securityManager"/>
 	</bean>
 
-  <bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor"/>
+  	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor"/>
 	
-	<bean id="DataRuleStringCreat" class="com.sinosoft.one.rms.client.DataRuleStringCreatImpl"/>
+ 	<bean id="DataRuleStringCreat" class="com.sinosoft.one.rms.client.DataRuleStringCreatImpl"/>
 	
 </beans>

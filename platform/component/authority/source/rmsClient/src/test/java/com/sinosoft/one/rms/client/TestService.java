@@ -12,7 +12,5 @@ public interface TestService {
 
 	Page findbyHql(int pageNo, int pageSize);
 	
-	void findBySQL();
-	
 	public List findBySql();
 }

@@ -15,6 +15,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.Group;
@@ -25,11 +27,14 @@ import com.sinosoft.one.rms.model.RoleDesignateId;
 import com.sinosoft.one.rms.model.RoleDesignateInfo;
 import com.sinosoft.one.rms.model.RoleTask;
 import com.sinosoft.one.rms.model.TaskAuth;
+import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
 import com.sinosoft.one.rms.service.facade.RoleService;
 
 public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, String>
 		implements RoleService {
-
+	@Autowired
+	private CompanyServiceInterface companyServiceInterface;
+	
 	private static CacheService cacheManager = CacheManager.getInstance("Role");
 	public void addRole(String comCode, String userCode, List<String> TaskIDs,
 			String roleName, String des) {
@@ -265,6 +270,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	 */
 	public void roleDesignate(List<String> roleIDs, String comCode,String userCode) {
 		//comCodes 以机构为维度操作指派
+		
 		StringBuffer roleIdSQL = new StringBuffer();
 		// 以机构为维度删除该机构的指派从新添加
 		roleIdSQL.append("select roleid from ge_rms_role_designate t where  t.comcode = ");
@@ -276,6 +282,11 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		//需要指派的ID集合
 		List<String> designateRoldIDs=new ArrayList<String>();
 		roldids=getSession().createSQLQuery(roleIdSQL.toString()).list();
+		roleIdSQL.setLength(0);
+		//查询已经是全可见类型的角色 用于不做指派的角色ID
+		roleIdSQL.append("select roleid from ge_rms_role_designate t where  t.comcode = '*'");
+		List<String> alradyDesignateRoldids=new ArrayList<String>();
+		alradyDesignateRoldids=getSession().createSQLQuery(roleIdSQL.toString()).list();
 		roleIdSQL.setLength(0);
 		//如果查询的ID没有包含在传入的ID中则删除这个ID在机构的指派 包括所有子机构
 		for (String roleid : roldids) {
@@ -302,29 +313,31 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		//指派操做开始
 		List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
 		for (String roleID : designateRoldIDs) {
-			Role role=new Role();
-			role = super.get(roleID);
-			if(role!=null){
-				// 如果不等于空 则进行指派操纵 否则不进行指派操作
-				RoleDesignate roleDesignate = new RoleDesignate();
-				RoleDesignateId roleDesignateId = new RoleDesignateId();
-				roleDesignateId.setComCode(comCode);
-				roleDesignateId.setRoleID(roleID);
-				roleDesignate.setId(roleDesignateId);
-				Date date = new Date();
-				roleDesignate.setCreateTime(date);
-				roleDesignate.setOperateTime(date);
-				roleDesignate.setCreateUser(userCode);
-				roleDesignate.setOperateUser(userCode);
-				roleDesignate.setRole(role);
-				roleDesignates.add(roleDesignate);
-				super.save(roleDesignate);
-				// 操作该机构的默认用户组
-				role.setRoleDesignates(roleDesignates);
-				// editRoleTask(comCode, role);
+			if(!alradyDesignateRoldids.contains(roleID.toString())){
+				Role role = new Role();
+				role = super.get(roleID);
+				if (role != null) {
+					// 如果不等于空 则进行指派操纵 否则不进行指派操作
+					RoleDesignate roleDesignate = new RoleDesignate();
+					RoleDesignateId roleDesignateId = new RoleDesignateId();
+					roleDesignateId.setComCode(comCode);
+					roleDesignateId.setRoleID(roleID);
+					roleDesignate.setId(roleDesignateId);
+					Date date = new Date();
+					roleDesignate.setCreateTime(date);
+					roleDesignate.setOperateTime(date);
+					roleDesignate.setCreateUser(userCode);
+					roleDesignate.setOperateUser(userCode);
+					roleDesignate.setRole(role);
+					roleDesignates.add(roleDesignate);
+					super.save(roleDesignate);
+					// 操作该机构的默认用户组
+					role.setRoleDesignates(roleDesignates);
+					// editRoleTask(comCode, role);
+				}
+				editDefaultGroup(comCode, userCode, role);
+				cacheManager.clearCache("comCodeRole");
 			}
-			editDefaultGroup(comCode,userCode,role);
-			cacheManager.clearCache("comCodeRole");
 		}
 	}
 	
@@ -415,11 +428,12 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		Role role = super.get(roleID);
 		// 删除角色关联的功能
 		StringBuffer deleteRoleTasksql = new StringBuffer();
+		List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
 		deleteRoleTasksql.append("delete ge_rms_roletask t where t.roleID='"+roleID+"' and t.taskAuthid in (");
 		deleteRoleTasksql.append(" select taskauthid from ge_rms_task_auth a where a.comcode=");
 		deleteRoleTasksql.append("'" + loginComCode + "')");
 		getSession().createSQLQuery(deleteRoleTasksql.toString())
-				.executeUpdate();
+		.executeUpdate();
 		// 查询功能集合,重新添加角色功能信息
 		List<TaskAuth> taskAuths=new ArrayList<TaskAuth>();
 		if(TaskIDs.size()>0){
@@ -445,54 +459,61 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		super.update(role);
 		//判断修改的角色类型 当改成默认类型"default"时
 		if(type.toString().equals("default")){
-			StringBuffer sql = new StringBuffer();
 			//修改类型
+			StringBuffer sql = new StringBuffer();
 			sql.append("update ge_rms_role_designate t set  t.comcode='"+loginComCode+"' where  t.comcode='*'  and t.roleid ='"+roleID+"'");
 			getSession().createSQLQuery(sql.toString()).executeUpdate();
-			List<String> roleIDs = new ArrayList<String>();
-			roleIDs.add(roleID);
-			// 以角色为维度 操作指派
-			sql.setLength(0);
-			if (loginComCode != null) {
-				// 自身指派的不删除
-				sql.append("delete ge_rms_role_designate t where t.comcode!='"
-						+ loginComCode + "' and t.roleid = (");
-			}
-			for (String string : roleIDs) {
-				sql.append("'" + string + "',");
-			}
-			sql.delete(sql.length() - 1, sql.length());
-			sql.append(")");
+		
+//			for (RoleDesignate roleDesignate : role.getRoleDesignates()) {
+//				if(roleDesignate.getId().getRoleID().toString().equals(roleID.toString())&&roleDesignate.getId().getComCode().equals("*")){
+//					roleDesignate.getId().setComCode(loginComCode);
+//					super.update(roleDesignate.getId());
+//				}
+//			}
+// 以角色为维度 操作指派
+
+//			comCodes.add(loginComCode.toString());
+//			if (loginComCode != null) {
+//				// 自身指派的不删除
+//			}
 			// comCodes为选中的机构 不 delete comCodes的机构指派
 			if (comCodes.size() > 0) {
+				sql.setLength(0);
+				sql.append("delete ge_rms_role_designate t where t.comcode!='"+loginComCode+"' and t.roleid ='"+roleID+"'");
 				sql.append(" and t.comcode not in (");
 				for (String string : comCodes) {
 					sql.append("'" + string + "',");
 				}
+//				sql.append("'*',");
 				sql.delete(sql.length() - 1, sql.length());
 				sql.append(")");
+				getSession().createSQLQuery(sql.toString()).executeUpdate();
+			
+			List<String >alradyComCodes=new ArrayList<String>();
+			for (RoleDesignate roleDesignate : role.getRoleDesignates()) {
+				alradyComCodes.add(roleDesignate.getId().getComCode().toString());
 			}
-			getSession().createSQLQuery(sql.toString()).executeUpdate();
-			List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
-			// 为要操作的这些机构操作指派
 			for (String comCode : comCodes) {
-				RoleDesignate roleDesignate = new RoleDesignate();
-				RoleDesignateId roleDesignateId = new RoleDesignateId();
-				roleDesignateId.setComCode(comCode);
-				roleDesignateId.setRoleID(roleID);
-				roleDesignate.setId(roleDesignateId);
-				roleDesignate.setCreateTime(date);
-				roleDesignate.setOperateTime(date);
-				roleDesignate.setCreateUser(userCode);
-				roleDesignate.setOperateUser(userCode);
-				roleDesignate.setRole(role);
-				roleDesignates.add(roleDesignate);
-				super.save(roleDesignate);
+				if (!alradyComCodes.contains(comCode.toString())) {
+					RoleDesignate roleDesignate = new RoleDesignate();
+					RoleDesignateId roleDesignateId = new RoleDesignateId();
+					roleDesignateId.setComCode(comCode);
+					roleDesignateId.setRoleID(roleID);
+					roleDesignate.setId(roleDesignateId);
+					roleDesignate.setCreateTime(date);
+					roleDesignate.setOperateTime(date);
+					roleDesignate.setCreateUser(userCode);
+					roleDesignate.setOperateUser(userCode);
+					roleDesignate.setRole(role);
+					roleDesignates.add(roleDesignate);
+					super.save(roleDesignate);
+				}
 				// 操作当前循环的机构默认用户组
 				editDefaultGroup(comCode, userCode, role);
 			}
-			role.setRoleDesignates(roleDesignates);
-			super.update(role);
+		}
+//			role.setRoleDesignates(roleDesignates);
+//			super.update(role);
 		}
 		//判断修改的角色类型 当改成全可见类型"all"时
 		if(type.toString().equals("all")){
@@ -509,7 +530,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	 * 根据角色查询已指派到的信息
 	 */
 	
-	public List<RoleDesignateInfo> findComByRoleID(String RoleID, String ComCode) {
+	public List<RoleDesignateInfo> findComByRoleID(String RoleID, String comCode) {
 		List<RoleDesignateInfo> roleDesignateInfos = new ArrayList<RoleDesignateInfo>();
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("id.roleID", RoleID);
@@ -525,26 +546,29 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 //				return roleDesignateInfos;
 //			}
 //		}
-		//获取子机构代码
-		StringBuffer sql=new StringBuffer();
-		sql.append("select comCode from ge_rms_company c where c.upperComCode='"+ComCode+"'");
-		List<String> comcodes=new ArrayList<String>();
-		comcodes=(List<String>)getSession().createSQLQuery(sql.toString()).list();
+		//获取子机构代码 /交予comService  
+//		StringBuffer sql=new StringBuffer();
+//		sql.append("select comCode from ge_rms_company c where c.upperComCode='"+ComCode+"'");
+//		List<String> comcodes=new ArrayList<String>();
+//		comcodes=(List<String>)getSession().createSQLQuery(sql.toString()).list();
+		List<Company> companies =(List<Company>) companyServiceInterface.findNextSubCompany(comCode) ;
 		for (RoleDesignate roleDesignate : designates) {
 			//从指派的角色中过滤下级机构代码
 			if(roleDesignate.getId().getComCode().toString().equals("*")){
 				RoleDesignateInfo roleDesignateInfo = new RoleDesignateInfo();
 				roleDesignateInfo.setRole(roleDesignate.getRole());
 				roleDesignateInfo.setType("*");
+				roleDesignateInfo.setComCode("*");
 				roleDesignateInfo.setCreateUser(roleDesignate.getCreateUser());
 				roleDesignateInfo.setCreateTime(roleDesignate.getCreateTime());
 				roleDesignateInfos.add(roleDesignateInfo);
 			}else{
-				for (String comCode : comcodes) {
-					if (roleDesignate.getId().getComCode().toString().equals(comCode.toString())) {
+				for (Company company : companies) {
+					if (roleDesignate.getId().getComCode().toString().equals(company.getComCode().toString())) {
 						RoleDesignateInfo roleDesignateInfo = new RoleDesignateInfo();
 						roleDesignateInfo.setRole(roleDesignate.getRole());
-						roleDesignateInfo.setCompany(super.get(Company.class, roleDesignate.getId().getComCode()));
+						roleDesignateInfo.setComCode(company.getComCode());
+						roleDesignateInfo.setComCName(company.getComCName());
 						roleDesignateInfo.setCreateUser(roleDesignate.getCreateUser());
 						roleDesignateInfo.setCreateTime(roleDesignate.getCreateTime());
 						roleDesignateInfos.add(roleDesignateInfo);
@@ -677,22 +701,23 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		delteDesignatSQL.append(")");
 		getSession().createSQLQuery(delteDesignatSQL.toString()).executeUpdate();
 		// 然后进行查询下一级机构
-		StringBuffer comCodesSQL = new StringBuffer();
-		comCodesSQL.append("select comCode from ge_rms_company where uppercomcode in (");
-		List<String> subcomCodes = new ArrayList<String>();
-		i=0;
-		for (i = 0; i < comCodes.size(); i++) {
-			comCodesSQL.append(" '" + comCodes.get(i) + "',");
-			//每如果到了1000则用OR处理
-			if(i%999==0&&i>=999){
-				comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
-				comCodesSQL.append(")");
-				comCodesSQL.append(" or uppercomcode in(");
-			}
-		}
-		comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
-		comCodesSQL.append(")");
-		subcomCodes = (List<String>) getSession().createSQLQuery(comCodesSQL.toString()).list();
+		//次部分交予ComService
+//		StringBuffer comCodesSQL = new StringBuffer();
+//		comCodesSQL.append("select comCode from ge_rms_company where uppercomcode in (");
+//		i=0;
+//		for (i = 0; i < comCodes.size(); i++) {
+//			comCodesSQL.append(" '" + comCodes.get(i) + "',");
+//			//每如果到了1000则用OR处理
+//			if(i%999==0&&i>=999){
+//				comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
+//				comCodesSQL.append(")");
+//				comCodesSQL.append(" or uppercomcode in(");
+//			}
+//		}
+//		comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
+//		comCodesSQL.append(")");
+//		subcomCodes = (List<String>) getSession().createSQLQuery(comCodesSQL.toString()).list();
+		List<String> subcomCodes = companyServiceInterface.findComCodebySuperComCode(comCodes);
 		//递归的判断点
 		if (subcomCodes.size() > 0) {
 			iteraterComCode(subcomCodes, roleids);

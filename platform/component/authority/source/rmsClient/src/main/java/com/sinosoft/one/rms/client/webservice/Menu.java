@@ -96,9 +96,7 @@ public class Menu {
      *     
      */
     public void setId(String value) {
-    	if(this.id ==null){
-    		   this.id = value;
-    	}
+        this.id = value;
     }
 
     /**
@@ -122,9 +120,7 @@ public class Menu {
      *     
      */
     public void setName(String value) {
-    	if(this.name==null){
-    		this.name = value;
-    	}
+        this.name = value;
     }
 
     /**
@@ -148,9 +144,7 @@ public class Menu {
      *     
      */
     public void setUrl(String value) {
-    	if(this.url==null){
-    		this.url = value;
-    	}
+        this.url = value;
     }
 
 }

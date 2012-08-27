@@ -7,26 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.rms.model.Company;
+import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
 
 
 class CompanyService extends GenericDaoHibernate<Company, String> {
 	
 	/**
-	 * 查询下级机构 包含当前机构
-	 * @param comCode
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	List<Company>findComAndNextSubCom(String comCode){
-//		QueryRule queryRule = QueryRule.getInstance();
-//        queryRule.addEqual("upperComCode", comCode);
-//        queryRule.addSql("or comCode='"+comCode+"'");
-//        queryRule.addAscOrder("comCode");
-        return super.findByHql("from Company c where c.upperComCode='"+comCode+"' or c.comCode='"+comCode+"'");
-	}
-	  /**
      * 查询下级直属机构
      * @param comCode
      * @return

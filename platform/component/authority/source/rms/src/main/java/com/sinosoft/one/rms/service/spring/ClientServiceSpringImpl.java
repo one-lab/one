@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -30,12 +31,22 @@ import com.sinosoft.one.rms.model.RoleDesignate;
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
+import com.sinosoft.one.rms.model.service.CompanyModelInterface;
+import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 import com.sinosoft.one.rms.service.facade.ClientService;
+import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
+import com.sinosoft.one.rms.service.facade.EmployeServiceInterface;
 
 @Service
 public class ClientServiceSpringImpl extends
 		GenericDaoHibernate<Employe, String> implements ClientService {
 
+	@Autowired
+	private EmployeServiceInterface employeServiceInterface;
+	
+	@Autowired
+	private CompanyServiceInterface companyServiceInterface;
+	
 	// private RmsService rmsService;
 	// private RoleService roleService;
 	// private GroupService groupService;
@@ -44,10 +55,10 @@ public class ClientServiceSpringImpl extends
 	 * 创建USER对象
 	 */
 	public User getUserByUserCodeComCode(String userCode, String comCode) {
-		Employe employe = findUserByCode(userCode);
+		EmployeModelInterface employe = findUserByCode(userCode);
 		UserPower userPower = findUserPowerByComUser(userCode, comCode);
 		Assert.notNull(userPower);
-		Company company = findCompanyByComCode(comCode);
+		CompanyModelInterface company = findCompanyByComCode(comCode);
 		Assert.notNull(company);
 		List<Group> grouplist = findGroupByUser(userCode);
 		List<String> groupIdList = new ArrayList<String>();
@@ -85,68 +96,13 @@ public class ClientServiceSpringImpl extends
 				company.getComCName(), roleIdList, taskIdList, menulist, dataPowers);
 	}
 
-	/**
-	 * 组织树状数据
-	 * @param list
-	 * @param dest
-	 * @param filter
-	 */
-	private void craeteList(List<Task> list, List<Menu> dest,
-			Map<String, Task> filter) {
-		for (Iterator<Task> iter = list.iterator(); iter.hasNext();) {
-			Task task = iter.next();
-			if (!filter.containsKey(task.getTaskID()))
-				continue;
-			Menu menu = new Menu(task.getTaskID(), task.getMenuURL(),
-					task.getName());
-			if (!task.getChildren().isEmpty()) {
-				List<Menu> ls = new ArrayList<Menu>();
-				menu.setChildren(ls);
-				craeteList(task.getChildren(), ls, filter);
-			}
-			dest.add(menu);
-		}
-
-	}
 	
-	private void creatDataPowerList(List<DataPower> dataPowers,List<BusPower>busPowers){
-		for (BusPower busPower : busPowers) {
-			if(StringUtils.isNotBlank(busPower.getDataRuleParam())&&busPower.getDataRule()!=null){
-				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(), busPower.getDataRule().getDataRuleID(), busPower.getDataRuleParam(), busPower.getDataRule().getRule());
-				dataPowers.add(dataPower);
-			}else if(busPower.getDataRule()!=null){
-				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(),busPower.getDataRule().getDataRuleID(), null, busPower.getDataRule().getRule());
-				dataPowers.add(dataPower);
-			}
-		}
-	}
-
-	/**
-	 *  选择机构
-	 */
-	public List<Company> findCompanysByUserCodeAnyPassword(String userCode,
-			String passWord) {
-		List<Company> companies = new ArrayList<Company>();
-		Employe employe = findUserByCode(userCode);
-		if (employe == null
-				&& (!EncryptUtils.md5(employe.getPassword()).toString()
-						.equals(passWord))) {
-			return companies;
-		} else {
-			companies = findComByUserCode(userCode);
-		}
-		return companies;
-	}
 
 //----------------------------------------------------------------------------------------------------//
 
-	Employe findUserByCode(String userCode) {
-		QueryRule queryRule = QueryRule.getInstance();
-		queryRule.addEqual("userCode", userCode);
-		queryRule.addEqual("validStatus", "1");
-		Employe employe =new Employe();
-		employe=super.findUnique(Employe.class, queryRule);
-		return employe;
+	EmployeModelInterface findUserByCode(String userCode) {
+		Assert.hasText(userCode);
+		return employeServiceInterface.findUserByCode(userCode);
 	}
 
 	/**
@@ -164,9 +120,9 @@ public class ClientServiceSpringImpl extends
 		return super.findUnique(UserPower.class, queryRule);
 	}
 
-	Company findCompanyByComCode(String comCode) {
+	CompanyModelInterface findCompanyByComCode(String comCode) {
 		Assert.hasText(comCode);
-		return super.get(Company.class, comCode);
+		return companyServiceInterface.findCompanyByComCode(comCode);
 	}
 
 	List<Group> findGroupByUser(String userCode) {
@@ -238,7 +194,7 @@ public class ClientServiceSpringImpl extends
 	/**
 	 * 获得员工在机构下有效权限集合
 	 */
-	public List<Task> findTaskByUserCode(String userCode, String comCode) {
+	 List<Task> findTaskByUserCode(String userCode, String comCode) {
 		List<Task> userTasksResult = new ArrayList<Task>();
 		UserPower userPower = new UserPower();
 		QueryRule queryRule = QueryRule.getInstance();
@@ -410,4 +366,42 @@ public class ClientServiceSpringImpl extends
 		return companies;
 	}
 
+	
+	/**
+	 * 组织树状数据
+	 * @param list
+	 * @param dest
+	 * @param filter
+	 */
+	 void craeteList(List<Task> list, List<Menu> dest,
+			Map<String, Task> filter) {
+		for (Iterator<Task> iter = list.iterator(); iter.hasNext();) {
+			Task task = iter.next();
+			if (!filter.containsKey(task.getTaskID()))
+				continue;
+			Menu menu = new Menu(task.getTaskID(), task.getMenuURL(),
+					task.getName());
+			if (!task.getChildren().isEmpty()) {
+				List<Menu> ls = new ArrayList<Menu>();
+				menu.setChildren(ls);
+				craeteList(task.getChildren(), ls, filter);
+			}
+			dest.add(menu);
+		}
+
+	}
+	
+	 void creatDataPowerList(List<DataPower> dataPowers,List<BusPower>busPowers){
+		for (BusPower busPower : busPowers) {
+			if(StringUtils.isNotBlank(busPower.getDataRuleParam())&&busPower.getDataRule()!=null){
+				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(), busPower.getDataRule().getDataRuleID(), busPower.getDataRuleParam(), busPower.getDataRule().getRule());
+				dataPowers.add(dataPower);
+			}else if(busPower.getDataRule()!=null){
+				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(),busPower.getDataRule().getDataRuleID(), null, busPower.getDataRule().getRule());
+				dataPowers.add(dataPower);
+			}
+		}
+	}
+
+	
 }

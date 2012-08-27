@@ -19,11 +19,5 @@ public interface ClientService {
 	  * @return
 	  */
 	 public User getUserByUserCodeComCode(String userCode,String comCode);
-	 /**
-	  * 客户端调用 获得机构
-	  * @param userCode
-	  * @param passWord
-	  * @return
-	  */
-	 public List<Company> findCompanysByUserCodeAnyPassword(String userCode, String passWord);
+	 
 }

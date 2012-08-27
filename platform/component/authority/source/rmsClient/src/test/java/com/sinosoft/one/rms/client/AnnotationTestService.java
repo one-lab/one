@@ -24,41 +24,33 @@ import org.springframework.stereotype.Component;
 public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String>implements TestService  {
 
 
-    @DataAuthority(value = "RMS012")
+    @DataAuthority(value = "RMS012" ,depCodeCol="comCode",depTab="ge_rms_company",pdepCodeCol="upperComCode")
     public List  findUser() {
     	QueryRule queryRule=QueryRule.getInstance();
     	queryRule.addEqual("validStatus", "1");
-    	super.find(queryRule);
-        return null;
+    	return super.find(queryRule);
     }
 
-	@DataAuthority(value = "RMS012")
+	@DataAuthority(value = "RMS012" ,depCodeCol="comCode",depTab="ge_rms_company",pdepCodeCol="upperComCode")
 	public Page findUser(int pageNo, int pageSize) {
 		QueryRule queryRule = QueryRule.getInstance();
-		queryRule.addEqual("company.comCode", "00");
+		queryRule.addEqual("validStatus", "1");
         Page page;
         page=super.find(queryRule, pageNo, pageSize);
 		return page;
 	}
-	@DataAuthority(value = "RMS012")
+	@DataAuthority(value = "RMS012" ,depCodeCol="comCode",depTab="ge_rms_company",pdepCodeCol="upperComCode")
 	public List findBySql(){
 		String sql="select * from ge_rms_employe where VALIDSTATUS in ('1','0')order by usercode";
-		super.findBySql(sql);
-		return null;
+		return super.findBySql(sql);
 	}
-	
-	@DataAuthority(value = "RMS012" )
+	// 如果有内部包含的MODEL属性则需标注 如  hqlMod="Employe.company" 否则不标注
+	@DataAuthority(value = "RMS012",depCodeCol="comCode")
 	public Page findbyHql(int pageNo, int pageSize) {
 		StringBuffer hql=new StringBuffer();
 		hql.append("from Group  where comCode='00' order by comCode");
 		return super.findByHql(hql.toString(), pageNo, pageSize);
 	}
-	
-	@DataAuthority(value = "RMS012" )
-	public void findBySQL() {
-		
-	}
-	
 	
 	
 }

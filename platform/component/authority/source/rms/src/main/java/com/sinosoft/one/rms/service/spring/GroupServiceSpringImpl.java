@@ -12,24 +12,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.Group;
 import com.sinosoft.one.rms.model.GroupRole;
 import com.sinosoft.one.rms.model.Role;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
+import com.sinosoft.one.rms.service.facade.EmployeServiceInterface;
 import com.sinosoft.one.rms.service.facade.GroupService;
 
 public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> implements GroupService{
 
+	@Autowired
+	private EmployeServiceInterface employeServiceInterface;
 	/**
 	 * 初始缓存实例
 	 */
-	private static CacheService cacheManager = CacheManager.getInstance("Group");
+	private static CacheService groupCacheManager = CacheManager.getInstance("Group");
 	
-
+	private static CacheService userCacheManager = CacheManager.getInstance("User");
 	/**
 	 * 增加用户组
 	 */
@@ -58,7 +60,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 		group.setCreateTime(date);
 		group.setOperateTime(date);
 		save(group);
-		cacheManager.clearCache("comCodeGroup");
+		groupCacheManager.clearCache("comCodeGroup");
 	}
 	
 	
@@ -69,12 +71,18 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 		StringBuffer sql=new StringBuffer();
 		sql.append("delete ge_rms_usergroup t where t.groupid='"+groupID+"' and t.usercode='"+userCode+"' ");
 		getSession().createSQLQuery(sql.toString()).executeUpdate();
-		cacheManager.clearCache("userGroup");
+		userCacheManager.clearCache("notInGroup");
+		userCacheManager.clearCache("inGroup");
 	}
 	/**
 	 * 查询用户组下的成员
 	 */
-	public Page findEmployeByGroup(String groupId, String comCode, String userName,String usCode,int pageSize,int pageNo) {
+	public Page findEmployeByGroup(String groupId, String comCode, String userName,String usCode,int pageNo,int pageSize) {
+		String key = userCacheManager.generateCacheKey("inGroup", groupId+comCode+userName+userName+pageNo);
+		Object result = userCacheManager.getCache(key);
+		if (result != null) {
+			return (Page) result;
+		}
 		List<UserGroup>userGroups=new ArrayList<UserGroup>();
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("groupID", groupId);
@@ -90,44 +98,44 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 				userCodes.add(userGroup.getUserCode());
 			}
 			//根据引入的userPower获得userCode 过滤userCodes集合获得机构下的usercode
-			QueryRule queryRuleUserPower = QueryRule.getInstance();
-			queryRuleUserPower.addEqual("comCode", comCode);
-			queryRuleUserPower.addEqual("isValidate", "1");
-			List<UserPower> userPowers =new ArrayList<UserPower>();
-			userPowers=	super.find(UserPower.class, queryRuleUserPower);
+//			QueryRule queryRuleUserPower = QueryRule.getInstance();
+//			queryRuleUserPower.addEqual("comCode", comCode);
+//			queryRuleUserPower.addEqual("isValidate", "1");
+//			List<UserPower> userPowers =new ArrayList<UserPower>();
+//			userPowers=	super.find(UserPower.class, queryRuleUserPower);
 			List<String> onGroupUserCode=new ArrayList<String>();
-			for (UserPower userPower : userPowers) {
+//			for (UserPower userPower : userPowers) {
 				for (String userCode : userCodes) {
-					if(userCode.toString().equals(userPower.getUserCode().toString())){
+//					if(userCode.toString().equals(userPower.getUserCode().toString())){
 						onGroupUserCode.add(userCode);
-					}
+//					}
 				}
-			}
+//			}
 			//查询员工对象集合
 			if(onGroupUserCode.size()>0){
-				QueryRule queryRuleUserCode=QueryRule.getInstance();
-				queryRuleUserCode.addIn("userCode", onGroupUserCode);
-				if(StringUtils.isNotEmpty(userName))
-					queryRuleUserCode.addLike("userName", "%"+userName+"%");
-				if(StringUtils.isNotEmpty(usCode))
-					queryRuleUserCode.addLike("userCode", "%"+usCode+"%");
-				page = super.find(Employe.class,queryRuleUserCode, pageNo, pageSize);
-//				StringBuffer hql = new StringBuffer();
-//				hql.append("from Employe e where e.userCode in ( ");
-//				for (String string : onGroupUserCode) {
-//					hql.append("'" + string + "',");
-//				}
-//				hql.delete(hql.length() - 1, hql.length());
-//				hql.append(")");
-//				page = super.findByHql(hql.toString(), pageNo, pageSize);
+				// 现交予接口实现
+//				QueryRule queryRuleUserCode=QueryRule.getInstance();
+//				queryRuleUserCode.addIn("userCode", onGroupUserCode);
+//				if(StringUtils.isNotEmpty(userName))
+//					queryRuleUserCode.addLike("userName", "%"+userName+"%");
+//				if(StringUtils.isNotEmpty(usCode))
+//					queryRuleUserCode.addLike("userCode", "%"+usCode+"%");
+//				page = super.find(Employe.class,queryRuleUserCode, pageNo, pageSize);
+				page =employeServiceInterface.findUserInUserCodes(userCodes, userName, usCode, pageNo, pageSize);
 			}
 		}
+		userCacheManager.putCache(key, page);
 		return page;
 	}
 	/**
 	 * 查询未添加到用户组下的成员
 	 */
 	public Page findNEmployeByGroup(String groupId, String comCode, String userName,String usCode,int pageSize,int pageNo) {
+		String key = userCacheManager.generateCacheKey("notInGroup", groupId+comCode+userName+usCode+pageNo);
+		Object result = userCacheManager.getCache(key);
+		if (result != null) {
+			return (Page) result;
+		}
 		List<UserGroup>userGroups=new ArrayList<UserGroup>();
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("groupID", groupId);
@@ -143,40 +151,42 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 				userCodes.add(userGroup.getUserCode());
 			}
 			//根据引入的userPower获得userCode 过滤userCodes集合获得机构下的usercode
-			QueryRule queryRuleUserPower = QueryRule.getInstance();
-			queryRuleUserPower.addEqual("comCode", comCode);
-			queryRuleUserPower.addEqual("isValidate", "1");
-			List<UserPower> userPowers =new ArrayList<UserPower>();
-			userPowers=	super.find(UserPower.class, queryRuleUserPower);
+//			QueryRule queryRuleUserPower = QueryRule.getInstance();
+//			queryRuleUserPower.addEqual("comCode", comCode);
+//			queryRuleUserPower.addEqual("isValidate", "1");
+//			List<UserPower> userPowers =new ArrayList<UserPower>();
+//			userPowers=	super.find(UserPower.class, queryRuleUserPower);
 			List<String> onGroupUserCode=new ArrayList<String>();
-			for (UserPower userPower : userPowers) {
+//			for (UserPower userPower : userPowers) {
 				for (String userCode : userCodes) {
-					if(userCode.toString().equals(userPower.getUserCode().toString())){
+//					if(userCode.toString().equals(userPower.getUserCode().toString())){
 						onGroupUserCode.add(userCode);
-					}
+//					}
 				}
-			}
+//			}
 			//查询员工对象集合
-			if(onGroupUserCode.size()>0){
-				StringBuffer sql = new StringBuffer();
-				sql.append(" userCode not in ( ");
-				for (String string : onGroupUserCode) {
-					sql.append("'" + string + "',");
-				}
-				sql.delete(sql.length() - 1, sql.length());
-				sql.append(")");
-				QueryRule queryRuleUserCode=QueryRule.getInstance();
-				queryRuleUserCode.addSql(sql.toString());
-				if(StringUtils.isNotEmpty(userName))
-					queryRuleUserCode.addLike("userName", "%"+userName+"%");
-				if(StringUtils.isNotEmpty(usCode))
-					queryRuleUserCode.addLike("userCode", "%"+usCode+"%");
-				queryRuleUserCode.addEqual("company.comCode", comCode);
-				page = super.find(Employe.class,queryRuleUserCode, pageNo, pageSize);
-			
+//			if(!(onGroupUserCode.size()>0)){
+				//现交予接口实现
+//				StringBuffer sql = new StringBuffer();
+//				sql.append(" userCode not in ( ");
+//				for (String string : onGroupUserCode) {
+//					sql.append("'" + string + "',");
+//				}
+//				sql.delete(sql.length() - 1, sql.length());
+//				sql.append(")");
+//				QueryRule queryRuleUserCode=QueryRule.getInstance();
+//				queryRuleUserCode.addSql(sql.toString());
+//				if(StringUtils.isNotEmpty(userName))
+//					queryRuleUserCode.addLike("userName", "%"+userName+"%");
+//				if(StringUtils.isNotEmpty(usCode))
+//					queryRuleUserCode.addLike("userCode", "%"+usCode+"%");
+//				queryRuleUserCode.addEqual("company.comCode", comCode);
+//				page = super.find(Employe.class,queryRuleUserCode, pageNo, pageSize);
 //				page = super.findByHql(hql.toString(), pageNo, pageSize);
-			}
+				page =employeServiceInterface.findUserNoInUserCodes(userCodes, comCode, userName, usCode, pageNo, pageSize);
+//			}
 		}
+		userCacheManager.putCache(key, page);
 		return page;
 	}
 	
@@ -184,8 +194,8 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	 * 查询用户组（comCode默认条件,名字查询,查询页面) 
 	 */
 	public Page findGroup(String groupName, String comCode, int pageNo, int pageSize) {
-		String key = cacheManager.generateCacheKey("comCodeGroup", comCode+groupName);
-		Object result = cacheManager.getCache(key);
+		String key = groupCacheManager.generateCacheKey("comCodeGroup", comCode+groupName);
+		Object result = groupCacheManager.getCache(key);
 		if (result != null) {
 			return (Page) result;
 		}
@@ -196,7 +206,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 		queryRule.addEqual("isValidate", "1");
 		queryRule.addDescOrder("createTime");
 		Page page=super.find(Group.class,queryRule, pageNo, pageSize);
-		cacheManager.putCache(key, page);
+		groupCacheManager.putCache(key, page);
 		return page;
 	}
 	
@@ -222,8 +232,8 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	 * 查询用户所在的用户组
 	 */
 	public List<Group> findGroupByUser(String userCode) {
-		String key = cacheManager.generateCacheKey("Groups", userCode);
-		Object result = cacheManager.getCache(key);
+		String key = groupCacheManager.generateCacheKey("userHasGroups", userCode);
+		Object result = groupCacheManager.getCache(key);
 		if (result != null) {
 			return (List<Group>) result;
 		}
@@ -243,7 +253,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 				}
 			}
 		}
-		cacheManager.putCache(key, groups);
+		groupCacheManager.putCache(key, groups);
 		return groups;
 	}
 	
@@ -275,7 +285,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 		}
 		group.setGroupRoles(groupRoles);
 		super.update(group);
-		cacheManager.clearCache("comCodeGroup");
+		groupCacheManager.clearCache("comCodeGroup");
 	}
 	
 	/**
@@ -288,12 +298,20 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 			//异常
 		}else{
 			super.delete(group);
-			cacheManager.clearCache("comCodeGroup");
-			cacheManager.clearCache("Groups");
-			cacheManager.clearCache("userGroup");
+			groupCacheManager.clearCache("comCodeGroup");
+			groupCacheManager.clearCache("userHasGroups");
+			userCacheManager.clearCache("notInGroup");
+			userCacheManager.clearCache("inGroup");
 		}
 	}
 
-
+	public boolean checkGroupName(String groupName){
+		QueryRule queryRule=QueryRule.getInstance();
+		queryRule.addEqual("name", groupName);
+		if(super.find(queryRule).size()>0){
+			return false;
+		}
+		return true;
+	}
 }	
  

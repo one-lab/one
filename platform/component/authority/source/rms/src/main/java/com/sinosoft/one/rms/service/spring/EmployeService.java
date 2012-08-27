@@ -58,7 +58,6 @@ public class EmployeService extends GenericDaoHibernate<Employe, String> {
 
 	/**
 	 * 根据员工代码查询
-	 * 
 	 * @param userCode
 	 * @return
 	 */
@@ -72,7 +71,6 @@ public class EmployeService extends GenericDaoHibernate<Employe, String> {
 
 	/**
 	 * 更新密码
-	 * 
 	 * @param employe
 	 */
 	void updatePassword(Employe employe) {
@@ -81,7 +79,6 @@ public class EmployeService extends GenericDaoHibernate<Employe, String> {
 
 	/**
 	 * 获取机构下属员工（配送模块）
-	 * 
 	 * @param comCode
 	 * @return
 	 */
