@@ -26,7 +26,7 @@ public final class Replys {
 	    return new EntityReplyMaker<E>(entity);
 	  }
 	  
-	  public static SampleJsonReply sample() {
-		  return new SampleJsonReplyMaker();
+	  public static SimpleJsonReply simple() {
+		  return new SimpleJsonReplyMaker();
 	  }
 }
