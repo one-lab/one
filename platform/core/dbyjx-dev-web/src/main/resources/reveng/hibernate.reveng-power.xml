@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table-filter match-name="UTIGRADE" />
+	<table-filter match-name="UTIGRADETASK" />
+	<table-filter match-name="UTIMENU" />
+	<table-filter match-name="UTIMENUSTYLE" />
+	<table-filter match-name="UTITASK" />
+	<table-filter match-name="UTIUSERGRADE" />
+	<table-filter match-name="UTIUSERGRADEPOWER" />
+	<table-filter match-name="UTIUSERGRADETASK" />
+	<table-filter match-name="PRPDCOMPANY" />
+	<table-filter match-name="PRPDUSER" />
+	<table name="UTIUSERGRADEPOWER" class="ins.platform.model.UtiUserGradepower"></table>
+	<table name="UTIGRADE" class="ins.platform.model.UtiGrade"></table>
+	<table name="UTITASK" class="ins.platform.model.UtiTask"></table>
+	<table name="UTIUSERGRADE" class="ins.platform.model.UtiUserGrade"></table>
+	<table name="UTIMENU" class="ins.platform.model.UtiMenu"></table>
+	<table name="UTIMENUSTYLE" class="ins.platform.model.UtiMenuStyle"></table>
+	<table name="PRPDUSER" class="ins.platform.model.PrpDuser"></table>
+	<table name="UTIGRADETASK" class="ins.platform.model.UtiGradeTask"></table>
+	<table name="UTIUSERGRADETASK" class="ins.platform.model.UtiUserGradeTask"></table>
+	<table name="PRPDCOMPANY" class="ins.platform.model.PrpDcompany"></table>
+</hibernate-reverse-engineering>

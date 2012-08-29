@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/ng-context-3.0.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	default-autowire="byName" default-lazy-init="true">
+
+	<bean id="pdLMRiskAction" class="ins.product.web.PDLMRiskController" scope="prototype" />
+	<bean id="pdLMDutyParamsAction" class="ins.product.web.PDLMDutyParamsAction" scope="prototype" />
+	<bean id="pdLMRiskAppAction" class="ins.product.web.PDLMRiskAppAction" scope="prototype" />
+	<bean id="pdLMDutyGetAction" class="ins.product.web.PDLMDutyGetAction" scope="prototype" />
+	<bean id="pdLMDutyPayAction" class="ins.product.web.PDLMDutyPayAction" scope="prototype" />
+	<bean id="pdScheRateCalFactorLibAction" class="ins.product.web.PDScheRateCalFactorLibAction" scope="prototype" />
+	<bean id="pdLMRiskDutyFactorAction" class="ins.product.web.PDLMRiskDutyFactorAction" scope="prototype" />
+	<bean id="lcNotepadAction" class="ins.product.web.LCNotepadController" scope="prototype" />
+	<bean id="pdIsSueAction" class="ins.product.web.PDIsSueController" scope="prototype" />
+	<bean id="pdlmRiskEdorItemAction" class="ins.product.web.PDLMRiskEdorItemAction" scope="prototype" />
+	<bean id="pdlmDutyAction" class="ins.product.web.PDLMDutyAction" scope="prototype" />
+	<bean id="pdlmRiskDutyAction" class="ins.product.web.PDLMRiskDutyAction" scope="prototype" />
+	<bean id="pdlmUWAction" class="ins.product.web.PDLMUWAction" scope="prototype" />
+	<bean id="pdlmRiskRoleAction" class="ins.product.web.PDLMRiskRoleAction" scope="prototype" />
+	<bean id="pdldRiskPrintAction" class="ins.product.web.PDLDRiskPrintController" scope="prototype" />
+	<bean id="pdlmRiskPayAction" class="ins.product.web.PDLMRiskPayAction" scope="prototype" />
+	<bean id="pdlmRiskPayIntvAction" class="ins.product.web.PDLMRiskPayIntvAction" scope="prototype" />
+	<bean id="pdlmCheckFieldAction" class="ins.product.web.PDLMCheckFieldController" scope="prototype" />
+	<bean id="pdlmCalModeAction" class="ins.product.web.PDLMCalModeController" scope="prototype" />
+	<bean id="pdlmPutyPayAddFeeAction" class="ins.product.web.PDLMDutyPayAddFeeAction" scope="prototype" />
+</beans>

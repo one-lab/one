@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table-filter match-name="LCACTUARIALAUDIT" />
+	<table-filter match-name="LCREINSAUDIT" />
+	<table name="LCREINSAUDIT" class="ins.prpall.report.model.LCReinsAudit"></table>
+	<table name="LCACTUARIALAUDIT" class="ins.prpall.report.model.LCActurialAudit"></table>
+</hibernate-reverse-engineering>

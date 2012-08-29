@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="product" extends="struts-default" namespace="/product">
+		<action name="checkRiskExist" class = "pdLMRiskAction" method = "checkRiskExist">
+		</action>
+		<action name="queryApplingRisk" class = "pdLMRiskAction" method = "queryApplingRisk">
+			<result name="baseInfoDefine">pddefine/baseinfodefine/pdbasequery.jsp</result>
+			<result name="policyDefine">pddefine/policydefine/pdrisksortquery.jsp</result>
+			<result name="claimDefine">pddefine/claimdefine/pdclaimquery.jsp</result>
+		</action>
+		<action name="saveRisk" class = "pdLMRiskAction" method = "saveRisk">
+			<result name="success">pddefine/baseinfodefine/pdbasequery.jsp</result>
+		</action>
+		<action name="queryModifyApplingRisk" class = "pdLMRiskAction" method = "queryModifyApplingRisk">
+			<result name="queryModifyRiskInfo">pddefine/baseinfodefine/pdRiskDefine.jsp</result>
+		</action>	
+		<action name="savaNotepad" class = "lcNotepadAction" method = "savaNotepad">
+		</action>	
+		<action name="queryIsSueByCon" class = "pdIsSueAction" method = "queryIsSueByCon">
+		</action>	
+		<action name="findDutyParams" class = "pdLMDutyParamsAction" method = "findDutyParams"></action>
+		<!-- 查询险种承保定义中的所有字段 -->
+		<action name="findRiskAppField" class = "pdLMRiskAppAction" method = "findRiskAppField">
+			<result name="success">pddefine/baseinfodefine/pdlmriskappedit.jsp</result>
+		</action>	
+		
+		<!-- 查询险种给付责任定义中的所有字段 -->
+		<action name="findDutyGetField" class = "pdLMDutyGetAction" method = "findDutyGetField">
+			<result name="success">pddefine/baseinfodefine/pdLMRiskDutyGetEdit.jsp</result>
+		</action>	
+		
+		<!-- 保存险种给付责任定义 -->
+		<action name="saveRiskDutyGet" class = "pdLMDutyGetAction" method = "saveRiskDutyGet">
+			
+		</action>
+		
+		<!-- 查询险种缴费责任定义中的所有字段 -->
+		<action name="findDutyPayField" class = "pdLMDutyPayAction" method = "findDutyPayField">
+			<result name="success">pddefine/baseinfodefine/pdLMRiskDutyPayEdit.jsp</result>
+		</action>	
+		
+		<!-- 保存险种缴费责任定义 -->
+		<action name="saveRiskDutyPay" class = "pdLMDutyPayAction" method = "saveRiskDutyPay">
+			
+		</action>
+		
+		<!-- 费率表要素库 -->
+		<action name="findScheRateCalFactor" class = "pdScheRateCalFactorLibAction" method = "findScheRateCalFactor">
+			<result name="success">pddefine/policydefine/dutyTableDefine/pdratetableedit.jsp</result>
+		</action>
+		
+		<!-- 为责任添加要素  -->
+		<action name="addRiskDutyFactor" class = "pdLMRiskDutyFactorAction" method = "addRiskDutyFactor">
+			
+		</action>
+		
+		<!-- 通过险种和责任得到要素  -->
+		<action name="findFactorByRiskAndDuty" class = "pdLMRiskDutyFactorAction" method = "findFactorByRiskAndDuty">
+		</action>
+		
+		<!-- 查询保全定义(PD_LMRiskEdorItem)的所有属性  -->
+		<action name="findRiskEdorItemFields" class = "pdlmRiskEdorItemAction" method = "findRiskEdorItemFields">
+			<result name="success">pddefine/endordefine/pdendoredit.jsp</result>
+		</action>
+		
+		<!-- 保存责任和险种责任关联  -->
+		<action name="saveRiskDuty" class="pdlmRiskDutyAction" method = "saveRiskDuty"></action>
+		
+		<!-- 保存责任和险种责任关联  -->
+		<action name="updateDhtml" class="pdlmRiskDutyAction" method = "updateDhtml"></action>
+		
+		<!-- 险种核保规则  -->
+		<action name="pdriskUnderwrite" class = "pdlmUWAction" method = "pdriskUnderwrite">
+		</action>
+		
+		<!-- 查询险种核保规则  -->
+		<action name="queryApplingUW" class = "pdlmUWAction" method = "queryApplingUW">
+		</action>
+		
+		
+		<!-- 保存险种核保规则  -->
+		<action name="saveLMUW"  class="pdlmUWAction" method = "saveLMUW">
+		</action>
+		
+		<!-- 删除险种核保规则  -->
+		<action name="deleteLMUW"  class="pdlmUWAction" method = "deleteLMUW">
+		</action>
+		
+		<!-- 查询险种角色  -->
+		<action name="findRiskRoleByRisk" class = "pdlmRiskRoleAction" method = "findRiskRoleByRisk">
+		</action>
+		<!-- 新增和修改险种角色信息时做的查询  -->
+		<action name="findRiskRole"  class="pdlmRiskRoleAction" method = "findRiskRole">
+		</action>
+		<!-- 新增险种角色  -->
+		<action name="saveRiskRole"  class="pdlmRiskRoleAction" method = "saveRiskRole">
+		</action>
+		<!-- 更新险种角色  -->
+		<action name="updateRiskRole"  class="pdlmRiskRoleAction" method = "updateRiskRole">
+		</action>
+		<!-- 删除险种角色  -->
+		<action name="deleteRiskRole"  class="pdlmRiskRoleAction" method = "deleteRiskRole">
+		</action>
+		<!-- 算法模版增，删，改 -->
+		<action name="saveCalMode" class = "pdlmCalModeAction" method = "saveCalMode"></action>
+		<action name="updateCalMode" class = "pdlmCalModeAction" method = "updateCalMode"></action>
+		<action name="deleteCalMode" class = "pdlmCalModeAction" method = "deleteCalMode"></action>
+		
+		<action name="showDefine" class = "pdlmRiskDutyAction" method = "showDefine">
+			<result name="success">pddefine/policydefine/pdpolicyedit.jsp</result>
+		</action>
+		
+		<!-- 查询险种投保规则  -->
+		<action name="queryApplingCF" class = "pdlmCheckFieldAction" method = "queryApplingCF">
+		</action>
+		
+		<!-- 新增/修改投保规则  -->
+		<action name="insertCF" class = "pdlmCheckFieldAction" method = "insertCF">
+		</action>
+		
+		<!-- 删除险种投保规则  -->
+		<action name="deleteCF"  class="pdlmCheckFieldAction" method = "deleteCF">
+		</action>
+		
+		<!-- 保存险种投保规则  -->
+		<action name="saveCF"  class="pdlmCheckFieldAction" method = "saveCF">
+		</action>
+		
+		<!-- 算法模版增，删，改 -->
+		<action name="saveDutyPayAddFee" class = "pdlmDutyPayAddFeeAction" method = "saveDutyPayAddFee"></action>
+		<action name="updateDutyPayAddFee" class = "pdlmDutyPayAddFeeAction" method = "updateDutyPayAddFee"></action>
+		<action name="deleteDutyPayAddFee" class = "pdlmDutyPayAddFeeAction" method = "deleteDutyPayAddFee"></action>
+		<action name="findRiskDutyAddFeeField" class = "pdlmDutyPayAddFeeAction" method = "findRiskDutyAddFeeField"></action>
+		
+		
+	    <!-- 查询问题件  -->
+		<action name="queryApplingIssue" class = "pdIsSueAction" method = "queryApplingIssue">
+		</action>
+		
+		
+		<!-- 上传文件处理 -->
+		<action name="IssureFileUpload" class="pdIsSueAction" method="IssureFileUpload">
+		</action>
+		
+	    <!-- 保存问题件  -->
+		<action name="saveIssue"  class="pdIsSueAction" method = "saveIssue">
+		</action>
+		
+	    <!-- 删除问题件  -->
+		<action name="deleteIssue"  class="pdIsSueAction" method = "deleteIssue">
+		</action>
+		
+		
+			
+		<!-- 修改问题件  -->
+		<action name="updateIssue" class = "pdIsSueAction" method = "updateIssue">
+		</action>
+		
+		
+				
+	    <!-- 查询记事本  -->
+		<action name="queryApplingNote" class = "lcNotepadAction" method = "queryApplingNote">
+		</action>
+	</package>
+</struts>
