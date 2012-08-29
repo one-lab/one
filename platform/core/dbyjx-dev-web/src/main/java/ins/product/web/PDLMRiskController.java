@@ -278,6 +278,6 @@ public class PDLMRiskController {
 	
 	public Reply saveRisk(@Param("pdlMRisk") PDLMRisk pdLMRisk){
 		pdLmRiskService.saveRisk(pdLMRisk);
-		return Replys.sample().success();
+		return Replys.simple().success();
 	}
 }
