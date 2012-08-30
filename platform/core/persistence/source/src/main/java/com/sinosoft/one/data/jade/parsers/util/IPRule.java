@@ -151,7 +151,7 @@ public class IPRule {
 
 
             String[] ruleIpArray = StringUtil.split(ruleIp,'.');
-            if (ruleIpArray.length != 4) { throw new Exception("IP部分错误！"); }
+            if (ruleIpArray.length != 4) { throw new Exception("the ip is error."); }
 
             //region
             for (int i = 0; i < 4; i++)

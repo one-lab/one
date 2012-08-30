@@ -26,6 +26,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
+import com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -66,7 +67,7 @@ public class LockIntegrationTests {
 		when(em.createQuery(criteriaQuery)).thenReturn(query);
 		when(query.setLockMode(any(LockModeType.class))).thenReturn(query);
 
-		JpaRepositoryFactory factory = new JpaRepositoryFactory(em) {
+		OneJpaRepositoryFactory factory = new OneJpaRepositoryFactory(em) {
 			@Override
 			@SuppressWarnings("unchecked")
 			public <T, ID extends Serializable> JpaEntityInformation<T, ID> getEntityInformation(Class<T> domainClass) {

@@ -20,9 +20,12 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.mysema.query.types.Expression;
+import com.mysema.query.types.Visitor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -134,7 +137,6 @@ public class QueryDslRepositorySupportTests {
 		}
 
 		public List<User> findUsersByLastname(String lastname) {
-
 			return from(user).where(user.lastname.eq(lastname)).list(user);
 		}
 

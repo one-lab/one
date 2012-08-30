@@ -25,6 +25,8 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactoryBean;
+import com.sinosoft.one.data.jpa.repository.support.OneRepositoryFactorySupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,12 +50,12 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
 @RunWith(MockitoJUnitRunner.class)
 public class JpaRepositoryFactoryBeanUnitTests {
 
-	JpaRepositoryFactoryBean<SimpleSampleRepository, User, Integer> factoryBean;
+	OneJpaRepositoryFactoryBean<SimpleSampleRepository, User, Integer> factoryBean;
 
 	@Mock
 	EntityManager entityManager;
 	@Mock
-	RepositoryFactorySupport factory;
+	OneRepositoryFactorySupport factory;
 	@Mock
 	ListableBeanFactory beanFactory;
 	@Mock
@@ -114,12 +116,12 @@ public class JpaRepositoryFactoryBeanUnitTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void preventsUnsetRepositoryInterface() throws Exception {
 
-		factoryBean = new JpaRepositoryFactoryBean<SimpleSampleRepository, User, Integer>();
+		factoryBean = new OneJpaRepositoryFactoryBean<SimpleSampleRepository, User, Integer>();
 		factoryBean.afterPropertiesSet();
 	}
 
 	private class DummyJpaRepositoryFactoryBean<T extends JpaRepository<S, ID>, S, ID extends Serializable> extends
-			JpaRepositoryFactoryBean<T, S, ID> {
+			OneJpaRepositoryFactoryBean<T, S, ID> {
 
 		/*
 		 * (non-Javadoc)
@@ -129,7 +131,7 @@ public class JpaRepositoryFactoryBeanUnitTests {
 		 * #createRepositoryFactory()
 		 */
 		@Override
-		protected RepositoryFactorySupport doCreateRepositoryFactory() {
+		protected OneRepositoryFactorySupport doCreateRepositoryFactory() {
 
 			return factory;
 		}

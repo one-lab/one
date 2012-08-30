@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:jpa="http://com.sinosoft.one/schema/data/jpa"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+		http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd">
     
     <import resource="../infrastructure.xml" />
     
