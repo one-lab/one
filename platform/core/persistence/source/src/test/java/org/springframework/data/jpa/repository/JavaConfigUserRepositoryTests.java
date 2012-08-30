@@ -70,7 +70,7 @@ public class JavaConfigUserRepositoryTests extends UserRepositoryTests {
 		private NamedQueries namedQueries() throws IOException {
 
 			PropertiesFactoryBean factory = new PropertiesFactoryBean();
-			factory.setLocation(new ClassPathResource("META-INF/jpa-sql-queries.properties"));
+			factory.setLocation(new ClassPathResource("META-INF/jpa-named-queries.properties"));
 			factory.afterPropertiesSet();
 
 			return new PropertiesBasedNamedQueries(factory.getObject());
