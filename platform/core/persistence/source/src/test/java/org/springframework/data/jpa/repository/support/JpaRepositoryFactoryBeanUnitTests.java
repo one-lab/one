@@ -43,7 +43,7 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
 /**
  * Unit test for {@code JpaRepositoryFactoryBean}.
  * <p>
- * TODO: Check if test methods double the ones in {@link JpaRepositoryFactoryUnitTests}.
+ * TODO: Check if test methods double the ones in {@link org.springframework.data.jpa.repository.support.JpaRepositoryFactoryUnitTests}.
  * 
  * @author Oliver Gierke
  */

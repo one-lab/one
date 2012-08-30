@@ -36,7 +36,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration test for {@link org.springframework.data.jpa.repository.support.QueryDslRepositorySupport}.
+ * Integration test for {@link QueryDslRepositorySupport}.
  * 
  * @author Oliver Gierke
  */
