@@ -74,7 +74,7 @@ public class OneSimpleJpaRepositoryConfiguration extends
 	 */
 	public String getNamedQueriesLocation() {
 
-		return "classpath*:META-INF/jpa-sql-queries.properties";
+		return "classpath*:META-INF/jpa-named-queries.properties";
 	}
 
 	public String getSqlQueriesLocation() {

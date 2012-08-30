@@ -13,7 +13,7 @@ import java.util.Locale;
  * Date: 12-8-16
  * Time: 上午9:27
  */
-public interface QueryLookupStrategy {
+public interface OneQueryLookupStrategy {
 
 
 	public static enum Key {

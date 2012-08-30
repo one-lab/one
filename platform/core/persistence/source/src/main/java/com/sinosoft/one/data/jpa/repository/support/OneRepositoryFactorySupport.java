@@ -18,8 +18,8 @@ package com.sinosoft.one.data.jpa.repository.support;
 import com.sinosoft.one.data.jpa.repository.query.OneJadeRepositoryQuery;
 import com.sinosoft.one.data.jade.context.JadeInvocationHandler;
 import com.sinosoft.one.data.jpa.repository.query.PropertiesBasedSqlQueries;
-import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy;
-import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy.Key;
+import com.sinosoft.one.data.jpa.repository.query.OneQueryLookupStrategy;
+import com.sinosoft.one.data.jpa.repository.query.OneQueryLookupStrategy.Key;
 import com.sinosoft.one.data.jpa.repository.query.SqlQueries;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -230,9 +230,9 @@ public abstract class OneRepositoryFactorySupport {
 	 * Returns the {@link org.springframework.data.repository.query.QueryLookupStrategy} for the given {@link org.springframework.data.repository.query.QueryLookupStrategy.Key}.
 	 *
 	 * @param key can be {@literal null}
-	 * @return the {@link QueryLookupStrategy} to use or {@literal null} if no queries should be looked up.
+	 * @return the {@link com.sinosoft.one.data.jpa.repository.query.OneQueryLookupStrategy} to use or {@literal null} if no queries should be looked up.
 	 */
-	protected QueryLookupStrategy getQueryLookupStrategy(Key key) {
+	protected OneQueryLookupStrategy getQueryLookupStrategy(Key key) {
 		return null;
 	}
 
@@ -284,7 +284,7 @@ public abstract class OneRepositoryFactorySupport {
 			this.customImplementation = customImplementation;
 			this.target = target;
 
-			QueryLookupStrategy lookupStrategy = getQueryLookupStrategy(queryLookupStrategyKey);
+			OneQueryLookupStrategy lookupStrategy = getQueryLookupStrategy(queryLookupStrategyKey);
 			Iterable<Method> queryMethods = repositoryInformation.getQueryMethods();
 
 			if (lookupStrategy == null) {
