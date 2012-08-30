@@ -6,7 +6,7 @@ $(document).ready(function(){
 function findRiskDutyAddFeeField(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/findRiskDutyAddFeeField.do",
+	   url: contextRootPath + "/product/findRiskDutyAddFeeField",
 	   data : {},
 	   dataType : "json",
 	   success: function(obj){
@@ -33,7 +33,7 @@ function saveDutyPayAddFee(){
 	//"addFeeCalCode","addPointLimit"
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/saveDutyPayAddFee.do",
+	   url: contextRootPath + "/product/saveDutyPayAddFee",
 	   data : $("#frmDutyPayAddFee").serialize(),
 	   dataType : "json",
 	   success: function(obj){
@@ -68,7 +68,7 @@ function deleteDutyPayAddFee(){
 		if(boolean){
 			$.ajax({
 			   type: "POST",
-			   url: contextRootPath + "/product/deleteDutyPayAddFee.do",
+			   url: contextRootPath + "/product/deleteDutyPayAddFee",
 			   data : {"id":id},
 			   success: function(obj){
 				   alert(obj);
@@ -82,7 +82,7 @@ function deleteDutyPayAddFee(){
 function updateDutyPayAddFee(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/updateDutyPayAddFee.do",
+	   url: contextRootPath + "/product/updateDutyPayAddFee",
 	   data : $("#frmDutyPayAddFee").serialize(),
 	   dataType : "json",
 	   success: function(obj){

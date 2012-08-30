@@ -1,6 +1,6 @@
 //根据条件查询问题件
 function queryIsSueByCon(){
-	var url =contextRootPath + "/product/queryIsSueByCon.do";
+	var url =contextRootPath + "/product/queryIsSueByCon";
 	var params ={
 		"pdIsSue.riskCode":$("#pdIsSue_riskCode").val(),
 		"pdIsSue.backPost":$("#backPost").val(),

@@ -5,7 +5,7 @@ function addRiskCode(){
 		return false;
 	}
 	//url,params,callback
-	var url = contextRootPath + "/product/checkRiskExist.do";
+	var url = ctx + "/product/checkRiskExist";
 	var params ={
 		"pdLMRisk.riskCode":$("#riskCode").val(),
 		"pdLMRisk.makeDate":$("#makeDate").val()
@@ -24,7 +24,7 @@ function callbackRiskExist(obj){
 
 //查询定义中的产品
 function queryApplingRisk(){
-	var url=contextRootPath + "/product/queryApplingRisk.do";
+	var url=ctx + "/product/queryApplingRisk";
 	$("#frmInput").attr("action",url);
 	$("#frmInput").attr("target","fraInterface");
 	$("#frmInput").submit();	
@@ -36,7 +36,7 @@ function queryApplingUW(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/queryApplingUW.do",
+		url : ctx + "/product/queryApplingUW",
 		data : "",
 		dataType :"json",
 		success : function(obj){
@@ -65,7 +65,7 @@ function insertUW(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/pdriskUnderwrite.do",
+		   url: ctx + "/product/pdriskUnderwrite",
 		   data : {"uwCode":""},
 		   dataType : "json",
 		   success: function(obj){
@@ -108,7 +108,7 @@ function  updateUW(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/pdriskUnderwrite.do",
+		   url: ctx + "/product/pdriskUnderwrite",
 		   data : {"uwCode":""+$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
 		   success: function(obj){
@@ -143,7 +143,7 @@ function saveUW(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/saveLMUW.do",
+		url : ctx + "/product/saveLMUW",
 		data : $("#frmInput").serialize(),
 		dataType :"json",
 		success : function(obj){
@@ -169,7 +169,7 @@ function deleteUW(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteLMUW.do",
+		url : ctx + "/product/deleteLMUW",
 		data : {"uwCode":""+$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
 		success : function(obj){
@@ -191,7 +191,7 @@ function queryApplingCF(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/queryApplingCF.do",
+		url : ctx + "/product/queryApplingCF",
 		data : {"riskCode":"GCMR"},
 		dataType :"json",
 		success : function(obj){
@@ -220,7 +220,7 @@ function insertCF(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/insertCF.do",
+		   url: ctx + "/product/insertCF",
 		   data : {},
 		   dataType : "json",
 		   success: function(obj){
@@ -263,7 +263,7 @@ function  updateCF(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/insertCF.do",
+		   url: ctx + "/product/insertCF",
 		   data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
 		   success: function(obj){
@@ -307,7 +307,7 @@ function deleteCF(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteCF.do",
+		url : ctx + "/product/deleteCF",
 		 data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
 		success : function(obj){
@@ -331,7 +331,7 @@ function saveCF(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/saveCF.do",
+		url : ctx + "/product/saveCF",
 		data : $("#frmInput").serialize(),
 		dataType :"json",
 		success : function(obj){
@@ -353,7 +353,7 @@ function queryApplingIssue(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/queryApplingIssue.do",
+		url : ctx + "/product/queryApplingIssue",
 		data : {"riskCode":"","issueState":"1"},
 		dataType :"json",
 		success : function(obj){
@@ -391,7 +391,7 @@ function insertIssue(){
 function saveIssue(){
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/saveIssue.do",
+		url : ctx + "/product/saveIssue",
 		data : $("#frmIssueInput").serialize(),
 		dataType :"json",
 		success : function(obj){
@@ -417,7 +417,7 @@ function deleteIssue(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteIssue.do",
+		url : ctx + "/product/deleteIssue",
 		 data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
 		success : function(obj){
@@ -447,7 +447,7 @@ function  updateIssue(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/updateIssue.do",
+		   url: ctx + "/product/updateIssue",
 		   data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
 		   success: function(obj){
@@ -467,7 +467,7 @@ function  updateIssue(){
 function findRiskRoleByRisk(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/findRiskRoleByRisk.do",
+	   url: ctx + "/product/findRiskRoleByRisk",
 	   data : {"riskCode":"a"},
 	   dataType : "json",
 	   success: function(obj){
@@ -505,7 +505,7 @@ function updateRiskRole() {
 	var val=$('input:radio[name="riskRoleUnion"]:checked').val();
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/findRiskRole.do",
+		   url: ctx + "/product/findRiskRole",
 		   data : {"riskRoleUnion":val},
 		   dataType : "json",
 		   success: function(obj){
@@ -540,7 +540,7 @@ function addRiskRole() {
 	$("#riskRole").show();
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/findRiskRole.do",
+		   url: ctx + "/product/findRiskRole",
 		   data : {"riskRoleUnion":""},
 		   dataType : "json",
 		   success: function(obj){
@@ -581,7 +581,7 @@ function saveRiskRole() {
 		
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/"+operateRiskRole+".do",
+		url : ctx + "/product/"+operateRiskRole,
 		data :$("#riskRoleForm").serialize(),
 		dataType :"json",
 		success : function(){
@@ -602,7 +602,7 @@ function deleteRiskRole(){
 	var val=$('input:radio[name="riskRoleUnion"]:checked').val();
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteRiskRole.do",
+		url : ctx + "/product/deleteRiskRole",
 		data : {"riskRoleUnion":val},
 		dataType :"json",
 		success : function(obj){

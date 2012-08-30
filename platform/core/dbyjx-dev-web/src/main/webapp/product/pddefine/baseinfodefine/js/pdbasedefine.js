@@ -1,5 +1,6 @@
 //增加一个新的险种，并且检查该险种是否已存在
 function addRiskCode(){
+    alert($("#riskCode").val())
 	if(null==$("#riskCode").val()||$("#riskCode").val()==""){
 		alert("请输入待申请的产品险种代码！");
 		return false;

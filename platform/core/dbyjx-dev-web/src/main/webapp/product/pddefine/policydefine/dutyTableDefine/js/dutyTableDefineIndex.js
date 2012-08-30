@@ -2,7 +2,7 @@
 function defineDutyPay(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/findFactorByRiskAndDuty.do",
+	   url: contextRootPath + "/product/findFactorByRiskAndDuty",
 	   data : {"riskCode":""+$("#dutyPayRiskCode").val(),"dutyCode":""+$("#dutyPayDutyCode").val()},
 	   dataType : "json",
 	   success: function(obj){

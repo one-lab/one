@@ -20,10 +20,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link href="${ctx}/common/css/Standard.css" rel="stylesheet" type="text/css" />
 	<link href="${ctx}/common/css/TagPage.css" rel="stylesheet" type="text/css" />
 	<script src="${ctx}/common/calender/WdatePicker.js"></script>
+    <script type="text/javascript">var ctx= "${ctx}";</script>
 	<script type="text/javascript">
 	function startDefine(){
 		var val=$('input:radio[name="selectApplingRadio"]:checked').val();
-		$("#frmDefine").attr("action",contextRootPath + "/product/showDefine.do?riskCode="+val);
+		$("#frmDefine").attr("action",ctx + "/product/showDefine?riskCode="+val);
 		$("#frmDefine").submit();
 	}
 	</script>
@@ -79,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 			</thead>
 			<tbody id = "ApplingRiskDetail">
-			  <s:iterator value="page.result" var="temp" status="index">
+			  <%--<s:iterator value="page.result" var="temp" status="index">
 			  <tr class="content">
 				<td width="4%"><input type='radio' name='selectApplingRadio' value='<s:property value="#temp.riskCode" />' /></td>
 				<td width="5%"><s:property value="#index.count"/></td>
@@ -88,8 +89,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td width="16%"><s:date name="#temp.makeDate" format="yyyy-MM-dd"/></td>
 				<td width="20%"><s:property value="#temp.operator" /></td>
 			  </tr>	
-			  </s:iterator>			
-			</tbody>
+			  </s:iterator>		--%>
+              <c:forEach var="temp" varStatus="index" items="${page.result}">
+                  <tr class="content">
+                      <td width="4%"><input type='radio' name='selectApplingRadio' value='${temp.riskCode}' /></td>
+                      <td width="5%">${index.count}</td>
+                      <td width="15%">${temp.riskCode}</td>
+                      <td width="40%">${temp.riskShortName}</td>
+                      <td width="16%"><fmt:formatDate value="${temp.makeDate}" pattern="yyyy-MM-dd"/></td>
+                      <td width="20%">${temp.operator}</td>
+                  </tr>
+              </c:forEach>
+            </tbody>
 		</table>
 		<table id="ApplyButtonInfo" class="common" cellpadding="3" cellspacing="0">
 			<tr>

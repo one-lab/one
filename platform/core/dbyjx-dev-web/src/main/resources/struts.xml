@@ -71,10 +71,10 @@
 	</package>
 	
 	<!-- 加载文件 -->
-	<include file="struts/struts-platform.xml"></include>
+<!--	<include file="struts/struts-platform.xml"></include>
 	<include file="struts/struts-prpall.xml"></include>
 	<include file="struts/struts-product.xml"></include>
-	<include file="struts/struts-claim.xml"></include>
+	<include file="struts/struts-claim.xml"></include>-->
 	
 	
 	

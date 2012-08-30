@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</tr>
 			<tr>
 				<td class="left">产品险种代码：</td>
-				<td class="right"><input name="pdLMRisk.riskCode" id="riskCode" class="common" type="text" value='<s:property value="riskCode"/>'></td>
+				<td class="right"><input name="pdLMRisk.riskCode" id="riskCode" class="common" type="text" value='${riskCode}'></td>
 				<td class="left">申请日期：</td>
 				<td class="right">
 					<input name="pdLMRisk.makeDate" id="makeDate" class="common" type="text"  style="width: 73%" value='<s:if test="makeDate==null"><%= new SimpleDateFormat("yyyy-MM-dd").format(new Date())%></s:if><s:else><s:date name="makeDate" format="yyyy-MM-dd"/></s:else>'/>

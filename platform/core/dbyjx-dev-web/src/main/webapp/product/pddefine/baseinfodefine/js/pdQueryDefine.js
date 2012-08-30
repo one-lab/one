@@ -41,7 +41,7 @@ function addRiskCode(){
 		return false;
 	}
 	//url,params,callback
-	var url = contextRootPath + "/product/checkRiskExist.do";
+	var url = contextRootPath + "/product/checkRiskExist";
 	var params ={
 		"pdLMRisk.riskCode":$("#riskCode").val(),
 		"pdLMRisk.makeDate":$("#makeDate").val()
@@ -53,7 +53,7 @@ function addRiskCode(){
 			return false;
 		}
 		if(obj == "N"){
-			var registerUrl = contextRootPath + "/product/queryModifyApplingRisk.do";
+			var registerUrl = contextRootPath + "/product/queryModifyApplingRisk";
 			$("#frmInput").attr("action",registerUrl);
 			$("#frmInput").attr("target","fraInterface");
 			$("#frmInput").submit();
@@ -74,7 +74,7 @@ function modifyApplinyRisk(){
 
 	//进入定义中产品的修改页面
 	//var fm  = document.getElementById('queryApplingRiskForm');
-	var url=contextRootPath + "/product/queryModifyApplingRisk.do?pdLMRisk.riskCode="+riskCode;
+	var url=contextRootPath + "/product/queryModifyApplingRisk?pdLMRisk.riskCode="+riskCode;
 	$("#fm").attr("action",url);
 	$("#fm").attr("method","get");
 	$("#fm").attr("target","fraInterface");

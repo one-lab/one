@@ -51,7 +51,7 @@
 				</td>
 			</tr>
 		</table>
-		<form id="operCalMode" name="operCalMode" action="aaa.do">
+		<form id="operCalMode" name="operCalMode" action="aaa">
 			<table id="" class="common" cellpadding="3" cellspacing="0">
 				<tr>
 					<td class="left">算法编码：</td>

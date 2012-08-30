@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script>
 	//添加记事本信息
 	function saveNotepad(){
-		var url =contextRootPath + "/product/savaNotepad.do";
+		var url =contextRootPath + "/product/savaNotepad";
 		var params ={
 			"lcNotepad.content" : $("#notepadContent").val(),
 			"lcNotepad.id.bussinessNo" : $("#bussinessNo").val()
@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
     <form name="fm" method="post">
 	<div style = "width:70%">
-		<input type="hidden" id="bussinessNo" name="lcNotepad.id.bussinessNo" value='<s:property value="pdLMRisk.riskCode" />' >
+		<input type="hidden" id="bussinessNo" name="lcNotepad.id.bussinessNo" value='${pdLMRisk.riskCode}' >
 		<table id="" class="common" cellpadding="3" cellspacing="0">
 			<tr>
 				<td class="formtitle" ><img src="${ctx}/images/bgformtitle.gif" style="cursor:hand;">记事本信息录入</td>

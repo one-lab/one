@@ -9,7 +9,7 @@
 	function findAllFactor(){
 		$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/findScheRateCalFactor.do",
+		   url: contextRootPath + "/product/findScheRateCalFactor",
 		   dataType : "json",
 		   success: function(obj){
 		   		var factorString = $("#factorContent").html();
@@ -23,7 +23,7 @@
 		   		
 		   		var riskCode = $("#riskCode").val();
 				var dutyCode = $("#dutyCode").val();
-				var url = contextRootPath + "/product/findFactorByRiskAndDuty.do";
+				var url = contextRootPath + "/product/findFactorByRiskAndDuty";
 				var params = {
 					"riskCode":riskCode,
 					"dutyCode":dutyCode
@@ -60,7 +60,7 @@
 //	function findFactorByRiskDuty(){
 //		var riskCode = $("#riskCode").val();
 //		var dutyCode = $("#dutyCode").val();
-//		var url = contextRootPath + "/product/findFactorByRiskAndDuty.do";
+//		var url = contextRootPath + "/product/findFactorByRiskAndDuty";
 //		var params = {
 //			"riskCode":riskCode,
 //			"dutyCode":dutyCode
@@ -98,7 +98,7 @@
 				html += resuleString;
 				$("#riskDutyFactorContent").html(html);
 			}
-			jQuery.post(contextRootPath + "/product/addRiskDutyFactor.do",params,showFactor,'json');
+			jQuery.post(contextRootPath + "/product/addRiskDutyFactor",params,showFactor,'json');
 		}
 	}
 	//组合要素添加
@@ -137,7 +137,7 @@
 				html += resuleString;
 				$("#riskDutyFactorContent").html(html);
 			}
-			jQuery.post(contextRootPath + "/product/addRiskDutyFactor.do",params,showFactor,'json');
+			jQuery.post(contextRootPath + "/product/addRiskDutyFactor",params,showFactor,'json');
 		}
 	}
 	
@@ -147,7 +147,7 @@
 		//获得当前责任下的要素
 		var riskCode = $("#riskCode").val();
 		var dutyCode = $("#dutyCode").val();
-		var url = contextRootPath + "/product/findFactorByRiskAndDuty.do";
+		var url = contextRootPath + "/product/findFactorByRiskAndDuty";
 		var params = {
 			"riskCode":riskCode,
 			"dutyCode":dutyCode
@@ -191,7 +191,7 @@
 			alert(strHTML);
 			
 			//更新pd_lmriskduty表中的字段DHTML
-			var updateDhtmlUrl = contextRootPath + "/product/updateDhtml.do";
+			var updateDhtmlUrl = contextRootPath + "/product/updateDhtml";
 			var params = {
 				"pdlmRiskDuty.id.riskCode" : $("#riskCode").val(),
 				"pdlmRiskDuty.id.dutyCode" : $("#dutyCode").val(),

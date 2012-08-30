@@ -42,7 +42,7 @@ function sonCallbackFather(){
 		};
 		$.ajax({
 			type : "post",
-			url : contextRootPath + "/product/saveCalMode.do",
+			url : contextRootPath + "/product/saveCalMode",
 			data : params,
 			success : function(obj){
 				var calModeString = $("#calModeContent").html();
@@ -73,7 +73,7 @@ function sonCallbackFather(){
 		};
 		$.ajax({
 			type : "post",
-			url : contextRootPath + "/product/updateCalMode.do",
+			url : contextRootPath + "/product/updateCalMode",
 			data : params,
 			success : function(obj){
 				var calModeString = $("#calModeContent").html();
@@ -98,7 +98,7 @@ function sonCallbackFather(){
 		if(bool){			
 			$.ajax({
 				type : "post",
-				url : contextRootPath + "/product/deleteCalMode.do",
+				url : contextRootPath + "/product/deleteCalMode",
 				data : {"calCode":$("#calCode").val()},
 				success : function(obj){
 					alert(obj);
