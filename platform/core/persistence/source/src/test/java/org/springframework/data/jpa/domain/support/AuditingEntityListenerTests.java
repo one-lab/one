@@ -33,7 +33,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration test for {@link org.springframework.data.jpa.domain.support.AuditingEntityListener}.
+ * Integration test for {@link AuditingEntityListener}.
  * 
  * @author Oliver Gierke
  */

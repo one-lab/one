@@ -37,7 +37,7 @@ import com.mysema.query.types.path.PathBuilder;
 import com.mysema.query.types.path.PathBuilderFactory;
 
 /**
- * Integration test for {@link org.springframework.data.jpa.repository.support.QueryDslJpaRepository}.
+ * Integration test for {@link QueryDslJpaRepository}.
  * 
  * @author Oliver Gierke
  */

@@ -29,7 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Integration test for the setup of beans extending {@link org.springframework.data.jpa.repository.support.QueryDslRepositorySupport}.
+ * Integration test for the setup of beans extending {@link QueryDslRepositorySupport}.
  * 
  * @author Oliver Gierke
  */

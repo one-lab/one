@@ -9,7 +9,7 @@
 	<import resource="infrastructure.xml" />
 
 	<!-- Configure a DAO for User class -->
-	<bean id="userDao" class="org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean">
+	<bean id="userDao" class="com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactoryBean">
 		<property name="repositoryInterface" value="org.springframework.data.jpa.repository.sample.UserRepository" />
 		<property name="customImplementation">
 			<bean class="org.springframework.data.jpa.repository.sample.UserRepositoryImpl" />
@@ -23,7 +23,7 @@
 		</property>
 	</bean>
 	
-	<bean id="roleDao" class="org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean">
+	<bean id="roleDao" class="com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactoryBean">
 		<property name="repositoryInterface" value="org.springframework.data.jpa.repository.sample.RoleRepository" />
 	</bean>
 

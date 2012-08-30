@@ -34,7 +34,7 @@ import org.springframework.data.jpa.domain.sample.User;
 import org.springframework.orm.jpa.persistenceunit.MutablePersistenceUnitInfo;
 
 /**
- * Unit test for {@link org.springframework.data.jpa.support.MergingPersistenceUnitManager}.
+ * Unit test for {@link MergingPersistenceUnitManager}.
  * 
  * @author Oliver Gierke
  */

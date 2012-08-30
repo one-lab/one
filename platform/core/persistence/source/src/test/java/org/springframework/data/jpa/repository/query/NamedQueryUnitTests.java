@@ -33,7 +33,7 @@ import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.QueryCreationException;
 
 /**
- * Unit tests for {@link org.springframework.data.jpa.repository.query.NamedQuery}.
+ * Unit tests for {@link NamedQuery}.
  * 
  * @author Oliver Gierke
  */

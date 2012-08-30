@@ -41,6 +41,7 @@ import org.springframework.test.context.ContextConfiguration;
  * 
  * @author Oliver Gierke
  */
+@Ignore
 @ContextConfiguration(value = "classpath:openjpa.xml", inheritLocations = true)
 public class OpenJpaNamespaceUserRepositoryTests extends NamespaceUserRepositoryTests {
 

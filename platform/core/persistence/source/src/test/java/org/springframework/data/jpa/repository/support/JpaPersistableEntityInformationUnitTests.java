@@ -32,7 +32,7 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.core.EntityInformation;
 
 /**
- * Unit tests for {@link org.springframework.data.jpa.repository.support.JpaPersistableEntityInformation}.
+ * Unit tests for {@link JpaPersistableEntityInformation}.
  * 
  * @author Oliver Gierke
  */

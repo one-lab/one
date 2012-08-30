@@ -23,7 +23,7 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 
 /**
- * Unit test for {@link org.springframework.data.jpa.repository.query.QueryUtils}.
+ * Unit test for {@link QueryUtils}.
  * 
  * @author Oliver Gierke
  */

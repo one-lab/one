@@ -19,6 +19,8 @@ import java.io.Serializable;
 
 import javax.persistence.EntityManager;
 
+import com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactoryBean;
+import com.sinosoft.one.data.jpa.repository.support.OneRepositoryFactorySupport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
@@ -30,7 +32,7 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
  * @author Oliver Gierke
  */
 public class CustomGenericJpaRepositoryFactoryBean<T extends JpaRepository<Object, Serializable>> extends
-		JpaRepositoryFactoryBean<T, Object, Serializable> {
+        OneJpaRepositoryFactoryBean<T, Object, Serializable> {
 
 	/*
 	 * (non-Javadoc)
@@ -39,7 +41,7 @@ public class CustomGenericJpaRepositoryFactoryBean<T extends JpaRepository<Objec
 	 * GenericJpaRepositoryFactoryBean#getFactory()
 	 */
 	@Override
-	protected RepositoryFactorySupport createRepositoryFactory(EntityManager em) {
+	protected OneRepositoryFactorySupport createRepositoryFactory(EntityManager em) {
 
 		return new CustomGenericJpaRepositoryFactory(em);
 	}

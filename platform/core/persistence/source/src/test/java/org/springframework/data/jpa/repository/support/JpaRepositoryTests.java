@@ -23,6 +23,7 @@ import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,8 +56,8 @@ public class JpaRepositoryTests {
 	@Before
 	public void setUp() {
 
-		repository = new JpaRepositoryFactory(em).getRepository(SampleEntityRepository.class);
-		idClassRepository = new JpaRepositoryFactory(em).getRepository(SampleWithIdClassRepository.class);
+		repository = new OneJpaRepositoryFactory(em).getRepository(SampleEntityRepository.class);
+		idClassRepository = new OneJpaRepositoryFactory(em).getRepository(SampleWithIdClassRepository.class);
 	}
 
 	@Test

@@ -36,7 +36,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Integration tests for {@link org.springframework.data.jpa.repository.support.JpaMetamodelEntityInformation}. Has to run with OpenJPA as Hibernate does not implement
+ * Integration tests for {@link JpaMetamodelEntityInformation}. Has to run with OpenJPA as Hibernate does not implement
  * {@link javax.persistence.metamodel.Metamodel#managedType(Class)} correctly (does not consider {@link javax.persistence.MappedSuperclass}es correctly).
  * 
  * @see https://hibernate.onjira.com/browse/HHH-6896

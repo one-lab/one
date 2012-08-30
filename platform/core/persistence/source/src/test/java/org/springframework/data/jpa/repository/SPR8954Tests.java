@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactoryBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class SPR8954Tests {
 
 		assertThat(repoFactories.size(), is(greaterThan(0)));
 		assertThat(repoFactories.keySet(), hasItem("&userRepository"));
-		assertThat(repoFactories.get("&userRepository"), is(instanceOf(JpaRepositoryFactoryBean.class)));
+		assertThat(repoFactories.get("&userRepository"), is(instanceOf(OneJpaRepositoryFactoryBean.class)));
 		assertThat(Arrays.asList(context.getBeanNamesForType(UserRepository.class)), hasItem("userRepository"));
 	}
 }

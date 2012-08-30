@@ -32,7 +32,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.sample.User;
 
 /**
- * Unit tests for {@link org.springframework.data.jpa.repository.support.SimpleJpaRepository}.
+ * Unit tests for {@link SimpleJpaRepository}.
  * 
  * @author Oliver Gierke
  */

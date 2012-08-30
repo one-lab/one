@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactoryBean;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
@@ -30,7 +31,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.domain.sample.User;
 import org.springframework.data.jpa.repository.sample.UserRepository;
 import org.springframework.data.jpa.repository.sample.UserRepositoryImpl;
-import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.support.PropertiesBasedNamedQueries;
 import org.springframework.test.context.ContextConfiguration;
@@ -56,7 +56,7 @@ public class JavaConfigUserRepositoryTests extends UserRepositoryTests {
 		@Bean
 		public UserRepository userRepository() throws IOException {
 
-			JpaRepositoryFactoryBean<UserRepository, User, Integer> factory = new JpaRepositoryFactoryBean<UserRepository, User, Integer>();
+			OneJpaRepositoryFactoryBean<UserRepository, User, Integer> factory = new OneJpaRepositoryFactoryBean<UserRepository, User, Integer>();
 			factory.setEntityManager(entityManager);
 			factory.setBeanFactory(beanFactory);
 			factory.setRepositoryInterface(UserRepository.class);

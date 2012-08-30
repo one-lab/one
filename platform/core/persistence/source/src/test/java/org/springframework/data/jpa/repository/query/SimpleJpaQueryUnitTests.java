@@ -42,7 +42,7 @@ import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.Parameters;
 
 /**
- * Unit test for {@link org.springframework.data.jpa.repository.query.SimpleJpaQuery}.
+ * Unit test for {@link SimpleJpaQuery}.
  * 
  * @author Oliver Gierke
  */

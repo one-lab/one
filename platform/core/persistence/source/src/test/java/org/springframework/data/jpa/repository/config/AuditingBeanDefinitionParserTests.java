@@ -28,7 +28,7 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
 
 /**
- * Integration tests for {@link org.springframework.data.jpa.repository.config.AuditingBeanDefinitionParser}.
+ * Integration tests for {@link AuditingBeanDefinitionParser}.
  * 
  * @author Oliver Gierke
  */

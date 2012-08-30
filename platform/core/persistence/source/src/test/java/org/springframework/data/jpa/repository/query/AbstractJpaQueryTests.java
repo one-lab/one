@@ -41,7 +41,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Integration test for {@link org.springframework.data.jpa.repository.query.AbstractJpaQuery}.
+ * Integration test for {@link AbstractJpaQuery}.
  * 
  * @author Oliver Gierke
  */

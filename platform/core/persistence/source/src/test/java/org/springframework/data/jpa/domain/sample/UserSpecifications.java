@@ -23,14 +23,14 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
- * Collection of {@link org.springframework.data.jpa.domain.Specification}s for a {@link org.springframework.data.jpa.domain.sample.User}.
+ * Collection of {@link org.springframework.data.jpa.domain.Specification}s for a {@link User}.
  * 
  * @author Oliver Gierke
  */
 public class UserSpecifications {
 
 	/**
-	 * A {@link org.springframework.data.jpa.domain.Specification} to match on a {@link org.springframework.data.jpa.domain.sample.User}'s firstname.
+	 * A {@link org.springframework.data.jpa.domain.Specification} to match on a {@link User}'s firstname.
 	 * 
 	 * @param firstname
 	 * @return
@@ -41,7 +41,7 @@ public class UserSpecifications {
 	}
 
 	/**
-	 * A {@link org.springframework.data.jpa.domain.Specification} to match on a {@link org.springframework.data.jpa.domain.sample.User}'s lastname.
+	 * A {@link org.springframework.data.jpa.domain.Specification} to match on a {@link User}'s lastname.
 	 * 
 	 * @param firstname
 	 * @return
@@ -52,7 +52,7 @@ public class UserSpecifications {
 	}
 
 	/**
-	 * A {@link org.springframework.data.jpa.domain.Specification} to do a like-match on a {@link org.springframework.data.jpa.domain.sample.User}'s firstname.
+	 * A {@link org.springframework.data.jpa.domain.Specification} to do a like-match on a {@link User}'s firstname.
 	 * 
 	 * @param firstname
 	 * @return

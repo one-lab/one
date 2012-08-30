@@ -37,7 +37,7 @@ import org.springframework.data.jpa.repository.query.JpaQueryExecution.PagedExec
 import org.springframework.data.repository.query.Parameters;
 
 /**
- * Unit test for {@link org.springframework.data.jpa.repository.query.JpaQueryExecution}.
+ * Unit test for {@link JpaQueryExecution}.
  * 
  * @author Oliver Gierke
  */

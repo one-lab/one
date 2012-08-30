@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Custom Extended repository interface for a {@code User}. This relies on the custom intermediate repository interface
- * {@link org.springframework.data.jpa.repository.custom.CustomGenericRepository}.
+ * {@link CustomGenericRepository}.
  * 
  * @author Oliver Gierke
  */

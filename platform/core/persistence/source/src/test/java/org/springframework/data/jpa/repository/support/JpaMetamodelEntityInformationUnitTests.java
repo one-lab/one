@@ -38,7 +38,7 @@ import org.springframework.data.jpa.domain.sample.SampleWithIdClass;
 import org.springframework.data.jpa.domain.sample.SampleWithIdClassPK;
 
 /**
- * Unit tests for {@link org.springframework.data.jpa.repository.support.JpaMetamodelEntityInformation}.
+ * Unit tests for {@link JpaMetamodelEntityInformation}.
  * 
  * @author Oliver Gierke
  */

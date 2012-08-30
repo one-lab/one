@@ -28,7 +28,7 @@ import org.springframework.orm.jpa.persistenceunit.MutablePersistenceUnitInfo;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitPostProcessor;
 
 /**
- * Unit tests for {@link org.springframework.data.jpa.support.ClasspathScanningPersistenceUnitPostProcessor}.
+ * Unit tests for {@link ClasspathScanningPersistenceUnitPostProcessor}.
  * 
  * @author Oliver Gierke
  */

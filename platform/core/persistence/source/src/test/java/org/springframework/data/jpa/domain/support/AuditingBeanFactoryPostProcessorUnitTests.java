@@ -27,7 +27,7 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
 
 /**
- * Unit test for {@link org.springframework.data.jpa.domain.support.AuditingBeanFactoryPostProcessor}.
+ * Unit test for {@link AuditingBeanFactoryPostProcessor}.
  * 
  * @author Oliver Gierke
  */

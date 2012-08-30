@@ -36,7 +36,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.query.Parameters;
 
 /**
- * Unit test for {@link org.springframework.data.jpa.repository.query.ParameterBinder}.
+ * Unit test for {@link ParameterBinder}.
  * 
  * @author Oliver Gierke
  */
