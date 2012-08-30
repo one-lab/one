@@ -1,32 +1,21 @@
 package ins.product.web;
 
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import ins.framework.web.Struts2Action;
 import ins.product.model.PDLMDuty;
 import ins.product.model.PDLMRiskDuty;
 import ins.product.service.facade.PDLMDutyService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class PDLMDutyAction extends Struts2Action {
+@Path("/product")
+public class PDLMDutyController {
 	private static final long serialVersionUID = 1L;
 	
-	private PDLMDuty pdlmDuty;
-	private PDLMRiskDuty pdlmRiskDuty;
 	private PDLMDutyService pdlmDutyService;
-	public PDLMDuty getPdlmDuty() {
-		return pdlmDuty;
-	}
-	public void setPdlmDuty(PDLMDuty pdlmDuty) {
-		this.pdlmDuty = pdlmDuty;
-	}
-	public PDLMRiskDuty getPdlmRiskDuty() {
-		return pdlmRiskDuty;
-	}
-	public void setPdlmRiskDuty(PDLMRiskDuty pdlmRiskDuty) {
-		this.pdlmRiskDuty = pdlmRiskDuty;
-	}
-	
-	public PDLMDutyService getPdlmDutyService() {
-		return pdlmDutyService;
-	}
+    @Autowired
 	public void setPdlmDutyService(PDLMDutyService pdlmDutyService) {
 		this.pdlmDutyService = pdlmDutyService;
 	}
@@ -36,10 +25,11 @@ public class PDLMDutyAction extends Struts2Action {
 	 * @author Administrator
 	 * @return
 	 */
-	public String saveDuty(){
+	public Reply saveDuty(@Param("pdlmDuty") PDLMDuty pdlmDuty,
+                          @Param("pdlmRiskDuty") PDLMRiskDuty pdlmRiskDuty){
 		
 //		String riskCode = (String)this.getSession().getAttribute("riskCode");
 //		pdlmDutyService.saveDuty(pdlmDuty,riskCode);
-		return NONE;
+		return Replys.NO_REPLY;
 	}
 }

@@ -32,9 +32,9 @@ public class PDLMCalModeController {
 	 * @return 返回当前保存的对象
 	 */
 	public Reply saveCalMode(@Param("pdlmCalMode")PDLMCalMode pdlmCalMode){
-		pdlmCalMode = pdlmCalModeService.saveCalMode(pdlmCalMode);
+        PDLMCalMode	pdlmCalModeTemp = pdlmCalModeService.saveCalMode(pdlmCalMode);
 		List<PDLMCalMode> list = new ArrayList<PDLMCalMode>();
-		list.add(pdlmCalMode);
+		list.add(pdlmCalModeTemp);
 		String[] showField = new String[]{"calCode","riskCode","type","calSQL","remark"};
 		return Replys.with(list).as(Json.class).includes(showField);
 	}
@@ -45,9 +45,9 @@ public class PDLMCalModeController {
 	 * @return  返回修改后的对象
 	 */
 	public Reply updateCalMode(@Param("pdlmCalMode")PDLMCalMode pdlmCalMode){
-	PDLMCalMode	pdlmCalModeTemp = pdlmCalModeService.updateCalMode(pdlmCalMode);
+	    PDLMCalMode	pdlmCalModeTemp = pdlmCalModeService.updateCalMode(pdlmCalMode);
 		List<PDLMCalMode> list = new ArrayList<PDLMCalMode>();
-		list.add(pdlmCalMode);
+		list.add(pdlmCalModeTemp);
 		String[] showField = new String[]{"calCode","riskCode","type","calSQL","remark"};
 		return Replys.with(list).as(Json.class).includes(showField);
 	}

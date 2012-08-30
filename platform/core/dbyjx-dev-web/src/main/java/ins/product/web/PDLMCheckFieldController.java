@@ -37,9 +37,9 @@ public class PDLMCheckFieldController  {
 	 * @return
 	 */
 	public Reply saveCheckField(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField){
-		pdlmCheckField = pdlmCheckFieldService.saveCheckField(pdlmCheckField);
+		pdlmCheckFieldService.saveCheckField(pdlmCheckField);
 		//this.writeJSONData(list, args);
-		return Replys.simple().fail();
+		return Replys.simple().success();
 	}
 	/**
 	 * @title deletCheckField
@@ -48,8 +48,8 @@ public class PDLMCheckFieldController  {
 	 * @return
 	 */
 	public Reply deleteCheckField(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField){
-		pdlmCheckField = pdlmCheckFieldService.deleteCheckField(pdlmCheckField);
-		return Replys.simple().fail();
+		pdlmCheckFieldService.deleteCheckField(pdlmCheckField);
+		return Replys.simple().success();
 	}
 	/**
 	 * @title updateCheckField
@@ -58,8 +58,8 @@ public class PDLMCheckFieldController  {
 	 * @return
 	 */
 	public Reply updateCheckField(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField){
-		pdlmCheckField = pdlmCheckFieldService.updateCheckField(pdlmCheckField);
-		return Replys.simple().fail();
+		pdlmCheckFieldService.updateCheckField(pdlmCheckField);
+		return Replys.simple().success();
 	}
 
 
@@ -145,7 +145,7 @@ public class PDLMCheckFieldController  {
 			}
 			
 			String[] factorArray = new String[]{"displayOrder","fieldName","fieldCode","fieldType","fieldValueName","fieldValue","officialDesc","busiDesc"};
-			this.writeJSONData(list, factorArray);
+			return Replys.with(list).as(Json.class).includes(factorArray);
 		}else{
 			String tableCode = "PD_LMCheckField";
 			//获得相关属性
@@ -171,11 +171,8 @@ public class PDLMCheckFieldController  {
 				list.add(temp);
 			}
 			String[] factorArray = new String[]{"displayOrder","fieldName","fieldType","fieldValueName","fieldValue","officialDesc","busiDesc"};
-			this.writeJSONData(list, factorArray);
+            return Replys.with(list).as(Json.class).includes(factorArray);
 		}
-		
-		return NONE;
-		
 	}
 	
 	
@@ -204,6 +201,6 @@ public class PDLMCheckFieldController  {
 	 */
 	public Reply saveCF(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField){
 		pdlmCheckFieldService.saveCheckField(pdlmCheckField);
-		return Replys.simple().fail();
+		return Replys.simple().success();
 	}
 }

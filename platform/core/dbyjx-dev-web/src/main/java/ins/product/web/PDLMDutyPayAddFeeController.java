@@ -1,45 +1,34 @@
 package ins.product.web;
 
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Text;
 import ins.framework.web.Struts2Action;
 import ins.product.model.PDBaseField;
 import ins.product.model.PDLMDutyPayAddFee;
 import ins.product.model.PDLMDutyPayAddFeeId;
 import ins.product.service.facade.PDBaseFieldService;
 import ins.product.service.facade.PDLMDutyPayAddFeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
-
-public class PDLMDutyPayAddFeeAction extends Struts2Action {
+@Path("/product")
+public class PDLMDutyPayAddFeeController {
 	private static final long serialVersionUID = 1L;
 	
-	private PDLMDutyPayAddFee pdlmDutyPayAddFee;
-	private PDLMDutyPayAddFeeService pdlmDutyPayAddFeeService; 
+	private PDLMDutyPayAddFeeService pdlmDutyPayAddFeeService;
 	private PDBaseFieldService pdBaseFieldService;
-	private PDLMDutyPayAddFeeId id;
+
 	
-	
-	public PDLMDutyPayAddFeeId getId() {
-		return id;
-	}
-	public void setId(PDLMDutyPayAddFeeId id) {
-		this.id = id;
-	}
-	public PDBaseFieldService getPdBaseFieldService() {
-		return pdBaseFieldService;
-	}
+	@Autowired
 	public void setPdBaseFieldService(PDBaseFieldService pdBaseFieldService) {
 		this.pdBaseFieldService = pdBaseFieldService;
 	}
-	public PDLMDutyPayAddFee getPdlmDutyPayAddFee() {
-		return pdlmDutyPayAddFee;
-	}
-	public void setPdlmDutyPayAddFee(PDLMDutyPayAddFee pdlmDutyPayAddFee) {
-		this.pdlmDutyPayAddFee = pdlmDutyPayAddFee;
-	}
-	public PDLMDutyPayAddFeeService getPdlmDutyPayAddFeeService() {
-		return pdlmDutyPayAddFeeService;
-	}
+	@Autowired
 	public void setPdlmDutyPayAddFeeService(
 			PDLMDutyPayAddFeeService pdlmDutyPayAddFeeService) {
 		this.pdlmDutyPayAddFeeService = pdlmDutyPayAddFeeService;
@@ -51,13 +40,12 @@ public class PDLMDutyPayAddFeeAction extends Struts2Action {
 	 * @author 朱超
 	 * @return
 	 */
-	public String saveDutyPayAddFee(){
-		pdlmDutyPayAddFee = pdlmDutyPayAddFeeService.saveDutyPayAddFee(pdlmDutyPayAddFee);
+	public Reply saveDutyPayAddFee(@Param("pdlmDutyPayAddFee") PDLMDutyPayAddFee pdlmDutyPayAddFee){
+        PDLMDutyPayAddFee pdlmDutyPayAddFeeTarget = pdlmDutyPayAddFeeService.saveDutyPayAddFee(pdlmDutyPayAddFee);
 		List<PDLMDutyPayAddFee> pdlmDutyPayAddFees = new ArrayList<PDLMDutyPayAddFee>();
-		pdlmDutyPayAddFees.add(pdlmDutyPayAddFee);
+		pdlmDutyPayAddFees.add(pdlmDutyPayAddFeeTarget);
 		String[] show = new String[]{"id.riskCode","id.dutyCode","id.addFeeType","id.addFeeObject","addFeeCalCode","addPointLimit"};
-		this.writeJSONData(pdlmDutyPayAddFees, show);
-		return NONE;
+		return Replys.with(pdlmDutyPayAddFees).as(Json.class).includes(show);
 	}
 	
 	/**
@@ -66,13 +54,12 @@ public class PDLMDutyPayAddFeeAction extends Struts2Action {
 	 * @author 朱超
 	 * @return
 	 */
-	public String updateDutyPayAddFee(){
-		pdlmDutyPayAddFee = pdlmDutyPayAddFeeService.updateDutyPayAddFee(pdlmDutyPayAddFee);
+	public Reply updateDutyPayAddFee(@Param("pdlmDutyPayAddFee") PDLMDutyPayAddFee pdlmDutyPayAddFee){
+        PDLMDutyPayAddFee pdlmDutyPayAddFeeTarget = pdlmDutyPayAddFeeService.updateDutyPayAddFee(pdlmDutyPayAddFee);
 		List<PDLMDutyPayAddFee> pdlmDutyPayAddFees = new ArrayList<PDLMDutyPayAddFee>();
-		pdlmDutyPayAddFees.add(pdlmDutyPayAddFee);
+		pdlmDutyPayAddFees.add(pdlmDutyPayAddFeeTarget);
 		String[] show = new String[]{"id.riskCode","id.dutyCode","id.addFeeType","id.addFeeObject","addFeeCalCode","addPointLimit"};
-		this.writeJSONData(pdlmDutyPayAddFees, show);
-		return NONE;
+        return Replys.with(pdlmDutyPayAddFees).as(Json.class).includes(show);
 	}
 	
 	/**
@@ -81,10 +68,9 @@ public class PDLMDutyPayAddFeeAction extends Struts2Action {
 	 * @author 朱超
 	 * @return
 	 */
-	public String deleteDutyPayAddFee(){
+	public Reply deleteDutyPayAddFee(@Param("pdlmDutyPayAddFee") PDLMDutyPayAddFee pdlmDutyPayAddFee){
 		String flag = pdlmDutyPayAddFeeService.deleteDutyPayAddFee(pdlmDutyPayAddFee);
-		this.renderText(flag);
-		return NONE;
+		return Replys.with(flag).as(Text.class);
 	}
 	
 	/**
@@ -93,19 +79,17 @@ public class PDLMDutyPayAddFeeAction extends Struts2Action {
 	 * @author 朱超
 	 * @return
 	 */
-	public String findRiskDutyAddFeeField(){
+	public Reply findRiskDutyAddFeeField(){
 		String tableCode = "PD_LMDutyPayAddFee";
 		List<PDBaseField> fields = pdBaseFieldService.findField(tableCode);
 		String[] fieldsArr = new String[]{"id.fieldCode","fieldName","fieldType","officialDesc","busiDesc","displayOrder"}; 
-		this.writeJSONData(fields, fieldsArr);
-		
-		return NONE;
+		return Replys.with(fields).as(Json.class).includes(fieldsArr);
 	}
 	
-	public String findByPK(){
+	public Reply findByPK(@Param("id") PDLMDutyPayAddFeeId id){
 		PDLMDutyPayAddFee resultDutyPayAddFee = pdlmDutyPayAddFeeService.findByPK(id);
 		List<PDLMDutyPayAddFee> list = new ArrayList<PDLMDutyPayAddFee>();
-		this.writeJSONData(list, null);
-		return NONE;
+        list.add(resultDutyPayAddFee);
+		return Replys.with(list).as(Json.class);
 	}
 }

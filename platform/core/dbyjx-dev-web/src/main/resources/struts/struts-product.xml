@@ -65,7 +65,7 @@
 		
 		<!-- 查询保全定义(PD_LMRiskEdorItem)的所有属性  -->
 		<action name="findRiskEdorItemFields" class = "pdlmRiskEdorItemAction" method = "findRiskEdorItemFields">
-			<result name="success">pddefine/endordefine/pdendoredit.jsp</result>
+			<result name="success">showDefine</result>
 		</action>
 		
 		<!-- 保存责任和险种责任关联  -->

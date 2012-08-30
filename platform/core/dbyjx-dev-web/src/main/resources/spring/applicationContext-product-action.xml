@@ -10,7 +10,7 @@
 
 	<bean id="pdLMRiskAction" class="ins.product.web.PDLMRiskController" scope="prototype" />
 	<bean id="pdLMDutyParamsAction" class="ins.product.web.PDLMDutyParamsAction" scope="prototype" />
-	<bean id="pdLMRiskAppAction" class="ins.product.web.PDLMRiskAppAction" scope="prototype" />
+	<bean id="pdLMRiskAppAction" class="ins.product.web.PDLMRiskAppController" scope="prototype" />
 	<bean id="pdLMDutyGetAction" class="ins.product.web.PDLMDutyGetAction" scope="prototype" />
 	<bean id="pdLMDutyPayAction" class="ins.product.web.PDLMDutyPayAction" scope="prototype" />
 	<bean id="pdScheRateCalFactorLibAction" class="ins.product.web.PDScheRateCalFactorLibAction" scope="prototype" />
@@ -27,5 +27,5 @@
 	<bean id="pdlmRiskPayIntvAction" class="ins.product.web.PDLMRiskPayIntvAction" scope="prototype" />
 	<bean id="pdlmCheckFieldAction" class="ins.product.web.PDLMCheckFieldController" scope="prototype" />
 	<bean id="pdlmCalModeAction" class="ins.product.web.PDLMCalModeController" scope="prototype" />
-	<bean id="pdlmPutyPayAddFeeAction" class="ins.product.web.PDLMDutyPayAddFeeAction" scope="prototype" />
+	<bean id="pdlmPutyPayAddFeeAction" class="ins.product.web.PDLMDutyPayAddFeeController" scope="prototype" />
 </beans>
