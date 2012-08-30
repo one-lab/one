@@ -109,37 +109,37 @@ public class QueryCodeAllController {
 			else if("findRelationRisk".equals(methodType)){
 				Page page = pdLmRiskRelaService.findRelaRisk(pageNo,pageSize,hqlQueryRule);
 	//			writeJSONData(page, new String[]{"codeValue","codeLabel"});
-                Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
+              return   Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
 			}
 			//查询出险人治疗医院
 			else if("findHospital".equals(methodType)){
 				Page page = llHospitalService.findHospital(pageNo,pageSize);
 		//		writeJSONData(page, new String[]{"codeValue","codeLabel"});
-                Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
+               return Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
 			}
 			//根据附加险编码查询主险
 			else if("findMainRisk".equals(methodType)){
 				Page page = pdLmRiskRelaService.findMainRisk(pageNo,pageSize,paramsMap);
 		//		writeJSONData(page, new String[]{"codeValue","codeLabel"});
-                Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
+               return Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
 			}
 			//根据呈报号查询该呈报下面的险种
 			else if("LCContPlanRiskReport".equals(methodType)){
 				Page page = lcContPlanRiskReportService.findByRepNo(pageNo,pageSize,paramsMap);
 		//		writeJSONData(page, new String[]{"codeValue","codeLabel"});
-                Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
+               return Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
 			}
 			//通过呈报号查询险种
 			else if("findRiskByReport".equals(methodType)){
 				Page page = lcGrpPolReportService.findRiskByReport(pageNo,pageSize,paramsMap);
 			//	writeJSONData(page, new String[]{"codeValue","codeLabel"});
-                Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
+              return   Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
 			}
 			//通过险种查询责任
 			else if("findDutyByRisk".equals(methodType)){
 				Page page = pdLmDutyService.findDutyByRisk(pageNo,pageSize,paramsMap);
 		//		writeJSONData(page, new String[]{"codeValue","codeLabel"});
-                Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
+               return Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
 			}
 			//根据险种和责任查询要素，并且去重
 			else if("pdlmRiskDutyFactor".equals(methodType)){
@@ -147,13 +147,13 @@ public class QueryCodeAllController {
 				String dutyCode = (String)paramsMap.get("dutyCode");
 				List<QueryCodeVo> queryCodes = pdLmRiskDutyFactorService.findFactorDistinct(riskCode, dutyCode);
 		//		this.writeJSONData(queryCodes, new String[]{"codeValue","codeLabel"});
-                Replys.with(queryCodes).as(Json.class).includes("codeValue","codeLabel");
+              return   Replys.with(queryCodes).as(Json.class).includes("codeValue","codeLabel");
 			}
 			//其他统一调用pdLdCode查询
 			else{
 				Page page = pdLdCodeService.findByCode(pageNo,pageSize,paramsMap);
 			//	writeJSONData(page, new String[]{"codeValue","codeLabel"});
-                Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
+              return   Replys.with(page.getResult()).as(Json.class).includes("codeValue","codeLabel");
 			}
 		}
 		return Replys.simple().fail();
