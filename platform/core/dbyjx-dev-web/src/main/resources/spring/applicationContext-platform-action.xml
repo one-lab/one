@@ -9,5 +9,5 @@
 	default-autowire="byName" default-lazy-init="true">
 
 	<bean id="userPowerAction" class="ins.platform.web.UserPowerController" scope="prototype" />
-	<bean id="queryCodeAllAction" class="ins.platform.web.QueryCodeAllAction" scope="prototype"/>
+	<bean id="queryCodeAllAction" class="ins.platform.web.QueryCodeAllController" scope="prototype"/>
 </beans>

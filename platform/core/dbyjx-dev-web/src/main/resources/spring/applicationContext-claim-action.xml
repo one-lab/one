@@ -8,10 +8,10 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
 	default-autowire="byName" default-lazy-init="true">
 
-   	<bean id="claimReportAction" class="ins.claim.report.web.ClaimReportAction" scope="prototype"/>
-   	<bean id="llInqAction" class="ins.claim.report.web.LLInqAction" scope="prototype"/>
-   	<bean id="llSubmitAction" class="ins.claim.report.web.LLSubmitAction" scope="prototype"/>
-   	<bean id="lcInsuredAction" class="ins.claim.report.web.LCInsuredAction" scope="prototype"/>
+   	<bean id="claimReportAction" class="ins.claim.report.web.ClaimReportController" scope="prototype"/>
+   	<bean id="llInqAction" class="ins.claim.report.web.LLInqController" scope="prototype"/>
+   	<bean id="llSubmitAction" class="ins.claim.report.web.LLSubmitController" scope="prototype"/>
+   	<bean id="lcInsuredAction" class="ins.claim.report.web.LCInsuredController" scope="prototype"/>
    	<!-- <bean id="lcContPlanReportAction" class="ins.claim.web.LCContPlanReportAction" scope="prototype"/> -->
    	<!-- <bean id="noImageInputAction" class="ins.claim.web.NoImageInputAction" scope="prototype"/> -->
    	<!-- <bean id="lcInsuredReportAction" class="ins.claim.web.LCInsuredReportAction" scope="prototype"/> -->
