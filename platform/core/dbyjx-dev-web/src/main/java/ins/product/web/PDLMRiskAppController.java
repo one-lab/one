@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -16,42 +22,18 @@ import ins.product.model.PDLMRiskApp;
 import ins.product.service.facade.PDBaseFieldService;
 import ins.product.service.facade.PDLMRiskAppService;
 import ins.product.service.facade.PdLmRiskService;
-
-public class PDLMRiskAppAction extends Struts2Action {
+@Path("/product")
+public class PDLMRiskAppController {
 	private static final long serialVersionUID = 1L;
-	private String riskCode;
 	private PDBaseFieldService pdBaseFieldService;
 	private PDLMRiskAppService pdlmRiskAppService;
-	private PDLMRiskApp pdlmRiskApp;
-	
-	public PDLMRiskApp getPdlmRiskApp() {
-		return pdlmRiskApp;
-	}
 
-	public void setPdlmRiskApp(PDLMRiskApp pdlmRiskApp) {
-		this.pdlmRiskApp = pdlmRiskApp;
-	}
-
-	public String getRiskCode() {
-		return riskCode;
-	}
-
-	public void setRiskCode(String riskCode) {
-		this.riskCode = riskCode;
-	}
-
-	public PDBaseFieldService getPdBaseFieldService() {
-		return pdBaseFieldService;
-	}
-
+	@Autowired
 	public void setPdBaseFieldService(PDBaseFieldService pdBaseFieldService) {
 		this.pdBaseFieldService = pdBaseFieldService;
 	}
 	
-	public PDLMRiskAppService getPdlmRiskAppService() {
-		return pdlmRiskAppService;
-	}
-
+	@Autowired
 	public void setPdlmRiskAppService(PDLMRiskAppService pdlmRiskAppService) {
 		this.pdlmRiskAppService = pdlmRiskAppService;
 	}
@@ -60,7 +42,8 @@ public class PDLMRiskAppAction extends Struts2Action {
 	 * 险种承保定义——查询字段
 	 * @return
 	 */
-	public String findRiskAppField(){
+	public String findRiskAppField(@Param("riskCode") String riskCode,
+                                   Invocation invocation){
 		String tableCode = "PD_LMRiskAPP";
 		List<PDBaseField> riskAppFields = pdBaseFieldService.findField(tableCode);
 		
@@ -81,10 +64,10 @@ public class PDLMRiskAppAction extends Struts2Action {
 			temp.put("busiDesc", field.getBusiDesc());
 			list.add(temp);
 		}
-		super.getRequest().setAttribute("list",list);
-		super.getRequest().setAttribute("flag", "false");
+	    invocation.addModel("list", list);
+        invocation.addModel("flag", "false");
 		//将list放在request中
-		return SUCCESS;
+		return "/product/pddefine/baseinfodefine/pdlmriskappedit.jsp";
 	}
 	/**
 	 * @title saveRiskApp
@@ -92,10 +75,9 @@ public class PDLMRiskAppAction extends Struts2Action {
 	 * @author 朱超
 	 * @return
 	 */
-	public String saveRiskApp(){
-		pdlmRiskApp = pdlmRiskAppService.saveRiskApp(pdlmRiskApp);
-		renderText("保存成功！险种代码为："+pdlmRiskApp.getRiskCode());
-		return NONE;
+	public Reply saveRiskApp(@Param("pdlmRiskApp") PDLMRiskApp pdlmRiskApp){
+        PDLMRiskApp pdlmRiskAppTarget = pdlmRiskAppService.saveRiskApp(pdlmRiskApp);
+		return Replys.with("保存成功！险种代码为："+pdlmRiskApp.getRiskCode()).as(Text.class);
 	}
 	
 	/**
@@ -104,9 +86,8 @@ public class PDLMRiskAppAction extends Struts2Action {
 	 * @author 朱超
 	 * @return
 	 */
-	public String deleteRiskApp(){
+	public Reply deleteRiskApp(@Param("riskCode") String riskCode){
 		String flag = pdlmRiskAppService.deleteRiskApp(riskCode);
-		renderText(flag);
-		return NONE;
+		return Replys.with(flag);
 	}
 }

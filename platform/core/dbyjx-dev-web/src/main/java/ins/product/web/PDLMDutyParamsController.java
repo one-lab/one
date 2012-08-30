@@ -1,5 +1,10 @@
 package ins.product.web;
 
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import ins.framework.web.Struts2Action;
 import ins.product.model.PDLMRiskDutyFactor;
 import ins.product.service.facade.PDLMDutyParamsService;
@@ -17,28 +22,20 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-
-public class PDLMDutyParamsAction extends Struts2Action{
+@Path("/product")
+public class PDLMDutyParamsController {
 
 	private static final long serialVersionUID = 1L;
-	private String dutyCode;
 	private PDLMDutyParamsService pdLmDutyParamsService;
-	public PDLMDutyParamsService getPdLmDutyParamsService() {
-		return pdLmDutyParamsService;
-	}
+	@Autowired
 	public void setPdLmDutyParamsService(PDLMDutyParamsService pdLmDutyParamsService) {
 		this.pdLmDutyParamsService = pdLmDutyParamsService;
 	}
-	public String getDutyCode() {
-		return dutyCode;
-	}
-	public void setDutyCode(String dutyCode) {
-		this.dutyCode = dutyCode;
-	}
-	public String findDutyParams(){
+
+	public Reply findDutyParams(@Param("dutyCode") String dutyCode){
 		List<PDLMRiskDutyFactor> pdLmRiskDutyFactorList = pdLmDutyParamsService.findDutyParams(dutyCode);
-		writeJSONData(pdLmRiskDutyFactorList, new String[]{"factorName","factorNoti","id.calFactor"});
-		return NONE;
+		return Replys.with(pdLmRiskDutyFactorList).as(Json.class).includes("factorName","factorNoti","id.calFactor");
 	}
 }
