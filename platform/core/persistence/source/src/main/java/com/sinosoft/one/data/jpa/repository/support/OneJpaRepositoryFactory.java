@@ -25,7 +25,9 @@ import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.util.Assert;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.metamodel.SingularAttribute;
 import java.io.Serializable;
 
 import static org.springframework.data.querydsl.QueryDslUtils.QUERY_DSL_PRESENT;
@@ -83,7 +85,13 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 			EntityManager entityManager) {
 
 		Class<?> repositoryInterface = metadata.getRepositoryInterface();
-		JpaEntityInformation<?, Serializable> entityInformation = getEntityInformation(metadata.getDomainType());
+        JpaEntityInformation<?, Serializable> entityInformation = null;
+        //add by carvin, to resolve the question that save the no @Entity annotation's entity with Jade.
+        if(repositoryInterface.getAnnotation(Entity.class) != null) {
+            entityInformation = getEntityInformation(metadata.getDomainType());
+        } else {
+            entityInformation = new OneJadeEntityInformation(metadata.getDomainType());
+        }
 
 		SimpleJpaRepository<?, ?> repo = isQueryDslExecutor(repositoryInterface) ? new QueryDslJpaRepository(
 				entityInformation, entityManager) : new SimpleJpaRepository(entityInformation, entityManager);
