@@ -57,18 +57,10 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     </filter>
     <filter-mapping>
         <filter-name>struts2</filter-name>
-        <url-pattern>*.do</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>struts2</filter-name>
         <url-pattern>*.jsp</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>struts2</filter-name>
-        <url-pattern>/struts/*</url-pattern>
     </filter-mapping>
 
     <filter>

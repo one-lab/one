@@ -1,5 +1,6 @@
 package ins.product.service.facade;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.product.model.PDLMDutyPay;
 
 public interface PDLMDutyPayService {
@@ -10,7 +11,7 @@ public interface PDLMDutyPayService {
 	 * @param pdLmDutyPay
 	 * @return
 	 */
-	PDLMDutyPay saveRiskDutyPay(PDLMDutyPay pdLmDutyPay);
+	PDLMDutyPay saveRiskDutyPay(PDLMDutyPay pdLmDutyPay, Invocation invocation);
 	
 	/**
 	 * @title deleteRiskDutyPay

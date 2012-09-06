@@ -142,7 +142,7 @@ public class PDLMUWController {
 	public Reply saveLMUW(@Param("pdLMUW")PDLMUW pdLMUW){
 		 pdlmUWService.saveLMUW(pdLMUW);
 	//	 this.writeJSONMsg("save");
-		return Replys.simple().success();
+		return Replys.with("save").as(Text.class);
 	}
 	/**
 	 * @title deleteRiskDutyPay
@@ -152,7 +152,7 @@ public class PDLMUWController {
 	public Reply deleteLMUW(@Param("uwCode")String uwCode){
 		String flag = pdlmUWService.deleteLMUW(uwCode);
 //		this.writeJSONMsg(flag);
-		return Replys.simple().success();
+		return Replys.with(flag).as(Text.class);
 	}
 	
 	

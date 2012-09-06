@@ -1,5 +1,6 @@
 package ins.product.service.spring;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.HqlQueryRule;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
@@ -104,7 +105,7 @@ public class PDLMUWServiceSpringImpl extends
 	 * @return
 	 */
 	@Override
-	public void saveLMUW(PDLMUW pdLMUW) {
+	public void saveLMUW(PDLMUW pdLMUW, Invocation invocation) {
 		PDLMUW pdLMUW1 = this.get(pdLMUW.getPDLMRisk().getRiskCode());
 		try{
 			if (pdLMUW1 != null) {
@@ -121,7 +122,7 @@ public class PDLMUWServiceSpringImpl extends
 					pdLMUW.setUwGrade(pdLMUW1.getUwGrade());
 					pdLMUW.setUwResult(pdLMUW1.getUwResult());
 					pdLMUW.setPassFlag(pdLMUW1.getPassFlag());
-					PrpDuser user = (PrpDuser) ActionContext.getContext().getSession().get("user");
+					PrpDuser user = (PrpDuser) invocation.getRequest().getSession().getAttribute("user");;
 					pdLMUW.setOperator(user.getUserCode());
 					pdLMUW.setMakeDate(DateUtil.getDate());
 					pdLMUW.setMakeTime(DateUtil.getTime());
@@ -134,7 +135,7 @@ public class PDLMUWServiceSpringImpl extends
 					pdLMUW.setStandbyflag6(pdLMUW1.getStandbyflag6());
 					pdLMUW.setStandbyflag5(pdLMUW1.getStandbyflag5());
 			} else {
-					PrpDuser user = (PrpDuser) ActionContext.getContext().getSession().get("user");
+					PrpDuser user = (PrpDuser) invocation.getRequest().getSession().getAttribute("user");;
 					pdLMUW.setOperator(user.getUserCode());
 					pdLMUW.setMakeDate(DateUtil.getDate());
 					pdLMUW.setMakeTime(DateUtil.getTime());
