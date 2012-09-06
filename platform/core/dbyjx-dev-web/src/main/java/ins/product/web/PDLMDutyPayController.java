@@ -45,8 +45,8 @@ public class PDLMDutyPayController {
 	 * 保存缴费记录
 	 * @return
 	 */
-	public Reply saveRiskDutyPay(@Param("pdLmDutyPay") PDLMDutyPay pdLmDutyPay){
-		pdLmDutyPayService.saveRiskDutyPay(pdLmDutyPay);
+	public Reply saveRiskDutyPay(@Param("pdLmDutyPay") PDLMDutyPay pdLmDutyPay,Invocation invocation){
+		pdLmDutyPayService.saveRiskDutyPay(pdLmDutyPay,invocation);
 		return Replys.simple().success();
 	}
 	/**
