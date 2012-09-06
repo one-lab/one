@@ -42,7 +42,7 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 	private final LockModeRepositoryPostProcessor lockModePostProcessor;
 
 	/**
-	 * Creates a new {@link com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactory}.
+	 * Creates a new {@link OneJpaRepositoryFactory}.
 	 *
 	 * @param entityManager must not be {@literal null}
 	 */
