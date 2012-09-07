@@ -3,6 +3,7 @@ package ins.product.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
@@ -31,8 +32,8 @@ public class PDLMCalModeController {
 	 * @author 朱超
 	 * @return 返回当前保存的对象
 	 */
-	public Reply saveCalMode(@Param("pdlmCalMode")PDLMCalMode pdlmCalMode){
-        PDLMCalMode	pdlmCalModeTemp = pdlmCalModeService.saveCalMode(pdlmCalMode);
+	public Reply saveCalMode(@Param("pdlmCalMode")PDLMCalMode pdlmCalMode,Invocation invocation){
+        PDLMCalMode	pdlmCalModeTemp = pdlmCalModeService.saveCalMode(pdlmCalMode,invocation);
 		List<PDLMCalMode> list = new ArrayList<PDLMCalMode>();
 		list.add(pdlmCalModeTemp);
 		String[] showField = new String[]{"calCode","riskCode","type","calSQL","remark"};

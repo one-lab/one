@@ -3,6 +3,7 @@ package ins.product.service.facade;
 import java.util.List;
 import java.util.Map;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.HqlQueryRule;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
@@ -47,7 +48,7 @@ public interface PdLmRiskService {
 	 * 添加险种
 	 * @param pdLMRisk
 	 */
-	void saveRisk(PDLMRisk pdLMRisk);
+	void saveRisk(PDLMRisk pdLMRisk, Invocation invocation);
 	/**
 	 * 添加记事本信息
 	 * @param lcNotepad

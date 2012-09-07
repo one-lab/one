@@ -39,17 +39,17 @@ function queryApplingUW(){
 		url : ctx + "/product/queryApplingUW",
 		data : "",
 		dataType :"json",
-		success : function(obj){
+		success : function(data){
 			   var showContentString = "";
 			   $("#HASUWdetail").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td><input type='radio' name='selectApplingRadio' value='"+obj.data[i].uwCode+"'/></td>"
+				   +"<td><input type='radio' name='selectApplingRadio' value='"+data[i].uwCode+"'/></td>"
 				   +"<td>"+(i+1)+"</td>"
-				   +"<td>"+obj.data[i].uwCode+"</td>"
-				   +"<td>"+obj.data[i]["PDLMRisk.riskCode"]+"</td>"
-				   +"<td>"+obj.data[i].uwOrder+"</td>"
-				   +"<td>"+obj.data[i].remark+"</td>"
+				   +"<td>"+data[i].uwCode+"</td>"
+				   +"<td>"+data[i]["PDLMRisk.riskCode"]+"</td>"
+				   +"<td>"+data[i].uwOrder+"</td>"
+				   +"<td>"+data[i].remark+"</td>"
 				   +"</tr>";
 			   }
 		   		$("#HASUWdetail").html(showContentString);
@@ -68,23 +68,23 @@ function insertUW(){
 		   url: ctx + "/product/pdriskUnderwrite",
 		   data : {"uwCode":""},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -111,24 +111,24 @@ function  updateUW(){
 		   url: ctx + "/product/pdriskUnderwrite",
 		   data : {"uwCode":""+$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
 			   $("#UWContent").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -146,8 +146,8 @@ function saveUW(){
 		url : ctx + "/product/saveLMUW",
 		data : $("#frmInput").serialize(),
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
+		success : function(msg){
+			if(null!=msg){
 			  alert("保存成功！");
 			  $("#save").attr('disabled',true);
 			  queryApplingUW();
@@ -172,9 +172,9 @@ function deleteUW(){
 		url : ctx + "/product/deleteLMUW",
 		data : {"uwCode":""+$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
-			  alert(obj.msg);
+		success : function(msg){
+			if(null!=msg){
+			  alert(msg);
 			  queryApplingUW();
 		    }
 		}
@@ -194,17 +194,17 @@ function queryApplingCF(){
 		url : ctx + "/product/queryApplingCF",
 		data : {"riskCode":"GCMR"},
 		dataType :"json",
-		success : function(obj){
+		success : function(data){
 			   var showContentString = "";
 			   $("#HASCFdetail").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td><input type='radio' name='selectApplingRadio' value='"+obj.data[i]["PDLMRisk.riskCode"]+","+obj.data[i]["id.fieldName"]+","+obj.data[i]["id.serialNO"]+"'/></td>"
+				   +"<td><input type='radio' name='selectApplingRadio' value='"+data[i]["PDLMRisk.riskCode"]+","+data[i]["id.fieldName"]+","+data[i]["id.serialNO"]+"'/></td>"
 				   +"<td>"+(i+1)+"</td>"
-				   +"<td>"+obj.data[i]["PDLMRisk.riskCode"]+"</td>"
-				   +"<td>"+obj.data[i]["id.fieldName"]+"</td>"
-				   +"<td>"+obj.data[i]["id.serialNO"]+"</td>"
-				   +"<td>"+obj.data[i].msg+"</td>"
+				   +"<td>"+data[i]["PDLMRisk.riskCode"]+"</td>"
+				   +"<td>"+data[i]["id.fieldName"]+"</td>"
+				   +"<td>"+data[i]["id.serialNO"]+"</td>"
+				   +"<td>"+data[i].msg+"</td>"
 				   +"</tr>";
 			   }
 		   		$("#HASCFdetail").html(showContentString);
@@ -223,23 +223,23 @@ function insertCF(){
 		   url: ctx + "/product/insertCF",
 		   data : {},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -266,24 +266,24 @@ function  updateCF(){
 		   url: ctx + "/product/insertCF",
 		   data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
 			   $("#CFContent").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -310,9 +310,9 @@ function deleteCF(){
 		url : ctx + "/product/deleteCF",
 		 data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
-			  alert(obj.msg);
+		success : function(msg){
+			if(null!=msg){
+			  alert(msg);
 			  queryApplingCF();
 		    }
 		}
@@ -334,8 +334,8 @@ function saveCF(){
 		url : ctx + "/product/saveCF",
 		data : $("#frmInput").serialize(),
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
+		success : function(msg){
+			if(null!=msg){
 			  alert("保存成功！");
 			  $("#save").attr('disabled',true);
 			  queryApplingCF();
@@ -356,16 +356,16 @@ function queryApplingIssue(){
 		url : ctx + "/product/queryApplingIssue",
 		data : {"riskCode":"","issueState":"1"},
 		dataType :"json",
-		success : function(obj){
+		success : function(data){
 			   var showContentString = "";
 			   $("#HASIssuedetail").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td><input type='radio' name='selectApplingRadio' value='"+obj.data[i]["id.riskCode"]+","+obj.data[i]["id.serialNo"]+"'/></td>"
+				   +"<td><input type='radio' name='selectApplingRadio' value='"+data[i]["id.riskCode"]+","+data[i]["id.serialNo"]+"'/></td>"
 				   +"<td>"+(i+1)+"</td>"
-				   +"<td>"+obj.data[i].backpost+"</td>"
-				   +"<td>"+obj.data[i].issuecont+"</td>"
-				   +"<td>"+obj.data[i].issuestate+"</td>"
+				   +"<td>"+data[i].backpost+"</td>"
+				   +"<td>"+data[i].issuecont+"</td>"
+				   +"<td>"+data[i].issuestate+"</td>"
 				   +"</tr>";
 			   }
 		   		$("#HASIssuedetail").html(showContentString);
@@ -394,8 +394,8 @@ function saveIssue(){
 		url : ctx + "/product/saveIssue",
 		data : $("#frmIssueInput").serialize(),
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
+		success : function(msg){
+			if(null!=msg){
 			  alert("保存成功！");
 			  queryApplingIssue();
 		    }
@@ -420,9 +420,9 @@ function deleteIssue(){
 		url : ctx + "/product/deleteIssue",
 		 data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
-			  alert(obj.msg);
+		success : function(msg){
+			if(null!=msg){
+			  alert(msg);
 			  queryApplingIssue();
 		    }
 		}
@@ -450,13 +450,13 @@ function  updateIssue(){
 		   url: ctx + "/product/updateIssue",
 		   data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
-		   success: function(obj){
-			   for(var i = 0 ; i < obj.data.length ; i++){
-					$("#issuecont").val(obj.data[i].issuecont); 
-					$("#riskCode").val(obj.data[i].riskCode); 
-					$("#serialNo").val(obj.data[i].serialNo); 
-					$("#codeType").val(obj.data[i].backpost); 
-					$("#codeName").val(obj.data[i].backpostname); 
+		   success: function(data){
+			   for(var i = 0 ; i < data.length ; i++){
+					$("#issuecont").val(data[i].issuecont);
+					$("#riskCode").val(data[i].riskCode);
+					$("#serialNo").val(data[i].serialNo);
+					$("#codeType").val(data[i].backpost);
+					$("#codeName").val(data[i].backpostname);
 					
 			   }
 		   }
@@ -470,19 +470,19 @@ function findRiskRoleByRisk(){
 	   url: ctx + "/product/findRiskRoleByRisk",
 	   data : {"riskCode":"a"},
 	   dataType : "json",
-	   success: function(obj){
+	   success: function(data){
 		   var showContentString = "";
-		   for(var i = 0 ; i < obj.data.length ; i++){
-			   showContentString += "<tr class='content'><td><input name='riskRoleUnion' value='"+obj.data[i]["id.riskCode"]+","+obj.data[i]["id.riskRole"]+","+obj.data[i]["id.riskRoleSex"]+","+obj.data[i]["id.riskRoleNo"]+"' type='radio' /></td><td>"+i+1+"</td><td>"
-			   	+obj.data[i]["id.riskCode"]+"</td><td>"
-			   	+obj.data[i].riskVer+"</td><td>"
-			   	+obj.data[i]["id.riskRole"]+"</td><td>"
-			   	+obj.data[i]["id.riskRoleSex"]+"</td><td>"
-			   	+obj.data[i]["id.riskRoleNo"]+"</td><td>"
-			   	+obj.data[i].minAppAgeFlag+"</td><td>"
-			   	+obj.data[i].minAppAge+"</td><td>"
-			   	+obj.data[i].maxAppAgeFlag+"</td><td>"
-			   	+obj.data[i].maxAppAge+"</td>";
+		   for(var i = 0 ; i < data.length ; i++){
+			   showContentString += "<tr class='content'><td><input name='riskRoleUnion' value='"+data[i]["id.riskCode"]+","+data[i]["id.riskRole"]+","+data[i]["id.riskRoleSex"]+","+data[i]["id.riskRoleNo"]+"' type='radio' /></td><td>"+i+1+"</td><td>"
+			   	+data[i]["id.riskCode"]+"</td><td>"
+			   	+data[i].riskVer+"</td><td>"
+			   	+data[i]["id.riskRole"]+"</td><td>"
+			   	+data[i]["id.riskRoleSex"]+"</td><td>"
+			   	+data[i]["id.riskRoleNo"]+"</td><td>"
+			   	+data[i].minAppAgeFlag+"</td><td>"
+			   	+data[i].minAppAge+"</td><td>"
+			   	+data[i].maxAppAgeFlag+"</td><td>"
+			   	+data[i].maxAppAge+"</td>";
 		   }
 	   		$("#roleList").html(showContentString);
 	   }
@@ -508,24 +508,24 @@ function updateRiskRole() {
 		   url: ctx + "/product/findRiskRole",
 		   data : {"riskRoleUnion":val},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'><td>"
-				    +obj.data[i].displayOrder+"</td><td>"
-				   	+obj.data[i].fieldName+"</td><td>"
-				   	+obj.data[i].fieldCode+"</td><td>"
-				   	+obj.data[i].fieldType+"</td><td><input type='text' value='"
-				   	+obj.data[i].fieldValue+"' name='pdlmRiskRole."+obj.data[i].fieldCode+"' class='common'/></td><td>";
-				   if(null==obj.data[i].officialDesc){
+				    +data[i].displayOrder+"</td><td>"
+				   	+data[i].fieldName+"</td><td>"
+				   	+data[i].fieldCode+"</td><td>"
+				   	+data[i].fieldType+"</td><td><input type='text' value='"
+				   	+data[i].fieldValue+"' name='pdlmRiskRole."+data[i].fieldCode+"' class='common'/></td><td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="</td><td>";
 				   }else{
-					   showContentString  +=obj.data[i].officialDesc+"</td><td>"; 
+					   showContentString  +=data[i].officialDesc+"</td><td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="</td>";
 				   }else{
-					   showContentString  +=obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +=data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -543,24 +543,24 @@ function addRiskRole() {
 		   url: ctx + "/product/findRiskRole",
 		   data : {"riskRoleUnion":""},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'><td>"
-				    +obj.data[i].displayOrder+"</td><td>"
-				   	+obj.data[i].fieldName+"</td><td>"
-				   	+obj.data[i].fieldCode+"</td><td>"
-				   	+obj.data[i].fieldType+"</td><td><input type='text' value='"
-				   	+obj.data[i].fieldValue+"' name='pdlmRiskRole."+obj.data[i].fieldCode+"' class='common'/></td><td>";
-				   if(null==obj.data[i].officialDesc){
+				    +data[i].displayOrder+"</td><td>"
+				   	+data[i].fieldName+"</td><td>"
+				   	+data[i].fieldCode+"</td><td>"
+				   	+data[i].fieldType+"</td><td><input type='text' value='"
+				   	+data[i].fieldValue+"' name='pdlmRiskRole."+data[i].fieldCode+"' class='common'/></td><td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="</td><td>";
 				   }else{
-					   showContentString  +=obj.data[i].officialDesc+"</td><td>"; 
+					   showContentString  +=data[i].officialDesc+"</td><td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="</td>";
 				   }else{
-					   showContentString  +=obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +=data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -605,11 +605,11 @@ function deleteRiskRole(){
 		url : ctx + "/product/deleteRiskRole",
 		data : {"riskRoleUnion":val},
 		dataType :"json",
-		success : function(obj){
+		success : function(msg){
 			$("#saveriskRole").attr('disabled',false);
-			if(null!=obj.msg){
+			if(null!=msg){
 			  $("#oneRole").html("");
-			  alert(obj.msg);
+			  alert(msg);
 			  //查询剩余险种角色记录
 			  findRiskRoleByRisk();
 			  //删除后清空下面的数据

@@ -1,5 +1,6 @@
 package ins.product.service.spring;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.platform.common.DateUtil;
@@ -46,7 +47,7 @@ public class PDLMRiskDutyFactorServiceSpringImpl extends
 	 */
 	@Override
 	public List<PDLMRiskDutyFactor> addRiskDutyFactor(
-			List<PDLMRiskDutyFactor> pdLmRiskDutyFactorList) {
+			List<PDLMRiskDutyFactor> pdLmRiskDutyFactorList, Invocation invocation) {
 		//构造calSql字段内容。如果是组合要素那么保持两个要素的id
 		StringBuffer calSql = new StringBuffer();
 		StringBuffer calName = new StringBuffer();
@@ -68,8 +69,7 @@ public class PDLMRiskDutyFactorServiceSpringImpl extends
 			temp.setMakeTime(DateUtil.getTime());
 			temp.setModifyDate(new Date());
 			temp.setModifyTime(DateUtil.getTime());
-			ActionContext ac = ActionContext.getContext();
-			PrpDuser user = (PrpDuser)ac.getSession().get("user");
+			PrpDuser user = (PrpDuser)invocation.getRequest().getSession().getAttribute("user");
 			temp.setOperator(user.getUserCode());
 			temp.setCalSQL(calSql.toString());
 			temp.setDhtmlType(factor.getDhtmlType());
@@ -111,7 +111,7 @@ public class PDLMRiskDutyFactorServiceSpringImpl extends
 	 */
 	@Override
 	public PDLMRiskDutyFactor addRiskDutyFactor(
-			PDLMRiskDutyFactor pdLMRiskDutyFactor) {
+			PDLMRiskDutyFactor pdLMRiskDutyFactor, Invocation invocation) {
 		PDLMRiskDutyFactor temp = pdLMRiskDutyFactor;
 		PDScheRateCalFactorLib factor = pdScheRateCalFactorLibService.findScheRateCalFactorByFactorCode(temp.getId().getCalFactor());
 		//FactorDataType--1:字符;2:整形;3:数值  | CalFactorType--1 直接值  2 算法计算结果值
@@ -124,8 +124,7 @@ public class PDLMRiskDutyFactorServiceSpringImpl extends
 		temp.setMakeTime(DateUtil.getTime());
 		temp.setModifyDate(new Date());
 		temp.setModifyTime(DateUtil.getTime());
-		ActionContext ac = ActionContext.getContext();
-		PrpDuser user = (PrpDuser)ac.getSession().get("user");
+		PrpDuser user = (PrpDuser)invocation.getRequest().getSession().getAttribute("user");
 		temp.setOperator(user.getUserCode());
 		temp.setCalSQL(factor.getFactorCode());
 		temp.setComFactorCode(factor.getFactorCode());

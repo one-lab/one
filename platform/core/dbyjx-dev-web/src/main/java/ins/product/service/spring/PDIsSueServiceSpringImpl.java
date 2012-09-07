@@ -4,8 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.opensymphony.xwork2.ActionContext;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
@@ -96,9 +96,9 @@ public class PDIsSueServiceSpringImpl extends GenericDaoHibernate<PDIsSue,PDIsSu
 	 * @return PDIsSue
 	 */
 	@Override
-	public PDIsSue saveIssue(PDIsSue pdIsSue) {
+	public PDIsSue saveIssue(PDIsSue pdIsSue, Invocation invocation) {
 		try{
-			PrpDuser user = (PrpDuser) ActionContext.getContext().getSession().get("user");
+			PrpDuser user = (PrpDuser) invocation.getRequest().getSession().getAttribute("user");
 			pdIsSue.setOperator(user.getUserCode());
 			pdIsSue.setOperpostman(user.getUserCode());
 			pdIsSue.setMakeDate(DateUtil.getDate());

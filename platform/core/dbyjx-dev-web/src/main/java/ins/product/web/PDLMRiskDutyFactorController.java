@@ -1,5 +1,6 @@
 package ins.product.web;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
@@ -30,14 +31,14 @@ public class PDLMRiskDutyFactorController {
 	 * @return
 	 */
 	public Reply addRiskDutyFactor(@Param("pdLmRiskDutyFactorList")List<PDLMRiskDutyFactor> pdLmRiskDutyFactorList,
-                                   @Param("pdLMRiskDutyFactor") PDLMRiskDutyFactor pdLMRiskDutyFactor ) {
+                                   @Param("pdLMRiskDutyFactor") PDLMRiskDutyFactor pdLMRiskDutyFactor,Invocation invocation ) {
 		if(null != pdLmRiskDutyFactorList && pdLmRiskDutyFactorList.size() > 0){
-			pdLmRiskDutyFactorList = pdLmRiskDutyFactorService.addRiskDutyFactor(pdLmRiskDutyFactorList);
+			pdLmRiskDutyFactorList = pdLmRiskDutyFactorService.addRiskDutyFactor(pdLmRiskDutyFactorList,invocation);
 	//		this.writeJSONData(pdLmRiskDutyFactorList, new String[] {"factorOrder", "factorName" });
             return Replys.with(pdLmRiskDutyFactorList).as(Json.class).includes("factorOrder", "factorName" );
 		}else{
 			pdLmRiskDutyFactorList = new ArrayList<PDLMRiskDutyFactor>();
-			pdLMRiskDutyFactor = pdLmRiskDutyFactorService.addRiskDutyFactor(pdLMRiskDutyFactor);
+			pdLMRiskDutyFactor = pdLmRiskDutyFactorService.addRiskDutyFactor(pdLMRiskDutyFactor,invocation);
 			pdLmRiskDutyFactorList.add(pdLMRiskDutyFactor);
 	//		this.writeJSONData(pdLmRiskDutyFactorList, new String[] {"factorOrder", "factorName" });
             return Replys.with(pdLmRiskDutyFactorList).as(Json.class).includes("factorOrder", "factorName" );

@@ -276,8 +276,8 @@ public class PDLMRiskController {
 		return "/product/pddefine/baseinfodefine/pdRiskDefine.jsp";
 	}
 	
-	public Reply saveRisk(@Param("pdlMRisk") PDLMRisk pdLMRisk){
-		pdLmRiskService.saveRisk(pdLMRisk);
+	public Reply saveRisk(@Param("pdlMRisk") PDLMRisk pdLMRisk,Invocation invocation){
+		pdLmRiskService.saveRisk(pdLMRisk,invocation);
 		return Replys.simple().success();
 	}
 }

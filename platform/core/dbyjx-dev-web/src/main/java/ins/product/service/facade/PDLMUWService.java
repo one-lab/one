@@ -2,6 +2,7 @@ package ins.product.service.facade;
 
 import java.util.List;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.HqlQueryRule;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
@@ -47,7 +48,7 @@ public interface PDLMUWService {
 	 *  * @description 保存一条核保规则
 	 * @param pdLMUW
 	 */
-	void saveLMUW(PDLMUW pdLMUW);
+	void saveLMUW(PDLMUW pdLMUW, Invocation invocation);
 	
 	
 	

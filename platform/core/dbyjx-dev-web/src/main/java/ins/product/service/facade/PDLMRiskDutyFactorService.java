@@ -1,5 +1,6 @@
 package ins.product.service.facade;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.platform.vo.QueryCodeVo;
 import ins.product.model.PDLMRiskDutyFactor;
 import ins.product.vo.ToRiskDutyFactorVo;
@@ -13,7 +14,7 @@ public interface PDLMRiskDutyFactorService {
 	 * @return
 	 */
 	List<PDLMRiskDutyFactor> addRiskDutyFactor(
-			List<PDLMRiskDutyFactor> pdLmRiskDutyFactorList);
+			List<PDLMRiskDutyFactor> pdLmRiskDutyFactorList, Invocation invocation);
 	/**
 	 * 根据riskCode和dutyCode得到险种责任要素
 	 * @param riskCode
@@ -27,7 +28,7 @@ public interface PDLMRiskDutyFactorService {
 	 * @param pdLMRiskDutyFactor
 	 * @return
 	 */
-	PDLMRiskDutyFactor addRiskDutyFactor(PDLMRiskDutyFactor pdLMRiskDutyFactor);
+	PDLMRiskDutyFactor addRiskDutyFactor(PDLMRiskDutyFactor pdLMRiskDutyFactor, Invocation invocation);
 	/**
 	 * 
 	 * @title findFactorDistinct

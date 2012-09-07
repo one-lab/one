@@ -1,5 +1,6 @@
 package ins.product.service.spring;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.platform.common.DateUtil;
 import ins.platform.model.PrpDuser;
@@ -13,8 +14,8 @@ import com.opensymphony.xwork2.ActionContext;
 public class PDLMCalModeServiceSpringImpl extends GenericDaoHibernate<PDLMCalMode, String> implements PDLMCalModeService {
 
 	@Override
-	public PDLMCalMode saveCalMode(PDLMCalMode pdlmCalMode) {
-		pdlmCalMode.setOperator(((PrpDuser)ActionContext.getContext().getSession().get("user")).getUserCode());
+	public PDLMCalMode saveCalMode(PDLMCalMode pdlmCalMode, Invocation invocation) {
+		pdlmCalMode.setOperator(((PrpDuser)invocation.getRequest().getSession().getAttribute("user")).getUserCode());
 //		pdlmCalMode.setOperator("114000038");
 		pdlmCalMode.setMakeDate(new Date());
 		pdlmCalMode.setMakeTime(DateUtil.getTime());

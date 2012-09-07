@@ -1,5 +1,6 @@
 package ins.product.web;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
@@ -139,10 +140,10 @@ public class PDLMUWController {
 	 * 保存核保规则记录
 	 * @return
 	 */
-	public Reply saveLMUW(@Param("pdLMUW")PDLMUW pdLMUW){
-		 pdlmUWService.saveLMUW(pdLMUW);
+	public Reply saveLMUW(@Param("pdLMUW")PDLMUW pdLMUW,Invocation invocation){
+		 pdlmUWService.saveLMUW(pdLMUW,invocation);
 	//	 this.writeJSONMsg("save");
-		return Replys.simple().success();
+		return Replys.with("save").as(Text.class);
 	}
 	/**
 	 * @title deleteRiskDutyPay
@@ -152,7 +153,7 @@ public class PDLMUWController {
 	public Reply deleteLMUW(@Param("uwCode")String uwCode){
 		String flag = pdlmUWService.deleteLMUW(uwCode);
 //		this.writeJSONMsg(flag);
-		return Replys.simple().success();
+		return Replys.with(flag).as(Text.class);
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
@@ -36,8 +37,8 @@ public class PDLMCheckFieldController  {
 	 * @author 党泽
 	 * @return
 	 */
-	public Reply saveCheckField(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField){
-		pdlmCheckFieldService.saveCheckField(pdlmCheckField);
+	public Reply saveCheckField(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField,Invocation invocation){
+		pdlmCheckFieldService.saveCheckField(pdlmCheckField,invocation);
 		//this.writeJSONData(list, args);
 		return Replys.simple().success();
 	}
@@ -199,8 +200,8 @@ public class PDLMCheckFieldController  {
 	 * 保存投保规则记录
 	 * @return
 	 */
-	public Reply saveCF(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField){
-		pdlmCheckFieldService.saveCheckField(pdlmCheckField);
+	public Reply saveCF(@Param("pdlmCheckField")PDLMCheckField pdlmCheckField,Invocation invocation){
+		pdlmCheckFieldService.saveCheckField(pdlmCheckField,invocation);
 		return Replys.simple().success();
 	}
 }

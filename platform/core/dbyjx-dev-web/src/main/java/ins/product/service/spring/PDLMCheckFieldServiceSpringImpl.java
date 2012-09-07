@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.opensymphony.xwork2.ActionContext;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
@@ -22,9 +23,9 @@ public class PDLMCheckFieldServiceSpringImpl extends GenericDaoHibernate<PDLMChe
 	 * @return pdlmCheckField
 	 */
 	@Override
-	public PDLMCheckField saveCheckField(PDLMCheckField pdlmCheckField) {
+	public PDLMCheckField saveCheckField(PDLMCheckField pdlmCheckField, Invocation invocation) {
 		try{
-			PrpDuser user = (PrpDuser) ActionContext.getContext().getSession().get("user");
+			PrpDuser user = (PrpDuser) invocation.getRequest().getSession().getAttribute("user");
 			pdlmCheckField.setOperator(user.getUserCode());
 			pdlmCheckField.setMakeDate(DateUtil.getDate());
 			pdlmCheckField.setMakeTime(DateUtil.getTime());

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
@@ -144,8 +145,8 @@ public class PDLMRiskRoleController {
 	 * @author 党泽
 	 * @return
 	 */
-	public Reply saveRiskRole(@Param("pdlmRiskRole")PDLMRiskRole pdlmRiskRole){
-		pdlmRiskRole = pdlmRiskRoleService.saveRiskRole(pdlmRiskRole);
+	public Reply saveRiskRole(@Param("pdlmRiskRole")PDLMRiskRole pdlmRiskRole,Invocation invocation){
+		pdlmRiskRole = pdlmRiskRoleService.saveRiskRole(pdlmRiskRole,invocation);
 		//this.writeJSONData(list, args);
 		return Replys.simple().success();
 	}
@@ -184,8 +185,8 @@ public class PDLMRiskRoleController {
 	 * @author 党泽
 	 * @return
 	 */
-	public Reply updateRiskRole(@Param("pdlmRiskRole")PDLMRiskRole pdlmRiskRole){
-		pdlmRiskRole = pdlmRiskRoleService.updateRiskRole(pdlmRiskRole);
+	public Reply updateRiskRole(@Param("pdlmRiskRole")PDLMRiskRole pdlmRiskRole,Invocation invocation){
+		pdlmRiskRole = pdlmRiskRoleService.updateRiskRole(pdlmRiskRole,invocation);
 		return Replys.simple().success();
 	}
 

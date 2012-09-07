@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.opensymphony.xwork2.ActionContext;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.platform.common.DateUtil;
 import ins.platform.common.SerialNoUtil;
@@ -12,6 +13,8 @@ import ins.platform.model.PrpDcompany;
 import ins.platform.model.PrpDuser;
 import ins.product.service.facade.LCNotepadService;
 import ins.prpall.proposal.model.LCNotepad;
+
+import javax.servlet.http.HttpSession;
 
 public class LCNotepadServiceSpringImpl extends GenericDaoHibernate<LCNotepad, String> implements LCNotepadService {
 	private SerialNoUtil serialNoUtil;
@@ -25,10 +28,10 @@ public class LCNotepadServiceSpringImpl extends GenericDaoHibernate<LCNotepad, S
 	}
 
 	@Override
-	public LCNotepad savaNotepad(LCNotepad lcNotepad) {
-		ActionContext ac = ActionContext.getContext();
-		PrpDuser user = (PrpDuser) ac.getSession().get("user");
-		PrpDcompany prpDcompany = (PrpDcompany) ac.getSession().get("prpDcompany");
+	public LCNotepad savaNotepad(LCNotepad lcNotepad, Invocation invocation) {
+        HttpSession session = invocation.getRequest().getSession();
+		PrpDuser user = (PrpDuser) session.getAttribute("user");
+		PrpDcompany prpDcompany = (PrpDcompany) session.getAttribute("prpDcompany");
 		int serialNo;
 		String hql = "select max(cast( lcNotepad.id.serialNo as int)) as serialNo from LCNotepad lcNotepad where lcNotepad.id.bussinessNo = ?";
 		List<Integer> list = (List<Integer>) this.findByHql(hql, lcNotepad.getId().getBussinessNo());

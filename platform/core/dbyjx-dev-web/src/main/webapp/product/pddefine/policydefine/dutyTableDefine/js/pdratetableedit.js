@@ -9,49 +9,49 @@
 	function findAllFactor(){
 		$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/findScheRateCalFactor",
+		   url: ctx + "/product/findScheRateCalFactor",
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 		   		var factorString = $("#factorContent").html();
-		   		for(var i = 0 ; i < obj.data.length ; i++){
+		   		for(var i = 0 ; i < data.length ; i++){
 		   			factorString += '<tr class="content">'+
-		   				'<td><input name="factor" type="checkbox" value="'+obj.data[i].factorCode+'" /></td>'+
+		   				'<td><input name="factor" type="checkbox" value="'+data[i].factorCode+'" /></td>'+
 		   				'<td>'+(i+1)+'</td>'+
-		   				'<td>'+obj.data[i].factorName+'</td>';
+		   				'<td>'+data[i].factorName+'</td>';
 		   		}
 		   		$("#factorContent").html(factorString);
 		   		
 		   		var riskCode = $("#riskCode").val();
 				var dutyCode = $("#dutyCode").val();
-				var url = contextRootPath + "/product/findFactorByRiskAndDuty";
+				var url = ctx + "/product/findFactorByRiskAndDuty";
 				var params = {
 					"riskCode":riskCode,
 					"dutyCode":dutyCode
 				};
 				jQuery.post(url,params,checkFactorCallBack,"json");
-				function checkFactorCallBack(obj){
+				function checkFactorCallBack(data){
 					$("input:checkbox").each(function(){
-						for(var i = 0 ; i < obj.data.length ; i++){
-							if($(this).val() == obj.data[i]["id.calFactor"]){
+						for(var i = 0 ; i < data.length ; i++){
+							if($(this).val() == data[i]["id.calFactor"]){
 								$(this).attr("disabled","disabled");
 								//$(this).css("display","display");
 							}
 						}
 					});
 					//获得当前险种的已定义好的要素
-					showFactor(obj);
+					showFactor(data);
 				}
 		   }
 		}); 
 	}
-	function showFactor(obj){
+	function showFactor(data){
 		var factorContent = $("#riskDutyFactorContent").html();
-		for(var i = 0 ; i < obj.data.length ; i++){
+		for(var i = 0 ; i < data.length ; i++){
 			factorContent += '<tr class="content">'+
 			'<td width="25%">'+ (i+1) +'</td>'+  //obj.data[i].factorOrder
-			'<td width="25%">'+ obj.data[i].factorName +'</td>'+
-			'<td  width="25%">'+ (obj.data[i].comFactorName.indexOf("(")>=0?"是":"否") +'</td>'+
-			'<td  width="25%">'+ obj.data[i].comFactorName +'</td>'+'<td width="25%">&nbsp;</td>'+
+			'<td width="25%">'+ data[i].factorName +'</td>'+
+			'<td  width="25%">'+ (data[i].comFactorName.indexOf("(")>=0?"是":"否") +'</td>'+
+			'<td  width="25%">'+ data[i].comFactorName +'</td>'+'<td width="25%">&nbsp;</td>'+
 			'</tr>';
 		}
 		$("#riskDutyFactorContent").html(factorContent);
@@ -60,7 +60,7 @@
 //	function findFactorByRiskDuty(){
 //		var riskCode = $("#riskCode").val();
 //		var dutyCode = $("#dutyCode").val();
-//		var url = contextRootPath + "/product/findFactorByRiskAndDuty";
+//		var url = ctx + "/product/findFactorByRiskAndDuty";
 //		var params = {
 //			"riskCode":riskCode,
 //			"dutyCode":dutyCode
@@ -98,7 +98,7 @@
 				html += resuleString;
 				$("#riskDutyFactorContent").html(html);
 			}
-			jQuery.post(contextRootPath + "/product/addRiskDutyFactor",params,showFactor,'json');
+			jQuery.post(ctx + "/product/addRiskDutyFactor",params,showFactor,'json');
 		}
 	}
 	//组合要素添加
@@ -122,22 +122,22 @@
 			paramString = paramString.substring(0,(paramString.length-2));
 			paramString +=" } ";
 			eval(paramString);
-			function showFactor(obj){
+			function showFactor(data){
 				var resuleString = '';
 				var factors = "";
-				for(var i = 0 ; i < obj.data.length ; i++){
-					factors += "（"+obj.data[i].factorName+"）";
+				for(var i = 0 ; i < data.length ; i++){
+					factors += "（"+data[i].factorName+"）";
 					
 				}
-				for(var i = 0 ; i < obj.data.length ; i++){
-					resuleString += '<tr class="content"><td>'+obj.data[i].factorOrder+'</td><td>'+obj.data[i].factorName+'</td>'+
+				for(var i = 0 ; i < data.length ; i++){
+					resuleString += '<tr class="content"><td>'+data[i].factorOrder+'</td><td>'+data[i].factorName+'</td>'+
 					'<td>是</td><td> '+factors+' </td><td>&nbsp;-&nbsp;</td></tr>';
 				}
 				var html = $("#riskDutyFactorContent").html();
 				html += resuleString;
 				$("#riskDutyFactorContent").html(html);
 			}
-			jQuery.post(contextRootPath + "/product/addRiskDutyFactor",params,showFactor,'json');
+			jQuery.post(ctx + "/product/addRiskDutyFactor",params,showFactor,'json');
 		}
 	}
 	
@@ -147,39 +147,39 @@
 		//获得当前责任下的要素
 		var riskCode = $("#riskCode").val();
 		var dutyCode = $("#dutyCode").val();
-		var url = contextRootPath + "/product/findFactorByRiskAndDuty";
+		var url = ctx + "/product/findFactorByRiskAndDuty";
 		var params = {
 			"riskCode":riskCode,
 			"dutyCode":dutyCode
 		};
-		function createHTML(obj){
+		function createHTML(data){
 			var strHtmlTitle = "<tr class='tableHead'>";
 			var strHtmlContent = "<tr class='content' >";
-			for(var i = 0 ; i < obj.data.length ; i++){
+			for(var i = 0 ; i < data.length ; i++){
 				//0:直接值   1:双击文本   2:特殊值
-				if("0"==obj.data[i].dhtmlType){
+				if("0"==data[i].dhtmlType){
 					//TODO 朱超，单位是否要带上
-					strHtmlTitle += "<td>"+obj.data[i].factorName+"()</td>";
+					strHtmlTitle += "<td>"+data[i].factorName+"()</td>";
 					strHtmlContent += "<td>"+
-						"<input type='hidden' name='PDLMRiskDutyFactorValueVos["+i+"].calFactor' value="+obj.data[i]["id.calFactor"]+" />"+
+						"<input type='hidden' name='PDLMRiskDutyFactorValueVos["+i+"].calFactor' value="+data[i]["id.calFactor"]+" />"+
 						" <input type='text' class='common' name='PDLMRiskDutyFactorValueVos["+i+"].calFactorValue' /></td>";
 				}
-				if("1"==obj.data[i].dhtmlType){
-					strHtmlTitle += "<td>"+obj.data[i].factorName+"()</td>";
+				if("1"==data[i].dhtmlType){
+					strHtmlTitle += "<td>"+data[i].factorName+"()</td>";
 					//<input id="sex" class="codecode" type="text" sex','sexname','pdldcode1','codetype:sex')'="" ondblclick="queryCode(" name="sex" style="width: 20%;">
 					strHtmlContent += "<td>"+
-						"<input type='hidden' name='PDLMRiskDutyFactorValueVos["+i+"].calFactor' value="+obj.data[i]["id.calFactor"]+" />"+
-						" <input type='text' style='width:20%' class='codecode' id='"+obj.data[i]["id.calFactor"]+"' name='PDLMRiskDutyFactorValueVos["+i+"].calFactorValue'"+
-						" ondblclick=queryCode('"+obj.data[i]["id.calFactor"]+"','"+obj.data[i]["id.calFactor"]+"Name','PDLDcode1','codeType:"+obj.data[i]["id.calFactor"]+"') />"+
-						"<input type='text' class='common' style='width:60%' id='"+obj.data[i]["id.calFactor"]+"Name' /> </td>";
+						"<input type='hidden' name='PDLMRiskDutyFactorValueVos["+i+"].calFactor' value="+data[i]["id.calFactor"]+" />"+
+						" <input type='text' style='width:20%' class='codecode' id='"+data[i]["id.calFactor"]+"' name='PDLMRiskDutyFactorValueVos["+i+"].calFactorValue'"+
+						" ondblclick=queryCode('"+data[i]["id.calFactor"]+"','"+data[i]["id.calFactor"]+"Name','PDLDcode1','codeType:"+data[i]["id.calFactor"]+"') />"+
+						"<input type='text' class='common' style='width:60%' id='"+data[i]["id.calFactor"]+"Name' /> </td>";
 				}
-				if("2"==obj.data[i].dhtmlType){
-					strHtmlTitle += "<td>"+obj.data[i].factorName+"()</td>";
+				if("2"==data[i].dhtmlType){
+					strHtmlTitle += "<td>"+data[i].factorName+"()</td>";
 					strHtmlContent += "<td>"+
-					"<input type='hidden' name='PDLMRiskDutyFactorValueVos["+i+"].calFactor' value="+obj.data[i]["id.calFactor"]+" />"+
-						" <input type='text' style='width:20%' class='codecode' id='"+obj.data[i]["id.calFactor"]+"' name='"+obj.data[i]["id.calFactor"]+"'" +
-						" ondblclick=queryCode('"+obj.data[i]["id.calFactor"]+"','"+obj.data[i]["id.calFactor"]+"Name','PDLDcode1','codeType:"+obj.data[i]["id.calFactor"]+"') />"+
-						"<input type='text' class='common' style='width:50%' id='"+obj.data[i]["id.calFactor"]+"Name' />"+
+					"<input type='hidden' name='PDLMRiskDutyFactorValueVos["+i+"].calFactor' value="+data[i]["id.calFactor"]+" />"+
+						" <input type='text' style='width:20%' class='codecode' id='"+data[i]["id.calFactor"]+"' name='"+data[i]["id.calFactor"]+"'" +
+						" ondblclick=queryCode('"+data[i]["id.calFactor"]+"','"+data[i]["id.calFactor"]+"Name','PDLDcode1','codeType:"+data[i]["id.calFactor"]+"') />"+
+						"<input type='text' class='common' style='width:50%' id='"+data[i]["id.calFactor"]+"Name' />"+
 						"<input type='text' class='common' style='width:30%' name='PDLMRiskDutyFactorValueVos["+i+"].calFactorValue' /> </td>";
 				}
 			}
@@ -191,7 +191,7 @@
 			alert(strHTML);
 			
 			//更新pd_lmriskduty表中的字段DHTML
-			var updateDhtmlUrl = contextRootPath + "/product/updateDhtml";
+			var updateDhtmlUrl = ctx + "/product/updateDhtml";
 			var params = {
 				"pdlmRiskDuty.id.riskCode" : $("#riskCode").val(),
 				"pdlmRiskDuty.id.dutyCode" : $("#dutyCode").val(),

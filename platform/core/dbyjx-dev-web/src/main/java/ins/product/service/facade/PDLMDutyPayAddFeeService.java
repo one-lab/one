@@ -1,5 +1,6 @@
 package ins.product.service.facade;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.product.model.PDLMDutyPayAddFee;
 import ins.product.model.PDLMDutyPayAddFeeId;
 
@@ -11,7 +12,7 @@ public interface PDLMDutyPayAddFeeService {
 	 * @param pdlmDutyPayAddFee
 	 * @return
 	 */
-	PDLMDutyPayAddFee saveDutyPayAddFee(PDLMDutyPayAddFee pdlmDutyPayAddFee);
+	PDLMDutyPayAddFee saveDutyPayAddFee(PDLMDutyPayAddFee pdlmDutyPayAddFee, Invocation invocation);
 	/**
 	 * @title updateDutyPayAddFee
 	 * @description 更新一条加费记录

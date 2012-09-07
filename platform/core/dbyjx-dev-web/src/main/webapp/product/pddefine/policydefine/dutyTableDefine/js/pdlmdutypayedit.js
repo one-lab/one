@@ -42,18 +42,18 @@ function sonCallbackFather(){
 		};
 		$.ajax({
 			type : "post",
-			url : contextRootPath + "/product/saveCalMode",
+			url : ctx + "/product/saveCalMode",
 			data : params,
-			success : function(obj){
+			success : function(data){
 				var calModeString = $("#calModeContent").html();
-				for(var i = 0 ; i < obj.data.length ; i++){
+				for(var i = 0 ; i < data.length ; i++){
 					calModeString += '<tr class="content" align="center">'+
-						'<td width="5%"> <input name="calCodeRadio" value='+obj.data[i].calCode+' type="radio"/> </td>'+
+						'<td width="5%"> <input name="calCodeRadio" value='+data[i].calCode+' type="radio"/> </td>'+
 						'<td width="5%">'+(i+1)+'</td>'+
-						'<td width="18%">'+obj.data[i].calCode+'</td>'+
-						'<td width="18%">'+obj.data[i].riskCode+'</td>'+
-						'<td width="18%">'+obj.data[i].type+'</td>'+
-						'<td width="18%">'+obj.data[i].remark+'</td>'+
+						'<td width="18%">'+data[i].calCode+'</td>'+
+						'<td width="18%">'+data[i].riskCode+'</td>'+
+						'<td width="18%">'+data[i].type+'</td>'+
+						'<td width="18%">'+data[i].remark+'</td>'+
 						'</tr>';
 						
 				}
@@ -73,18 +73,18 @@ function sonCallbackFather(){
 		};
 		$.ajax({
 			type : "post",
-			url : contextRootPath + "/product/updateCalMode",
+			url : ctx + "/product/updateCalMode",
 			data : params,
-			success : function(obj){
+			success : function(data){
 				var calModeString = $("#calModeContent").html();
-				for(var i = 0 ; i < obj.data.length ; i++){
+				for(var i = 0 ; i < data.length ; i++){
 					calModeString += '<tr class="content" align="center">'+
-						'<td width="5%"> <input name="calCodeRadio" value='+obj.data[i].calCode+' type="radio"/> </td>'+
+						'<td width="5%"> <input name="calCodeRadio" value='+data[i].calCode+' type="radio"/> </td>'+
 						'<td width="5%">'+(i+1)+'</td>'+
-						'<td width="18%">'+obj.data[i].calCode+'</td>'+
-						'<td width="18%">'+obj.data[i].riskCode+'</td>'+
-						'<td width="18%">'+obj.data[i].type+'</td>'+
-						'<td width="18%">'+obj.data[i].remark+'</td>'+
+						'<td width="18%">'+data[i].calCode+'</td>'+
+						'<td width="18%">'+data[i].riskCode+'</td>'+
+						'<td width="18%">'+data[i].type+'</td>'+
+						'<td width="18%">'+data[i].remark+'</td>'+
 						'</tr>';
 						
 				}

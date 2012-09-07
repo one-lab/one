@@ -2,18 +2,18 @@
 function defineDutyPay(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/findFactorByRiskAndDuty",
+	   url: ctx + "/product/findFactorByRiskAndDuty",
 	   data : {"riskCode":""+$("#dutyPayRiskCode").val(),"dutyCode":""+$("#dutyPayDutyCode").val()},
 	   dataType : "json",
-	   success: function(obj){
+	   success: function(data){
 		   var showContentString = "";
-		   for(var i = 0 ; i < obj.data.length ; i++){
+		   for(var i = 0 ; i < data.length ; i++){
 			   showContentString += "<tr class='content'><td><input name='' value='' type='radio'/></td><td>"
-			   	+obj.data[i].factorOrder+"</td><td>"
-			   	+obj.data[i].calFactorType+"</td><td>"
-			   	+obj.data[i].factorName+"</td><td>"
-			   	+obj.data[i]["id.calFactor"]+"</td><td><input class='common' type='text' id=''></td><td>"
-			   	+obj.data[i].factorNoti+"</td><input type='hidden' value='"+obj.data[i].calSQL+"'/>";
+			   	+data[i].factorOrder+"</td><td>"
+			   	+data[i].calFactorType+"</td><td>"
+			   	+data[i].factorName+"</td><td>"
+			   	+data[i]["id.calFactor"]+"</td><td><input class='common' type='text' id=''></td><td>"
+			   	+data[i].factorNoti+"</td><input type='hidden' value='"+data[i].calSQL+"'/>";
 		   }
 	   		$("#factorList").html(showContentString);
 	   }

@@ -13,6 +13,7 @@
 	<link href="${ctx}/common/css/Standard.css" rel="stylesheet" type="text/css" />
 	<script src="${ctx}/common/calender/WdatePicker.js"></script>
 	<script src="${ctx}/product/pddefine/policydefine/dutyTableDefine/js/pdlmdutypayedit.js"></script>
+    <script type="text/javascript">var ctx = "${ctx}"</script>
   </head>
   <body>
 	<div style = "width:80%">
