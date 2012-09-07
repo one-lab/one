@@ -17,7 +17,7 @@ import java.util.List;
  * select methods
  */
 
-public interface UserDao extends CrudRepository<User, String> {
+public interface UserDao extends CrudRepository<org.springframework.data.jpa.domain.sample.User, String> {
 
     @SQL("select * from t_user where id = ?1")
     public User selectById(String id);
