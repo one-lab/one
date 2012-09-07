@@ -1,10 +1,15 @@
 package com.sinosoft.one.data.jade.dao;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.data.jade.annotation.SQLType;
 import com.sinosoft.one.data.jade.model.Group;
+import oracle.jdbc.OracleTypes;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Map;
+
+import static oracle.jdbc.OracleTypes.*;
 
 /**
  * User: Chunliang.Han
@@ -22,7 +27,7 @@ public interface GroupDao extends CrudRepository<Group, String> {
     //2.3.1
     @SQL("update t_code_group set name=?2 " +
             "where id=?1")
-    void updateGroupWithAnnoUseEntityParam(String id,String name);
+    void updateGroupWithAnnoUseMultiParam(String id,String name);
 
     //2.3.2
     @SQL("update t_code_group set name=?1.name " +
@@ -45,4 +50,10 @@ public interface GroupDao extends CrudRepository<Group, String> {
 
     @SQL("delete from t_code_group")
     void deleteAllGroup();
+
+    @SQL("select * from t_code_group where id in (?1)")
+    List<Group> selectGroupById(String[] ids);
+
+    @SQL(value = "call testprc(?1,?2)")
+    void testProc(String newname,String id);
 }

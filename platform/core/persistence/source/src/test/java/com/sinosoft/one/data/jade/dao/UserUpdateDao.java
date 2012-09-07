@@ -32,7 +32,7 @@ public interface UserUpdateDao extends UserDao  {
     @SQL("update t_user set " +
             "name=?1.name,age=?1.age,birthday=?1.birthday,money=?1.money,gender=?1.gender,groupids=?1.groupIds" +
             " where id=?1.id")
-    List<Integer> updateBatchUserWithAnnoUseEntityParam(List<User> user);
+    int[] updateBatchUserWithAnnoUseEntityParam(List<User> user);
 
     //2.2.2
     int updateBatchUserWithSqlQueryUseEntityParam(List<User> user);

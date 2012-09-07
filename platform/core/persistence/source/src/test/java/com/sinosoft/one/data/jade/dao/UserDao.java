@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: carvin
@@ -19,6 +21,9 @@ public interface UserDao extends CrudRepository<User, String> {
 
     @SQL("select * from t_user where id = ?1")
     public User selectById(String id);
+
+    @SQL("select * from t_user where id in (?1)")
+    public List<User> selectByIds(String[] ids);
 
     @SQL("select count(1) from t_user")
     public int countUser();
