@@ -2,8 +2,10 @@ package com.sinosoft.one.data.jade.dao;
 
 import com.sinosoft.one.data.jade.annotation.RowHandler;
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.data.jade.model.SomePropertis;
 import com.sinosoft.one.data.jade.model.User;
 import com.sinosoft.one.data.jade.model.User1;
+import com.sinosoft.one.data.jade.rowMapper.UserRowMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +20,7 @@ import java.util.*;
  * User: Chunliang.Han
  * Time: 12-9-5[上午10:55]
  */
-public interface UserSelectDao extends UserDao {
+public interface UserSelectDao  extends UserDao {
     //4.1.1
     User selectUserWithSqlQueryById(String id);
 
@@ -56,40 +58,44 @@ public interface UserSelectDao extends UserDao {
     List<User> selectUserWithAnnoByGroupid(String[] groups);
 
     //4.2.4
-    @SQL("select * from t_user where id = :1[id] and name = :1[name]")
-    User selectUserWithAnnoByIdAndName(Map<String,String> idAndName);
+    @SQL("select * from t_user where id = :idAndName.id and name = :idAndName.name")
+    User selectUserWithAnnoByIdAndName(@Param("idAndName")Map<String,?> idAndName);
 
     //4.2.5
-    @SQL("select * from t_user where id = :1[id] and name = :1[name]")
-    List<User> selectUsersWithAnnoByIdAndName(Map<String,String> idAndName);
+    @SQL("select * from t_user where id = ?1.id and name = ?1.name")
+    List<User> selectUsersWithAnnoByIdAndName(Map<String,?> idAndName);
 
     //4.2.6
-    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id(+) and g.name = :1[gName] and u.birthday = :1[userBirthday]")
-    List<User> selectUsersWithAnnoByGnameAndUbirthday(Object[] params);
+    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id(+) and g.name = :params.0 and u.birthday = :params.1")
+    List<User> selectUsersWithAnnoByGnameAndUbirthday(@Param("params")Object[] params);
 
     //4.2.7
-    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id(+) and g.name = :1[gName] and u.birthday = :1[userBirthday]")
+    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id(+) and g.name = ?1.0")
     User selectUserWithAnnoByGnameAndUbirthday(Object[] params);
 
     //4.3.1
-    Page selectUsersWithSqlQueryForPage(Pageable pageable);
+    //@SQL("select u.id user_id,u.name user_name, g.name group_name, s.name gender_name from t_user u,t_code_group g,t_code_gender s where u.groupIds = g.id(+) and u.gender = s.id(+)")
+    Page<SomePropertis> selectUsersWithSqlQueryForPage(Pageable pageable);
+
+    //4.3.1
+    @SQL("select * from t_user")
+    Page<User> selectUsersWithAnooForPage(Pageable pageable);
 
     //4.3.2
-    @SQL("select id, name from t_user where groupIds = ?1")
+    @SQL("select id, name from t_user where groupIds in (?1)")
     @RowHandler(rowMapper = UserRowMapper.class)
-    List<User1> selectUsersWithAnnoByGroupid(String groupId);
-}
-class UserRowMapper implements RowMapper {
+    List<User1> selectUser1WithAnnoByGroupid(Set<String> groups);
 
-    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-        List<User1> users = new ArrayList<User1>();
-        while(rs.next()){
-            User1 user = new User1();
-            user.setId(rs.getString(1));
-            user.setName(rs.getString(2));
-            users.add(user);
-            rowNum++;
-        }
-        return users ;
-    }
+    //4.2.3
+    @SQL("SELECT * FROM t_##(:table) #if(:gender=='0'){ where id=:id } ")
+    List<User> selectUserForActiveSql(@Param("table")String table,@Param("gender")String  gender,@Param("id") String id);
+
+    //4.2.4
+    //@SQL("SELECT * FROM t_##(:table) #if(:gender=='0'){ #if(:gender=='0'){where id=:id} and name=:name } ")
+    List<User> selectUserForActiveComplexSql(@Param("table")String table,@Param("gender")String  gender,@Param("id") String id,@Param("name") String name);
+
+    //4.2.5
+    @SQL("SELECT * FROM t_user where id='AAF000' #for(var in :params){ #if(:var==0) { and 0=:var} #if(:var==1) { and 1=:var}} ")
+    User selectUserForActiveComplexSql1(@Param("params") int[] params);
+
 }

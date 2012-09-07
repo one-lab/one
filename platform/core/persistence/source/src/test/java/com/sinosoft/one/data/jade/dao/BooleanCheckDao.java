@@ -16,4 +16,10 @@ public interface BooleanCheckDao extends UserDao {
     @SQL("select boolean_str from t_check_boolean where id= ?1")
     boolean selectBooleanStrWithAnnoById(String id);
 
+    @SQL("insert into t_check_boolean(id,boolean_int,boolean_str) values(?1,?2,?3)")
+    void insert(String id,String num,String str);
+
+    @SQL("delete from t_check_boolean")
+    void clear();
+
 }

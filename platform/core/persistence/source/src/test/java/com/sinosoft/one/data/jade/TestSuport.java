@@ -30,8 +30,8 @@ public class TestSuport {
         for(int i=0;i<9;i++){
             User user = new User();
             Date date = sdf.parse("2012-01-0"+(i%10+1));
-            user.setId("AAF00"+i).setAge(13).setName("user"+i).setGender(""+(i%2))
-                    .setGroupIds("" + (i % 4 + 1)).setMoney((long) (Math.random() * 1000000)).setBirthday(date);
+            user.setId("AAF00"+i).setAge(13+i).setName("user"+i).setGender(""+(i%2))
+                    .setGroupIds("" + (i % 4 + 1)).setMoney((long) (111001L+i)).setBirthday(date);
             users.add(user);
         }
     }

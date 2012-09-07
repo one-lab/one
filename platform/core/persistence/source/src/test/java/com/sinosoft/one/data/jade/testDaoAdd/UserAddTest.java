@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import com.sinosoft.one.data.jade.TestSuport;
+import com.sinosoft.one.data.jade.dao.GroupDao;
 import com.sinosoft.one.data.jade.dao.UserAddDao;
+import com.sinosoft.one.data.jade.model.Group;
 import com.sinosoft.one.data.jade.model.User;
 import org.junit.After;
 import org.junit.Before;
@@ -32,6 +34,23 @@ import java.util.List;
 public class UserAddTest extends TestSuport {
     @Autowired
     UserAddDao userAddDao ;
+    @Autowired
+    GroupDao  groupDao;
+    @Before
+    public void init(){
+        userAddDao.deleteUserAll();
+        groupDao.deleteAllGroup();
+
+        List<Group> groups = new ArrayList<Group>();
+        for(int i=0;i<4;i++){
+            Group group = new Group();
+            group.setId(""+(i+1));
+            group.setName("group"+(i+1));
+            groups.add(group);
+        }
+        groupDao.addBatchGroupWithAnnoUseEntityParam(groups);
+
+    }
     @Test
     public void addUserWithAnnoUseEntityParamTest() throws Exception{
         SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd");
@@ -140,8 +159,6 @@ public class UserAddTest extends TestSuport {
         //删除增加的记录
         userAddDao.deleteByUser(user);
     }
-    //返回值转型异常
-    @Ignore
     @Test
     public void addBatchUsersWithAnnoUseEntityParamTest()throws Exception{
         List<User> users = new ArrayList<User>();
@@ -153,8 +170,27 @@ public class UserAddTest extends TestSuport {
                     .setGroupIds("" + (i % 4 + 1)).setMoney((long) (111001L+i)).setBirthday(date);
             users.add(user);
         }
+        int oldCount = userAddDao.countUser();
         Integer[] counts = userAddDao.addBatchUsersWithAnnoUseEntityParam(users);
+        int newCount = userAddDao.countUser();
+        //确认数据库中只增加了3条数据
+        assertEquals(3,newCount-oldCount);
+        assertEquals(3,counts.length);
+        for(int i=0;i<counts.length;i++){
+            assertEquals((Integer)1,counts[i]) ;
+        }
+        //确认增加数据的准确性
+        User user = userAddDao.selectById(users.get(0).getId());
+        Date date = sdf.parse("2012-01-01");
+        assertEquals(17,user.getAge());
+        assertEquals("user1",user.getName());
+        assertEquals("0",user.getGender() );
+        assertEquals("1",user.getGroupIds());
+        assertEquals(111001L,user.getMoney());
+        assertEquals(date,user.getBirthday());
+        userAddDao.deleteUserAll();
     }
+
     @Test
     public void addBatchUserWithAnnoUseEntityParamTest()throws Exception{
         userAddDao.deleteUserAll();
@@ -215,5 +251,10 @@ public class UserAddTest extends TestSuport {
         assertEquals(111001L,user.getMoney());
         assertEquals(date,user.getBirthday());
         userAddDao.deleteUserAll();
+    }
+    @After
+    public void destroy(){
+        userAddDao.deleteUserAll();
+        groupDao.deleteAllGroup();
     }
 }

@@ -2,6 +2,7 @@ package com.sinosoft.one.data.jade.dao;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.data.jade.model.Group;
+import org.springframework.data.jpa.domain.sample.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * User: Chunliang.Han
  * Time: 12-9-4[下午5:45]
  */
-public interface GroupDao extends CrudRepository<Group, String> {
+public interface GroupDao extends CrudRepository<User, String> {
     //1.3.1
     @SQL("insert into t_code_group values(?1,?2)")
     void addGroupWithAnnoUseMultiParam(String id,String name);
