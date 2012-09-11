@@ -31,3 +31,10 @@ create table T_USER
   GENDER   VARCHAR2(3) CONSTRAINT fk_gender_id  REFERENCES  t_code_gender(id),
   GROUPIDS VARCHAR2(300) CONSTRAINT fk_group_id  REFERENCES  t_code_group(id)
 );
+-- Create Procedure testprc
+create or replace procedure testprc(newname in varchar2,uid in varchar2) is
+
+begin
+  update t_code_group set name = newname where id = trim(uid);
+  commit;
+end testprc;
