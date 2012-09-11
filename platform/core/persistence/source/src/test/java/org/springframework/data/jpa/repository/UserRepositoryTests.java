@@ -21,6 +21,7 @@ import static org.springframework.data.domain.Sort.Direction.*;
 import static org.springframework.data.jpa.domain.Specifications.*;
 import static org.springframework.data.jpa.domain.sample.UserSpecifications.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -844,10 +845,10 @@ public class UserRepositoryTests {
 
 		flushTestUsers();
 
-		List<Integer> result = repository.findOnesByNativeQuery();
+		List<BigDecimal> result = repository.findOnesByNativeQuery();
 
 		assertThat(result.size(), is(3));
-		assertThat(result, hasItem(1));
+		assertThat(result, hasItem(BigDecimal.valueOf(1)));
 	}
 
 	protected void flushTestUsers() {
