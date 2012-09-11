@@ -66,11 +66,11 @@ public interface UserSelectDao  extends UserDao {
     List<User> selectUsersWithAnnoByIdAndName(Map<String,?> idAndName);
 
     //4.2.6
-    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id(+) and g.name = :params.0 and u.birthday = :params.1")
+    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id and g.name = :params.0 and u.birthday = :params.1")
     List<User> selectUsersWithAnnoByGnameAndUbirthday(@Param("params")Object[] params);
 
     //4.2.7
-    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id(+) and g.name = ?1.0")
+    @SQL("select u.id id,u.name from t_user u,t_code_group g where u.groupIds = g.id and g.name = ?1.0")
     User selectUserWithAnnoByGnameAndUbirthday(Object[] params);
 
     //4.3.1

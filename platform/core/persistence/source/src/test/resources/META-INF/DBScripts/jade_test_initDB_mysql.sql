@@ -60,3 +60,10 @@ CREATE TABLE `t_user` (
 --  Records 
 -- ----------------------------
 INSERT INTO `t_code_gender` VALUES ('0','女'),  ('1','男');
+
+-- Create Procedure testprc
+create procedure testprc(in newname varchar(10), in uid varchar(3))
+begin
+  update t_code_group set name = newname where id = trim(uid);
+end;
+
