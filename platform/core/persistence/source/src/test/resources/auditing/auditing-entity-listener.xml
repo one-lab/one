@@ -15,7 +15,7 @@
     <bean id="auditorAware" class="org.springframework.data.jpa.domain.sample.AuditorAwareStub">
     	<constructor-arg ref="auditableUserRepository" />
     </bean>
-    
+
     <jpa:repositories base-package="org.springframework.data.jpa.repository.sample">
         <jpa:repository id="auditableUserRepository" />
     </jpa:repositories>

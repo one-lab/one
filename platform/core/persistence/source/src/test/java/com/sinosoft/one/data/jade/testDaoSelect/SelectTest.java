@@ -125,8 +125,9 @@ public class SelectTest extends TestSuport {
     @Test
     public void selectBooleanIntWithAnnoByIdTest(){
         boolean isTrue = false;
-        isTrue = booleanCheckDao.selectBooleanIntWithAnnoById("2") ;
-        assertTrue(isTrue) ;
+        Boolean isTrue1 = false;
+        isTrue1 = booleanCheckDao.selectBooleanIntWithAnnoById("2") ;
+        assertTrue(isTrue1) ;
         isTrue = booleanCheckDao.selectBooleanIntWithAnnoById("1") ;
         assertTrue(!isTrue) ;
         isTrue = booleanCheckDao.selectBooleanIntWithAnnoById("3") ;
@@ -157,6 +158,8 @@ public class SelectTest extends TestSuport {
         List <User> users = userSelectDao.selectUserWithAnnoByGroupid(groups);
         assertNotNull(users);
         assertEquals(7,users.size());
+        assertEquals("AAF000",users.get(0).getId());
+        assertEquals("user0",users.get(0).getName());
         for(int i=0;i<users.size();i++){
             User user = users.get(i) ;
             assertNotNull(user.getAge());
@@ -178,6 +181,8 @@ public class SelectTest extends TestSuport {
         List <User> users = userSelectDao.selectUserWithAnnoByGroupid(groups);
         assertNotNull(users);
         assertEquals(7,users.size());
+        assertEquals("AAF000",users.get(0).getId());
+        assertEquals("user0",users.get(0).getName());
         for(int i=0;i<users.size();i++){
             User user = users.get(i) ;
             assertNotNull(user.getAge());
@@ -196,6 +201,8 @@ public class SelectTest extends TestSuport {
         List <User> users = userSelectDao.selectUserWithAnnoByGroupid(groups);
         assertNotNull(users);
         assertEquals(7,users.size());
+        assertEquals("AAF000",users.get(0).getId());
+        assertEquals("user0",users.get(0).getName());
         for(int i=0;i<users.size();i++){
             User user = users.get(i) ;
             assertNotNull(user.getAge());
@@ -311,12 +318,6 @@ public class SelectTest extends TestSuport {
 
         Pageable pageable=new PageRequest(2,5, Direction.ASC,"name","id") ;
         new PageRequest(2,3) ;
-//        Sort sort = pageable.getSort();
-//        System.out.println("=======");
-//        System.out.println(sort);
-//        System.out.println(sort.iterator().next().getDirection());
-//        System.out.println(sort.iterator().next().getProperty());
-//        System.out.println("=======");
         Page<User> page = userSelectDao.selectUsersWithAnooForPage(pageable);
         assertNotNull(page);
         assertNotNull(page.getContent());
@@ -325,6 +326,9 @@ public class SelectTest extends TestSuport {
         assertEquals(5, page.getSize());               //每页大小
         assertEquals(9, page.getTotalElements());     //总条目数
         assertEquals(4,page.getNumberOfElements());  //当前页的条目数
+        User user= page.getContent().get(0) ;
+        assertEquals("AAF005", user.getId());
+        assertEquals("user5", user.getName());
         for(int i=0;i<page.getContent().size();i++){
             User prop= page.getContent().get(i) ;
             System.out.println();

@@ -41,6 +41,11 @@ public class GroupAddTest {
         Group group = groupList.get(0);
         assertEquals("0",group.getId());
         assertEquals("group0",group.getName());
+        for(int i=0;i<3;i++){
+            group = groupList.get(i);
+            assertEquals(""+i,group.getId());
+            assertEquals("group"+i,group.getName());
+        }
         groupDao.deleteAllGroup();
     }
 
