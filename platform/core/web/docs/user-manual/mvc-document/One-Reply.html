@@ -257,7 +257,7 @@
             <td>1</td>
             <td>返回一个简单的消息</td>
             <td>return Replys.with(str);或者<br/>
-                return Replys.sample().success("successMessage");</td>
+                return Replys.simple().success("successMessage");</td>
         </tr>
         <tr>
             <td>2</td>
@@ -306,8 +306,8 @@
 
                             //对ajax请求响应一个简单的消息
                             public Reply simpleReplys(){
-                                return Replys.sample().success("successMessage");
-                                //return Replys.sample().fail("failMessage");
+                                return Replys.simple().success("successMessage");
+                                //return Replys.simple().fail("failMessage");
                             }
 
                             //对ajax请求以json或xml格式返回数据
