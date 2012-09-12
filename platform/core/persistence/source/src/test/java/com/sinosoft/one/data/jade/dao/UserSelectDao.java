@@ -86,6 +86,18 @@ public interface UserSelectDao  extends UserDao {
     @RowHandler(rowMapper = UserRowMapper.class)
     List<User1> selectUser1WithAnnoByGroupid(Set<String> groups);
 
+    //begin of contrast Sort Between Jade And JPA Test
+    @SQL("select * from jpa_user")
+    Page<org.springframework.data.jpa.domain.sample.User> findAllForJade(Pageable pageable);
+
+    @SQL("insert into jpa_user (id,active,age,emailaddress,firstname,lastname,dtype) " +
+            "values (?users.id,?users.active,?users.age,?users.emailAddress,?users.firstname,?users.lastname,1)")
+    int insertDataForContrastSortBetweenJadeAndJPA(@Param("users") List<org.springframework.data.jpa.domain.sample.User> users);
+
+    @SQL("delete from jpa_user")
+    int deleteDataForContrastSortBetweenJadeAndJPA();
+    //end of contrast Sort Between Jade And JPA Test
+
     //4.2.3
     @SQL("SELECT * FROM t_##(:table) #if(:gender=='0'){ where id=:id } ")
     List<User> selectUserForActiveSql(@Param("table")String table,@Param("gender")String  gender,@Param("id") String id);
