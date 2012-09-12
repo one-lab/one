@@ -19,11 +19,22 @@
 		<property name="generateDdl" value="true" />
 		<property name="database" value="HSQL" />
 	</bean>
-	
+
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
 	<jdbc:embedded-database id="dataSource" type="HSQL" />
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        &lt;!&ndash; Connection Info &ndash;&gt;
 
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/ptest" />
+        <property name="username" value="root" />
+        <property name="password" value="mysql" />
+
+        &lt;!&ndash; 连接Idle一个小时后超时 &ndash;&gt;
+        <property name="timeBetweenEvictionRunsMillis" value="3600000" />
+        <property name="minEvictableIdleTimeMillis" value="3600000" />
+    </bean>-->
 </beans>

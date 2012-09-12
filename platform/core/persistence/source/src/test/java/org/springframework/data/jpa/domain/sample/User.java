@@ -15,6 +15,9 @@
  */
 package org.springframework.data.jpa.domain.sample;
 
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +33,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Domain class representing a person emphasizing the use of {@code AbstractEntity}. No declaration of an id is
@@ -44,8 +50,11 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+
 	private String firstname;
+
 	private String lastname;
+
 	private int age;
 	private boolean active;
 	@Temporal(TemporalType.TIMESTAMP)
