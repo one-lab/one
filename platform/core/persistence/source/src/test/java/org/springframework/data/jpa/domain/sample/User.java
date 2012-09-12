@@ -307,6 +307,6 @@ public class User {
 	@Override
 	public String toString() {
 
-		return "User: " + getId() + ", " + getFirstname() + " " + getLastname() + ", " + getEmailAddress();
+		return "User: " + getId() + ", " + getFirstname() + " " + getLastname() + ", " + getEmailAddress()+ ", " + getAge();
 	}
 }

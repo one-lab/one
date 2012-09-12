@@ -43,10 +43,10 @@ public class ContrastSortBetweenJadeAndJPATest {
             User user = new User();
             user.setId(10000+i);
             user.setActive(true);
-            user.setAge(23+i);
+            user.setAge((int)(Math.random()*20));
             user.setEmailAddress("user"+i+"@sinosoft.com.cn");
-            user.setFirstname("firstname"+i);
-            user.setLastname("lastname"+i);
+            user.setFirstname("firstname"+(int)(Math.random()*20));
+            user.setLastname("lastname"+(int)(Math.random()*20));
             users.add(user);
         }
         userSelectDao.insertDataForContrastSortBetweenJadeAndJPA(users);
@@ -54,7 +54,12 @@ public class ContrastSortBetweenJadeAndJPATest {
 
     @Test
     public void  contrastSortBetweenJadeAndJPATest(){
-        Pageable pageable=new PageRequest(2,5, Sort.Direction.ASC,"id") ;
+        List<Sort.Order> orders = new ArrayList<Sort.Order>();
+        orders.add(new Sort.Order(Sort.Direction.DESC,"age"));
+        orders.add(new Sort.Order(Sort.Direction.ASC,"firstname"));
+        Sort sort = new Sort(orders);
+        Pageable pageable=new PageRequest(2,5, sort) ;
+        userSelectDao.findAll(pageable);
         Page<User> jadePage = userSelectDao.findAllForJade(pageable);
         for(User user:jadePage.getContent()){
             System.out.println(user);
