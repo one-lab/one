@@ -43,8 +43,8 @@
 <!--     </bean>  -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
-        <property name="username" value="kylin" />
-        <property name="password" value="kylin" />
+        <property name="username" value="kongyz" />
+        <property name="password" value="kongyz" />
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 <!--         <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/> -->
 <!--         <property name="username" value="testaccount" /> -->

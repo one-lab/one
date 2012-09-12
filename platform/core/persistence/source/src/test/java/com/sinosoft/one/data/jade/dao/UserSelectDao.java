@@ -74,7 +74,7 @@ public interface UserSelectDao  extends UserDao {
     User selectUserWithAnnoByGnameAndUbirthday(Object[] params);
 
     //4.3.1
-    //@SQL("select u.id user_id,u.name user_name, g.name group_name, s.name gender_name from t_user u,t_code_group g,t_code_gender s where u.groupIds = g.id(+) and u.gender = s.id(+)")
+    //@SQL("select u.id user_id,u.name user_name, g.name group_name, s.name gender_name from t_user u,t_code_group g,t_code_gender s where u.groupIds = g.id and u.gender = s.id")
     Page<SomePropertis> selectUsersWithSqlQueryForPage(Pageable pageable);
 
     //4.3.1
