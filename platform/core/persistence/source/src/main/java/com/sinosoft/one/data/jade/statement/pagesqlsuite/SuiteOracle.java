@@ -15,21 +15,23 @@ import java.util.Iterator;
 public class SuiteOracle implements SuiteDataSourcePageSql {
     public static final String COMMA = ",";
     public static final String SPACE = " ";
+    public static final String ORDER = " order by ";
     public String suiteSql(String sql,Pageable pageable) {
         StringBuilder newSql = new StringBuilder();
         newSql.append("select * from (select a.*, rownum rn from(")
-                .append(sql)
-                .append(") a where rownum <=")
+                .append(sql);
+        renderForOrders(pageable,newSql).append(SPACE);
+        newSql.append(") a where rownum <=")
                 .append(pageable.getPageSize()*pageable.getPageNumber())
                 .append(") where rn >")
                 .append(pageable.getPageSize()*(pageable.getPageNumber()-1));
-        return renderForOrders(pageable,newSql).toString();
+        return newSql.toString();
     }
     private StringBuilder renderForOrders(Pageable pageable,StringBuilder sb){
         if(pageable.getSort()!=null){
             Iterator iterator = pageable.getSort().iterator();
-            String sep = "";
-            sb.append(" order by ");
+            String sep = new String() ;
+            sb.append(ORDER);
             while(iterator.hasNext()){
                 sb.append(sep);
                 Sort.Order order = (Sort.Order)iterator.next();

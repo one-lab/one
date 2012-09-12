@@ -293,15 +293,15 @@ public class SelectTest extends TestSuport {
     @Test
     public void selectUsersWithSqlQueryForPageTest() throws Exception{
 
-        Pageable pageable=new PageRequest(2,5,Direction.ASC,"genderName") ;
+        Pageable pageable=new PageRequest(2,5,Direction.DESC,"gender_name") ;
 
         Page<SomePropertis> page = userSelectDao.selectUsersWithSqlQueryForPage(pageable);
         assertNotNull(page);
         assertNotNull(page.getContent());
         assertEquals(2,page.getNumber());            //当前页码
         assertEquals(2,page.getTotalPages());        //总共的页数
-        assertEquals(5, page.getSize());               //每页大小
-        assertEquals(9, page.getTotalElements());     //总条目数
+        assertEquals(5,page.getSize());               //每页大小
+        assertEquals(9,page.getTotalElements());     //总条目数
         assertEquals(4,page.getNumberOfElements());  //当前页的条目数
         for(int i=0;i<page.getContent().size();i++){
             SomePropertis prop= page.getContent().get(i) ;
@@ -316,7 +316,7 @@ public class SelectTest extends TestSuport {
     @Test
     public void selectUsersWithAnooForPageTest() throws Exception{
 
-        Pageable pageable=new PageRequest(2,5, Direction.DESC,"name","id") ;
+        Pageable pageable=new PageRequest(2,5, Direction.ASC,"name","id") ;
         Page<User> page = userSelectDao.selectUsersWithAnooForPage(pageable);
         assertNotNull(page);
         assertNotNull(page.getContent());
