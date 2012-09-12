@@ -24,7 +24,7 @@ public class SuiteMySql implements SuiteDataSourcePageSql{
         renderForOrders(pageable,newSql) ;
         newSql.append(SPACE);
     	newSql.append(" limit ")
-    	.append((pageable.getPageNumber()-1)*pageable.getPageSize())
+    	.append((pageable.getPageNumber())*pageable.getPageSize())
     	.append(",").append(pageable.getPageSize());
     	return newSql.toString();
     }
