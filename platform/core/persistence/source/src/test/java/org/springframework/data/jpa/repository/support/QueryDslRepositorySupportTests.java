@@ -67,6 +67,7 @@ public class QueryDslRepositorySupportTests {
 		this.repository = repository;
 	}
 
+
 	@Test
 	public void readsUsersCorrectly() throws Exception {
 

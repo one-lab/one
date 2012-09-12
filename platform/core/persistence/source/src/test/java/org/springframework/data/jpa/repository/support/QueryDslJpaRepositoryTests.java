@@ -64,6 +64,16 @@ public class QueryDslJpaRepositoryTests {
 		carter = repository.save(new User("Carter", "Beauford", "carter@beauford.com"));
 	}
 
+//	@Test
+//	public void testSave() throws Exception {
+//		User u1 = new User("Dave", "Matthews", "dav");
+//		u1.setAge(21);
+//		User u2 = new User("Carter", "Beauford", "car");
+//		u2.setAge(22);
+//		repository.save(u1);
+//		repository.save(u2);
+//	}
+
 	@Test
 	public void executesPredicatesCorrectly() throws Exception {
 

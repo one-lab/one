@@ -11,30 +11,7 @@
 		http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
        default-lazy-init="true">
 
+    <description>One-data配置 </description>
 
-
-    <description>Spring公共配置 </description>
-    <context:component-scan base-package="com.sinosoft.one.data.test" />
-
-    <onejpa:repositories base-package="com.sinosoft.one">
-        <onejpa:dbscripts_file_name>dbscripts-config.xml</onejpa:dbscripts_file_name>
-        <onejpa:dbscript_path>classpath*:com.sinosoft.one.data.dbscripts</onejpa:dbscript_path>
-    </onejpa:repositories>
-
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManaegerFactory"/>
-    </bean>
-
-    <bean id="entityManaegerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
-        <property name="persistenceUnitName" value="oracleNormalPU"/>
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
-        <property name="username" value="kylin" />
-        <property name="password" value="kylin" />
-        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-    </bean>
     <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
 </beans>

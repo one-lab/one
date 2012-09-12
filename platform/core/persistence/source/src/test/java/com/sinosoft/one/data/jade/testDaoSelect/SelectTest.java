@@ -316,8 +316,7 @@ public class SelectTest extends TestSuport {
     @Test
     public void selectUsersWithAnooForPageTest() throws Exception{
 
-        Pageable pageable=new PageRequest(2,5, Direction.ASC,"name","id") ;
-        new PageRequest(2,3) ;
+        Pageable pageable=new PageRequest(2,5, Direction.DESC,"name","id") ;
         Page<User> page = userSelectDao.selectUsersWithAnooForPage(pageable);
         assertNotNull(page);
         assertNotNull(page.getContent());
