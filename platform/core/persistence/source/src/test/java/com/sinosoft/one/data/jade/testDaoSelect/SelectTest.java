@@ -43,6 +43,7 @@ public class SelectTest extends TestSuport {
     @Autowired
     BooleanCheckDao booleanCheckDao;
     @Before
+    @Test
     public void init(){
         booleanCheckDao.clear();
         booleanCheckDao.insert("1","0","false");
@@ -443,10 +444,10 @@ public class SelectTest extends TestSuport {
         assertEquals("user0",user1.getName());
 
     }
-    @After
-    public void destroy(){
-        booleanCheckDao.clear();
-        userSelectDao.deleteUserAll();
-        groupDao.deleteAllGroup();
-    }
+//    @After
+//    public void destroy(){
+//        booleanCheckDao.clear();
+//        userSelectDao.deleteUserAll();
+//        groupDao.deleteAllGroup();
+//    }
 }

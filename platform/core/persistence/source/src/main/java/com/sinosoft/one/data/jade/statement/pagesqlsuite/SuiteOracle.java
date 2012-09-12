@@ -22,9 +22,9 @@ public class SuiteOracle implements SuiteDataSourcePageSql {
                 .append(sql);
         renderForOrders(pageable,newSql).append(SPACE);
         newSql.append(") a where rownum <=")
-                .append(pageable.getPageSize()*pageable.getPageNumber())
+                .append(pageable.getPageSize()*(pageable.getPageNumber()+1))
                 .append(") where rn >")
-                .append(pageable.getPageSize()*(pageable.getPageNumber()-1));
+                .append(pageable.getPageSize()*pageable.getPageNumber());
         return newSql.toString();
     }
     private StringBuilder renderForOrders(Pageable pageable,StringBuilder sb){
