@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 	//保存险种责任关联和责任
 	function saveRiskDuty(){
-		var url = contextRootPath + "/product/saveRiskDuty.do";
+		var url = contextRootPath + "/product/saveRiskDuty";
 		
 	}
 	

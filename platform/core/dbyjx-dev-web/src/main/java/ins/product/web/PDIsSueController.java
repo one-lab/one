@@ -107,7 +107,7 @@ public class PDIsSueController {
 	 * 保存问题件
 	 * @return
 	 */
-	public Reply saveIssue(@Param("pdIsSue") PDIsSue pdIsSue){
+	public Reply saveIssue(@Param("pdIsSue") PDIsSue pdIsSue,Invocation invocation){
 		PDIsSueId id=new PDIsSueId();
 		if (null!=pdIsSue.getId().getSerialNo()) {
 			id.setSerialNo(pdIsSue.getId().getSerialNo());
@@ -120,7 +120,7 @@ public class PDIsSueController {
 			pdIsSue.setId(id);
 		}
 		
-		pdIsSueService.saveIssue(pdIsSue);
+		pdIsSueService.saveIssue(pdIsSue,invocation);
 		return Replys.with("save").as(Text.class);
 	}
 

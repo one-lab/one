@@ -15,27 +15,11 @@
  */
 package org.springframework.data.jpa.domain.sample;
 
-
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
 
 /**
  * Domain class representing a person emphasizing the use of {@code AbstractEntity}. No declaration of an id is
@@ -44,17 +28,15 @@ import javax.validation.constraints.Size;
  * @author Oliver Gierke
  */
 @Entity
+@Table(name = "jpa_user")
 @NamedQuery(name = "User.findByEmailAddress", query = "SELECT u FROM User u WHERE u.emailAddress = ?1")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-
 	private String firstname;
-
 	private String lastname;
-
 	private int age;
 	private boolean active;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -64,9 +46,15 @@ public class User {
 	private String emailAddress;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "jpa_user_colleagues", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+           inverseJoinColumns = {@JoinColumn(name = "colleagues_id", referencedColumnName = "id")}
+    )
 	private Set<User> colleagues;
 
 	@ManyToMany
+    @JoinTable(name = "jpa_user_role", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")}
+    )
 	private Set<Role> roles;
 
 	@ManyToOne

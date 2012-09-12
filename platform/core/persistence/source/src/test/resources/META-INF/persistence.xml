@@ -24,12 +24,18 @@
 		<class>org.springframework.data.jpa.repository.cdi.Person</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
-			<property name="hibernate.connection.username" value="sa" />
-			<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
-			<property name="hibernate.connection.password" value="" />
-			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:cdi" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<!--<property name="hibernate.connection.username" value="sa" />-->
+			<!--<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />-->
+			<!--<property name="hibernate.connection.password" value="" />-->
+			<!--<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:cdi" />-->
+			<!--<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />-->
+			<!--<property name="hibernate.hbm2ddl.auto" value="update" />-->
+            <property name="hibernate.connection.username" value="kylin" />
+            <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
+            <property name="hibernate.connection.password" value="kylin" />
+            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
 		</properties>
         <!--<properties>
             <property name="hibernate.connection.username" value="root" />

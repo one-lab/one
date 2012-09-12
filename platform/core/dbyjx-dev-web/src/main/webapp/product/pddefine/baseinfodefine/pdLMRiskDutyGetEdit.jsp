@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var mark = confirm("您确定删除"+getDutyCode+"记录吗？");
 		if(mark == true){
 			$.ajax({
-				url : contextRootPath + "/product/deleteRiskDutyGet.do",
+				url : contextRootPath + "/product/deleteRiskDutyGet",
 				data : {"getDutyCode":getDutyCode},
 				dataType : "String",
 				success : function(obj){
@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 	}
 	function saveRiskDutyGet(){
-		$("#riskDutyGetForm").attr("action",contextRootPath + "/product/saveRiskDutyGet.do");
+		$("#riskDutyGetForm").attr("action",contextRootPath + "/product/saveRiskDutyGet");
 		$("#riskDutyGetForm").submit();
 	}
 	</script>

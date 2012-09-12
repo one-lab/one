@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.opensymphony.xwork2.ActionContext;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
@@ -53,8 +54,8 @@ public class PDLMRiskRoleServiceSpringImpl extends GenericDaoHibernate<PDLMRiskR
 	 * @return pdlmRiskRole
 	 */
 	@Override
-	public PDLMRiskRole saveRiskRole(PDLMRiskRole pdlmRiskRole) {
-		pdlmRiskRole.setOperator(((PrpDuser)ActionContext.getContext().getSession().get("user")).getUserCode());
+	public PDLMRiskRole saveRiskRole(PDLMRiskRole pdlmRiskRole, Invocation invocation) {
+		pdlmRiskRole.setOperator(((PrpDuser)invocation.getRequest().getSession().getAttribute("user")).getUserCode());
 		pdlmRiskRole.setMakeDate(new Date());
 		pdlmRiskRole.setMakeTime(DateUtil.getTime());
 		pdlmRiskRole.setModifyDate(new Date());
@@ -88,8 +89,8 @@ public class PDLMRiskRoleServiceSpringImpl extends GenericDaoHibernate<PDLMRiskR
 	 * @return pdlmRiskRole
 	 */
 	@Override
-	public PDLMRiskRole updateRiskRole(PDLMRiskRole pdlmRiskRole) {
-		pdlmRiskRole.setOperator(((PrpDuser)ActionContext.getContext().getSession().get("user")).getUserCode());
+	public PDLMRiskRole updateRiskRole(PDLMRiskRole pdlmRiskRole, Invocation invocation) {
+		pdlmRiskRole.setOperator(((PrpDuser)invocation.getRequest().getSession().getAttribute("user")).getUserCode());
 		pdlmRiskRole.setMakeDate(new Date());
 		pdlmRiskRole.setMakeTime(DateUtil.getTime());
 		pdlmRiskRole.setModifyDate(new Date());

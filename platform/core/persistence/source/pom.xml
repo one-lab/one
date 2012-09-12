@@ -257,6 +257,7 @@
                 <configuration>
                     <includes>
                         <include>**/*Tests.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                     <argLine>-javaagent:${settings.localRepository}/org/springframework/spring-instrument/3.1.1.RELEASE/spring-instrument-3.1.1.RELEASE.jar -javaagent:${settings.localRepository}/org/apache/openjpa/openjpa/${openjpa.version}/openjpa-${openjpa.version}.jar</argLine>
                     <parallel>methods</parallel>

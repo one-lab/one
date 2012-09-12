@@ -1,5 +1,6 @@
 package ins.product.service.spring;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.platform.common.DateUtil;
 import ins.platform.model.PrpDuser;
@@ -19,8 +20,8 @@ public class PDLMDutyPayServiceSpringImpl extends GenericDaoHibernate<PDLMDutyPa
 	 * @return
 	 */
 	@Override
-	public PDLMDutyPay saveRiskDutyPay(PDLMDutyPay pdLmDutyPay) {
-		pdLmDutyPay.setOperator(((PrpDuser)ActionContext.getContext().getSession().get("user")).getUserCode());
+	public PDLMDutyPay saveRiskDutyPay(PDLMDutyPay pdLmDutyPay, Invocation invocation) {
+		pdLmDutyPay.setOperator(((PrpDuser)invocation.getRequest().getSession().getAttribute("user")).getUserCode());
 		//pdLmDutyPay.setOperator("114000038");
 		pdLmDutyPay.setMakeDate(new Date());
 		pdLmDutyPay.setMakeTime(DateUtil.getTime());

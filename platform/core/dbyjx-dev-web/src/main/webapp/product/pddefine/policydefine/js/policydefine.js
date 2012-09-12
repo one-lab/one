@@ -5,7 +5,7 @@ function addRiskCode(){
 		return false;
 	}
 	//url,params,callback
-	var url = contextRootPath + "/product/checkRiskExist.do";
+	var url = ctx + "/product/checkRiskExist";
 	var params ={
 		"pdLMRisk.riskCode":$("#riskCode").val(),
 		"pdLMRisk.makeDate":$("#makeDate").val()
@@ -24,7 +24,7 @@ function callbackRiskExist(obj){
 
 //查询定义中的产品
 function queryApplingRisk(){
-	var url=contextRootPath + "/product/queryApplingRisk.do";
+	var url=ctx + "/product/queryApplingRisk";
 	$("#frmInput").attr("action",url);
 	$("#frmInput").attr("target","fraInterface");
 	$("#frmInput").submit();	
@@ -36,20 +36,20 @@ function queryApplingUW(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/queryApplingUW.do",
+		url : ctx + "/product/queryApplingUW",
 		data : "",
 		dataType :"json",
-		success : function(obj){
+		success : function(data){
 			   var showContentString = "";
 			   $("#HASUWdetail").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td><input type='radio' name='selectApplingRadio' value='"+obj.data[i].uwCode+"'/></td>"
+				   +"<td><input type='radio' name='selectApplingRadio' value='"+data[i].uwCode+"'/></td>"
 				   +"<td>"+(i+1)+"</td>"
-				   +"<td>"+obj.data[i].uwCode+"</td>"
-				   +"<td>"+obj.data[i]["PDLMRisk.riskCode"]+"</td>"
-				   +"<td>"+obj.data[i].uwOrder+"</td>"
-				   +"<td>"+obj.data[i].remark+"</td>"
+				   +"<td>"+data[i].uwCode+"</td>"
+				   +"<td>"+data[i]["PDLMRisk.riskCode"]+"</td>"
+				   +"<td>"+data[i].uwOrder+"</td>"
+				   +"<td>"+data[i].remark+"</td>"
 				   +"</tr>";
 			   }
 		   		$("#HASUWdetail").html(showContentString);
@@ -65,26 +65,26 @@ function insertUW(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/pdriskUnderwrite.do",
+		   url: ctx + "/product/pdriskUnderwrite",
 		   data : {"uwCode":""},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -108,27 +108,27 @@ function  updateUW(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/pdriskUnderwrite.do",
+		   url: ctx + "/product/pdriskUnderwrite",
 		   data : {"uwCode":""+$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
 			   $("#UWContent").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -143,11 +143,11 @@ function saveUW(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/saveLMUW.do",
+		url : ctx + "/product/saveLMUW",
 		data : $("#frmInput").serialize(),
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
+		success : function(msg){
+			if(null!=msg){
 			  alert("保存成功！");
 			  $("#save").attr('disabled',true);
 			  queryApplingUW();
@@ -169,12 +169,12 @@ function deleteUW(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteLMUW.do",
+		url : ctx + "/product/deleteLMUW",
 		data : {"uwCode":""+$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
-			  alert(obj.msg);
+		success : function(msg){
+			if(null!=msg){
+			  alert(msg);
 			  queryApplingUW();
 		    }
 		}
@@ -191,20 +191,20 @@ function queryApplingCF(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/queryApplingCF.do",
+		url : ctx + "/product/queryApplingCF",
 		data : {"riskCode":"GCMR"},
 		dataType :"json",
-		success : function(obj){
+		success : function(data){
 			   var showContentString = "";
 			   $("#HASCFdetail").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td><input type='radio' name='selectApplingRadio' value='"+obj.data[i]["PDLMRisk.riskCode"]+","+obj.data[i]["id.fieldName"]+","+obj.data[i]["id.serialNO"]+"'/></td>"
+				   +"<td><input type='radio' name='selectApplingRadio' value='"+data[i]["PDLMRisk.riskCode"]+","+data[i]["id.fieldName"]+","+data[i]["id.serialNO"]+"'/></td>"
 				   +"<td>"+(i+1)+"</td>"
-				   +"<td>"+obj.data[i]["PDLMRisk.riskCode"]+"</td>"
-				   +"<td>"+obj.data[i]["id.fieldName"]+"</td>"
-				   +"<td>"+obj.data[i]["id.serialNO"]+"</td>"
-				   +"<td>"+obj.data[i].msg+"</td>"
+				   +"<td>"+data[i]["PDLMRisk.riskCode"]+"</td>"
+				   +"<td>"+data[i]["id.fieldName"]+"</td>"
+				   +"<td>"+data[i]["id.serialNO"]+"</td>"
+				   +"<td>"+data[i].msg+"</td>"
 				   +"</tr>";
 			   }
 		   		$("#HASCFdetail").html(showContentString);
@@ -220,26 +220,26 @@ function insertCF(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/insertCF.do",
+		   url: ctx + "/product/insertCF",
 		   data : {},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -263,27 +263,27 @@ function  updateCF(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/insertCF.do",
+		   url: ctx + "/product/insertCF",
 		   data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
 			   $("#CFContent").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td>"+obj.data[i].displayOrder+"</td>"
-				   +"<td>"+obj.data[i].fieldName+"</td>"
-				   +"<td>"+obj.data[i].fieldType+"</td>"
-				   +"<td><input name='"+obj.data[i].fieldValueName+"' class='common' type='text' value='"+obj.data[i].fieldValue+"' /></td>";
-				   if(null==obj.data[i].officialDesc){
+				   +"<td>"+data[i].displayOrder+"</td>"
+				   +"<td>"+data[i].fieldName+"</td>"
+				   +"<td>"+data[i].fieldType+"</td>"
+				   +"<td><input name='"+data[i].fieldValueName+"' class='common' type='text' value='"+data[i].fieldValue+"' /></td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].officialDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].officialDesc+"</td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="<td>"+""+"</td>";
 				   }else{
-					   showContentString  +="<td>"+obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +="<td>"+data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -307,12 +307,12 @@ function deleteCF(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteCF.do",
+		url : ctx + "/product/deleteCF",
 		 data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
-			  alert(obj.msg);
+		success : function(msg){
+			if(null!=msg){
+			  alert(msg);
 			  queryApplingCF();
 		    }
 		}
@@ -331,11 +331,11 @@ function saveCF(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/saveCF.do",
+		url : ctx + "/product/saveCF",
 		data : $("#frmInput").serialize(),
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
+		success : function(msg){
+			if(null!=msg){
 			  alert("保存成功！");
 			  $("#save").attr('disabled',true);
 			  queryApplingCF();
@@ -353,19 +353,19 @@ function queryApplingIssue(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/queryApplingIssue.do",
+		url : ctx + "/product/queryApplingIssue",
 		data : {"riskCode":"","issueState":"1"},
 		dataType :"json",
-		success : function(obj){
+		success : function(data){
 			   var showContentString = "";
 			   $("#HASIssuedetail").html("");
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'>"
-				   +"<td><input type='radio' name='selectApplingRadio' value='"+obj.data[i]["id.riskCode"]+","+obj.data[i]["id.serialNo"]+"'/></td>"
+				   +"<td><input type='radio' name='selectApplingRadio' value='"+data[i]["id.riskCode"]+","+data[i]["id.serialNo"]+"'/></td>"
 				   +"<td>"+(i+1)+"</td>"
-				   +"<td>"+obj.data[i].backpost+"</td>"
-				   +"<td>"+obj.data[i].issuecont+"</td>"
-				   +"<td>"+obj.data[i].issuestate+"</td>"
+				   +"<td>"+data[i].backpost+"</td>"
+				   +"<td>"+data[i].issuecont+"</td>"
+				   +"<td>"+data[i].issuestate+"</td>"
 				   +"</tr>";
 			   }
 		   		$("#HASIssuedetail").html(showContentString);
@@ -391,11 +391,11 @@ function insertIssue(){
 function saveIssue(){
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/saveIssue.do",
+		url : ctx + "/product/saveIssue",
 		data : $("#frmIssueInput").serialize(),
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
+		success : function(msg){
+			if(null!=msg){
 			  alert("保存成功！");
 			  queryApplingIssue();
 		    }
@@ -417,12 +417,12 @@ function deleteIssue(){
 	
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteIssue.do",
+		url : ctx + "/product/deleteIssue",
 		 data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		dataType :"json",
-		success : function(obj){
-			if(null!=obj.msg){
-			  alert(obj.msg);
+		success : function(msg){
+			if(null!=msg){
+			  alert(msg);
 			  queryApplingIssue();
 		    }
 		}
@@ -447,16 +447,16 @@ function  updateIssue(){
 
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/updateIssue.do",
+		   url: ctx + "/product/updateIssue",
 		   data : {"id":$('input:radio[name="selectApplingRadio"]:checked').val()},
 		   dataType : "json",
-		   success: function(obj){
-			   for(var i = 0 ; i < obj.data.length ; i++){
-					$("#issuecont").val(obj.data[i].issuecont); 
-					$("#riskCode").val(obj.data[i].riskCode); 
-					$("#serialNo").val(obj.data[i].serialNo); 
-					$("#codeType").val(obj.data[i].backpost); 
-					$("#codeName").val(obj.data[i].backpostname); 
+		   success: function(data){
+			   for(var i = 0 ; i < data.length ; i++){
+					$("#issuecont").val(data[i].issuecont);
+					$("#riskCode").val(data[i].riskCode);
+					$("#serialNo").val(data[i].serialNo);
+					$("#codeType").val(data[i].backpost);
+					$("#codeName").val(data[i].backpostname);
 					
 			   }
 		   }
@@ -467,22 +467,22 @@ function  updateIssue(){
 function findRiskRoleByRisk(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/findRiskRoleByRisk.do",
+	   url: ctx + "/product/findRiskRoleByRisk",
 	   data : {"riskCode":"a"},
 	   dataType : "json",
-	   success: function(obj){
+	   success: function(data){
 		   var showContentString = "";
-		   for(var i = 0 ; i < obj.data.length ; i++){
-			   showContentString += "<tr class='content'><td><input name='riskRoleUnion' value='"+obj.data[i]["id.riskCode"]+","+obj.data[i]["id.riskRole"]+","+obj.data[i]["id.riskRoleSex"]+","+obj.data[i]["id.riskRoleNo"]+"' type='radio' /></td><td>"+i+1+"</td><td>"
-			   	+obj.data[i]["id.riskCode"]+"</td><td>"
-			   	+obj.data[i].riskVer+"</td><td>"
-			   	+obj.data[i]["id.riskRole"]+"</td><td>"
-			   	+obj.data[i]["id.riskRoleSex"]+"</td><td>"
-			   	+obj.data[i]["id.riskRoleNo"]+"</td><td>"
-			   	+obj.data[i].minAppAgeFlag+"</td><td>"
-			   	+obj.data[i].minAppAge+"</td><td>"
-			   	+obj.data[i].maxAppAgeFlag+"</td><td>"
-			   	+obj.data[i].maxAppAge+"</td>";
+		   for(var i = 0 ; i < data.length ; i++){
+			   showContentString += "<tr class='content'><td><input name='riskRoleUnion' value='"+data[i]["id.riskCode"]+","+data[i]["id.riskRole"]+","+data[i]["id.riskRoleSex"]+","+data[i]["id.riskRoleNo"]+"' type='radio' /></td><td>"+i+1+"</td><td>"
+			   	+data[i]["id.riskCode"]+"</td><td>"
+			   	+data[i].riskVer+"</td><td>"
+			   	+data[i]["id.riskRole"]+"</td><td>"
+			   	+data[i]["id.riskRoleSex"]+"</td><td>"
+			   	+data[i]["id.riskRoleNo"]+"</td><td>"
+			   	+data[i].minAppAgeFlag+"</td><td>"
+			   	+data[i].minAppAge+"</td><td>"
+			   	+data[i].maxAppAgeFlag+"</td><td>"
+			   	+data[i].maxAppAge+"</td>";
 		   }
 	   		$("#roleList").html(showContentString);
 	   }
@@ -505,27 +505,27 @@ function updateRiskRole() {
 	var val=$('input:radio[name="riskRoleUnion"]:checked').val();
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/findRiskRole.do",
+		   url: ctx + "/product/findRiskRole",
 		   data : {"riskRoleUnion":val},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'><td>"
-				    +obj.data[i].displayOrder+"</td><td>"
-				   	+obj.data[i].fieldName+"</td><td>"
-				   	+obj.data[i].fieldCode+"</td><td>"
-				   	+obj.data[i].fieldType+"</td><td><input type='text' value='"
-				   	+obj.data[i].fieldValue+"' name='pdlmRiskRole."+obj.data[i].fieldCode+"' class='common'/></td><td>";
-				   if(null==obj.data[i].officialDesc){
+				    +data[i].displayOrder+"</td><td>"
+				   	+data[i].fieldName+"</td><td>"
+				   	+data[i].fieldCode+"</td><td>"
+				   	+data[i].fieldType+"</td><td><input type='text' value='"
+				   	+data[i].fieldValue+"' name='pdlmRiskRole."+data[i].fieldCode+"' class='common'/></td><td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="</td><td>";
 				   }else{
-					   showContentString  +=obj.data[i].officialDesc+"</td><td>"; 
+					   showContentString  +=data[i].officialDesc+"</td><td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="</td>";
 				   }else{
-					   showContentString  +=obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +=data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -540,27 +540,27 @@ function addRiskRole() {
 	$("#riskRole").show();
 	$.ajax({
 		   type: "POST",
-		   url: contextRootPath + "/product/findRiskRole.do",
+		   url: ctx + "/product/findRiskRole",
 		   data : {"riskRoleUnion":""},
 		   dataType : "json",
-		   success: function(obj){
+		   success: function(data){
 			   var showContentString = "";
-			   for(var i = 0 ; i < obj.data.length ; i++){
+			   for(var i = 0 ; i < data.length ; i++){
 				   showContentString += "<tr class='content'><td>"
-				    +obj.data[i].displayOrder+"</td><td>"
-				   	+obj.data[i].fieldName+"</td><td>"
-				   	+obj.data[i].fieldCode+"</td><td>"
-				   	+obj.data[i].fieldType+"</td><td><input type='text' value='"
-				   	+obj.data[i].fieldValue+"' name='pdlmRiskRole."+obj.data[i].fieldCode+"' class='common'/></td><td>";
-				   if(null==obj.data[i].officialDesc){
+				    +data[i].displayOrder+"</td><td>"
+				   	+data[i].fieldName+"</td><td>"
+				   	+data[i].fieldCode+"</td><td>"
+				   	+data[i].fieldType+"</td><td><input type='text' value='"
+				   	+data[i].fieldValue+"' name='pdlmRiskRole."+data[i].fieldCode+"' class='common'/></td><td>";
+				   if(null==data[i].officialDesc){
 					   showContentString  +="</td><td>";
 				   }else{
-					   showContentString  +=obj.data[i].officialDesc+"</td><td>"; 
+					   showContentString  +=data[i].officialDesc+"</td><td>";
 				   }
-				   if(null==obj.data[i].busiDesc){
+				   if(null==data[i].busiDesc){
 					   showContentString  +="</td>";
 				   }else{
-					   showContentString  +=obj.data[i].busiDesc+"</td>"; 
+					   showContentString  +=data[i].busiDesc+"</td>";
 				   }
 				   showContentString  +="</tr>";
 			   }
@@ -581,7 +581,7 @@ function saveRiskRole() {
 		
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/"+operateRiskRole+".do",
+		url : ctx + "/product/"+operateRiskRole,
 		data :$("#riskRoleForm").serialize(),
 		dataType :"json",
 		success : function(){
@@ -602,14 +602,14 @@ function deleteRiskRole(){
 	var val=$('input:radio[name="riskRoleUnion"]:checked').val();
 	$.ajax({
 		type : "POST",
-		url : contextRootPath + "/product/deleteRiskRole.do",
+		url : ctx + "/product/deleteRiskRole",
 		data : {"riskRoleUnion":val},
 		dataType :"json",
-		success : function(obj){
+		success : function(msg){
 			$("#saveriskRole").attr('disabled',false);
-			if(null!=obj.msg){
+			if(null!=msg){
 			  $("#oneRole").html("");
-			  alert(obj.msg);
+			  alert(msg);
 			  //查询剩余险种角色记录
 			  findRiskRoleByRisk();
 			  //删除后清空下面的数据

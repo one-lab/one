@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="${ctx}/common/js/jquery-1.7.1.js"></script>
 	<script type="text/javascript">
 	function findRiskAppField(){
-		$("#riskAppForm").attr("action",ctx + "/product/findRiskAppField.do");
+		$("#riskAppForm").attr("action",ctx + "/product/findRiskAppField");
 		//TODO 不知道将targer的目标指向哪里？
 		$("#riskAppForm").attr("target","");
 		$("#riskAppForm").submit();

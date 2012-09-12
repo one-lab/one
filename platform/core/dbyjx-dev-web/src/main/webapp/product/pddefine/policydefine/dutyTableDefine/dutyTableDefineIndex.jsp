@@ -23,6 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="${ctx}/common/js/TagPage.js"></script>
 	<script type="text/javascript" src="${ctx}/common/js/jquery-1.7.1.js"></script>
 	<script type="text/javascript" src="${ctx}/product/pddefine/policydefine/dutyTableDefine/js/dutyTableDefineIndex.js"></script>
+    <script type="text/javascript">var ctx = "${ctx}"</script>
   </head>
     <div id="con">
 	   <!-- 0责任层级定义 -->

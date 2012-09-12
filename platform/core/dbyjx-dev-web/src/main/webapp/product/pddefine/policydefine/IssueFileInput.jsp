@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</head>
 	
 	<body>
-		<form name="fm" id="fm" method="post" action = "${ctx}/product/IssureFileUpload.do" enctype="multipart/form-data" >
+		<form name="fm" id="fm" method="post" action = "${ctx}/product/IssureFileUpload" enctype="multipart/form-data" >
 			<div style="width:100%">
 				<table  class="common" cellpadding="3" cellspacing="0">
 					<tr>

@@ -1,5 +1,6 @@
 package ins.product.web;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
@@ -40,8 +41,8 @@ public class PDLMDutyPayAddFeeController {
 	 * @author 朱超
 	 * @return
 	 */
-	public Reply saveDutyPayAddFee(@Param("pdlmDutyPayAddFee") PDLMDutyPayAddFee pdlmDutyPayAddFee){
-        PDLMDutyPayAddFee pdlmDutyPayAddFeeTarget = pdlmDutyPayAddFeeService.saveDutyPayAddFee(pdlmDutyPayAddFee);
+	public Reply saveDutyPayAddFee(@Param("pdlmDutyPayAddFee") PDLMDutyPayAddFee pdlmDutyPayAddFee,Invocation invocation){
+        PDLMDutyPayAddFee pdlmDutyPayAddFeeTarget = pdlmDutyPayAddFeeService.saveDutyPayAddFee(pdlmDutyPayAddFee,invocation);
 		List<PDLMDutyPayAddFee> pdlmDutyPayAddFees = new ArrayList<PDLMDutyPayAddFee>();
 		pdlmDutyPayAddFees.add(pdlmDutyPayAddFeeTarget);
 		String[] show = new String[]{"id.riskCode","id.dutyCode","id.addFeeType","id.addFeeObject","addFeeCalCode","addPointLimit"};

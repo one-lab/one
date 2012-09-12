@@ -39,7 +39,6 @@ public class CustomHsqlHibernateJpaVendorAdaptor extends HibernateJpaVendorAdapt
 		if (Database.HSQL.equals(database)) {
 			return CustomHsqlDialect.class;
 		}
-
 		return super.determineDatabaseDialectClass(database);
 	}
 

@@ -22,10 +22,10 @@
 
 			<tr>
 				<td class="left">险种代码：</td>
-				<td class="right"><input name="pdLMRisk.riskCode" id="riskCode" class="common" type="text" readonly value='<s:property value="pdLMRisk.riskCode" />'></td>
+				<td class="right"><input name="pdLMRisk.riskCode" id="riskCode" class="common" type="text" readonly value='${pdLMRisk.riskCode}'></td>
 				<td class="left">申请日期：</td>
 				<td class="right">
-					<input name="pdLMRisk.makeDate" id="makeDate" class="common" type="text" readonly  style="width: 73%" value='<s:property value="pdLMRisk.makeDate"/>' />
+					<input name="pdLMRisk.makeDate" id="makeDate" class="common" type="text" readonly  style="width: 73%" value='${pdLMRisk.makeDate}' />
 					<img style='cursor: hand' align="middle" src="${ctx}/images/bgcalendar.gif" onclick="WdatePicker({el:'makeDate',startDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd',minDate:'#{%y-10}-%M-%d',maxDate:'#{%y+10}-%M-%d',alwaysUseStartDate:true})">
 				</td>				
 			</tr>

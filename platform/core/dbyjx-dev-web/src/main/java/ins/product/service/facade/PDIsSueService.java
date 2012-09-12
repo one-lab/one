@@ -1,5 +1,6 @@
 package ins.product.service.facade;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.product.model.PDIsSue;
@@ -30,7 +31,7 @@ public interface PDIsSueService {
 	 * @param pdlmCheckField
 	 * @return
 	 */
-	PDIsSue saveIssue(PDIsSue pdIsSue);
+	PDIsSue saveIssue(PDIsSue pdIsSue, Invocation invocation);
 	
 	int countIssue();
 	

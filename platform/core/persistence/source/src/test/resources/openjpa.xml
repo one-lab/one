@@ -5,7 +5,7 @@
 
 	<!-- EclipseLink vendor adaptor with workaround platform class for HSQL usage -->
 	<bean id="vendorAdaptor" class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter" parent="abstractVendorAdaptor">
-		<property name="database" value="HSQL" />
+		<property name="database" value="ORACLE" />
 	</bean>
 
 </beans>

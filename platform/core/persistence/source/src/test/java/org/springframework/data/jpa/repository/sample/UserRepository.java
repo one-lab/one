@@ -15,6 +15,7 @@
  */
 package org.springframework.data.jpa.repository.sample;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -196,7 +197,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 	/**
 	 * @see DATAJPA-117
 	 */
-	@Query(value = "SELECT * FROM User WHERE lastname = ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM jpa_User WHERE lastname = ?1", nativeQuery = true)
 	List<User> findNativeByLastname(String lastname);
 
 	/**
@@ -240,6 +241,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 	 */
 	List<User> findByFirstnameContaining(String firstname);
 
-	@Query(value = "SELECT 1 FROM User", nativeQuery = true)
-	List<Integer> findOnesByNativeQuery();
+	@Query(value = "SELECT 1 FROM jpa_User", nativeQuery = true)
+	List<BigDecimal> findOnesByNativeQuery();
 }

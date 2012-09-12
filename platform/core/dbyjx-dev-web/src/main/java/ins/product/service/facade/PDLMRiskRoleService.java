@@ -2,6 +2,7 @@ package ins.product.service.facade;
 
 import java.util.List;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.product.model.PDLMRiskDutyFactor;
@@ -25,7 +26,7 @@ public interface PDLMRiskRoleService {
 	 * @param pdlmRiskRole
 	 * @return
 	 */
-	PDLMRiskRole saveRiskRole(PDLMRiskRole pdlmRiskRole);
+	PDLMRiskRole saveRiskRole(PDLMRiskRole pdlmRiskRole, Invocation invocation);
 	/**
 	 * @title deleteRiskRole
 	 * @description 删除险种角色数据
@@ -41,7 +42,7 @@ public interface PDLMRiskRoleService {
 	 * @param pdlmRiskRole
 	 * @return
 	 */
-	PDLMRiskRole updateRiskRole(PDLMRiskRole pdlmRiskRole);
+	PDLMRiskRole updateRiskRole(PDLMRiskRole pdlmRiskRole, Invocation invocation);
 	/**
 	 * @title findRiskByCondition
 	 * @description 通过查询条件查询险种角色信息--分页

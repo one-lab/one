@@ -13,6 +13,7 @@
 	<link href="${ctx}/common/css/Standard.css" rel="stylesheet" type="text/css" />
 	<script src="${ctx}/common/calender/WdatePicker.js"></script>
 	<script src="${ctx}/product/pddefine/policydefine/dutyTableDefine/js/pdlmdutypayedit.js"></script>
+    <script type="text/javascript">var ctx = "${ctx}"</script>
   </head>
   <body>
 	<div style = "width:80%">
@@ -51,7 +52,7 @@
 				</td>
 			</tr>
 		</table>
-		<form id="operCalMode" name="operCalMode" action="aaa.do">
+		<form id="operCalMode" name="operCalMode" action="aaa">
 			<table id="" class="common" cellpadding="3" cellspacing="0">
 				<tr>
 					<td class="left">算法编码：</td>

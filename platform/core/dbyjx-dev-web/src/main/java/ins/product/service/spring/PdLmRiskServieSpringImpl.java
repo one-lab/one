@@ -1,5 +1,6 @@
 package ins.product.service.spring;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.HqlQueryRule;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
@@ -97,21 +98,21 @@ public class PdLmRiskServieSpringImpl extends
 	}
 
 	@Override
-	public void saveRisk(PDLMRisk pdLMRisk) {
+	public void saveRisk(PDLMRisk pdLMRisk, Invocation invocation) {
 		PDLMRisk pdLMRisk1 = this.get(pdLMRisk.getRiskCode());
 		try{
 			if (pdLMRisk1 != null) {
 					pdLMRisk.setMakeTime(pdLMRisk1.getMakeTime());
 					pdLMRisk.setModifyDate(DateUtil.getDate());
 					pdLMRisk.setModifyTime(DateUtil.getTime());
-					PrpDuser user = (PrpDuser) ActionContext.getContext().getSession().get("user");
+					PrpDuser user = (PrpDuser) invocation.getRequest().getSession().getAttribute("user");
 					pdLMRisk.setOperator(user.getUserCode());
 			} else {
 					pdLMRisk.setMakeDate(DateUtil.getDate());
 					pdLMRisk.setMakeTime(DateUtil.getTime());
 					pdLMRisk.setModifyDate(DateUtil.getDate());
 					pdLMRisk.setModifyTime(DateUtil.getTime());
-					PrpDuser user = (PrpDuser) ActionContext.getContext().getSession().get("user");
+					PrpDuser user = (PrpDuser) invocation.getRequest().getSession().getAttribute("user");
 					pdLMRisk.setOperator(user.getUserCode());
 			}
 		}catch(Exception e){

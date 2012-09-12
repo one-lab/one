@@ -1,5 +1,6 @@
 package ins.product.service.facade;
 
+import com.sinosoft.one.mvc.web.Invocation;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.product.model.PDLMCheckField;
@@ -13,7 +14,7 @@ public interface PDLMCheckFieldService {
 	 * @param pdlmCheckField
 	 * @return
 	 */
-	PDLMCheckField saveCheckField(PDLMCheckField pdlmCheckField);
+	PDLMCheckField saveCheckField(PDLMCheckField pdlmCheckField, Invocation invocation);
 	/**
 	 * @title deleteCheckField
 	 * @description 删除投保规则数据

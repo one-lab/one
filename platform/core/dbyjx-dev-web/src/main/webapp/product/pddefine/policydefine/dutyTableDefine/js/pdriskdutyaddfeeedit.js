@@ -6,20 +6,20 @@ $(document).ready(function(){
 function findRiskDutyAddFeeField(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/findRiskDutyAddFeeField.do",
+	   url: ctx + "/product/findRiskDutyAddFeeField",
 	   data : {},
 	   dataType : "json",
-	   success: function(obj){
+	   success: function(data){
 		   var fieldsString = $("#RiskDutyAddFeeFields").html();
-		   for(var i = 0 ; i < obj.data.length ; i++){
+		   for(var i = 0 ; i < data.length ; i++){
 			   fieldsString += ' <tr class="content">'+
-			   	'<td>'+ obj.data[i].displayOrder +'</td>'+
-			   	'<td>'+ obj.data[i].fieldName +'</td>'+
-			   	'<td>'+ obj.data[i]["id.fieldCode"] +'</td>'+
-			   	'<td>'+ obj.data[i].fieldType +'</td>'+
-			   	'<td> <input type="text" name="pdlmDutyPayAddFee.'+obj.data[i]["id.fieldCode"]+'" class="common" /></td>'+
-			   	'<td>'+ obj.data[i].officialDesc +'</td>'+
-			   	'<td>'+ obj.data[i].busiDesc +'</td>'+
+			   	'<td>'+ data[i].displayOrder +'</td>'+
+			   	'<td>'+ data[i].fieldName +'</td>'+
+			   	'<td>'+ data[i]["id.fieldCode"] +'</td>'+
+			   	'<td>'+ data[i].fieldType +'</td>'+
+			   	'<td> <input type="text" name="pdlmDutyPayAddFee.'+data[i]["id.fieldCode"]+'" class="common" /></td>'+
+			   	'<td>'+ data[i].officialDesc +'</td>'+
+			   	'<td>'+ data[i].busiDesc +'</td>'+
 			   	'</tr>';
 		   }
 	   		$("#RiskDutyAddFeeFields").html(fieldsString);
@@ -33,22 +33,22 @@ function saveDutyPayAddFee(){
 	//"addFeeCalCode","addPointLimit"
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/saveDutyPayAddFee.do",
+	   url: ctx + "/product/saveDutyPayAddFee",
 	   data : $("#frmDutyPayAddFee").serialize(),
 	   dataType : "json",
-	   success: function(obj){
+	   success: function(data){
 		   var fieldsString = $("#RiskDutyAddFeeFields").html();
 		   //TODO 朱超 主键解析暂时没有完成
-		   for(var i = 0 ; i < obj.data.length ; i++){
+		   for(var i = 0 ; i < data.length ; i++){
 			   fieldsString += ' <tr class="content">'+
 			    '<td width="5%"> <input type="radio" name="dutyPayAddFeeId" value=""/> </td>'+
 			    '<td width="5%">'+(i+1)+'</td>'+
-			   	'<td>'+ obj.data[i]["id.riskCode"] +'</td>'+
-			   	'<td>'+ obj.data[i]["id.dutyCode"] +'</td>'+
-			   	'<td>'+ obj.data[i]["id.addFeeType"] +'</td>'+
-			   	'<td>'+ obj.data[i]["id.addFeeObject"] +'</td>'+
-			   	'<td>'+obj.data[i].addFeeCalCode+'</td>'+
-			   	'<td>'+ obj.data[i].addPointLimit +'</td>'+
+			   	'<td>'+ data[i]["id.riskCode"] +'</td>'+
+			   	'<td>'+ data[i]["id.dutyCode"] +'</td>'+
+			   	'<td>'+ data[i]["id.addFeeType"] +'</td>'+
+			   	'<td>'+ data[i]["id.addFeeObject"] +'</td>'+
+			   	'<td>'+data[i].addFeeCalCode+'</td>'+
+			   	'<td>'+ data[i].addPointLimit +'</td>'+
 			   	'</tr>';
 		   }
 	   		$("#RiskDutyAddFeeFields").html(fieldsString);
@@ -68,7 +68,7 @@ function deleteDutyPayAddFee(){
 		if(boolean){
 			$.ajax({
 			   type: "POST",
-			   url: contextRootPath + "/product/deleteDutyPayAddFee.do",
+			   url: ctx + "/product/deleteDutyPayAddFee",
 			   data : {"id":id},
 			   success: function(obj){
 				   alert(obj);
@@ -82,22 +82,22 @@ function deleteDutyPayAddFee(){
 function updateDutyPayAddFee(){
 	$.ajax({
 	   type: "POST",
-	   url: contextRootPath + "/product/updateDutyPayAddFee.do",
+	   url: ctx + "/product/updateDutyPayAddFee",
 	   data : $("#frmDutyPayAddFee").serialize(),
 	   dataType : "json",
-	   success: function(obj){
+	   success: function(data){
 		   var fieldsString = $("#RiskDutyAddFeeFields").html();
 		   //TODO 朱超 主键解析暂时没有完成
-		   for(var i = 0 ; i < obj.data.length ; i++){
+		   for(var i = 0 ; i < data.length ; i++){
 			   fieldsString += ' <tr class="content">'+
 			    '<td width="5%"> <input type="radio" name="dutyPayAddFeeId" value=""/> </td>'+
 			    '<td width="5%">'+(i+1)+'</td>'+
-			   	'<td>'+ obj.data[i]["id.riskCode"] +'</td>'+
-			   	'<td>'+ obj.data[i]["id.dutyCode"] +'</td>'+
-			   	'<td>'+ obj.data[i]["id.addFeeType"] +'</td>'+
-			   	'<td>'+ obj.data[i]["id.addFeeObject"] +'</td>'+
-			   	'<td>'+obj.data[i].addFeeCalCode+'</td>'+
-			   	'<td>'+ obj.data[i].addPointLimit +'</td>'+
+			   	'<td>'+ data[i]["id.riskCode"] +'</td>'+
+			   	'<td>'+ data[i]["id.dutyCode"] +'</td>'+
+			   	'<td>'+ data[i]["id.addFeeType"] +'</td>'+
+			   	'<td>'+ data[i]["id.addFeeObject"] +'</td>'+
+			   	'<td>'+data[i].addFeeCalCode+'</td>'+
+			   	'<td>'+ data[i].addPointLimit +'</td>'+
 			   	'</tr>';
 		   }
 	   		$("#RiskDutyAddFeeFields").html(fieldsString);
