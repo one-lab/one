@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<chapter id="codegenarchitecture">
+  <title>Code generation architecture</title>
+
+  <para>The code generation mechanism in the Hibernate Tools consists of a few
+  core concepts. This section explains their overall structure which are the
+  same for the Ant and Eclipse tools.</para>
+
+  <section>
+    <title>Hibernate Meta Model</title>
+
+    <para>The meta model is the model used by Hibernate core to perform its
+    object relational mapping. The model includes information about tables,
+    columns, classes, properties, components, values, collections etc. The API
+    is in <literal>org.hibernate.mapping</literal> and its main entry point is
+    the <literal>Configuration</literal> class, the same class that is used to
+    build a session factory.</para>
+
+    <para>The model represented by the <literal>Configuration</literal> class
+    can be build in many ways. The best known is by using hbm.xml files to
+    describe the meta model, other methods are using annotations in java
+    source code and a third is reading JDBC metadata and build a
+    configuration. The last method is provided via the reverse engineering
+    part of the hibernate tools.</para>
+
+    <para><mediaobject>
+        <imageobject role="fo">
+          <imagedata fileref="images/architecture.png" format="PNG" />
+        </imageobject>
+
+        <imageobject role="html">
+          <imagedata align="center"
+                     fileref="../shared/images/architecture.png" format="PNG" />
+        </imageobject>
+      </mediaobject></para>
+
+    <para>The code generation is done based on this model no matter which
+    method have been used to create the meta model, and thus the code
+    generation is independent on the source of the meta model and represented
+    via Exporters.</para>
+  </section>
+
+  <section>
+    <title>Exporters</title>
+
+    <para>Code generation is done in so called Exporters. An
+    <literal>Exporter</literal> is handed a Hibernate Meta Model represented
+    as a <literal>Configuration</literal> instance and it is then the job of
+    the exporter to generate a set of code artifacts.</para>
+
+    <para>The tools provides a default set of Exporter's which can be used in
+    both Ant and the Eclipse UI. Documentation for these Exporters is in the
+    Ant and Eclipse sections.</para>
+
+    <para>Users can provide their own customer Exporter's, either by custom
+    classes implementing the Exporter interface or simply be providing custom
+    templates. This is documented at <xref linkend="hbmtemplate"/></para>
+
+        <para>NOTICE: This release uses Velocity for the templates. The next
+        release might move to an alternative template engine.</para>
+  </section>
+</chapter>
