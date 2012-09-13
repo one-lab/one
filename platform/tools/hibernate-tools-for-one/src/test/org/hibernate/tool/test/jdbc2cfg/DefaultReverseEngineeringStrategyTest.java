@@ -13,6 +13,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.hibernate.cfg.reveng.DefaultReverseEngineeringStrategy;
+import org.hibernate.cfg.reveng.DelegatingReverseEngineeringStrategy;
+import org.hibernate.cfg.reveng.ReverseEngineeringSettings;
 import org.hibernate.cfg.reveng.ReverseEngineeringStrategy;
 import org.hibernate.cfg.reveng.TableIdentifier;
 import org.hibernate.mapping.Column;
@@ -82,6 +84,25 @@ public class DefaultReverseEngineeringStrategyTest extends TestCase {
         assertEquals("order", rns.foreignKeyToEntityName("something", new TableIdentifier("product"), null, new TableIdentifier("order"), null, true ) );
     }
 	
+    public void testCustomClassNameStrategyWithCollectionName() {
+    	
+    	ReverseEngineeringStrategy custom = new DelegatingReverseEngineeringStrategy(new DefaultReverseEngineeringStrategy()) {
+    		public String tableToClassName(TableIdentifier tableIdentifier) {
+    			return super.tableToClassName( tableIdentifier ) + "Impl";
+    		}
+    	};
+
+    	custom.setSettings( new ReverseEngineeringSettings(custom) );
+    	
+    	TableIdentifier productTable = new TableIdentifier("product");
+		assertEquals("ProductImpl", custom.tableToClassName( productTable ));
+    	
+        assertEquals("productImpls", custom.foreignKeyToCollectionName("something", productTable, null, new TableIdentifier("order"), null, true ) );
+        /*assertEquals("willies", custom.foreignKeyToCollectionName("something", new TableIdentifier("willy"), null, new TableIdentifier("order"), null, true ) );
+		assertEquals("boxes", custom.foreignKeyToCollectionName("something", new TableIdentifier("box"), null, new TableIdentifier("order"), null, true ) );
+        assertEquals("order", custom.foreignKeyToEntityName("something", productTable, null, new TableIdentifier("order"), null, true ) );*/
+    }
+    
     public void testForeignKeyNamesToPropertyNames() {
     	
     	String fkName = "something";

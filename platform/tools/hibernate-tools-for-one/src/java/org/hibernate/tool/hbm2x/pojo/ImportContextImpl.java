@@ -50,7 +50,7 @@ public class ImportContextImpl implements ImportContext {
 	 * @return import string
 	 */
 	public String importType(String fqcn) {
-		String result = fqcn;
+		String result = fqcn;		
 		
 		String additionalTypePart = null;
 		if(fqcn.indexOf('<')>=0) {
@@ -63,35 +63,38 @@ public class ImportContextImpl implements ImportContext {
 			fqcn = result;
 		}
 		
+		String pureFqcn = fqcn.replace( '$', '.' );
+		
 		boolean canBeSimple = true;
 		
 		
 		String simpleName = StringHelper.unqualify(fqcn);
 		if(simpleNames.containsKey(simpleName)) {
 			String existingFqcn = (String) simpleNames.get(simpleName);
-			if(existingFqcn.equals(fqcn)) {
+			if(existingFqcn.equals(pureFqcn)) {
 				canBeSimple = true;
 			} else {
 				canBeSimple = false;
 			}
 		} else {
 			canBeSimple = true;
-			simpleNames.put(simpleName, fqcn);
-			imports.add( fqcn );
+			simpleNames.put(simpleName, pureFqcn);
+			imports.add( pureFqcn );
 		}
 		
 		
-		if ( inSamePackage(fqcn) || (imports.contains( fqcn ) && canBeSimple) ) {
+		if ( inSamePackage(fqcn) || (imports.contains( pureFqcn ) && canBeSimple) ) {
 			result = StringHelper.unqualify( result ); // dequalify
 		} else if ( inJavaLang( fqcn ) ) {
 			result = result.substring( "java.lang.".length() );
 		}
 
 		if(additionalTypePart!=null) {
-			return result + additionalTypePart;
-		} else {
-			return result;
-		}
+			result = result + additionalTypePart;
+		} 
+		
+		result = result.replace( '$', '.' );
+		return result;		
 	}
 	
 	public String staticImport(String fqcn, String member) {
@@ -129,7 +132,7 @@ public class ImportContextImpl implements ImportContext {
 		
 		for ( Iterator imps = imports.iterator(); imps.hasNext(); ) {
 				String next = (String) imps.next();
-				if(isPrimitive(next)  || inDefaultPackage(next) || inJavaLang(next) || inSamePackage(next)) {
+				if(isPrimitive(next) || inDefaultPackage(next) || inJavaLang(next) || inSamePackage(next)) {
 					// dont add automatically "imported" stuff
 				} else {
 					if(staticImports.contains(next)) {
@@ -140,6 +143,9 @@ public class ImportContextImpl implements ImportContext {
 				}
 		}
 		
+		if(buf.indexOf( "$" )>=0) {
+			return buf.toString();
+		}
 		return buf.toString();            
 	}
 }

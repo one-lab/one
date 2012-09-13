@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,8 +21,8 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.hibernate.MappingException;
 import org.hibernate.mapping.ForeignKey;
+import org.hibernate.mapping.MetaAttribute;
 import org.hibernate.mapping.Table;
-import org.hibernate.tool.hbm2x.MetaAttributeHelper;
 import org.hibernate.util.StringHelper;
 import org.hibernate.util.XMLHelper;
 import org.xml.sax.EntityResolver;
@@ -32,12 +31,12 @@ import org.xml.sax.InputSource;
 public class OverrideRepository  {
 
 	final private static Log log = LogFactory.getLog( OverrideRepository.class );
-	
+
 	final private transient XMLHelper xmlHelper;
 	final private transient EntityResolver entityResolver;
 
 	final private Map typeMappings; // from sqltypes to list of SQLTypeMapping
-	
+
 	final private List tableFilters;
 
 	final private List tables;
@@ -54,27 +53,30 @@ public class OverrideRepository  {
 	final private Map primaryKeyColumnsForTable;
 
 	final private Set excludedColumns;
-	
+
 	final private Map tableToClassName;
-	
+
 	final private List schemaSelections;
 
 	final private Map propertyNameForPrimaryKey;
 
 	final private Map compositeIdNameForTable;
 
-	final private Map foreignKeyToEntityName;
+	final private Map foreignKeyToOneName;
 
-	final private Map foreignKeyToCollectionName;
+	final private Map foreignKeyToInverseName;
 
-	final private Map foreignKeyCollectionExclude;
+	final private Map foreignKeyInverseExclude;
 
-	final private Map foreignKeyManyToOneExclude;
+	final private Map foreignKeyToOneExclude;
+
+	final private Map foreignKeyToEntityInfo;
+	final private Map foreignKeyToInverseEntityInfo;
 
 	final private Map tableMetaAttributes; // TI -> MultiMap of SimpleMetaAttributes
 
 	final private Map columnMetaAttributes;
-	
+
 	//private String defaultCatalog;
 	//private String defaultSchema;
 
@@ -97,14 +99,16 @@ public class OverrideRepository  {
 		excludedColumns = new HashSet();
 		schemaSelections = new ArrayList();
 		compositeIdNameForTable = new HashMap();
-		foreignKeyToEntityName = new HashMap();
-		foreignKeyToCollectionName = new HashMap();
-		foreignKeyCollectionExclude = new HashMap();
-		foreignKeyManyToOneExclude = new HashMap();
+		foreignKeyToOneName = new HashMap();
+		foreignKeyToInverseName = new HashMap();
+		foreignKeyInverseExclude = new HashMap();
+		foreignKeyToOneExclude = new HashMap();
 		tableMetaAttributes = new HashMap();
 		columnMetaAttributes = new HashMap();
+		foreignKeyToEntityInfo = new HashMap();
+		foreignKeyToInverseEntityInfo = new HashMap();
 	}
-	
+
 	public OverrideRepository addFile(File xmlFile) {
 		log.info( "Override file: " + xmlFile.getPath() );
 		try {
@@ -114,10 +118,10 @@ public class OverrideRepository  {
 			log.error( "Could not configure overrides from file: " + xmlFile.getPath(), e );
 			throw new MappingException( "Could not configure overrides from file: " + xmlFile.getPath(), e );
 		}
-		return this;	
-		
+		return this;
+
 	}
-	
+
 	/**
 	 * Read override from an application resource trying different classloaders.
 	 * This method will try to load the resource first from the thread context
@@ -136,7 +140,7 @@ public class OverrideRepository  {
 		}
 	}
 
-	
+
 	public OverrideRepository addInputStream(InputStream xmlInputStream) throws MappingException {
 		try {
 			List errors = new ArrayList();
@@ -169,7 +173,7 @@ public class OverrideRepository  {
 
 	private String getPreferredHibernateType(int sqlType, int length, int precision, int scale, boolean nullable) {
 		List l = (List) typeMappings.get(new TypeMappingKey(sqlType,length) );
-		
+
 		if(l == null) { // if no precise length match found, then try to find matching unknown length matches
 			l = (List) typeMappings.get(new TypeMappingKey(sqlType,SQLTypeMapping.UNKNOWN_LENGTH) );
 		}
@@ -184,12 +188,12 @@ public class OverrideRepository  {
 				if(element.getJDBCType()!=sqlType) return null;
 				if(element.match(sqlType, length, precision, scale, nullable) ) {
 					return element.getHibernateType();
-				}				
-			}			
+				}
+			}
 		}
 		return null;
 	}
-	
+
 	public OverrideRepository addTypeMapping(SQLTypeMapping sqltype) {
 		TypeMappingKey key = new TypeMappingKey(sqltype);
 		List list = (List) typeMappings.get(key);
@@ -197,20 +201,20 @@ public class OverrideRepository  {
 			list = new ArrayList();
 			typeMappings.put(key, list);
 		}
-		list.add(sqltype);				
+		list.add(sqltype);
 		return this;
 	}
-	
+
 	static class TypeMappingKey {
-		
+
 		int type;
 		int length;
-		
+
 		TypeMappingKey(SQLTypeMapping mpa) {
 			type = mpa.getJDBCType();
 			length = mpa.getLength();
 		}
-		
+
 		public TypeMappingKey(int sqlType, int length) {
 			this.type = sqlType;
 			this.length = length;
@@ -220,15 +224,15 @@ public class OverrideRepository  {
 			if(obj==null) return false;
 			if(!(obj instanceof TypeMappingKey)) return false;
 			TypeMappingKey other = (TypeMappingKey) obj;
-			
-			
+
+
 			return type==other.type && length==other.length;
 		}
-		
+
 		public int hashCode() {
 			return (type + length) % 17;
 		}
-		
+
 		public String toString() {
 			return this.getClass() + "(type:" + type + ", length:" + length + ")";
 		}
@@ -243,13 +247,13 @@ public class OverrideRepository  {
 				return value;
 			}
 		}
-		return null; 
+		return null;
 	}
 
 	protected boolean excludeTable(TableIdentifier identifier) {
 		Iterator iterator = tableFilters.iterator();
 		boolean hasInclude = false;
-		
+
 		while(iterator.hasNext() ) {
 			TableFilter tf = (TableFilter) iterator.next();
 			Boolean value = tf.exclude(identifier);
@@ -260,7 +264,7 @@ public class OverrideRepository  {
 				hasInclude = true;
 			}
 		}
-		
+
 		// can probably be simplified - but like this to be very explicit ;)
 		if(hasInclude) {
 			return true; // exclude all by default when at least one include specified
@@ -272,26 +276,26 @@ public class OverrideRepository  {
 	public void addTableFilter(TableFilter filter) {
 		tableFilters.add(filter);
 	}
-	
+
 	public ReverseEngineeringStrategy getReverseEngineeringStrategy(ReverseEngineeringStrategy delegate) {
 		return new DelegatingReverseEngineeringStrategy(delegate) {
-			
+
 			public boolean excludeTable(TableIdentifier ti) {
 				return OverrideRepository.this.excludeTable(ti);
 			}
-						
+
 			public Map tableToMetaAttributes(TableIdentifier tableIdentifier) {
-				return OverrideRepository.this.tableToMetaAttributes(tableIdentifier);							
+				return OverrideRepository.this.tableToMetaAttributes(tableIdentifier);
 			}
-			
+
 			public Map columnToMetaAttributes(TableIdentifier tableIdentifier, String column) {
-				return OverrideRepository.this.columnToMetaAttributes(tableIdentifier, column);							
+				return OverrideRepository.this.columnToMetaAttributes(tableIdentifier, column);
 			}
-			
+
 			public boolean excludeColumn(TableIdentifier identifier, String columnName) {
 				return excludedColumns.contains(TABLECOLUMN_KEY_FACTORY.newInstance(identifier, columnName));
 			}
-			
+
 			public String tableToCompositeIdName(TableIdentifier identifier) {
 				String result = (String) compositeIdNameForTable.get(identifier);
 				if(result==null) {
@@ -307,36 +311,38 @@ public class OverrideRepository  {
 					return schemaSelections;
 				}
 			}
-			
+
 			public String columnToHibernateTypeName(TableIdentifier table, String columnName, int sqlType, int length, int precision, int scale, boolean nullable, boolean generatedIdentifier) {
 				String result = null;
 				String location = "";
+				String info = " t:" + JDBCToHibernateTypeHelper.getJDBCTypeName( sqlType ) + " l:" + length + " p:" + precision + " s:" + scale + " n:" + nullable + " id:" + generatedIdentifier;
 				if(table!=null) {
-					location = "Table: " + Table.qualify(table.getCatalog(), table.getSchema(), table.getName() ) + " column: " + columnName;
+					location = Table.qualify(table.getCatalog(), table.getSchema(), table.getName() ) + "." + columnName;
 				} else {
-					location += " Column: " + columnName + " l:" + length + " p:" + precision + " s:" + scale;
+
+					location += " Column: " + columnName + info;
 				}
 				if(table!=null && columnName!=null) {
 					result = (String) typeForColumn.get(TABLECOLUMN_KEY_FACTORY.newInstance(table, columnName));
 					if(result!=null) {
-						log.debug("columnToHibernateTypeName, explicit mapping found: " + result + " for " + location);
+						log.debug("explicit column mapping found for [" + location + "] to [" + result + "]");
 						return result;
 					}
 				}
-				
+
 				result = OverrideRepository.this.getPreferredHibernateType(sqlType, length, precision, scale, nullable);
 				if(result==null) {
 					return super.columnToHibernateTypeName(table, columnName, sqlType, length, precision, scale, nullable, generatedIdentifier);
-				} 
-				else {					
-					log.debug("columnToHibernateTypeName, <type-mapping> found: " + result + " for " + location);					
+				}
+				else {
+					log.debug("<type-mapping> found for [" + location + info + "] to [" + result + "]");
 					return result;
 				}
 			}
-			
+
 			public String tableToClassName(TableIdentifier tableIdentifier) {
 				String className = (String) tableToClassName.get(tableIdentifier);
-				
+
 				if(className!=null) {
 					 if(className.indexOf( "." )>=0) {
 						 return className;
@@ -348,19 +354,19 @@ public class OverrideRepository  {
 							 return StringHelper.qualify(packageName, className);
 						 }
 					 }
-				} 
-				
+				}
+
 				String packageName = getPackageName(tableIdentifier);
 				if(packageName==null) {
 					return super.tableToClassName(tableIdentifier);
-				} 
+				}
 				else {
 					String string = super.tableToClassName(tableIdentifier);
 					if(string==null) return null;
-					return StringHelper.qualify(packageName, StringHelper.unqualify(string));					
+					return StringHelper.qualify(packageName, StringHelper.unqualify(string));
 				}
 			}
-						
+
 			public List getForeignKeys(TableIdentifier referencedTable) {
 				List list = (List) foreignKeys.get(referencedTable);
 				if(list==null) {
@@ -369,7 +375,7 @@ public class OverrideRepository  {
 					return list;
 				}
 			}
-			
+
 			public String columnToPropertyName(TableIdentifier table, String column) {
 				String result = (String) propertyNameForColumn.get(TABLECOLUMN_KEY_FACTORY.newInstance(table, column));
 				if(result==null) {
@@ -378,7 +384,7 @@ public class OverrideRepository  {
 					return result;
 				}
 			}
-			
+
 			public String tableToIdentifierPropertyName(TableIdentifier tableIdentifier) {
 				String result = (String) propertyNameForPrimaryKey.get(tableIdentifier);
 				if(result==null) {
@@ -387,54 +393,69 @@ public class OverrideRepository  {
 					return result;
 				}
 			}
-			
+
 			public String getTableIdentifierStrategyName(TableIdentifier tableIdentifier) {
 				String result = (String) identifierStrategyForTable.get(tableIdentifier);
 				if(result==null) {
-					return super.getTableIdentifierStrategyName( tableIdentifier );	
+					return super.getTableIdentifierStrategyName( tableIdentifier );
 				} else {
+					log.debug("tableIdentifierStrategy for " + tableIdentifier + " -> '" + result + "'");
 					return result;
 				}
 			}
-			
+
 			public Properties getTableIdentifierProperties(TableIdentifier tableIdentifier) {
 				Properties result = (Properties) identifierPropertiesForTable.get(tableIdentifier);
 				if(result==null) {
-					return super.getTableIdentifierProperties( tableIdentifier );	
+					return super.getTableIdentifierProperties( tableIdentifier );
 				} else {
 					return result;
 				}
 			}
-			
+
 			public List getPrimaryKeyColumnNames(TableIdentifier tableIdentifier) {
 				List result = (List) primaryKeyColumnsForTable.get(tableIdentifier);
 				if(result==null) {
-					return super.getPrimaryKeyColumnNames(tableIdentifier);	
+					return super.getPrimaryKeyColumnNames(tableIdentifier);
 				} else {
 					return result;
 				}
 			}
-			
+
 			public String foreignKeyToEntityName(String keyname, TableIdentifier fromTable, List fromColumnNames, TableIdentifier referencedTable, List referencedColumnNames, boolean uniqueReference) {
-				String property = (String) foreignKeyToEntityName.get(keyname);
+				String property = (String) foreignKeyToOneName.get(keyname);
 				if(property==null) {
 					return super.foreignKeyToEntityName(keyname, fromTable, fromColumnNames, referencedTable, referencedColumnNames, uniqueReference);
 				} else {
 					return property;
 				}
 			}
-			
+
+
+			public String foreignKeyToInverseEntityName(String keyname,
+					TableIdentifier fromTable, List fromColumnNames,
+					TableIdentifier referencedTable,
+					List referencedColumnNames, boolean uniqueReference) {
+
+				String property = (String) foreignKeyToInverseName.get(keyname);
+				if(property==null) {
+					return super.foreignKeyToInverseEntityName(keyname, fromTable, fromColumnNames, referencedTable, referencedColumnNames, uniqueReference);
+				} else {
+					return property;
+				}
+			}
+
 			public String foreignKeyToCollectionName(String keyname, TableIdentifier fromTable, List fromColumns, TableIdentifier referencedTable, List referencedColumns, boolean uniqueReference) {
-				String property = (String) foreignKeyToCollectionName.get(keyname);
+				String property = (String) foreignKeyToInverseName.get(keyname);
 				if(property==null) {
 					return super.foreignKeyToCollectionName(keyname, fromTable, fromColumns, referencedTable, referencedColumns, uniqueReference);
 				} else {
 					return property;
 				}
 			}
-			
+
 			public boolean excludeForeignKeyAsCollection(String keyname, TableIdentifier fromTable, List fromColumns, TableIdentifier referencedTable, List referencedColumns) {
-				Boolean bool = (Boolean) foreignKeyCollectionExclude.get(keyname);
+				Boolean bool = (Boolean) foreignKeyInverseExclude.get(keyname);
 				if(bool!=null) {
 					return bool.booleanValue();
 				} else {
@@ -442,9 +463,9 @@ public class OverrideRepository  {
 							referencedTable, referencedColumns );
 				}
 			}
-			
+
 			public boolean excludeForeignKeyAsManytoOne(String keyname, TableIdentifier fromTable, List fromColumns, TableIdentifier referencedTable, List referencedColumns) {
-				Boolean bool = (Boolean) foreignKeyManyToOneExclude.get(keyname);
+				Boolean bool = (Boolean) foreignKeyToOneExclude.get(keyname);
 				if(bool!=null) {
 					return bool.booleanValue();
 				} else {
@@ -452,7 +473,26 @@ public class OverrideRepository  {
 							referencedTable, referencedColumns );
 				}
 			}
-		}; 
+
+
+			public AssociationInfo foreignKeyToInverseAssociationInfo(ForeignKey foreignKey) {
+				AssociationInfo fkei = (AssociationInfo) foreignKeyToInverseEntityInfo.get(foreignKey.getName());
+				if(fkei!=null) {
+					return fkei;
+				} else {
+					return super.foreignKeyToInverseAssociationInfo(foreignKey);
+				}
+			}
+
+			public AssociationInfo foreignKeyToAssociationInfo(ForeignKey foreignKey) {
+				AssociationInfo fkei = (AssociationInfo) foreignKeyToEntityInfo.get(foreignKey.getName());
+				if(fkei!=null) {
+					return fkei;
+				} else {
+					return super.foreignKeyToAssociationInfo(foreignKey);
+				}
+			}
+		};
 	}
 
 	protected Map columnToMetaAttributes(TableIdentifier tableIdentifier, String column) {
@@ -460,7 +500,7 @@ public class OverrideRepository  {
 		if(specific!=null && !specific.isEmpty()) {
 			return toMetaAttributes(specific);
 		}
-		
+
 		return null;
 	}
 
@@ -474,13 +514,13 @@ public class OverrideRepository  {
 		if(general!=null && !general.isEmpty()) {
 			return toMetaAttributes(general);
 		}
-		
+
 		return null;
-		
+
 		/* inheritance not defined yet
 		 if(specific==null) { specific = Collections.EMPTY_MAP; }
 		if(general==null) { general = Collections.EMPTY_MAP; }
-		
+
 		MultiMap map = MetaAttributeBinder.mergeMetaMaps( specific, general );
 		*/
 		/*
@@ -493,7 +533,7 @@ public class OverrideRepository  {
 	}
 
 	private Map findGeneralAttributes(TableIdentifier identifier) {
-		Iterator iterator = tableFilters.iterator(); 
+		Iterator iterator = tableFilters.iterator();
 		while(iterator.hasNext() ) {
 			TableFilter tf = (TableFilter) iterator.next();
 			Map value = tf.getMetaAttributes(identifier);
@@ -506,16 +546,16 @@ public class OverrideRepository  {
 
 	private Map toMetaAttributes(Map value) {
 		Map result = new HashMap();
-		
+
 		Set set = value.entrySet();
 		for (Iterator iter = set.iterator(); iter.hasNext();) {
 			Map.Entry entry = (Map.Entry) iter.next();
 			String name = (String) entry.getKey();
 			List values = (List) entry.getValue();
-			
-			result.put(name, MetaAttributeBinder.toRealMetaAttribute(name, values));			
+
+			result.put(name, MetaAttributeBinder.toRealMetaAttribute(name, values));
 		}
-		
+
 		return result;
 	}
 
@@ -533,20 +573,20 @@ public class OverrideRepository  {
 				existing = new ArrayList();
 				foreignKeys.put(identifier, existing);
 			}
-			existing.add( fk );			
+			existing.add( fk );
 		}
-		
+
 		tables.add(table);
-		
+
 		if(StringHelper.isNotEmpty(wantedClassName)) {
 			tableToClassName.put(TableIdentifier.create(table), wantedClassName);
 		}
 	}
 
-	
+
 	private static final TableColumnKeyFactory TABLECOLUMN_KEY_FACTORY;
 	static {
-		TABLECOLUMN_KEY_FACTORY = (TableColumnKeyFactory) KeyFactory.create(TableColumnKeyFactory.class);		
+		TABLECOLUMN_KEY_FACTORY = (TableColumnKeyFactory) KeyFactory.create(TableColumnKeyFactory.class);
 	}
 
 	static interface TableColumnKeyFactory {
@@ -558,11 +598,11 @@ public class OverrideRepository  {
 			typeForColumn.put(TABLECOLUMN_KEY_FACTORY.newInstance(identifier, columnName), type);
 		}
 	}
-	
+
 	public void setExcludedColumn(TableIdentifier tableIdentifier, String columnName) {
-		excludedColumns.add(TABLECOLUMN_KEY_FACTORY.newInstance(tableIdentifier, columnName));		
+		excludedColumns.add(TABLECOLUMN_KEY_FACTORY.newInstance(tableIdentifier, columnName));
 	}
-	
+
 	public void setPropertyNameForColumn(TableIdentifier identifier, String columnName, String property) {
 		if(StringHelper.isNotEmpty(property)) {
 			propertyNameForColumn.put(TABLECOLUMN_KEY_FACTORY.newInstance(identifier, columnName), property);
@@ -574,17 +614,17 @@ public class OverrideRepository  {
 			final TableIdentifier tid = TableIdentifier.create(table);
 			identifierStrategyForTable.put(tid, identifierClass);
 			identifierPropertiesForTable.put(tid, params);
-		}		
+		}
 	}
 
 	public void addPrimaryKeyNamesForTable(Table table, List boundColumnNames, String propertyName, String compositeIdName) {
-		TableIdentifier tableIdentifier = TableIdentifier.create(table);		
+		TableIdentifier tableIdentifier = TableIdentifier.create(table);
 		if(boundColumnNames!=null && !boundColumnNames.isEmpty()) {
 			primaryKeyColumnsForTable.put(tableIdentifier, boundColumnNames);
 		}
 		if(StringHelper.isNotEmpty(propertyName)) {
 			propertyNameForPrimaryKey.put(tableIdentifier, propertyName);
-		}		
+		}
 		if(StringHelper.isNotEmpty(compositeIdName)) {
 			compositeIdNameForTable.put(tableIdentifier, compositeIdName);
 		}
@@ -602,36 +642,48 @@ public class OverrideRepository  {
 		schemaSelections.add(schemaSelection);
 	}
 
-	public void addForeignKeyInfo(String constraintName, String manyToOneProperty, Boolean excludeManyToOne, String collectionProperty, Boolean excludeCollection) {
-		if(StringHelper.isNotEmpty(manyToOneProperty)) {
-			foreignKeyToEntityName.put(constraintName, manyToOneProperty);
-		}		
-		if(StringHelper.isNotEmpty(collectionProperty)) {
-			foreignKeyToCollectionName.put(constraintName, collectionProperty);
+	/**
+	 * Both sides of the FK are important,
+	 * the owning side can generate a toOne (ManyToOne or OneToOne), we call this side foreignKeyToOne
+	 * the inverse side can generate a OneToMany OR a OneToOne (in case we have a pure bidirectional OneToOne, we call this side foreignKeyToInverse
+	 */
+	public void addForeignKeyInfo(String constraintName, String toOneProperty, Boolean excludeToOne, String inverseProperty, Boolean excludeInverse, AssociationInfo associationInfo, AssociationInfo inverseAssociationInfo) {
+		if(StringHelper.isNotEmpty(toOneProperty)) {
+			foreignKeyToOneName.put(constraintName, toOneProperty);
 		}
-		if(excludeCollection!=null) {
-			foreignKeyCollectionExclude.put(constraintName, excludeCollection);
+		if(StringHelper.isNotEmpty(inverseProperty)) {
+			foreignKeyToInverseName.put(constraintName, inverseProperty);
 		}
-		if(excludeManyToOne!=null) {
-			foreignKeyManyToOneExclude.put(constraintName, excludeManyToOne);
+		if(excludeInverse!=null) {
+			foreignKeyInverseExclude.put(constraintName, excludeInverse);
 		}
+		if(excludeToOne!=null) {
+			foreignKeyToOneExclude.put(constraintName, excludeToOne);
+		}
+		if(associationInfo!=null) {
+			foreignKeyToEntityInfo.put(constraintName, associationInfo);
+		}
+		if(inverseAssociationInfo!=null) {
+			foreignKeyToInverseEntityInfo.put(constraintName, inverseAssociationInfo);
+		}
+
 	}
 
 	public void addMetaAttributeInfo(Table table, Map map) {
 		if(map!=null && !map.isEmpty()) {
 			tableMetaAttributes.put(TableIdentifier.create(table), map);
 		}
-		
+
 	}
 
 	public void addMetaAttributeInfo(TableIdentifier tableIdentifier, String name, MultiMap map) {
 		if(map!=null && !map.isEmpty()) {
 			columnMetaAttributes.put(TABLECOLUMN_KEY_FACTORY.newInstance( tableIdentifier, name ), map);
 		}
-		
-	}
-	
 
-	
-		
+	}
+
+
+
+
 }

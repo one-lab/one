@@ -14,6 +14,7 @@ import org.hibernate.mapping.OneToOne;
 import org.hibernate.mapping.PrimitiveArray;
 import org.hibernate.mapping.Set;
 import org.hibernate.mapping.SimpleValue;
+import org.hibernate.mapping.Value;
 import org.hibernate.mapping.ValueVisitor;
 
 /**
@@ -35,8 +36,9 @@ public class DefaultValueVisitor implements ValueVisitor {
 		this.throwException = throwException;
 	}
 
-	protected Object handle(Object o) {
+	protected Object handle(Value o) {
 		if (throwException) { 
+			
 			throw new UnsupportedOperationException("accept on " + o); 
 		} 
 		else { return null; }

@@ -12,7 +12,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.JDBCMetaDataConfiguration;
-import org.hibernate.cfg.Settings;
 import org.hibernate.cfg.reveng.DefaultReverseEngineeringStrategy;
 import org.hibernate.cfg.reveng.OverrideRepository;
 import org.hibernate.cfg.reveng.ReverseEngineeringSettings;
@@ -25,13 +24,14 @@ import org.hibernate.util.ReflectHelper;
  * @author <a href='mailto:the_mindstorm@evolva.ro'>Alexandru Popescu</a>
  */
 public class JDBCConfigurationTask extends ConfigurationTask {
-	//not exposed here.
+	//not expfosed here.
     private boolean preferBasicCompositeIds = true;
     
     private String reverseEngineeringStrategyClass;
     private String packageName;
 	private Path revengFiles;
 
+	private boolean detectOneToOne = true;
 	private boolean detectManyToMany = true;
 	private boolean detectOptimisticLock = true;
     
@@ -52,14 +52,6 @@ public class JDBCConfigurationTask extends ConfigurationTask {
         jmdc.setPreferBasicCompositeIds(preferBasicCompositeIds);
 
 		DefaultReverseEngineeringStrategy defaultStrategy = new DefaultReverseEngineeringStrategy();
-		ReverseEngineeringSettings qqsettings = 
-				new ReverseEngineeringSettings().setDefaultPackageName(packageName)
-				.setDetectManyToMany( detectManyToMany )
-				.setDetectOptimisticLock( detectOptimisticLock );
-		
-        if(packageName!=null) {
-            defaultStrategy.setSettings(qqsettings);
-        }
 		
 		ReverseEngineeringStrategy strategy = defaultStrategy;
 		
@@ -76,7 +68,16 @@ public class JDBCConfigurationTask extends ConfigurationTask {
 		if(reverseEngineeringStrategyClass!=null) {
 			strategy = loadreverseEngineeringStrategy(reverseEngineeringStrategyClass, strategy);			
 		}
+		
+		ReverseEngineeringSettings qqsettings = 
+			new ReverseEngineeringSettings(strategy).setDefaultPackageName(packageName)
+			.setDetectManyToMany( detectManyToMany )
+			.setDetectOneToOne( detectOneToOne )
+			.setDetectOptimisticLock( detectOptimisticLock );
+	
+		defaultStrategy.setSettings(qqsettings);
 		strategy.setSettings(qqsettings);
+		
         jmdc.setReverseEngineeringStrategy(strategy);
         
 		jmdc.readFromJDBC(); 
@@ -97,6 +98,10 @@ public class JDBCConfigurationTask extends ConfigurationTask {
 	
 	public void setPreferBasicCompositeIds(boolean b) {
 		preferBasicCompositeIds = b;
+	}
+	
+	public void setDetectOneToOne(boolean b) {
+		detectOneToOne = b;
 	}
 	
 	public void setDetectManyToMany(boolean b) {

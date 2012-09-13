@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.hibernate.connection.ConnectionProvider;
-import org.hibernate.exception.SQLExceptionConverter;
 import org.hibernate.mapping.ForeignKey;
 import org.hibernate.mapping.Table;
 
@@ -65,8 +63,8 @@ public class DelegatingReverseEngineeringStrategy implements ReverseEngineeringS
 		return delegate==null?null:delegate.classNameToCompositeIdName(className);
 	}
 
-	public void configure(ConnectionProvider provider, SQLExceptionConverter sec) {
-		if(delegate!=null) delegate.configure(provider,sec);		
+	public void configure(ReverseEngineeringRuntimeInfo runtimeInfo) {
+		if(delegate!=null) delegate.configure(runtimeInfo);		
 	}
 
 	public void close() {
@@ -109,6 +107,13 @@ public class DelegatingReverseEngineeringStrategy implements ReverseEngineeringS
 		return delegate==null?true:delegate.isForeignKeyCollectionLazy(name, foreignKeyTable, columns, foreignKeyReferencedTable, referencedColumns);
 	}
 
+	/**
+	 * Initialize the settings. 
+	 * 
+	 * If subclasses need to use the Settings then it should keep its own reference, but still remember to initialize the delegates settings by calling super.setSettings(settings).
+	 * 
+	 * @see ReverseEngineeringStrategy.setSettings
+	 */
 	public void setSettings(ReverseEngineeringSettings settings) {
 		if(delegate!=null) delegate.setSettings(settings);
 	}
@@ -116,6 +121,11 @@ public class DelegatingReverseEngineeringStrategy implements ReverseEngineeringS
 	public boolean isManyToManyTable(Table table) {
 		return delegate==null?true:delegate.isManyToManyTable( table );
 	}
+	
+	public boolean isOneToOne(ForeignKey foreignKey) { 
+		return delegate==null?true:delegate.isOneToOne( foreignKey );
+    }
+
 
 	public String foreignKeyToManyToManyName(ForeignKey fromKey, TableIdentifier middleTable, ForeignKey toKey, boolean uniqueReference) {
 		return delegate==null?null:delegate.foreignKeyToManyToManyName( fromKey, middleTable, toKey, uniqueReference );
@@ -128,5 +138,20 @@ public class DelegatingReverseEngineeringStrategy implements ReverseEngineeringS
 	public Map columnToMetaAttributes(TableIdentifier identifier, String column) {
 		return delegate==null?null:delegate.columnToMetaAttributes( identifier, column );
 	}
+
+	public AssociationInfo foreignKeyToAssociationInfo(ForeignKey foreignKey) {
+		return delegate==null?null:delegate.foreignKeyToAssociationInfo(foreignKey);
+	}
+	
+	public AssociationInfo foreignKeyToInverseAssociationInfo(ForeignKey foreignKey) {
+		return delegate==null?null:delegate.foreignKeyToInverseAssociationInfo(foreignKey);
+	}
+	
+	public String foreignKeyToInverseEntityName(String keyname,
+			TableIdentifier fromTable, List fromColumnNames,
+			TableIdentifier referencedTable, List referencedColumnNames,
+			boolean uniqueReference) {
+		return delegate==null?null:delegate.foreignKeyToInverseEntityName(keyname, fromTable, fromColumnNames, referencedTable, referencedColumnNames, uniqueReference);
+	}	
 	
 }

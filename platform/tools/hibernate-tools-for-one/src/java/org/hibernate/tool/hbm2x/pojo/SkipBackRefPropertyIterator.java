@@ -7,7 +7,7 @@ import org.hibernate.mapping.Property;
 
 /**
  * Helper iterator to ignore "backrefs" properties in hibernate mapping model.
- * 
+ *
  * @author Max Rydahl Andersen
  *
  */
@@ -17,7 +17,7 @@ public class SkipBackRefPropertyIterator implements Iterator {
 
 	private Property backLog;
 
-	SkipBackRefPropertyIterator(Iterator iterator) {
+	public SkipBackRefPropertyIterator(Iterator iterator) {
 		delegate = iterator;
 	}
 

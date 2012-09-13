@@ -21,6 +21,10 @@ public class EntityNameFromValueVisitor extends DefaultValueVisitor {
 		super( true );
 	}
 		
+	public EntityNameFromValueVisitor(boolean b) {
+		super(b);
+	}
+
 	public Object accept(OneToOne o) {
 		return acceptToOne(o);
 	}

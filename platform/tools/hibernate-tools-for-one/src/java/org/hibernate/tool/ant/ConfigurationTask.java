@@ -35,7 +35,7 @@ public class ConfigurationTask extends Task {
 	private Configuration cfg;
 	private File configurationFile;
 	private File propertyFile;
-	private String entityResolver;
+	protected String entityResolver;
 	private String namingStrategy;
 	
 	public ConfigurationTask() {
@@ -67,19 +67,7 @@ public class ConfigurationTask extends Task {
 	 */
 	protected void doConfiguration(Configuration configuration) {	
 		validateParameters();		
-		if (propertyFile!=null) { 
-			Properties properties = new Properties(); // TODO: should we "inherit" from the ant projects properties ?
-			try {
-				properties.load(new FileInputStream(propertyFile) );
-			} 
-			catch (FileNotFoundException e) {
-				throw new BuildException(propertyFile + " not found.",e);					
-			} 
-			catch (IOException e) {
-				throw new BuildException("Problem while loading " + propertyFile,e);				
-			}
-			configuration.setProperties(properties);
-		}
+		
 		if (entityResolver != null) {
 			try {
 				Class resolver = ReflectHelper.classForName(entityResolver, this.getClass());
@@ -107,6 +95,31 @@ public class ConfigurationTask extends Task {
 		
 		if (configurationFile != null) configuration.configure( configurationFile );
 		addMappings(getFiles() );
+		Properties p = getProperties();
+		if(p!=null) {		
+			Properties overrides = new Properties();
+			overrides.putAll(configuration.getProperties());
+			overrides.putAll(p);
+			configuration.setProperties(overrides);
+		}		
+	}
+
+	protected Properties getProperties() {
+		if (propertyFile!=null) { 
+			Properties properties = new Properties(); // TODO: should we "inherit" from the ant projects properties ?
+			try {
+				properties.load(new FileInputStream(propertyFile) );
+				return properties;
+			} 
+			catch (FileNotFoundException e) {
+				throw new BuildException(propertyFile + " not found.",e);					
+			} 
+			catch (IOException e) {
+				throw new BuildException("Problem while loading " + propertyFile,e);				
+			}		
+		} else {
+			return null;
+		}
 	}
 	
 	

@@ -6,13 +6,13 @@
 <#-- explicitly set the column name for this property-->
 </#if>
 </#if>
-<#if c2h.isManyToOne(property)>
-<#--TODO support @OneToOne true and false-->    
-@${pojo.importType("javax.persistence.ManyToOne")}(cascade={${pojo.getCascadeType(property)}},
-        fetch=${pojo.getFetchType(property)})
-    ${pojo.getHibernateCascadeTypeAnnotation(property)}
+
+<#if c2h.isOneToOne(property)>
+${pojo.generateOneToOneAnnotation(property, cfg)}
+<#elseif c2h.isManyToOne(property)>
+${pojo.generateManyToOneAnnotation(property)}
 <#--TODO support optional and targetEntity-->    
-${pojo.generateJoinColumnsAnnotation(property)}
+${pojo.generateJoinColumnsAnnotation(property, cfg)}
 <#elseif c2h.isCollection(property)>
 ${pojo.generateCollectionAnnotation(property, cfg)}
 <#else>

@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.hibernate.connection.ConnectionProvider;
-import org.hibernate.exception.SQLExceptionConverter;
+import org.hibernate.cfg.reveng.dialect.MetaDataDialect;
 import org.hibernate.mapping.ForeignKey;
 import org.hibernate.mapping.MetaAttribute;
 import org.hibernate.mapping.Table;
@@ -13,7 +12,7 @@ import org.hibernate.mapping.Table;
 public interface ReverseEngineeringStrategy {
 
 	/**
-	 * Generic method used to initialize the reverse engineering strategy. 
+	 * Generic method used to initialize the reverse engineering strategy.
 	 * 
 	 * @param settings used for this
 	 */
@@ -22,12 +21,11 @@ public interface ReverseEngineeringStrategy {
 	/**
 	 * Configure the reverse engineering strategy. Called before reverse engineering commences.
 	 * 
-	 * This is mainly for exotic strategies to get access to a connection. 
+	 * This is mainly for exotic strategies to get access to a connection.
 	 *  
-	 * @param provider a connectionprovider. It is the responsibility of the metadatadialect to open/close any used connections via this provider.
-	 * @param sec sqlexceptionConverter, use to convert any possible SQLExceptions.
+	 * @param runtimeInfo 
 	 */
-	public void configure(ConnectionProvider provider, SQLExceptionConverter sec);
+	public void configure(ReverseEngineeringRuntimeInfo runtimeInfo);
 
 
 	/**
@@ -74,6 +72,10 @@ public interface ReverseEngineeringStrategy {
 	 */
 	public List getForeignKeys(TableIdentifier referencedTable);
 
+	/** 
+	 * @param identifier the table to look up for
+	 * @return the identifier strategy name wanted for a specific table, null if use what the database metadata can tell. 
+	 */
 	public String getTableIdentifierStrategyName(TableIdentifier identifier);
 
 	public Properties getTableIdentifierProperties(TableIdentifier identifier);
@@ -164,6 +166,16 @@ public interface ReverseEngineeringStrategy {
      */
     public String foreignKeyToEntityName(String keyname, TableIdentifier fromTable, List fromColumnNames, TableIdentifier referencedTable, List referencedColumnNames, boolean uniqueReference);
 
+    /**
+     * Used to rename the inverse one-to-one properties.
+     * 
+     * @param fromColumns list of Column instances on the fromTable. Only col.getName() should be assumed to be correct 
+     * @param referencedColumns list of Column instances on the referenced Table. Only col.getName() should be assumed to be correct
+     * @param uniqueReference true if there is no other references to the same table
+     * @return null if use defaults or non-empty String with a specific name 
+     */
+    public String foreignKeyToInverseEntityName(String keyname, TableIdentifier fromTable, List fromColumnNames, TableIdentifier referencedTable, List referencedColumnNames, boolean uniqueReference);
+    
 	/**
 	 * @param table
 	 * @return true if this table is considered to be a many-to-many table.
@@ -180,7 +192,9 @@ public interface ReverseEngineeringStrategy {
      */
     public String foreignKeyToManyToManyName(ForeignKey fromKey, TableIdentifier middleTable, ForeignKey toKey, boolean uniqueReference);
 
-	
-	
-	
+	public boolean isOneToOne(ForeignKey foreignKey);
+
+	public AssociationInfo foreignKeyToAssociationInfo(ForeignKey foreignKey);
+	public AssociationInfo foreignKeyToInverseAssociationInfo(ForeignKey foreignKey);
+		
 }

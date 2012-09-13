@@ -28,8 +28,8 @@ import org.hibernate.tool.JDBCMetaDataBinderTestCase;
 public class DefaultSchemaCatalogTest extends JDBCMetaDataBinderTestCase {
 	
 	
-	protected void configure(JDBCMetaDataConfiguration cfg) {
-		super.configure( cfg );
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+		super.configure( configuration );
 	}
 	
 	public void testReadOnlySpecificSchema() {
@@ -121,7 +121,7 @@ public class DefaultSchemaCatalogTest extends JDBCMetaDataBinderTestCase {
 	protected String[] getCreateSQL() {
 		
 		return new String[] {
-				"create schema ovrtest AUTHORIZATION DBA ",
+				"create schema ovrtest AUTHORIZATION DBA",
 				"create table ovrtest.catmaster ( id char not null, name varchar(20), primary key (id) )",
 				"create table ovrtest.catchild  ( childid char not null, masterref char, primary key (childid), foreign key (masterref) references catmaster(id) )",
 				"create table master ( id char not null, name varchar(20), primary key (id) )",

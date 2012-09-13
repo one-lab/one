@@ -1,34 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<HTML>
+<html>
+	<head>
+		<title>Hibernate Mappings - Schema List</title>
+		<link rel="stylesheet" type="text/css" href="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" title="Style"/>
+	</head>
+	<body class="List">
 
-<HEAD>
+		<p>
+			<a href="${docFileManager.getRef(docFile, docFileManager.getAllTablesDocFile())}" target="tablesFrame">All Tables</a>
+		</p>
 
-<TITLE>Hibernate Mappings - Schema List</TITLE>
+		<p class="ListTitleFont">
+			Schemas
+		</p>
 
-<LINK REL ="stylesheet" TYPE="text/css" HREF="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" TITLE="Style">
+		<p>
+			<#foreach schema in schemaList>
+				<a href="${docFileManager.getRef(docFile, docFileManager.getSchemaTableListDocFile(schema))}" target="tablesFrame">${schema}</a><br/>
+			</#foreach>
+		</p>
 
-</HEAD>
-
-<BODY>
-
-<TABLE BORDER="0" WIDTH="100%" SUMMARY="">
-	<TR>
-		<TD NOWRAP>
-			<FONT CLASS="ListTitleFont">
-				${title}
-			</FONT>
-			<BR>
-				<A HREF="${docFileManager.getRef(docFile, docFileManager.getAllTablesDocFile())}" TARGET="tablesFrame">all tables</A>
-			<BR>
-<#foreach schema in schemaList>
-				<A HREF="${docFileManager.getRef(docFile, docFileManager.getSchemaTableListDocFile(schema))}" TARGET="tablesFrame">${schema}</A>
-			<BR>
-</#foreach>
-		</TD>
-	</TR>
-</TABLE>
-
-</BODY>
-
-</HTML>
+	</body>
+</html>

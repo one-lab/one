@@ -5,6 +5,7 @@
 package org.hibernate.tool.hbm2x;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +39,12 @@ public class Hbm2DaoTest extends NonReflectiveTestCase {
 		assertFileAndExists(new File(getOutputDir(), "org/hibernate/tool/hbm2x/AuthorHome.java") );
 	}
 	
-	public void testCompilable() {
+	public void testCompilable() throws IOException {
 		
 		File file = new File("compilable");
 		file.mkdir();
+		
+		generateComparator();
 		
 		List list = new ArrayList();
 		TestHelper.compile(getOutputDir(), file, TestHelper.visitAllFiles(getOutputDir(), list), "1.5", "" );

@@ -61,10 +61,18 @@ public class QueryExporter extends AbstractExporter {
 			}
 			transaction.commit();
 		} catch(HibernateException he) {
-			if(transaction!=null) transaction.rollback();
+			if(transaction!=null) {
+				transaction.rollback();
+			}
+			throw new ExporterException("Error occured while trying to execute query", he);
 		} finally {			
-			session.close();
-			session.getSessionFactory().close();
+			if(session!=null) {
+				session.close();				
+			}
+			if(sessionFactory!=null) {
+				sessionFactory.close();
+			}
+			
 			
 		}
 	}

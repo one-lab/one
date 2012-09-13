@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,15 +41,15 @@ public class DocExporter extends AbstractExporter {
     private static final String FILE_HIBERNATE_IMAGE = "doc/hibernate_logo.gif";
 
     /**
+     * Extends Image.
+     */
+    private static final String FILE_EXTENDS_IMAGE = "doc/inherit.gif";
+
+    /**
      * Main index page.
      */
     private static final String FILE_INDEX = "doc/index.html";
     
-    /**
-     * The main header file.
-     */
-    private static final String FILE_HEADER = "doc/header.html";
-
     /**
      * Template used for the index of the table documentation.
      */
@@ -100,6 +101,11 @@ public class DocExporter extends AbstractExporter {
     private static final String FTL_TABLES_TABLE_LIST = "doc/tables/table-list.ftl";
 
     /**
+     * Template used for table lists for a specific schema.
+     */
+    private static final String FTL_TABLES_PERSCHEMA_TABLE_LIST = "doc/tables/schema-table-list.ftl";
+
+    /**
      * Template used for schema lists.
      */
     private static final String FTL_TABLES_SCHEMA_LIST = "doc/tables/schema-list.ftl";
@@ -123,12 +129,6 @@ public class DocExporter extends AbstractExporter {
      * Doc File Manager.
      */
     private DocFileManager docFileManager;
-
-    /**
-     * As of now we are not using generics. In future we may allow to pass one of the parameters in ant for generics 
-     */
-    //TODO Should we allow user to make use of genrics?
-    private boolean jdk5 = false;
     
     /**
      * Creates a new object.
@@ -170,6 +170,7 @@ public class DocExporter extends AbstractExporter {
 
 	private boolean generateDot() {
 		String cmd = getProperties().getProperty( "dot.executable" );
+		boolean ignoreError = Boolean.parseBoolean(getProperties().getProperty("dot.ignoreerror", "false"));
 		
 		if(StringHelper.isNotEmpty( cmd )) {
 			try {
@@ -186,19 +187,27 @@ public class DocExporter extends AbstractExporter {
 				exporter.setProperties( getProperties() );
 				exporter.start();
 				
-				dotToFile( cmd, new File(getOutputDirectory(), "entities/entitygraph.dot").toString(), new File(getOutputDirectory(), "entities/entitygraph.png").toString());
-				dotToFile( cmd, new File(getOutputDirectory(), "entities/entitygraph.dot").toString(), new File(getOutputDirectory(), "entities/entitygraph.svg").toString());
-				dotToFile( cmd, new File(getOutputDirectory(), "entities/entitygraph.dot").toString(), new File(getOutputDirectory(), "entities/entitygraph.cmap").toString());
 				
-				dotToFile( cmd, new File(getOutputDirectory(), "tables/tablegraph.dot").toString(), new File(getOutputDirectory(), "tables/tablegraph.png").toString());
-				dotToFile( cmd, new File(getOutputDirectory(), "tables/tablegraph.dot").toString(), new File(getOutputDirectory(), "tables/tablegraph.svg").toString());
-				dotToFile( cmd, new File(getOutputDirectory(), "tables/tablegraph.dot").toString(), new File(getOutputDirectory(), "tables/tablegraph.cmap").toString());
+				File entityGraphDot = new File(getOutputDirectory(), "entities/entitygraph.dot");
+				dotToFile( cmd, entityGraphDot.toString(), new File(getOutputDirectory(), "entities/entitygraph.png").toString());
+				dotToFile( cmd, entityGraphDot.toString(), new File(getOutputDirectory(), "entities/entitygraph.svg").toString());
+				dotToFile( cmd, entityGraphDot.toString(), new File(getOutputDirectory(), "entities/entitygraph.cmap").toString());
+				
+				File tableGraphDot = new File(getOutputDirectory(), "tables/tablegraph.dot");
+				dotToFile( cmd, tableGraphDot.toString(), new File(getOutputDirectory(), "tables/tablegraph.png").toString());
+				dotToFile( cmd, tableGraphDot.toString(), new File(getOutputDirectory(), "tables/tablegraph.svg").toString());
+				dotToFile( cmd, tableGraphDot.toString(), new File(getOutputDirectory(), "tables/tablegraph.cmap").toString());
 			
 				return true;
 
 			}
 			catch (IOException e) {
-				throw new HibernateException("Problem while generating DOT graph for Configuration", e);
+				if(ignoreError) {
+					log.warn( "Skipping entitygraph creation since dot.executable was not found and dot.ignoreerror=false." );
+					return false;
+				} else {
+					throw new HibernateException("Problem while generating DOT graph for Configuration (set dot.ignoreerror=false to ignore)", e);
+				}
 			}
 		} else {
 			log.info( "Skipping entitygraph creation since dot.executable is empty or not-specified." );
@@ -270,7 +279,9 @@ public class DocExporter extends AbstractExporter {
 	
 
 	protected void setupContext() {
-		getProperties().put("jdk5", "" + useJdk5());
+		if(!getProperties().contains( "jdk5" )) {
+			getProperties().setProperty( "jdk5", "true" );
+		}		
 		super.setupContext();
 		docHelper = new DocHelper( getConfiguration(), getCfg2JavaTool() );
         docFileManager = new DocFileManager(docHelper, getOutputDirectory() );
@@ -286,20 +297,20 @@ public class DocExporter extends AbstractExporter {
         try {
             DocFile cssStylesDocFile = docFileManager.getCssStylesDocFile();
 
-            DocFileManager.copy(FILE_CSS_DEFINITION, cssStylesDocFile.getFile() );
+            processTemplate(Collections.EMPTY_MAP, FILE_CSS_DEFINITION, cssStylesDocFile.getFile());
 
             DocFile hibernateLogoDocFile = docFileManager.getHibernateImageDocFile();
 
-            DocFileManager.copy(FILE_HIBERNATE_IMAGE,
+            DocFileManager.copy(this.getClass().getClassLoader(), FILE_HIBERNATE_IMAGE,
                     hibernateLogoDocFile.getFile() );
 
+            DocFile extendsImageDocFile = docFileManager.getExtendsImageDocFile();
+                        
+            DocFileManager.copy(this.getClass().getClassLoader(), FILE_EXTENDS_IMAGE, extendsImageDocFile.getFile());
+            
             DocFile mainIndexDocFile = docFileManager.getMainIndexDocFile();
 
-            DocFileManager.copy(FILE_INDEX, mainIndexDocFile.getFile() );
-            
-            DocFile headerFile = docFileManager.getHeaderDocFile();
-            
-            DocFileManager.copy(FILE_HEADER, headerFile.getFile() );
+            processTemplate(Collections.EMPTY_MAP, FILE_INDEX, mainIndexDocFile.getFile() );
         } 
         catch (IOException ioe) {
             throw new RuntimeException("Error while copying files.", ioe);
@@ -446,7 +457,6 @@ public class DocExporter extends AbstractExporter {
 
         Map parameters = new HashMap();
         parameters.put("docFile", docFile);
-        parameters.put("title", "Package List");
         List list = docHelper.getPackages();
         //Remove All Classes
         list.remove(0);
@@ -466,7 +476,6 @@ public class DocExporter extends AbstractExporter {
 
         Map parameters = new HashMap();
         parameters.put("docFile", docFile);
-        parameters.put("title", "All Entities");
         parameters.put("classList", docHelper.getClasses());  
 
         processTemplate(parameters, FTL_ENTITIES_ENTITY_LIST, file);
@@ -530,7 +539,6 @@ public class DocExporter extends AbstractExporter {
 
         Map parameters = new HashMap();
         parameters.put("docFile", docFile);
-        parameters.put("title", "Schema List");
         parameters.put("schemaList", docHelper.getSchemas() );
 
         processTemplate(parameters, FTL_TABLES_SCHEMA_LIST, file);
@@ -546,7 +554,6 @@ public class DocExporter extends AbstractExporter {
 
         Map parameters = new HashMap();
         parameters.put("docFile", docFile);
-        parameters.put("title", "All Tables");
         parameters.put("tableList", docHelper.getTables() );
 
         processTemplate(parameters, FTL_TABLES_TABLE_LIST, file);
@@ -564,10 +571,10 @@ public class DocExporter extends AbstractExporter {
 
             Map parameters = new HashMap();
             parameters.put("docFile", docFile);
-            parameters.put("title", "Tables for " + schemaName);
+            parameters.put("title", schemaName);
             parameters.put("tableList", docHelper.getTables(schemaName) );
 
-            processTemplate(parameters, FTL_TABLES_TABLE_LIST, file);
+            processTemplate(parameters, FTL_TABLES_PERSCHEMA_TABLE_LIST, file);
         }
     }
 
@@ -619,13 +626,5 @@ public class DocExporter extends AbstractExporter {
     public String getName() {
     	return "hbm2doc";
     }
-    
-	public boolean useJdk5() {
-		return jdk5;
-	}
-
-	public void setJdk5(boolean jdk5) {
-		this.jdk5 = jdk5;
-	}
-    
+       
 }

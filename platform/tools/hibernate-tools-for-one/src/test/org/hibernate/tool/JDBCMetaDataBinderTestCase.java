@@ -10,12 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
 
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.JDBCMetaDataConfiguration;
 import org.hibernate.cfg.Settings;
 import org.hibernate.cfg.reveng.TableIdentifier;
-import org.hibernate.cfg.reveng.dialect.JDBCMetaDataDialect;
 import org.hibernate.mapping.ForeignKey;
 import org.hibernate.mapping.Table;
 
@@ -25,6 +25,8 @@ import org.hibernate.mapping.Table;
  */
 public abstract class JDBCMetaDataBinderTestCase extends BaseTestCase {
 
+	private Log log = LogFactory.getLog( this.getClass() );
+	
 	public JDBCMetaDataBinderTestCase() {
 		super( null );
 	}
@@ -93,15 +95,16 @@ public abstract class JDBCMetaDataBinderTestCase extends BaseTestCase {
 		
 		for (int i = 0; i < sqls.length; i++) {
 			String ddlsql = sqls[i];
-			System.out.println("Execute: " + ddlsql);
+			log.info( "Execute: " + ddlsql);
 			
             try {            	
             	statement.execute(ddlsql);
             } 
             catch (SQLException se) {
             	if(ignoreErrors) {
-            		System.err.println(se.toString() + " for " + ddlsql);
+            		log.info(se.toString() + " for " + ddlsql);
             	} else {
+            		log.error(ddlsql, se);
             		throw se;
             	}
             }
@@ -141,14 +144,14 @@ public abstract class JDBCMetaDataBinderTestCase extends BaseTestCase {
 	}
 
    protected void tearDown() throws Exception {
-        executeDDL(getDropSQL(), false);
+        executeDDL(getDropSQL(), true);
         
         super.tearDown();
     }
 	/**
 	 * @param cfg2
 	 */
-	protected void configure(JDBCMetaDataConfiguration cfg) {
+	protected void configure(JDBCMetaDataConfiguration configuration) {
 		
 		
 	}
@@ -195,8 +198,8 @@ public abstract class JDBCMetaDataBinderTestCase extends BaseTestCase {
         return getTable( cfg, tabName );
     }
 
-	protected Table getTable(Configuration cfg, String tabName) {
-		Iterator iter = cfg.getTableMappings();
+	protected Table getTable(Configuration configuration, String tabName) {
+		Iterator iter = configuration.getTableMappings();
         while(iter.hasNext() ) {
             Table table = (Table) iter.next();
             if(table.getName().equals(tabName) ) {
@@ -206,8 +209,8 @@ public abstract class JDBCMetaDataBinderTestCase extends BaseTestCase {
         return null;
 	}
  
-	protected Table getTable(Configuration cfg, String schemaName, String tabName) {
-		Iterator iter = cfg.getTableMappings();
+	protected Table getTable(Configuration configuration, String schemaName, String tabName) {
+		Iterator iter = configuration.getTableMappings();
         while(iter.hasNext() ) {
             Table table = (Table) iter.next();
             if(table.getName().equals(tabName) && safeEquals(schemaName, table.getSchema())) {

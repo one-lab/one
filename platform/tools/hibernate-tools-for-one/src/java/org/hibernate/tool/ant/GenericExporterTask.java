@@ -22,6 +22,7 @@ public class GenericExporterTask extends ExporterTask {
 	String templateName;
 	String exporterClass;
 	String filePattern;
+	String forEach;
 	
 	/**
 	 * The FilePattern defines the pattern used to generate files.
@@ -29,6 +30,10 @@ public class GenericExporterTask extends ExporterTask {
 	 */
 	public void setFilePattern(String filePattern) {
 		this.filePattern = filePattern;
+	}
+	
+	public void setForEach(String forEach) {
+		this.forEach = forEach;
 	}
 	
 	public void setTemplate(String templateName) {
@@ -62,13 +67,21 @@ public class GenericExporterTask extends ExporterTask {
 		if(exp instanceof GenericExporter) {
 			GenericExporter exporter = (GenericExporter) exp;
 			if(filePattern!=null) exporter.setFilePattern(filePattern);
-			if(templateName!=null) exporter.setTemplateName(templateName);			
+			if(templateName!=null) exporter.setTemplateName(templateName);
+			if(forEach!=null) exporter.setForEach(forEach);
 		}
 		
 		return exp;
 	}
 
 	public String getName() {
-		return "generic exporter " + ((exporterClass==null) ? "" : exporterClass);
+		StringBuffer buf = new StringBuffer("generic exporter");
+		if(exporterClass!=null) {
+			buf.append( "class: " + exporterClass);
+		}
+		if(templateName!=null) {
+			buf.append( "template: " + templateName);
+		}
+		return buf.toString();
 	}
 }

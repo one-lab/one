@@ -1,37 +1,24 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<HTML>
+<html>
+	<head>
+		<title>Hibernate Mappings - Package List</title>
+		<link rel="stylesheet" type="text/css" href="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" title="Style"/>
+	</head>
+	<body class="List">
 
-<HEAD>
+		<p>
+			<a href="${docFileManager.getRef(docFile, docFileManager.getAllEntitiesDocFile())}" target="entitiesFrame">All Entities</a>
+		</p>
 
-<TITLE>Hibernate Mappings - Package List</TITLE>
-
-<LINK REL ="stylesheet" TYPE="text/css" HREF="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" TITLE="Style">
-
-</HEAD>
-
-<BODY>
-
-<TABLE BORDER="0" WIDTH="100%" SUMMARY="">
-	<TR>
-		<TD NOWRAP>
-			<FONT CLASS="ListTitleFont">
-				${title}
-			</FONT>
-			<BR>
-		</TD>
-	</TR>
-	<TR>
-		<TD>
-			       <A HREF="${docFileManager.getRef(docFile, docFileManager.getAllEntitiesDocFile())}" TARGET="entitiesFrame">all entities</A>
-			<BR>
-<#foreach package in packageList>
-				<A HREF="${docFileManager.getRef(docFile, docFileManager.getPackageEntityListDocFile(package))}" TARGET="entitiesFrame">${package}</A>				
-			<BR>
-</#foreach>		</TD>
-	</TR>
-</TABLE>
-
-</BODY>
-
-</HTML>
+		<p class="ListTitleFont">
+			Packages
+		</p>
+		<p>
+			<#foreach package in packageList>
+				<a href="${docFileManager.getRef(docFile, docFileManager.getPackageEntityListDocFile(package))}" target="entitiesFrame">${package}</a><br/>
+			</#foreach>
+		</p>
+		
+	</body>
+</html>

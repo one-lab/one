@@ -1,16 +1,10 @@
 package org.hibernate.tool.hbm2x;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.collections.MultiMap;
-import org.dom4j.Element;
-import org.hibernate.cfg.reveng.MetaAttributeBinder;
-import org.hibernate.mapping.MetaAttribute;
 
 /**
  * Helper for loading, merging  and accessing <meta> tags.

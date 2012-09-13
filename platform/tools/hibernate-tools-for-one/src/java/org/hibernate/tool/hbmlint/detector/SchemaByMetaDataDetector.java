@@ -9,9 +9,9 @@ import java.util.TreeMap;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.Environment;
 import org.hibernate.cfg.JDBCReaderFactory;
 import org.hibernate.cfg.Settings;
+import org.hibernate.cfg.reveng.DatabaseCollector;
 import org.hibernate.cfg.reveng.DefaultDatabaseCollector;
 import org.hibernate.cfg.reveng.DefaultReverseEngineeringStrategy;
 import org.hibernate.cfg.reveng.JDBCReader;
@@ -41,7 +41,7 @@ public class SchemaByMetaDataDetector extends RelationalModelDetector {
 
 	private TableSelectorStrategy tableSelector;
 
-	private DefaultDatabaseCollector dbc;
+	private DatabaseCollector dbc;
 
 	private Dialect dialect;
 
@@ -62,7 +62,7 @@ public class SchemaByMetaDataDetector extends RelationalModelDetector {
 				new DefaultReverseEngineeringStrategy() );
 		reader = JDBCReaderFactory.newJDBCReader( cfg.getProperties(),
 				settings, tableSelector );
-		dbc = new DefaultDatabaseCollector();
+		dbc = new DefaultDatabaseCollector(reader.getMetaDataDialect());
 		mapping = cfg.buildMapping();
 	}
 
@@ -185,7 +185,7 @@ public class SchemaByMetaDataDetector extends RelationalModelDetector {
 		}
 		else {
 			//TODO: this needs to be able to know if a type is truly compatible or not. Right now it requires an exact match.
-			String sqlType = col.getSqlType( dialect, mapping );
+			//String sqlType = col.getSqlType( dialect, mapping );
 			int dbTypeCode = dbColumn.getSqlTypeCode().intValue();
 			int modelTypeCode = col
 								.getSqlTypeCode( mapping );
@@ -226,6 +226,7 @@ public class SchemaByMetaDataDetector extends RelationalModelDetector {
 
 				IdentifierGenerator ig = pc.getIdentifier()
 						.createIdentifierGenerator(
+								cfg.getIdentifierGeneratorFactory(),
 								dialect,
 								defaultCatalog,
 								defaultSchema,
@@ -247,6 +248,7 @@ public class SchemaByMetaDataDetector extends RelationalModelDetector {
 
 				IdentifierGenerator ig = ( (IdentifierCollection) collection ).getIdentifier()
 						.createIdentifierGenerator(
+								getConfiguration().getIdentifierGeneratorFactory(),
 								dialect,
 								defaultCatalog,
 								defaultSchema,

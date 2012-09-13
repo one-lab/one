@@ -17,13 +17,15 @@ import org.hibernate.tool.hbm2x.Exporter;
 import org.hibernate.tool.hbm2x.HibernateMappingExporter;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.TimestampType;
+;
 
 /**
+ * To be extended by VersioningForJDK50Test for the JPA generation part
  * @author max
  *
  */
 public class VersioningTest extends JDBCMetaDataBinderTestCase {
-
+	
 	protected String[] getCreateSQL() {
 		
 		return new String[] {
@@ -59,10 +61,8 @@ public class VersioningTest extends JDBCMetaDataBinderTestCase {
 	}
 	
 	public void testGenerateMappings() {
-		
         cfg.buildMappings();
-        
-		Exporter exporter = new HibernateMappingExporter(cfg, getOutputDir());
+        Exporter exporter = new HibernateMappingExporter(cfg, getOutputDir());
 		
 		exporter.start();
 		
@@ -70,35 +70,39 @@ public class VersioningTest extends JDBCMetaDataBinderTestCase {
 		
 		derived.addFile(new File(getOutputDir(), "Withversion.hbm.xml") );
 		derived.addFile(new File(getOutputDir(), "Noversion.hbm.xml") );
-		derived.addFile(new File(getOutputDir(), "WithRealTimestamp.hbm.xml") );
-		derived.addFile(new File(getOutputDir(), "WithFakeTimestamp.hbm.xml") );
+		derived.addFile(new File(getOutputDir(), "Withrealtimestamp.hbm.xml") );
+		derived.addFile(new File(getOutputDir(), "Withfaketimestamp.hbm.xml") );
 		
+		testVersioningInDerivedCfg(derived);
+	}
+    
+	protected void testVersioningInDerivedCfg(Configuration derived){
 		derived.buildMappings();
 		
-		PersistentClass cl = derived.getClassMapping("Withversion");		
+		PersistentClass cl = derived.getClassMapping( "Withversion" );		
 		
 		Property version = cl.getVersion();
 		assertNotNull(version);
 		assertEquals("version", version.getName());
 		
-		cl = derived.getClassMapping("Noversion");
+		cl = derived.getClassMapping( "Noversion" );
 		assertNotNull(cl);
 		version = cl.getVersion();
 		assertNull(version);
 
-		cl = derived.getClassMapping("Withrealtimestamp");
+		cl = derived.getClassMapping( "Withrealtimestamp" );
 		assertNotNull(cl);
 		version = cl.getVersion();
 		assertNotNull(version);
 		assertTrue(version.getType() instanceof TimestampType);
 		
-		cl = derived.getClassMapping("Withfaketimestamp");
+		cl = derived.getClassMapping( "Withfaketimestamp" );
 		assertNotNull(cl);
 		version = cl.getVersion();
 		assertNotNull(version);
 		assertTrue(version.getType() instanceof IntegerType);
-		
 	}
+	
 	
 	public static Test suite() {
 		return new TestSuite(VersioningTest.class);

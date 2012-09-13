@@ -1,11 +1,11 @@
 package org.hibernate.tool;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.hibernate.tool.hbm2x.query.QueryAllTests;
 import org.hibernate.tool.hbmlint.HbmLintAllTests;
 import org.hibernate.tool.ide.completion.CompletionAllTests;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 public class ToolAllTests {
 

@@ -1,5 +1,6 @@
 package org.hibernate.tool.ide.completion;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,6 +10,12 @@ public class HQLCodeAssist implements IHQLCodeAssist {
 
 	private Configuration configuration;
 	private ConfigurationCompletion completion;
+	
+	private static final char[] charSeparators;	
+	static {
+		charSeparators = new char[]{',', '(', ')'};
+		Arrays.sort(charSeparators);
+	}
 	
 	public HQLCodeAssist(Configuration configuration) {
 		this.configuration = configuration;
@@ -81,7 +88,7 @@ public class HQLCodeAssist implements IHQLCodeAssist {
 		return configuration;
 	}
 
-	public int findNearestWhiteSpace( CharSequence doc, int start ) {
+	public static int findNearestWhiteSpace( CharSequence doc, int start ) {
     	boolean loop = true;
     	
     	int offset = 0;
@@ -89,7 +96,7 @@ public class HQLCodeAssist implements IHQLCodeAssist {
     	int tmpOffset = start - 1;
     	while (loop && tmpOffset >= 0) {
     		char c = doc.charAt(tmpOffset);
-    		if(Character.isWhitespace(c)) {
+    		if(isWhitespace(c)) {
     			loop = false;
     		} else {
     			tmpOffset--;
@@ -99,5 +106,10 @@ public class HQLCodeAssist implements IHQLCodeAssist {
 
     	return offset;
     }
+
+	private static boolean isWhitespace(char c) {
+		return Arrays.binarySearch(charSeparators, c) >= 0  
+				|| Character.isWhitespace(c);
+	}
 
 }

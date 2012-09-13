@@ -39,7 +39,7 @@ public class HibernateMappingExporter extends GenericExporter {
 		Configuration cfg = getConfiguration();
 		if(c2h.isImportData(cfg) && (c2h.isNamedQueries(cfg)) && (c2h.isNamedSQLQueries(cfg)) && (c2h.isFilterDefinitions(cfg))) {
 			TemplateProducer producer = new TemplateProducer(getTemplateHelper(),getArtifactCollector());
-			producer.produce(new HashMap(), "hbm/generalhbm.hbm.ftl", new File(getOutputDirectory(),"GeneralHbmSettings.hbm.xml"), getTemplateName());
+			producer.produce(new HashMap(), "hbm/generalhbm.hbm.ftl", new File(getOutputDirectory(),"GeneralHbmSettings.hbm.xml"), getTemplateName(), "General Settings");
 		}
 	}
 	

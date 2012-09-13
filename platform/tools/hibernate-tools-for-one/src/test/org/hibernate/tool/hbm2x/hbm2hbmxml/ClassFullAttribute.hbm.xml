@@ -59,6 +59,14 @@
     		</column>
     	</property>
 
+        <property name="columnDetails" 
+    		type="string" 
+    	>
+    		<column name="columnd" length="200" not-null="true" sql-type="varchar(200)" unique="true" >
+    		  <comment></comment><!--  empty comment -->
+    		</column>
+    	</property>
+
     	<property name="vitualValue" 
     		not-null="true" 
     		length="200"

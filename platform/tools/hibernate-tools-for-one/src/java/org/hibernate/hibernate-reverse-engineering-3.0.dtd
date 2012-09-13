@@ -60,11 +60,6 @@ Each schema-selection can be viewed as a "call" to DatabaseMetaData.getTables().
 <!ATTLIST column type           CDATA        #IMPLIED >
 <!ATTLIST column property       CDATA        #IMPLIED >
 <!ATTLIST column exclude        (true|false) "false" >
-<!-- too much flexibility to maintain; just use a foreign-key definition
-<!ATTLIST column foreign-catalog CDATA  #IMPLIED >
-<!ATTLIST column foreign-schema CDATA   #IMPLIED >
-<!ATTLIST column foreign-table  CDATA   #IMPLIED >
-<!ATTLIST column foreign-column CDATA   #IMPLIED > -->
 
 <!ELEMENT key-column EMPTY >
 <!ATTLIST key-column name           CDATA        #REQUIRED >
@@ -84,7 +79,7 @@ Each schema-selection can be viewed as a "call" to DatabaseMetaData.getTables().
 <!ATTLIST param name CDATA #REQUIRED>
 
 <!-- A foreign-key has to have at least a constraint-name AND/OR foreign-table+column-ref's -->
-<!ELEMENT foreign-key (column-ref*,many-to-one?,(set)?) >
+<!ELEMENT foreign-key (column-ref*,many-to-one?,(set)?,one-to-one?,(inverse-one-to-one)?) >
 <!ATTLIST foreign-key constraint-name        CDATA    #IMPLIED >
 <!ATTLIST foreign-key foreign-catalog CDATA  #IMPLIED >
 <!ATTLIST foreign-key foreign-schema CDATA   #IMPLIED >
@@ -97,11 +92,30 @@ Each schema-selection can be viewed as a "call" to DatabaseMetaData.getTables().
 <!ELEMENT many-to-one EMPTY >
 <!ATTLIST many-to-one property CDATA #IMPLIED>
 <!ATTLIST many-to-one exclude (true|false) #IMPLIED>
+<!ATTLIST many-to-one cascade CDATA #IMPLIED>
+<!ATTLIST many-to-one fetch (join|select) #IMPLIED>
+<!ATTLIST many-to-one update (true|false) "true">
+<!ATTLIST many-to-one insert (true|false) "true">
 
+<!-- pure one to one (shared pk) are managed) -->
+<!ELEMENT one-to-one EMPTY >
+<!ATTLIST one-to-one property CDATA #IMPLIED>
+<!ATTLIST one-to-one exclude (true|false) #IMPLIED>
+<!ATTLIST one-to-one cascade CDATA #IMPLIED>
+<!ATTLIST one-to-one fetch (join|select) #IMPLIED>
+
+
+<!ELEMENT inverse-one-to-one EMPTY >
+<!ATTLIST inverse-one-to-one property CDATA #IMPLIED>
+<!ATTLIST inverse-one-to-one exclude (true|false) #IMPLIED>
+<!ATTLIST inverse-one-to-one cascade CDATA #IMPLIED>
+<!ATTLIST inverse-one-to-one fetch (join|select) #IMPLIED>
 
 <!ELEMENT set EMPTY >
 <!ATTLIST set property CDATA #IMPLIED>
 <!ATTLIST set exclude (true|false) #IMPLIED>
+<!ATTLIST set cascade CDATA #IMPLIED>
+
 
 <!-- <!ELEMENT bag EMPTY >
 <!ATTLIST bag property CDATA #REQUIRED> -->

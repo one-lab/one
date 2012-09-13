@@ -4,11 +4,13 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
 import org.hibernate.HibernateException;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.util.ReflectHelper;
+import org.xml.sax.EntityResolver;
 
 public class JPAConfigurationTask extends ConfigurationTask {
 	
@@ -21,9 +23,22 @@ public class JPAConfigurationTask extends ConfigurationTask {
 	protected Configuration createConfiguration() {
 		try {
 			Map overrides = new HashMap();
+			Properties p = getProperties();
+			
+			if(p!=null) {
+				overrides.putAll( p );
+			}
 
 			Class clazz = ReflectHelper.classForName("org.hibernate.ejb.Ejb3Configuration", JPAConfigurationTask.class);
 			Object ejb3cfg = clazz.newInstance();
+			
+			if(entityResolver!=null) {
+				Class resolver = ReflectHelper.classForName(entityResolver, this.getClass());
+				Object object = resolver.newInstance();
+				Method method = clazz.getMethod("setEntityResolver", new Class[] { EntityResolver.class });
+				method.invoke(ejb3cfg, new Object[] { object } );
+			}
+			
 			Method method = clazz.getMethod("configure", new Class[] { String.class, Map.class });
 			if ( method.invoke(ejb3cfg, new Object[] { persistenceUnit, overrides } ) == null ) {
 				throw new BuildException("Persistence unit not found: '" + persistenceUnit + "'.");
@@ -38,7 +53,7 @@ public class JPAConfigurationTask extends ConfigurationTask {
 		catch(BuildException be) {
 			throw be;
 		}
-		catch(Throwable t) {
+		catch(Exception t) {
 			throw new BuildException("Problems in creating a configuration for JPA. Have you remembered to add hibernate EntityManager jars to the classpath ?",t);			
 		}
 		
@@ -63,10 +78,6 @@ public class JPAConfigurationTask extends ConfigurationTask {
 		complain("configurationfile");
 	}
 
-	public void setEntityResolver(String entityResolverName) {
-		complain("entityresolver");
-	}
-		
 	private void complain(String param) {
 		throw new BuildException("<" + getTaskName() + "> currently only support autodiscovery from META-INF/persistence.xml. Thus setting the " + param + " attribute is not allowed");
 	}

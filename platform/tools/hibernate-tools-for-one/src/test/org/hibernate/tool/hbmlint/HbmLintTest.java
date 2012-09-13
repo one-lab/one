@@ -21,64 +21,60 @@ public class HbmLintTest extends JDBCMetaDataBinderTestCase {
 	
 	public void testExporter() {
 	
-		Configuration cfg = new Configuration();
-		addMappings( getMappings(), cfg );
-		cfg.buildMappings();
+		Configuration configuration = new Configuration();
+		addMappings( getMappings(), configuration );
+		configuration.buildMappings();
 	
-		new HbmLintExporter(cfg, getOutputDir()).start();
+		new HbmLintExporter(configuration, getOutputDir()).start();
 		
 	}
 	public void testValidateCache() {
 		
-		Configuration cfg = new Configuration();
-		addMappings( getMappings(), cfg );
-		cfg.buildMappings();
+		Configuration configuration = new Configuration();
+		addMappings( getMappings(), configuration );
+		configuration.buildMappings();
 		
 		HbmLint analyzer = new HbmLint(new Detector[] { new BadCachingDetector() });
 		
-		analyzer.analyze(cfg);
+		analyzer.analyze(configuration);
 		
 		List result = analyzer.getResults();
 		
 		assertEquals(1,result.size());
-
-		System.out.println(result);
 		
 	}
 
 	public void testValidateIdentifier() {
 		
-		Configuration cfg = new Configuration();
-		addMappings( getMappings(), cfg );
-		cfg.buildMappings();
+		Configuration configuration = new Configuration();
+		addMappings( getMappings(), configuration );
+		configuration.buildMappings();
 		
 		HbmLint analyzer = new HbmLint(new Detector[] { new ShadowedIdentifierDetector() });
 		
-		analyzer.analyze(cfg);
+		analyzer.analyze(configuration);
 		
 		List result = analyzer.getResults();
 		
 		assertEquals(1,result.size());
 
-		System.out.println(result);
 		
 	}
 	
 	public void testBytecodeRestrictions() {
 		
-		Configuration cfg = new Configuration();
-		addMappings( getMappings(), cfg );
-		cfg.buildMappings();
+		Configuration configuration = new Configuration();
+		addMappings( getMappings(), configuration );
+		configuration.buildMappings();
 		
 		HbmLint analyzer = new HbmLint(new Detector[] { new InstrumentationDetector() });
 		
-		analyzer.analyze(cfg);
+		analyzer.analyze(configuration);
 		
 		List result = analyzer.getResults();
 		
 		assertEquals(2,result.size());
 
-		System.out.println(result);
 		
 	}
 	

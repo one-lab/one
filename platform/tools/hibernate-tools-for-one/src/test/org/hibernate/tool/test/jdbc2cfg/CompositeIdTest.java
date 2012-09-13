@@ -39,8 +39,8 @@ import org.hibernate.tool.test.TestHelper;
  */
 public class CompositeIdTest extends JDBCMetaDataBinderTestCase {
 
-	protected void configure(JDBCMetaDataConfiguration cfg) {
-		super.configure( cfg );		
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+		super.configure( configuration );		
 	}
     protected String[] getCreateSQL() {
         
@@ -104,7 +104,7 @@ public class CompositeIdTest extends JDBCMetaDataBinderTestCase {
                 "insert into PRODUCT (productId, extraId, description, price, numberAvailable) values('PC', '0', 'My PC', 100.0, 23)",
                 "insert into PRODUCT (productId, extraId, description, price, numberAvailable) values('MS', '1', 'My Mouse', 101.0, 23)",
                 "insert into CUSTOMER (customerId, name, address) values('MAX', 'Max Rydahl Andersen', 'Neuchatel')",
-                "insert into CUSTOMERORDER (customerId, orderNumber, orderDate) values ('MAX', 1, '11-11-2005')", 
+                "insert into CUSTOMERORDER (customerId, orderNumber, orderDate) values ('MAX', 1, '2005-11-11')", 
                 "insert into LINEITEM (customerIdref, orderNumber, productId, extraProdId, quantity) values ('MAX', 1, 'PC', '0', 10)",
                 "insert into LINEITEM (customerIdref, orderNumber, productId, extraProdId, quantity) values ('MAX', 1, 'MS', '1', 12)",
         };
@@ -112,8 +112,8 @@ public class CompositeIdTest extends JDBCMetaDataBinderTestCase {
 
      protected String[] getDropSQL() {
         return new String[] {   
-                "alter table LineItem drop constraint toCustomerOrder",
-                "alter table LineItem drop constraint toProduct",
+                "alter table LINEITEM drop constraint toCustomerOrder",
+                "alter table LINEITEM drop constraint toProduct",
                 "alter table CustomerOrder drop constraint toCustomer",
                 "alter table SimpleLineItem drop constraint toSimpleCustomerOrder",
                 "alter table SimpleLineItem drop constraint fromSimpletoProduct",
@@ -230,12 +230,12 @@ public class CompositeIdTest extends JDBCMetaDataBinderTestCase {
         
         Configuration derived = new Configuration();
         
-        derived.addFile(new File(outputdir, "SimplecustomerOrder.hbm.xml") );
-        derived.addFile(new File(outputdir, "SimpleLineItem.hbm.xml") );
+        derived.addFile(new File(outputdir, "Simplecustomerorder.hbm.xml") );
+        derived.addFile(new File(outputdir, "Simplelineitem.hbm.xml") );
         derived.addFile(new File(outputdir, "Product.hbm.xml") );
         derived.addFile(new File(outputdir, "Customer.hbm.xml") );
-        derived.addFile(new File(outputdir, "LineItem.hbm.xml") );
-        derived.addFile(new File(outputdir, "CustomerOrder.hbm.xml") );
+        derived.addFile(new File(outputdir, "Lineitem.hbm.xml") );
+        derived.addFile(new File(outputdir, "Customerorder.hbm.xml") );
         
         derived.buildMappings();        
         

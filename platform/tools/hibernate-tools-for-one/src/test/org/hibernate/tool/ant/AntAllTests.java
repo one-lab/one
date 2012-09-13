@@ -8,8 +8,8 @@ public class AntAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.hibernate.tool.ant");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(HibernateToolTest.class);
-		suite.addTestSuite(SeamAntTest.class);
+		suite.addTestSuite(AntHibernateToolTest.class);		
+		suite.addTestSuite(JavaFormatterTest.class);
 		//$JUnit-END$
 		return suite;
 	}

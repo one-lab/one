@@ -6,25 +6,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.cfg.reveng.dialect.MetaDataDialect;
 import org.hibernate.mapping.Table;
 import org.hibernate.util.StringHelper;
 
-public class DefaultDatabaseCollector implements DatabaseCollector  {
+public class DefaultDatabaseCollector extends AbstractDatabaseCollector  {
 
-	Map tables;
-		
-	Map qualifiers;
-	
-	static class TableContainer {
-		List tables = new ArrayList();
-	}
-	
-	public DefaultDatabaseCollector() {
+	private Map tables;		
+	private Map qualifiers;
+
+	public DefaultDatabaseCollector(MetaDataDialect metaDataDialect) {
+		super(metaDataDialect);
 		tables = new HashMap();
-		qualifiers = new HashMap();		
+		qualifiers = new HashMap();
 	}
-	
-	private Map oneToManyCandidates;
 	
 	public Iterator iterateTables() {
 		return tables.values().iterator();
@@ -34,7 +29,7 @@ public class DefaultDatabaseCollector implements DatabaseCollector  {
 			String catalog, 
 			String name) {
 		
-        String key = Table.qualify(catalog, schema, name);
+        String key = Table.qualify(quote(catalog), quote(schema), quote(name));
 		Table table = (Table) tables.get(key);
 		
 		if (table == null) {
@@ -60,20 +55,14 @@ public class DefaultDatabaseCollector implements DatabaseCollector  {
 		return table;
 	}
 
-	public void setOneToManyCandidates(Map oneToManyCandidates) {
-		this.oneToManyCandidates = oneToManyCandidates;
-	}
-
 	public Table getTable(String schema, String catalog, String name) {
-        String key = Table.qualify(catalog, schema, name);
+        String key = Table.qualify(quote(catalog), quote(schema), quote(name));
 		return (Table) tables.get(key);
-	}
-
-	public Map getOneToManyCandidates() {
-		return oneToManyCandidates;
 	}
 
 	public Iterator getQualifierEntries() {
 		return qualifiers.entrySet().iterator();
 	}
+	
+	
 }

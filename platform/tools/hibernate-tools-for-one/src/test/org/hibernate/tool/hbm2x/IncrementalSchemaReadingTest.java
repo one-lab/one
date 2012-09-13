@@ -5,12 +5,9 @@
 package org.hibernate.tool.hbm2x;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.hibernate.cfg.Environment;
 import org.hibernate.cfg.JDBCMetaDataConfiguration;
 import org.hibernate.cfg.JDBCReaderFactory;
 import org.hibernate.cfg.Settings;
@@ -18,9 +15,7 @@ import org.hibernate.cfg.reveng.DatabaseCollector;
 import org.hibernate.cfg.reveng.DefaultDatabaseCollector;
 import org.hibernate.cfg.reveng.DefaultReverseEngineeringStrategy;
 import org.hibernate.cfg.reveng.JDBCReader;
-import org.hibernate.cfg.reveng.OverrideRepository;
 import org.hibernate.cfg.reveng.SchemaSelection;
-import org.hibernate.cfg.reveng.TableIdentifier;
 import org.hibernate.cfg.reveng.dialect.JDBCMetaDataDialect;
 import org.hibernate.mapping.Table;
 import org.hibernate.tool.JDBCMetaDataBinderTestCase;
@@ -35,8 +30,8 @@ import org.hibernate.tool.hbmlint.detector.TableSelectorStrategy;
 public class IncrementalSchemaReadingTest extends JDBCMetaDataBinderTestCase {
 	
 	
-	protected void configure(JDBCMetaDataConfiguration cfg) {
-		super.configure( cfg );
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+		super.configure( configuration );
 	}
 	
 	public class MockedMetaDataDialect extends JDBCMetaDataDialect {
@@ -56,7 +51,7 @@ public class IncrementalSchemaReadingTest extends JDBCMetaDataBinderTestCase {
 		
 		tss.addSchemaSelection( new SchemaSelection(null,null, "CHILD") );
 		
-		DatabaseCollector dc = new DefaultDatabaseCollector();
+		DatabaseCollector dc = new DefaultDatabaseCollector(reader.getMetaDataDialect());
 		reader.readDatabaseSchema( dc, null, null );
 		
 		assertEquals(mockedMetaDataDialect.gottenTables.size(),1);

@@ -3,8 +3,9 @@ package org.hibernate.tool.test;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.hibernate.cfg.JDBCReaderFactory;
 import org.hibernate.cfg.Settings;
+import org.hibernate.cfg.reveng.DefaultDatabaseCollector;
+import org.hibernate.cfg.reveng.ReverseEngineeringRuntimeInfo;
 import org.hibernate.cfg.reveng.dialect.JDBCMetaDataDialect;
 import org.hibernate.cfg.reveng.dialect.MetaDataDialect;
 import org.hibernate.tool.JDBCMetaDataBinderTestCase;
@@ -40,7 +41,7 @@ protected String[] getCreateSQL() {
 		
 		Settings settings = cfg.buildSettings();
 		
-		dialect.configure( settings.getConnectionProvider(), settings.getSQLExceptionConverter() );
+		dialect.configure( ReverseEngineeringRuntimeInfo.createInstance(settings.getConnectionProvider(), settings.getSQLExceptionConverter(), new DefaultDatabaseCollector(dialect)));
 		
 		Iterator tables = dialect.getTables( settings.getDefaultCatalogName(), settings.getDefaultSchemaName(), identifier("tab_master") ); 
 		
@@ -75,7 +76,7 @@ protected String[] getCreateSQL() {
 		
 		Settings settings = cfg.buildSettings();
 		
-		dialect.configure( settings.getConnectionProvider(), settings.getSQLExceptionConverter() );
+		dialect.configure( ReverseEngineeringRuntimeInfo.createInstance(settings.getConnectionProvider(), settings.getSQLExceptionConverter(), new DefaultDatabaseCollector(dialect)));
 		
 		Iterator tables = dialect.getColumns( settings.getDefaultCatalogName(), settings.getDefaultSchemaName(), "test", null ); 
 		
@@ -95,7 +96,7 @@ protected String[] getCreateSQL() {
 		
 		Settings settings = cfg.buildSettings();
 		
-		dialect.configure( settings.getConnectionProvider(), settings.getSQLExceptionConverter() );
+		dialect.configure( ReverseEngineeringRuntimeInfo.createInstance(settings.getConnectionProvider(), settings.getSQLExceptionConverter(), new DefaultDatabaseCollector(dialect)));
 		
 		Iterator tables = dialect.getTables( settings.getDefaultCatalogName(), settings.getDefaultSchemaName(), identifier( "TAB_MASTER"));
 		

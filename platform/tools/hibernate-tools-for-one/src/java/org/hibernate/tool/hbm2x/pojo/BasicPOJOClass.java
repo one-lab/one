@@ -5,21 +5,29 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.hibernate.cfg.reveng.ReverseEngineeringStrategyUtil;
+import org.hibernate.mapping.Any;
+import org.hibernate.mapping.Array;
+import org.hibernate.mapping.Bag;
 import org.hibernate.mapping.Collection;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.Component;
+import org.hibernate.mapping.IdentifierBag;
 import org.hibernate.mapping.MetaAttributable;
 import org.hibernate.mapping.MetaAttribute;
+import org.hibernate.mapping.PrimitiveArray;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.PropertyGeneration;
 import org.hibernate.mapping.Selectable;
+import org.hibernate.mapping.Set;
 import org.hibernate.mapping.SimpleValue;
 import org.hibernate.mapping.Value;
 import org.hibernate.tool.hbm2x.Cfg2JavaTool;
 import org.hibernate.tool.hbm2x.MetaAttributeConstants;
 import org.hibernate.tool.hbm2x.MetaAttributeHelper;
+import org.hibernate.tool.hbm2x.visitor.DefaultValueVisitor;
 import org.hibernate.util.StringHelper;
 
 /**
@@ -74,25 +82,16 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 
 	/** Return package name. Note: Does not handle inner classes */ 
 	public String getPackageName() {
-		String generatedClass = getMetaAsString(MetaAttributeConstants.GENERATED_CLASS).trim();
-		if(StringHelper.isEmpty(generatedClass) ) {
-			generatedClass = getMappedClassName();
-		}
-		if(generatedClass==null) return ""; // will occur for <dynamic-component>
+		String generatedClass = getGeneratedClassName();
 		return StringHelper.qualifier(generatedClass.trim());
 	}
 	
 	public String getShortName() {
-		return StringHelper.unqualify(getMappedClassName());
+		return qualifyInnerClass(StringHelper.unqualify(getMappedClassName()));
 	}
 	
 	public String getQualifiedDeclarationName() {
-		String generatedName = getMetaAsString( MetaAttributeConstants.GENERATED_CLASS );
-		if ( generatedName == null || generatedName.trim().length() == 0 ) {
-			generatedName = getMappedClassName();
-		}
-
-		generatedName = generatedName.replace( '$', '.' ).trim();
+		String generatedName = qualifyInnerClass(getGeneratedClassName());
 		String qualifier = StringHelper.qualifier( getMappedClassName() );
 		if ( "".equals( qualifier ) ) {
 			return qualifier + "." + generatedName;
@@ -106,7 +105,22 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 	 * @return unqualified classname for this class (can be changed by meta attribute "generated-class")
 	 */
 	public String getDeclarationName() {
-		return StringHelper.unqualify( getQualifiedDeclarationName() );
+		return qualifyInnerClass(StringHelper.unqualify( getGeneratedClassName() ));
+	}
+	
+	protected String getGeneratedClassName()
+	{
+		String generatedClass = getMetaAsString(MetaAttributeConstants.GENERATED_CLASS).trim();
+		if(StringHelper.isEmpty(generatedClass) ) {
+			generatedClass = getMappedClassName();
+		}
+		if(generatedClass==null) return ""; // will occur for <dynamic-component>
+		return generatedClass;
+	}
+	
+	protected String qualifyInnerClass(String className)
+	{
+		return className.replace('$', '.');
 	}
 	
 	protected abstract String getMappedClassName();
@@ -196,6 +210,7 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 		return generateEquals( thisName, otherName, allPropertiesIterator, useGenerics );
 	}
 	
+	/** returns the properties that would be visible on this entity as a pojo. This does not return *all* properties since hibernate has certain properties that are only relevant in context of persistence. */ 
 	public abstract Iterator getAllPropertiesIterator();
 
 	protected String generateEquals(String thisName, String otherName, Iterator allPropertiesIterator, boolean useGenerics) {
@@ -301,14 +316,19 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 	public String generateBasicAnnotation(Property property) {
 		StringBuffer annotations = new StringBuffer( "    " );
 		if(property.getValue() instanceof SimpleValue) {
+			if (hasVersionProperty())
+				if (property.equals(getVersionProperty()))
+						buildVersionAnnotation(annotations);
 			String typeName = ((SimpleValue)property.getValue()).getTypeName();
 			if("date".equals(typeName) || "java.sql.Date".equals(typeName)) {
 				buildTemporalAnnotation( annotations, "DATE" );
 			} else if ("timestamp".equals(typeName) || "java.sql.Timestamp".equals(typeName)) {
-				//buildTemporalAnnotation( annotations, "TIMESTAMP" ); ..the default so don't generate
+				buildTemporalAnnotation( annotations, "TIMESTAMP" );
 			} else if ("time".equals(typeName) || "java.sql.Time".equals(typeName)) {
 				buildTemporalAnnotation(annotations, "TIME");
 			} //TODO: calendar etc. ?
+
+						
 		}
 			
 		return annotations.toString();
@@ -319,6 +339,12 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 		String temporalType = importType("javax.persistence.TemporalType");
 		
 		return annotations.append( "@" + temporal +"(" + temporalType + "." + temporalTypeValue + ")");
+	}
+	
+	private StringBuffer buildVersionAnnotation(StringBuffer annotations) {
+		String version = importType("javax.persistence.Version");
+		
+		return annotations.append( "@" + version );
 	}
 	
 	public String generateAnnColumnAnnotation(Property property) {
@@ -405,31 +431,49 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 		}
 		else {
 			Column column = (Column) selectable;
-			annotations.append( "@" + importType("javax.persistence.Column") + "(name=\"" ).append( column.getName() ).append( "\"" )
-					.append( ", unique=" ).append( column.isUnique() )
-					.append( ", nullable=" ).append( column.isNullable() )
-					.append( ", insertable=" ).append( insertable )
-					.append( ", updatable=" ).append( updatable );
+			annotations.append( "@" + importType("javax.persistence.Column") + "(name=\"" ).append( column.getName() ).append( "\"" );
 			
-			if (column.getPrecision() != Column.DEFAULT_PRECISION) {
+			appendCommonColumnInfo( annotations, column, insertable, updatable );
+			
+			if (column.getPrecision() != Column.DEFAULT_PRECISION) { // the default is actually 0 in spec
 				annotations.append( ", precision=" ).append( column.getPrecision() );
 			}
-			if (column.getScale() != Column.DEFAULT_SCALE) {
+			if (column.getScale() != Column.DEFAULT_SCALE) { // default is actually 0 in spec
 				annotations.append( ", scale=" ).append( column.getScale() );
 			}
-			else if (column.getLength() != Column.DEFAULT_LENGTH){
+			else if (column.getLength() != 255){ 
 				annotations.append( ", length=" ).append( column.getLength() );
 			}
 			
 					
 					
-			String sqlType = column.getSqlType();
-			if ( StringHelper.isNotEmpty( sqlType ) ) {
-				annotations.append( ", columnDefinition=\"" ).append( sqlType ).append( "\"" );
-			}
+			
 			//TODO support secondary table
 			annotations.append( ")" );
 		}
+	}
+
+	protected void appendCommonColumnInfo(StringBuffer annotations, Column column, boolean insertable, boolean updatable) {
+		if(column.isUnique()) {
+				annotations.append( ", unique=" ).append( column.isUnique() );
+		}
+		if(!column.isNullable()) {
+				annotations.append( ", nullable=" ).append( column.isNullable() );
+		}
+		
+		if(!insertable) {
+				annotations.append( ", insertable=" ).append( insertable );
+		}
+		
+		if(!updatable) {
+				annotations.append( ", updatable=" ).append( updatable );
+		}
+		
+		String sqlType = column.getSqlType();
+		if ( StringHelper.isNotEmpty( sqlType ) ) {
+			annotations.append( ", columnDefinition=\"" ).append( sqlType ).append( "\"" );
+		}
+				
 	}
 
 
@@ -815,11 +859,48 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 		return c2j.getJavaTypeName(p, useGenerics, this);
 	}
 	
+	static private class DefaultInitializor {
+		
+		private final String type;
+		private final boolean initToZero;
+		
+		public DefaultInitializor(String type, boolean initToZero) {
+			this.type = type;
+			this.initToZero = initToZero;					
+		}
+		
+		public String getDefaultValue(String comparator, String genericDeclaration, ImportContext importContext) {
+			StringBuffer val = new StringBuffer("new " + importContext.importType(type));
+			if(genericDeclaration!=null) {
+				val.append(genericDeclaration);
+			}
+			
+			val.append("(");
+			if(comparator!=null) {
+				val.append("new ");
+				val.append(importContext.importType(comparator));
+				val.append("()");
+				if(initToZero) val.append(",");
+			}
+			if(initToZero) {
+				val.append("0");
+			}
+			val.append(")");
+			return val.toString();
+		}
+		
+		public String getType() {
+			return type;
+		}
+	}
+	
 	static Map defaultInitializors = new HashMap();
 	static {
-		defaultInitializors.put("java.util.List", "java.util.ArrayList");
-		defaultInitializors.put("java.util.Map", "java.util.HashMap");
-		defaultInitializors.put("java.util.Set", "java.util.HashSet");		
+		defaultInitializors.put("java.util.List", new DefaultInitializor("java.util.ArrayList", true));
+		defaultInitializors.put("java.util.Map", new DefaultInitializor("java.util.HashMap", true));
+		defaultInitializors.put("java.util.Set", new DefaultInitializor("java.util.HashSet",true));		
+		defaultInitializors.put("java.util.SortedSet", new DefaultInitializor("java.util.TreeSet", false));
+		defaultInitializors.put("java.util.SortedMap", new DefaultInitializor("java.util.TreeMap", false));
 	}
 	
 	public boolean hasFieldInitializor(Property p, boolean useGenerics) {
@@ -827,22 +908,67 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 	}
 	
 	public String getFieldInitialization(Property p, boolean useGenerics) {
-		String javaTypeName = c2j.getJavaTypeName(p, false);
 		if(hasMetaAttribute(p, "default-value")) {
 			return MetaAttributeHelper.getMetaAsString( p.getMetaAttribute( "default-value" ) );
 		}
-		if(javaTypeName==null) {
-			return null;
+		if(c2j.getJavaTypeName(p, false)==null) {
+			throw new IllegalArgumentException();
 		} else if (p.getValue() instanceof Collection) {
-			String initialization = (String) defaultInitializors.get(javaTypeName);
+			Collection col = (Collection) p.getValue();
 			
-			String decl = null;
-			
-			if(useGenerics) {
-				decl = c2j.getGenericCollectionDeclaration((Collection) p.getValue(), true, importContext);
-			}
-			if(initialization!=null) {			
-				return "new " + importType(initialization) + (decl==null?"":decl) + "(0)";
+			DefaultInitializor initialization = (DefaultInitializor) col.accept(new DefaultValueVisitor(true) {
+			 
+				public Object accept(Bag o) {
+					return new DefaultInitializor("java.util.ArrayList", true);
+				}
+				
+				public Object accept(org.hibernate.mapping.List o) {
+					return new DefaultInitializor("java.util.ArrayList", true);
+				}
+				
+				public Object accept(org.hibernate.mapping.Map o) {
+					if(o.isSorted()) {
+						return new DefaultInitializor("java.util.TreeMap", false);
+					} else {
+						return new DefaultInitializor("java.util.HashMap", true);
+					}
+				}
+				
+				public Object accept(IdentifierBag o) {
+					return new DefaultInitializor("java.util.ArrayList", true);
+				}
+				
+				public Object accept(Set o) {
+					if(o.isSorted()) {
+						return new DefaultInitializor("java.util.TreeSet", false);
+					} else {
+						return new DefaultInitializor("java.util.HashSet", true);
+					}
+				}
+				
+				
+				public Object accept(PrimitiveArray o) {
+					return null; // TODO: default init for arrays ?
+				}
+				
+				public Object accept(Array o) {
+					return null;// TODO: default init for arrays ?
+				}
+				
+			});
+						 
+			if(initialization!=null) {
+				String comparator = null;
+				String decl = null;
+
+				if(col.isSorted()) {
+					comparator = col.getComparatorClassName();
+				}
+
+				if(useGenerics) {
+					decl = c2j.getGenericCollectionDeclaration((Collection) p.getValue(), true, importContext);
+				}
+				return initialization.getDefaultValue(comparator, decl, this);
 			} else {
 				return null;
 			}
@@ -852,3 +978,4 @@ abstract public class BasicPOJOClass implements POJOClass, MetaAttributeConstant
 	}	
 	
 }
+ 

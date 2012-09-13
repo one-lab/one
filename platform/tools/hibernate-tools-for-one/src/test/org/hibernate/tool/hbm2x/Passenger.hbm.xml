@@ -14,7 +14,7 @@
             </generator>
         </id>
 
-        <property name="familyName" type="string" not-null="true" length="10000"/>
+        <property name="familyName" type="string" not-null="true" length="234"/>
 
 		<many-to-one
 		    name="currentTrain"
@@ -24,7 +24,8 @@
             lazy="false"
             update="true"
             insert="true"
-            access="property">
+            access="property"
+            >
             <column name="currentTrainCity"/>
             <column name="currentTrainLine"/>
         </many-to-one>

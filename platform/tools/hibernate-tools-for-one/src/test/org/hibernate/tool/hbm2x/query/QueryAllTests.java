@@ -7,9 +7,9 @@ public class QueryAllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
-				"Test for org.hibernate.tool.hbm2x.query" );
+				"Test for org.hibernate.tool.hbm2x.query");
 		//$JUnit-BEGIN$
-		suite.addTestSuite( QueryExporterTest.class );
+		suite.addTestSuite(QueryExporterTest.class);
 		//$JUnit-END$
 		return suite;
 	}

@@ -3,17 +3,19 @@ package org.hibernate.cfg.reveng;
 public class ReverseEngineeringSettings {
 
 	
-	//final ReverseEngineeringStrategy rootStrategy;
+	final ReverseEngineeringStrategy rootStrategy;
 	
 	private String defaultPackageName = "";
 	private boolean detectOptimisticLock = true;
 	private boolean createCollectionForForeignKey = true;
 	private boolean createManyToOneForForeignKey = true;
 	private boolean detectManyToMany = true;
+	private boolean detectOneToOne = true;
+
 	
-	//public ReverseEngineeringSettings(ReverseEngineeringStrategy rootStrategy) {
-	//	this.rootStrategy = rootStrategy;
-	//}
+	public ReverseEngineeringSettings(ReverseEngineeringStrategy rootStrategy) {
+		this.rootStrategy = rootStrategy;
+	}
 	
 	public ReverseEngineeringSettings setDefaultPackageName(String defaultPackageName) {
 		if(defaultPackageName==null) {
@@ -72,9 +74,20 @@ public class ReverseEngineeringSettings {
 		return detectManyToMany;
 	}
 	
-	/** return the top/root strategy. Allows a lower strategy to ask another question. Dangerous to do since recursive loops can easily occur! */
-	/*public ReverseEngineeringStrategy getRootStrategy() {
+	public ReverseEngineeringSettings setDetectOneToOne(boolean b) {
+		this.detectOneToOne = b;
+		return this;
+	}
+
+	public boolean getDetectOneToOne() {
+		return detectOneToOne;
+	}
+	
+	/** return the top/root strategy. Allows a lower strategy to ask another question. Be aware of possible recursive loops; e.g. do not call the root.tableToClassName in tableToClassName of a custom reversengineeringstrategy. */
+	public ReverseEngineeringStrategy getRootStrategy() {
 		return rootStrategy;
-	}*/
+	}
+
+	
 	
 }

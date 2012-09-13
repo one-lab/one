@@ -11,12 +11,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.cfg.reveng.ReverseEngineeringStrategyUtil;
 import org.hibernate.mapping.Array;
 import org.hibernate.mapping.Collection;
@@ -24,11 +24,9 @@ import org.hibernate.mapping.Component;
 import org.hibernate.mapping.IndexedCollection;
 import org.hibernate.mapping.MetaAttributable;
 import org.hibernate.mapping.MetaAttribute;
-import org.hibernate.mapping.OneToMany;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.SimpleValue;
-import org.hibernate.mapping.ToOne;
 import org.hibernate.mapping.Value;
 import org.hibernate.tool.hbm2x.pojo.ComponentPOJOClass;
 import org.hibernate.tool.hbm2x.pojo.EntityPOJOClass;
@@ -36,8 +34,6 @@ import org.hibernate.tool.hbm2x.pojo.ImportContext;
 import org.hibernate.tool.hbm2x.pojo.NoopImportContext;
 import org.hibernate.tool.hbm2x.pojo.POJOClass;
 import org.hibernate.tool.hbm2x.visitor.JavaTypeFromValueVisitor;
-import org.hibernate.type.CompositeCustomType;
-import org.hibernate.type.CustomType;
 import org.hibernate.type.PrimitiveType;
 import org.hibernate.type.Type;
 import org.hibernate.type.TypeFactory;
@@ -167,7 +163,7 @@ public class Cfg2JavaTool {
 	public String getJavaTypeName(Property p, boolean useGenerics, ImportContext importContext) {
 		String overrideType = getMetaAsString( p, "property-type" );
 		if ( !StringHelper.isEmpty( overrideType ) ) {
-			String importType = importContext.importType(overrideType);			
+			String importType = importContext.importType(overrideType);
 			if ( useGenerics && importType.indexOf( "<" )<0) {
 				if ( p.getValue() instanceof Collection ) {
 					String decl = getGenericCollectionDeclaration( (Collection) p.getValue(), true, importContext );
@@ -178,9 +174,6 @@ public class Cfg2JavaTool {
 		}
 		else {
 			String rawType = getRawTypeName( p, useGenerics, true, importContext );
-			if(rawType!=null) {
-				rawType = rawType.replace( '$', '.' );
-			}
 			if(rawType==null) {
 					throw new IllegalStateException("getJavaTypeName *must* return a value");				
 			}
@@ -296,41 +289,18 @@ public class Cfg2JavaTool {
 		String decl = "<" + genericDecl + ">";
 		return decl;
 	}
+	
+	/**
+	 * @param simpleValue
+	 * @return
+	 */
+	public Properties getFilteredIdentifierGeneratorProperties(SimpleValue simpleValue) {
+		Properties p = simpleValue.getIdentifierGeneratorProperties();
+		return Cfg2HbmTool.getFilteredIdentifierGeneratorProperties(p);
+	}
 
 	private String getJavaTypeName(Value value, boolean preferRawTypeNames) {
-		if(true) return (String) value.accept( new JavaTypeFromValueVisitor() );
-		if ( value instanceof Component) {
-			// composite-element breaks without it.
-			return ((Component)value).getComponentClassName();
-		}
-		if ( value instanceof ToOne ) {
-			return ( (ToOne) value ).getReferencedEntityName(); // should get the cfg and lookup the persistenclass.
-		}
-
-		if(value instanceof OneToMany) {
-			return ((OneToMany)value).getAssociatedClass().getClassName();
-		}
-		
-		try {
-			// have to attempt calling gettype to decide if its custom type.
-			Type type = value.getType();
-			if(type instanceof CustomType || type instanceof CompositeCustomType) {
-				return toName( type.getReturnedClass() );
-			}
-		} catch(HibernateException he) {
-			// ignore
-		}
-		
-		if ( preferRawTypeNames && value.isSimpleValue() ) {
-			// this logic make us use the raw typename if it is something else than an Hibernate type. So, if user wrote long we will use long...if he meant to have a Long then he should use the java.lang.Long version.
-			String typename = ( (SimpleValue) value ).getTypeName();
-			if ( !isNonPrimitiveTypeName( typename ) ) {
-				String val = ( (SimpleValue) value ).getTypeName();
-				if(val!=null) return val; // val can be null when type is any 
-			}
-		} 
-		
-		return toName( value.getType().getReturnedClass() );
+		return (String) value.accept( new JavaTypeFromValueVisitor() );
 	}
 
 	public String asParameterList(Iterator fields, boolean useGenerics, ImportContext ic) {
@@ -435,13 +405,11 @@ public class Cfg2JavaTool {
 	}
 	
 	public boolean isComponent(Property property) {
-		Value value = property.getValue();
-		if ( value != null && value instanceof Component ) {
-			return true;
-		}
-		else {
-			return false;
-		}	
+		return isComponent(property.getValue());
+	}	
+	
+	public boolean isComponent(Value value) {
+		return ( value instanceof Component );
 	}	
 	
 	// TODO: should consult exporter/cfg2java tool for cached POJOEntities....or maybe not since they

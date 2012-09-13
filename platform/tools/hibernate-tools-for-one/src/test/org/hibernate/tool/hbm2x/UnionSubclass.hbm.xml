@@ -27,7 +27,7 @@
             </column> 
         </property> 
 
-        <union-subclass name="UUser" table="CROWN_USERS" lazy="false"> 
+        <union-subclass name="UUser" table="CROWN_USERS" schema="CROWN" lazy="false"> 
             <comment>Table of crown users</comment> 
             <property name="userName" type="string"> 
                 <column name="USER_NAME" length="15" not-null="true" unique="true"> 

@@ -1,7 +1,6 @@
 package org.hibernate.cfg.reveng;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -14,7 +13,6 @@ import org.hibernate.MappingException;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.ForeignKey;
 import org.hibernate.mapping.Table;
-import org.hibernate.tool.hbm2x.MetaAttributeHelper;
 import org.hibernate.util.StringHelper;
 
 
@@ -49,6 +47,37 @@ public final class OverrideBinder {
 		
 	}
 
+	static boolean bindManyToOneAndCollection(Element element, String constraintName, OverrideRepository repository) {
+		
+		String manyToOneProperty = null;
+		Boolean excludeManyToOne = null;
+		
+		DefaulAssociationInfo associationInfo = null;
+		DefaulAssociationInfo inverseAssociationInfo = null;
+		Element manyToOne = element.element("many-to-one");
+		if(manyToOne!=null) {
+			manyToOneProperty = manyToOne.attributeValue("property");
+			excludeManyToOne = BooleanValue(manyToOne.attributeValue("exclude"));										
+			associationInfo = extractAssociationInfo(manyToOne);										
+		}
+		
+		String collectionProperty = null;
+		Boolean excludeCollection = null;
+		Element collection = element.element("set");
+		if(collection!=null) {
+			collectionProperty = collection.attributeValue("property");
+			excludeCollection = BooleanValue(collection.attributeValue("exclude"));
+			inverseAssociationInfo = extractAssociationInfo(collection);
+		}
+		
+		if ( (manyToOne!=null) || (collection!=null) ) {
+			repository.addForeignKeyInfo(constraintName, manyToOneProperty, excludeManyToOne, collectionProperty, excludeCollection, associationInfo, inverseAssociationInfo);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	private static void bindSchemaSelection(List selection, OverrideRepository repository) {
 		Iterator iterator = selection.iterator();
 		
@@ -162,29 +191,105 @@ public final class OverrideBinder {
 			}
 			
 			if(StringHelper.isNotEmpty(constraintName)) {
-				String manyToOneProperty = null;
-				Boolean excludeManyToOne = null;
+				if (!validateFkAssociations(element))
+					throw new IllegalArgumentException("you can't mix <many-to-one/> or <set/> with <(inverse-)one-to-one/> ");
 				
-				Element manyToOne = element.element("many-to-one");
-				if(manyToOne!=null) {
-					manyToOneProperty = manyToOne.attributeValue("property");
-					excludeManyToOne = BooleanValue(manyToOne.attributeValue("exclude"));					
-				}
-				
-				String collectionProperty = null;
-				Boolean excludeCollection = null;
-				Element collection = element.element("set");
-				if(collection!=null) {
-					collectionProperty = collection.attributeValue("property");
-					excludeCollection = BooleanValue(collection.attributeValue("exclude"));
-				}
-				repository.addForeignKeyInfo(constraintName, manyToOneProperty, excludeManyToOne, collectionProperty, excludeCollection);
+				if(!bindManyToOneAndCollection(element, constraintName, repository)) {
+					bindOneToOne(element, constraintName, repository);
+				}								
 			}
-			
 		}
 		
 	}
 
+	private static void bindOneToOne(Element element, String constraintName,
+			OverrideRepository repository) {
+		String oneToOneProperty = null;
+		Boolean excludeOneToOne = null;
+		Element oneToOne = element.element("one-to-one");
+		DefaulAssociationInfo associationInfo = null;
+		if(oneToOne!=null) {
+			oneToOneProperty = oneToOne.attributeValue("property");
+			excludeOneToOne = BooleanValue(oneToOne.attributeValue("exclude"));
+			associationInfo = extractAssociationInfo(oneToOne);										
+		}
+		
+		String inverseOneToOneProperty = null;
+		Boolean excludeInverseOneToOne = null;
+		Element inverseOneToOne = element.element("inverse-one-to-one");
+		DefaulAssociationInfo inverseAssociationInfo = null;
+		if(inverseOneToOne!=null) {
+			inverseOneToOneProperty = inverseOneToOne.attributeValue("property");
+			excludeInverseOneToOne = BooleanValue(inverseOneToOne.attributeValue("exclude"));
+			inverseAssociationInfo = extractAssociationInfo(inverseOneToOne);
+		}	
+		
+		// having oneToOne = null and inverseOneToOne != null doesn't make sense
+		// we cannot have the inverse side without the owning side in this case
+		
+		if ( (oneToOne!=null) ) {
+			repository.addForeignKeyInfo(constraintName, oneToOneProperty, excludeOneToOne, inverseOneToOneProperty, excludeInverseOneToOne, associationInfo, inverseAssociationInfo);
+		}
+	}
+
+	private static DefaulAssociationInfo extractAssociationInfo(Element manyToOne) {
+		String attributeValue = manyToOne.attributeValue("cascade");
+		DefaulAssociationInfo associationInfo = null;
+		if(attributeValue!=null) {
+			associationInfo = ensureInit(associationInfo);
+			associationInfo.setCascade(attributeValue);
+		}
+		
+		
+		attributeValue = manyToOne.attributeValue("fetch");
+		if(attributeValue!=null) {
+			associationInfo = ensureInit(associationInfo);
+			associationInfo.setFetch(attributeValue);
+		}					
+		
+		
+		attributeValue = manyToOne.attributeValue("insert");
+		if(attributeValue!=null) {
+			associationInfo = ensureInit(associationInfo);
+			associationInfo.setInsert(new Boolean(attributeValue));
+		}					
+		
+		
+		attributeValue = manyToOne.attributeValue("update");
+		if(attributeValue!=null) {
+			associationInfo = ensureInit(associationInfo);
+			associationInfo.setUpdate(new Boolean(attributeValue));
+		}
+		return associationInfo;
+	}
+
+	private static DefaulAssociationInfo ensureInit(
+			DefaulAssociationInfo associationInfo) {
+		return associationInfo==null?new DefaulAssociationInfo():associationInfo;
+	}
+
+	private static boolean validateFkAssociations(Element element){
+		Element manyToOne = element.element("many-to-one");
+		Element oneToOne = element.element("one-to-one");
+		Element set = element.element("set");
+		Element inverseOneToOne = element.element("inverse-one-to-one");
+		
+		if((manyToOne != null) && ( (oneToOne != null) || (inverseOneToOne != null))) {
+			return false;
+			
+		}
+				
+		if((oneToOne != null) && (set != null)) {
+			return false;
+		}
+		
+		if ((inverseOneToOne != null) && (set != null)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	private static Boolean BooleanValue(String string) {
 		if(string==null) return null;
 		return Boolean.valueOf(string);		
@@ -344,6 +449,7 @@ public final class OverrideBinder {
 	String getMatchString(String input) {
 		return input.toUpperCase();
 	}
+
 	
 
 }

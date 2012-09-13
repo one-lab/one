@@ -1,9 +1,7 @@
 //$Id: Group.java 5686 2005-02-12 07:27:32Z steveebersole $
 package org.hibernate.tool.stat;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**

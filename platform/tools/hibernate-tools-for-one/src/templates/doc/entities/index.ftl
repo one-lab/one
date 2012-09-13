@@ -1,25 +1,23 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 
-<HTML>
+<html>
+	<head>
+		<title>Hibernate Mappings - Entity Mapping Information</title>
+		<link rel="stylesheet" type="text/css" href="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" title="Style"/>
+	</head>
 
-<HEAD>
+	<frameset cols="20%,80%">
+		<frameset rows="30%,70%">
+			<frame src="allpackages.html" name="packagesFrame" title="All Packages"/>
+			<frame src="allentities.html" name="entitiesFrame" title="All Entities"/>
+		</frameset>
+		<frame src="summary.html" name="generalFrame" title="Entity descriptions" scrolling="yes"/>
+		<noframes>
+			<body>
+				<h2>Frame Alert</h2>
+				<p>This document is designed to be viewed using the frames feature. If you see this message, you are using a non-frame-capable web client.</p>
+			</body>
+		</noframes>
+	</frameset>
 
-<TITLE>Hibernate Mappings - Entity Mapping Information</TITLE>
-
-<LINK REL ="stylesheet" TYPE="text/css" HREF="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" TITLE="Style">
-
-</HEAD>
-
-<FRAMESET cols="20%,80%">
-	<FRAMESET rows="30%,70%">
-		<FRAME src="allpackages.html" name="packagesFrame" title="All Packages">
-		<FRAME src="allentities.html" name="entitiesFrame" title="All Entities">
-	</FRAMESET>
-	<FRAME src="summary.html" name="generalFrame" title="Entity descriptions" scrolling="yes">
-	<NOFRAMES>
-		<H2>Frame Alert</H2>
-		This document is designed to be viewed using the frames feature. If you see this message, you are using a non-frame-capable web browser.
-	</NOFRAMES>
-</FRAMESET>
-
-</HTML>
+</html>

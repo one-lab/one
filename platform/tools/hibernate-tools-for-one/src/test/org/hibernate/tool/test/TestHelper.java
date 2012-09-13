@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +20,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jdt.internal.compiler.batch.Main;
+import org.hibernate.cfg.reveng.JDBCReader;
 import org.hibernate.util.StringHelper;
 import org.xml.sax.SAXException;
 
@@ -27,6 +32,8 @@ import org.xml.sax.SAXException;
  * 
  */
 public final class TestHelper {
+
+	private static final Log log = LogFactory.getLog(TestHelper.class);
 
 	private TestHelper() {
 		// noop
@@ -72,7 +79,8 @@ public final class TestHelper {
 		togglesList.add( "-" + jdktarget ); // put this here so DAOs compile
 		togglesList.add( "-noExit" );
 		//togglesList.add( "-noWarn" );
-		togglesList.add( "-warn:unusedImport,noEffectAssign,fieldHiding,localHiding,semicolon,uselessTypeCheck" ); // TODO: unused private
+		//togglesList.add( "-warn:unusedImport,noEffectAssign,fieldHiding,localHiding,semicolon,uselessTypeCheck" ); // TODO: unused private
+		togglesList.add( "-warn:unusedImport,noEffectAssign,fieldHiding,localHiding,semicolon" ); // TODO: unused private
 		togglesList.add( "-sourcepath" );
 		togglesList.add( srcdir.getAbsolutePath() + File.separatorChar );
 		togglesList.add( "-d" );
@@ -110,6 +118,7 @@ public final class TestHelper {
 		// return javaCompile( arguments );
 	}
 
+	/* Uses the JDK javac tools.
 	private static boolean javaCompile(String[] arguments) {
 		StringWriter sw = new StringWriter();
 		int result = com.sun.tools.javac.Main.compile( arguments,
@@ -120,7 +129,7 @@ public final class TestHelper {
 		else {
 			return true;
 		}
-	}
+	}*/
 
 	/**
 	 * @param ext
@@ -156,15 +165,17 @@ public final class TestHelper {
 		if ( dir.isDirectory() ) {
 			String[] children = dir.list();
 			for (int i = 0; i < children.length; i++) {
-				boolean success = deleteDir( new File( dir, children[i] ) );
+				File childFile = new File( dir, children[i] );
+				boolean success = deleteDir( childFile );
 				if ( !success ) {
-					return false;
+					throw new RuntimeException("Could not delete " + childFile);
+					//return false;
 				}
 			}
 		}
 
 		// The directory is now empty so delete it
-		System.out.println("deleting: " + dir);
+		log.debug("deleting: " + dir);
 		return dir.delete();
 	}
 
@@ -196,8 +207,8 @@ public final class TestHelper {
 		return db;
 	}
 
-	public static String buildClasspath(List jars) {
-		StringBuffer classpath = new StringBuffer();
+	private static List buildClasspathFiles(List jars) {
+		List classpath = new ArrayList();
 		String dir = System.getProperty("org.hibernate.tool.test.libdir", "lib" + File.separator + "testlibs");
 		if(dir==null) {
 			throw new IllegalStateException("System property org.hibernate.tool.test.libdir must be set to run tests that compile with a custom classpath");
@@ -212,6 +223,19 @@ public final class TestHelper {
 			if(!f.exists()) {
 				throw new IllegalStateException(f + " not found. Check if system property org.hibernate.tool.test.libdir is set correctly.");
 			}
+			classpath.add(f);			
+		}
+		
+		return classpath;
+	}
+
+	public static String buildClasspath(List jars) {
+		List files = buildClasspathFiles(jars);
+		StringBuffer classpath = new StringBuffer();
+		
+		Iterator iterator = files.iterator();
+		while (iterator.hasNext()) {
+			File f = (File) iterator.next();
 			classpath.append(f);
 			if(iterator.hasNext()) {
 				classpath.append(File.pathSeparatorChar);
@@ -220,23 +244,38 @@ public final class TestHelper {
 		
 		return classpath.toString();
 	}
-
+	
+	public static URL[] buildClasspathURLS(List jars, File outputDir) throws MalformedURLException {
+		List files = buildClasspathFiles(jars);
+		List classpath = new ArrayList();
+		
+		if(outputDir!=null) {
+			classpath.add(outputDir.toURL());
+		}
+		Iterator iterator = files.iterator();
+		while (iterator.hasNext()) {
+			File f = (File) iterator.next();
+			classpath.add(f.toURL());			
+		}
+		
+		return (URL[]) classpath.toArray(new URL[classpath.size()]);
+	}
+	
 	static public String findFirstString(String string, File file) {
+		String str;
 		try {
 	        BufferedReader in = new BufferedReader(new FileReader(file) );
-	        String str;
 	        while ( (str = in.readLine() ) != null ) {
 	            if(str.indexOf(string)>=0) {
-					return str;
+					break;
 	            }
 	        }
-	        in.close();
-	        
+	        in.close();	        
 	    } 
 		catch (IOException e) {
 			throw new RuntimeException("trouble with searching in " + file,e);
 	    }
-		return null;
+		return str;
 	}
 
 }

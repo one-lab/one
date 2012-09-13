@@ -1,49 +1,45 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<#import "/doc/common.ftl" as common>
 
-<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<HEAD>
+<html>
+	<head>
+		<title>Hibernate Mappings - Entity Summary</title>
+		<link rel="stylesheet" type="text/css" href="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" title="Style"/>
+	</head>
+	<body>
+	
+		<@common.header selected="entities"/>
 
-<TITLE>Hibernate Mappings - Entity Summary</TITLE>
+		<h1>Hibernate Mapping Documentation</h1>
 
-<LINK REL ="stylesheet" TYPE="text/css" HREF="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" TITLE="Style">
+		<#if graphsGenerated>
+			<p>
+				<img src="entitygraph.png" alt="Entity Graph" usemap="#entitygraph"/>
+				<map name="entitygraph">
+					${entitygrapharea}
+				</map>
+			</p>
+		</#if>
 
-</HEAD>
+		<table>
+			<thead>
+				<tr>
+					<th class="MainTableHeading">
+						Packages
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#foreach package in packageList>
+				<tr>
+					<td>
+						<a href="${docFileManager.getRef(docFile, docFileManager.getPackageSummaryDocFile(package))}" target="generalFrame">${package}</a>
+					</td>
+				</tr>
+				</#foreach>
+			</tbody>
+		</table>
 
-<BODY>
-
-<H1>Hibernate Mapping Documentation</H1>
-
-<#if graphsGenerated>
-<p>
- <img src="entitygraph.png" usemap="#entitygraph"/>
-  <map name="entitygraph">
-  ${entitygrapharea}
- </map>
-</p>
-</#if>
-
-<H2>List of Packages</H2>
-
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0">
-	<THEAD>
-		<TR>
-			<TH COLSPAN="2" CLASS="MainTableHeading">
-				Packages
-			</TH>
-		</TR>
-	</THEAD>
-	<TBODY>
-<#foreach package in packageList>
-		<TR>
-			<TD>
-				
-				<A HREF='${docFileManager.getRef(docFile, docFileManager.getPackageSummaryDocFile(package))}' TARGET="generalFrame"><B>${package}</B></A>				
-			</TD>
-		</TR>
-</#foreach>
-	</TBODY>
-</TABLE>
-
-
-</BODY>
+	</body>
+</html>

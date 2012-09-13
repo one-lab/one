@@ -92,7 +92,7 @@ public class Hbm2JavaTest extends NonReflectiveTestCase {
 		assertEquals("test", findFirstString("testParent", file));
 	}
 	
-	public void testNoVelocityLeftOvers() {
+	public void testNoFreeMarkerLeftOvers() {
 
 		assertEquals( null, findFirstString( "$", new File( getOutputDir(),
 				"org/hibernate/tool/hbm2x/Customer.java" ) ) );
@@ -320,11 +320,13 @@ public class Hbm2JavaTest extends NonReflectiveTestCase {
 		assertEquals( 3, wl.size() );
 
 		PersistentClass uni = getCfg().getClassMapping( "HelloUniverse" );
-		pjc = c2j.getPOJOClass(pc);
+		pjc = c2j.getPOJOClass(uni);
 		List local = pjc.getPropertyClosureForFullConstructor();
-		assertEquals( 3, local.size() );
+		assertEquals( 6, local.size() );
 
-		assertEquals( local.get( 0 ), wl.get( 0 ) );
+		for(int i=0;i<wl.size();i++) {
+			assertEquals( i + " position should be the same", local.get( i ), wl.get( i ) );
+		}
 
 	}
 
@@ -379,17 +381,44 @@ public class Hbm2JavaTest extends NonReflectiveTestCase {
 		
 		assertEquals("Entity", context.importType("org.test.Entity"));
 		assertEquals("org.other.test.Entity", context.importType("org.other.test.Entity"));
-		
+				
 		assertEquals("Collection<org.marvel.Hulk>", context.importType("java.util.Collection<org.marvel.Hulk>"));
 		assertEquals("Map<java.lang.String, org.marvel.Hulk>", context.importType("java.util.Map<java.lang.String, org.marvel.Hulk>"));
 		assertEquals("Collection<org.marvel.Hulk>[]", context.importType("java.util.Collection<org.marvel.Hulk>[]"));
-		assertEquals("Map<java.lang.String, org.marvel.Hulk>", context.importType("java.util.Map<java.lang.String, org.marvel.Hulk>"));
+		assertEquals("Map<java.lang.String, org.marvel.Hulk>", context.importType("java.util.Map<java.lang.String, org.marvel.Hulk>"));		
 		
 		String string = context.generateImports();
 		assertTrue(string.indexOf("import org.hibernate.Session;")<0);
 		assertTrue(string.indexOf("import org.test.Entity;")>0);
-		assertTrue("Entity can only be imported once", string.indexOf("import org.other.test.Entity;")<0);
+		assertTrue("Entity can only be imported once", string.indexOf("import org.other.test.Entity;")<0);		
 		assertFalse(string.indexOf("<")>=0);
+		
+		assertEquals("Outer.Entity", context.importType("org.test.Outer$Entity"));
+		assertEquals("org.other.test.Outer.Entity", context.importType("org.other.test.Outer$Entity"));
+		
+		assertEquals("Collection<org.marvel.Outer.Hulk>", context.importType("java.util.Collection<org.marvel.Outer$Hulk>"));
+		assertEquals("Map<java.lang.String, org.marvel.Outer.Hulk>", context.importType("java.util.Map<java.lang.String, org.marvel.Outer$Hulk>"));
+		assertEquals("Collection<org.marvel.Outer.Hulk>[]", context.importType("java.util.Collection<org.marvel.Outer$Hulk>[]"));
+		assertEquals("Map<java.lang.String, org.marvel.Outer.Hulk>", context.importType("java.util.Map<java.lang.String, org.marvel.Outer$Hulk>"));
+		
+		
+		//assertEquals("Test.Entry", context.importType("org.hibernate.Test.Entry")); what should be the behavior for this ?
+		assertEquals("Test.Entry", context.importType("org.hibernate.Test$Entry"));
+		
+		assertEquals("Map.Entry", context.importType("java.util.Map$Entry"));
+		assertEquals("Entry", context.importType("java.util.Map.Entry")); // we can't detect that it is the same class here unless we try an load all strings so we fall back to default class name.
+		
+		assertEquals("List<java.util.Map.Entry>", context.importType( "java.util.List<java.util.Map$Entry>" ));
+		assertEquals("List<org.hibernate.Test.Entry>", context.importType( "java.util.List<org.hibernate.Test$Entry>" ));
+		
+		
+		string = context.generateImports();
+		
+		assertTrue(string.indexOf("import java.util.Map")>=0);
+		assertTrue(string.indexOf("import java.utilMap$")<0);
+		assertTrue(string.indexOf("$")<0);
+		
+		
 		
 	}
 	

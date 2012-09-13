@@ -59,7 +59,7 @@ digraph EntityGraph {
 <#macro propertyEdges root properties>
   /* Property edges/nodes for ${root} */
   <#foreach property in properties>
-     <#if c2h.getHibernateTypeName(property)?exists>
+     <#if c2h.getSafeHibernateTypeName(property)?exists>
      ${root} -> ${c2h.getHibernateTypeName(property)?replace(".","_dot_")} [ 
         label="${property.name}" 
         <#if c2j.isComponent(property)>

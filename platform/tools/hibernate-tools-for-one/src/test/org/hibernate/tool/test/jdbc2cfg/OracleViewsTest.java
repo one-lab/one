@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.hibernate.cfg.JDBCMetaDataConfiguration;
+import org.hibernate.cfg.reveng.dialect.OracleMetaDataDialect;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.Oracle9Dialect;
 import org.hibernate.mapping.PersistentClass;
@@ -53,6 +55,10 @@ public class OracleViewsTest extends JDBCMetaDataBinderTestCase {
 
 	public boolean appliesTo(Dialect dialect) {
 		return dialect instanceof Oracle9Dialect;
+	}
+	
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+		configuration.setProperty( "hibernatetool.metadatadialect", OracleMetaDataDialect.class.getName() );
 	}
 	
 	public void testViewAndSynonyms() throws SQLException {

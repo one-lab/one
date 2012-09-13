@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2x.GenericExporter;
 import org.hibernate.tool.hbm2x.pojo.POJOClass;
 
 /**

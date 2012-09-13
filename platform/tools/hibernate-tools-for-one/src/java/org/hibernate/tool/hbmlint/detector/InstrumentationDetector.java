@@ -25,7 +25,7 @@ public class InstrumentationDetector extends EntityModelDetector {
 		
 		if(Environment.getBytecodeProvider() instanceof BytecodeProviderImpl) {
 			cglibEnabled = true;
-		} else if(Environment.getBytecodeProvider() instanceof BytecodeProviderImpl) {
+		} else if(Environment.getBytecodeProvider() instanceof org.hibernate.bytecode.javassist.BytecodeProviderImpl) {
 			javassistEnabled = true;
 		}		
 	}
@@ -61,7 +61,7 @@ public class InstrumentationDetector extends EntityModelDetector {
 				Class intface = interfaces[i];				
 				if(intface.getName().equals( "net.sf.cglib.transform.impl.InterceptFieldEnabled" )) {
 					cglib = true;
-				} else if(javassistEnabled && !intface.getName().equals( "org.hibernate.bytecode.javassist.FieldHandled" )) {
+				} else if(intface.getName().equals( "org.hibernate.bytecode.javassist.FieldHandled" )) {
 					javaassist = true;
 				} 							
 			}

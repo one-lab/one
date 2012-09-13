@@ -1,8 +1,8 @@
 package org.hibernate.tool.stat; 
 
+import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 

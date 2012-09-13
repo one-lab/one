@@ -12,10 +12,9 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.connection.ConnectionProvider;
-import org.hibernate.exception.SQLExceptionConverter;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.ForeignKey;
+import org.hibernate.mapping.PrimaryKey;
 import org.hibernate.mapping.Table;
 import org.hibernate.util.StringHelper;
 
@@ -25,7 +24,9 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 	
 	private static Set AUTO_OPTIMISTICLOCK_COLUMNS;
 
-	private ReverseEngineeringSettings settings = new ReverseEngineeringSettings();
+	private ReverseEngineeringSettings settings = new ReverseEngineeringSettings(this);
+
+	private ReverseEngineeringRuntimeInfo runtimeInfo;
 	static {
 		AUTO_OPTIMISTICLOCK_COLUMNS = new HashSet();
 		AUTO_OPTIMISTICLOCK_COLUMNS.add("version");
@@ -59,7 +60,7 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 	 * TODO: are the from/to names correct ?
 	 */
     public String foreignKeyToCollectionName(String keyname, TableIdentifier fromTable, List fromColumns, TableIdentifier referencedTable, List referencedColumns, boolean uniqueReference) {
-		String propertyName = Introspector.decapitalize( StringHelper.unqualify( tableToClassName(fromTable) ) );
+		String propertyName = Introspector.decapitalize( StringHelper.unqualify( getRoot().tableToClassName(fromTable) ) );
 		propertyName = pluralize( propertyName );
 		
 		if(!uniqueReference) {
@@ -78,8 +79,16 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 		return ReverseEngineeringStrategyUtil.simplePluralize(singular);
 	}
 
+	public String foreignKeyToInverseEntityName(String keyname,
+			TableIdentifier fromTable, List fromColumnNames,
+			TableIdentifier referencedTable, List referencedColumnNames,
+			boolean uniqueReference) {		
+		return foreignKeyToEntityName(keyname, fromTable, fromColumnNames, referencedTable, referencedColumnNames, uniqueReference);
+	}
+	
+	
     public String foreignKeyToEntityName(String keyname, TableIdentifier fromTable, List fromColumnNames, TableIdentifier referencedTable, List referencedColumnNames, boolean uniqueReference) {
-        String propertyName = Introspector.decapitalize( StringHelper.unqualify( tableToClassName(referencedTable) ) );
+        String propertyName = Introspector.decapitalize( StringHelper.unqualify( getRoot().tableToClassName(referencedTable) ) );
         
         if(!uniqueReference) {
         	if(fromColumnNames!=null && fromColumnNames.size()==1) {
@@ -96,15 +105,27 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 	
 	public String columnToHibernateTypeName(TableIdentifier table, String columnName, int sqlType, int length, int precision, int scale, boolean nullable, boolean generatedIdentifier) {
 		String preferredHibernateType = JDBCToHibernateTypeHelper.getPreferredHibernateType(sqlType, length, precision, scale, nullable, generatedIdentifier);
-		if(preferredHibernateType==null) {
-			log.debug("No preferred hibernate type found for " + table.toString() + " column: " + columnName + " falling back to 'serializable'");
-			return "serializable";
+		
+		String location = "<no info>";
+		if(log.isDebugEnabled()) {
+			String info = " t:" + JDBCToHibernateTypeHelper.getJDBCTypeName( sqlType ) + " l:" + length + " p:" + precision + " s:" + scale + " n:" + nullable + " id:" + generatedIdentifier;
+			if(table!=null) {
+				location = Table.qualify(table.getCatalog(), table.getSchema(), table.getName() ) + "." + columnName + info;
+			} else {
+				
+				location += " Column: " + columnName + info;
+			}			
 		}
-		return preferredHibernateType;
+		if(preferredHibernateType==null) {
+			log.debug("No default type found for [" + location + "] falling back to [serializable]");
+			return "serializable";
+		} else {
+			log.debug("Default type found for [" + location + "] to [" + preferredHibernateType + "]");		
+			return preferredHibernateType;
+		}		
 	}
 
-	public boolean excludeTable(TableIdentifier ti) {
-		if(ti.getName().startsWith("BIN$")) return true; // hard code oracle recycle bin names. Better than requiring users to do it manually. TODO: make it dependent on dialect.
+	public boolean excludeTable(TableIdentifier ti) {		
 		return false;
 	}
 	
@@ -131,7 +152,7 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 	}
 
 	public String getTableIdentifierStrategyName(TableIdentifier identifier) {
-		return "assigned";
+		return null;
 	}
 
 	public Properties getTableIdentifierProperties(TableIdentifier identifier) {
@@ -146,13 +167,15 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 		return className + "Id"; 
 	}
 
-	public void configure(ConnectionProvider provider, SQLExceptionConverter sec) {
-		// noop		
+	public void configure(ReverseEngineeringRuntimeInfo rti) {
+		this.runtimeInfo = rti;		
 	}
 
 	public void close() {
-		// noop		
+		
 	}
+	
+	
 
 	/** Return explicit which column name should be used for optimistic lock */
 	public String getOptimisticLockColumnName(TableIdentifier identifier) {
@@ -188,6 +211,21 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 	}
 
 	public boolean isForeignKeyCollectionInverse(String name, TableIdentifier foreignKeyTable, List columns, TableIdentifier foreignKeyReferencedTable, List referencedColumns) {
+		Table fkTable = getRuntimeInfo().getTable(foreignKeyTable);
+		if(fkTable==null) {
+			return true; // we don't know better
+		}
+		
+		if(isManyToManyTable(fkTable)) {
+		       // if the reference column is the first one then we are inverse.
+			   Column column = fkTable.getColumn(0);
+			   Column fkColumn = (Column) referencedColumns.get(0);
+			   if(fkColumn.equals(column)) {
+				   return true;   
+			   } else {
+				   return false;
+			   }
+		}
 		return true;
 	}
 
@@ -199,10 +237,45 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 		this.settings = settings;		
 	}
 
+	public boolean isOneToOne(ForeignKey foreignKey) {
+		if(settings.getDetectOneToOne()) {
+			// add support for non-PK associations
+			List fkColumns = foreignKey.getColumns();
+			List pkForeignTableColumns = null;
+			
+			if (foreignKey.getTable().hasPrimaryKey())
+				pkForeignTableColumns = foreignKey.getTable().getPrimaryKey().getColumns();
+
+			boolean equals =
+				fkColumns != null && pkForeignTableColumns != null
+				&& fkColumns.size() == pkForeignTableColumns.size();
+
+			Iterator columns = foreignKey.getColumnIterator();
+			while (equals && columns.hasNext()) {
+				Column fkColumn = (Column) columns.next();
+				equals = equals && pkForeignTableColumns.contains(fkColumn);
+			}
+
+			return equals;
+		} else {
+			return false;
+		}
+    }
+
 	public boolean isManyToManyTable(Table table) {
 		if(settings.getDetectManyToMany()) {
+			
+			// if the number of columns in the primary key is different 
+			// than the total number of columns then it can't be a middle table
+			PrimaryKey pk = table.getPrimaryKey();
+			if ( pk==null || pk.getColumns().size() != table.getColumnSpan() )
+				return false;
+			
 			Iterator foreignKeyIterator = table.getForeignKeyIterator();
 			List foreignKeys = new ArrayList();
+			
+			// if we have more than 2 fk, means we have more than 2 table implied
+			// in this table --> cannot be a simple many-to-many
 			while ( foreignKeyIterator.hasNext() ) {
 				ForeignKey fkey = (ForeignKey) foreignKeyIterator.next();
 				foreignKeys.add( fkey );
@@ -214,27 +287,43 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 				return false;
 			}
 			
+			// tests that all columns are implied in the fks
 			Set columns = new HashSet();
 			Iterator columnIterator = table.getColumnIterator();
 			while ( columnIterator.hasNext() ) {
 				Column column = (Column) columnIterator.next();
 				columns.add(column);
 			}
-		
+			
+						
 			foreignKeyIterator = table.getForeignKeyIterator();
 			while ( !columns.isEmpty() && foreignKeyIterator.hasNext() ) {
 				ForeignKey element = (ForeignKey) foreignKeyIterator.next();				
 				columns.removeAll( element.getColumns() );				
 			}
 			// what if one of the columns is not the primary key?
+			
 			return columns.isEmpty();
+			
+
+			
+			
+			
 		} else {
 			return false;
 		}
 	}
 
+	protected ReverseEngineeringStrategy getRoot() {
+		return settings.getRootStrategy();
+	}
+	
+	protected ReverseEngineeringRuntimeInfo getRuntimeInfo() {
+		return runtimeInfo;
+	}
+	
 	public String foreignKeyToManyToManyName(ForeignKey fromKey, TableIdentifier middleTable, ForeignKey toKey, boolean uniqueReference) {
-		String propertyName = Introspector.decapitalize( StringHelper.unqualify( tableToClassName(TableIdentifier.create( toKey.getReferencedTable()) )) );
+		String propertyName = Introspector.decapitalize( StringHelper.unqualify( getRoot().tableToClassName(TableIdentifier.create( toKey.getReferencedTable()) )) );
 		propertyName = pluralize( propertyName );
 		
 		if(!uniqueReference) {
@@ -257,5 +346,15 @@ public class DefaultReverseEngineeringStrategy implements ReverseEngineeringStra
 	public Map columnToMetaAttributes(TableIdentifier identifier, String column) {
 		return null;
 	}
+
+	public AssociationInfo foreignKeyToAssociationInfo(ForeignKey foreignKey) {
+		return null;
+	}
+
+	public AssociationInfo foreignKeyToInverseAssociationInfo(ForeignKey foreignKey) {
+		return null;
+	}
+
+	
 	
 }

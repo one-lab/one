@@ -101,6 +101,78 @@ public class GenericExporterTest extends NonReflectiveTestCase {
 		"genericHelloUniverse.txt" ) );
 	}
 
+	public void testForEachGeneration() {
+
+		GenericExporter ge = new GenericExporter();
+		ge.setConfiguration(getCfg());
+		ge.setOutputDirectory(getOutputDir());
+		ge.setTemplateName("generictemplates/pojo/generic-class.ftl");
+		ge.setFilePattern("{package-name}/generic{class-name}.txt");
+		ge.setForEach("entity");
+		ge.start();
+
+		assertFileAndExists( new File( getOutputDir(),
+				"org/hibernate/tool/hbm2x/genericAuthor.txt" ) );
+		
+		assertFileAndExists( new File( getOutputDir(),
+		"org/hibernate/tool/hbm2x/genericArticle.txt" ) );
+
+		assertFileAndExists( new File( getOutputDir(),
+		"org/hibernate/tool/hbm2x/genericArticle.txt" ) );		
+		
+		assertFalse("component file should not exist", new File( getOutputDir(), "genericUniversalAddress.txt" ).exists());
+		
+		
+		assertFileAndExists( new File( getOutputDir(),
+		"genericHelloUniverse.txt" ) );
+		
+		
+		try {
+			ge.setForEach( "does, not, exist" );
+			ge.start();
+			fail();
+		} catch(Exception e) {
+			//e.printStackTrace();
+			//expected
+		}
+	}
+
+	public void testForEachWithExceptionGeneration() {
+
+		GenericExporter ge = new GenericExporter();
+		ge.setConfiguration(getCfg());
+		ge.setOutputDirectory(getOutputDir());
+		ge.setTemplateName("generictemplates/generic-exception.ftl");
+		ge.setFilePattern("{package-name}/generic{class-name}.txt");
+		
+		try {
+			ge.setForEach("entity");
+			ge.start();
+			fail();
+		} catch(ExporterException e) {
+			assertTrue(e.getMessage().startsWith("Error while processing Entity:"));			
+		}
+
+
+		try {
+			ge.setForEach("component");
+			ge.start();
+			fail();
+		} catch(ExporterException e) {
+			assertTrue(e.getMessage().startsWith("Error while processing Component: UniversalAddress"));
+		}
+		
+		try {
+			ge.setForEach("configuration");
+			ge.start();
+			fail();
+		} catch(ExporterException e) {
+			assertTrue(e.getMessage().startsWith("Error while processing Configuration"));
+		}
+
+
+	}
+
 	public void testPropertySet() throws FileNotFoundException, IOException {
 		GenericExporter ge = new GenericExporter();
 		ge.setConfiguration(getCfg());

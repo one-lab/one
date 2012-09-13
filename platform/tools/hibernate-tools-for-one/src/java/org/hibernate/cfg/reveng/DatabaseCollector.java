@@ -5,16 +5,25 @@ import java.util.Map;
 
 import org.hibernate.mapping.Table;
 
+// split up to readonly/writeable interface
+/**
+ * Only intended to be used internally in reveng. *not* public api.
+ */
 public interface DatabaseCollector {
 
-	public abstract Iterator iterateTables();
+	public Iterator iterateTables();
 
-	public abstract Table addTable(String schema, String catalog, String name);
+	public Table addTable(String schema, String catalog, String name);
 
-	public abstract void setOneToManyCandidates(Map oneToManyCandidates);
+	public void setOneToManyCandidates(Map oneToManyCandidates);
 
-	public abstract Table getTable(String schema, String catalog, String name);
+	public Table getTable(String schema, String catalog, String name);
 
-	public abstract Map getOneToManyCandidates();
+	public Map getOneToManyCandidates();
 
+	public void addSuggestedIdentifierStrategy(String catalog, String schema, String name, String strategy);
+	
+	public String getSuggestedIdentifierStrategy(String catalog, String schema, String name);
+	
+	
 }

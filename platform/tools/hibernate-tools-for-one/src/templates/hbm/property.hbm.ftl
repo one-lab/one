@@ -1,6 +1,8 @@
     <property
         name="${property.name}"
-        type="${property.value.typeName}"
+<#if !property.value.typeParameters?exists>
+	    type="${property.value.typeName}"
+</#if>        
 <#if !property.updateable>
         update="false"
 </#if>
@@ -28,5 +30,12 @@
   <#foreach column in property.columnIterator>
         <#include "column.hbm.ftl">
   </#foreach>	
+  <#if property.value.typeParameters?exists>
+  <type name="${property.value.typeName}">
+  		<#foreach entry in property.value.typeParameters.entrySet()>
+              		<param name="${entry.key}">${entry.value}</param>
+        </#foreach>  	  
+  </type>
+  </#if>
   </property>
 

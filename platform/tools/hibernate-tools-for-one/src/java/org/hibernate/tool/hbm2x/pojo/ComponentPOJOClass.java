@@ -153,7 +153,7 @@ public class ComponentPOJOClass extends BasicPOJOClass {
 	}
 
 	public String toString() {
-		return getClass().getName() + "(" + (clazz==null?"<none>":clazz.getComponentClassName()) + ")";
+		return "Component: " + (clazz==null?"<none>":clazz.getComponentClassName());
 	}
 	
 	public Property getIdentifierProperty(){
@@ -163,5 +163,12 @@ public class ComponentPOJOClass extends BasicPOJOClass {
    public boolean hasVersionProperty() {
 	   return false;
    }
-	
+   
+	/*
+	 * @see org.hibernate.tool.hbm2x.pojo.POJOClass#getVersionProperty()
+	 */
+	public Property getVersionProperty()
+	{
+		return null;
+	}
 }

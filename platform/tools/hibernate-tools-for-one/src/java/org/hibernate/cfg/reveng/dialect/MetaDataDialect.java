@@ -2,6 +2,7 @@ package org.hibernate.cfg.reveng.dialect;
 
 import java.util.Iterator;
 
+import org.hibernate.cfg.reveng.ReverseEngineeringRuntimeInfo;
 import org.hibernate.connection.ConnectionProvider;
 import org.hibernate.exception.SQLExceptionConverter;
 
@@ -20,10 +21,9 @@ public interface MetaDataDialect {
 
 	/**
 	 * Configure the metadatadialect. 
-	 * @param provider a connectionprovider. It is the responsibility of the metadatadialect to open/close any used connections via this provider.
-	 * @param sec sqlexceptionConverter, use to convert any possible SQLExceptionsConverter.
+	 * @param info a {@link ReverseEngineeringRuntimeInfo} to extract Connection and SQLExceptionConverter and other runtime info
 	 */
-	public void configure(ConnectionProvider provider, SQLExceptionConverter sec);
+	public void configure(ReverseEngineeringRuntimeInfo info);
 	
 	/** 
 	 * Return iterator over the tables that mathces catalog, schema and table
@@ -95,4 +95,16 @@ public interface MetaDataDialect {
 	 * Close any resources this dialect might have used.
 	 */
 	void close();
+
+	/**
+	 * Use database (possible native) metadata to suggest identifier strategy. 
+	 * 
+	 * @param catalog
+	 * @param schema
+	 * @param name
+	 * @return iterator with map elements that has "TABLE_NAME", "TABLE_SCHEMA", "TABLE_CAT", "HIBERNATE_STRATEGY" (null if no possible to determine strategy, otherwise return hibernate identifier strategy name/classname)
+	 */
+	public Iterator getSuggestedPrimaryKeyStrategyName(String catalog, String schema, String table);
+
+	
 }

@@ -8,8 +8,8 @@ public abstract class Detector {
 	private Configuration cfg;
 	private Settings settings;
 
-	public void initialize(Configuration cfg, Settings settings) {
-		this.cfg = cfg;
+	public void initialize(Configuration configuration, Settings settings) {
+		this.cfg = configuration;
 		this.settings = settings;		
 	}
 	
@@ -21,7 +21,7 @@ public abstract class Detector {
 		return cfg;
 	}
 
-	public void visit(Configuration cfg, IssueCollector collector) {
+	public void visit(Configuration configuration, IssueCollector collector) {
 		
 	}
 	

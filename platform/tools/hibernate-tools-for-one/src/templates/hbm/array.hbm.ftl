@@ -1,26 +1,26 @@
 <#assign value = property.value>
-<#assign dependentValue = value.getKey()>
-<#if c2h.isOneToMany(value.getElement())>
- <#assign toManyElement = "one-to-many">
- <#assign toManyClass = value.getElement().getAssociatedClass().getEntityName()>
-<#else>
- <#-- many-to-one not valid-->
- <#assign toManyElement = "many-to-many">
-<#assign toManyClass = value.getElement().getType().getAssociatedEntityName()>
-</#if>
-<array name="${property.name}" cascade="${property.cascade}" 
- <#assign metaattributable=property>
- <#include "meta.hbm.ftl">
-<#if c2h.hasFetchMode(property)> fetch="${fetch}"</#if>>
-    <key> 
-       <#foreach column in dependentValue.columnIterator>
-                <#include "column.hbm.ftl">
-       </#foreach>
-    </key>
+<#assign keyValue = value.getKey()>
+<#assign elementValue = value.getElement()>
+<#assign indexValue = value.getIndex()>
+<#assign elementTag = c2h.getCollectionElementTag(property)>
+
+<array name="${property.name}"
+	<#if value.elementClassName?exists> element-class="${value.elementClassName}"</#if>
+	<#include "collection-tableattr.hbm.ftl">
+	<#if property.cascade != "none">
+        cascade="${property.cascade}"
+	</#if>
+	<#if !property.basicPropertyAccessor>
+        access="${property.propertyAccessorName}"
+	</#if>
+	<#if c2h.hasFetchMode(property)> fetch="${c2h.getFetchMode(property)}"</#if>>
+ 	<#assign metaattributable=property>
+ 	<#include "meta.hbm.ftl">
+    <#include "key.hbm.ftl">
     <list-index>
-       <#foreach column in value.getIndex().getColumnIterator()>
-                <#include "column.hbm.ftl">
-       </#foreach>
+    <#foreach column in indexValue.columnIterator>
+    	<#include "column.hbm.ftl">
+    </#foreach>  
     </list-index>
-<${toManyElement} class="${toManyClass}" />
+    <#include "${elementTag}-element.hbm.ftl">
 </array>

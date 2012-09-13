@@ -13,6 +13,7 @@ import org.hibernate.MappingException;
 import org.hibernate.cfg.reveng.DefaultReverseEngineeringStrategy;
 import org.hibernate.cfg.reveng.ReverseEngineeringStrategy;
 import org.hibernate.engine.Mapping;
+import org.hibernate.id.factory.IdentifierGeneratorFactory;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.Table;
@@ -30,9 +31,11 @@ public class JDBCMetaDataConfiguration extends Configuration {
     
 	protected void secondPassCompileForeignKeys(Table table, Set done)
 			throws MappingException {
-		//super.secondPassCompileForeignKeys(table, done);
+		super.secondPassCompileForeignKeys(table, done);
 		// TODO: doing nothing to avoid creating foreignkeys which is NOT actually in the database. 
 	}
+	
+	
 	
 	public void readFromJDBC() {
 		JDBCBinder binder = new JDBCBinder(this, buildSettings(), createMappings(),revEngStrategy);
@@ -65,6 +68,10 @@ public class JDBCMetaDataConfiguration extends Configuration {
 				Property prop = pc.getProperty(propertyName);
 				if (prop==null)  throw new MappingException("property not known: " + persistentClass + '.' + propertyName);
 				return prop.getType();
+			}
+
+			public IdentifierGeneratorFactory getIdentifierGeneratorFactory() {
+				return null;
 			}
 		};
 	}

@@ -25,9 +25,9 @@ import org.hibernate.tool.JDBCMetaDataBinderTestCase;
  */
 public class OracleCompositeIdOrderTest extends JDBCMetaDataBinderTestCase {
 
-	protected void configure(JDBCMetaDataConfiguration cfg) {
-		cfg.setPreferBasicCompositeIds(false);
-		super.configure( cfg );		
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+		configuration.setPreferBasicCompositeIds(false);
+		super.configure( configuration );		
 	}
 	
 	

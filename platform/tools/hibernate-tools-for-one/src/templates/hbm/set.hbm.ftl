@@ -1,30 +1,22 @@
-	<set
-		name="${property.name}"
-		inverse="${property.value.inverse?string}"
-		<#if !c2h.isOneToMany(property)>
-		table="${property.value.collectionTable.name}"
-		</#if>
-		>
+<#assign value = property.value>
+<#assign keyValue = value.getKey()>
+<#assign elementValue = value.getElement()>
+<#assign elementTag = c2h.getCollectionElementTag(property)>
+
+	<set name="${property.name}"
+	<#include "collection-tableattr.hbm.ftl"> 
+	inverse="${value.inverse?string}"
+	lazy="${c2h.getCollectionLazy(value)}"	 		
+	<#if property.cascade != "none">
+        cascade="${property.cascade}"
+	</#if>
+	<#if !property.basicPropertyAccessor>
+        access="${property.propertyAccessorName}"
+	</#if>
+	<#if c2h.hasFetchMode(property)> fetch="${c2h.getFetchMode(property)}"</#if>
+	>
 		<#assign metaattributable=property>
 		<#include "meta.hbm.ftl">
-		<key> 
-        <#foreach column in property.value.key.columnIterator>
-          <#include "column.hbm.ftl">
-        </#foreach>
-        </key>
-<#if c2h.isOneToMany(property)>
-		<one-to-many 
-			 class="${property.getValue().getElement().getAssociatedClass().getClassName()}"
-<#if !property.getValue().getElement().getAssociatedClass().getClassName().equals(property.getValue().getElement().getReferencedEntityName())>
-			 entity-name="${property.getValue().getElement().getReferencedEntityName()}"
-</#if>
-			/>			
-<#elseif c2h.isManyToMany(property)>
-        <many-to-many 
-			 entity-name="${property.getValue().getElement().getReferencedEntityName()}"> <#-- lookup needed classname -->
-<#foreach column in property.getValue().getElement().columnIterator>
-    <#include "column.hbm.ftl">
-</#foreach>            
-		</many-to-many>
-</#if>
+		<#include "key.hbm.ftl">
+		<#include "${elementTag}-element.hbm.ftl">
 	</set>

@@ -1,8 +1,8 @@
 //$Id$
 package org.hibernate.tool;
 
-import java.io.File;
 
+import org.dom4j.io.SAXReader;
 import org.hibernate.HibernateException;
 import org.hibernate.Interceptor;
 import org.hibernate.SessionFactory;
@@ -10,7 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.tool.test.TestHelper;
+import org.hibernate.util.DTDEntityResolver;
 
 public abstract class NonReflectiveTestCase extends BaseTestCase {
 
@@ -176,9 +176,6 @@ public abstract class NonReflectiveTestCase extends BaseTestCase {
 		return cfg;
 	}
 
-	protected String findFirstString(String string, File file) {
-		return TestHelper.findFirstString(string, file);
-	}	
 	
 	public Configuration getConfiguration() {
 		return getCfg();
@@ -187,4 +184,11 @@ public abstract class NonReflectiveTestCase extends BaseTestCase {
 	protected void buildSessionFactory() {
 		sessions = getCfg().buildSessionFactory();
 	}
+	
+	public SAXReader getSAXReader() {
+    	SAXReader xmlReader = new SAXReader();
+    	xmlReader.setEntityResolver(new DTDEntityResolver() );
+    	xmlReader.setValidation(true);
+    	return xmlReader;
+    }
 }

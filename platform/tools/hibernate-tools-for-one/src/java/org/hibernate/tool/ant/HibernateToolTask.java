@@ -17,7 +17,6 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.PropertySet;
-import org.hibernate.MappingException;
 import org.hibernate.MappingNotFoundException;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.util.StringHelper;
@@ -28,6 +27,9 @@ import org.hibernate.util.StringHelper;
  */
 public class HibernateToolTask extends Task {
 
+	public HibernateToolTask() {
+		super();
+	}
 	ConfigurationTask configurationTask;
 	private File destDir;
 	private List generators = new ArrayList();
@@ -148,7 +150,8 @@ public class HibernateToolTask extends Task {
     public void setClasspath(Path s) {
 		classPath = s;
     }
-
+    
+    
     /**
      * Adds a path to the classpath.
      *
@@ -169,12 +172,13 @@ public class HibernateToolTask extends Task {
 		Iterator iterator = generators.iterator();
 		
 		AntClassLoader loader = getProject().createClassLoader(classPath);
+		
 		ExporterTask generatorTask = null;
 		int count = 1;
 		try {
-			loader.setParent(this.getClass().getClassLoader() ); // if this is not set, classes from the taskdef cannot be found - which is crucial for e.g. annotations.
+			ClassLoader classLoader = this.getClass().getClassLoader();
+			loader.setParent(classLoader ); // if this is not set, classes from the taskdef cannot be found - which is crucial for e.g. annotations.
 			loader.setThreadContextLoader();
-			
 			
 			while (iterator.hasNext() ) {				
 				generatorTask = (ExporterTask) iterator.next();
@@ -323,5 +327,6 @@ public class HibernateToolTask extends Task {
 	public void addConfiguredProperty(Environment.Variable property) {
 		properties.put(property.getKey(), property.getValue());
 	}
+	
 	
 }

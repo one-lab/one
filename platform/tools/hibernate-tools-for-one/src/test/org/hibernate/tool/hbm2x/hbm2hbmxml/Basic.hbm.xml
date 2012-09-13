@@ -36,7 +36,7 @@
     	
     	<property name="numberAvailable" type="int" column="`number-Available`"/>
     	
-    	<set name="aSet">
+    	<set name="aSet" cascade="delete, update">
     	 <meta attribute="set-desc">anotherone</meta>    	 
     	 <key/>
     	 <one-to-many class="Basic"/>

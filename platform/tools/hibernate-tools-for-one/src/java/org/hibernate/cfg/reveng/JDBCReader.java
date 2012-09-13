@@ -23,7 +23,6 @@ import org.hibernate.MappingException;
 import org.hibernate.cfg.JDBCBinderException;
 import org.hibernate.cfg.reveng.dialect.MetaDataDialect;
 import org.hibernate.connection.ConnectionProvider;
-import org.hibernate.dialect.Dialect;
 import org.hibernate.exception.SQLExceptionConverter;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.ForeignKey;
@@ -32,6 +31,7 @@ import org.hibernate.mapping.PrimaryKey;
 import org.hibernate.mapping.Table;
 import org.hibernate.mapping.UniqueKey;
 import org.hibernate.sql.Alias;
+import org.hibernate.util.StringHelper;
 
 public class JDBCReader {
 
@@ -62,8 +62,9 @@ public class JDBCReader {
 		
 	public List readDatabaseSchema(DatabaseCollector dbs, String catalog, String schema, ProgressListener progress) {
 		try {
-			getMetaDataDialect().configure(provider, sec);
-			revengStrategy.configure(provider, sec);
+			ReverseEngineeringRuntimeInfo info = new ReverseEngineeringRuntimeInfo(provider, sec, dbs);
+			getMetaDataDialect().configure(info);
+			revengStrategy.configure(info);
 			
 			Set hasIndices = new HashSet();
 			
@@ -82,7 +83,7 @@ public class JDBCReader {
 			while ( tables.hasNext() ) {
 				Table table = (Table) tables.next();
 				processBasicColumns(table, progress);
-				processPrimaryKey(table);
+				processPrimaryKey(dbs, table);
 				if(hasIndices.contains(table)) {
 					processIndices(table);
 				}
@@ -192,14 +193,14 @@ public class JDBCReader {
 				String pkColumnName = (String) exportedKeyRs.get("PKCOLUMN_NAME");
 				String fkName = (String) exportedKeyRs.get("FK_NAME");
 				short keySeq = ((Short)exportedKeyRs.get("KEY_SEQ")).shortValue();
-				
-				log.debug("foreign key name: " + fkName);
 								
 				Table fkTable = dbs.getTable(fkSchema, fkCatalog, fkTableName);
 				if(fkTable==null) {
 					//	filter out stuff we don't have tables for!
 					log.debug("Foreign key " + fkName + " references unknown or filtered table " + Table.qualify(fkCatalog, fkSchema, fkTableName) );
 					continue;
+				} else {
+					log.debug("Foreign key " + fkName);
 				}
 				
 				// TODO: if there is a relation to a column which is not a pk
@@ -234,6 +235,19 @@ public class JDBCReader {
 				column = existingColumn==null ? column : existingColumn;
 				
 				depColumns.add(column);
+				
+				List primColumns = (List) referencedColumns.get(fkName);
+				if (primColumns == null) {
+					primColumns = new ArrayList();
+					referencedColumns.put(fkName,primColumns);					
+				} 
+				
+				Column refColumn = new Column(pkColumnName);
+				existingColumn = referencedTable.getColumn(refColumn);
+				refColumn = existingColumn==null?refColumn:existingColumn;
+				
+				primColumns.add(refColumn);
+				
 			}
 		} 
         finally {
@@ -315,6 +329,7 @@ public class JDBCReader {
 
 	
 	/**
+	 * @param dbs 
 	 * @param catalog
 	 * @param schema
 	 * @param table
@@ -322,8 +337,8 @@ public class JDBCReader {
 	 * @return
 	 * @throws SQLException
 	 */
-	private void processPrimaryKey(Table table) {
-		
+	private void processPrimaryKey(DatabaseCollector dbs, Table table) {
+				
 		List columns = new ArrayList();
 		PrimaryKey key = null;
 		Iterator primaryKeyIterator = null;
@@ -393,7 +408,7 @@ public class JDBCReader {
 			t.add(element[1]);
 	      }
 	      columns = t;
-			      
+	      
 	      if(key==null) {
 	      	log.warn("The JDBC driver didn't report any primary key columns in " + table.getName() + ". Asking rev.eng. strategy" );
 	      	List userPrimaryKey = revengStrategy.getPrimaryKeyColumnNames(TableIdentifier.create(table));
@@ -410,7 +425,26 @@ public class JDBCReader {
 	      		log.warn("Rev.eng. strategy did not report any primary key columns for " + table.getName());
 	      	}	      	
 	      }
-	      
+
+	      Iterator suggestedPrimaryKeyStrategyName = getMetaDataDialect().getSuggestedPrimaryKeyStrategyName( getCatalogForDBLookup(table.getCatalog()), getSchemaForDBLookup(table.getSchema()), table.getName() );
+	      try {
+	      if(suggestedPrimaryKeyStrategyName.hasNext()) {
+	    	  Map m = (Map) suggestedPrimaryKeyStrategyName.next();
+	    	  String suggestion = (String) m.get( "HIBERNATE_STRATEGY" );
+	    	  if(suggestion!=null) {
+	    		  dbs.addSuggestedIdentifierStrategy( table.getCatalog(), table.getSchema(), table.getName(), suggestion );
+	    	  }
+	      }
+	      } finally {
+	    	  if(suggestedPrimaryKeyStrategyName!=null) {
+					try {
+						getMetaDataDialect().close(suggestedPrimaryKeyStrategyName);
+					} catch(JDBCException se) {
+						log.warn("Exception while closing iterator for suggested primary key strategy name",se);
+					}
+				}	    	  
+	      }
+	      	      
 	      if(key!=null) {
 	    	  cols = columns.iterator();
 	    	  while (cols.hasNext() ) {
@@ -421,11 +455,7 @@ public class JDBCReader {
 	    	  }
 	    	  log.debug("primary key for " + table + " -> "  + key);
 	      } 
-	     
-	      	     
-	      	
-	      
-		
+	     	      
 	}
 
 	private boolean safeEquals(Object value, Object tf) {
@@ -443,7 +473,9 @@ public class JDBCReader {
 		  try {			  
 		     progress.startSubTask("Finding tables in " + schemaSelection);
 		     
-		     tableIterator = getMetaDataDialect().getTables(schemaSelection.getMatchCatalog(), schemaSelection.getMatchSchema(), schemaSelection.getMatchTable());
+		     tableIterator = getMetaDataDialect().getTables(StringHelper.replace(schemaSelection.getMatchCatalog(),".*", "%"), 
+		    		                                        StringHelper.replace(schemaSelection.getMatchSchema(),".*", "%"), 
+		    		                                        StringHelper.replace(schemaSelection.getMatchTable(),".*", "%"));
 		     String[] lastQualifier = null;
 		     String[] foundQualifier = new String[2];
 		     
@@ -504,7 +536,7 @@ public class JDBCReader {
 				  log.debug("Ignoring " + tableName + " since it has already been processed");
 				  continue;
 			  } else {
-				  if ( ("TABLE".equals(tableType) || "VIEW".equals(tableType) /*|| "SYNONYM".equals(tableType) */) ) { //||
+				  if ( ("TABLE".equalsIgnoreCase(tableType) || "VIEW".equalsIgnoreCase(tableType) /*|| "SYNONYM".equals(tableType) */) ) { //||
 					  // ("SYNONYM".equals(tableType) && isOracle() ) ) { // only on oracle ? TODO: HBX-218
 					  // it's a regular table or a synonym
 					  
@@ -517,9 +549,9 @@ public class JDBCReader {
 					  }
 					  log.debug("Adding table " + tableName + " of type " + tableType);
 					  progress.startSubTask("Found " + tableName);
-					  Table table = dbs.addTable(quote(getSchemaForModel(schemaName)), getCatalogForModel(catalogName), quote(tableName));
+					  Table table = dbs.addTable(getSchemaForModel(schemaName), getCatalogForModel(catalogName), tableName);
 					  table.setComment(comment);
-					  if(tableType.equals("TABLE")) {
+					  if(tableType.equalsIgnoreCase("TABLE")) {
 						  hasIndices.add(table);
 					  }
 					  processedTables.add( table );
@@ -550,14 +582,13 @@ public class JDBCReader {
 				columnRs = (Map) columnIterator.next();
 				String tableName = (String) columnRs.get("TABLE_NAME");
 				int sqlType = ((Integer)columnRs.get("DATA_TYPE")).intValue();
-				String sqlTypeName = (String) columnRs.get("TYPE_NAME");
+				//String sqlTypeName = (String) columnRs.get("TYPE_NAME");
 				String columnName = (String) columnRs.get("COLUMN_NAME");
 				
 			
 				
 				
 				String comment = (String) columnRs.get("REMARKS");
-				
 				TableIdentifier ti = TableIdentifier.create(table);
 				if(revengStrategy.excludeColumn(ti, columnName)) {
 					log.debug("Column " + ti + "." + columnName + " excluded by strategy");
@@ -636,7 +667,7 @@ public class JDBCReader {
 	}
 
 
-	   private String quote(String columnName) {
+	private String quote(String columnName) {
 		   if(columnName==null) return columnName;
 		   if(getMetaDataDialect().needQuote(columnName)) {
 			   if(columnName.length()>1 && columnName.charAt(0)=='`' && columnName.charAt(columnName.length()-1)=='`') {
@@ -648,7 +679,7 @@ public class JDBCReader {
 		   }		
 	}
 
-	private MetaDataDialect getMetaDataDialect() {
+	public MetaDataDialect getMetaDataDialect() {
 		return metadataDialect;
 	}
 	

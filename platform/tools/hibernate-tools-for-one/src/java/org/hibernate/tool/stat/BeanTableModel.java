@@ -1,6 +1,5 @@
 package org.hibernate.tool.stat;
 
-import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;

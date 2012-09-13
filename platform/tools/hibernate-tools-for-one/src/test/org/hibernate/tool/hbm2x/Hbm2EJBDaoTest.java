@@ -5,6 +5,7 @@
 package org.hibernate.tool.hbm2x;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,9 @@ public class Hbm2EJBDaoTest extends NonReflectiveTestCase {
 		assertFileAndExists(new File(getOutputDir(), "org/hibernate/tool/hbm2x/AuthorHome.java") );
 	}
 	
-	public void testCompilable() {
+	public void testCompilable() throws IOException {
+		
+		generateComparator();
 		
 		File file = new File("compilable");
 		file.mkdir();
@@ -45,7 +48,7 @@ public class Hbm2EJBDaoTest extends NonReflectiveTestCase {
 		ArrayList list = new ArrayList();
 		List jars = new ArrayList();
 		jars.add("commons-logging-1.0.4.jar");
-		jars.add("ejb3-persistence.jar");
+		jars.add("hibernate-jpa-2.0-api-1.0.0.Final.jar");
 		jars.add("jboss-ejb3x.jar");
 		TestHelper.compile(getOutputDir(), file, TestHelper.visitAllFiles(getOutputDir(), list), "1.5", TestHelper.buildClasspath(jars) );
 		

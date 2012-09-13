@@ -4,7 +4,6 @@
  */
 package org.hibernate.tool.test.jdbc2cfg;
 
-import java.io.File;
 import java.sql.Types;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.Map;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.cfg.JDBCMetaDataConfiguration;
 import org.hibernate.cfg.Settings;
@@ -34,7 +32,6 @@ import org.hibernate.mapping.Property;
 import org.hibernate.mapping.SimpleValue;
 import org.hibernate.mapping.Table;
 import org.hibernate.tool.JDBCMetaDataBinderTestCase;
-import org.hibernate.tool.hbm2x.HibernateMappingExporter;
 
 /**
  * @author max
@@ -121,6 +118,17 @@ public class OverrideBinderTest extends JDBCMetaDataBinderTestCase {
 		assertEquals("OVRTEST",ss.getMatchSchema());
 		assertEquals(".*",ss.getMatchTable());
 		
+		JDBCMetaDataConfiguration configuration = new JDBCMetaDataConfiguration();
+		
+		OverrideRepository ox = new OverrideRepository();
+		ox.addSchemaSelection(new SchemaSelection(null, null, "DUMMY.*"));
+		configuration.setReverseEngineeringStrategy(ox.getReverseEngineeringStrategy(new DefaultReverseEngineeringStrategy()));
+		configuration.readFromJDBC();
+		
+		Iterator tableMappings = configuration.getTableMappings();
+		Table t = (Table) tableMappings.next();
+		assertEquals(t.getName(), "DUMMY");
+		assertFalse(tableMappings.hasNext());
 	}
 
 
@@ -281,6 +289,7 @@ public class OverrideBinderTest extends JDBCMetaDataBinderTestCase {
 		assertNotNull(foundTable);
 		Iterator fkiter = foundTable.getForeignKeyIterator();
 		ForeignKey fk1 = (ForeignKey) fkiter.next();
+		assertNotNull(fk1);
 		assertFalse(fkiter.hasNext() );
 		
 		
@@ -480,12 +489,11 @@ public class OverrideBinderTest extends JDBCMetaDataBinderTestCase {
 		
 	}
 	
-	protected void configure(JDBCMetaDataConfiguration cfg) {
-		super.configure(cfg);		
-		Settings s = cfg.buildSettings();
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+		super.configure(configuration);		
 		OverrideRepository or = new OverrideRepository();
 		or.addResource(OVERRIDETEST_REVENG_XML);
-		cfg.setReverseEngineeringStrategy(or.getReverseEngineeringStrategy(new DefaultReverseEngineeringStrategy() ) );
+		configuration.setReverseEngineeringStrategy(or.getReverseEngineeringStrategy(new DefaultReverseEngineeringStrategy() ) );
 	}
 
 	private String getPropertyTypeName(Property property) {
@@ -503,7 +511,7 @@ public class OverrideBinderTest extends JDBCMetaDataBinderTestCase {
                 "create table misc_types ( id numeric(10,0) not null, name varchar(20), shortname varchar(5), flag varchar(1), primary key (id) )",
                 "create table inthemiddle ( miscid numeric(10,0), defunctid numeric(10,0), foreign key (miscid) references misc_types, foreign key (defunctid) references defunct_table )",
                 "create table customer ( custid varchar(10), name varchar(20) )",
-                "create table orders ( orderid varchar(10), name varchar(20),  custid varchar(10), completed numeric(1) not null, verified numeric(1) )",
+                "create table orders ( orderid varchar(10), name varchar(20),  custid varchar(10), completed numeric(1,0) not null, verified numeric(1) )",
                 "create table parent ( id varchar(10), name varchar(20))",
                 "create table children ( id varchar(10), parentid varchar(10), name varchar(20) )",
                 "create table excolumns (id varchar(12), name varchar(20), excolumn numeric(10,0) )"

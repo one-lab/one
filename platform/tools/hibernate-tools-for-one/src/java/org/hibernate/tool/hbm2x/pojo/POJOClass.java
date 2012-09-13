@@ -65,7 +65,6 @@ public interface POJOClass extends ImportContext {
 	
 	public boolean hasIdentifierProperty();
 	
-	public boolean needsAnnTableUniqueConstraints();	
 	public String generateAnnColumnAnnotation(Property property);
 	public String generateAnnIdGenerator();
 	public String generateAnnTableUniqueConstraint();
@@ -107,5 +106,6 @@ public interface POJOClass extends ImportContext {
 	public Property getIdentifierProperty();
 	
 	public boolean hasVersionProperty();
+	public Property getVersionProperty();
 		
 }

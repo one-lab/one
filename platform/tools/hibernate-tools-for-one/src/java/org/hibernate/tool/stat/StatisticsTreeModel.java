@@ -1,6 +1,5 @@
 package org.hibernate.tool.stat;
 
-import java.util.Collections;
 import java.util.Map;
 
 import org.hibernate.stat.SecondLevelCacheStatistics;
@@ -39,8 +38,8 @@ public class StatisticsTreeModel extends AbstractTreeModel {
 		} else if(parent==secondlevelcache) {
 			return stats.getSecondLevelCacheStatistics( stats.getSecondLevelCacheRegionNames()[index]);
 		} else if(parent instanceof SecondLevelCacheStatistics) {
-			SecondLevelCacheStatistics stats = (SecondLevelCacheStatistics) parent;			
-			return stats.getEntries();
+			SecondLevelCacheStatistics slcs = (SecondLevelCacheStatistics) parent;			
+			return slcs.getEntries();
 		}
 		return null;
 	}

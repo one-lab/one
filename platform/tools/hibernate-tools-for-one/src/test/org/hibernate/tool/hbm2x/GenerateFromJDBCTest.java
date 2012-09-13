@@ -5,9 +5,12 @@
 package org.hibernate.tool.hbm2x;
 
 import java.io.File;
-import java.util.HashMap;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -55,12 +58,12 @@ public class GenerateFromJDBCTest extends JDBCMetaDataBinderTestCase {
 	protected void configure(JDBCMetaDataConfiguration cfg2configure) {
 		
 		DefaultReverseEngineeringStrategy configurableNamingStrategy = new DefaultReverseEngineeringStrategy();
-		configurableNamingStrategy.setSettings(new ReverseEngineeringSettings().setDefaultPackageName("org.reveng").setCreateCollectionForForeignKey(false));
+		configurableNamingStrategy.setSettings(new ReverseEngineeringSettings(configurableNamingStrategy).setDefaultPackageName("org.reveng").setCreateCollectionForForeignKey(false));
 		cfg2configure.setReverseEngineeringStrategy(configurableNamingStrategy);
 	}
 	
-	public void testGenerateJava() {
-		
+	public void testGenerateJava() throws SQLException, ClassNotFoundException {
+	
 		POJOExporter exporter = new POJOExporter(cfg,getOutputDir());		
 		exporter.start();
 		

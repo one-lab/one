@@ -96,6 +96,11 @@
 			<many-to-many class="Product" />
 		</array> 
 		
+	<!-- hbm2java can't generate a innerclass (Test$Entry) correctly. should probably skip it as a fallback.-->
+    <!-- <component name="mapEntry" class="java.util.Map$Entry">
+			<property name="value" type="string"/>
+			<property name="key" type="string"/>
+		 </component>  -->
 	</class>
 
 

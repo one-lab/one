@@ -9,9 +9,9 @@ import org.hibernate.mapping.Property;
 
 public class KeyPropertyCompositeIdTest extends CompositeIdTest {
 	
-	protected void configure(JDBCMetaDataConfiguration cfg) {
-		super.configure( cfg );
-		cfg.setPreferBasicCompositeIds(false);
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+		super.configure( configuration );
+		configuration.setPreferBasicCompositeIds(false);
 	}
 	
 	public static Test suite() {

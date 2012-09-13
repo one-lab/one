@@ -50,13 +50,13 @@ public class TableFilter {
 			}
 		}
 		
-		boolean match(String value) {
+		boolean match(String matchEnum) {
 			switch (mode) {
 			case ANY: return true;
-			case EQUALS: return this.value.equals(value);
-			case ENDSWITH: return value.endsWith(this.value);
-			case STARTSWITH: return value.startsWith(this.value);
-			case SUBSTRING: return value.indexOf(this.value)>=0;
+			case EQUALS: return this.value.equals(matchEnum);
+			case ENDSWITH: return matchEnum.endsWith(this.value);
+			case STARTSWITH: return matchEnum.startsWith(this.value);
+			case SUBSTRING: return matchEnum.indexOf(this.value)>=0;
 			default:
 				throw new IllegalStateException();				
 			}

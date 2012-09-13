@@ -5,6 +5,7 @@
 package org.hibernate.tool.hbm2x;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class Hbm2HibernateDAOTest extends NonReflectiveTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
+		
+		
 		POJOExporter javaExporter = new POJOExporter(getCfg(), getOutputDir() );
 		POJOExporter exporter = new DAOExporter(getCfg(), getOutputDir() );
 		exporter.getProperties().setProperty("ejb3", "false");
@@ -37,8 +40,9 @@ public class Hbm2HibernateDAOTest extends NonReflectiveTestCase {
 		assertFileAndExists(new File(getOutputDir(), "org/hibernate/tool/hbm2x/AuthorHome.java") );
 	}
 	
-	public void testCompilable() {
+	public void testCompilable() throws IOException {
 		
+		generateComparator();
 		File file = new File("compilable");
 		file.mkdir();
 		

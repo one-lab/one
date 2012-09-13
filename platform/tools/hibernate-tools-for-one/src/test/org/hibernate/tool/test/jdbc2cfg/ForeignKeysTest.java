@@ -66,7 +66,7 @@ public class ForeignKeysTest extends JDBCMetaDataBinderTestCase {
 	}
 	public void testMasterChild() {
 		
-		Table master = getTable(identifier("master") );
+		assertNotNull(getTable(identifier("master") ));
 		Table child = getTable(identifier("child") );
 		
 		Iterator iterator = child.getForeignKeyIterator();

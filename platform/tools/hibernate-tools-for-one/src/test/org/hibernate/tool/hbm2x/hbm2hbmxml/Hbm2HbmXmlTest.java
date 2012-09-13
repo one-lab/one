@@ -141,6 +141,12 @@ public class Hbm2HbmXmlTest extends NonReflectiveTestCase {
 		Node node = (Node) list.get(0);
 		assertEquals(node.getText(),"Basic");
 		
+		xpath = DocumentHelper.createXPath("//hibernate-mapping/class/id/meta");
+		list = xpath.selectNodes(document);
+		assertEquals("Expected to get one meta element", 1, list.size());
+		node = (Node) list.get(0);
+		assertEquals(node.getText(),"basicId");	
+		
 		xpath = DocumentHelper.createXPath("//hibernate-mapping/class/property/meta");
 		list = xpath.selectNodes(document);
 		assertEquals("Expected to get one meta element", 1, list.size());
@@ -153,9 +159,23 @@ public class Hbm2HbmXmlTest extends NonReflectiveTestCase {
 		node = (Node) list.get(0);
 		assertEquals(node.getText(),"anotherone");
 		
+	}
+
+	public void testCollectionAttributes() throws DocumentException {
+		File outputXml = new File(getOutputDir().getAbsolutePath() + "/org/hibernate/tool/hbm2x/hbm2hbmxml/Basic.hbm.xml");
+		assertFileAndExists(outputXml);
+
+		SAXReader xmlReader =  this.getSAXReader();
+		
+		Document document = xmlReader.read(outputXml);		
+	
+		XPath xpath = DocumentHelper.createXPath("//hibernate-mapping/class/set");
+		List list = xpath.selectNodes(document);
+		assertEquals("Expected to get one set element", 1, list.size());
+		Element node = (Element) list.get(0);
+		assertEquals("delete, update", node.attributeValue("cascade"));
 		
 	}
-	
 	
 	public void testComments() throws DocumentException {
 		File outputXml = new File(getOutputDir().getAbsolutePath() + "/org/hibernate/tool/hbm2x/hbm2hbmxml/ClassFullAttribute.hbm.xml");
@@ -176,8 +196,6 @@ public class Hbm2HbmXmlTest extends NonReflectiveTestCase {
 		assertEquals("Expected to get one comment element", 1, list.size());
 		node = (Node) list.get(0);
 		assertEquals(node.getText(),"columnd comment");
-		
-
 	}
 
 	public void testNoComments() throws DocumentException {
@@ -187,7 +205,7 @@ public class Hbm2HbmXmlTest extends NonReflectiveTestCase {
 		SAXReader xmlReader =  this.getSAXReader();
 		
 		Document document = xmlReader.read(outputXml);
-		Element root = document.getRootElement();
+		
 	
 		XPath xpath = DocumentHelper.createXPath("//hibernate-mapping/class/comment");
 		List list = xpath.selectNodes(document);
@@ -202,7 +220,7 @@ public class Hbm2HbmXmlTest extends NonReflectiveTestCase {
 
 	/**
 	 * Special test for external Global settings were generated.
-	 * Test Access and Cacade setting but they are default values
+	 * Test Access and Cascade setting but they are default values
 	 * so they should not appear.
 	 */
 	public void testGlobalSettingsGeneratedAccessAndCascadeDefault()  throws Exception {
@@ -307,12 +325,26 @@ public class Hbm2HbmXmlTest extends NonReflectiveTestCase {
 		xpath = DocumentHelper.createXPath("//hibernate-mapping/class/id/generator/param");
 		list = xpath.selectNodes(document);
 		assertEquals("Expected to get correct number of generator param elements", 2, list.size() );
-		Attribute paramTableAtt = ( (Element)list.get(0) ).attribute("name");
+		Element tableElement = (Element)list.get(0);
+		Attribute paramTableAtt = tableElement.attribute("name");
+		Element columnElement = (Element)list.get(1);
+		Attribute paramColumnAtt = columnElement.attribute("name");
+		
+		if(paramTableAtt.getStringValue().equals("column")) {
+			// to make sure the order of the elements doesn't matter.
+			Element tempElement = tableElement;
+			Attribute temp = paramTableAtt;
+			
+			paramTableAtt = paramColumnAtt;
+			tableElement = columnElement;
+			paramColumnAtt = temp;
+			columnElement = tempElement;
+		}
+		
 		assertEquals("Unexpected generator param name", "table", paramTableAtt.getStringValue() );
-		Attribute paramColumnAtt = ( (Element)list.get(1) ).attribute("name");
 		assertEquals("Unexpected generator param name", "column", paramColumnAtt.getStringValue() );
-		assertEquals("Unexpected param value for table", "uni_table", ( (Element)list.get(0) ).getStringValue() );
-		assertEquals("Unexpected param value for column", "next_hi_value", ( (Element)list.get(1) ).getStringValue() );
+		assertEquals("Unexpected param value for table", "uni_table", tableElement.getStringValue() );
+		assertEquals("Unexpected param value for column", "next_hi_value", columnElement.getStringValue() );
     }
 
 	public void testGeneralHbmSettingsQuery()  throws Exception {
@@ -521,14 +553,6 @@ public class Hbm2HbmXmlTest extends NonReflectiveTestCase {
 		assertEquals("Unexpected class lock-mode for return element", "none", genAtt.getStringValue() );
 
 	}
-	    
-
-    private SAXReader getSAXReader() {
-    	SAXReader xmlReader = new SAXReader();
-    	xmlReader.setEntityResolver(new DTDEntityResolver() );
-    	xmlReader.setValidation(true);
-    	return xmlReader;
-    }
 	
 	protected String getBaseForMappings() {
 		return "org/hibernate/tool/hbm2x/hbm2hbmxml/";

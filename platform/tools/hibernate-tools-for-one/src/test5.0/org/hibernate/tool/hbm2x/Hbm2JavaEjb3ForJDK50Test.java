@@ -2,6 +2,8 @@ package org.hibernate.tool.hbm2x;
 
 import java.io.File;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -9,10 +11,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.tool.NonReflectiveTestCase;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.test.TestHelper;
 
 /**
@@ -52,8 +56,7 @@ public class Hbm2JavaEjb3ForJDK50Test extends NonReflectiveTestCase {
 
 		ArrayList list = new ArrayList();
 		List jars = new ArrayList();
-		jars.add( "ejb3-persistence.jar" );
-		jars.add( "hibernate-annotations.jar" );
+		addAnnotationJars(jars);
 		TestHelper.compile(
 				getOutputDir(), file, TestHelper.visitAllFiles( getOutputDir(), list ), "1.5",
 				TestHelper.buildClasspath( jars )
@@ -69,8 +72,7 @@ public class Hbm2JavaEjb3ForJDK50Test extends NonReflectiveTestCase {
 
 		ArrayList list = new ArrayList();
 		List jars = new ArrayList();
-		jars.add( "ejb3-persistence.jar" );
-		jars.add( "hibernate-annotations.jar" );
+		addAnnotationJars(jars);
 		TestHelper.compile(
 				getOutputDir(), file, TestHelper.visitAllFiles( getOutputDir(), list ), "1.5",
 				TestHelper.buildClasspath( jars )
@@ -173,56 +175,99 @@ public class Hbm2JavaEjb3ForJDK50Test extends NonReflectiveTestCase {
 	public void testTableGenerator() throws Exception {
 		testGenerator( "Bungalow" );
 	}
-
-	private void testGenerator(String className) throws Exception {
+	
+	public void testCreateAnnotationConfiguration() throws Exception {
+		
 		File file = new File( "ejb3compilable" );
 		file.mkdir();
 
 		ArrayList list = new ArrayList();
 		List jars = new ArrayList();
+		addAnnotationJars(jars);
+		
+		new ExecuteContext(getOutputDir(), file, jars) {
+
+			protected void execute() throws Exception {
+				AnnotationConfiguration configuration = new AnnotationConfiguration();
+				configuration.addAnnotatedClass( getUcl().loadClass( "org.hibernate.tool.hbm2x.Train" ) );
+				configuration.addAnnotatedClass( getUcl().loadClass( "org.hibernate.tool.hbm2x.Passenger" ) );
+
+				configuration.setProperty( "hibernate.hbm2ddl.auto", "create-drop" );
+				SessionFactory sf = configuration.buildSessionFactory();
+				Session s = sf.openSession();
+                Query createQuery = s.createQuery("from java.lang.Object");
+                createQuery.list();
+				s.close();
+				sf.close();
+				
+			}
+			
+		}.run();
+	}
+
+	private void testGenerator(final String className) throws Exception {
+		
+		File file = new File( "ejb3compilable" );
+		file.mkdir();
+
+		ArrayList list = new ArrayList();
+		List jars = new ArrayList();
+		addAnnotationJars(jars);
+		
+		new ExecuteContext(getOutputDir(), file, jars) {
+			
+		   protected void execute() throws Exception {
+			   
+			   AnnotationConfiguration configuration = new AnnotationConfiguration();
+				Class puppet = getUcl().loadClass( "org.hibernate.tool.hbm2x." + className );
+				configuration.addAnnotatedClass( puppet );
+				
+				configuration.setProperty( "hibernate.hbm2ddl.auto", "create-drop" );
+				SessionFactory sf = configuration.buildSessionFactory();
+				Session s = sf.openSession();
+
+				Object puppetInst = puppet.newInstance();
+				puppet.getMethod( "setName", new Class[]{String.class} ).invoke( puppetInst, new Object[]{"Barbie"} );
+				
+				if(className.equals("Bungalow")) { // hack to avoid not-null execption
+					puppet.getMethod("setMascot", new Class[] { puppet }).invoke( puppetInst, new Object[] { puppetInst } );
+				}
+				
+				s.getTransaction().begin();
+				s.persist( puppetInst );
+				s.getTransaction().commit();
+				s.clear();
+
+				s.getTransaction().begin();
+				Object puppetInst2 = s.get(
+						puppet,
+						(Serializable) puppet.getMethod( "getId", new Class[]{} ).invoke( puppetInst, new Object[]{} )
+				);
+				assertNotNull( puppetInst2 );
+				assertEquals(
+						"Barbie",
+						puppet.getMethod( "getName", new Class[]{} ).invoke( puppetInst, new Object[]{} )
+				);
+				s.delete( puppetInst2 );
+				s.getTransaction().commit();
+				s.close();
+				sf.close();
+				new SchemaExport(configuration).drop(false, true);
+			   
+		   };
+		   
+		}.run();
+		
+	}
+
+	private void addAnnotationJars(List jars) {
 		jars.add( "ejb3-persistence.jar" );
 		jars.add( "hibernate-annotations.jar" );
-		TestHelper.compile(
-				getOutputDir(), file, TestHelper.visitAllFiles( getOutputDir(), list ), "1.5",
-				TestHelper.buildClasspath( jars )
-		);
-		URL[] urls = new URL[]{file.toURL()};
-		Thread currentThread = Thread.currentThread();
-		URLClassLoader ucl = new URLClassLoader( urls, currentThread.getContextClassLoader() );
-		currentThread.setContextClassLoader( ucl );
-
-		AnnotationConfiguration configuration = new AnnotationConfiguration();
-		Class puppet = ucl.loadClass( "org.hibernate.tool.hbm2x." + className );
-		configuration.addAnnotatedClass( puppet );
-
-		configuration.setProperty( "hibernate.hbm2ddl.auto", "create-drop" );
-		SessionFactory sf = configuration.buildSessionFactory();
-		Session s = sf.openSession();
-
-		Object puppetInst = puppet.newInstance();
-		puppet.getMethod( "setName", new Class[]{String.class} ).invoke( puppetInst, new Object[]{"Barbie"} );
-		s.getTransaction().begin();
-		s.persist( puppetInst );
-		s.getTransaction().commit();
-		s.clear();
-
-		s.getTransaction().begin();
-		Object puppetInst2 = s.get(
-				puppet,
-				(Serializable) puppet.getMethod( "getId", new Class[]{} ).invoke( puppetInst, new Object[]{} )
-		);
-		assertNotNull( puppetInst2 );
-		assertEquals(
-				"Barbie",
-				puppet.getMethod( "getName", new Class[]{} ).invoke( puppetInst, new Object[]{} )
-		);
-		s.delete( puppetInst2 );
-		s.getTransaction().commit();
-		s.close();
-		sf.close();
-
-		currentThread.setContextClassLoader( ucl.getParent() );
-		TestHelper.deleteDir( file );
+		jars.add( "hibernate-commons-annotations.jar" );
+		jars.add( "hibernate3.jar" );
+		jars.add( "dom4j-1.6.1.jar" );
+		jars.add( "commons-logging-1.0.4.jar" );
+		
 	}
 
 	protected String getBaseForMappings() {
@@ -237,5 +282,11 @@ public class Hbm2JavaEjb3ForJDK50Test extends NonReflectiveTestCase {
 				"Bungalow.hbm.xml"
 		};
 	}
+	
+	
 
+	protected void tearDown() throws Exception {
+		// TODO Auto-generated method stub
+		super.tearDown();
+	}
 }

@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -89,14 +90,26 @@ public class HibernateConfigurationExporter extends AbstractExporter {
         
         String sfname = (String) props.get(Environment.SESSION_FACTORY_NAME);
         pw.println("    <session-factory" + (sfname==null?"":" name=\"" + sfname + "\"") + ">");
+
+        Map ignoredProperties = new HashMap();
+        ignoredProperties.put(Environment.SESSION_FACTORY_NAME, null);
+        ignoredProperties.put(Environment.HBM2DDL_AUTO, "false" );
+        ignoredProperties.put("hibernate.temp.use_jdbc_metadata_defaults", null );
+        ignoredProperties.put(Environment.TRANSACTION_MANAGER_STRATEGY, "org.hibernate.console.FakeTransactionManagerLookup");
         
         Set set = props.entrySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext() ) {
             Map.Entry element = (Map.Entry) iterator.next();
             String key = (String) element.getKey();
-            if(!key.equals(Environment.SESSION_FACTORY_NAME) && key.startsWith("hibernate.") ) { // if not starting with hibernate. not relevant for cfg.xml
-                pw.println("        <property name=\"" + key + "\">" + element.getValue() + "</property>");
+            if(ignoredProperties.containsKey( key )) {
+            	Object ignoredValue = ignoredProperties.get( key );
+				if(ignoredValue == null || element.getValue().equals(ignoredValue)) {
+            		continue;
+            	}
+            } 
+            if(key.startsWith("hibernate.") ) { // if not starting with hibernate. not relevant for cfg.xml
+                pw.println("        <property name=\"" + key + "\">" + forXML(element.getValue().toString()) + "</property>");
             }
         }
         
@@ -157,4 +170,27 @@ public class HibernateConfigurationExporter extends AbstractExporter {
 	public String getName() {
 		return "cfg2cfgxml";
 	}
+	
+	/**
+	 * 
+	 * @param text
+	 * @return String with escaped [<,>] special characters.
+	 */
+	public static String forXML(String text) {
+		if (text == null) return null;
+		final StringBuilder result = new StringBuilder();
+		char[] chars = text.toCharArray();
+		for (int i = 0; i < chars.length; i++){
+			char character = chars[i];
+			if (character == '<') {
+				result.append("&lt;");
+			} else if (character == '>'){
+				result.append("&gt;");
+			} else {
+				result.append(character);
+			}
+		}
+		return result.toString();
+	  }
+
 }

@@ -1,10 +1,14 @@
 package org.hibernate.tool.hbm2x.visitor;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.mapping.Component;
 import org.hibernate.mapping.ManyToOne;
+import org.hibernate.mapping.Map;
 import org.hibernate.mapping.OneToMany;
 import org.hibernate.mapping.OneToOne;
+import org.hibernate.mapping.Set;
 import org.hibernate.mapping.SimpleValue;
 import org.hibernate.mapping.ToOne;
 import org.hibernate.mapping.Value;
@@ -12,6 +16,7 @@ import org.hibernate.tool.hbm2x.Cfg2JavaTool;
 import org.hibernate.type.CompositeCustomType;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.Type;
+import org.hibernate.type.TypeFactory;
 
 public class JavaTypeFromValueVisitor extends DefaultValueVisitor {
 
@@ -22,6 +27,22 @@ public class JavaTypeFromValueVisitor extends DefaultValueVisitor {
 		super( true );
 	}
 	
+	// special handling for Map's to avoid initialization of comparators that depends on the keys/values which might not be generated yet.
+	public Object accept(Map o) {
+		if ( o.isSorted() ) {
+			return "java.util.SortedMap";
+		}
+		return super.accept(o);
+	}
+	
+	// special handling for Set's to avoid initialization of comparators that depends on the keys/values which might not be generated yet.
+	public Object accept(Set o) {
+		if ( o.isSorted() ) {
+			return "java.util.SortedSet";
+		}
+		return super.accept(o);
+	}
+
 	public Object accept(Component value) {
 		// composite-element breaks without it.
 		return value.getComponentClassName();
@@ -55,7 +76,7 @@ public class JavaTypeFromValueVisitor extends DefaultValueVisitor {
 		}
 	}
 
-	protected Object handle(Object o) {
+	protected Object handle(Value o) {
 		Value value = (Value) o;
 		try {
 			// have to attempt calling gettype to decide if its custom type.

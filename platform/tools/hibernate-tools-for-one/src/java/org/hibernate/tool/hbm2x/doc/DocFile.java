@@ -13,17 +13,17 @@ public class DocFile {
     /**
      * The name of the file.
      */
-    private String name;
+    final private String name;
 
     /**
      * The parent folder.
      */
-    private DocFolder folder;
+    final private DocFolder parentFolder;
 
     /**
      * The File representation.
      */
-    private File file;
+    final private File file;
 
     /**
      * Constructor.
@@ -46,9 +46,9 @@ public class DocFile {
         }
 
         name = pName;
-        folder = pFolder;
+        parentFolder = pFolder;
 
-        file = new File(folder.getFile(), pName);
+        file = new File(parentFolder.getFile(), pName);
     }
 
     /**
@@ -68,7 +68,7 @@ public class DocFile {
      */
     public DocFolder getFolder() {
 
-        return folder;
+        return parentFolder;
     }
 
     /**
@@ -88,7 +88,7 @@ public class DocFile {
      */
     public List getPathFolders() {
 
-        return folder.getPathFolders();
+        return parentFolder.getPathFolders();
     }
 
     /**
@@ -136,16 +136,16 @@ public class DocFile {
 
         StringBuffer ref = new StringBuffer();
 
-        DocFolder parentFolder = folder;
-        while (parentFolder != null) {
-            if (tgtFileFolders.contains(parentFolder) ) {
-                ref.append(target.buildRefFromFolder(parentFolder) );
+        DocFolder localFolder = this.parentFolder;
+        while (localFolder != null) {
+            if (tgtFileFolders.contains(localFolder) ) {
+                ref.append(target.buildRefFromFolder(localFolder) );
                 String result = ref.toString();
                 return result;
             } 
             else {
                 ref.append("../");
-                parentFolder = parentFolder.getParent();
+                localFolder = localFolder.getParent();
             }
         }
 

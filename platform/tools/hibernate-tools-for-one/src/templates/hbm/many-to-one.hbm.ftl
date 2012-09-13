@@ -1,6 +1,10 @@
     <many-to-one
 	    name="${property.name}"
 	    class="${c2j.getJavaTypeName(property, false)}"
+	    
+<#if property.value.referencedPropertyName?exists> 
+        property-ref="${property.value.referencedPropertyName}"
+</#if>	    
 <#if !property.updateable> 
         update="false"
 </#if>
@@ -22,7 +26,7 @@
 </#if>
 <#if property.value.hasFormula()>
 <#assign formula = c2h.getFormulaForProperty(property)>
-<#if formula>
+<#if formula?exists>
         formula="${formula.text}"
 </#if>
 </#if>

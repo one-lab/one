@@ -87,7 +87,8 @@ public class ConfigurationNavigator {
 	private static void collectComponents(Map components, Iterator iter) {
 		while(iter.hasNext()) {
 			Property property = (Property) iter.next();
-			if (property.getValue() instanceof Component) {
+			if (!"embedded".equals(property.getPropertyAccessorName()) && // HBX-267, embedded property for <properties> should not be generated as component. 
+				property.getValue() instanceof Component) {
 				Component comp = (Component) property.getValue();
 				addComponent( components, comp );			
 			} 
@@ -111,7 +112,7 @@ public class ConfigurationNavigator {
 			}
 		} else {
 			log.debug("dynamic-component found. Ignoring it as a component, but will collect any embedded components.");
-		}
+		}	
 		collectComponents( components, new ComponentPOJOClass(comp, new Cfg2JavaTool()).getAllPropertiesIterator());		
 	}
 

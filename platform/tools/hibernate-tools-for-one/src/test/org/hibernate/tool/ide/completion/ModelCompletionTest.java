@@ -66,7 +66,7 @@ public class ModelCompletionTest extends TestCase {
     public void testGetMappedClasses() {
     	Collector hcc = new Collector();
     	cc.getMatchingImports("", hcc);
-    	assertEquals("Invalid entity names count", 9, hcc.getCompletionProposals().length);
+    	assertEquals("Invalid entity names count", 11, hcc.getCompletionProposals().length);
         
     	hcc.clear();
         cc.getMatchingImports( " ", hcc );
@@ -74,13 +74,13 @@ public class ModelCompletionTest extends TestCase {
         
         hcc.clear();
         cc.getMatchingImports( "pro", hcc );
-        assertTrue("Completion should be case sensitive", hcc.getCompletionProposals().length==0);
+        assertTrue("Completion should not be case sensitive", hcc.getCompletionProposals().length==2);
         
         hcc.clear();
         cc.getMatchingImports( "StoreC", hcc );
         assertEquals("Invalid entity names count", 1, hcc.getCompletionProposals().length);
         assertEquals("StoreCity should have been found", "StoreCity", hcc.getCompletionProposals()[0].getSimpleName());
-        
+      
         hcc.clear();
         cc.getMatchingImports( "NotThere", hcc );        
         assertTrue(hcc.getCompletionProposals().length==0);
@@ -108,8 +108,11 @@ public class ModelCompletionTest extends TestCase {
         hcc.clear();
         
         cc.getMatchingProperties( "Product", "V", hcc );
-        doTestFields(hcc.getCompletionProposals(), new String[0]);
+        doTestFields(hcc.getCompletionProposals(), new String[] {"version"} );        
         hcc.clear();
+        
+        cc.getMatchingProperties( "Product", "X", hcc );
+        doTestFields(hcc.getCompletionProposals(), new String[0] );
     }
 
     public void testGetStoreFields() {
@@ -142,6 +145,17 @@ public class ModelCompletionTest extends TestCase {
     	
     	assertEquals(1, completionProposals.length);
     	assertEquals("x", completionProposals[0].getCompletion());
+    	
+    	hcc.clear();
+    	cc.getMatchingKeywords("FR", 3, hcc);
+    	completionProposals = hcc.getCompletionProposals();
+    	assertEquals(1, completionProposals.length);
+    	
+    	hcc.clear();
+    	cc.getMatchingFunctions( "MA", 2, hcc );
+    	completionProposals = hcc.getCompletionProposals();
+    	assertEquals(1, completionProposals.length);
+    	
     }
 
     public void testUnmappedClassFields() {
@@ -169,7 +183,7 @@ public class ModelCompletionTest extends TestCase {
     
     public void testProductOwnerAddress() {
         String query = "select p from Product p where p.owner.";
-        List visible = getVisibleEntityNames(query.toCharArray(), query.length());
+        List visible = getVisibleEntityNames(query.toCharArray());
         
     	Collector hcc = new Collector();
     	
@@ -179,23 +193,23 @@ public class ModelCompletionTest extends TestCase {
         
         hcc.clear();
         query = "select p from Product p where p.owner.address.";
-        visible = getVisibleEntityNames(query.toCharArray(), query.length());
+        visible = getVisibleEntityNames(query.toCharArray());
         cc.getMatchingProperties( cc.getCanonicalPath(visible, "p.owner.address"), "", hcc );
         doTestFields(hcc.getCompletionProposals(), new String[] {"id", "number", "street"});
     }
     
-    private List getVisibleEntityNames(char[] cs, int i) {
+    private List getVisibleEntityNames(char[] cs) {
     	return new HQLAnalyzer().getVisibleEntityNames( cs, cs.length);	
 	}
 
 	public void testStoreCity() {
         String query = "select p from Product p join p.stores store where store";
-        List visible = getVisibleEntityNames(query.toCharArray(), query.length());
+        List visible = getVisibleEntityNames(query.toCharArray());
         Collector hcc = new Collector();
     	
     	String canonicalPath = cc.getCanonicalPath(visible, "store.city");
 		cc.getMatchingProperties( canonicalPath, "", hcc );    	
-        doTestFields(hcc.getCompletionProposals(), new String[] {"id", "name"});
+        doTestFields(hcc.getCompletionProposals(), new String[] {"id", "name", "number"});
     }
     
     public void testUnaliasedProductQuery() {
@@ -207,7 +221,7 @@ public class ModelCompletionTest extends TestCase {
     private void doTestUnaliasedProductQuery(final String query) {
         Collector hcc = new Collector();
 
-    	List visible = getVisibleEntityNames(query.toCharArray(), query.length());
+    	List visible = getVisibleEntityNames(query.toCharArray());
         cc.getMatchingProperties( cc.getCanonicalPath(visible, "owner"), "f", hcc );
 
     	HQLCompletionProposal[] completionProposals = hcc.getCompletionProposals();
@@ -242,7 +256,7 @@ public class ModelCompletionTest extends TestCase {
     
     	HQLCompletionProposal[] completionProposals = c.getCompletionProposals();
     	
-    	assertEquals(9, completionProposals.length);
+    	assertEquals(11, completionProposals.length);
     	for (int i = 0; i < completionProposals.length; i++) {
 			HQLCompletionProposal proposal = completionProposals[i];
 			assertEquals(HQLCompletionProposal.ENTITY_NAME, proposal.getCompletionKind());
@@ -252,7 +266,73 @@ public class ModelCompletionTest extends TestCase {
 			assertNotNull(proposal.getShortEntityName());
 			assertNotNull(proposal.getEntityName());
 			//assertNotNull(proposal.getShortEntityName());
-		}    	    	    	
+		}
+    	
+    	c.clear();
+    	query = "from Store, | ";
+    	caretPosition = getCaretPosition(query);
+		hqlEval.codeComplete(query, caretPosition, c);
+    
+    	completionProposals = c.getCompletionProposals();
+    	
+    	assertEquals(11, completionProposals.length);
+    	       	
+    }
+    
+    public void testFromNonWhitespace() {
+    	Collector c = new Collector();
+    	
+    	IHQLCodeAssist hqlEval = new HQLCodeAssist(sf);
+    	
+    	String query = null;
+    	int caretPosition = -1;
+    	HQLCompletionProposal[] completionProposals = null;
+    	
+    	c.clear();
+    	query = "from Store,| ";
+    	caretPosition = getCaretPosition(query);
+		hqlEval.codeComplete(query, caretPosition, c);    
+    	completionProposals = c.getCompletionProposals();    	
+    	assertEquals("should get results after a nonwhitespace separator", 11, completionProposals.length);
+    	
+    	c.clear();
+    	query = "from Store s where ";
+    	caretPosition = getCaretPosition(query);
+		hqlEval.codeComplete(query, caretPosition, c);    
+    	completionProposals = c.getCompletionProposals();    	
+    	assertTrue(completionProposals.length > 0);
+    	
+    	c.clear();
+    	query = "from Store s where (";
+    	caretPosition = getCaretPosition(query);
+		hqlEval.codeComplete(query, caretPosition, c);    
+    	completionProposals = c.getCompletionProposals();    	
+    	assertTrue(completionProposals.length > 0);
+ 	
+    }
+    
+    public void testFromWithTabs() {
+    	Collector c = new Collector();
+    	
+    	IHQLCodeAssist hqlEval = new HQLCodeAssist(sf);
+    	
+    	String query = null;
+    	int caretPosition = -1;
+    	HQLCompletionProposal[] completionProposals = null;
+    	
+    	c.clear();
+		final String codeCompletionPlaceMarker = " from ";
+		query = "select\t \tt1." + codeCompletionPlaceMarker + "Product t1";
+		caretPosition = query.indexOf(codeCompletionPlaceMarker);
+		hqlEval.codeComplete(query, caretPosition, c);    
+    	completionProposals = c.getCompletionProposals();    	
+    	assertTrue(completionProposals.length == 0);
+
+    	c.clear();
+		query = query.replace('\t', ' ');
+		hqlEval.codeComplete(query, caretPosition, c);    
+    	completionProposals = c.getCompletionProposals();    	
+    	assertTrue(completionProposals.length > 0);
     }
     
     public void testBasicFromPartialEntityName() {
@@ -280,6 +360,31 @@ public class ModelCompletionTest extends TestCase {
 		}    	    	    	
     }
     
+    public void testBasicFromPartialDifferentCaseEntityName() {
+    	Collector c = new Collector();
+    	
+    	IHQLCodeAssist hqlEval = new HQLCodeAssist(sf);
+    	
+    	String query = "from pro| ";
+    	int caretPosition = getCaretPosition(query);
+		hqlEval.codeComplete(query, caretPosition, c);
+    
+    	HQLCompletionProposal[] completionProposals = c.getCompletionProposals();
+    	
+    	assertEquals(2, completionProposals.length);
+    	assertEquals("Product", completionProposals[0].getSimpleName());
+    	assertEquals("Product", completionProposals[0].getCompletion());
+    	assertEquals("ProductOwnerAddress", completionProposals[1].getSimpleName());
+    	assertEquals("ProductOwnerAddress", completionProposals[1].getCompletion());
+    	for (int i = 0; i < completionProposals.length; i++) {
+			HQLCompletionProposal proposal = completionProposals[i];
+			assertEquals(HQLCompletionProposal.ENTITY_NAME, proposal.getCompletionKind());
+			assertEquals(caretPosition, proposal.getCompletionLocation());
+			assertEquals(caretPosition-3, proposal.getReplaceStart());
+			assertEquals(caretPosition, proposal.getReplaceEnd());
+		}    	    	    	
+    }
+    
     public void testDottedFromPartialEntityName() {
     	Collector c = new Collector();
     	
@@ -291,7 +396,7 @@ public class ModelCompletionTest extends TestCase {
     
     	HQLCompletionProposal[] completionProposals = c.getCompletionProposals();
     	
-    	assertEquals(4, completionProposals.length);
+    	assertEquals(5, completionProposals.length);
     	for (int i = 0; i < completionProposals.length; i++) {
 			HQLCompletionProposal proposal = completionProposals[i];
 			assertEquals(HQLCompletionProposal.ENTITY_NAME, proposal.getCompletionKind());
@@ -328,7 +433,7 @@ public class ModelCompletionTest extends TestCase {
     
     	HQLCompletionProposal[] completionProposals = c.getCompletionProposals();
     	
-    	assertEquals(4, completionProposals.length);
+    	assertEquals(5, completionProposals.length);
     	    	    	    	
     }
     
@@ -397,7 +502,7 @@ public class ModelCompletionTest extends TestCase {
     	HQLCompletionProposal[] completionProposals = c.getCompletionProposals();
     	
     	assertEquals(3, completionProposals.length);
-    	HQLCompletionProposal proposal = completionProposals[0];
+    	assertNotNull(completionProposals[0]);
 		
     	c.clear();
     	
@@ -434,7 +539,7 @@ public class ModelCompletionTest extends TestCase {
     
     	HQLCompletionProposal[] completionProposals = c.getCompletionProposals();
     	
-    	assertEquals(9, completionProposals.length);
+    	assertEquals(11, completionProposals.length);
     	HQLCompletionProposal proposal = completionProposals[0];
     	assertEquals(HQLCompletionProposal.ENTITY_NAME, proposal.getCompletionKind());
     	

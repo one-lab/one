@@ -18,6 +18,9 @@
         <property name="lastModified" type="timestamp"/>
         <property name="dayFree" type="date"/>
         <property name="timeFree" type="time"/>
+        
+        <many-to-one name="mascot" not-null="true" class="Bungalow"/>
+
 	</class>
 
 </hibernate-mapping>

@@ -38,17 +38,17 @@ public class StatisticsCellRenderer extends DefaultTreeCellRenderer {
 			
 		}
 		if(value instanceof EntityStatistics) {
-			EntityStatistics stats = (EntityStatistics) value;
+			//EntityStatistics stats = (EntityStatistics) value;
 			
 		}
 		
 		if(value instanceof CollectionStatistics) {
-			CollectionStatistics stats = (CollectionStatistics) value;
+			//CollectionStatistics stats = (CollectionStatistics) value;
 			
 		}
 		
 		if(value instanceof QueryStatistics) {
-			QueryStatistics stats = (QueryStatistics) value;
+			//QueryStatistics stats = (QueryStatistics) value;
 		
 		}
 		

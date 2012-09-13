@@ -54,9 +54,8 @@ package org.hibernate.tool.hbm2x;
  * <http://www.apache.org/>.
  */
 
-import java.util.StringTokenizer;
-
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /**
  * max: Removed methods that dependent on anything else than common.StringUtils.

@@ -2,12 +2,11 @@ package org.hibernate.tool.hbm2x.doc;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.cfg.Configuration;
@@ -34,7 +33,31 @@ import org.hibernate.type.Type;
  */
 public final class DocHelper {
 
-    /**
+	/** used to sort pojoclass according to their declaration name */
+    static final Comparator POJOCLASS_COMPARATOR = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			POJOClass that = (POJOClass) o1;
+			POJOClass what = (POJOClass) o2;
+				
+			return that.getDeclarationName().compareTo(what.getDeclarationName());				
+		}
+	};
+	
+	/**
+	 * Used to sort properties according to their name.
+	 */
+	private static final Comparator PROPERTY_COMPARATOR = new Comparator()
+	{
+		public int compare(Object o1, Object o2)
+		{
+			Property property1 = (Property) o1;
+			Property property2 = (Property) o2;
+			
+			return property1.getName().compareTo(property2.getName());
+		}
+	};
+
+	/**
      * Name to use if the schema is not specified.
      */
     public static final String DEFAULT_NO_SCHEMA_NAME = "default";
@@ -94,13 +117,6 @@ public final class DocHelper {
     private Dialect dialect;
     
     /**
-     * To make use of helper methods for javadoc generation
-     */
-    private Cfg2JavaTool cfg2JavaTool;
-    
-   
-
-    /**
      * Constructor.
      * 
      * @param cfg Hibernate configuration.
@@ -116,8 +132,8 @@ public final class DocHelper {
 
         this.cfg = cfg;
 
-        dialect = Dialect.getDialect(cfg.getProperties() );
-
+        dialect = cfg.buildSettings().getDialect(); // TODO: get it from somewhere "cached".
+        
         Settings settings = cfg.buildSettings();
 
         String defaultCatalog = settings.getDefaultCatalogName();
@@ -305,12 +321,15 @@ public final class DocHelper {
     }
     
     /**
-     * return List of POJOClass corresponding to packageName passed
+     * return a sorted List of POJOClass corresponding to packageName passed
      * @param packageName packageName other than DEFAULT_NO_PACKAGE
-     * @return List of POJOClass
+     * @return a sorted List of POJOClass
      */
     public List getClasses(String packageName){
-    	return (List)classesByPackage.get(packageName);
+    	List clazzes = (List)classesByPackage.get(packageName);
+    	List orderedClasses = new ArrayList(clazzes);
+    	Collections.sort(orderedClasses, POJOCLASS_COMPARATOR);
+    	return orderedClasses;
     }
 
     /**
@@ -324,11 +343,13 @@ public final class DocHelper {
     }
     
     /**
-     * Return List of all POJOClass
+     * Return a sorted List of all POJOClass
      * @return
      */
     public List getClasses(){
-    	return classes;
+    	List orderedClasses = new ArrayList(classes);
+    	Collections.sort(orderedClasses, POJOCLASS_COMPARATOR);
+    	return orderedClasses;
     }
     
     /**
@@ -473,5 +494,64 @@ public final class DocHelper {
     		return null;
     	}
     }
+    
+    public List getInheritanceHierarchy(POJOClass pc) {
+    	if(pc.isSubclass()) {
+    		List superClasses = new ArrayList();
 
+    		POJOClass superClass = pc.getSuperClass();
+    		while (superClass != null)
+    		{
+    			superClasses.add(superClass);
+    			superClass = superClass.getSuperClass();
+    		}
+
+    		return superClasses; 
+    	} else {
+    		return Collections.EMPTY_LIST;
+    	}
+    }
+    
+    public List getOrderedProperties(POJOClass pojoClass)
+    {
+    	List orderedProperties = getAllProperties(pojoClass);
+
+    	Collections.sort(orderedProperties, PROPERTY_COMPARATOR);
+    	
+    	return orderedProperties;
+    }
+    
+    public List getSimpleProperties(POJOClass pojoClass)
+    {
+    	List properties = getAllProperties(pojoClass);
+    	
+    	if (pojoClass.hasIdentifierProperty())
+    		properties.remove(pojoClass.getIdentifierProperty());
+    	
+    	// TODO: do we need to also remove component id properties?
+    	
+    	if (pojoClass.hasVersionProperty())
+    		properties.remove(pojoClass.getVersionProperty());
+    	
+    	return properties;
+    }
+    
+    public List getOrderedSimpleProperties(POJOClass pojoClass)
+    {
+    	List orderedProperties = getSimpleProperties(pojoClass);
+
+    	Collections.sort(orderedProperties, PROPERTY_COMPARATOR);
+    	
+    	return orderedProperties;
+    }
+    
+    private List getAllProperties(POJOClass pojoClass)
+    {
+    	List properties = new ArrayList();
+    	
+    	for (Iterator iterator = pojoClass.getAllPropertiesIterator(); iterator.hasNext(); )
+    		properties.add(iterator.next());
+    	
+    	return properties;
+    }
 }

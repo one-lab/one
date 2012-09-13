@@ -4,12 +4,16 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.cfg.JDBCBinderException;
-import org.hibernate.connection.ConnectionProvider;
+import org.hibernate.cfg.reveng.ReverseEngineeringRuntimeInfo;
 import org.hibernate.exception.SQLExceptionConverter;
 import org.hibernate.util.StringHelper;
 
@@ -23,34 +27,31 @@ import org.hibernate.util.StringHelper;
 abstract public class AbstractMetaDataDialect implements MetaDataDialect {
 
 	protected final Log log = LogFactory.getLog(this.getClass());
-
-	private SQLExceptionConverter sec;
-	private ConnectionProvider provider;
 	
 	private Connection connection;
 	private DatabaseMetaData metaData;
 
-	public void configure(ConnectionProvider provider, SQLExceptionConverter sec) {
-		this.provider = provider;
-		this.sec = sec;
-		
+	private ReverseEngineeringRuntimeInfo info;
+
+
+	public void configure(ReverseEngineeringRuntimeInfo info) {
+		this.info = info;
+				
 	}
-	
 	
 	public void close() {
 		metaData = null;
 		if(connection != null) {
 			try {
-				provider.closeConnection(connection);				
+				info.getConnectionProvider().closeConnection(connection);				
 			}
 			catch (SQLException e) {
-				getSQLExceptionConverter().convert(e, "Problem while closing connection", null);
+				throw getSQLExceptionConverter().convert(e, "Problem while closing connection", null);
 			} finally {
 				connection = null;
 			}
 		}
-		provider = null;
-		sec = null;
+		info = null;		
 	}
 	
 	protected DatabaseMetaData getMetaData() throws JDBCBinderException {
@@ -117,9 +118,13 @@ abstract public class AbstractMetaDataDialect implements MetaDataDialect {
 
 	protected Connection getConnection() throws SQLException {
 		if(connection==null) {
-			connection = provider.getConnection();
+			connection = info.getConnectionProvider().getConnection();
 		}
 		return connection;
+	}
+	
+	public ReverseEngineeringRuntimeInfo getReverseEngineeringRuntimeInfo() {
+		return info;
 	}
 	
 	public void close(Iterator iterator) {
@@ -129,26 +134,52 @@ abstract public class AbstractMetaDataDialect implements MetaDataDialect {
 	}
 	
 	protected SQLExceptionConverter getSQLExceptionConverter() {
-		return sec;
+		return info.getSQLExceptionConverter();
 	}
 	
 	public boolean needQuote(String name) {
 		
-		// TODO: use jdbc metadata to decide on this. but for now we just handle the most typical cases.
+		if(name==null) return false;
+	
+		// TODO: use jdbc metadata to decide on this. but for now we just handle the most typical cases.		
 		if(name.indexOf('-')>0) return true;
 		if(name.indexOf(' ')>0) return true;
+		if(name.indexOf('.')>0) return true;
 		return false;
 	}
 	
 	protected String caseForSearch(String value) throws SQLException  {
 		// TODO: handle quoted requests (just strip it ?)
-		if ( getMetaData().storesUpperCaseIdentifiers() ) { 
+		if(needQuote(value)) {
+			if ( getMetaData().storesMixedCaseQuotedIdentifiers() ) {
+				return value;
+			} else if ( getMetaData().storesUpperCaseQuotedIdentifiers() ) { 
+				return StringHelper.toUpperCase( value ); 
+			} else if( getMetaData().storesLowerCaseQuotedIdentifiers() ) {
+				return StringHelper.toLowerCase( value );
+			} else {
+				return value;
+			}
+		} else if ( getMetaData().storesMixedCaseQuotedIdentifiers() ) {
+			return value;
+		} else if ( getMetaData().storesUpperCaseIdentifiers() ) { 
 			return StringHelper.toUpperCase( value ); 
-		} else if( getMetaData().storesUpperCaseIdentifiers() ) {
+		} else if( getMetaData().storesLowerCaseIdentifiers() ) {
 			return StringHelper.toLowerCase( value );
 		} else {
 			return value;
 		}		
 	}
 
+	
+	public Iterator getSuggestedPrimaryKeyStrategyName(String catalog, String schema, String table) {
+		Map m = new HashMap();
+		m.put( "TABLE_CAT", catalog );
+		m.put( "TABLE_SCHEMA", schema );
+		m.put( "TABLE_NAME", table );
+		m.put( "HIBERNATE_STRATEGY", null );
+		List l = new ArrayList();
+		l.add(m);
+		return l.iterator();
+	}
 }

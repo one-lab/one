@@ -108,6 +108,10 @@ public abstract class AbstractExporter implements Exporter {
 		this.templatePaths = templatePaths;
 	}
 
+	public String[] getTemplatePath() {
+		return templatePaths;
+	}
+	
 	static String toString(Object[] a) {
         if (a == null)
             return "null";

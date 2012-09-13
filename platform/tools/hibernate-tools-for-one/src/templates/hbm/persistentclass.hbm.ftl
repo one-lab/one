@@ -1,4 +1,4 @@
-<${c2h.getTag(clazz)} 
+<${c2h.getTag(clazz)}
     name="${c2h.getClassName(clazz)}"
 <#if !c2h.getClassName(clazz).equals(clazz.entityName)>
     entity-name="${clazz.entityName}"
@@ -38,7 +38,7 @@
 <#elseif !clazz.isLazy()>
     lazy="false"
 </#if>
-<#if clazz.abstract?exists && clazz.abstract>
+<#if clazz.isAbstract()?exists && clazz.isAbstract()>
     abstract="true"
 </#if>
 <#if c2h.isClassLevelOptimisticLockMode(clazz)>
@@ -62,7 +62,7 @@
 <#assign metaattributable=clazz/>
 <#include "meta.hbm.ftl"/>
 
-<#if clazz.table.comment?exists>
+<#if clazz.table.comment?exists  && clazz.table.comment?trim?length!=0>
  <comment>${clazz.table.comment}</comment>
 </#if>
 <#-- TODO: move this to id.hbm.ftl -->
@@ -73,14 +73,43 @@
  <#elseif clazz.hasEmbeddedIdentifier()>
  <#assign embeddedid=clazz.key/>
  <#include "id.hbm.ftl"/>
+ <#elseif clazz.identifier?exists>
+ 	<#if c2j.isComponent(clazz.identifier)>
+ 	 	<composite-id
+        	class="${clazz.identifier.getComponentClassName()}"
+        	<#if clazz.identifierMapper?exists>mapped="true"</#if>>
+        	<#foreach property in clazz.identifier.propertyIterator>
+        		<key-property name="${property.name}">
+        		<#foreach column in property.value.columnIterator>
+        		<#include "column.hbm.ftl">
+ 			</#foreach>
+ 			</key-property>
+ 		</#foreach>
+        	</composite-id>
+ 	<#else>
+ 		 <id type="${clazz.identifier.typeName}">
+		 <#foreach column in clazz.identifier.columnIterator>
+        	<#include "column.hbm.ftl">
+ 		</#foreach>
+ 		</id>
+ 	</#if>
  </#if>
 <#elseif c2h.isJoinedSubclass(clazz)>
- <key> 
+ <key>
        <#foreach column in clazz.key.columnIterator>
                 <#include "column.hbm.ftl">
        </#foreach>
  </key>
 </#if>
+
+<#if c2h.needsDiscriminatorElement(clazz)>
+    <discriminator type="${clazz.discriminator.typeName}">
+    	<#foreach column in clazz.discriminator.columnIterator>
+        	<#include "column.hbm.ftl">
+  	</#foreach>
+    </discriminator>
+</#if>
+
 
 <#-- version has to be done explicitly since Annotation's does not list version first -->
 <#if pojo.hasVersionProperty()>
@@ -88,7 +117,7 @@
 <#include "${c2h.getTag(property)}.hbm.ftl"/>
 </#if>
 
-<#foreach property in clazz.getUnjoinedPropertyIterator()>
+<#foreach property in c2h.getProperties(clazz)>
 <#if c2h.getTag(property)!="version" && c2h.getTag(property)!="timestamp">
 <#include "${c2h.getTag(property)}.hbm.ftl"/>
 </#if>

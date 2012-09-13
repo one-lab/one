@@ -1,48 +1,43 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<#import "/doc/common.ftl" as common>
 
-<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<HEAD>
+<html>
+	<head>
+		<title>Hibernate Mappings - Entity Summary</title>
+		<link rel="stylesheet" type="text/css" href="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" title="Style"/>
+	</head>
+	<body>
 
-<TITLE>Hibernate Mappings - Entity Summary</TITLE>
+		<@common.header/>
 
-<LINK REL ="stylesheet" TYPE="text/css" HREF="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" TITLE="Style">
+		<h2>Package ${package}</h2>
 
-</HEAD>
-
-<BODY>
-
-<H1>Hibernate Mapping Documentation</H1>
-
-<H2>Package ${package}</H2>
-
-<P>
-<#if (classList.size()>0)>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0">
-	<THEAD>
-		<TR>
-			<TH COLSPAN="2" CLASS="MainTableHeading">
-				Entities Summary
-			</TH>
-		</TR>
-	</THEAD>
-	<TBODY>
-<#foreach class in classList>
-		<TR>
-			<TD WIDTH="30%">
-				<A HREF='${docFileManager.getRef(docFile, docFileManager.getEntityDocFile(class))}' TARGET="generalFrame">
-					<B>${class.declarationName}</B>
-				</A>
-			</TD>
-			<TD WIDTH="70%">
-
-&nbsp;${class.getMetaAsString("class-description")}
-
-			</TD>
-
-		</TR>
-</#foreach>
-	</TBODY>
-</TABLE>
-</#if>
-</BODY>
+		<#if (classList.size() > 0)>
+			<table>
+				<thead>
+					<tr>
+						<th class="MainTableHeading" colspan="2">
+							Entities Summary
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#foreach class in classList>
+						<tr>
+							<td style="width: 15%">
+								<a href="${docFileManager.getRef(docFile, docFileManager.getEntityDocFile(class))}" target="generalFrame">
+									${class.declarationName}
+								</a>
+							</td>
+							<td>
+								${class.getMetaAsString("class-description")?default("&nbsp;")}
+							</td>
+						</tr>
+					</#foreach>
+				</tbody>
+			</table>
+		</#if>
+		
+	</body>
+</html>

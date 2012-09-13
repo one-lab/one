@@ -2,11 +2,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.hibernate.cfg.reveng.AssociationInfo;
+import org.hibernate.cfg.reveng.ReverseEngineeringRuntimeInfo;
 import org.hibernate.cfg.reveng.ReverseEngineeringSettings;
 import org.hibernate.cfg.reveng.ReverseEngineeringStrategy;
 import org.hibernate.cfg.reveng.TableIdentifier;
-import org.hibernate.connection.ConnectionProvider;
-import org.hibernate.exception.SQLExceptionConverter;
 import org.hibernate.mapping.ForeignKey;
 import org.hibernate.mapping.Table;
 
@@ -79,7 +79,7 @@ public class NoopReverseEngineeringStrategy implements ReverseEngineeringStrateg
 		return null;
 	}
 
-	public void configure(ConnectionProvider provider, SQLExceptionConverter sec) {
+	public void configure(ReverseEngineeringRuntimeInfo runtimeInfo) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -160,6 +160,32 @@ public class NoopReverseEngineeringStrategy implements ReverseEngineeringStrateg
 	}
 
 	public Map columnToMetaAttributes(TableIdentifier identifier, String column) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public boolean isOneToOne(ForeignKey foreignKey) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+	public AssociationInfo foreignKeyToAssociationInfo(ForeignKey foreignKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	public String foreignKeyToInverseEntityName(String keyname,
+			TableIdentifier fromTable, List fromColumnNames,
+			TableIdentifier referencedTable, List referencedColumnNames,
+			boolean uniqueReference) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	public AssociationInfo foreignKeyToInverseAssociationInfo(ForeignKey foreignKey) {
 		// TODO Auto-generated method stub
 		return null;
 	}

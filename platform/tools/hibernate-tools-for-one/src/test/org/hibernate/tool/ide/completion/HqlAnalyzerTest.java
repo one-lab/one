@@ -19,6 +19,7 @@ package org.hibernate.tool.ide.completion;
 
 import java.util.Iterator;
 import java.util.List;
+
 import junit.framework.TestCase;
 
 /**
@@ -116,8 +117,7 @@ public class HqlAnalyzerTest extends TestCase {
         assertEquals("Invalid visible query size", size, visible.size());
     }
 
-    private void doTestSubQueries(String query, int size) {
-    	char[] cs = query.toCharArray();
+    private void doTestSubQueries(String query, int size) {    	
     	List l = new HQLAnalyzer().getSubQueries(query.toCharArray(), 0).subQueries;
         assertEquals("Incorrent subqueries count", size, l.size());
     }

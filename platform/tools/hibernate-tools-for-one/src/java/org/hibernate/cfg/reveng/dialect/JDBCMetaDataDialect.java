@@ -30,11 +30,11 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 			return new ResultSetIterator(tableRs, getSQLExceptionConverter()) {
 				
 				Map element = new HashMap();
-				protected Object convertRow(ResultSet tableRs) throws SQLException {
+				protected Object convertRow(ResultSet tableResultSet) throws SQLException {
 					element.clear();
-					putTablePart( element, tableRs );
-					element.put("TABLE_TYPE", tableRs.getString("TABLE_TYPE"));
-					element.put("REMARKS", tableRs.getString("REMARKS"));
+					putTablePart( element, tableResultSet );
+					element.put("TABLE_TYPE", tableResultSet.getString("TABLE_TYPE"));
+					element.put("REMARKS", tableResultSet.getString("REMARKS"));
 					return element;					
 				}
 				protected Throwable handleSQLException(SQLException e) {
@@ -53,30 +53,6 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 		} 		
 	}
 	
-
-	private void dumpHeader(ResultSet columnRs) throws SQLException {
-		   ResultSetMetaData md2 = columnRs.getMetaData();
-		   
-		   int columnCount = md2.getColumnCount();
-		   for (int i = 1; i <= columnCount; i++) {
-			   System.out.print(md2.getColumnName(i) + "|");
-		   }		
-		   System.out.println();
-	}
-
-	private void dumpRow(ResultSet columnRs) throws SQLException {
-		   ResultSetMetaData md2 = columnRs.getMetaData();
-		   
-		   int columnCount = md2.getColumnCount();
-		   for (int i = 1; i <= columnCount; i++) {
-			   System.out.print(columnRs.getObject(i) + "|");
-		   }		
-		   System.out.println();
-	}
-
-    
-	
-
 	public Iterator getIndexInfo(final String xcatalog, final String xschema, final String xtable) {
 		try {
 			final String catalog = caseForSearch( xcatalog );
@@ -107,7 +83,7 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 		} 		
 	}
 
-	private void putTablePart(Map element, ResultSet tableRs) throws SQLException {
+	protected void putTablePart(Map element, ResultSet tableRs) throws SQLException {
 		element.put("TABLE_NAME", tableRs.getString("TABLE_NAME"));
 		element.put("TABLE_SCHEM", tableRs.getString("TABLE_SCHEM"));
 		element.put("TABLE_CAT", tableRs.getString("TABLE_CAT"));
@@ -190,16 +166,7 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 				Map element = new HashMap();
 				protected Object convertRow(ResultSet rs) throws SQLException {
 					element.clear();
-					element.put( "PKTABLE_NAME", rs.getString("PKTABLE_NAME"));
-					element.put( "PKTABLE_SCHEM", rs.getString("PKTABLE_SCHEM"));
-					element.put( "PKTABLE_CAT", rs.getString("PKTABLE_CAT"));
-					element.put( "FKTABLE_CAT", rs.getString("FKTABLE_CAT"));
-					element.put( "FKTABLE_SCHEM",rs.getString("FKTABLE_SCHEM"));
-					element.put( "FKTABLE_NAME", rs.getString("FKTABLE_NAME"));
-					element.put( "FKCOLUMN_NAME", rs.getString("FKCOLUMN_NAME"));
-					element.put( "PKCOLUMN_NAME", rs.getString("PKCOLUMN_NAME"));
-					element.put( "FK_NAME", rs.getString("FK_NAME"));
-					element.put( "KEY_SEQ", new Short(rs.getShort("KEY_SEQ")));					
+					putExportedKeysPart( element, rs );					
 					return element;					
 				}
 				protected Throwable handleSQLException(SQLException e) {
@@ -209,6 +176,19 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 		} catch (SQLException e) {
 			throw getSQLExceptionConverter().convert(e, "Error while reading exported keys meta data for " + Table.qualify(xcatalog, xschema, xtable), null);
 		}	
+	}
+	
+	protected void putExportedKeysPart(Map element, ResultSet rs) throws SQLException {
+		element.put( "PKTABLE_NAME", rs.getString("PKTABLE_NAME"));
+		element.put( "PKTABLE_SCHEM", rs.getString("PKTABLE_SCHEM"));
+		element.put( "PKTABLE_CAT", rs.getString("PKTABLE_CAT"));
+		element.put( "FKTABLE_CAT", rs.getString("FKTABLE_CAT"));
+		element.put( "FKTABLE_SCHEM",rs.getString("FKTABLE_SCHEM"));
+		element.put( "FKTABLE_NAME", rs.getString("FKTABLE_NAME"));
+		element.put( "FKCOLUMN_NAME", rs.getString("FKCOLUMN_NAME"));
+		element.put( "PKCOLUMN_NAME", rs.getString("PKCOLUMN_NAME"));
+		element.put( "FK_NAME", rs.getString("FK_NAME"));
+		element.put( "KEY_SEQ", new Short(rs.getShort("KEY_SEQ")));
 	}
 	
 	

@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC 
+<!DOCTYPE hibernate-mapping PUBLIC
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<!-- 
+<!--
 
   This mapping demonstrates how to map a many-to-many
   association with a shared attribute in the primary keys
   of the associated entities.
-     
+
 -->
 
-<hibernate-mapping 
+<hibernate-mapping
 	package="org.hibernate.tool.hbm2x.hbm2hbmxml">
-	
+
 	<class name="User" table="`User`">
 		<composite-id>
 			<key-property name="name"/>
 			<key-property name="org"/>
 		</composite-id>
-		<set name="groups" table="UserGroup">
+		<set name="groups" table="UserGroup" lazy="extra">
 			<key>
 				<column name="userName"/>
 				<column name="org"/>
@@ -30,14 +30,14 @@
 			</many-to-many>
 		</set>
 	</class>
-	
+
 	<class name="Group" table="`Group`">
 		<composite-id>
 			<key-property name="name"/>
 			<key-property name="org"/>
 		</composite-id>
 		<property name="description"/>
-		<set name="users" table="UserGroup" inverse="true">
+		<set name="users" table="UserGroup" inverse="true" lazy="extra">
 			<key>
 				<column name="groupName"/>
 				<column name="org"/>
@@ -48,5 +48,5 @@
 			</many-to-many>
 		</set>
 	</class>
-	
+
 </hibernate-mapping>

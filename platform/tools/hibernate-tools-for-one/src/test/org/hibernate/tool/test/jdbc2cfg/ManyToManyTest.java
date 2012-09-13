@@ -31,8 +31,8 @@ public class ManyToManyTest extends JDBCMetaDataBinderTestCase {
 
 	private JDBCMetaDataConfiguration localCfg;
 
-	protected void configure(JDBCMetaDataConfiguration cfg) {
-    	super.configure( cfg );    	    
+	protected void configure(JDBCMetaDataConfiguration configuration) {
+    	super.configure( configuration );    	    
         
 	}
 	
@@ -42,7 +42,7 @@ public class ManyToManyTest extends JDBCMetaDataBinderTestCase {
 		localCfg = new JDBCMetaDataConfiguration();
         
         DefaultReverseEngineeringStrategy c = new DefaultReverseEngineeringStrategy();
-        c.setSettings(new ReverseEngineeringSettings().setDetectManyToMany(false));        
+        c.setSettings(new ReverseEngineeringSettings(c).setDetectManyToMany(false));        
         localCfg.setReverseEngineeringStrategy(c);
         localCfg.readFromJDBC();
 	}
@@ -98,7 +98,14 @@ public class ManyToManyTest extends JDBCMetaDataBinderTestCase {
 		assertNotNull( projectClass.getProperty( "employees" ));				
 		
 	}
-	
+
+	public void testFalsePositive() {
+	    
+        assertNotNull("Middle class should be generated.", cfg.getClassMapping( "NonMiddle" ));
+                				
+		
+	}
+
 	public void testBuildMappings() {
 		
 		localCfg.buildMappings();
@@ -115,9 +122,13 @@ public class ManyToManyTest extends JDBCMetaDataBinderTestCase {
 		assertFileAndExists( new File(getOutputDir(), "Project.hbm.xml") );
 		assertFileAndExists( new File(getOutputDir(), "WorksOnContext.hbm.xml") );
 		
+		assertFileAndExists( new File(getOutputDir(), "Right.hbm.xml") );
+		assertFileAndExists( new File(getOutputDir(), "Left.hbm.xml") );
+		assertFileAndExists( new File(getOutputDir(), "NonMiddle.hbm.xml") ); //Must be there since it has a fkey that is not part of the pk
+		
 		assertFalse(new File(getOutputDir(), "WorksOn.hbm.xml").exists() );
 		
-		assertEquals(3, getOutputDir().listFiles().length);
+		assertEquals(6, getOutputDir().listFiles().length);
 		
 		Configuration configuration = new Configuration()
 		    .addFile( new File(getOutputDir(), "Employee.hbm.xml") )
@@ -141,10 +152,14 @@ public class ManyToManyTest extends JDBCMetaDataBinderTestCase {
 	protected String[] getCreateSQL() {
 		return new String[] {
 			"create table PROJECT ( project_id integer not null, name varchar(50), primary key (project_id) )",
-			"create table EMPLOYEE ( id integer not null, name varchar(50), manager_id integer, primary key (id), constraint employee_manager foreign key (manager_id) references EMPLOYEE)",
-			"create table WORKS_ON ( project_id integer not null, employee_id integer not null, primary key (project_id, employee_id), constraint workson_employee foreign key (employee_id) references EMPLOYEE, foreign key (project_id) references PROJECT )",
-			"create table WORKS_ON_CONTEXT ( project_id integer not null, employee_id integer not null, created_by integer, primary key (project_id, employee_id), constraint workson_ctx_employee foreign key (employee_id) references EMPLOYEE, foreign key (project_id) references PROJECT, foreign key (created_by) references EMPLOYEE )",
+			"create table EMPLOYEE ( id integer not null, name varchar(50), manager_id integer, primary key (id), constraint employee_manager foreign key (manager_id) references EMPLOYEE(id))",
+			"create table WORKS_ON ( project_id integer not null, employee_id integer not null, primary key (project_id, employee_id), constraint workson_employee foreign key (employee_id) references EMPLOYEE(id), foreign key (project_id) references PROJECT(project_id) )",
+			"create table WORKS_ON_CONTEXT ( project_id integer not null, employee_id integer not null, created_by integer, primary key (project_id, employee_id), constraint workson_ctx_employee foreign key (employee_id) references EMPLOYEE, foreign key (project_id) references PROJECT(project_id), foreign key (created_by) references EMPLOYEE(id) )",
 			//"alter  table PROJECT add constraint project_manager foreign key (team_lead) references EMPLOYEE"
+			// nonmiddle left and right are used to test a false association table isn't detected.
+			"create table LEFT ( id integer not null, primary key (id) )",
+			"create table RIGHT ( id integer not null, primary key (id) )",
+			"create table NON_MIDDLE ( left_id integer not null, right_id integer not null, primary key (left_id), constraint FK_MIDDLE_LEFT foreign key (left_id) references LEFT(id), constraint FK_MIDDLE_RIGHT foreign key (right_id) references RIGHT(id))",
 		};
 	}
 
@@ -154,7 +169,10 @@ public class ManyToManyTest extends JDBCMetaDataBinderTestCase {
 				"drop table WORKS_ON_CONTEXT",
 				"drop table WORKS_ON",
 				"drop table EMPLOYEE",
-				"drop table PROJECT",											
+				"drop table PROJECT",
+				"drop table NON_MIDDLE",
+				"drop table LEFT",
+				"drop table RIGHT",
 			};
 	}
 

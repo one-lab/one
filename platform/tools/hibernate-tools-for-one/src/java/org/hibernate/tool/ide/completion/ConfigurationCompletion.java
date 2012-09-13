@@ -48,16 +48,8 @@ class ConfigurationCompletion {
 			String entityImport = (String) entry.getKey();
 			String entityName = (String) entry.getValue();
 			
-			if(entityImport.startsWith(prefix)) {
-				String remaining = entityImport.substring( prefix.length() );
-				HQLCompletionProposal proposal = new HQLCompletionProposal(
-													HQLCompletionProposal.ENTITY_NAME, 
-													cursorPosition);
-				proposal.setCompletion( remaining );
-				proposal.setSimpleName( entityImport );
-				proposal.setReplaceStart( cursorPosition );
-				proposal.setReplaceEnd( cursorPosition+0 ); // we don't replace anything here
-				
+			if(entityImport.toLowerCase().startsWith(prefix.toLowerCase())) {
+				HQLCompletionProposal proposal = createStartWithCompletionProposal( prefix, cursorPosition, HQLCompletionProposal.ENTITY_NAME, entityImport );
 				proposal.setShortEntityName( entityImport );
 				proposal.setEntityName( entityName );
 				collector.accept(proposal);				
@@ -179,28 +171,40 @@ class ConfigurationCompletion {
             prefix = "";
         }
         
-        EntityPOJOClass pc = new EntityPOJOClass(cmd, new Cfg2JavaTool()); // TODO: we should extract the needed functionallity from this hbm2java class.
-        
-        Iterator allPropertiesIterator = pc.getAllPropertiesIterator();
-        while ( allPropertiesIterator.hasNext() ) {
-			Property property = (Property) allPropertiesIterator.next();
-			String candidate = property.getName();
-		    if (prefix.length() == 0 || candidate.startsWith(prefix)) {
-		    	HQLCompletionProposal proposal = createStartWithCompletionProposal( prefix, cursorPosition, HQLCompletionProposal.PROPERTY, candidate );
-		    	proposal.setEntityName( cmd.getEntityName() );
-		    	proposal.setProperty( property );
-		    	proposal.setPropertyName( candidate );		    	
-				hcc.accept( proposal);		    	                
+        // Add superclass's properties too
+        while (cmd != null){
+        	EntityPOJOClass pc = new EntityPOJOClass(cmd, new Cfg2JavaTool()); // TODO: we should extract the needed functionallity from this hbm2java class.
+            
+        	Iterator allPropertiesIterator = pc.getAllPropertiesIterator();
+            while ( allPropertiesIterator.hasNext() ) {
+    			Property property = (Property) allPropertiesIterator.next();
+    			String candidate = property.getName();
+    		    if (prefix.length() == 0 || candidate.toLowerCase().startsWith(prefix.toLowerCase())) {
+    		    	HQLCompletionProposal proposal = createStartWithCompletionProposal( prefix, cursorPosition, HQLCompletionProposal.PROPERTY, candidate );
+    		    	proposal.setEntityName( cmd.getEntityName() );
+    		    	proposal.setProperty( property );
+    		    	proposal.setPropertyName( candidate );		    	
+    				hcc.accept( proposal);		    	                
+                }
             }
-        }        	
+            cmd = cmd.getSuperclass();
+        }
+           	
 	}
 
 	private HQLCompletionProposal createStartWithCompletionProposal(String prefix, int cursorPosition, int kind, String candidate) {
 		HQLCompletionProposal proposal = new HQLCompletionProposal(kind, cursorPosition);
-		proposal.setCompletion( candidate.substring( prefix.length() ) );
-		proposal.setSimpleName( candidate );
-		proposal.setReplaceEnd( cursorPosition );
-		proposal.setReplaceStart( cursorPosition );
+		if(candidate.startsWith(prefix)) {
+			proposal.setCompletion( candidate.substring(prefix.length()) );
+			proposal.setSimpleName( candidate );
+			proposal.setReplaceStart( cursorPosition );	
+			proposal.setReplaceEnd( cursorPosition );
+		} else {
+			proposal.setCompletion( candidate );
+			proposal.setSimpleName( candidate );
+			proposal.setReplaceStart( cursorPosition  - prefix.length() );// replace prefix	
+			proposal.setReplaceEnd( cursorPosition ); 	
+		}
 		return proposal;
 	}
 
@@ -320,7 +324,7 @@ class ConfigurationCompletion {
         while ( props.hasNext() ) {
 			Property element = (Property) props.next();			
 			String candidate = element.getName();
-			if (candidate.startsWith(prefix)) {
+			if (candidate.toLowerCase().startsWith(prefix.toLowerCase())) {
 				HQLCompletionProposal proposal = createStartWithCompletionProposal( prefix, cursorPosition, HQLCompletionProposal.PROPERTY, candidate );
 				//proposal.setEntityName( cmd.getEntityName() ); ...we don't know here..TODO: pass in the "path"
 		    	proposal.setPropertyName( candidate );
@@ -332,14 +336,14 @@ class ConfigurationCompletion {
     }
 	
 	private void findMatchingWords(int cursorPosition, String prefix, String[] words, int kind, IHQLCompletionRequestor hcc) {
-		int i = Arrays.binarySearch(words, prefix);
+		int i = Arrays.binarySearch(words, prefix.toLowerCase());
 		if(i<0) {
 			i = Math.abs(i+1);
 		}
 		
 		for (int cnt = i; cnt < words.length; cnt++) {
 			String word = words[cnt];
-			if(word.startsWith(prefix)) {
+			if(word.toLowerCase().startsWith(prefix.toLowerCase())) {
 				HQLCompletionProposal proposal = createStartWithCompletionProposal( prefix, cursorPosition, kind, word );
 				hcc.accept( proposal);				
 			} else {

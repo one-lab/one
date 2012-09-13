@@ -71,7 +71,7 @@ public class TableIdentifier {
 	
 	public String toString() {
 		StringBuffer buf = new StringBuffer()
-					.append( getClass().getName() )
+					.append( "TableIdentifier" )
 					.append('(');
 		if ( getCatalog()!=null ) buf.append( getCatalog() + "." );
 		if ( getSchema()!=null ) buf.append( getSchema()+ ".");

@@ -64,13 +64,6 @@ public class OtherCfg2HbmTest extends NonReflectiveTestCase {
         assertEquals(null,findFirstString("$",new File(getOutputDir(), "org/hibernate/tool/hbm2x/Product.hbm.xml") ) );
         
 	}
-
-	private SAXReader getSAXReader() {
-    	SAXReader xmlReader = new SAXReader();
-    	xmlReader.setEntityResolver(new DTDEntityResolver() );
-    	xmlReader.setValidation(true);
-    	return xmlReader;
-    }
 	
 	public void testVersioning() throws DocumentException {
 		

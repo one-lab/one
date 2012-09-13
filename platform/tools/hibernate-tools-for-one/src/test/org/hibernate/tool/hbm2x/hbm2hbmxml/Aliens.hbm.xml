@@ -18,6 +18,9 @@
 		<id name="id" type="long">
 			<generator class="assigned"/>
 		</id>
+		  <discriminator type="string">
+            	<column name="HIER_TYPE" length="5" not-null="true" />
+  		  </discriminator>
 		<property name="legs" type="int"/>
 	</class>
 	
@@ -26,6 +29,7 @@
 	</subclass>
 	
 	<joined-subclass name="Alien" extends="Animal">
+	  <comment>A comment for joined-subclass</comment>
 	  <key column="aid"/>
 	  <property name="planet" type="string"/>
 	</joined-subclass>

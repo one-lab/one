@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.Table;
 import org.hibernate.tool.hbm2x.pojo.POJOClass;
 
@@ -32,11 +31,6 @@ public class DocFileManager {
     private DocFile mainIndexDocFile;
 
     /**
-     * The header of the documentation.
-     */
-    private DocFile headerDocFile;
-
-    /**
      * Folder for the utility files.
      */
     private DocFolder assetsDocFolder;
@@ -45,6 +39,11 @@ public class DocFileManager {
      * The Hibernate image.
      */
     private DocFile hibernateImageDocFile;
+    
+    /**
+     * The extends image.
+     */
+    private DocFile extendsImageDocFile;
 
     /**
      * The CSS stylesheet file.
@@ -147,18 +146,16 @@ public class DocFileManager {
 
         super();        
 
-        Configuration cfg = docHelper.getCfg();
-
         rootDocFolder = new DocFolder(pRootFolder);
 
         mainIndexDocFile = new DocFile("index.html", rootDocFolder);
-
-        headerDocFile = new DocFile("header.html", rootDocFolder);
 
         assetsDocFolder = new DocFolder("assets", rootDocFolder);
 
         hibernateImageDocFile = new DocFile("hibernate_logo.gif",
                 assetsDocFolder);
+        
+        extendsImageDocFile = new DocFile("inherit.gif", assetsDocFolder);
 
         cssStylesDocFile = new DocFile("doc-style.css", assetsDocFolder);
         
@@ -263,16 +260,6 @@ public class DocFileManager {
     }
 
     /**
-     * Returns the DocFile for the header.
-     * 
-     * @return the value.
-     */
-    public DocFile getHeaderDocFile() {
-
-        return headerDocFile;
-    }
-
-    /**
      * Returns the DocFile for the Hibernate Image.
      * 
      * @return the value.
@@ -280,6 +267,16 @@ public class DocFileManager {
     public DocFile getHibernateImageDocFile() {
 
         return hibernateImageDocFile;
+    }
+    
+    /**
+     * Returns the DocFile for the extends Image.
+     * 
+     * @return the value.
+     */
+    public DocFile getExtendsImageDocFile() {
+
+        return extendsImageDocFile;
     }
 
     /**
@@ -475,27 +472,30 @@ public class DocFileManager {
     /**
      * Copy a File.
      * 
-     * TODO: this method ignores custom provided templatepath. Want to call velocity to get the resourceloaders but they are hidden, so we need another way.
-     *  
+     * TODO: this method ignores custom provided templatepath. Want to call freemarker to get the resourceloaders but they are hidden, so we need another way.
+     * ..and if we use currentthread classloader you might conflict with the projects tools.jar
+     * 
      * @param fileName the name of the file to copy.
      * @param to the target file.
      * 
      * @throws IOException in case of error.
      */
-    public static void copy(String fileName, File to) throws IOException {
+    public static void copy(ClassLoader loader, String fileName, File to) throws IOException {
         InputStream is = null;
         FileOutputStream out = null;
         try {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader(); 
+            /*ClassLoader classLoader = Thread.currentThread().getContextClassLoader(); 
             if (classLoader == null) {
                 classLoader = DocFileManager.class.getClassLoader();			
             }
 			
-			is = classLoader.getResourceAsStream(fileName);
-            if (is == null && classLoader!=DocFileManager.class.getClassLoader() ) {
+			is = classLoader.getResourceAsStream(fileName);*/
+        	
+            /*if (is == null && classLoader!=DocFileManager.class.getClassLoader() ) {
 				is = DocFileManager.class.getClassLoader().getResourceAsStream(fileName); // HACK: workaround since eclipse for some reason doesnt provide the right classloader;
 				
-            } 
+            } */
+        	is = loader.getResourceAsStream( fileName );
 			
 			if(is==null) {
                 throw new IllegalArgumentException("File not found: "

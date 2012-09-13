@@ -28,7 +28,7 @@ public class QueryExporterTask extends ExporterTask {
 		for (Iterator iter = queries.iterator(); iter.hasNext();) {
 			HQL hql = (HQL) iter.next();
 			if(StringHelper.isNotEmpty(hql.query)) {
-				queryStrings.add(query);
+				queryStrings.add(hql.query);
 			}
 		}
 		exporter.setQueries(queryStrings);

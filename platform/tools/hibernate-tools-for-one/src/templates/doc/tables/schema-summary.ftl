@@ -1,78 +1,38 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<#import "/doc/common.ftl" as common>
 
-<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<HEAD>
+<html>
+	<head>
+		<title>Hibernate Mappings - Table Summary</title>
+		<link rel="stylesheet" type="text/css" href="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" title="Style"/>
+	</head>
+	<body>
 
-<TITLE>Hibernate Mappings - Table Summary</TITLE>
+		<@common.header/>
 
-<LINK REL ="stylesheet" TYPE="text/css" HREF="${docFileManager.getRef(docFile, docFileManager.getCssStylesDocFile())}" TITLE="Style">
+		<h2>Schema ${schema}</h2>
 
-</HEAD>
+		<table>
+			<thead>
+				<tr>
+					<th class="MainTableHeading">
+						Tables
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#foreach table in dochelper.tablesBySchema.get(schema)>
+					<tr>
+						<td>
+							<a href="${docFileManager.getRef(docFile, docFileManager.getTableDocFile(table))}" target="generalFrame">
+								${table.name}
+							</a>
+						</td>
+					</tr>
+				</#foreach>
+			</tbody>
+		</table>
 
-<BODY>
-
-<H1>Hibernate Mapping Documentation</H1>
-
-<H2>List of Tables for Schema: ${schema}</H2>
-
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0">
-	<THEAD>
-		<TR>
-			<TH COLSPAN="2" CLASS="MainTableHeading">
-				Tables
-			</TH>
-		</TR>
-	</THEAD>
-<#foreach table in dochelper.tablesBySchema.get(schema)>
-	<TBODY>
-		<TR>
-			<TD>
-				<A HREF='${docFileManager.getRef(docFile, docFileManager.getTableDocFile(table))}' TARGET="generalFrame">
-					<B>${table.name}</B>
-				</A>
-			</TD>
-			<TD>
-				<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0">
-					<THEAD>
-						<TR>
-							<TH WIDTH="50%">
-								Name
-							</TH>
-							<TH WIDTH="30%">
-								SQL Type
-							</TH>
-							<TH WIDTH="15%">
-								Nullable
-							</TH>
-							<TH WIDTH="15%">
-								Unique
-							</TH>
-						</TR>
-					</THEAD>
-					<TBODY>
-<#foreach column in table.columnIterator>
-						<TR>
-							<TD>
-								${column.name}
-							</TD>
-							<TD>
-								${dochelper.getSQLTypeName(column)}
-							</TD>
-							<TD ALIGN="CENTER">
-								${column.nullable?string}
-							</TD>
-							<TD ALIGN="CENTER">
-								${column.unique?string}
-							</TD>
-						</TR>
-</#foreach>
-					</TBODY>
-				</TABLE>
-			</TD>
-		</TR>
-</#foreach>
-	</TBODY>
-</TABLE>
-
-</BODY>
+	</body>
+</html>

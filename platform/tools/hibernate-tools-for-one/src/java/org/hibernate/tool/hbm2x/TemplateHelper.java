@@ -85,6 +85,7 @@ public class TemplateHelper {
         
     }
     
+    
     public class Templates {
     	    	
     	/*public String get(String name) {
@@ -170,6 +171,11 @@ public class TemplateHelper {
     	} 	// else make the directory and any non-existent parent directories
     	else if ( !dir.exists() ) {
     		if ( !dir.mkdirs() ) {
+    			if(dir.getName().equals(".")) { // Workaround that Linux/JVM apparently can't handle mkdirs of File's with current dir references.
+    				if(dir.getParentFile().mkdirs()) {
+    					return;
+    				}
+    			}
     			throw new ExporterException( "unable to create directory: " + dir.getAbsolutePath() );
     		}
     	}
@@ -239,19 +245,23 @@ public class TemplateHelper {
     }
     
     /** look up the template named templateName via the paths and print the content to the output */
-    public void processTemplate(String templateName, Writer output) {
+    public void processTemplate(String templateName, Writer output, String rootContext) {
+    	if(rootContext == null) {
+    		rootContext = "Unknown context";
+    	}
+    	
     	try {
     		Template template = freeMarkerEngine.getTemplate(templateName);
     		template.process(getContext(), output);            
         } 
         catch (IOException e) {
-            throw new ExporterException("Error while processing template " + templateName, e);
+            throw new ExporterException("Error while processing " + rootContext + " with template " + templateName, e);
         }
-        catch (TemplateException te) {
-        	throw new ExporterException("Error while processing template " + templateName, te);
+        catch (TemplateException te) {        	
+        	throw new ExporterException("Error while processing " + rootContext + " with template " + templateName, te);
         }        
         catch (Exception e) {
-            throw new ExporterException("Error while processing template " + templateName, e);
+        	throw new ExporterException("Error while processing " + rootContext + " with template " + templateName, e);
         }    	
     }
         
@@ -287,5 +297,6 @@ public class TemplateHelper {
 		catch (IOException e) {
 			throw new ExporterException("templateExists for " + templateName + " failed", e);
 		}
-    }  
+    }
+
 }

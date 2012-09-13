@@ -19,27 +19,29 @@ public interface Exporter {
 	 */
 	public void setConfiguration(Configuration cfg);
 
+	public Configuration getConfiguration();
+	
 	/**
 	 * @param file basedirectory to be used for generated files.
 	 */
 	public void setOutputDirectory(File file);
 
+	public File getOutputDirectory();
+	
 	/**
 	 * @param templatePath array of directories used sequentially to lookup templates
 	 */
 	public void setTemplatePath(String[] templatePath);
 	
-	/**
-	 * @param templatePrefix template prefix to be used. e.g. if set to "dao/", "dao/" will be prefixed all lookups before the simple name will looked up. Used to allow seperation of templates within a templatepath.  
-	 */
-//	public void setTemplatePrefix(String templatePrefix);
-
+	public String[] getTemplatePath();
+	
 	/**
 	 * 
 	 * @param properties set of properties to be used by exporter.
 	 */
 	public void setProperties(Properties properties);
 	
+	public Properties getProperties();
 	
 	/**
 	 * 

@@ -30,14 +30,14 @@ public class SchemaAnalyzerTest extends JDBCMetaDataBinderTestCase {
 	}
 	
 	public void testSchemaAnalyzer() {
-		Configuration cfg = new Configuration();
-		addMappings( getMappings(), cfg );
-		cfg.buildMappings();
+		Configuration configuration = new Configuration();
+		addMappings( getMappings(), configuration );
+		configuration.buildMappings();
 	
 		SchemaByMetaDataDetector analyzer = new SchemaByMetaDataDetector();
-		analyzer.initialize( cfg, cfg.buildSettings() );
+		analyzer.initialize( configuration, configuration.buildSettings() );
 		
-		Iterator tableMappings = cfg.getTableMappings();
+		Iterator tableMappings = configuration.getTableMappings();
 		
 		
 		while ( tableMappings.hasNext() ) {
@@ -46,17 +46,17 @@ public class SchemaAnalyzerTest extends JDBCMetaDataBinderTestCase {
 			MockCollector mc = new MockCollector();
 			
 			if(table.getName().equalsIgnoreCase( "missingtable" )) {
-				analyzer.visit( cfg, table, mc );				
+				analyzer.visit( configuration, table, mc );				
 				assertEquals(mc.problems.size(),1);
 				Issue ap = (Issue) mc.problems.get( 0 );
 				assertTrue(ap.getDescription().indexOf( "Missing table" ) >=0);
 			} else if(table.getName().equalsIgnoreCase( "category" )) {
-				analyzer.visit( cfg, table, mc );
+				analyzer.visit( configuration, table, mc );
 				assertEquals(mc.problems.size(),1);
 				Issue ap = (Issue) mc.problems.get( 0 );
 				assertTrue(ap.getDescription().indexOf( "missing column: name" ) >=0);							
 			} else if(table.getName().equalsIgnoreCase( "badtype" )) {
-				analyzer.visit( cfg, table, mc );
+				analyzer.visit( configuration, table, mc );
 				assertEquals(mc.problems.size(),1);
 				Issue ap = (Issue) mc.problems.get( 0 );
 				assertTrue(ap.getDescription().indexOf( "wrong column type for name" ) >=0);
@@ -66,7 +66,7 @@ public class SchemaAnalyzerTest extends JDBCMetaDataBinderTestCase {
 		}
 		
 		MockCollector mc = new MockCollector();
-		analyzer.visitGenerators( cfg, mc );
+		analyzer.visitGenerators( configuration, mc );
 		assertEquals(1,mc.problems.size());
 		Issue issue = (Issue) mc.problems.get( 0 );
 		assertTrue(issue.getDescription().indexOf( "hibernate_unique_key" ) >=0);
@@ -77,11 +77,11 @@ public class SchemaAnalyzerTest extends JDBCMetaDataBinderTestCase {
 		
 		public void testExporter() {
 			
-			Configuration cfg = new Configuration();
-			addMappings( getMappings(), cfg );
-			cfg.buildMappings();
+			Configuration configuration = new Configuration();
+			addMappings( getMappings(), configuration );
+			configuration.buildMappings();
 		
-			new HbmLintExporter(cfg, getOutputDir()).start();
+			new HbmLintExporter(configuration, getOutputDir()).start();
 			
 		}
 		
