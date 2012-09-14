@@ -39,19 +39,19 @@
         <!--<property name="password" value="kylin" />-->
         <!--<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />-->
     <!--</bean>-->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
-        <property name="username" value="kongyz" />
-        <property name="password" value="kongyz" />
-        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-    </bean>
-
     <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
-        <!--<property name="url" value="jdbc:mysql://localhost:3306/mini-web"/>-->
-        <!--<property name="username" value="root" />-->
-        <!--<property name="password" value="root" />-->
-        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+        <!--<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>-->
+        <!--<property name="username" value="kongyz" />-->
+        <!--<property name="password" value="kongyz" />-->
+        <!--<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />-->
     <!--</bean>-->
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="url" value="jdbc:mysql://localhost:3306/mini-web"/>
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    </bean>
     <jpa:repositories base-package="com.sinosoft.one" sql-queries-location="META-INF/sqlquery/*"/>
 
 </beans>
