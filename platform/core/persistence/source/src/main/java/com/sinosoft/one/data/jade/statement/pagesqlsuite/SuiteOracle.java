@@ -3,8 +3,6 @@ package com.sinosoft.one.data.jade.statement.pagesqlsuite;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.Iterator;
-
 /**
  * Created with IntelliJ IDEA.
  * User: kylin
@@ -12,11 +10,13 @@ import java.util.Iterator;
  * Time: 下午2:44
  * To change this template use File | Settings | File Templates.
  */
-public class SuiteOracle implements SuiteDataSourcePageSql {
-    public static final String COMMA = ",";
-    public static final String SPACE = " ";
-    public static final String ORDER = " order by ";
-    public String suiteSql(String sql,Pageable pageable) {
+public class SuiteOracle extends AbstractSuiteDataSourceSql implements SuiteDataSourceSql {
+
+    public String suiteSql(String sql,Pageable pageable,Sort sort) {
+        return super.suiteSql(sql,pageable, sort);
+    }
+    //@Override
+    String renderForPage(String sql,Pageable pageable){
         StringBuilder newSql = new StringBuilder();
         newSql.append("select * from (select a.*, rownum rn from(")
                 .append(sql);
@@ -24,21 +24,13 @@ public class SuiteOracle implements SuiteDataSourcePageSql {
         newSql.append(") a where rownum <=")
                 .append(pageable.getPageSize()*(pageable.getPageNumber()+1))
                 .append(") where rn >")
-                .append(pageable.getPageSize()*pageable.getPageNumber());
+                .append(pageable.getPageSize() * pageable.getPageNumber());
         return newSql.toString();
     }
-    private StringBuilder renderForOrders(Pageable pageable,StringBuilder sb){
-        if(pageable.getSort()!=null){
-            Iterator iterator = pageable.getSort().iterator();
-            String sep = new String() ;
-            sb.append(ORDER);
-            while(iterator.hasNext()){
-                sb.append(sep);
-                Sort.Order order = (Sort.Order)iterator.next();
-                sb.append(order.getProperty()).append(SPACE).append(order.getDirection());
-                sep = COMMA;
-            }
-        }
-        return sb;
+    //@Override
+    String renderForSort(String sql,Sort sort){
+        StringBuilder newSql = new StringBuilder(sql);
+        renderForOrders(sort,newSql) ;
+        return newSql.toString();
     }
 }

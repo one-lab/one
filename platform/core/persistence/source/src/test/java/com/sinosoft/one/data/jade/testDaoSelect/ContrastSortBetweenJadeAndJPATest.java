@@ -53,7 +53,7 @@ public class ContrastSortBetweenJadeAndJPATest {
     }
 
     @Test
-    public void  contrastSortBetweenJadeAndJPATest(){
+    public void  contrastPageSortBetweenJadeAndJPATest(){
         List<Sort.Order> orders = new ArrayList<Sort.Order>();
         orders.add(new Sort.Order(Sort.Direction.DESC,"age"));
         orders.add(new Sort.Order(Sort.Direction.ASC,"firstname"));
@@ -76,6 +76,31 @@ public class ContrastSortBetweenJadeAndJPATest {
             assertEquals(jadePage.getContent().get(i).getEmailAddress(),jpaPage.getContent().get(i).getEmailAddress());
             assertEquals(jadePage.getContent().get(i).getFirstname(),jpaPage.getContent().get(i).getFirstname());
             assertEquals(jadePage.getContent().get(i).getLastname(),jpaPage.getContent().get(i).getLastname());
+        }
+    }
+    @Test
+    public void  contrastSortBetweenJadeAndJPATest(){
+        List<Sort.Order> orders = new ArrayList<Sort.Order>();
+        orders.add(new Sort.Order(Sort.Direction.DESC,"age"));
+        orders.add(new Sort.Order(Sort.Direction.ASC,"firstname"));
+        Sort sort = new Sort(orders);
+
+        List<User> users1 = userSelectDao.findAllForJade(sort);
+        for(User user:users1){
+            System.out.println(user);
+        }
+        System.out.println("==========================");
+        List<User> users2 = (List<User>) userSelectDao.findAll(sort);
+        for(User user:users2){
+            System.out.println(user);
+        }
+        assertEquals(users1.size(),users2.size());
+        for(int i = 0; i < users1.size(); i++){
+            assertEquals(users1.get(i).getId(),users2.get(i).getId());
+            assertEquals(users1.get(i).getAge(),users2.get(i).getAge());
+            assertEquals(users1.get(i).getEmailAddress(),users2.get(i).getEmailAddress());
+            assertEquals(users1.get(i).getFirstname(),users2.get(i).getFirstname());
+            assertEquals(users1.get(i).getLastname(),users2.get(i).getLastname());
         }
     }
     @After

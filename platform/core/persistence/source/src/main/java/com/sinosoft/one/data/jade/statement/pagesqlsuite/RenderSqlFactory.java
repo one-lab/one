@@ -7,13 +7,13 @@ package com.sinosoft.one.data.jade.statement.pagesqlsuite;
  * Time: 下午2:39
  * To change this template use File | Settings | File Templates.
  */
-public class PageSqlFactory {
+public class RenderSqlFactory {
 
     private static final String ORACLE=":oracle:";
     private static final String MYSQL=":mysql:";
     private static final String SQL_SERVER=":sqlserver:";
 
-    public static SuiteDataSourcePageSql createPageSql(String URL) {
+    public static SuiteDataSourceSql createPageSql(String URL) {
         if(URL.contains(ORACLE)){
             return new SuiteOracle();
         }   else if(URL.contains(MYSQL)) {

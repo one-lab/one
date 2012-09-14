@@ -8,6 +8,7 @@ import com.sinosoft.one.data.jade.model.User1;
 import com.sinosoft.one.data.jade.rowMapper.UserRowMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -77,9 +78,9 @@ public interface UserSelectDao  extends UserDao {
     //@SQL("select u.id user_id,u.name user_name, g.name group_name, s.name gender_name from t_user u,t_code_group g,t_code_gender s where u.groupIds = g.id and u.gender = s.id")
     Page<SomePropertis> selectUsersWithSqlQueryForPage(Pageable pageable);
 
-    //4.3.1
-    @SQL("select * from t_user")
-    Page<User> selectUsersWithAnooForPage(Pageable pageable);
+    //4.3.1a
+    @SQL("select * from t_user where id = ?1")
+    Page<User> selectUsersWithAnooForPage(String a,Pageable pageable);
 
     //4.3.2
     @SQL("select id, name from t_user where groupIds in (?1)")
@@ -89,6 +90,10 @@ public interface UserSelectDao  extends UserDao {
     //begin of contrast Sort Between Jade And JPA Test
     @SQL("select * from jpa_user")
     Page<org.springframework.data.jpa.domain.sample.User> findAllForJade(Pageable pageable);
+
+    //begin of contrast Sort Between Jade And JPA Test
+    @SQL("select * from jpa_user")
+    List<org.springframework.data.jpa.domain.sample.User> findAllForJade(Sort sort);
 
     @SQL("insert into jpa_user (id,active,age,emailaddress,firstname,lastname,dtype) " +
             "values (?users.id,?users.active,?users.age,?users.emailAddress,?users.firstname,?users.lastname,1)")
@@ -109,5 +114,9 @@ public interface UserSelectDao  extends UserDao {
     //4.2.5
     @SQL("SELECT * FROM t_user where id='AAF000' #for(var in :params){ #if(:var==0) { and 0=:var} #if(:var==1) { and 1=:var}} ")
     User selectUserForActiveComplexSql1(@Param("params") int[] params);
+
+    //from 4.3.1
+    @SQL("select * from t_user where id like ?1")
+    List<User> selectUsersWithAnooForSort(String a,Sort sort);
 
 }

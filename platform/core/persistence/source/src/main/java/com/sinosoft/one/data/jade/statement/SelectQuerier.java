@@ -22,10 +22,14 @@ import com.sinosoft.one.data.jade.statement.Querier;
 import com.sinosoft.one.data.jade.statement.StatementMetaData;
 import com.sinosoft.one.data.jade.statement.StatementRuntime;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.persistence.EntityManager;
@@ -46,6 +50,8 @@ public class SelectQuerier implements Querier {
 
 	private final EntityManager em;
 
+    private Log log = LogFactory.getLog(SelectQuerier.class);
+
 	public SelectQuerier(EntityManager em, StatementMetaData metaData,
 						 RowMapper<?> rowMapper) {
 		this.em = em;
@@ -61,23 +67,48 @@ public class SelectQuerier implements Querier {
 	public Object execute(SQLType sqlType, StatementRuntime runtime) {
 		String sql = runtime.getSQL();
 		Object[] args = runtime.getArgs();
-		DataAccess dataAccess = new DataAccessImpl(em);
-		// 执行查询
-		List<?> listResult = null;
-		if(returnType == Page.class ){
-			Pageable pageable = null;
-			Map<String, Object> paramMap = runtime.getParameters();
-			for(String key : paramMap.keySet()){
-				if(paramMap.get(key) instanceof Pageable){
-					pageable = (Pageable) paramMap.get(key);
-				}
-			}
-			String countSql = parseCountSql(sql);
+        DataAccess dataAccess = new DataAccessImpl(em);
+        List<?> listResult = null;
+        Pageable pageable = null;
+        Sort sort = null;
+        boolean isPage = false;
+        boolean isSort = false;
+        Map<String, Object> paramMap = runtime.getParameters();
+        for(String key : paramMap.keySet()){
+            if(paramMap.get(key) instanceof Pageable){
+                pageable = (Pageable) paramMap.get(key);
+                isPage = true;
+            }
+            else if(paramMap.get(key) instanceof Sort){
+                sort = (Sort) paramMap.get(key);
+                isSort = true;
+            }
+        }
+        if (isPage && !isSort) {
+            if(returnType == Page.class ){
+                String countSql = parseCountSql(sql);
+                Page<?> page = dataAccess.selectByPage(pageable, sql, countSql, args, rowMapper);
+                return page;
+            }
+            else {
+                try {
+                    log.error("The return type["+returnType+"] must be "+Page.class);
+                    throw new Exception("The return type [\"+returnType+\"] is invalid");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (!isPage && isSort){
+            return dataAccess.selectBySort(sort,sql,args,rowMapper);
+        } else if (isPage && isSort){
+            try {
+                log.error("Can not use Params:["+Pageable.class+" and "+Sort.class+"at the same time.");
+                throw new Exception("Can not use Params:["+Pageable.class+" and "+Sort.class+"at the same time.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
 
-			Page<?> page = dataAccess.selectByPage(pageable, sql, countSql, args, rowMapper);
-			return page;
-		}
-		else {
 			listResult = dataAccess.select(sql, args, rowMapper);
 			final int sizeResult = listResult.size();
 
@@ -161,6 +192,7 @@ public class SelectQuerier implements Querier {
 				}
 			}
 		}
+        return listResult;
 	}
 
 	private String parseCountSql(String sql) {

@@ -313,39 +313,24 @@ public class SelectTest extends TestSuport {
             assertNotNull(prop.getUserName());
         }
     }
-    //4.3.1         排序暂时无效
-    @Test
-    public void selectUsersWithAnooForPageTest() throws Exception{
 
-        Pageable pageable=new PageRequest(1,5, Direction.ASC,"name","id") ;
-        Page<User> page = userSelectDao.selectUsersWithAnooForPage(pageable);
-        assertNotNull(page);
-        assertNotNull(page.getContent());
-        assertEquals(1,page.getNumber());            //当前页码
-        assertEquals(2,page.getTotalPages());        //总共的页数
-        assertEquals(5, page.getSize());               //每页大小
-        assertEquals(9, page.getTotalElements());     //总条目数
-        assertEquals(4,page.getNumberOfElements());  //当前页的条目数
-        User user= page.getContent().get(0) ;
-        assertEquals("AAF005", user.getId());
-        assertEquals("user5", user.getName());
-        for(int i=0;i<page.getContent().size();i++){
-            User prop= page.getContent().get(i) ;
+    @Test
+    public void selectUsersWithAnooForSortTest() throws Exception {
+        Sort.Order order1 = new Sort.Order(Direction.DESC,"id");
+        Sort sort1 = new Sort(order1);
+        Sort.Order order = new Sort.Order(Direction.ASC,"gender");
+        Sort sort = new Sort(order);
+        List<User> users = userSelectDao.selectUsersWithAnooForSort("AAF00%",sort.and(sort1));
+        assertNotNull(users);
+        for(User user : users){
             System.out.println();
-            System.out.print(prop.getId()+";") ;
-            System.out.print(prop.getBirthday()+";") ;
-            System.out.print(prop.getGroupIds()+";") ;
-            System.out.print(prop.getMoney()+";") ;
-            System.out.print(prop.getAge()+";") ;
-            System.out.print(prop.getName()+";") ;
-            System.out.println(prop.getGender()+";") ;
-            assertNotNull(prop.getId());
-            assertNotNull(prop.getBirthday());
-            assertNotNull(prop.getGender());
-            assertNotNull(prop.getGroupIds());
-            assertNotNull(prop.getMoney());
-            assertNotNull(prop.getAge());
-            assertNotNull(prop.getName());
+            System.out.print("[id:"+user.getId()+"]-");
+            System.out.print("[name:"+user.getName()+"]-");
+            System.out.print("[gender:"+user.getGender()+"]-");
+            System.out.print("[groupIds:"+user.getGroupIds()+"]-");
+            System.out.print("[age:"+user.getAge()+"]-");
+            System.out.print("[money:"+user.getMoney()+"]");
+            System.out.println();
         }
     }
     //4.3.2
