@@ -33,6 +33,12 @@
         <!--<property name="username" value="sa" />-->
         <!--<property name="password" value="" />-->
     <!--</bean>-->
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
+        <!--<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>-->
+        <!--<property name="username" value="kylin" />-->
+        <!--<property name="password" value="kylin" />-->
+        <!--<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />-->
+    <!--</bean>-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
         <property name="username" value="kongyz" />
