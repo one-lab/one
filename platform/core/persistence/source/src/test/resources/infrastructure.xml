@@ -20,8 +20,8 @@
 
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
         <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
-        <property name="username" value="kongyz" />
-        <property name="password" value="kongyz" />
+        <property name="username" value="kylin" />
+        <property name="password" value="kylin" />
         <!--<property name="url" value="jdbc:mysql://localhost:3306/mini-web"/>-->
         <!--<property name="username" value="root" />-->
         <!--<property name="password" value="root" />-->
