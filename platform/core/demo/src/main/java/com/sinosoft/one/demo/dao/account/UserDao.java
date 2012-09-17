@@ -1,5 +1,7 @@
 package com.sinosoft.one.demo.dao.account;
 
+import com.sinosoft.one.demo.model.account.QUser;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.demo.model.account.User;
@@ -9,7 +11,7 @@ import com.sinosoft.one.demo.model.account.User;
  * 
  * @author calvin
  */
-public interface UserDao extends PagingAndSortingRepository<User, Long> {
+public interface UserDao extends PagingAndSortingRepository<User, Long> , QueryDslPredicateExecutor<User> {
 
 	User findByLoginName(String loginName);
 }

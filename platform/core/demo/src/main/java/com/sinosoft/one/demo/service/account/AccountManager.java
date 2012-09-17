@@ -2,9 +2,11 @@ package com.sinosoft.one.demo.service.account;
 
 import java.util.List;
 
+import com.mysema.query.types.expr.BooleanExpression;
 import com.sinosoft.one.demo.dao.account.GroupDao;
 import com.sinosoft.one.demo.dao.account.UserDao;
 import com.sinosoft.one.demo.dao.account.UserInfoDao;
+import com.sinosoft.one.demo.model.account.QUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,14 @@ public class AccountManager {
 	private UserDao userDao;
 	private GroupDao groupDao;
 	private UserInfoDao userInfoDao;
+    private QUser user=new QUser("user");
 	
-	
+
+    public List<User> findUser(){
+        //BooleanExpression isCalledDave = user.loginName.eq("Dave");
+        //BooleanExpression isBeauford = user.name.eq("Beauford");
+        return (List<User>)userDao.findAll(user.name.eq("Dave").or(user.name.eq("Beauford")));   //QSL方式
+    }
 	@Transactional(readOnly = false)
 	public void saveUserInfo(UserInfo entity){
 		userInfoDao.save(entity);
