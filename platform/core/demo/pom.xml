@@ -11,6 +11,7 @@
     <packaging>war</packaging>
 	<name>One :: Demo</name>
     <properties>
+        <querydsl.version>2.5.0</querydsl.version>
         <!-- oracle driver configuration -->
         <jdbc.driver.groupId>oracle</jdbc.driver.groupId>
         <jdbc.driver.artifactId>ojdbc</jdbc.driver.artifactId>
@@ -300,6 +301,22 @@
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
         </dependency>
+
+        <!-- QueryDsl -->
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+            <optional>true</optional>
+        </dependency>
+
 
         <!-- TEST end -->
     </dependencies>
