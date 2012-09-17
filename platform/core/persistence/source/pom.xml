@@ -183,14 +183,12 @@
             <groupId>com.mysema.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
             <version>${querydsl.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.mysema.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
             <version>${querydsl.version}</version>
-            <optional>true</optional>
         </dependency>
 
         <!-- CDI -->
