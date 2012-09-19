@@ -16,7 +16,7 @@ import com.sinosoft.one.demo.model.account.User;
 @Component
 public class GroupDaoImpl implements GroupDaoCustom {
 
-	private static final String QUERY_USER_BY_GROUPID = "select u from User u left join u.groupList g where g.id=?";
+	private static final String QUERY_USER_BY_GROUPID = "select u from User u left join u.groupList g where g.id=?1";
 
 	@PersistenceContext
 	private EntityManager em;
