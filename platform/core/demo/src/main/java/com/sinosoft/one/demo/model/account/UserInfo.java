@@ -23,8 +23,8 @@ public class UserInfo extends IdEntity {
 
 	private String phone;
 	private String idcode;
-	private String strGeneral;
-	private General general;
+	private String strGender;
+	private Gender gender;
 	private  long  userId;
 	
 	public long getUserId() {
@@ -46,18 +46,18 @@ public class UserInfo extends IdEntity {
 		this.idcode = idcode;
 	}
 	@Transient
-	public General getGeneral() {
-		return general;
+	public Gender getGender() {
+		return gender;
 	}
-	public void setGeneral(General general) {
-		this.general = general;
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
-	@Column(name="general")
-	public String getStrGeneral() {
-		return strGeneral;
+	@Column(name="gender")
+	public String getStrGender() {
+		return strGender;
 	}
-	public void setStrGeneral(String strGeneral) {
-		this.strGeneral = strGeneral;
+	public void setStrGender(String strGender) {
+		this.strGender = strGender;
 	}
 	
 	

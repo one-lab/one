@@ -1,0 +1,14 @@
+/*-------------------------------------------------------------------------*/
+/*    文件名称: TagPage.css                                                */
+/*    文件功能: 车险理赔标签页样式                                         */
+/*-------------------------------------------------------------------------*/
+	ol li { margin:8px}
+	#tags { float: left; width:100%; margin:0; padding:0; margin-left:5px}
+	#tags li { float:left; margin-right:1px; border:1px solid #cce3d9; height:20px; list-style-type:none}
+	#tags li a { text-decoration:none; float:left; height:23px; padding:0px 10px; line-height:20px; color:#000000}
+	#tags li.emptyTag { width:1px; background:none}
+	#tags li.selectTag { background-position: left top; position:relative; height:22px; margin-bottom:-2px}
+	#tags li.selectTag a { background-position: right top; color:#088d58; background:#cce3d9; height:22px; line-height:22px;}
+	#tagContent {float: left; width:100%; height: 99.2%; margin-top: 2px; padding:1px; background-color:#fff;}
+	.tagContent { height:100%; color:#474747; width:100%; display:none}
+	#tagContent div.selectTag{ display:block}

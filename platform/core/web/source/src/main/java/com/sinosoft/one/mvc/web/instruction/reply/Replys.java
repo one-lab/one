@@ -22,11 +22,11 @@ public final class Replys {
 	   * @param entity An entity to send back for which a valid transport exists (see
 	   *   {@link #as(Class)}).
 	   */
-	  public static <E> AjaxReply<E> with(E entity) {
-	    return new AjaxReplyMaker<E>(entity);
+	  public static <E> EntityReply<E> with(E entity) {
+	    return new EntityReplyMaker<E>(entity);
 	  }
 	  
-	  public static SampleJsonReply sample() {
-		  return new SampleJsonReplyMaker();
+	  public static SimpleJsonReply simple() {
+		  return new SimpleJsonReplyMaker();
 	  }
 }

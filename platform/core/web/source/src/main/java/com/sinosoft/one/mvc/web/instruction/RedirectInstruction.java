@@ -40,6 +40,13 @@ public class RedirectInstruction extends AbstractInstruction {
     public void doRender(Invocation inv) throws IOException {
         String location = resolvePlaceHolder(location(), inv);
         if (sc == null || sc == 302) {
+            String contextPath = inv.getRequest().getContextPath();
+            if(!location.startsWith(contextPath)) {
+                if(!location.startsWith("/")) {
+                    location = "/" + location;
+                }
+                location = contextPath + location;
+            }
             inv.getResponse().sendRedirect(location);
         } else {
             Assert.isTrue(sc == HttpServletResponse.SC_MOVED_PERMANENTLY);

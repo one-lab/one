@@ -41,7 +41,7 @@ public class FristDemoInterceptor extends ControllerInterceptorAdapter {
 	protected Object after(Invocation inv, Object instruction) throws Exception {
 		String loginUserName = (String)inv.getRequest().getSession().getAttribute("loginUserName");
 		if(loginUserName != null){
-			inv.addModel("welInfo", "您好，"+loginUserName+"先生，今天天气不错！");
+			inv.addModel("welInfo", "您好，"+loginUserName+".");
 		}
 		return super.after(inv, instruction);
 	}

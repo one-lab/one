@@ -16,11 +16,10 @@ atlassian-ide-plugin.xml
 .project
 .settings/
 .metadata/
+
 # Svn
 .svn/
 
-# Other
-bin/
 
 #secret stuff
 *.log

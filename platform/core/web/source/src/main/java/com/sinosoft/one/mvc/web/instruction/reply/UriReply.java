@@ -64,6 +64,11 @@ public interface UriReply extends Reply {
 	 * A Map of headers to set directly on the response.
 	 */
 	UriReply headers(Map<String, String> headers);
+
+    /**
+     * header to set directly on the response.
+     */
+    UriReply header(String key, String value);
 	
 	/**
 	 * Set a custom status code (call this last, it will be overridden if other

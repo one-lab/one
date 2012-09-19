@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table-filter match-name="PROPALLSEARCHINFO" />
+	<table-filter match-name="PROPALLSEARCHITEM" />
+	<table name="PROPALLSEARCHINFO" class="ins.prpall.report.model.PropallSearchInfo"></table>
+	<table name="PROPALLSEARCHITEM" class="ins.prpall.report.model.PropallSearchItem"></table>
+</hibernate-reverse-engineering>

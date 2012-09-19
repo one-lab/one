@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="platform" extends="struts-default" namespace="/platform">
+		
+		<action name="login" class = "userPowerAction" method = "login">
+			<result name="success">/common/pub/MainFrame.jsp</result>
+			<result name="input">/index.jsp</result>
+		</action>
+		
+		<action name="loadCompany" class = "userPowerAction" method = "loadCompany">
+		</action>
+		
+		<action name="showTree" class = "userPowerAction" method = "showTree">
+		</action>
+		
+		<action name="queryCode" class = "queryCodeAllAction" method = "queryCode">
+		</action>
+		
+	</package>
+</struts>

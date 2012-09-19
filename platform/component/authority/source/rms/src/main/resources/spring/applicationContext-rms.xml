@@ -8,24 +8,28 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
 	default-autowire="byName" default-lazy-init="true">
 
-	<bean id="roleService" class="com.sinosoft.ebusiness.rms.service.spring.RoleServiceSpringImpl" />
+	<bean id="roleService" class="com.sinosoft.one.rms.service.spring.RoleServiceSpringImpl" />
 	
-	<bean id="rmstaskService" class="com.sinosoft.ebusiness.rms.service.spring.TaskServiceSpringImpl"></bean>
+	<bean id="rmstaskService" class="com.sinosoft.one.rms.service.spring.TaskServiceSpringImpl"></bean>
     
-    <bean id="groupService" class="com.sinosoft.ebusiness.rms.service.spring.GroupServiceSpringImpl"></bean>
+    <bean id="groupService" class="com.sinosoft.one.rms.service.spring.GroupServiceSpringImpl"></bean>
     
-    <bean id="rmsService" class="com.sinosoft.ebusiness.rms.service.spring.RmsServiceSpringImpl"></bean>
+    <bean id="rmsService" class="com.sinosoft.one.rms.service.spring.RmsServiceSpringImpl"></bean>
    
-    <bean id="userpowerSerivce" class="com.sinosoft.ebusiness.rms.service.spring.UserPowerService"></bean>
+    <bean id="userpowerSerivce" class="com.sinosoft.one.rms.service.spring.UserPowerService"></bean>
     
-    <bean id="companyService" class="com.sinosoft.ebusiness.rms.service.spring.CompanyService"></bean>
+    <bean id="companyService" class="com.sinosoft.one.rms.service.spring.CompanyService"></bean>
     
-    <bean id="employeService" class="com.sinosoft.ebusiness.rms.service.spring.EmployeService"></bean>
+    <bean id="employeService" class="com.sinosoft.one.rms.service.spring.EmployeService"></bean>
      
-    <bean id="dataRuleService" class="com.sinosoft.ebusiness.rms.service.spring.DataRuleServiceSpringImpl"></bean>
+    <bean id="dataRuleService" class="com.sinosoft.one.rms.service.spring.DataRuleServiceSpringImpl"></bean>
     
-    <bean id="clientService" class="com.sinosoft.ebusiness.rms.service.spring.ClientServiceSpringImpl"></bean>
+    <bean id="clientService" class="com.sinosoft.one.rms.service.spring.ClientServiceSpringImpl"></bean>
     
-    <bean id="rmsClientService" class="com.sinosoft.ebusiness.rms.clientService.facade.RmsClientServiceImpl"></bean>
+    <bean id="rmsClientService" class="com.sinosoft.one.rms.clientService.facade.RmsClientServiceImpl"></bean>
+    
+    <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
+    
+    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>
     
 </beans> 

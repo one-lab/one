@@ -22,7 +22,7 @@ public class PassportInterceptor extends ControllerInterceptorAdapter {
 	protected Object before(Invocation inv) throws Exception {
 		String loginName = (String) inv.getRequest().getSession().getAttribute("loginUserName");
 		if(StringUtils.isBlank(loginName))
-			return "r:/platformDemo/login";
+			return "r:/login";
 		else
 			return true;
 	}

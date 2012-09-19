@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-7-12 17:38:47 by Hibernate Tools 3.2.4.GA -->
+<hibernate-mapping>
+    <class name="ins.prpall.report.model.LCReportAudit" table="LCREPORTAUDIT">
+        <composite-id name="id" class="ins.prpall.report.model.LCReportAuditId">
+            <key-property name="repno" type="string">
+                <column name="REPNO" length="20" />
+            </key-property>
+            <key-property name="serialNo" type="string">
+                <column name="SERIALNO" length="8" />
+            </key-property>
+        </composite-id>
+        <property name="repoperator" type="string">
+            <column name="REPOPERATOR" length="20" not-null="true" />
+        </property>
+        <property name="repauditoperator" type="string">
+            <column name="REPAUDITOPERATOR" length="20" />
+        </property>
+        <property name="repmanagecom" type="string">
+            <column name="REPMANAGECOM" length="8" not-null="true" />
+        </property>
+        <property name="reportDate" type="date">
+            <column name="REPORTDATE" length="7" not-null="true" />
+        </property>
+        <property name="result" type="string">
+            <column name="RESULT" length="1" />
+        </property>
+        <property name="managecom" type="string">
+            <column name="MANAGECOM" length="8" not-null="true" />
+        </property>
+        <property name="makeDate" type="date">
+            <column name="MAKEDATE" length="7" not-null="true" />
+        </property>
+        <property name="maketime" type="string">
+            <column name="MAKETIME" length="8" not-null="true" />
+        </property>
+        <property name="modifydate" type="date">
+            <column name="MODIFYDATE" length="7" not-null="true" />
+        </property>
+        <property name="modifyTime" type="string">
+            <column name="MODIFYTIME" length="10" not-null="true" />
+        </property>
+        <property name="repauditidea" type="string">
+            <column name="REPAUDITIDEA" length="500" />
+        </property>
+    </class>
+</hibernate-mapping>
