@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 import com.sinosoft.one.demo.model.account.User;
@@ -164,4 +165,42 @@ public class UserController {
 		
 		return Replys.with(userInfo).as(Json.class);
 	}
+
+    @Get("qslList")
+    public String qslList(Invocation inv){
+        return "userQslList";
+    }
+
+    @Post("qslListResult")
+    public String qslListResult(Invocation inv,@Param("mapa") Map<String,String> mapa) {
+        List<User> users = accountManager.findAllUserByQSL(mapa);
+        inv.addModel("users", users);
+        return "userQslList";
+    }
+
+    @Get("complexSql")
+    public String complexSql(Invocation inv){
+        return "userComplexSqlList";
+    }
+
+    @Post("complexSqlResult")
+    public String qslComplexListResult(Invocation inv,@Param("name") String name,@Param("email") String email, @Param("id") Long id) {
+        List<User> users = accountManager.findAllUserByDynamicSQL(name,email,id);
+        inv.addModel("users", users);
+        return "userComplexSqlList";
+    }
+
+    @Get("queryResult")
+    public String queryList(Invocation inv){
+        List<User> users=accountManager.findAllUserOne();
+        inv.addModel("users",users);
+        return "userQueryList";
+    }
+    @Get("resourceResult")
+    public String resourceList(Invocation inv){
+        List<User> users=accountManager.findAllUserTwo();
+        inv.addModel("users",users);
+        return "userResourceList";
+
+    }
 }

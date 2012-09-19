@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.base.css" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.tree.css" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.form.css" />
+<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="../js/sinosoft.tree.js"></script>
+<script type="text/javascript" src="../js/sinosoft.form.js"></script>
+<script type="text/javascript" src="../js/sinosoft.mouseoutclick.js"></script>
+<script type="text/javascript">
+	var treeFlag = true;
+	$(function(){
+		$(".centerDiv_one").css({"display":"none"});
+		$(".rightDiv").css({"display":"none"});
+		$(".centerDiv_two").css({"display":"none"});
+		$("body").forms({defaultWidth:70});	
+		$('#treeOne').treeView({
+			data : {
+				type  : 'json',
+				url   : 'tree.json',
+				async : true
+			},
+			"checkbox" : false,
+			"callback" : {
+				onselect : function(tree, nodeLi) {
+					$(".centerDiv_one").css({"display":"none"});
+					$(".centerDiv_two").css({"display":"block"});
+					var nodeId = nodeLi.attr("id");
+					/*
+					$.ajax({    
+						url:"",
+						beforeSend: function(){
+						},
+						complete: function(XMLHttpRequest, textStatus){
+							
+						},
+						type:'post', 
+						data:"nodeId="+nodeId,
+						dataType: "json",  
+						success: function(data, display){
+							
+						},
+						error:function(XMLHttpRequest,errorThrown){   
+							alert( "出错了!"+ errorThrown);   
+						}
+					});
+					*/
+				}
+			}
+		});
+	});
+	function showCenterDiv() {
+		$(".centerDiv_two").css({"display":"none"});
+		$(".centerDiv_one").css({"display":"block"});
+	}
+	function showRightDiv() {
+		$("#treeTwo").empty();
+		$('#treeTwo').treeView({
+			data : {
+				type  : 'json',
+				url   : 'tree.json',
+				async : true
+			},
+			"checkbox" : false,
+			"callback" : {
+			}
+		});
+		$(".rightDiv").show();
+	}
+</script>
+<style type="text/css">
+	body{padding-left:14px; padding-top:14px;}
+	.leftDiv{width:269px; height:546px; border:1px solid #ebebeb; float:left; margin-right:10px;}
+	.headDiv{ line-height:30px; height:30px; text-align:center; border-bottom:1px solid #ebebeb;}
+	.tree_view{width:267px;height:513px; overflow-y:auto;}
+	.button_content{height:27px; padding-top:5px;}
+	.centerDiv_one{height:298px; width:532px; border:1px solid #cccccc; float:left;}
+	.centerDiv_two{height:325px; width:532px; border:1px solid #cccccc; float:left;}
+	.center_head_div{height:30px; border-bottom:1px solid #cccccc; line-height:30px; height:30px; text-align:center;}
+	.rightDiv{width:269px; height:546px; border:1px solid #ebebeb; float:left; margin-left:10px;}
+</style>
+<title>权限管理-功能菜单管理</title>
+</head>
+
+<body>
+	<div class="leftDiv">
+    	<div class="headDiv">功能列表</div>
+        <div id="treeOne">
+        </div>
+    </div>
+    <div class="button_content">
+    	<input class="headButton" type="button" value="新建功能" onclick="showCenterDiv()"/>
+	</div>
+    <div class="centerDiv_one">
+    	<div class="center_head_div">功能信息</div>
+        <div class="center_bottom_div">
+			<table width="532px" height="267px" >
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td width="97" align="right">功能ID：</td>
+                <td width="144"><input type="text" /></td>
+                <td width="55">&nbsp;</td>
+                <td width="74">功能名称：</td>
+                <td colspan="2">
+                	<input type="text" />
+                </td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">菜单名称：</td>
+                <td><input type="text" /></td>
+                <td>&nbsp;</td>
+                <td>是否为菜单：</td>
+                <td colspan="2">
+                	<select>
+                    	<option>否</option>
+                        <option>是</option>
+                    </select>
+                </td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">菜单连接：</td>
+                <td colspan="5"><input type="text" style="width:230px;" /></td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">描述：</td>
+                <td colspan="3">
+                	<input type="text" style="width:230px;" />
+                </td>
+                <td>
+                    <div style="float:right;">
+                        <select>
+                            <option>使用中</option>
+                            <option>没有使用</option>
+                        </select>
+                     </div>
+                     <div style="float:right; line-height:22px;">状态：</div>
+                </td>
+                <td width="28px"></td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">父功能ID：</td>
+                <td><input type="text" /></td>
+                <td>&nbsp;</td>
+                <td>父功能名称：</td>
+                <td colspan="2">
+                	<input type="text" />
+                </td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="30px">
+                <td>&nbsp;</td>
+                <td><input type="button" value="保存" /></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="2">&nbsp;</td>
+              </tr>
+              <tr height="18px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+        </table>
+        </div>	
+	</div>
+    
+	<div class="centerDiv_two">
+    	<div class="center_head_div">功能信息</div>
+        <div class="center_bottom_div">
+			<table width="532px" height="267px" >
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td width="97" align="right">功能ID：</td>
+                <td width="144"><input type="text" /></td>
+                <td width="55">&nbsp;</td>
+                <td width="74">功能名称：</td>
+                <td colspan="2">
+                	<input type="text" />
+                </td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">菜单名称：</td>
+                <td><input type="text" /></td>
+                <td>&nbsp;</td>
+                <td>是否为菜单：</td>
+                <td colspan="2">
+                	<select>
+                    	<option>否</option>
+                        <option>是</option>
+                    </select>
+                </td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">菜单连接：</td>
+                <td colspan="5"><input type="text" style="width:230px;" /></td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">描述：</td>
+                <td colspan="3">
+                	<input type="text" style="width:230px;" />
+                </td>
+                <td>
+                    <div style="float:right;">
+                        <select>
+                            <option>使用中</option>
+                            <option>没有使用</option>
+                        </select>
+                     </div>
+                     <div style="float:right; line-height:22px;">状态：</div>
+                </td>
+                <td width="28"></td>
+              </tr>
+              <tr height="16px">
+                <td colspan="6">&nbsp;</td>
+              </tr>
+              <tr height="22px">
+                <td align="right">父功能ID：</td>
+                <td><input type="text" /></td>
+                <td>&nbsp;</td>
+                <td>父功能名称：</td>
+                <td colspan="2">
+                	<input type="text" />
+                </td>
+              </tr>
+              <tr height="50px" align="center">
+                <td colspan="6"><input type="button" value="选择父功能" onclick="showRightDiv();" /></td>
+              </tr>
+              <tr height="40px">
+                <td colspan="6" align="center" style="border-top:1px solid #cccccc"><input type="button" value="保存" /></td>
+              </tr>
+        </table>
+</div>	
+	</div>
+    
+	<div class="rightDiv">
+    	<div class="headDiv">请选择父功能节点</div>
+        <div id="treeTwo">
+    	</div>
+    </div>
+<br />
+    <br />
+</body>
+</html>
