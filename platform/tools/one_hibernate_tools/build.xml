@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="hibernate tools" default="generate.code">
+
+    <property name="hibernatetools-templates.path" value="tools/hibernatetools" />
+    <property file="config.properties" id="prop"/>
+    <path id="toolslib">
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <!-- set global properties for this build -->
+    <property name="src" location="tools/generatetemp"/>
+    <!--<property name="src" location="${generate.code.dir}"/>-->
+    <property name="qsrc" location="tools/generatetemp"/>
+    <property name="daoType" value="${dao.type}"/>
+    <!--<property name="build" location="../generate-code/build"/>-->
+    <!--<property name="dist" location="../generate-code/dist"/>-->
+    <property name="generated" location="tools/generatetemp"/>
+
+    <target name="deletetemp">
+        <delete dir="${src}"/>
+    </target>
+
+    <taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="toolslib" />
+
+    <target name="generate.code" depends="deletetemp">
+
+        <hibernatetool destdir="${src}" templatepath="${hibernatetools-templates.path}/">
+
+            <jdbcconfiguration propertyfile="config.properties"
+                               revengfile="hibernate.reveng2.xml"
+                               detectmanytomany="true"
+                               namingstrategy="org.hibernate.cfg.ImprovedNamingStrategy"
+                               reversestrategy="com.sinosoft.one.data.strategy.IgnorePrefixReverseEngineeringStrategy"
+
+                    />
+            <hbmtemplate templateprefix="pojo/" template="pojo/Pojo.ftl" filepattern="{package-name}/{class-name}.java">
+                <property key="jdk5" value="true" />
+                <property key="ejb3" value="true" />
+            </hbmtemplate>
+
+            <hbmtemplate templateprefix="pojo/" template="${daoType}dao.ftl" filepattern="{parent-package-name}/dao/{class-name}Dao.java" />
+            <!--<hbmtemplate templateprefix="pojo/" template="manager.ftl" filepattern="manager/{package-name}/{class-name}Manager.java" />-->
+        </hibernatetool>
+
+    </target>
+
+
+
+    <target name="init">
+        <tstamp/>
+        <!--<mkdir dir="${build}"/>-->
+        <mkdir dir="${generated}"/>
+        <mkdir dir="${generate.code.dir}"/>
+    </target>
+    <target name="compile" depends="init" description="compile the source ">
+        <javac srcdir="${qsrc}" classpathref="toolslib" nowarn="true"
+               includeantruntime="no"
+                excludes="**/dao/**">
+
+            <compilerarg value="-proc:only"/>
+            <compilerarg value="-processor"/>
+            <compilerarg value="com.mysema.query.apt.jpa.JPAAnnotationProcessor"/>
+            <compilerarg value="-s"/>
+            <compilerarg value="${generated}"/>
+        </javac>
+        <!--<javac classpathref="cp" destdir="${build}">
+            <src path="${qsrc}"/>
+            <src path="${generated}"/>
+        </javac>-->
+    </target>
+    <target name="move">
+        <copydir src="${src}" dest="${generate.code.dir}"/>
+        <!--<move todir="${generate.code.dir}" file="${src}/*"/>-->
+    </target>
+    <!--<target name="dist" depends="compile" description="generate the distribution">
+        <mkdir dir="${dist}/lib"/>
+        <jar jarfile="${dist}/lib/MyProject-${DSTAMP}.jar" basedir="${build}"/>
+    </target>
+    <target name="clean" description="clean up">
+        <delete dir="${build}"/>
+        <delete dir="${generated}"/>
+        <delete dir="${dist}"/>
+    </target>-->
+</project>
