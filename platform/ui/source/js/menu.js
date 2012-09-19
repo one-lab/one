@@ -68,14 +68,14 @@
 					alert("数据加载出错！" + errorThrown);
 				},
 				success: function(data){
-					$load.hide();							
+					$load.hide();
 					if(defaults.dataType == "xml") {
 						analyseXML(data);
 					} else if(defaults.dataType == "json") {
 						analyseJson(data);	
 					} else if(defaults.dataType == "html"){
 						analyseHtml(data);	
-					};							
+					};
 					$menuHtml.children("div:not(.side_inner)").bind(defaults.eventType,openMenu);														
 					$("div.sub_inner > div.sub")
 						.bind("click",selected)
