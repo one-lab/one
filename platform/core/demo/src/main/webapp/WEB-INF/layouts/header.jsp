@@ -1,4 +1,4 @@
-<%@ page language="java" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
@@ -20,6 +20,10 @@
 				<li id="portal-tab"><a href="${ctx}/user_group/portal/main">帐号及权限信息(portal)</a></li>
 				<li id="pipe-tab"><a href="${ctx}/user_group/pipe/main">帐号及权限信息(pipe)</a></li>
                 <li id="file-tab"><a href="${ctx}/file/download/main">文件下载</a></li>
+                <li id="qsl-tab"><a href="${ctx}/account/user/qslList">QSL演示</a></li>
+                <li id="sql-tab"><a href="${ctx}/account/user/complexSql">动态SQL演示</a></li>
+                <li id="test"><a href="${ctx}/account/user/queryResult">JPQL演示</a></li>
+                <li id="test1"><a href="${ctx}/account/user/resourceResult">资源文件演示</a></li>
 		</ul>
 	</div>
 </div>
