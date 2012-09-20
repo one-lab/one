@@ -10,22 +10,22 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd"
 	default-autowire="byName" default-lazy-init="true">
 
-	<!-- 閰嶇疆鍩虹鎵弿鐨刯ava鍖�-->
+	<!-- 配置基础扫描的java包 -->
 	<context:component-scan  base-package="com.sinosoft.one"/>
 	
-	<!-- 鏀寔 @Transactional 鏍囪 -->
+	<!-- 支持 @Transactional 标记 -->
 	<tx:annotation-driven />
 
-	<!-- 鏀寔 @AspectJ 鏍囪-->
+	<!-- 支持 @AspectJ 标记-->
 	<aop:aspectj-autoproxy />
 
-	<!-- 浠spectJ鏂瑰紡 瀹氫箟 AOP -->
+	<!-- 以AspectJ方式 定义 AOP -->
 	<aop:config proxy-target-class="true"> 
 		<aop:advisor
-			pointcut="execution(public * com.sinosoft.one.*service..*Service*Impl.*(..))" advice-ref="txAdvice" />
+			pointcut="execution(public * com.sinosoft.one.*service..*service*Impl.*(..))" advice-ref="txAdvice" />
 	</aop:config>
 
-	<!-- 鍩烘湰浜嬪姟瀹氫箟,浣跨敤transactionManager浣滀簨鍔＄鐞�榛樿鏌ヨ鏂规硶鐨勪簨鍔′负readonly,鍏朵綑鏂规硶鎸夐粯璁よ缃�->
+	<!-- 基本事务定义,使用transactionManager作事务管理,默认查询方法的事务为readonly,其余方法按默认设置-->
 	<tx:advice id="txAdvice" >
 		<tx:attributes>
 			<tx:method name="is*" read-only="true"
