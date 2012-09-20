@@ -20,8 +20,6 @@ atlassian-ide-plugin.xml
 # Svn
 .svn/
 
-# Other
-bin/
 
 #secret stuff
 *.log
