@@ -16,62 +16,53 @@
 		$(".rightDiv").css({"display":"none"});
 		$(".centerDiv_two").css({"display":"none"});
 		$("body").forms({defaultWidth:70});	
-		$('#treeOne').treeView({
-			data : {
-				type  : 'json',
-				url   : 'tree.json',
-				async : true
+		$("#treeOne").jstree({ 
+			"themes" : {
+				"theme" : "default",
+				"dots" : false,
 			},
-			"checkbox" : false,
-			"callback" : {
-				onselect : function(tree, nodeLi) {
-					$(".centerDiv_one").css({"display":"none"});
-					$(".centerDiv_two").css({"display":"block"});
-					var nodeId = nodeLi.attr("id");
-					/*
-					$.ajax({    
-						url:"",
-						beforeSend: function(){
-						},
-						complete: function(XMLHttpRequest, textStatus){
-							
-						},
-						type:'post', 
-						data:"nodeId="+nodeId,
-						dataType: "json",  
-						success: function(data, display){
-							
-						},
-						error:function(XMLHttpRequest,errorThrown){   
-							alert( "出错了!"+ errorThrown);   
-						}
-					});
-					*/
+			"json_data" : {
+			"ajax" : {
+					"url" : "_json_data.json",
+					"data" : function (n) { 
+						return { id : n.attr ? n.attr("id") : 0 }; 
+					}
 				}
-			}
+			},
+			"plugins" : [ "themes", "json_data", "ui" ]
+		}).bind("select_node.jstree", function(){
+			$(".centerDiv_one").css({"display":"none"});
+			$(".centerDiv_two").css({"display":"block"});
 		});
+		
+		
 	});
 	function showCenterDiv() {
 		$(".centerDiv_two").css({"display":"none"});
 		$(".centerDiv_one").css({"display":"block"});
 	}
 	function showRightDiv() {
-		$("#treeTwo").empty();
-		$('#treeTwo').treeView({
-			data : {
-				type  : 'json',
-				url   : 'tree.json',
-				async : true
+		$("#treeTwo").jstree({ 
+			"themes" : {
+				"theme" : "default",
+				"dots" : false,
 			},
-			"checkbox" : false,
-			"callback" : {
-			}
+			"json_data" : {
+			"ajax" : {
+					"url" : "_json_data.json",
+					"data" : function (n) { 
+						return { id : n.attr ? n.attr("id") : 0 }; 
+					}
+				}
+			},
+			"plugins" : [ "themes", "json_data", "ui" ]
 		});
 		$(".rightDiv").show();
 	}
 </script>
 <style type="text/css">
 	body{padding-left:14px; padding-top:14px;}
+	table{border-collapse:collapse;}
 	.leftDiv{width:269px; height:546px; border:1px solid #ebebeb; float:left; margin-right:10px;}
 	.headDiv{ line-height:30px; height:30px; text-align:center; border-bottom:1px solid #ebebeb;}
 	.tree_view{width:267px;height:513px; overflow-y:auto;}
@@ -252,7 +243,7 @@
                 <td colspan="6"><input type="button" value="选择父功能" onclick="showRightDiv();" /></td>
               </tr>
               <tr height="40px">
-                <td colspan="6" align="center" style="border-top:1px solid #cccccc"><input type="button" value="保存" /></td>
+                <td colspan="6" align="center" style="border-top:1px solid #cccccc"><input type="button" value="修改" /></td>
               </tr>
         </table>
 </div>	
