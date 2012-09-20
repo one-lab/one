@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+       default-autowire="byName" default-lazy-init="true">
+
+	<!-- 鍔犺浇config鏂囦欢澶圭殑properties鏂囦欢 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:config/*.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 寮�彂鐢紝鐢ㄤ簬鎷︽埅鎵ц鐨凷QL骞舵墦鍗�+	<bean id="dataSource" class="com.p6spy.engine.spy.P6DataSource">
+		<constructor-arg>
+			<ref local="dataSourceTarget" />
+		</constructor-arg>
+	</bean>
+	 -->
+	<!--鏁版嵁婧愬畾涔�浣跨敤搴旂敤鏈嶅姟鍣�+	<bean id="dataSourceTarget"
+		class="ins.framework.jndi.JndiObjectFindFactoryBean">
+		<property name="jndiName">
+			<value>arch4PlatformDataSource</value>
+		</property> 
+	</bean>
+	-->
+	 
+	<!-- 涓哄紑鍙戞柟渚匡紝鏁版嵁婧愬畾涔変娇鐢ˋpache DBCP 杩炴帴姹�-->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+	</bean>
+	
+	<!-- 澶у璞″鐞嗗櫒 -->
+	<bean id="lobHandler" lazy-init="true" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
+	
+	<!-- 閰嶇疆hibernate瀹炵敤鐨剆essionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<!-- 閰嶇疆sessionFactory涓鐢ㄧ殑鏁版嵁婧�-->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 澶у璞″鐞嗗櫒 -->
+		<property name="lobHandler" ref="lobHandler" /> 
+
+		<!--  鍙互鍚屾椂鏀寔娉ㄨВ鍜寈ml鐨勬柟寮忎骇鐢熸槧灏勭被-->
+		<property name="packagesToScan">                        
+			<list>                                
+				<value>com.sinosoft.one.**.model</value>
+			</list>                
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					${hibernate.dialect}
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<!--<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>-->
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
+                <prop key="javax.persistence.validation.mode">none</prop>
+			</props>
+		</property>  
+	</bean>
+	<!-- 閰嶇疆浜嬪姟绫�-->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean> 
+	 <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" >
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+</beans>
