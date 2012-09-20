@@ -59,7 +59,8 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 --  Records 
 -- ----------------------------
-INSERT INTO `t_code_gender` VALUES ('0','女'),  ('1','男');
+INSERT INTO `t_code_gender` VALUES ('0','女'),('1','男'),('3', 'g3'),('4', 'g4'),
+('5', 'g5'),('6', 'g6'),('7', 'g7'),('8', 'g8'),('9', 'g9');
 
 -- Create Procedure testprc
 create procedure testprc(in newname varchar(10), in uid varchar(3))

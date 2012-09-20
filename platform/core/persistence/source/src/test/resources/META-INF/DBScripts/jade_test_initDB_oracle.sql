@@ -5,8 +5,15 @@ create table T_CODE_GENDER
   NAME VARCHAR2(10)
 );
 -- insert init data for T_USER
-insert into T_CODE_GENDER values ('1','男');
-insert into T_CODE_GENDER values ('0','女');
+insert into T_CODE_GENDER (ID, NAME) values ('1','男');
+insert into T_CODE_GENDER (ID, NAME) values ('0','女');
+insert into T_CODE_GENDER (ID, NAME) values ('3', 'g3');
+insert into T_CODE_GENDER (ID, NAME) values ('4', 'g4');
+insert into T_CODE_GENDER (ID, NAME) values ('5', 'g5');
+insert into T_CODE_GENDER (ID, NAME) values ('6', 'g6');
+insert into T_CODE_GENDER (ID, NAME) values ('7', 'g7');
+insert into T_CODE_GENDER (ID, NAME) values ('8', 'g8');
+insert into T_CODE_GENDER (ID, NAME) values ('9', 'g9');
 -- Create table T_CODE_GROUP
 create table T_CODE_GROUP
 (
