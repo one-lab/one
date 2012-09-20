@@ -25,3 +25,16 @@ html,body{font-size:12px;font-family:Microsoft Yahei,Verdana,"HelveticaNeue",Hel
 #open{background:url(../images/system/open.gif) no-repeat center center;cursor:pointer}
 .crumbs{height:37px;background:url(../images/system/crumbs.gif) repeat-x;border-bottom:#ccc 1px solid;line-height:37px;padding:0 10px;}
 .crumbs span{color:#39c}
+.copyright{line-height:45px;text-align:right;color:#fff;padding:0 120px;}
+.copyright span{padding:10px 0 10px 25px;margin-left:15px;}
+.copyright .author,.copyright .help{background:url(../images/system/author.gif) no-repeat 0 center}
+.copyright .help{background-image:url(../images/system/help.gif)}
+.login_cont{background:#efefef url(../images/system/login.jpg) no-repeat center center}
+.login_line{background:#efefef url(../images/system/center_bg.gif) repeat-x;height:5px;}
+.login{width:429px;height:209px;background:url(../images/system/login_box.gif) no-repeat;margin:0 auto;padding:90px 40px 30px 96px;}
+.list li{line-height:40px;color:#333;margin-bottom:13px;font-size:15px;font-weight:bold}
+.list{float:left}
+.inp_text,.inp_selec{border:#999 1px solid;margin-left:20px;width:220px;font-size:15px;padding:5px 8px;font-family:Microsoft Yahei,Verdana,"HelveticaNeue",Helvetica,Arial;}
+.inp_selec{width:238px;}
+.login_btn{float:right;margin-top:46px;width:96px;cursor:pointer;height:96px;background:url(../images/system/login_btn.gif) no-repeat;border:none}
+.prompt{line-height:34px;background:url(../images/system/tips.gif) no-repeat;padding-left:39px;clear:both;color:#666;font-size:13px;}
