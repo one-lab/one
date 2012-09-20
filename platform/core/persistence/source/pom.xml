@@ -227,8 +227,18 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
-
-    </dependencies>
+<!--one-arch4-->
+        <dependency>
+            <groupId>com.sinosoft.one.plugins</groupId>
+            <artifactId>arch4</artifactId>
+            <version>4.2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+</dependencies>
 
     <build>
 
