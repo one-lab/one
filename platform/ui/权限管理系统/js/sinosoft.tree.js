@@ -332,7 +332,7 @@
 		},
 		defaults : { 
 			html_titles	: false,
-			animation	: 500,
+			animation	: 200,
 			initially_open : [],
 			initially_load : [],
 			open_parents : true,
