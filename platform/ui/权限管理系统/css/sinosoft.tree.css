@@ -3,7 +3,10 @@
  * Supported features: dots/no-dots, icons/no-icons, focused, loading
  * Supported plugins: ui (hovered, clicked), checkbox, contextmenu, search
  */
-
+ .jstree li a{
+	 line-height:27px;
+	 height:auto;
+	 padding:0;}
 .jstree-default li, 
 .jstree-default ins { background-image:url("../images/tree/d.gif"); background-repeat:no-repeat; background-color:transparent; }
 .jstree-default li { background-position:-90px 0; background-repeat:repeat-y; }
@@ -76,6 +79,6 @@
 .tree_view .jstree-no-dots .jstree-open{background:#39c url(../images/tree/open_bg.gif) repeat-x;border-color:#1982b6;}
 .tree_view .jstree-no-dots .jstree-open a{color:#fff}
 .tree_view  .jstree-no-dots li li{background:none;margin:0;padding-left:15px;border:none}
-.jstree-default .jstree-no-dots li ins{float:left;margin:4px 8px 0 4px}
+.jstree-default .jstree-no-dots li ins{margin:4px 8px 0 4px;display:block;float:left}
 .jstree-default .jstree-no-dots .jstree-leaf ins{background:url(../images/tree/d.gif) no-repeat -48px -53px}
 .tree_view .jstree-no-dots li .select{background:#5eafd7}
