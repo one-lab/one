@@ -122,7 +122,7 @@ function showRight(){
     </div></td>
     <td width="532" valign="top"><div class="center_content f_left">
       <input class="add_btn" type="button" value="新建功能" onclick="showCenter(true)"/>
-      <div class="fun_info" id="centerInfo" style="display:block">
+      <div class="fun_info" id="centerInfo">
         <div class="title2"><b><a href="javascript:;" onclick="hideCenter()" class="close"></a>功能信息</b></div>
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="info_form" >
           <tr>
@@ -179,7 +179,8 @@ function showRight(){
         </table>
       </div>
     </div></td>
-    <td width="269" valign="top"><div class="left_content f_left" id="rightBox">
+    <td width="269" valign="top">
+    <div class="left_content f_left right_content" id="rightBox">
       <div class="title2"><b>选择父级功能节点</b></div>
       <div id="treeTow" class="tree_view"></div>
     </div></td>
