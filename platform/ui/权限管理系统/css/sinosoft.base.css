@@ -54,3 +54,6 @@ body{background:#efefef;padding:15px 10px 10px;}
 .form_tool{border-top:#ccc 1px solid;padding:12px 0 0;text-align:center}
 .info_form .select_parent{padding-right:65px;}
 .select_parent a{color:#fff;text-decoration:none;text-align:center;display:block;float:right;width:97px;height:32px;line-height:32px;background:url(../images/system/parents.gif) no-repeat}
+.right_content{display:none}
+#layout_center{
+	overflow:hidden}
