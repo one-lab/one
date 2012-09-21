@@ -23,7 +23,7 @@ public class PageServiceImpl extends GenericDaoHibernate<Gender, String> impleme
      }
 
     public Page find2() {
-        Page page=findByHqlNoLimit("from Gender",1,3,null);
+        Page page=findByHqlNoLimit("from Gender",1,3);
         return page;
     }
     public Page find3() {

@@ -24,7 +24,7 @@
 
     <bean id="abstractVendorAdaptor" abstract="true">
         <property name="generateDdl" value="true" />
-        <property name="database" value="ORACLE" />
+        <property name="database" value="${database}" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

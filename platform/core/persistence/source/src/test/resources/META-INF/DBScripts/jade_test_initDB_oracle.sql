@@ -1,10 +1,10 @@
--- Create table T_USER
+-- Create table T_CODE_GENDER
 create table T_CODE_GENDER
 (
   ID   VARCHAR2(3) primary key,
   NAME VARCHAR2(10)
 );
--- insert init data for T_USER
+-- insert init data for T_CODE_GENDER
 insert into T_CODE_GENDER (ID, NAME) values ('1','男');
 insert into T_CODE_GENDER (ID, NAME) values ('0','女');
 insert into T_CODE_GENDER (ID, NAME) values ('3', 'g3');
