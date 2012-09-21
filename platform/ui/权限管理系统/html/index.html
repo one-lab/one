@@ -34,6 +34,8 @@ $(function(){
 function dMenu(){
 	var a = $(this);
 	var ul = $(this).siblings("ul");
+	var url = a.attr("href");
+	var myfram = $("#pageContent");
 	if(ul.length > 0){
 		ul.show();
 		$("#nav").find("a").removeClass("select");
@@ -48,6 +50,8 @@ function dMenu(){
 		$("#nav").find("a").removeClass("select");
 		a.addClass("select");
 	};
+	myfram.attr("src",url);
+	return false;
 };
 function leftOnOff(){
 	$.layout.leftOnOff();
@@ -98,8 +102,8 @@ function myFrame(){
         	<h3>权限管理</h3>
             <div>
             	<ul class="nav" id="nav">
-                	<li><a href="#"><span>功能菜单管理</span></a></li>
-                    <li><a href="#"><span>功能授权</span></a></li>
+                	<li><a href="loadTask.html"><span>功能菜单管理</span></a></li>
+                    <li><a href="loadtaskAuth.html"><span>功能授权</span></a></li>
                     <li><a href="#"><span>角色管理</span></a>
                     	<ul>
                         	<li><a href="#"><span>角色指派</span></a></li>
