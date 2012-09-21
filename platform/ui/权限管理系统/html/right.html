@@ -20,17 +20,15 @@
 		var treeId = "";
 		$(".right_div_right input:checkbox:checked").each(function(){
 			treeId = $(this).attr("id");
-			alert(treeId);
 			if($(".right_div_bottom #" + treeId + "_tree").length > 0) {
-				alert("if");
 			} else {
-alert("else");
 				var tem = $(this).parent().text();
 				//把ID传给后台，返回一个tree的json数据
 				$.ajax({
 				   type: "POST",
 				   url: "_json_data.json",
 				   dataType: "json",
+				   async: false,
 				   data: treeId,
 				   success: function(msg){
 						$(".right_div_bottom .show_select")
@@ -43,7 +41,7 @@ alert("else");
 						"json_data" : {
 							"data" : msg
 						},
-						"plugins" : [ "themes", "json_data", "ui" ]
+						"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
 					});
 					}
 				});
