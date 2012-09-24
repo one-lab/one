@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>权限管理-功能菜单管理</title>
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.base.css" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.tree.css" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.grid.css" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.window.css" />
+<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="../js/sinosoft.tree.js"></script>
+<script language="javascript" src="../js/sinosoft.grid.js"></script>
+<script language="javascript" src="../js/sinosoft.tips.js"></script>
+<script type="text/javascript" src="../js/sinosoft.mouseoutclick.js"></script>
+<script type="text/javascript" src="../js/sinosoft.window.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#grid").Grid({
+		url : "grid.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'员工编号',name:"appellation",width:'120',index:'1',align:'',color:''},
+			{id:'2',text:'员工姓名',name:"Status",width:'90',index:'1',align:'',color:'green'},
+			{id:'3',text:'归属机构',name:"Version",index:'1',align:'',color:''},
+			{id:'4',text:'已引入机构',name:"degrees",index:'1',align:'',color:''},
+			{id:'5',text:'操作',name:"degrees",index:'1',align:'',color:''}
+		],
+		rowNum:10,
+		sorts:false,
+		pager : true,
+		number:false,
+		multiselect: false
+	});	
+	//$("#grid > table .dis").tips({type:"toolTip",tipPostion:"left"});
+});
+function openWindow(){
+	$("body").window({
+		"id":"window1", 
+		"title":"姓名：张山  编号：10009999000", 
+		"content":"<h4>已引入机构</h4><ul class='jigou'><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li></ul>",
+		"width":225, 
+		"height":380, 
+		"resizing":false,
+	});
+}
+</script>
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="40%" align="right"><input type="text" value="请输入员工编号" class="seach_text" /></td>
+    <td>&nbsp;</td>
+    <td><input type="text" value="请输入机构代码" class="seach_text" /></td>
+    <td>&nbsp;</td>
+    <td><input type="button" value=" " class="seach_btn" /></td>
+  </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td>&nbsp;</td>
+    <td width="50">&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<div id="grid"></div>
+</body>
+</html>
