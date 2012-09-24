@@ -3,14 +3,14 @@
 .grid_box table td,.grid_head .gird_head_column{white-space:nowrap;overflow:hidden;vertical-align:middle;white-space:nowrap;border:#ccc 1px solid;border-width:0 1px 1px 0;}
 .grid_box .multiple,.grid_head div.multiple{width:22px;text-align:center;padding:0;cursor:default;}
 .grid_view{clear:both;position:relative;overflow:auto;}
-.grid_view table td{border-color:#ededed;line-height:20px;text-overflow:ellipsis;background:#fff;}
+.grid_view table td{border-color:#ededed;line-height:30px;text-overflow:ellipsis;background:#fff;}
 .grid_view table td span{padding:0 3px;white-space:nowrap;display:block;}
 .grid_view a{color:#005590;}
 .grid_view a:hover{color:#000;text-decoration:none;}
 .grid_view a img{margin:0 3px -3px 2px;}
 .grid_view tr.odd td{background:url(../images/grids/grid_td.gif)}
-.grid_view tr.select td{background:#f1f1f1;}
-.grid_view tr.hover td{background:#fcf2f4;border-bottom-color:#b0b0b0;}
+.grid_view tr.select td{/*background:#f1f1f1;*/}
+.grid_view tr.hover td{background:#d2e4f0;}
 .grid_box .grid_head_menu{display:none;width:126px;position:absolute;border:#aaa 1px solid;z-index:9}
 .grid_head_menusha{background:#000;filter:alpha(opacity=10);-moz-opacity:0.1;-khtml-opacity:0.1;opacity:0.1;position:absolute;z-index:2}
 .grid_box .grid_head_menu span{display:block;width:16px;height:16px;float:left;background:url(../images/grids/grids.gif) no-repeat;margin:5px 8px 0 4px;_margin:5px 6px 0 2px}
@@ -51,9 +51,9 @@
 .grid_box .grid_page_box b.unclick{opacity:0.40;filter:alpha(opacity=40);-moz-opacity:0.4;}
 .grid_box .grid_head_menu span input{width:14px;height:14px;margin:1px 0 0 2px;}
 .grid_box .grid_head_menu .hover .hover input{margin-left:1px}
-.grid_head .gird_head_column{float:left;border-bottom:none;height:22px;font-weight:bold;text-shadow:0 1px 0 #fff;line-height:22px;position:relative}
+.grid_head .gird_head_column{float:left;border-bottom:none;height:28px;font-weight:bold;text-shadow:0 1px 0 #fff;line-height:28px;position:relative}
 .gird_head_column .grid_menu{width:14px;height:100%;position:absolute;right:0;top:0;border-left:#ccc 1px solid;cursor:default;background:url(../images/grids/grids-head-menu.gif) no-repeat center center;display:none}
-.grid_box .grid_head{height:22px;;overflow:hidden;background:#eeeff0 url(../images/grids/grids-head.gif) repeat-x;border-bottom:#ccc 1px solid;
+.grid_box .grid_head{height:28px;;overflow:hidden;background:#eeeff0 url(../images/grids/th_bg.gif) repeat-x;border-bottom:#ccc 1px solid;
 position:relative}
 .gird_head_column span{padding:0 12px 0 3px;_line-height:26px}
 .grid_head .hover,.grid_head_menu .hover,.grid_head .select{background:#d9e1fb url(../images/grids/grids-head-hove.gif) repeat-x 0 0}
@@ -74,3 +74,9 @@ position:relative}
 .grid_box .g_indicator,.grid_box .g_pointer{position:absolute;left:-999px;top:-999px;z-index:9;border:1px solid #DDD;padding:0 4px 0 18px;height:16px;line-height:16px;background:#f4f5f6 url(../images/grids/drog_icon.gif) no-repeat;}
 .grid_box .no{background-position: 0 -64px}
 .grid_box .g_pointer{background:none;width:16px;height:16px;background:url(../images/grids/drog_icon.gif) no-repeat 0 -16px;border:none;padding:0;}
+.agency{display:block;width:36px;height:20px;background:url(../images/system/jigou.gif) no-repeat}
+.grid_view tr.hover .agency{background-position:0 -20px}
+.grid_view .set{width:68px;height:21px;display:block;line-height:21px;text-align:center;color:#333;text-decoration:none;background:
+url(../images/system/caozuo.gif) no-repeat;float:left;margin-right:8px;}
+.grid_view tr.hover .set{background-position:0 -42px;color:#fff}
+.grid_view .dis,.grid_view tr.hover .dis{background-position:0 -21px;color:#ccc}
