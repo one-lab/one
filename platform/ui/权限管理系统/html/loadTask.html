@@ -5,8 +5,10 @@
 <title>权限管理-功能菜单管理</title>
 <link type="text/css" rel="stylesheet" href="../css/sinosoft.base.css" />
 <link type="text/css" rel="stylesheet" href="../css/sinosoft.tree.css" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.message.css" />
 <script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="../js/sinosoft.tree.js"></script>
+<script type="text/javascript" src="../js/sinosoft.message.js"></script>
 <script type="text/javascript" src="../js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -52,7 +54,7 @@ $(function(){
 		},
 		"plugins":["themes","json_data","ui"]
 	}).bind("select_node.jstree", function (event, data) {
-		var text = data.rslt.obj.text();
+		var text = $.trim(data.rslt.obj.children("a").text());
 		$("#parentName").val(text);
 		$("#rightBox").hide();
 	}).bind("open_node.jstree",function(e,data){
@@ -83,9 +85,9 @@ function showCenter(dis){
 		$("#centerInfo").slideToggle("fast")
 	};
 	if(!dis){
-		center.find("input:not(#saveBtn),select,textarea").attr("disabled","disabled")
+		center.find("input:not(#saveBtn),select,textarea").attr("disabled","disabled").val("读取数据");
 	}else{
-		center.find("input:not(#saveBtn),select,textarea").removeAttr("disabled");
+		center.find("input:not(#saveBtn),select,textarea").removeAttr("disabled").val("");
 	};
 	$("#saveBtn").val("保存");
 	$("#selectParent").show();
@@ -100,13 +102,13 @@ function evevtCheck(){
 		theBtn.val("保存");
 		$("#selectParent").show();
 		$("#centerInfo").find("input:not(#saveBtn),select,textarea").removeAttr("disabled");
+	}else{
+		 msgSuccess("", "保存成功！");
 	}
 };
 function showRight(){
 	var right = $("#rightBox");
-	//if(right.is(":hidden")){
 	right.slideToggle("fast");
-	//};
 };
 </script>
 </head>

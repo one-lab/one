@@ -7,12 +7,14 @@
 <link type="text/css" rel="stylesheet" href="../css/sinosoft.tree.css" />
 <link type="text/css" rel="stylesheet" href="../css/sinosoft.grid.css" />
 <link type="text/css" rel="stylesheet" href="../css/sinosoft.window.css" />
+<link type="text/css" rel="stylesheet" href="../css/sinosoft.message.css" />
 <script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="../js/sinosoft.tree.js"></script>
 <script language="javascript" src="../js/sinosoft.grid.js"></script>
 <script language="javascript" src="../js/sinosoft.tips.js"></script>
 <script type="text/javascript" src="../js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript" src="../js/sinosoft.window.js"></script>
+<script type="text/javascript" src="../js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("#grid").Grid({
@@ -42,7 +44,95 @@ function openWindow(){
 		"width":225, 
 		"height":380, 
 		"resizing":false,
+		"diyButton":[{
+			"id": "btOne",
+			"class": "def_btn",
+			"value": "保 存",
+			"btFun": function() {
+				msgSuccess("", "保存成功！");
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}	
+			}, {
+			"id": "btTwo",
+			"class": "def_btn",
+			"value": "取 消",
+			"btFun": function() {
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}	
+			}
+		]
 	});
+}
+function openQX() {
+	$("body").window({
+		"id":"window1", 
+		"url":"permissionSettings.html",
+		"title":"权限设置", 
+		"hasIFrame":true,
+		"content":"",
+		"width":1080, 
+		"height":480,
+		"diyButton":[{
+			"id": "btOne",
+			"class": "def_btn",
+			"value": "保 存",
+			"btFun": function() {
+				msgSuccess("", "保存成功！");
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}	
+			}, {
+			"id": "btTwo",
+			"class": "def_btn",
+			"value": "取 消",
+			"btFun": function() {
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}	
+			}
+		]
+	});
+}
+
+function openSJ() {
+	$("body").window({
+		"id":"window1", 
+		"url":"dataSet.html",
+		"title":"数据设置", 
+		"hasIFrame":true,
+		"content":"",
+		"width":820, 
+		"height":450,
+		"diyButton":[{
+			"id": "btOne",
+			"class": "def_btn",
+			"value": "保 存",
+			"btFun": function() {
+				msgSuccess("", "保存成功！");
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}	
+			}, {
+			"id": "btTwo",
+			"class": "def_btn",
+			"value": "取 消",
+			"btFun": function() {
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}	
+			}, {
+			"id": "btTwo",
+			"class": "def_btn",
+			"value": "关 闭",
+			"btFun": function() {
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}	
+			}
+		]
+	});	
 }
 </script>
 </head>

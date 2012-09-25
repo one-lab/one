@@ -24,7 +24,7 @@
 				sequence  : true,
 				pages     : {
 					pager    : true ,
-					renew    : true ,
+					renew    : false ,
 					paging   : true ,
 					goPage   : true ,
 					info     : true 
@@ -47,7 +47,7 @@
 			var $checkBox = $('<input type="checkbox" value="" name="all_sec" class="chex" />');
 			var $gNumber = '';
 			var adaptive = 0,str = 0,end = defaults.rowNum,pB = 1;
-			var onOff,disb = true,oW,nW,tI,rows,total,pFirst,pPrev,pNext,pLast,pNub,pB = 1,pSel,ps,_stop;
+			var onOff,pageUnclik,disb = true,oW,nW,tI,rows,total,pFirst,pPrev,pNext,pLast,pNub,pB = 1,pSel,ps,_stop;
 			var _move=false;
 			var _x;
 			
@@ -58,7 +58,7 @@
 			autoWidth();
 			createGridHead();
 			$gHeader.width($gW);
-			$gView.width($gW);
+			
 			if(defaults.height != 'auto'){
 				$gView.height(defaults.height - $gHeader.height() - 1);
 			};
@@ -84,7 +84,7 @@
 			if(defaults.pager){
 				greadPage();
 			}
-			
+			$gView.width($gW).height($gView.height());
 			//ajax加载数据
 			function createData(){
 				var url = defaults.url;
@@ -148,13 +148,18 @@
 					pNub = $('input.page_nub',$pagings);
 					pNext = $('b.grid_page_next',$pagings);
 					pLast = $('b.grid_page_last',$pagings);
-					$pBox.append($pagings,$p);
+					//dddddddddddd
+					if(pageUnclik){
+						pNext.addClass('unclick');
+						pLast.addClass('unclick');
+					};
+					$pBox.append($pagings);
 					pFirst.bind("click",{b:'first'},pageFn);
 					pPrev.bind("click",{b:'prev'},pageFn);
 					pNext.bind("click",{b:'next'},pageFn);
 					pLast.bind("click",{b:'last'},pageFn);
 					pNub.bind('keyup',{b:'nub'},jampPage);
-				};	
+				};
 				if(defaults.pages.renew){
 					var $refresh = $('<span title="刷新"><b class="grid_refresh"></b></span>');
 					$pBox.append($refresh,$p);
@@ -313,18 +318,12 @@
 				rePage();
 			};
 			function rePage(){
-				//dddddddddd
 				$('table',$gView).remove();
 				loading();
 				if(hids.length > 0){
 					hideCol();
 				}else{
 					initGrid(_data,str,end,colAttributes);
-					/*var nW;
-					var colW = colAttributes.widths;
-					for(i = 0;i < colW.length;i ++){
-						nw = nw + colW[i];
-					};*/
 				};				
 				if(defaults.pages.paging)
 				pNub.val(pB);
@@ -485,6 +484,10 @@
 					allW += Math.abs(colParams.widths[i]);
 				};
 				gTable  = gTable + '</tr>';
+				if(rows.length < endParam){
+					endParam = rows.length;
+					pageUnclik = true;
+				};
 				for(j = startParam; j < endParam; j++){					
 					var cell = rows[j].cell;
 					gTable = gTable + '<tr id="row_' + j + '">';
@@ -945,6 +948,7 @@
 			
 			//列拖拽
 			function dragCol(e){
+				//dddddddddddddd
 				$('div.grid_head_menu',$gBox).hide();
 				var $c = $("div.th_change",$gHeader);
 				var mL = parseInt($gHeader.css("margin-left"));
@@ -964,7 +968,7 @@
 					$rL.css("left",colL - 1);
 					$rR.css("left",colL + colW);
 					$gView.append($rL,$rR);
-				};				
+				};
 				//$gBox.css("position","relative");
 				_move = true;
 				_x = $c.offset().left;

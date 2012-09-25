@@ -61,7 +61,7 @@ position:relative}
 .grid_head .hover .clk,.grid_head .select .clk{background-color:#dce3fb}
 .grid_head span.up{background:url(../images/grids/grids-up.gif) no-repeat right center}
 .grid_head span.down{background:url(../images/grids/grids-down.gif) no-repeat right center}
-.grid_head .multiple .chex{height:22px;line-height:22px;}
+.grid_head .multiple .chex{height:28px;line-height:28px;}
 .grid_head .needle{position:absolute;width:8px;height:22px;cursor:col-resize;background:#000;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity:0;opacity:0;left:-999px}
 .gird_head_column span.number{padding:0 3px;}
 .grid_view .loading span{color:#444;background:#fff url(../images/loading/spinner.gif) no-repeat 2px center;padding-left:22px}
@@ -80,3 +80,4 @@ position:relative}
 url(../images/system/caozuo.gif) no-repeat;float:left;margin-right:8px;}
 .grid_view tr.hover .set{background-position:0 -42px;color:#fff}
 .grid_view .dis,.grid_view tr.hover .dis{background-position:0 -21px;color:#ccc}
+.tree_view .grid_box{border:none}
