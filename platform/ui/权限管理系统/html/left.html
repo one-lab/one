@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script type="text/javascript">
+	function showCenterUl(thisCheck){
+		var checkId = ""; 
+		$(".right_div_left input:checkbox").each(function(){
+			if($(this).attr("checked")) {
+				checkId = checkId + $(this).attr("id") + ";";	
+			}	
+		});
+		$.ajax({
+		   type: "POST",
+		   url: "center.html",
+		   dataType: "html",
+		   data : checkId,
+		   success: function(msg){
+			   	$(".right_div_center").html("");
+				$(".right_div_right").html("");
+				$(".right_div_bottom").hide();
+				$(".right_div_center").html(msg);		 
+		   }
+		});	
+	}
+</script>
+</head>
+
+<body>
+	<span>设置用户组</span>
+    <label><input type="button" value="关闭" onclick="closeAll();" /></label>
+    <ul>
+        <li>权限管理<input id="check_1" type="checkbox" onclick="showCenterUl(this);" /></li>
+        <li>客服专员<input id="check_2" type="checkbox" onclick="showCenterUl(this);" /></li>
+        <li>保单配送<input id="check_3" type="checkbox" onclick="showCenterUl(this);" /></li>
+    </ul>
+</body>
+</html>
