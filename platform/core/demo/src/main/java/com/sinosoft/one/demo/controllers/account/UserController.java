@@ -203,4 +203,49 @@ public class UserController {
         return "userResourceList";
 
     }
+
+    @Get("namedQuerylList")
+    public String namedQueryList(Invocation inv){
+        return "userNamedQueryList";
+    }
+
+    @Post("namedQueryResult")
+    public String namedQueryResult(Invocation inv,@Param("name") String name) {
+        List<User> users = accountManager.findAllUserByNamedQueyt(name);
+        inv.addModel("users", users);
+        return "userNamedQueryList";
+    }
+
+    @Get("createValidator")
+    @Post("errorCreate")
+    public String createValidatorForm(Invocation inv) {
+        inv.addModel("user", new User());
+        inv.addModel("allGroups", accountManager.getAllGroup());
+        return "userValidatorForm";
+    }
+
+    @Post("saveValidator")
+    public String saveValidator(@Param("groupList") List<Long> gids,User user, @Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {
+
+        List<Group> groupList = new ArrayList<Group>();
+        for (Long long1 : gids) {
+            Group group = new Group(long1, null);
+            groupList.add(group);
+        }
+        user.setGroupList(groupList);
+        user.setId(System.currentTimeMillis());
+        user.setCreateTime(new Date());
+        accountManager.saveUser(user);
+        for (MultipartFile multipartFile : docs) {
+            if(StringUtils.isEmpty(multipartFile.getOriginalFilename())){
+                continue;
+            }
+
+            multipartFile.transferTo(new File(MvcPathUtil.getDirectoryPath(inv, "/")+multipartFile.getOriginalFilename()));
+        }
+        return "r:/account/user/queryResult";
+    }
+
+
+
 }

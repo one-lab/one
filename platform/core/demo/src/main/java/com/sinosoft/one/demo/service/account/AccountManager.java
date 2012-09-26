@@ -73,14 +73,22 @@ public class AccountManager {
      * JPQL方式.
      */
     public List<User> findAllUserOne(){
-        return (List<User>) userDao.findAllUserByJpql();
+        return userDao.findAllUserByJpql();
     }
 
     /**
-     * 资源文件方式.
+     * SQL资源文件方式.
      */
-    public List<User>findAllUserTwo(){
-        return (List<User>) userDao.findAllUseuByResourse();
+    public List<User> findAllUserTwo(){
+        return userDao.findAllUseuByResourse();
+    }
+
+    /**
+     * JPA资源文件方式.
+     */
+    public List<User> findAllUserByNamedQueyt(String name){
+        name="%"+name+"%";
+        return userDao.findBySpringDataNamedQuery(name);
     }
 
 	@Transactional(readOnly = false)

@@ -12,7 +12,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             //聚焦第一个输入框
-            $("#test").addClass("active");
+            $("#jpql-tab").addClass("active");
         });
 
     </script>
@@ -52,7 +52,7 @@
             </c:forEach>
             </tbody>
         </table>
-        <a class="btn" href="create">创建用户</a>
+        <a class="btn" href="createValidator">创建用户</a>
     </div>
     <%@ include file="/WEB-INF/layouts/footer.jsp"%>
 </div>

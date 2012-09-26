@@ -7,12 +7,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>动态SQL查询方式演示</title>
+    <title>JPA资源文件查询方式演示</title>
     <%@ include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
         $(document).ready(function() {
             //聚焦第一个输入框
-            $("#dynamicsql-tab").addClass("active");
+            $("#jparesource-tab").addClass("active");
         });
 
     </script>
@@ -24,10 +24,8 @@
 <div class="container">
     <%@ include file="/WEB-INF/layouts/header.jsp"%>
     <div id="view" class="span12" >
-        <form name="form" action="complexSqlResult" method="post">
+        <form name="form" action="namedQueryResult" method="post">
             用户名：<input name="name" id="name" type="text" />
-            用户邮箱：<input name="email" id="email" type="text" /></br>
-            用户ID：<input name="id" id="idFrom" type="text" />
             <input type="submit"  onClick="viewUser();" value="查询" />
         </form>
     </div>

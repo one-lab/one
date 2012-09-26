@@ -43,8 +43,9 @@
 
 	<!-- Spring Data Jpa配置 -->
  	<onejpa:repositories base-package="com.sinosoft.one.demo"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"
-                          sql-queries-location="classpath:META-INF/sqlquery/*"/>
-   
+                          sql-queries-location="classpath:META-INF/sqlquery/*"
+                          named-queries-location="classpath:META-INF/jpa-named-queries.properties"/>
+
 	<!-- Jpa 事务配置 -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
