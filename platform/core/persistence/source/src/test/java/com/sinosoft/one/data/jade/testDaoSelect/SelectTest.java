@@ -146,8 +146,8 @@ public class SelectTest extends TestSuport {
         } catch (Exception e) {
             flag = true;
         }
-        assertTrue(!isTrue) ;
-        assertTrue(flag) ;
+        assertTrue(isTrue) ;
+        assertTrue(!flag) ;
     }
     //4.2.1
     @Test
