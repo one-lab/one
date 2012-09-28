@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-7-12 17:38:47 by Hibernate Tools 3.2.4.GA -->
+<hibernate-mapping>
+    <class name="ins.prpall.report.model.LCReport" table="LCREPORT">
+        <id name="repno" type="string">
+            <column name="REPNO" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="repoperator" type="string">
+            <column name="REPOPERATOR" length="20" not-null="true" />
+        </property>
+        <property name="repapplydate" type="date">
+            <column name="REPAPPLYDATE" length="7" not-null="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="120" not-null="true" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="10" not-null="true" />
+        </property>
+        <property name="agentCode" type="string">
+            <column name="AGENTCODE" length="10" not-null="true" />
+        </property>
+        <property name="agentgroup" type="string">
+            <column name="AGENTGROUP" length="12" />
+        </property>
+        <property name="serviceType" type="string">
+            <column name="SERVICETYPE" length="2" not-null="true" />
+        </property>
+        <property name="bussinessflag" type="string">
+            <column name="BUSSINESSFLAG" length="2" not-null="true" />
+        </property>
+        <property name="managecom" type="string">
+            <column name="MANAGECOM" length="8" not-null="true" />
+        </property>
+        <property name="makeDate" type="date">
+            <column name="MAKEDATE" length="7" not-null="true" />
+        </property>
+        <property name="maketime" type="string">
+            <column name="MAKETIME" length="8" not-null="true" />
+        </property>
+        <property name="modifydate" type="date">
+            <column name="MODIFYDATE" length="7" not-null="true" />
+        </property>
+        <property name="modifyTime" type="string">
+            <column name="MODIFYTIME" length="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-7-13 20:01:22 by Hibernate Tools 3.2.4.GA -->
+<hibernate-mapping>
+    <class name="ins.prpall.report.model.PropallSearchInfo" table="PROPALLSEARCHINFO">
+        <composite-id name="id" class="ins.prpall.report.model.PropallSearchInfoId">
+            <key-property name="repno" type="string">
+                <column name="REPNO" length="20" />
+            </key-property>
+            <key-property name="serialNo" type="string">
+                <column name="SERIALNO" length="6" />
+            </key-property>
+        </composite-id>
+        <property name="repoperator" type="string">
+            <column name="REPOPERATOR" length="20" not-null="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="60" not-null="true" />
+        </property>
+        <property name="reason" type="string">
+            <column name="REASON" length="1" />
+        </property>
+        <property name="investor" type="string">
+            <column name="INVESTOR" length="20" not-null="true" />
+        </property>
+        <property name="othermessage" type="string">
+            <column name="OTHERMESSAGE" length="200" not-null="true" />
+        </property>
+        <property name="fileName" type="string">
+            <column name="FILENAME" length="100" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" not-null="true" />
+        </property>
+        <property name="result" type="string">
+            <column name="RESULT" length="200" not-null="true" />
+        </property>
+        <property name="standbyflag1" type="string">
+            <column name="STANDBYFLAG1" length="20" />
+        </property>
+        <property name="standbyflag2" type="string">
+            <column name="STANDBYFLAG2" length="20" />
+        </property>
+        <property name="standbyflag3" type="string">
+            <column name="STANDBYFLAG3" length="200" />
+        </property>
+        <property name="operator" type="string">
+            <column name="OPERATOR" length="20" not-null="true" />
+        </property>
+        <property name="makeDate" type="date">
+            <column name="MAKEDATE" length="7" not-null="true" />
+        </property>
+        <property name="maketime" type="string">
+            <column name="MAKETIME" length="8" not-null="true" />
+        </property>
+        <property name="modifydate" type="date">
+            <column name="MODIFYDATE" length="7" not-null="true" />
+        </property>
+        <property name="modifyTime" type="string">
+            <column name="MODIFYTIME" length="8" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

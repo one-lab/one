@@ -16,8 +16,8 @@
 package com.sinosoft.one.data.jpa.repository.support;
 
 import com.sinosoft.one.data.jpa.repository.query.OneJpaQueryLookupStrategy;
-import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy;
-import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy.Key;
+import com.sinosoft.one.data.jpa.repository.query.OneQueryLookupStrategy;
+import com.sinosoft.one.data.jpa.repository.query.OneQueryLookupStrategy.Key;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.QueryExtractor;
 import org.springframework.data.jpa.repository.support.*;
@@ -42,7 +42,7 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 	private final LockModeRepositoryPostProcessor lockModePostProcessor;
 
 	/**
-	 * Creates a new {@link com.sinosoft.one.data.jpa.repository.support.OneJpaRepositoryFactory}.
+	 * Creates a new {@link OneJpaRepositoryFactory}.
 	 *
 	 * @param entityManager must not be {@literal null}
 	 */
@@ -129,7 +129,7 @@ public class OneJpaRepositoryFactory extends OneRepositoryFactorySupport {
 	 * (org.springframework.data.repository.query.QueryLookupStrategy.Key)
 	 */
 
-	protected QueryLookupStrategy getQueryLookupStrategy(Key key) {
+	protected OneQueryLookupStrategy getQueryLookupStrategy(Key key) {
 
 		return OneJpaQueryLookupStrategy.create(entityManager, key, extractor);
 	}

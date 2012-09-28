@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table-filter match-name="LCCONTPLANREPORT"></table-filter>
+	<table-filter match-name="LCCONTREPORT"></table-filter>
+	<table-filter match-name="LCDUTYREPORT"></table-filter>
+	<table-filter match-name="LCGRPAPPREPORT"></table-filter>
+	<table-filter match-name="LCGRPCONTREPORT"></table-filter>
+	<table-filter match-name="LCGRPPOLREPORT"></table-filter>
+	<table-filter match-name="LCPOLREPORT"></table-filter>
+	<table-filter match-name="LCREPORT"></table-filter>
+	<table-filter match-name="LDGRPREPORT"></table-filter>
+	<table-filter match-name="LCREPINFO"></table-filter>
+	<table name="LCREPORT" class="ins.prpall.report.model.LCReport"></table>
+	<table name="LCGRPCONTREPORT" class="ins.prpall.report.model.LCGrpContReport"></table>
+	<table name="LCPOLREPORT" class="ins.prpall.report.model.LCPolReport"></table>
+	<table name="LCGRPAPPREPORT" class="ins.prpall.report.model.LCGrpAppReport"></table>
+	<table name="LCCONTPLANREPORT" class="ins.prpall.report.model.LCContPlanReport"></table>
+	<table name="LCREPINFO" class="ins.prpall.report.model.LCRepInfo"></table>
+	<table name="LCCONTREPORT" class="ins.prpall.report.model.LCContReport"></table>
+	<table name="LDGRPREPORT" class="ins.prpall.report.model.LDGrpReport"></table>
+	<table name="LCDUTYREPORT" class="ins.prpall.report.model.LCDutyReport"></table>
+	<table name="LCGRPPOLREPORT" class="ins.prpall.report.model.LCGrpPolReport"></table>
+</hibernate-reverse-engineering>

@@ -1,0 +1,59 @@
+*{margin:0;padding:0;font-size:12px;}
+table{border-collapse:separate;}
+a img{border:none}
+ul{list-style:none;}
+html,body{font-size:12px;font-family:Microsoft Yahei,Verdana,"HelveticaNeue",Helvetica,Arial;color:#000;}
+body{background:#efefef;padding:15px 10px 10px;}
+.home{padding:0;}
+.box_shadow{background:#444;opacity:0.3;filter:Alpha(Opacity=30);position:absolute;z-index:2;margin:5px 0 0 4px;padding:4px;display:none}
+.header{background:url(../images/system/earth.gif) no-repeat right center;height:68px;}
+.logo{margin:18px 0 0 54px;}
+.logo,.f_left{float:left}
+.user_bar{text-align:right;padding:24px 220px 0 0;}
+.user_bar a{text-decoration:none;margin-left:38px;padding-left:20px;}
+.user_bar a:hover{text-decoration:underline}
+.pass{background:url(../images/system/pass.gif) no-repeat}
+.quit{background:url(../images/system/quit.gif) no-repeat}
+.left_bar{margin:16px auto 0;background:#efefef;width:220px;}
+.user_bar,.user_bar a,.left_hide{color:#fff}
+.left_hide{display:block;height:43px;line-height:43px;text-align:center;background:url(../images/system/hide.gif) no-repeat;text-decoration:none}
+.left_hide span{padding-right:18px;background:url(../images/system/hide_icon.gif) no-repeat right center}
+.nav a{color:#000;text-decoration:none;display:block;line-height:28px;border-top:#fff 1px solid;border-bottom:#ccc 1px solid;text-align:center;display:block;height:28px;}
+.nav a:hover,.nav a.select,.nav .select li a:hover{color:#069;background:url(../images/accordion/accordion_bg.gif) repeat-x center 2px}
+.nav li ul{display:none}
+.nav a.select span,.nav a:hover span{padding-left:10px;background:url(../images/system/acc_icon.gif) no-repeat 0 center}
+.nav .select li a{background:#ddd;color:#000}
+#open{background:url(../images/system/open.gif) no-repeat center center;cursor:pointer}
+.crumbs{height:37px;background:url(../images/system/crumbs.gif) repeat-x;border-bottom:#ccc 1px solid;line-height:37px;padding:0 10px;}
+.crumbs span{color:#39c}
+.copyright{line-height:45px;text-align:right;color:#fff;padding:0 120px;}
+.copyright span{padding:10px 0 10px 25px;margin-left:15px;}
+.copyright .author,.copyright .help{background:url(../images/system/author.gif) no-repeat 0 center}
+.copyright .help{background-image:url(../images/system/help.gif)}
+.login_cont{background:#efefef url(../images/system/login.jpg) no-repeat center center}
+.login_line{background:#efefef url(../images/system/center_bg.gif) repeat-x;height:5px;}
+.login{width:429px;height:209px;background:url(../images/system/login_box.gif) no-repeat;margin:0 auto;padding:90px 40px 30px 96px;}
+.list li{line-height:40px;color:#333;margin-bottom:13px;font-size:15px;font-weight:bold}
+.list{float:left}
+.inp_text,.inp_selec{border:#999 1px solid;margin-left:20px;width:220px;font-size:15px;padding:5px 8px;font-family:Microsoft Yahei,Verdana,"HelveticaNeue",Helvetica,Arial;}
+.inp_selec{width:238px;}
+.login_btn{float:right;margin-top:46px;width:96px;cursor:pointer;height:96px;background:url(../images/system/login_btn.gif) no-repeat;border:none}
+.prompt{line-height:34px;background:url(../images/system/tips.gif) no-repeat;padding-left:39px;clear:both;color:#666;font-size:13px;}
+/*其它页面*/
+.left_content{width:269px;}
+.title2,.title2 b{height:32px;line-height:32px;padding-left:10px;background:url(../images/system/title_bg.gif) no-repeat}
+.title2 b{display:block;padding:0 10px 0 0;background-position:right 0;text-align:center;text-shadow:1px 1px 2px #bdbdbd;color:#39c}
+.center_content{margin:0 10px;}
+.fun_info{width:532px;margin-top:10px;display:none}
+.info_form input,textarea,select{padding:2px;border:#ccc 1px solid;}
+.info_form{background:#fff;border:#ccc 1px solid;border-top:none;padding:10px 0;color:#333}
+.info_form td{padding:6px 2px;}
+.add_btn,.info_form .def_btn{width:92px;height:24px;line-height:24px;border:none;background:url(../images/system/add_btn.gif) no-repeat;color:#fff;font-weight:bold;cursor:pointer;text-indent:10px;}
+.title2 .close{float:right;width:17px;height:17px;display:block;background:url(../images/system/close.gif) no-repeat;margin-top:8px;}
+.info_form .def_btn{background:url(../images/system/btn_bg.gif) no-repeat;text-indent:0}
+.form_tool{border-top:#ccc 1px solid;padding:12px 0 0;text-align:center}
+.info_form .select_parent{padding-right:65px;}
+.select_parent a{color:#fff;text-decoration:none;text-align:center;display:block;float:right;width:97px;height:32px;line-height:32px;background:url(../images/system/parents.gif) no-repeat}
+.right_content{display:none}
+#layout_center{overflow:hidden}
+.ac_name{float:right;padding-right:76px;}

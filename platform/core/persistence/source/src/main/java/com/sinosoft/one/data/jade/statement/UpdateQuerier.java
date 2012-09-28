@@ -181,7 +181,7 @@ public class UpdateQuerier implements Querier {
             for (int i = 0; i < ret.length; i++) {
                 ret[i] = updatedArray[i];
             }
-            return updatedArray;
+            return ret;
         }
         if (batchReturnClazz == void.class) {
             return null;

@@ -1,15 +1,20 @@
 package com.sinosoft.one.demo.service.account;
 
 import java.util.List;
+import java.util.Map;
 
+import com.mysema.query.types.expr.BooleanExpression;
+import com.sinosoft.one.data.jade.parsers.util.StringUtil;
 import com.sinosoft.one.demo.dao.account.GroupDao;
 import com.sinosoft.one.demo.dao.account.UserDao;
 import com.sinosoft.one.demo.dao.account.UserInfoDao;
+import com.sinosoft.one.demo.model.account.QUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +39,58 @@ public class AccountManager {
 	private UserDao userDao;
 	private GroupDao groupDao;
 	private UserInfoDao userInfoDao;
-	
-	
+    private QUser user=new QUser("user");
+
+
+    /**
+     * QSL方式.
+     */
+    public List<User> findAllUserByQSL(Map<String,String> mapa){
+        BooleanExpression expression = user.id.isNotNull();
+
+        if(!StringUtil.isEmpty(mapa.get("name"))) {
+            expression = expression.and(user.name.like("%"+mapa.get("name")+"%"));
+        }
+        if(!StringUtil.isEmpty(mapa.get("email"))){
+            expression = expression.and(user.email.like("%"+mapa.get("email")+"%"));
+        }
+        if(!StringUtil.isEmpty(mapa.get("id"))){
+            expression = expression.and(user.id.eq(Long.valueOf(mapa.get("id"))));
+        }
+        return (List<User>)userDao.findAll(expression);
+    }
+
+    /**
+     * 动态QSL方式.
+     */
+    public List<User> findAllUserByDynamicSQL(String name,String email,Long id){
+        if(!name.isEmpty()){name="%"+name+"%";}
+        if(!email.isEmpty()){email="%"+email+"%";}
+        return userDao.selectUserForDynamicComplexSql(name,email,id);
+    }
+
+    /**
+     * JPQL方式.
+     */
+    public List<User> findAllUserOne(){
+        return userDao.findAllUserByJpql();
+    }
+
+    /**
+     * SQL资源文件方式.
+     */
+    public List<User> findAllUserTwo(){
+        return userDao.findAllUseuByResourse();
+    }
+
+    /**
+     * JPA资源文件方式.
+     */
+    public List<User> findAllUserByNamedQueyt(String name){
+        name="%"+name+"%";
+        return userDao.findBySpringDataNamedQuery(name);
+    }
+
 	@Transactional(readOnly = false)
 	public void saveUserInfo(UserInfo entity){
 		userInfoDao.save(entity);

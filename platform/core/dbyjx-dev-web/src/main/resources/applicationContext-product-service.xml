@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-autowire="byName" default-lazy-init="true">
+	
+	
+	<bean id="pdLmRiskService" class="ins.product.service.spring.PdLmRiskServieSpringImpl" />
+	<bean id="pdLmRiskRelaService" class="ins.product.service.spring.PDLMRiskRelaServiceSpringImpl" />
+	<bean id="pdLmDutyParamsService" class="ins.product.service.spring.PDLMDutyParamsServiceSpringImpl" />
+	<bean id="pdBaseFieldService" class="ins.product.service.spring.PDBaseFieldServiceSpringImpl" />
+	<bean id="pdLmDutyGetService" class="ins.product.service.spring.PDLMDutyGetServiceSpringImpl" />
+	<bean id="pdLmDutyPayService" class="ins.product.service.spring.PDLMDutyPayServiceSpringImpl" />
+	<bean id="pdScheRateCalFactorLibService" class="ins.product.service.spring.PDScheRateCalFactorLibServiceSpringImpl" />
+	<bean id="pdLmRiskDutyFactorService" class="ins.product.service.spring.PDLMRiskDutyFactorServiceSpringImpl" />
+	<bean id="pdlmRiskDutyRateService" class="ins.product.service.spring.PDLMRiskDutyRateServiceSpringImpl" />
+	<bean id="pdlmRiskDutyRateValueService" class="ins.product.service.spring.PDLMRiskDutyRateValueServiceSpringImpl" />
+	<bean id="createMoneyService" class="ins.product.service.spring.CreateMoneyServiceSpringImpl" />
+	<bean id="pdlmRiskAppService" class="ins.product.service.spring.PDLMRiskAppServiceSpringImpl" />
+	<bean id="lcNotepadService" class="ins.product.service.spring.LCNotepadServiceSpringImpl" />
+	<bean id="pdIsSueService" class="ins.product.service.spring.PDIsSueServiceSpringImpl" />
+	<bean id="pdlmRiskEdorItemService" class="ins.product.service.spring.PDLMRiskEdorItemServiceSpringImpl" />
+	<bean id="pdlmDutyService" class="ins.product.service.spring.PDLMDutyServiceSpringImpl" />
+	<bean id="pdlmRiskDutyService" class="ins.product.service.spring.PDLMRiskDutyServiceSpringImpl" />
+	<bean id="pdlmRiskRoleService" class="ins.product.service.spring.PDLMRiskRoleServiceSpringImpl" />
+	<bean id="pdldRiskPrintService" class="ins.product.service.spring.PDLDRiskPrintServiceSpringImpl" />
+	<bean id="pdlmRiskPayService" class="ins.product.service.spring.PDLMRiskPayServiceSpringImpl" />
+	<bean id="pdlmRiskPayIntvService" class="ins.product.service.spring.PDLMRiskPayIntvServiceSpringImpl" />
+	<bean id="pdlmCheckFieldService" class="ins.product.service.spring.PDLMCheckFieldServiceSpringImpl" />
+	<bean id="pdlmCalModeService" class="ins.product.service.spring.PDLMCalModeServiceSpringImpl" />
+	<bean id="pdlmUWService" class="ins.product.service.spring.PDLMUWServiceSpringImpl" />
+	<bean id="pdlmDutyPayAddFeeService" class="ins.product.service.spring.PDLMDutyPayAddFeeServiceSpringimpl" />
+</beans>

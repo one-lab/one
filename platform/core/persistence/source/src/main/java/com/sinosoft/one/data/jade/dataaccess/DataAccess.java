@@ -17,6 +17,7 @@ package com.sinosoft.one.data.jade.dataaccess;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -49,6 +50,16 @@ public interface DataAccess {
 	 * @return
 	 */
 	<T> Page<T> selectByPage(Pageable pageable,String sql,String countSql, Object[] args, RowMapper<?> rowMapper);
+
+    /**
+     * 排序查询
+     * @param sort
+     * @param sql
+     * @param args
+     * @param rowMapper
+     * @return
+     */
+    <T> List<?> selectBySort(Sort sort, String sql, Object[] args, RowMapper<?> rowMapper);
 	/**
 	 * 写访问（更新或插入）
 	 *
@@ -67,4 +78,5 @@ public interface DataAccess {
 	 * @return
 	 */
 	int[] batchUpdate(String sql, List<Object[]> argsList);
+
 }

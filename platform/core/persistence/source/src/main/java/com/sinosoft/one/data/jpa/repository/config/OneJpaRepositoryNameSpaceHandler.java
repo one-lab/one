@@ -15,10 +15,6 @@ import org.springframework.data.jpa.repository.config.AuditingBeanDefinitionPars
 public class OneJpaRepositoryNameSpaceHandler extends NamespaceHandlerSupport {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     public void init() {
-        if(logger.isDebugEnabled()) {
-            logger.debug("hello hello hello jpa ++++++++++============");
-        }
-
         registerBeanDefinitionParser("repositories", new OneJpaRepositoryConfigDefinitionParser());
         registerBeanDefinitionParser("auditing", new AuditingBeanDefinitionParser());
     }

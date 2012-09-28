@@ -1,5 +1,6 @@
 package com.sinosoft.one.data.jpa.repository.config;
 
+import com.sinosoft.one.data.jpa.repository.query.OneQueryLookupStrategy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -50,6 +51,12 @@ public abstract class OneAbstractRepositoryConfigDefinitionParser<S extends Glob
 	private static final Log LOG = LogFactory.getLog(OneAbstractRepositoryConfigDefinitionParser.class);
 
 	private static final String REPOSITORY_INTERFACE_POST_PROCESSOR = "org.springframework.data.repository.core.support.RepositoryInterfaceAwareBeanPostProcessor";
+
+	/**
+	 * 定义QUERY_LOOKUP_STRATEGY 为了解决 OneQueryLookupStrategy.key 与 QueryLookupStrategy.key 不匹配
+	 */
+	public static final String QUERY_LOOKUP_STRATEGY = "query-lookup-strategy";
+
 
 	/*
 	 * (non-Javadoc)
@@ -160,14 +167,17 @@ public abstract class OneAbstractRepositoryConfigDefinitionParser<S extends Glob
 					.getRepositoryFactoryBeanClassName());
 
 			builder.addPropertyValue("repositoryInterface", context.getInterfaceName());
-			builder.addPropertyValue("queryLookupStrategyKey", context.getQueryLookupStrategyKey());
+
+			//builder.addPropertyValue("queryLookupStrategyKey", context.getQueryLookupStrategyKey());
+			//2012-8-30 修改为
+			builder.addPropertyValue("queryLookupStrategyKey", getOneQueryLookupStrategyKey(context.getSource()));
+
 			builder.addPropertyValue("namedQueries",
 					new NamedQueriesBeanDefinitionParser(context.getNamedQueriesLocation()).parse(context.getSource(), parser));
-			//if(context instanceof OneSimpleJpaRepositoryConfiguration) {
-				builder.addPropertyValue("sqlQueries",
+			//添加sqlQueries
+			builder.addPropertyValue("sqlQueries",
 						new SqlQueriesBeanDefinitionParser()
 						.parse(context.getSource(),parser));
-			//}
 
 			String customImplementationBeanName = registerCustomImplementation(context, parser, beanSource);
 
@@ -191,6 +201,17 @@ public abstract class OneAbstractRepositoryConfigDefinitionParser<S extends Glob
 		} catch (RuntimeException e) {
 			handleError(e, context.getSource(), parser.getReaderContext());
 		}
+	}
+
+	/**
+	 *	此方法为了解决 OneQueryLookupStrategy.Key 和 QueryLookupStrategy.key 不匹配
+	 * @param element
+	 * @return
+	 */
+	private OneQueryLookupStrategy.Key getOneQueryLookupStrategyKey( Element element ) {
+		String createFinderQueries = element.getAttribute(QUERY_LOOKUP_STRATEGY);
+
+		return StringUtils.hasText(createFinderQueries) ? OneQueryLookupStrategy.Key.create(createFinderQueries) : null;
 	}
 
 	/**

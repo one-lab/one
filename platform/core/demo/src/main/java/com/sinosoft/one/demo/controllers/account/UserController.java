@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 import com.sinosoft.one.demo.model.account.User;
@@ -164,4 +165,87 @@ public class UserController {
 		
 		return Replys.with(userInfo).as(Json.class);
 	}
+
+    @Get("qslList")
+    public String qslList(Invocation inv){
+        return "userQslList";
+    }
+
+    @Post("qslListResult")
+    public String qslListResult(Invocation inv,@Param("mapa") Map<String,String> mapa) {
+        List<User> users = accountManager.findAllUserByQSL(mapa);
+        inv.addModel("users", users);
+        return "userQslList";
+    }
+
+    @Get("complexSql")
+    public String complexSql(Invocation inv){
+        return "userComplexSqlList";
+    }
+
+    @Post("complexSqlResult")
+    public String qslComplexListResult(Invocation inv,@Param("name") String name,@Param("email") String email, @Param("id") Long id) {
+        List<User> users = accountManager.findAllUserByDynamicSQL(name,email,id);
+        inv.addModel("users", users);
+        return "userComplexSqlList";
+    }
+
+    @Get("queryResult")
+    public String queryList(Invocation inv){
+        List<User> users=accountManager.findAllUserOne();
+        inv.addModel("users",users);
+        return "userQueryList";
+    }
+    @Get("resourceResult")
+    public String resourceList(Invocation inv){
+        List<User> users=accountManager.findAllUserTwo();
+        inv.addModel("users",users);
+        return "userResourceList";
+
+    }
+
+    @Get("namedQuerylList")
+    public String namedQueryList(Invocation inv){
+        return "userNamedQueryList";
+    }
+
+    @Post("namedQueryResult")
+    public String namedQueryResult(Invocation inv,@Param("name") String name) {
+        List<User> users = accountManager.findAllUserByNamedQueyt(name);
+        inv.addModel("users", users);
+        return "userNamedQueryList";
+    }
+
+    @Get("createValidator")
+    @Post("errorCreate")
+    public String createValidatorForm(Invocation inv) {
+        inv.addModel("user", new User());
+        inv.addModel("allGroups", accountManager.getAllGroup());
+        return "userValidatorForm";
+    }
+
+    @Post("saveValidator")
+    public String saveValidator(@Param("groupList") List<Long> gids,User user, @Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {
+
+        List<Group> groupList = new ArrayList<Group>();
+        for (Long long1 : gids) {
+            Group group = new Group(long1, null);
+            groupList.add(group);
+        }
+        user.setGroupList(groupList);
+        user.setId(System.currentTimeMillis());
+        user.setCreateTime(new Date());
+        accountManager.saveUser(user);
+        for (MultipartFile multipartFile : docs) {
+            if(StringUtils.isEmpty(multipartFile.getOriginalFilename())){
+                continue;
+            }
+
+            multipartFile.transferTo(new File(MvcPathUtil.getDirectoryPath(inv, "/")+multipartFile.getOriginalFilename()));
+        }
+        return "r:/account/user/queryResult";
+    }
+
+
+
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="claim" extends="struts-default" namespace="/claim">
+	<!-- 理赔部分处理请求action集合 (reportAction)>>>>>>>>begin -->	
+	
+		<!-- 查询报案信息 -->
+		<action name="findClaimReport" class="claimReportAction" method="findClaimReport">	
+			<result name="success">claimoperate/report/ReportQuery.jsp</result>
+		</action>
+		<!-- 查询报案出险详细信息 -->
+		<action name="findReportInfo" class="claimReportAction" method="findReportInfo">
+			<result name="success">claimoperate/report/ReportAdd.jsp</result>
+		</action>
+		<!-- 保存报案信息，出险信息，理赔类型信息，事件信息 -->
+		<action name="saveClaimReportInfo" class="reportAction" method="saveClaimReportInfo">
+			<result name="success">claim/claimoperate/report/ReportAdd.jsp</result>
+		</action>
+		<action name="findLCInsuredByCondition" class="lcInsuredAction" method="findLCInsuredByCondition">
+			<result name="success">/claim/claimoperate/report/AppntQuery.jsp</result>
+		</action>
+		<action name="udpateClaimReportInfo" class="claimReportAction" method="udpateClaimReportInfo"></action>
+		<action name="findLCInsuredByContNoInsuredNo" class="lcInsuredAction" method="findLCInsuredByContNoInsuredNo"></action>
+		<action name="findLLInqApplyByRptNoInsuredNo" class="llInqAction" method="findLLInqApplyByRptNoInsuredNo">
+			<result name="success">/claim/claimoperate/report/SurveyApply.jsp</result>
+		</action>
+		<action name="saveLLInqApply" class="llInqAction" method="saveLLInqApply"></action>
+		<action name="findLLInqApplyByRptNoInsuredNoTwo" class="llInqAction" method="findLLInqApplyByRptNoInsuredNoTwo">
+			<result name="success">/claim/claimoperate/report/SurveyInfoQuery.jsp</result>
+		</action>
+		<action name="findLLInqApplyByRptNoInsuredNoThree" class="llInqAction" method="findLLInqApplyByRptNoInsuredNoThree">
+			<result name="success">/claim/claimoperate/report/SurveyCancel.jsp</result>
+		</action>
+		<action name="findLLInq" class="llInqAction" method="findLLInq"></action>
+		<action name="cancelSurvey" class="llInqAction" method="cancelSurvey"></action>
+		<!-- 发起呈报 -->
+		<action name="submitApply" class="llSubmitAction" method="submitApply"></action>
+			
+	</package>
+</struts>

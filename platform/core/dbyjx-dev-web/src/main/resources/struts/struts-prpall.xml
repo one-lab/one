@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="prpall" extends="struts-default" namespace="/prpall">
+	<!-- 呈报部分处理请求action集合 (reportAction)>>>>>>>>begin -->	
+	
+		<!-- 添加新增呈报件信息 -->
+		<action name="saveBaseInfo" class="reportAction" method="saveBaseInfo">
+			<result name="success">group/report/reportInput/ReportAdd.jsp</result>
+		</action>
+		
+		<!-- 更新新增呈报件信息 -->
+		<action name="updateBaseInfo" class="reportAction" method="updateBaseInfo">
+			<result name="success">group/report/reportInput/ReportAdd.jsp</result>
+		</action>
+		
+		<!-- 添加险种 -->
+		<action name="addRisk" class="reportAction" method="addRisk">
+		<result name="success">group/report/reportInput/ReportAdd.jsp</result>
+		</action>
+		<!-- 删除险种 -->
+		<action name="deleRisk" class="reportAction" method="deleRisk">
+		</action>
+		<!-- 开始录入按钮的跳页查询 -->
+		<action name="findReportAllInfo" class="reportAction" method="findReportAllInfo">
+		<result name="success">group/report/reportInput/ReportAdd.jsp</result>
+		</action>
+		<!-- 查询呈报信息 -->
+		<action name="findReport" class="reportAction" method="findReport">
+		<result name="success">group/report/reportInput/ReportApply.jsp</result>
+		</action>
+		<!-- 删除呈报信息 -->
+		<action name="deleteReport" class="reportAction" method="deleteReport">
+		<result name="success">group/report/reportInput/ReportApply.jsp</result>
+		</action>
+		<!-- 精算核审查询呈报信息 -->
+		<action name="findActuarialReport" class="reportAction" method="findActuarialReport">
+		<result name="success">group/report/actuarialAudit/ActuarialAuditApply.jsp</result>
+		</action>
+		
+		<!-- 精算核审查询 呈报审核意见-->
+		<action name="findReportIdea" class="reportAction" method="findReportIdea">
+		<result name="success">group/report/actuarialAudit/ActuarialAuditInput.jsp</result>
+		</action>
+		
+		<!-- 精算核审 保存呈报审核意见-->
+		<action name="saveActuarialAuditIdea" class="reportAction" method="saveActuarialAuditIdea">
+		<result name="success">group/report/actuarialAudit/ActuarialAuditInput.jsp</result>
+		</action>
+		<!-- 根据申请号查找信息 -->
+		<action name="findByRepNo" class="reportAction" method="findByRepNo">
+			<result name="success">group/report/reportInput/ReportAdd.jsp</result>
+		</action>
+		
+		<!-- 上传文件处理 -->
+		<action name="reportFileUpload" class="reportAction" method="reportFileUpload">
+		
+		</action>
+		<!-- 上传文件查询 -->
+		<action name="findFileInfo" class="reportAction" method="findFileInfo">
+		<result name="success">group/report/reportInput/ReportAdd.jsp</result>
+		</action>
+		
+		<!-- 呈报审核查询 -->
+		<action name="findReportAudit" class="reportAction" method="findReportAudit"></action>
+		<!-- 呈报审核初始化页面 -->
+		<action name="initialReportAudit" class="reportAction" method="initialReportAudit"></action>
+		<!-- 呈报申请 -->
+		<action name="applyReportAudit" class="reportAction" method="applyReportAudit">
+			<result name="success">group/report/reportAudit/ReportAuditDeal.jsp</result>
+		</action>
+		
+		<!-- 呈报审核查看 -->
+		<action name="applyReportView" class="reportAction" method="applyReportView">
+			<result name="success">group/report/reportAudit/ReportAuditDeal.jsp</result>
+		</action>
+		
+		<!-- 呈报审核确认 -->
+		<action name="reportAuditCommit" class="reportAction" method="reportAuditCommit">
+			<result name="success">group/report/reportAudit/ReportAuditDeal.jsp</result>
+		</action>
+		
+		<!-- 契调信息的保存 -->
+		<action name="reportConCommit" class="reportAction" method="reportConCommit">
+			<result name="success">group/report/reportAudit/ReportContSearch.jsp
+			</result>
+		</action>
+		
+		<!--契调用呈报信息查询 -->
+		<action name="reportConFind" class="reportAction" method="reportConFind">
+			<result name="success">group/report/reportAudit/ReportContSearch.jsp
+			</result>
+		</action>
+		
+		<!-- 根据客户号查询投保单位资料的查询按钮 -->
+		<action name="findInfoByCustomerNo" class="reportAction" method="findByCustomerNo">
+		</action>
+		
+		<!-- 呈报结果的查询按钮 -->
+		<action name="findReportResult" class="reportAction" method="findReportResult">
+		</action>
+		
+		<!-- 呈报返回信息查询 -->
+		<action name="findReportReturningInfo" class="reportAction" method="findReportReturningInfo">
+		
+		</action>
+		
+		<!-- 再保审核信息查询 -->
+		<action name="findReinsAuditInfo" class="reportAction" method="findReinsAuditInfo">
+			<result name="success">group/report/reinsAudit/ReinsAuditApply.jsp</result>
+		</action>
+		
+		<!-- 再保审核中查询核审意见 -->
+		<action name="findAuditIdea" class="reportAction" method="findAuditIdea">
+			<result name="success">group/report/reinsAudit/ReinsAuditInput.jsp</result>
+		</action>
+
+		
+		<!-- 再保审核中保存审核意见和核保结论 -->
+		<action name="saveAuditResultAndIdea" class="reportAction" method="saveAuditResultAndIdea">
+			<result name="success">group/report/reinsAudit/ReinsAuditInput.jsp</result>
+		</action>
+
+
+	<!-- 呈报部分处理请求action集合 (reportAction)>>>>>>>>end -->	
+		
+		
+		
+	<!-- 保障计划信息处理（lcContPlanReportAction） >>>>>>>>begin-->
+		<!--保存保障计划信息 -->
+		<action name="saveContPlan" class="lcContPlanReportAction" method="saveContPlan">
+			
+		</action>
+		
+		<!-- 呈报保险计划初始化 -->
+		<action name="initializeEnsurePlan" class="lcContPlanReportAction" method="initializeEnsurePlan">
+			<result name="success">group/report/reportInput/EnsurePlan.jsp</result>
+		</action>
+		
+		<!-- 删除保障计划及其关联表的内容 -->
+		<action name="deleteConPlan" class="lcContPlanReportAction" method="deleteConPlan">
+			<result name="success">group/report/reportInput/EnsurePlan.jsp</result>
+		</action>
+		
+		<!-- 更新保障计划及其关联表的信息 -->
+		<action name="updateConPlan" class="lcContPlanReportAction" method="updateConPlan">
+			<result name="success">group/report/reportInput/EnsurePlan.jsp</result>
+		</action>
+	<!-- 保障计划信息处理（lcContPlanReportAction） >>>>>>>>end-->	
+		
+		
+	<!-- 被保人信息处理（lcInsuredReportAction）>>>>>>>>>>begin -->
+		<!-- excel导入数据处理 -->
+		<action name="importInsured" class="lcInsuredReportAction"
+			method="importInsured">
+			<result name="success">group/report/reportInput/InsuredListImport.jsp</result>
+		</action>
+		
+		<!-- 集体被保人模糊信息保存 -->
+		<action name="saveGrpInsurInfor" class="lcInsuredReportAction" method="saveGrpInsurInfor">
+			<result name="success">group/report/reportInput/ReportAdd.jsp</result>
+		</action>
+	<!-- 被保人信息处理（lcInsuredReportAction）>>>>>>>>>>end -->
+	
+	
+	
+	
+	<!-- 无影象录入信息处理（NoImageInputAction）>>>>>>>>>> begin>>>>>>>>>>>-->	
+
+		<!--告知单、受益人、被保险人信息保存 -->
+		<action name="saveAllInfo" class="noImageInputAction" method="saveAllInfo">
+			<result name="success">group/noImageInput/NoListAdd.jsp</result>
+		</action>
+		
+		<!-- 个单被保人信息查询 -->
+		<action name="findInsuredInfo" class="noImageInputAction" method="findInsuredInfo">
+			<result name="success">group/report/reportInput/InsuredListImport.jsp</result>
+		</action>
+		<!--保存集体保单信息，呈报团体客户信息，呈报团单投保人信息，投保告知单信息-->
+		<action name="saveGrpBaseInfo" class="noImageInputAction" method="saveGrpBaseInfo">
+			<result name="success">group/noImageInput/NoImageInputDetail.jsp</result>
+		</action>
+		<!-- 投保单信息查询 -->
+		<action name="findLcGrpContInfo" class="noImageInputAction" method="findLcGrpContInfo">
+			<result name="success">group/noImageInput/NoImageInputApply.jsp</result>
+		</action>
+		<!-- 投保单详细信息查询 -->
+		<action name="findGrpContDetailInfo" class="noImageInputAction" method="findGrpContDetailInfo">
+			<result name="success">group/noImageInput/NoImageInputDetail.jsp</result>
+		</action>
+		<!--跳转到客户选择页面 -->
+		<action name="findClertPage" class="noImageInputAction" method="findClertPage">
+			<result name="success">group/noImageInput/ClientQuery.jsp</result>
+		</action>
+		<!--根据条件查询客户信息  -->
+		<action name="findCustomerInfoByCondition" class="noImageInputAction" method="findCustomerInfoByCondition">
+		<result name="success">group/noImageInput/ClientQuery.jsp</result>
+		</action>
+		<!--根据客户号初始化单位信息 -->
+		<action name="findClertInfoByCustomerNo" class="noImageInputAction" method="findClertInfoByCustomerNo">
+			<result name="success">group/noImageInput/NoImageInputDetail.jsp</result>
+		</action>
+		<!-- 保存集体险种信息 -->
+		<action name="saveGrpRiskInfo" class="noImageInputAction" method="saveGrpRiskInfo">
+			<result name="success">group/noImageInput/NoImageInputDetail.jsp</result>
+		</action>
+		<!-- 录入完毕，修改状态 -->
+		<action name="writeFinishByState" class="noImageInputAction" method="writeFinishByState">
+		</action>
+		<!-- 删除险种信息 -->
+		<action name="deleGrpRiskInfo" class="noImageInputAction" method="deleGrpRiskInfo">
+		</action>
+		<!-- 判断是否附加险 -->
+		<action name="findSubRiskIsOr" class="noImageInputAction" method="findSubRiskIsOr">
+		</action>
+		
+		
+		
+	<!-- 无影象录入信息处理（NoImageInputAction）>>>>>>>>>>end>>>>>>>>>>>-->
+	
+
+	<!-- 人工核保处理（ArtificalUWAction）>>>>>>>>>>>>>>>>begin>>>>>>>>>> -->
+		
+		<!-- 初始化人工核保界面 -->
+		<action name="initArtificalUWApply" class="artificalUWAction" method="initArtificalUWApply">
+			<result name="success">group/artificalUW/ArtificalUWApply.jsp</result>
+		</action>
+		
+		<!-- 查询集体投保单基本信息 -->
+		<action name="findProposalGrpContInfo" class="artificalUWAction" method="findProposalGrpContInfo">
+			<result name="success">group/artificalUW/ArtificalUWApply.jsp</result>
+		</action>
+		
+		<!-- 申请投保单(进入人工核保界面) -->
+	    <action name="applyProposal" class="artificalUWAction" method="applyProposal">
+	    	<result name="success">group/artificalUW/ArtificalUWDeal.jsp</result>
+		</action>
+		
+		<!-- 查看集体投保单信息和集体险种信息(进入人工核保界面) -->
+	    <action name="findArtificalUWDeal" class="artificalUWAction" method="findArtificalUWDeal">
+	    	<result name="success">group/artificalUW/ArtificalUWDeal.jsp</result>
+		</action>
+		
+		<!-- 保存集体投保单核审意见和核保结论 -->
+	    <action name="saveArtificalUWResultAndIdea" class="artificalUWAction" method="saveArtificalUWResultAndIdea">
+	    	<result name="success">group/artificalUW/ArtificalUWApply.jsp</result>
+		</action>
+		
+		<!-- 人投保单处理界面跳转 -->
+	    <action name="personProposalInfoProcess" class="artificalUWAction" method="personProposalInfoProcess">
+	    	<result name="success">group/artificalUW/InsuredSelect.jsp</result>
+		</action>
+		
+		<!-- 查询个人投保单基本信息 -->
+	    <action name="findArtificalUWContInfo" class="artificalUWAction" method="findArtificalUWContInfo">
+	    	<result name="success">group/artificalUW/InsuredSelect.jsp</result>
+		</action>
+		
+		<!-- 查询个人投保单详细信息 -->
+	    <action name="findArtificalUWPersonDeal" class="artificalUWAction" method="findArtificalUWPersonDeal">
+	    	<result name="success">group/artificalUW/IndUWInfoDeal.jsp</result>
+		</action>
+		
+		<!-- 保存个人投保单的审核意见和核保结论 -->
+	    <action name="saveArtificalUWPersonResultAndIdea" class="artificalUWAction" method="saveArtificalUWPersonResultAndIdea">
+	    	<result name="success">group/artificalUW/IndUWInfoDeal.jsp</result>
+		</action>
+		
+		<!-- 查询投保件信息 -->
+	    <action name="findArtificalUWFile" class="artificalUWAction" method="findArtificalUWFile">
+	    	<result name="success">group/artificalUW/UWFileQuery.jsp</result>
+		</action>
+		
+		<!-- 自动核保功能 -->
+	    <action name="autoUWInfoQuery" class="artificalUWAction" method="autoUWInfoQuery">
+	    	<result name="success">group/artificalUW/AutoUWInfoQuery.jsp</result>
+		</action>
+		
+		<!-- 问题件录入 -->
+	    <action name="issueInput" class="artificalUWAction" method="issueInput">
+	    	<result name="success">group/artificalUW/ProblemFileInput.jsp</result>
+		</action>
+		
+		<!-- 问题件录入保存 -->
+	    <action name="saveIssueFile" class="artificalUWAction" method="saveIssueFile">
+	    	<result name="success">group/artificalUW/ProblemFileInput.jsp</result>
+		</action>
+		
+		<!-- 团体问题件查询 -->
+	    <action name="findGrpIssue" class="artificalUWAction" method="findGrpIssue">
+	    	<result name="success">group/artificalUW/GrpIssueSelect.jsp</result>
+		</action>
+		<!-- 团体问题件内容和回复查询 -->
+		<action name="viewContentAndReply" class="artificalUWAction" method="viewContentAndReply">
+			<result name="success">group/artificalUW/GrpIssueSelect.jsp</result>
+		</action>
+		<!-- 个人契调信息录入 -->
+	    <action name="findSingleSearchInfoInput" class="artificalUWAction" method="findSingleSearchInfoInput">
+	    	<result name="success">group/artificalUW/ContSearchDataInput.jsp</result>
+		</action>
+		
+		<!-- 个人契调信息保存 -->
+	    <action name="saveSingleSearchInfo" class="artificalUWAction" method="saveSingleSearchInfo">
+	    	<result name="success">group/artificalUW/ContSearchDataInput.jsp</result>
+		</action>
+		
+		<!-- 团体契调结论查询 -->
+	    <action name="findGrpSearchInfoQuery" class="artificalUWAction" method="findGrpSearchInfoQuery">
+	    	<result name="success">group/artificalUW/GrpSearchInfoQuery.jsp</result>
+		</action>
+		
+		<!-- 查询个人契调项目列表 -->
+	    <action name="findGrpSearchItemList" class="artificalUWAction" method="findGrpSearchItemList">
+		</action>
+	<!-- 人工核保处理（ArtificalUWAction）>>>>>>>>>>>>>>>>end>>>>>>>>>> -->
+
+	
+	<!-- 投保单初审action集合 (proposalPreAction)>>>>>>>>begin -->
+	
+	   <!-- 查找投保单信息 -->
+	    <action name="findProsalPreInfo" class="proposalPreAction" method="findProsalPreInfo">
+	    	<result name="success">group/proposalPre/ProposalPreApply.jsp</result>
+		</action>
+		
+		<!--根据集体合同号查询投保单 -->
+		<action name="findProsalPreInfoByGrpContNo" class="proposalPreAction" method="findProsalPreInfoByGrpContNo">
+			<result name="ok">group/proposalPre/ProposalPreInput.jsp</result>
+		</action>
+		
+		<!--根据客户号和投保单位名称查询相关呈报件  -->
+		<action name="findReportInfo" class="proposalPreAction" method="findReportInfo">
+		</action>
+		
+		<!-- 记事本查看 -->
+		<action name="findNoteInfo" class="proposalPreAction" method="findNoteInfo">
+		 
+		</action>
+		
+		<!-- 保存记事本内容 -->
+		<action name="savaNoteInfo" class="proposalPreAction" method="savaNoteInfo">
+		   <result name="ok">group/proposalPre/NotepadInputAndQuery.jsp</result>
+		</action>
+		
+		<!-- 投保单初审信息保存 -->
+		<action name="saveProposalInfo" class="proposalPreAction" method="saveProposalInfo">
+		</action>
+		
+		<!-- 判断投保单号（集体合同号）是否存在 -->
+		<action name="isGrpContNoExist" class="proposalPreAction" method="isGrpContNoExist">
+		</action>
+		
+		<!-- 更新投保单信息 -->
+		<action name="editProposalInfo" class="proposalPreAction" method="editProposalInfo">
+		</action>
+		
+		<!-- 根据投保单位名称查询客户号 -->
+		<action name="findCustomerNoByGrpName" class="proposalPreAction" method="findCustomerNoByGrpName">
+		</action>
+		
+		<!-- 自动生成集体投保单号 -->
+		<action name="obtainProposalGrpContNo" class="proposalPreAction" method="obtainProposalGrpContNo">
+		</action>
+		
+		<!-- 初审确认 -->
+		<action name="proposalPreConfirm" class="proposalPreAction" method="proposalPreConfirm">
+		</action>
+		
+		<!-- 投保单申请按钮 -->
+		<action name="apply" class="proposalPreAction" method="apply">
+			<result name="ok">group/proposalPre/ProposalPreInput.jsp</result>
+		</action>
+		
+	<!-- 投保单初审action集合 (proposalPreAction)>>>>>>>>end -->
+	
+	<!-- 签发保单action集合 (proposalPreAction)>>>>>>>>begin -->
+	     <!--查询待签单的投保单 -->
+	     <action name="findProposalSignInfo" class="signAction" method="findProposalSignInfo">
+			<result name="success">group/sign/SignDeal.jsp</result>
+		</action>
+		<!-- 签单 -->
+		 <action name="saveSignInfo" class="signAction" method="saveSignInfo">
+			<result name="success">group/sign/SignDeal.jsp</result>
+		</action>
+		
+	
+	<!-- 签发保单action集合 (proposalPreAction)>>>>>>>>end -->
+	
+	<!-- 投保单复核Action集合(proposalApproveAction) >>>>>>>>>>begin-->
+		<!-- 集体投保单复核初始化 -->
+		<action name="initialLcGrpContAudit" class="proposalApproveAction" method="initialLcGrpContAudit"></action>
+		<!-- 集体投保单查询 -->
+		<action name="findGrpContInfo" class="proposalApproveAction" method="findGrpContInfo">
+			<result name="success">group/proposalApprove/ProposalApproveApply.jsp</result>
+		</action>
+		<!-- 集体投保单审核申请(弃用) -->
+		<action name="applyLcGrpCont" class="proposalApproveAction" method="applyLcGrpCont"></action>
+		<!-- 已申请投保单开始审核 -->
+		<action name="auditLcGrpCont" class="proposalApproveAction" method="auditLcGrpCont">
+			<result name="success">group/proposalApprove/ProposalApprove.jsp</result>
+		</action>
+		<!-- 审核完毕 -->
+		<action name="finishAudit" class="proposalApproveAction" method="finishAudit"></action>
+		<!-- 个人已承保保单查询 -->
+		<action name="findLcContAndInsured" class="proposalApproveAction" method="findLcContAndInsured">
+			<result name="success">group/proposalApprove/IndUnderQuery.jsp</result>
+		</action>
+		<!-- 合并客户号 -->
+		<action name="mergeCustomerNo" class="proposalApproveAction" method="mergeCustomerNo"></action>
+	<!-- 投保单复核Action集合(proposalApproveAction) >>>>>>>>>>end-->
+	
+	<!-- 核保订正Action集合(UWResultModifyAction)>>>>>>>>>>>>>>   begin    >>>>>>>>>>>>>> -->
+		<!-- 查找需要进行核保订正的投保单记录 -->
+		<action name="findUWResultModify" class="uwModifyAction" method="findUWResultModify">
+			<result name="success">group/uwresultmodify/PrpUWModify.jsp</result>
+		</action>
+		
+		<!-- 进行核保订正 -->
+		<action name="uwResultModify" class="uwModifyAction" method="uwResultModify">
+			<result name="success">group/uwresultmodify/PrpUWModify.jsp</result>
+		</action>
+	
+	
+	<!-- 核保订正Action集合(UWResultModifyAction)>>>>>>>>>>>>>>   end    >>>>>>>>>>>>>> -->
+	</package>
+</struts>

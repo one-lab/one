@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table-filter match-name="LCSEARCHINFO" />
+	<table-filter match-name="LCSEARCHITEM" />
+	<table-filter match-name="LCGRPREPINFO" />
+	<table-filter match-name="LCGRPREPINFODETAIL" />
+	<table-filter match-name="LCREPINFOREPORT" />
+	<table-filter match-name="LCREPINFOREPORTDETAIL" />
+	<table name="LCREPINFOREPORTDETAIL" class="ins.prpall.report.model.LCRepInfoReportDetail"></table>
+	<table name="LCREPINFOREPORT" class="ins.prpall.report.model.LCRepInfoReport"></table>
+	<table name="LCGRPREPINFO" class="ins.prpall.report.model.LCGrpRepInfo"></table>
+	<table name="LCSEARCHITEM" class="ins.prpall.report.model.LCSearchItem"></table>
+	<table name="LCGRPREPINFODETAIL" class="ins.prpall.report.model.LCGrpRepInfoDetail"></table>
+	<table name="LCSEARCHINFO" class="ins.prpall.report.model.LCSearchInfo"></table>
+</hibernate-reverse-engineering>

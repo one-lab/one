@@ -25,7 +25,7 @@ import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryFactoryInformation;
-import com.sinosoft.one.data.jpa.repository.query.QueryLookupStrategy.Key;
+import com.sinosoft.one.data.jpa.repository.query.OneQueryLookupStrategy.Key;
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.util.Assert;
 

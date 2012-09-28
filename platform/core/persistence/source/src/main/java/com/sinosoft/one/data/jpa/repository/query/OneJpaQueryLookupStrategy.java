@@ -39,11 +39,11 @@ public final class OneJpaQueryLookupStrategy {
 	}
 
 	/**
-	 * Base class for {@link QueryLookupStrategy} implementations that need access to an {@link javax.persistence.EntityManager}.
+	 * Base class for {@link OneQueryLookupStrategy} implementations that need access to an {@link javax.persistence.EntityManager}.
 	 *
 	 * @author Oliver Gierke
 	 */
-	private abstract static class OneAbstractQueryLookupStrategy implements QueryLookupStrategy {
+	private abstract static class OneAbstractOneQueryLookupStrategy implements OneQueryLookupStrategy {
 
 
         private Method method;
@@ -66,7 +66,7 @@ public final class OneJpaQueryLookupStrategy {
             this.metadata = metadata;
         }
 
-        public OneAbstractQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
+        public OneAbstractOneQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
 
 			this.em = em;
 			this.provider = extractor;
@@ -94,9 +94,9 @@ public final class OneJpaQueryLookupStrategy {
 	 *
 	 * @author Oliver Gierke
 	 */
-	private static class OneCreateQueryLookupStrategy extends OneAbstractQueryLookupStrategy {
+	private static class OneCreateOneQueryLookupStrategy extends OneAbstractOneQueryLookupStrategy {
 
-		public OneCreateQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
+		public OneCreateOneQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
 
 			super(em, extractor);
 		}
@@ -119,9 +119,9 @@ public final class OneJpaQueryLookupStrategy {
 	 *
 	 * @author Oliver Gierke
 	 */
-	private static class OneDeclaredQueryLookupStrategy extends OneAbstractQueryLookupStrategy {
+	private static class OneDeclaredOneQueryLookupStrategy extends OneAbstractOneQueryLookupStrategy {
 
-		public OneDeclaredQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
+		public OneDeclaredOneQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
 
 			super(em, extractor);
 		}
@@ -159,18 +159,18 @@ public final class OneJpaQueryLookupStrategy {
 	 *
 	 * @author Oliver Gierke
 	 */
-	private static class OneCreateIfNotFoundQueryLookupStrategy extends OneAbstractQueryLookupStrategy {
+	private static class OneCreateIfNotFoundOneQueryLookupStrategy extends OneAbstractOneQueryLookupStrategy {
 
-		private final OneDeclaredQueryLookupStrategy strategy;
-		private final OneCreateQueryLookupStrategy createStrategy;
-        private final OneJadeQueryLookupStrategy jadeStrategy;
+		private final OneDeclaredOneQueryLookupStrategy strategy;
+		private final OneCreateOneQueryLookupStrategy createStrategy;
+        private final OneJadeOneQueryLookupStrategy jadeStrategy;
 
-		public OneCreateIfNotFoundQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
+		public OneCreateIfNotFoundOneQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
 
 			super(em, extractor);
-			this.strategy = new OneDeclaredQueryLookupStrategy(em, extractor);
-			this.createStrategy = new OneCreateQueryLookupStrategy(em, extractor);
-            this.jadeStrategy = new OneJadeQueryLookupStrategy(em, extractor);
+			this.strategy = new OneDeclaredOneQueryLookupStrategy(em, extractor);
+			this.createStrategy = new OneCreateOneQueryLookupStrategy(em, extractor);
+            this.jadeStrategy = new OneJadeOneQueryLookupStrategy(em, extractor);
 		}
 
 
@@ -189,9 +189,9 @@ public final class OneJpaQueryLookupStrategy {
 		}
 	}
 
-    private static class OneJadeQueryLookupStrategy  extends OneAbstractQueryLookupStrategy {
+    private static class OneJadeOneQueryLookupStrategy extends OneAbstractOneQueryLookupStrategy {
 
-        public OneJadeQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
+        public OneJadeOneQueryLookupStrategy(EntityManager em, QueryExtractor extractor) {
             super(em, extractor);
         }
 
@@ -215,19 +215,19 @@ public final class OneJpaQueryLookupStrategy {
 	 * @param key
 	 * @return
 	 */
-	public static QueryLookupStrategy create(EntityManager em, QueryLookupStrategy.Key key, QueryExtractor extractor) {
+	public static OneQueryLookupStrategy create(EntityManager em, OneQueryLookupStrategy.Key key, QueryExtractor extractor) {
 
 		if (key == null) {
-			return new OneCreateIfNotFoundQueryLookupStrategy(em, extractor);
+			return new OneCreateIfNotFoundOneQueryLookupStrategy(em, extractor);
 		}
 
 		switch (key) {
 		case CREATE:
-			return new OneCreateQueryLookupStrategy(em, extractor);
+			return new OneCreateOneQueryLookupStrategy(em, extractor);
 		case USE_DECLARED_QUERY:
-			return new OneDeclaredQueryLookupStrategy(em, extractor);
+			return new OneDeclaredOneQueryLookupStrategy(em, extractor);
 		case CREATE_IF_NOT_FOUND:
-			return new OneCreateIfNotFoundQueryLookupStrategy(em, extractor);
+			return new OneCreateIfNotFoundOneQueryLookupStrategy(em, extractor);
 		default:
 			throw new IllegalArgumentException(String.format("Unsupported query lookup strategy %s!", key));
 		}
