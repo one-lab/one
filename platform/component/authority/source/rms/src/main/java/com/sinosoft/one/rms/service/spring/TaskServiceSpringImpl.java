@@ -24,7 +24,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	private static CacheService cacheManager = CacheManager.getInstance("Task");
 	
 	@Autowired
-	private CompanyServiceInterface comService;
+	private CompanyServiceInterface companyServiceInterface;
 	/**
 	 * 为机构授权操作
 	 */
@@ -103,6 +103,52 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	}
 	
 	/**
+	 * 为机构查询授权信息
+	 */
+	@SuppressWarnings("unchecked")
+	public Set<Task> findTaskAuthByComCodeAndsysFlag(String comCode,String sysFlag) {
+//		List<TaskAuth> taskaAuths=new ArrayList<TaskAuth>();
+//		QueryRule queryRule = QueryRule.getInstance();
+//		queryRule.addEqual("comCode", comCode);
+//		taskaAuths = super.find(TaskAuth.class, queryRule);
+//		if (taskaAuths == null) {
+//			// 异常处理
+//		}
+		StringBuffer taskIDSQL=new StringBuffer();
+		Set<Task> tasks=new HashSet<Task>();
+		taskIDSQL.append("select taskid from ge_rms_task_auth where comcode='"+comCode+"' or comcode='*'");
+		List<String> taskids=new ArrayList<String>();
+		taskids=(List<String>)getSession().createSQLQuery(taskIDSQL.toString()).list();
+//		for (TaskAuth taskAuth : taskaAuths) {
+//			if(taskAuth.getTask().getSysFlag()!=null){
+//				if(sysFlag.toString().equals(taskAuth.getTask().getSysFlag().toString())&&"1".equals(taskAuth.getTask().getIsValidate().toString()))
+//					tasks.add(taskAuth.getTask());
+//				if("RMS".toString().equals(taskAuth.getTask().getSysFlag().toString())&&"1".equals(taskAuth.getTask().getIsValidate().toString()))
+//					tasks.add(taskAuth.getTask());
+//			}
+//		}
+//		for(TaskAuth taskAuth : taskaAuths){
+//			taskids.add(taskAuth.getTask().getTaskID());
+//		}
+		if (taskids.size() > 0) {
+			StringBuffer hql=new StringBuffer();
+			hql.append("from Task where taskID in(");
+			for (String string : taskids) {
+				hql.append(" '" + string + "',");
+			}
+			hql.delete(hql.length() - 1, hql.length());
+			hql.append(")");
+			hql.append(" and isValidate='1'");
+			if(StringUtils.isNotBlank(sysFlag)){
+				hql.append(" and (sysFlag='"+sysFlag+"' or sysFlag='RMS')");
+			}else{
+				hql.append(" and sysFlag='RMS'");
+			}
+			tasks.addAll(super.findByHql(hql.toString()));
+		}
+		return tasks;
+	}
+	/**
 	 * 根据角色查询关联的功能
 	 */
 	@SuppressWarnings("unchecked")
@@ -141,6 +187,55 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 		}
 		return tasks;
 	}
+	
+	public Set<Task> findTaskByRoleAndsysFlag(List<String> RoleIDs,String comCode,String sysFlag) {
+		//获取角色关联的功能ID
+		StringBuffer taskIDSQL=new StringBuffer();
+		taskIDSQL.append(" select taskid from ge_rms_task_auth where taskauthid in (" );
+		taskIDSQL.append(" select taskauthid from ge_rms_roletask g where g.isvalidate='1' and g.roleid in (");
+		for (String string : RoleIDs) {
+			taskIDSQL.append(" '" + string + "',");
+		}
+		taskIDSQL.delete(taskIDSQL.length() - 1, taskIDSQL.length());
+		taskIDSQL.append("))");
+		List<String>taskIDs=new ArrayList<String>();
+		taskIDs=(List<String>)getSession().createSQLQuery(taskIDSQL.toString()).list();
+		taskIDSQL.setLength(0);
+		//获取该机构的功能ID
+		taskIDSQL.append("select taskid from ge_rms_task_auth where comcode='"+comCode+"' or comcode='*'");
+		List<String> comtaskIDs=new ArrayList<String>();
+		comtaskIDs=(List<String>)getSession().createSQLQuery(taskIDSQL.toString()).list();
+		List<String> resultTaskIDs=new ArrayList<String>();
+		//两功能ID集合去重
+		for (String com_TaskID : comtaskIDs) {
+			for (String role_TaskID : taskIDs) {
+				if(com_TaskID.toString().equals(role_TaskID.toString())){
+					resultTaskIDs.add(com_TaskID);
+					break;
+				}
+			}
+		}
+		Set<Task>tasks=new HashSet<Task>();
+		if (resultTaskIDs.size() > 0) {
+			StringBuffer hql=new StringBuffer();
+			hql.append("from Task where taskID in(");
+			for (String string : resultTaskIDs) {
+				hql.append(" '" + string + "',");
+			}
+			hql.delete(hql.length() - 1, hql.length());
+			hql.append(")");
+			hql.append(" and isValidate='1'");
+			if(StringUtils.isNotBlank(sysFlag)){
+				hql.append(" and( sysFlag='"+sysFlag+"' or sysFlag='RMS')");
+			}else{
+				hql.append(" and sysFlag='RMS'");
+			}
+			tasks.addAll(super.findByHql(hql.toString()));
+		}
+		return tasks;
+	}
+	
+	
 	/**
 	 * 删除机构授权信息
 	 */
@@ -177,7 +272,6 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 			delteComCodeSQL.append(" '" + comCodes.get(i) + "',");
 			//每如果到了1000则用OR处理
 			if(i>=999&&i%999==0){
-				System.out.println(i+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 				delteComCodeSQL.delete(delteComCodeSQL.length() - 1,
 						delteComCodeSQL.length());
 				delteComCodeSQL.append(")");
@@ -208,7 +302,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 //		comCodesSQL.append(")");
 //		//是否要删除OR语句的结尾
 //		subcomCodes = (List<String>) getSession().createSQLQuery(comCodesSQL.toString()).list();
-		List<String> subcomCodes = comService.findComCodebySuperComCode(comCodes);
+		List<String> subcomCodes = companyServiceInterface.findComCodebySuperComCode(comCodes);
 		if (subcomCodes.size() > 0) {
 			iteraterComCode(subcomCodes, taskIds);
 		}
@@ -230,7 +324,6 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 			deleteRoleTaskSQL.append(" '" + comCodes.get(i) + "',");
 			//每如果到了1000则用OR处理
 			if(i>=999&&i%999==0){
-				System.out.println(i+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 				deleteRoleTaskSQL.delete(deleteRoleTaskSQL.length() - 1,
 						deleteRoleTaskSQL.length());
 				deleteRoleTaskSQL.append(")");
@@ -249,7 +342,6 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 				delteComCodeSQL.append(" '" + taskauthids.get(i) + "',");
 				// 每如果到了1000则用OR处理
 				if (i >= 999 && i % 999 == 0) {
-					System.out.println(i + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 					delteComCodeSQL.delete(delteComCodeSQL.length() - 1,
 							delteComCodeSQL.length());
 					delteComCodeSQL.append(")");
@@ -265,21 +357,26 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	
 	public void addTaskHasSysFlag(String taskId, String name, String menuURL,
 			String menuName, String des,String isAsMenu, String parentId,String loginUserCode,String loginComCode,
-			String SysFlag) {
+			String sysFlag) {
 		Task task=new Task();
 		task.setTaskID(taskId);
 		task.setName(name);
 		task.setMenuURL(menuURL);
 		task.setMenuName(menuName);
 		task.setDes(des);
-		task.setSysFalg(SysFlag);
+		task.setSysFlag(sysFlag);
 		task.setIsValidate("1");
 		task.setParent(super.get(Task.class, parentId));
 		task.setIsAsMenu(isAsMenu);
 		List<TaskAuth> taskAuths=new ArrayList<TaskAuth>();
 		TaskAuth taskAuth=new TaskAuth();
 		taskAuth.setTask(task);
-		taskAuth.setComCode(loginComCode);
+		if("*".equals(loginComCode)){
+			taskAuth.setComCode("*");
+			task.setFlag("*");
+		}else{
+			taskAuth.setComCode(loginComCode);
+		}
 		taskAuth.setOperateUser(loginUserCode);
 		taskAuth.setTask(task);
 		taskAuths.add(taskAuth);
@@ -312,7 +409,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	}
 
 	public void updateTaskHasSysFlag(String taskId, String name, String menuURL,String isValidate,
-			String menuName, String des,String isAsMenu,String SysFlag) {
+			String menuName, String des,String isAsMenu,String sysFlag,String loginComCode) {
 		Task task=super.get(Task.class, taskId);
 		if (task!=null) {
 			task.setTaskID(taskId);
@@ -321,9 +418,19 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 			task.setMenuName(menuName);
 			task.setDes(des);
 			task.setIsValidate(isValidate);
-			task.setSysFalg(SysFlag);
+			task.setSysFlag(sysFlag);
 			task.setIsAsMenu(isAsMenu);
 			super.update(task);
+			if(!"*".equals(loginComCode)){
+				QueryRule queryRule=QueryRule.getInstance();
+				queryRule.addEqual("task.taskID", taskId);
+				queryRule.addEqual("comCode", "*");
+				TaskAuth taskAuth=super.findUnique(TaskAuth.class, queryRule);
+				if(taskAuth!=null){
+					taskAuth.setComCode(loginComCode);
+					super.update(taskAuth);
+				}
+			}
 		}
 	}
 

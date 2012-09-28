@@ -2,7 +2,11 @@ package com.sinosoft.one.rms.model.service;
 
 import java.util.Date;
 
-
+/**
+ * 对于不同的人员MODEL进行实现的接口
+ * @author Administrator
+ *
+ */
 public interface EmployeModelInterface extends java.io.Serializable {
 	
 

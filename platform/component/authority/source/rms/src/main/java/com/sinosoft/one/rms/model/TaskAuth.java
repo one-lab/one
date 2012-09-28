@@ -69,7 +69,7 @@ public class TaskAuth implements java.io.Serializable {
 	/**
 	 * 属性task的getter方法
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "TASKID", nullable = false)
 	public Task getTask() {
 		return this.task;

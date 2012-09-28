@@ -35,6 +35,8 @@ public class DataRule implements java.io.Serializable {
 	/** 属性busPowers */
 	private List<BusPower> busPowers = new ArrayList<BusPower>(0);
 
+	/** 属性busDataInfos */
+	private List<BusDataInfo>busDataInfos=new ArrayList<BusDataInfo>();
 	/**
 	 * 类dataRule的默认构造方法
 	 */
@@ -121,4 +123,20 @@ public class DataRule implements java.io.Serializable {
 		this.busPowers = busPowers;
 	}
 
+	/**
+	 * 属性busDataInfos的getter方法
+	 */
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "dataRule")
+	public List<BusDataInfo> getBusDataInfos() {
+		return busDataInfos;
+	}
+
+	/**
+	 * 属性busDataInfos的setter方法
+	 */
+	public void setBusDataInfos(List<BusDataInfo> busDataInfos) {
+		this.busDataInfos = busDataInfos;
+	}
+
+	
 }

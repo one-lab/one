@@ -23,6 +23,13 @@ public interface TaskService {
 	 */
 	public Set<Task> findTaskAuthByComCode(String comCode);
 	
+	
+	/**
+	 * 根据机构，系统标志查询功能授权，获得功能集合
+	 * @param comCode
+	 * @return
+	 */
+	public Set<Task> findTaskAuthByComCodeAndsysFlag(String comCode,String sysFlag);
 	/**
 	 * 根据角色ID查询角色下的功能（人员功能配置页面）
 	 * @param RoleIDs
@@ -30,6 +37,13 @@ public interface TaskService {
 	 */
 	public Set<Task> findTaskByRole(List<String> RoleIDs,String comCode);
 	
+	/**
+	 * 根据角色ID,系统标记查询角色下的功能（人员功能配置页面）
+	 * @param RoleIDs
+	 * @param sysFlage
+	 * @return
+	 */
+	public Set<Task> findTaskByRoleAndsysFlag(List<String> RoleIDs,String comCode,String sysFlag);
 	/**
 	 * 添加功能菜单 有系统标志类型
 	 * @param taskId
@@ -64,7 +78,7 @@ public interface TaskService {
 	 * @param des
 	 * @param parentId
 	 */
-	public void updateTaskHasSysFlag(String taskId,String name ,String menuURL,String isValidate,String menuName ,String des,String isAsMenu,String SysFlag);
+	public void updateTaskHasSysFlag(String taskId,String name ,String menuURL,String isValidate,String menuName ,String des,String isAsMenu,String SysFlag,String loginComCode);
 	
 	/**
 	 * 修改功能菜单 无系统标志类型
@@ -95,5 +109,6 @@ public interface TaskService {
 	 * 删除功能
 	 */
 	public void deleteTaskByID(String TaskId);
+	
 	
 }
