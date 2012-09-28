@@ -2,7 +2,6 @@ package com.sinosoft.one.rms.client;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.rms.clientService.User;
 import com.sinosoft.one.rms.clientService.facade.RmsClientService;
@@ -19,8 +18,8 @@ public class AccountManagerLocalImpl implements AccountManager{
 	//引用的本地接口
 	private RmsClientService rmsClientService;
 	
-    public User findUserByLoginName(String loginUserCode, String comCode) {
-    	return rmsClientService.login(loginUserCode,  comCode);
+    public User findUserByLoginName(String loginUserCode, String comCode,String sysFlag) {
+    	return rmsClientService.login(loginUserCode,  comCode,sysFlag);
     }
 
 

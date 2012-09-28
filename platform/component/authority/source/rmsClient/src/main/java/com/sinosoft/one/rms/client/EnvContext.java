@@ -22,16 +22,10 @@ public class EnvContext {
     
     private static final String EMPLOYE="EMPLOYE";
     
-    private static final String TABLENAME="TABLENAME";
-    
     private static final String HQLMODELCLASSNAME="HQLMODELCLASSNAME";
     
     private static final String TABLEALIAS="TABLEALIAS";
     
-    private static final String COMLUMNNAME="COMLUMNNAME";
-    
-    private static final String SUPERCOMCULNAME="SUPERCOMCULNAME";
-
     public static void setDataAuthorityTaskId(String value) {
 		Map<String,Object>  context = threadLocal.get();
         if(context == null){
@@ -62,20 +56,6 @@ public class EnvContext {
         return (User)threadLocal.get().get(EMPLOYE);
     }
     
-    public static void setComPanyTableName(String tableName){
-    	 Map<String,String>  table = threadLocal.get();
-         if(table == null){
-        	 table = new HashMap<String,String>();
-             threadLocal.set(table);
-         }
-         table.put(TABLENAME,tableName) ;
-    }
-    
-    public static String getComPanyTableName(){
-    	if(threadLocal.get() == null)
-    		 return null;
-    	return (String) threadLocal.get().get(TABLENAME);
-    }
     
     public static void setHqlModelClassName(String hqlModelClassName){
    	 Map<String,String>  modelname = threadLocal.get();
@@ -107,33 +87,4 @@ public class EnvContext {
     	return (String) threadLocal.get().get(TABLEALIAS);
     }
 	
-	public static void setComCodeColumnName(String comCodeClomnName) {
-		Map<String, String> ClomnName = threadLocal.get();
-		if (ClomnName == null) {
-			ClomnName = new HashMap<String, String>();
-			threadLocal.set(ClomnName);
-		}
-		ClomnName.put(COMLUMNNAME, comCodeClomnName);
-	}
-	
-	public static String getComCodeColumnName(){
-    	if(threadLocal.get() == null)
-    		 return null;
-    	return (String) threadLocal.get().get(COMLUMNNAME);
-    }
-	
-	public static void setSuperComCulName(String superComClomnName){
-		Map<String, String> superClomnName = threadLocal.get();
-		if (superClomnName == null) {
-			superClomnName = new HashMap<String, String>();
-			threadLocal.set(superClomnName);
-		}
-		superClomnName.put(SUPERCOMCULNAME, superComClomnName);
-	}
-	
-	public static String getSuperComCulName(){
-    	if(threadLocal.get() == null)
-    		 return null;
-    	return (String) threadLocal.get().get(SUPERCOMCULNAME);
-    }
 }
