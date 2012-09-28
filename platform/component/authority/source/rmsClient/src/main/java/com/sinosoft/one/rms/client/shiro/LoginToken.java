@@ -12,13 +12,16 @@ public class LoginToken implements AuthenticationToken{
 	
 	private String comCode;
 	
+	private String sysFlag;
+	
 	public LoginToken(){
 	}  
 	  
-    public LoginToken(String userCode,String passWord,String comCode ){  
+    public LoginToken(String userCode,String passWord,String comCode,String sysFlag ){  
         this.userCode=userCode; 
         this.passWord=passWord; 
         this.comCode=comCode; 
+        this.sysFlag=sysFlag;
     }  
 	
 	public Object getPrincipal() {
@@ -33,6 +36,7 @@ public class LoginToken implements AuthenticationToken{
 		this.userCode = null;
 		this.passWord = null;
 		this.comCode= null;
+		this.sysFlag= null;
 //		if (this.password != null) {
 //			for (int i = 0; i < password.length; i++) {
 //				this.password[i] = 0x00;
@@ -52,6 +56,8 @@ public class LoginToken implements AuthenticationToken{
 		sb.append(passWord);
 		sb.append(" - ");
 		sb.append(comCode);
+		sb.append(" - ");
+		sb.append(sysFlag);
 		return sb.toString();
 	}
 
@@ -77,6 +83,14 @@ public class LoginToken implements AuthenticationToken{
 
 	public void setComCode(String comCode) {
 		this.comCode = comCode;
+	}
+
+	public String getSysFlag() {
+		return sysFlag;
+	}
+
+	public void setSysFlag(String sysFlag) {
+		this.sysFlag = sysFlag;
 	}
 	
 }
