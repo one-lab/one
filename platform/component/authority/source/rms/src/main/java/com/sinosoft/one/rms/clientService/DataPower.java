@@ -1,27 +1,39 @@
 package com.sinosoft.one.rms.clientService;
 
+import java.util.List;
+
 import org.springframework.util.Assert;
+
+import com.sinosoft.one.rms.model.BusDataInfo;
 
 import ins.framework.utils.StringUtils;
 
 public class DataPower  {
 	
-	private  String taskId;
+	private String userCode;
 	
-	private  String ruleId;
+	private String comCode;
 	
-	private  String rule;
+	private String taskId;
 	
-	private  String param;
+	private String ruleId;
+	
+	private String rule;
+	
+	private String param;
+	
+	private List<BusDataInfo> busDataInfos;
 	
 	public DataPower(){
-		
 	}
 	
-	public  DataPower(final String taskId,final String ruleId,final String param,final String rule){
+	public  DataPower(final String userCode,final String comCode,final String taskId,final String ruleId,final String param,final String rule,final List<BusDataInfo> busDataInfos){
+		Assert.hasText(userCode);
+		Assert.hasText(comCode);
 		Assert.hasText(taskId);
 		Assert.hasText(ruleId);
-		Assert.hasText(rule);
+		this.userCode=userCode;
+		this.comCode=comCode;
 		this.taskId=taskId;
 		this.ruleId=ruleId;
 		if(StringUtils.isNotBlank(param))
@@ -29,6 +41,15 @@ public class DataPower  {
 		else
 			this.param=null;
 		this.rule=rule;
+		this.busDataInfos=busDataInfos;
+	}
+
+	public String getUserCode() {
+		return userCode;
+	}
+
+	public String getComCode() {
+		return comCode;
 	}
 
 	public String getTaskId() {
@@ -47,6 +68,23 @@ public class DataPower  {
 		return rule;
 	}
 
+	public List<BusDataInfo> getBusDataInfos() {
+		return busDataInfos;
+	}
+	
+	public void setUserCode(String userCode) {
+		if(this.userCode ==null){
+			this.userCode = userCode;
+		}
+	}
+	
+	public void setComCode(String comCode) {
+		if(this.comCode==null){
+			this.comCode = comCode;
+		}
+		
+	}
+	
 	public void setTaskId(String taskId) {
 		if(this.taskId ==null){
 			this.taskId = taskId;
@@ -70,6 +108,13 @@ public class DataPower  {
 			this.param = param;
 		}
 	}
+
+	public void setBusDataInfos(List<BusDataInfo> busDataInfos) {
+		if(	this.busDataInfos ==null){
+			this.busDataInfos = busDataInfos;
+		}
+	}
+
 	
 	
 }

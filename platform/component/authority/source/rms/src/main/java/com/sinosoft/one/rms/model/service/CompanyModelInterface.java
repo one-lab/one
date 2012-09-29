@@ -2,6 +2,11 @@ package com.sinosoft.one.rms.model.service;
 
 import java.util.List;
 
+/**
+ * 对于不同的机构model实现的接口
+ * @author Administrator
+ *
+ */
 public interface CompanyModelInterface extends java.io.Serializable {
 	
 	public String getComCode();

@@ -51,7 +51,7 @@ public class Task implements java.io.Serializable {
 	private String flag;
 
 	/** 属性系统标志字段(sysFalg) */
-	private String sysFalg;
+	private String sysFlag;
 	
 	/** 属性是否为菜单字段(sysFalg) */
 	private String isAsMenu;
@@ -195,15 +195,15 @@ public class Task implements java.io.Serializable {
 	 * 属性系统标志字段(sysFlag)的getter方法
 	 */
 	@Column(name = "SYSFLAG")
-	public String getSysFalg() {
-		return sysFalg;
+	public String getSysFlag() {
+		return sysFlag;
 	}
 	
 	/**
 	 * 属性系统标志字段(sysFlag)的setter方法
 	 */
-	public void setSysFalg(String sysFalg) {
-		this.sysFalg = sysFalg;
+	public void setSysFlag(String sysFlag) {
+		this.sysFlag = sysFlag;
 	}
 	
 	/**

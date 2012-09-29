@@ -22,7 +22,7 @@ public interface RmsService {
      * @param groupIDList
      * @param taskIDs
      */
-	public void addUserPower(String userCode,String comCode ,List<String>  groupIDs,List<String> ExcTaskIDs);
+	public void addUserPower(String userCode,String comCode ,List<String>  groupIDs,List<String>roleIDS,List<String> ExcTaskIDs,String sysFlag);
 	
 	/**
 	 * 根据员工代码 机构代码删除用户权限
@@ -36,7 +36,7 @@ public interface RmsService {
      * @param userCode
      * @return List<Company>
      */
-	public List<Company> findComByUserCode(String userCode) ;
+//	public List<Company> findComByUserCode(String userCode) ;
 	
 	/**
 	 * 根据机构代码查询该机构下的所有员工（配置页面 已引入）
@@ -64,7 +64,7 @@ public interface RmsService {
 	 * @param comCode
 	 * @return
 	 */
-	public List<Company>findNextSubCom(String comCode);
+//	public List<Company>findNextSubCom(String comCode);
 	
 	/**
 	 * 获取功能集合
@@ -87,14 +87,14 @@ public interface RmsService {
 	 * @param userCode
 	 * @return
 	 */
-	public Employe findUserByCode(String userCode);
+//	public Employe findUserByCode(String userCode);
 	
 	/**
 	 * 判断是否有下属机构
 	 * @param comCode
 	 * @return
 	 */
-	public boolean  isExtSubCom(String comCode);
+//	public boolean  isExtSubCom(String comCode);
 	
 	/**
 	 * 根据userCode,comCode查询USERPOWER
@@ -105,6 +105,12 @@ public interface RmsService {
 	public UserPower findUserPowerByComUser(String userCode,String comCode);
 	
 	
+	/**
+	 * 查询用户的所有权限对象
+	 * @param userCode
+	 * @return
+	 */
+	public List<UserPower>findUserPowersByUserCode(String userCode);
 	/**
 	 * 递归获得父功能节点
 	 * @param tasks
@@ -120,7 +126,7 @@ public interface RmsService {
 	 * 修改密码
 	 * @param employe
 	 */
-	public void updatePassword(Employe employe);
+//	public void updatePassword(Employe employe);
 	
 	
 	/**
@@ -128,27 +134,27 @@ public interface RmsService {
 	 * @param comCode
 	 * @return
 	 */
-	public List<Employe> findUserByComCode(String comCode);
+//	public List<Employe> findUserByComCode(String comCode);
 	/**
 	 * 查询四级机构
 	 * @param comCode
 	 * @return
 	 */
-	public List<Company>findLevFourCom(String comCode);
+//	public List<Company>findLevFourCom(String comCode);
 	
 	/**
 	 * 根据机构代码获取机构
 	 * @param comCode
 	 * @return
 	 */
-	public Company findCompanyByComCode(String comCode);
+//	public Company findCompanyByComCode(String comCode);
 	
 	/**
 	 * 查询机构及其下级所有机构
 	 * @param comCode
 	 * @return
 	 */
-	public List<Company> findAllNextLevelCompanyByComCode(String comCode);
+//	public List<Company> findAllNextLevelCompanyByComCode(String comCode);
 	
 	/**
 	 * 根据父类机构和机构类型 获得机构集合
@@ -156,6 +162,6 @@ public interface RmsService {
 	 * @param comType
 	 * @return
 	 */
-	public List<Company>findCompanyBySuperAndType(String SuppercomCode,String comType);
+//	public List<Company>findCompanyBySuperAndType(String SuppercomCode,String comType);
 
 }

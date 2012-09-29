@@ -1,6 +1,5 @@
 package com.sinosoft.one.rms.service.spring;
 
-import ins.framework.common.EncryptUtils;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.framework.utils.StringUtils;
@@ -54,8 +53,12 @@ public class ClientServiceSpringImpl extends
 	/**
 	 * 创建USER对象
 	 */
-	public User getUserByUserCodeComCode(String userCode, String comCode) {
+	public User getUserByUserCodeComCode(String userCode, String comCode,String sysFlag) {
+		try{
+			
+		
 		EmployeModelInterface employe = findUserByCode(userCode);
+		Assert.notNull(employe);
 		UserPower userPower = findUserPowerByComUser(userCode, comCode);
 		Assert.notNull(userPower);
 		CompanyModelInterface company = findCompanyByComCode(comCode);
@@ -70,7 +73,7 @@ public class ClientServiceSpringImpl extends
 		for (Role role : roles) {
 			roleIdList.add(role.getRoleID());
 		}
-		List<Task> tasklist = findTaskByUserCode(userCode, comCode);
+		List<Task> tasklist = findTaskByUserCode(userCode, comCode, sysFlag);
 		List<String> taskIdList = new ArrayList<String>();
 		for (Task task : tasklist) {
 			taskIdList.add(task.getTaskID());
@@ -78,23 +81,33 @@ public class ClientServiceSpringImpl extends
 
 		List<Menu> menulist = new ArrayList<Menu>();
 		List<Task> topList = new ArrayList<Task>();
-		Map<String, Task> filter = new HashMap<String, Task>();
+//		Map<String, Task> filter = new HashMap<String, Task>();
+//		List<Task> filter = new ArrayList<Task>();
 		for (Task task : tasklist) {
-			if (StringUtils.isNotBlank(task.getIsAsMenu())
-					&& task.getIsAsMenu().toString().equals("1")) {
-				filter.put(task.getTaskID(), task);
+			if (StringUtils.isNotBlank(task.getIsAsMenu())&& task.getIsAsMenu().toString().equals("1")) {
+//				filter.add( task);
 				if (task.getParent() == null) {
 					topList.add(task);
 				}
 			}
 		}
-		craeteList(topList, menulist, filter);
+		craeteList(topList, menulist, tasklist);
 		List<DataPower> dataPowers = new ArrayList<DataPower>();
-		creatDataPowerList(dataPowers,userPower.getBusPowers());
-		return new User(employe.getUserCode(), employe.getPassword(),
+		creatDataPowerList(dataPowers,userPower.getBusPowers(),userCode,comCode);
+		String passWord="";
+		if(employe.getPassword()!=null&&!employe.getPassword().equals("")){
+			passWord=employe.getPassword();
+		}
+//		System.out.println("用户的密码："+employe.getPassword()+"        用户代码："+employe.getUserCode());
+		return new User(employe.getUserCode(),employe.getPassword(),
 				employe.getUserName(), company.getComCode(),
 				company.getComCName(), roleIdList, taskIdList, menulist, dataPowers);
-	}
+		 } catch (Exception e) {
+			  // TODO Auto-generated catch block
+			  e.printStackTrace();
+		}
+		 return null;
+		}
 
 	
 
@@ -174,12 +187,8 @@ public class ClientServiceSpringImpl extends
 		Set<Role> roles = new HashSet<Role>();
 		for (RoleDesignate roleDesignate : roleDesignates) {
 			roleids.add(roleDesignate.getId().getRoleID());
-			// 判断如果是全可见类型的‘*’ 则直接使用
-			if (roleDesignate.getId().getComCode().toString().equals("*")) {
-				roles.add(roleDesignate.getRole());
-			}
 		}
-		// 根据指派获得的ID过滤用户组角色 获得角色集合
+//		// 根据指派获得的ID过滤用户组角色 获得角色集合
 		for (GroupRole groupRole : groupRoles) {
 			for (String roleid : roleids) {
 				if (groupRole.getRole().getRoleID().toString()
@@ -194,7 +203,7 @@ public class ClientServiceSpringImpl extends
 	/**
 	 * 获得员工在机构下有效权限集合
 	 */
-	 List<Task> findTaskByUserCode(String userCode, String comCode) {
+	 List<Task> findTaskByUserCode(String userCode, String comCode,String sysFlag) {
 		List<Task> userTasksResult = new ArrayList<Task>();
 		UserPower userPower = new UserPower();
 		QueryRule queryRule = QueryRule.getInstance();
@@ -209,10 +218,7 @@ public class ClientServiceSpringImpl extends
 			for (UserGroup usergroup : userGroups) {
 				// 用户组的过滤
 				if (usergroup.getIsValidate().toString().equals("1".toString())) {
-					if (usergroup.getGroup().getComCode().toString()
-							.equals(comCode)) {
-						groups.add(usergroup.getGroup());
-					}
+					groups.add(usergroup.getGroup());
 				}
 			}
 			List<GroupRole> groupRoles = new ArrayList<GroupRole>();
@@ -222,7 +228,7 @@ public class ClientServiceSpringImpl extends
 			// 根据机构获得指派的信息 取得roleID 过滤用户组关联的角色
 			List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
 			QueryRule queryRole = QueryRule.getInstance();
-			queryRole.addIn("id.comCode", comCode);
+			queryRole.addIn("id.comCode", comCode,"*");
 			roleDesignates = super.find(RoleDesignate.class, queryRole);
 			// 根据获得的指派角色信息获得角色ID
 			List<String> roleids = new ArrayList<String>();
@@ -254,9 +260,7 @@ public class ClientServiceSpringImpl extends
 			}
 			taskIDSQL.setLength(0);
 			// 获取该机构的功能ID
-			taskIDSQL
-					.append("select taskid from ge_rms_task_auth where comcode='"
-							+ comCode + "'");
+			taskIDSQL.append("select taskid from ge_rms_task_auth where comcode='"+ comCode + "' or comcode='*'");
 			List<String> comtaskIDs = new ArrayList<String>();
 			comtaskIDs = (List<String>) getSession().createSQLQuery(
 					taskIDSQL.toString()).list();
@@ -273,10 +277,20 @@ public class ClientServiceSpringImpl extends
 			// 获得功能对象
 			Set<Task> tasks = new HashSet<Task>();
 			if (resultTaskIDs.size() > 0) {
-				QueryRule queryTask = QueryRule.getInstance();
-				queryTask.addIn("taskID", resultTaskIDs);
-				queryTask.addEqual("isValidate", "1");
-				tasks.addAll(super.find(Task.class, queryTask));
+				StringBuffer hql=new StringBuffer();
+				hql.append("from Task where taskID in(");
+				for (String string : resultTaskIDs) {
+					hql.append(" '" + string + "',");
+				}
+				hql.delete(hql.length() - 1, hql.length());
+				hql.append(")");
+				hql.append(" and isValidate='1'");
+				if(StringUtils.isNotBlank(sysFlag)){
+					hql.append(" and (sysFlag='"+sysFlag+"' or sysFlag='RMS')");
+				}else{
+					hql.append(" and sysFlag='RMS'");
+				}
+				tasks.addAll(super.findByHql(hql.toString()));
 			}
 			// 获得除外权限
 			Set<Task> excTasks = new HashSet<Task>();
@@ -374,30 +388,36 @@ public class ClientServiceSpringImpl extends
 	 * @param filter
 	 */
 	 void craeteList(List<Task> list, List<Menu> dest,
-			Map<String, Task> filter) {
+			List<Task> filter) {
 		for (Iterator<Task> iter = list.iterator(); iter.hasNext();) {
 			Task task = iter.next();
-			if (!filter.containsKey(task.getTaskID()))
+			if (!filter.contains(task))
 				continue;
-			Menu menu = new Menu(task.getTaskID(), task.getMenuURL(),
-					task.getName());
+			Menu menu = new Menu(task.getTaskID(), task.getMenuURL(),task.getName());
 			if (!task.getChildren().isEmpty()) {
+				List<Task> newTopTask=new ArrayList<Task>();
+				for (Task filterTask : filter) {
+					for (Task childrenTask : task.getChildren()){
+						if(filterTask.getTaskID().toString().equals(childrenTask.getTaskID().toString())&&"1".toString().equals(childrenTask.getIsAsMenu()))
+						newTopTask.add(filterTask);
+					}
+				}
 				List<Menu> ls = new ArrayList<Menu>();
 				menu.setChildren(ls);
-				craeteList(task.getChildren(), ls, filter);
+				craeteList(newTopTask, ls, filter);
 			}
 			dest.add(menu);
 		}
 
 	}
 	
-	 void creatDataPowerList(List<DataPower> dataPowers,List<BusPower>busPowers){
+	 void creatDataPowerList(List<DataPower> dataPowers,List<BusPower>busPowers,String userCode,String comCode){
 		for (BusPower busPower : busPowers) {
 			if(StringUtils.isNotBlank(busPower.getDataRuleParam())&&busPower.getDataRule()!=null){
-				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(), busPower.getDataRule().getDataRuleID(), busPower.getDataRuleParam(), busPower.getDataRule().getRule());
+				DataPower dataPower=new DataPower(userCode,comCode,busPower.getTask().getTaskID(), busPower.getDataRule().getDataRuleID(), busPower.getDataRuleParam(), busPower.getDataRule().getRule(),busPower.getDataRule().getBusDataInfos());
 				dataPowers.add(dataPower);
 			}else if(busPower.getDataRule()!=null){
-				DataPower dataPower=new DataPower(busPower.getTask().getTaskID(),busPower.getDataRule().getDataRuleID(), null, busPower.getDataRule().getRule());
+				DataPower dataPower=new DataPower(userCode,comCode,busPower.getTask().getTaskID(),busPower.getDataRule().getDataRuleID(), null, busPower.getDataRule().getRule(),busPower.getDataRule().getBusDataInfos());
 				dataPowers.add(dataPower);
 			}
 		}

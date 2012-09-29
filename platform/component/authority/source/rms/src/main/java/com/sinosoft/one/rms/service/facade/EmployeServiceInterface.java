@@ -2,12 +2,17 @@ package com.sinosoft.one.rms.service.facade;
 
 import java.util.List;
 
+
 import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 
 import ins.framework.common.Page;
-
+/**
+ * 如果有自定的人员model 需实现该接口
+ * @author Administrator
+ *
+ */
 public interface EmployeServiceInterface {
 	
 	/**
@@ -28,7 +33,7 @@ public interface EmployeServiceInterface {
 	 * 
 	 * @param employe
 	 */
-	public void updatePassword(String userCode);
+	public boolean updatePassword(String userCode,String userPassword)throws Exception;
 	
 	/**
 	 * 获取机构下属员工（配送模块）
@@ -52,7 +57,7 @@ public interface EmployeServiceInterface {
 	
 	
 	/**
-	 * 根据传入的用户代码集合查询用户
+	 * 查询属于传入的用户代码集合查询用户
 	 * @param userCodes 必选
 	 * @param userName 可选
 	 * @param userCode 可选
