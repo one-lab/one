@@ -161,7 +161,7 @@ public class DataAccessImpl implements DataAccess, Repository {
         }
     }
     /**
-     * Connection查询操作的类
+     * Connection更新操作的类
      */
     private class UpdateWork implements Work {
         public String sql;
@@ -185,7 +185,9 @@ public class DataAccessImpl implements DataAccess, Repository {
             number = ps.executeUpdate();
         }
     }
-
+    /**
+     * Connection分页排序的类
+     */
     private class RenderSqlWork implements Work {
         private String sql;
         private Pageable pageable;
@@ -200,7 +202,7 @@ public class DataAccessImpl implements DataAccess, Repository {
             this.sort = sort;
         }
         public void execute(Connection con) throws SQLException {
-            String URl = con.getMetaData().getURL();
+            String URl = con.getMetaData().getURL().toLowerCase();
             SuiteDataSourceSql dps = RenderSqlFactory.createPageSql(URl);
             if(sort == null){
                 sql = dps.suiteSql(sql,pageable,null);
