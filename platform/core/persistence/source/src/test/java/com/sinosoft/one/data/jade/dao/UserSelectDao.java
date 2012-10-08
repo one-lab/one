@@ -95,8 +95,8 @@ public interface UserSelectDao  extends UserDao {
     @SQL("select * from jpa_user")
     List<org.springframework.data.jpa.domain.sample.User> findAllForJade(Sort sort);
 
-    @SQL("insert into jpa_user (id,active,age,emailaddress,firstname,lastname,dtype) " +
-            "values (?users.id,?users.active,?users.age,?users.emailAddress,?users.firstname,?users.lastname,1)")
+    @SQL("insert into jpa_user (active,age,emailaddress,firstname,lastname,DTYPE) " +
+            "values (?users.active,?users.age,?users.emailAddress,?users.firstname,?users.lastname,1)")
     int insertDataForContrastSortBetweenJadeAndJPA(@Param("users") List<org.springframework.data.jpa.domain.sample.User> users);
 
     @SQL("delete from jpa_user")
