@@ -2,9 +2,15 @@ package com.sinosoft.one.rms.service.facade;
 
 import java.util.List;
 
+import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 
-public interface CompanyServiceInterface {
+/**
+ * 如果有自定的机构model 请实现该接口
+ * @author Administrator
+ *
+ */
+public abstract interface CompanyServiceInterface {
 	
 	/**
 	 * 查询下级机构 包含当前机构
@@ -48,6 +54,13 @@ public interface CompanyServiceInterface {
      * @return
      */
     public <T extends CompanyModelInterface>T findCompanyByComCode(String comCode);
+    
+    /**
+     * 根据机构代码查询所有下级机构的机构代码
+     * @param comCode
+     * @return
+     */
+	public List<String>findAllNextSubComCodesByComCode(String comCode);
     
     /**
      * 根据机构代码查询所有下级机构 

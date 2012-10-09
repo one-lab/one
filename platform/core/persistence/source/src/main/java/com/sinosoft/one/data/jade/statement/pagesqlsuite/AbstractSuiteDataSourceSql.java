@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.io.PrintStream;
 import java.util.Iterator;
 
 /**
@@ -18,7 +17,9 @@ public abstract class AbstractSuiteDataSourceSql {
     public static final String COMMA = ",";
     public static final String SPACE = " ";
     public static final String ORDER = " order by ";
+
     protected String suiteSql(String sql,Pageable pageable,Sort sort) {
+        sql = sql.toLowerCase();
         if(pageable!=null){
             return renderForPage(sql,pageable);
         } else {

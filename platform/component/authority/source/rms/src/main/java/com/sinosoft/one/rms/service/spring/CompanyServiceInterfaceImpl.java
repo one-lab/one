@@ -4,12 +4,16 @@ import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Query;
 
 import com.sinosoft.one.rms.model.Company;
+import com.sinosoft.one.rms.model.UserPower;
+import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
+
 
 public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, String> implements CompanyServiceInterface {
 	
@@ -46,6 +50,8 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
 		comcodes=(List<String>)getSession().createSQLQuery(sql.toString()).list();
 		return comcodes;
 	}
+	
+	
 	/**
 	 * 判断是否有下属机构
 	 * @return
@@ -79,11 +85,26 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
      * @param comCode
      * @return
      */
+	
+	@SuppressWarnings("unchecked")
 	public Company findCompanyByComCode(String comCode) {
 		return  super.get(comCode);
 	}
 	
-	 
+	/**
+     * 根据机构代码查询所有下级机构的机构代码
+     * @param comCode
+     * @return
+     */
+	public List<String>findAllNextSubComCodesByComCode(String comCode){
+		StringBuffer sql=new StringBuffer();
+		sql.append("select comCode from ge_rms_company start with comCode='"+comCode+"' connect by prior comcode=upperComcode");
+		List<String> comcodes=new ArrayList<String>();
+		comcodes=(List<String>)getSession().createSQLQuery(sql.toString()).list();
+		return comcodes;
+	} 
+	
+	
     /**
      * 根据机构代码查询所有下级机构 
      * @param comCode
@@ -97,6 +118,7 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
 		sql.setLength(0);
 		List<String>comCodes=new ArrayList<String>();
 		comCodes=(List<String>)query.list();
+		comCodes.add(comCode);
 		sql.append("from Company c where c.comCode in(");
 		int i=0;
 		for (i = 0; i < comCodes.size(); i++) {
@@ -163,5 +185,6 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
 		queryRuleComcode.addIn("comCode", comCodes);
 		return super.find(Company.class, queryRuleComcode);
 	}
+
 
 }

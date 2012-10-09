@@ -64,7 +64,7 @@ public class UserGroup implements java.io.Serializable {
 	/**
 	 * 属性group的getter方法
 	 */
-	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.REFRESH)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "GROUPID", nullable = false)
 	public Group getGroup() {
 		return this.group;

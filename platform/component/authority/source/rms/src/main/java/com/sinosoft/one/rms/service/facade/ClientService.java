@@ -18,6 +18,6 @@ public interface ClientService {
 	  * @param comCode
 	  * @return
 	  */
-	 public User getUserByUserCodeComCode(String userCode,String comCode);
+	 public User getUserByUserCodeComCode(String userCode,String comCode,String sysFlag);
 	 
 }

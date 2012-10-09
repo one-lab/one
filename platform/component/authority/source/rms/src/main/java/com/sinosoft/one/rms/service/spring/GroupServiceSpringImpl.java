@@ -32,6 +32,11 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	private static CacheService groupCacheManager = CacheManager.getInstance("Group");
 	
 	private static CacheService userCacheManager = CacheManager.getInstance("User");
+	
+	private static CacheService taskCacheManager = CacheManager.getInstance("Task");
+	
+	private static CacheService companyCacheManager = CacheManager.getInstance("Company");
+	
 	/**
 	 * 增加用户组
 	 */
@@ -62,7 +67,6 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 		save(group);
 		groupCacheManager.clearCache("comCodeGroup");
 	}
-	
 	
 	/**
 	 * 删除用户组下的组成员
@@ -200,7 +204,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 			return (Page) result;
 		}
 		QueryRule queryRule = QueryRule.getInstance();
-		queryRule.addEqual("comCode", comCode);
+		queryRule.addIn("comCode", comCode,"*");
 		if(StringUtils.isNotBlank(groupName))
 			queryRule.addLike("name", "%"+groupName+"%");
 		queryRule.addEqual("isValidate", "1");
@@ -215,7 +219,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	 */
 	public List<Group> findGroupByCom(String comCode) {
 		QueryRule queryRule = QueryRule.getInstance();
-		queryRule.addEqual("comCode", comCode);
+		queryRule.addIn("comCode", comCode,"*");
 		queryRule.addEqual("isValidate", "1");
 		queryRule.addDescOrder("createTime");
 		return super.find(queryRule);
@@ -263,7 +267,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	public void updataGroup(String groupID,String userCode, String comCode, String groupName,
 			String Des, List<String> RoleIDs) {
 		QueryRule queryRule = QueryRule.getInstance();
-		queryRule.addEqual("comCode", comCode);
+//		queryRule.addEqual("comCode", comCode);
 		queryRule.addEqual("groupID",groupID);
 		queryRule.addEqual("isValidate", "1");
 		Group group=super.findUnique(queryRule);
@@ -271,6 +275,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 			//异常
 		}
 		group.setName(groupName);
+		group.setComCode(comCode);
 		group.setDes(Des);
 		super.deleteAll(group.getGroupRoles());
 		List<GroupRole> groupRoles=new ArrayList<GroupRole>();
@@ -312,6 +317,37 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 			return false;
 		}
 		return true;
+	}
+	
+	public void addGroupUser(String userCode, String comCode,String groupId){
+		QueryRule queryRule = QueryRule.getInstance();
+		queryRule.addEqual("userCode", userCode);
+		queryRule.addEqual("comCode", comCode);
+		queryRule.addEqual("isValidate", "1");
+		UserPower userPowe = super.findUnique(UserPower.class, queryRule);
+		if (userPowe == null)
+			userPowe = new UserPower();
+		userPowe.setUserCode(userCode);
+		userPowe.setComCode(comCode);
+		userPowe.setIsValidate("1");
+		List<UserGroup> userGroups=new ArrayList<UserGroup>();
+		UserGroup userGroup = new UserGroup();
+		Group group = new Group();
+		group.setGroupID(groupId);
+		userGroup.setGroup(group);
+		userGroup.setUserPower(userPowe);
+		userGroup.setIsValidate("1");
+		userGroup.setUserCode(userCode);
+		userGroups.add(userGroup);
+		userPowe.setUserGroups(userGroups);
+		super.save(userPowe);
+		groupCacheManager.clearCache("Groups");
+		taskCacheManager.clearCache("userTask");
+		groupCacheManager.clearCache("userHasGroups");
+		userCacheManager.clearCache("inGroup");
+		userCacheManager.clearCache("notInGroup");
+		userCacheManager.clearCache("inUserPower");
+		userCacheManager.clearCache("notInUserPower");
 	}
 }	
  

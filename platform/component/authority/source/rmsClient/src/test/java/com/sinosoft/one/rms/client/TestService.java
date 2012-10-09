@@ -1,16 +1,21 @@
 package com.sinosoft.one.rms.client;
 
+
 import ins.framework.common.Page;
 
 import java.util.List;
 
+import com.sinosoft.one.rms.model.Employe;
+
 public interface TestService {
 	
-	List findUser();
+	public List<Employe> testfindQueryRule(String userCode);
 
-	Page findUser(int pageNo, int pageSize);
-
-	Page findbyHql(int pageNo, int pageSize);
+	public  List<Employe> testfindBySql();
 	
-	public List findBySql();
+//	Page findUser(String hql,int pageNo, int pageSize);
+//
+	public Page findbyHql(int pageNo, int pageSize);
+	
+	
 }

@@ -39,7 +39,6 @@ public class User {
 		final List<String> roleIdList,final List<String> taskIdList,final List<Menu> menuList, final List<DataPower> dataPowers){
 		Assert.hasText(userCode);
 		Assert.hasText(userName);
-		Assert.hasText(passWord);
 		Assert.hasText(loginComCode);
 		Assert.hasText(loginComName);
 		Assert.notNull(taskIdList);
