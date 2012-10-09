@@ -242,5 +242,5 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 	List<User> findByFirstnameContaining(String firstname);
 
 	@Query(value = "SELECT 1 FROM jpa_User", nativeQuery = true)
-	List<BigDecimal> findOnesByNativeQuery();
+	List<Number> findOnesByNativeQuery();
 }
