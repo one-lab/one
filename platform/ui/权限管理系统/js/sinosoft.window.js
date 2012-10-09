@@ -20,9 +20,10 @@
 				iconMinUrl:"", // 自定义图片的标识
 				iconMaxUrl:"",
 				iconResUrl:"",
-				iconCloseUrl:""
+				iconCloseUrl:"",
+				diyButton:[]
 			}
-			var defaults = $.extend(defaults, opts);
+			var defaults = $.extend(true, defaults, opts);
 			var self;
 			//必须得传个id， 随便什么id都行
 			var $cusWindow = $('<div class="cusWindow" minsize="false" maxsize="false"></div>');
@@ -41,6 +42,7 @@
 			var $rightTop = $('<div class="right_top"></div>');
 			var $leftBottom = $('<div class="left_bottom"></div>');
 			var $rightBottom = $('<div class="right_bottom"></div>');
+			var $allShadow = $('<div class="all_shadow"></div>');
 			var $ifr;
 			var contHeight = 0;//内容的高度
 			var x = 0;
@@ -61,7 +63,7 @@
 			//窗口的初始化工作：包含把各个html元素组装起来，添加相应的标识属性，给相应的标签绑定事件
 			function init() {
 				if(defaults.id != "") {
-					//下边这个我用的js，是在是不会用jquery来写了
+					//下边这个我用的js实在是不会用jquery来写了
 					//document.getElementsByTagName("body")[0].onselectstart = function(){return false;};
 					$cusWindow.css({"display":"block","position":"absolute","width":defaults.width, "height":defaults.height});
 					contHeight = defaults.height - 30;
@@ -74,8 +76,10 @@
 					if(defaults.hasIFrame == true) {
 						$cusWindow_cont.append($iframe);
 						$iframe.attr("id", defaults.id + "_iframe");
+						$iframe.css({"width":defaults.width, "height":defaults.height - 30});
 					} else {
-						$cusWindow_cont.append(defaults.content);	
+						$cusWindow_cont.append(defaults.content);
+						addMyButton(2);
 					}
 					$cusWindow_cont.attr("id",defaults.id+"_cont");
 					bindFunction();
@@ -98,12 +102,14 @@
 						} else {
 							noFrameAjaxMethod();		
 						}
-					}
+					};
+					$allShadow.width($(document).width()).height($(document).height());
+					$("body").prepend($allShadow);					
 				} else {
 					alert("窗口的id参数不能为空！");
 					return false;	
 				}
-				self.bind("dblclick", changeWinMax);
+				//self.bind("dblclick", changeWinMax);
 				if(defaults.iconMaxUrl != "") {
 					$cusWindow_icon.filter(".max_size").css({"background":"url("+defaults.iconMaxUrl+")"});
 				}
@@ -173,14 +179,47 @@
 						type: "get",
 						success: function (data){
 							$ifr = $("#"+ defaults.id + "_iframe");
-							$("#"+ defaults.id + "_iframe").contents().find("body").append(data);
-							$("#"+ defaults.id + "_iframe").contents().find("body").append(defaults.content);
+							$ifr.attr("src", defaults.url);
+							if(defaults.diyButton.length > 0) {
+								$ifr.bind("load", {flagType: 1}, addMyButton);
+							}
+							//$("#"+ defaults.id + "_iframe").contents().find("body").append(data);
+							//$("#"+ defaults.id + "_iframe").contents().find("body").append(defaults.content);
 						},
 						error: function (XMLHttpRequest,errorThrown) {
 							alert("数据加载出错！" + errorThrown);
 						}
 					});
 				}	
+			}
+			
+			function addMyButton(event) {
+				var $btnBox = $('<div class="form_tool add_peo"></div>');
+				if(event.data != undefined) {
+					$("#"+ defaults.id + "_iframe").contents().find("body").append($btnBox);
+				} else {
+					$cusWindow_cont.append($btnBox);
+				}
+				for(var i = 0; i < defaults.diyButton.length; i++) {
+					var $inputButton = $("<input type='button' />");
+					var btId = defaults.diyButton[i].id;
+					var btClass = defaults.diyButton[i].class;
+					var btName = defaults.diyButton[i].value;
+					var btFun = defaults.diyButton[i].btFun;
+					if( btId != undefined) {
+						$inputButton.attr("id", btId);	
+					}
+					if( btClass != undefined) {
+						$inputButton.addClass(btClass);	
+					}
+					if( btName != undefined) {
+						$inputButton.attr("value", btName);	
+					}
+					if( btFun != undefined) {
+						$inputButton.bind("click", btFun);
+					}
+					$btnBox.append($inputButton);
+				}
 			}
 			
 			function noFrameAjaxMethod() {
@@ -847,8 +886,9 @@
 			
 			//关闭窗口方法
 			function closeWindow() {
-				self.remove();	
-			}
+				self.remove();
+				$allShadow.remove();
+			};
 			
 			//直接改css是最有效的，当然也可以按照注解的for循环方式，但是不好用
 			function changeZIndex() {
@@ -924,6 +964,14 @@
 					
 				});	
 			}
+			
+			jQuery.extend({
+				window :{
+					cloWindow : function() {
+						closeWindow();
+					}
+				}
+			})
 			
 			//它可以回调的几个方法
 			return { 
