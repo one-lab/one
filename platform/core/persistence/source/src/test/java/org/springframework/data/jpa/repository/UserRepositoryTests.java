@@ -845,10 +845,10 @@ public class UserRepositoryTests {
 
 		flushTestUsers();
 
-		List<BigDecimal> result = repository.findOnesByNativeQuery();
+		List<Number> result = repository.findOnesByNativeQuery();
 
 		assertThat(result.size(), is(3));
-		assertThat(result, hasItem(BigDecimal.valueOf(1)));
+		assertThat(result, hasItem(1));
 	}
 
 	protected void flushTestUsers() {
