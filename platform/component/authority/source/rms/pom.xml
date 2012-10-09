@@ -2,20 +2,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sinosoft.one</groupId>
+		<groupId>com.sinosoft.one</groupId> 
 		<artifactId>parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>rms</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
+	<artifactId>rms</artifactId> 
+	<version>0.1.2-SNAPSHOT</version> 
 	<packaging>jar</packaging>
-	<name>rms</name>
-
-
+	<name>rms</name> 
+  
+   
 	<dependencies>
-		<!-- SPRING begin -->
-		<dependency>
-			<groupId>org.springframework</groupId>
+		<!-- SPRING begin --> 
+		 <dependency>
+			<groupId>org.springframework</groupId> 
 			<artifactId>spring-core</artifactId>
 		</dependency>
 		<dependency>
@@ -62,12 +62,21 @@
 			<artifactId>commons-dbcp</artifactId>
 		</dependency>
 
-		<!-- JSON begin -->
+		
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
-
+		<!-- JSON begin 
+		<dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+      	</dependency>
+      	<dependency>
+			<groupId>com.fasterxml</groupId>
+			<artifactId>jackson-module-hibernate</artifactId>
+		</dependency> 
+		-->
 		<!-- template engine -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -83,32 +92,7 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
-		<!-- hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>3.3.2.GA</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.3.2.GA</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<version>3.4.0.GA</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-ehcache</artifactId>
-			<version>3.3.2.GA</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-		</dependency>
-
+		
 		<!-- j2ee web spec -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -146,7 +130,7 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 		</dependency>
-		<!-- CXF begin -->
+		<!-- CXF begin 
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -154,6 +138,11 @@
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-api</artifactId>
 		</dependency>
 		<!-- CXF end -->
 		
@@ -168,26 +157,52 @@
 			<version>4.2.7</version>
 		</dependency>
 		<!-- Test begin -->
+		<!-- hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>3.3.2.GA</version>
+			 <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.3.2.GA</version>
+			 <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.4.0.GA</version>
+			 <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+			<version>3.3.2.GA</version>
+			 <scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
              <groupId>oracle</groupId>
              <artifactId>ojdbc</artifactId>
              <scope>test</scope>
-         </dependency>
+         </dependency> 
 		<dependency>
-			<groupId>com.sinosoft.ebusiness</groupId>
-			<artifactId>util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>test</scope>
+			<groupId>com.sinosoft.one</groupId>
+			<artifactId>util</artifactId> 
+			<version>1.0.0-SNAPSHOT</version> 
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-
-
+ 
+ 
 	</dependencies>
 </project>

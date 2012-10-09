@@ -11,5 +11,5 @@ import com.sinosoft.one.rms.clientService.User;
  */
 public interface AccountManager {
 	
-    User findUserByLoginName(String loginName,String comCode);
+    User findUserByLoginName(String loginName,String comCode,String sysFlag);
 }

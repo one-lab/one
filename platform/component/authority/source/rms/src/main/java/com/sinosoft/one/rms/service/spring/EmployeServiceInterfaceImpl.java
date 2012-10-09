@@ -75,12 +75,18 @@ public class EmployeServiceInterfaceImpl extends GenericDaoHibernate<Employe, St
 	/**
 	 * 更新密码
 	 * @param employe
+	 * @throws Exception 
 	 */
-	public void updatePassword(String userCode) {
+	public boolean updatePassword(String userCode,String userpassword) throws Exception {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("userCode", userCode);
 		Employe employe = super.findUnique(Employe.class, queryRule);
-		super.update(employe);
+		try {
+			super.update(employe);
+			return true;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 	/**
@@ -122,7 +128,8 @@ public class EmployeServiceInterfaceImpl extends GenericDaoHibernate<Employe, St
 			queryRuleUserCode.addLike("userName", "%"+userName+"%");
 		if(StringUtils.isNotEmpty(userCode))
 			queryRuleUserCode.addLike("userCode", "%"+userCode+"%");
-		queryRuleUserCode.addEqual("company.comCode", comCode);
+		if(!"*".equals(comCode))
+			queryRuleUserCode.addEqual("company.comCode", comCode);
 		return super.find(Employe.class,queryRuleUserCode, pageNo, pageSize);
 	}
 

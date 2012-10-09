@@ -3,6 +3,8 @@ package com.sinosoft.one.rms.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContextException;
@@ -13,12 +15,17 @@ import org.springframework.integration.Message;
 import org.springframework.integration.handler.MessageProcessor;
 import org.springframework.integration.scripting.AbstractScriptExecutingMessageProcessor;
 import org.springframework.integration.scripting.RefreshableResourceScriptSource;
+import org.springframework.scripting.ScriptCompilationException;
 import org.springframework.scripting.ScriptSource;
 import org.springframework.scripting.groovy.GroovyScriptFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import groovy.lang.GroovyObject;
+import groovy.lang.Script;
+
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,8 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  */
 public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
-    
-    private Logger logger = LoggerFactory.getLogger(DataRuleFactoryPostProcessor.class);
+
+	private Logger logger = LoggerFactory.getLogger(DataRuleFactoryPostProcessor.class);
 
     protected ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
     
@@ -56,11 +63,10 @@ public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
         this.refreshDelay = refreshDelay;
     }
 
-
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         logger.info("DataRule init start...");
-        //1、初始化获取所有的MessageProcessor
-        initMessageProcessor();
+        //1、初始化获取所有的MessageProcessor //传入spring beanFactory 为groovy属性获得bean
+        initMessageProcessor(beanFactory);
         //2、将messageProcessors全部注册为bean--放弃，没必要注册为bean的方式
 
     }
@@ -75,16 +81,16 @@ public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
         return (DataRuleScript)dataRuleMap.get(dataRuleId).processMessage(null);
     }
 
-    protected void initMessageProcessor(){
-        convertResourceToGroovyProcess(findDataRuleResource());
+    protected void initMessageProcessor(ConfigurableListableBeanFactory beanFactory){
+        convertResourceToGroovyProcess(findDataRuleResource(), beanFactory);
     }
 
     //2、将resource文件转换为MessageProcessor
-    private void convertResourceToGroovyProcess(Map<String,Resource> resources) {
+    private void convertResourceToGroovyProcess(Map<String,Resource> resources,ConfigurableListableBeanFactory beanFactory) {
        for(String resourceId:resources.keySet()){
-           dataRuleMap.put(resourceId,
-                   new CustomGroovyScriptExecutingMessageProcessor(
-                           new RefreshableResourceScriptSource(resources.get(resourceId),refreshDelay)));
+    	   CustomGroovyScriptExecutingMessageProcessor processor = new CustomGroovyScriptExecutingMessageProcessor(
+                   new RefreshableResourceScriptSource(resources.get(resourceId),refreshDelay), beanFactory);
+           dataRuleMap.put(resourceId, processor);
        }
     }
 
@@ -96,7 +102,7 @@ public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
                String beanId =  org.apache.commons.lang.StringUtils.uncapitalize(StringUtils.stripFilenameExtension(resource.getFilename()));
                logger.info("resource:{}", beanId);
                resources.put(beanId,resource);
-            }
+           }
         } catch (IOException e){
             throw new ApplicationContextException(
                     "error on getJarResources/getClassesFolderResources", e);
@@ -111,21 +117,20 @@ public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
      */
     private class CustomGroovyScriptExecutingMessageProcessor extends AbstractScriptExecutingMessageProcessor{
 
-        private final GroovyScriptFactory scriptFactory;
+        private final CustomGroovySpringFactory scriptFactory;
 
         private volatile ScriptSource scriptSource;
 
-        public CustomGroovyScriptExecutingMessageProcessor(ScriptSource scriptSource) {
+		public CustomGroovyScriptExecutingMessageProcessor(ScriptSource scriptSource, ConfigurableListableBeanFactory beanFactory) {
             super();
             this.scriptSource = scriptSource;
-            this.scriptFactory = new GroovyScriptFactory(this.getClass().getSimpleName());
+            this.scriptFactory = new CustomGroovySpringFactory(this.getClass().getSimpleName());
+            this.scriptFactory.setBeanFactory(beanFactory);
         }
-
 
         public ScriptSource getScriptSource(Message message) {
             return scriptSource;
         }
-
 
         public Object executeScript(ScriptSource scriptSource, Map variables) throws Exception {
             Assert.notNull(scriptSource, "scriptSource must not be null");
@@ -134,6 +139,62 @@ public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
             }
         }
     }
+    
+    
+    /**
+     * 自定义的GroovySpringFactory 覆写executeScript
+     * @author Administrator
+     *
+     */
+    private class CustomGroovySpringFactory extends GroovyScriptFactory{
+    	
+    	private ConfigurableListableBeanFactory beanFactory;
 
+    	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    		this.beanFactory=(ConfigurableListableBeanFactory) beanFactory;
+    	}
+    	
+		public CustomGroovySpringFactory(String scriptSourceLocator) {
+			super(scriptSourceLocator);
+		}
 
+		@SuppressWarnings("rawtypes")
+		protected Object executeScript(ScriptSource scriptSource, Class scriptClass) throws ScriptCompilationException {
+			try {
+				GroovyObject goo = (GroovyObject) scriptClass.newInstance();
+//				if (super.groovyObjectCustomizer != null) {
+//					// Allow metaclass and other customization.
+//					this.groovyObjectCustomizer.customize(goo);
+//				}
+				
+				//为groovy类中标注@Autowired的属性 注入spring bean
+				Field[] f=goo.getClass().getDeclaredFields();
+				for (Field field : f) {
+					if(field.getAnnotation(Autowired.class)!=null){
+						goo.setProperty(field.getName(), beanFactory.getBean(field.getName()));
+					}
+				}
+				if (goo instanceof Script) {
+					// A Groovy script, probably creating an instance: let's execute it.
+					return ((Script) goo).run();
+				}
+				else {
+					// An instance of the scripted class: let's return it as-is.
+					return goo;
+				}
+			}
+			catch (InstantiationException ex) {
+				throw new ScriptCompilationException(
+						scriptSource, "Could not instantiate Groovy script class: " + scriptClass.getName(), ex);
+			}
+			catch (IllegalAccessException ex) {
+				throw new ScriptCompilationException(
+						scriptSource, "Could not access Groovy script constructor: " + scriptClass.getName(), ex);
+			}
+		}
+		
+		
+    }
+    
+    
 }

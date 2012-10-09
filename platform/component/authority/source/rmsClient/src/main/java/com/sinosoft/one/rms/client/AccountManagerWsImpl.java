@@ -11,14 +11,15 @@ import com.sinosoft.one.rms.clientService.User;
 
 public class AccountManagerWsImpl implements AccountManager{
 
+	//远程调用 需要将webService的中的对象类型 转化成MODEL
 	public User findUserByLoginName(String loginName, 
-			String comCode) {
+			String comCode,String sysFlags) {
 		RmsClientService rmsServiceClient = new RmsClientServiceImplService().getRmsClientServiceImplPort();
 		com.sinosoft.one.rms.client.webservice.User user =rmsServiceClient.login(loginName, comCode);
 		List<Menu> menus=new ArrayList<Menu>();
 		creatMenuList(user.getMenuList(), menus);
 		List<DataPower> dataPowers=new ArrayList<DataPower>();
-		creatDataPowerList(user.getDataPowers(), dataPowers);
+		creatDataPowerList(user.getDataPowers(), dataPowers,loginName,comCode);
 		return new User(user.getUserCode(), user.getPassWord(), user.getUserName(), user.getLoginComCode(), user.getLoginComName(), user.getRoleIdList(), user.getTaskIdList(),menus , dataPowers);
 	}
 	
@@ -34,9 +35,9 @@ public class AccountManagerWsImpl implements AccountManager{
 		}
 	}
 	
-	private void creatDataPowerList(List<com.sinosoft.one.rms.client.webservice.DataPower> webServiceDataPowers ,List<DataPower>localDataPowers){
+	private void creatDataPowerList(List<com.sinosoft.one.rms.client.webservice.DataPower> webServiceDataPowers ,List<DataPower>localDataPowers,String userCode,String comCode){
 		for (com.sinosoft.one.rms.client.webservice.DataPower dataPower : webServiceDataPowers) {
-			DataPower localPower=new DataPower(dataPower.getRuleId(), dataPower.getRuleId(), dataPower.getParam(), dataPower.getRule());
+			DataPower localPower=new DataPower(userCode,comCode,dataPower.getRuleId(), dataPower.getRuleId(), dataPower.getParam(), dataPower.getRule(),null);
 			localDataPowers.add(localPower);
 		}
 	}

@@ -20,8 +20,35 @@ import com.sinosoft.one.rms.service.facade.DataRuleService;
 public class DataRuleServiceSpringImpl extends GenericDaoHibernate<BusPower, String> implements DataRuleService{
 	
 	private static CacheService cacheManager = CacheManager.getInstance("Role");
+	
+	
 	public void addBusPower( String powerID,String dataRuleID, String taskID,
-			String dataRuleParam) {
+			String dataRuleParam ) {
+		BusPower busPower=new BusPower();
+		UserPower userPower=super.get(UserPower.class, powerID);
+		StringBuffer deletesql=new StringBuffer();
+		for (BusPower busP : userPower.getBusPowers()) {
+			if(busP.getTask().getTaskID().toString().equals(taskID)){
+				deletesql.append("delete ge_rms_busPower where buspowerid='"+busP.getBusPowerID()+"'");
+				getSession().createSQLQuery(deletesql.toString())
+				.executeUpdate();
+			}
+		}
+		busPower.setUserPower(userPower);
+		DataRule dataRule=super.get(DataRule.class, dataRuleID);
+		busPower.setDataRule(dataRule);
+		Task task=super.get(Task.class, taskID);
+		busPower.setTask(task);
+		if(StringUtils.isNotEmpty(dataRuleParam)){
+			busPower.setDataRuleParam(dataRuleParam);
+		}
+		busPower.setIsValidate("1");
+		super.save(busPower);
+		cacheManager.clearCache("UserBusPowers");
+	}
+	
+	public void addBusPower( String powerID,String dataRuleID, String taskID,
+			String dataRuleParam ,String busDataTable,String busDataColumn) {
 		BusPower busPower=new BusPower();
 		UserPower userPower=super.get(UserPower.class, powerID);
 		StringBuffer deletesql=new StringBuffer();

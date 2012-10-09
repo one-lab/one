@@ -81,7 +81,30 @@ public interface GroupService {
 	 */
 	public void deleteGroup(String GroupId);
 	
+	/**
+	 * 查询未在用户组中的用户
+	 * @param groupId
+	 * @param comCode
+	 * @param userName
+	 * @param usCode
+	 * @param pageSize
+	 * @param pageNo
+	 * @return
+	 */
 	public Page findNEmployeByGroup(String groupId, String comCode, String userName,String usCode,int pageSize,int pageNo);
 	
+	/**
+	 * 校验用户组名是否重复
+	 * @param groupName
+	 * @return
+	 */
 	public boolean checkGroupName(String groupName);
+	
+	/**
+	 * 添加用户组用户
+	 * @param userCode
+	 * @param comCode
+	 * @param groupId
+	 */
+	public void addGroupUser(String userCode, String comCode,String groupId);
 }

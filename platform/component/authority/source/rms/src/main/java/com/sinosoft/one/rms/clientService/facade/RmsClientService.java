@@ -9,5 +9,5 @@ import com.sinosoft.one.rms.clientService.User;
 @WebService
 public interface RmsClientService {
 	 
-	public User login(String userCode,String comCode);
+	public User login(String userCode,String comCode,String sysFalg);
 }

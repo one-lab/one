@@ -19,7 +19,7 @@ public class ShiroTest {
 	
 	@Test
 	public void testShiroDbRealm(){
-		accountManager.findUserByLoginName("admin", "00");
+		accountManager.findUserByLoginName("admin", "00","RMS");
 	}
 
 }

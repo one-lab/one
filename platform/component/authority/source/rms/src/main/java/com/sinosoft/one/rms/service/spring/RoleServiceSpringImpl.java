@@ -15,7 +15,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.rms.model.Company;
@@ -117,6 +116,10 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		Date date = new Date();
 		role.setCreateTime(date);
 		role.setOperateTime(date);
+		if(type.toString().equals("default".toString()))
+			role.setFlag("");
+		if(type.toString().equals("all".toString()))
+			role.setFlag("*");
 		super.save(role);
 		//默认指派角色操作
 		RoleDesignate roleDesignate = new RoleDesignate();
@@ -247,15 +250,11 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 			roleDesignates = super.find(RoleDesignate.class, queryRole);
 		}
 		List<String> roleids=new ArrayList<String>();
-		Set<Role> roles = new HashSet<Role>();
 		for (RoleDesignate roleDesignate : roleDesignates) {
 			roleids.add(roleDesignate.getId().getRoleID());
-			//判断如果是全可见类型的‘*’ 则直接使用
-			if(roleDesignate.getId().getComCode().toString().equals("*")){
-				roles.add(roleDesignate.getRole());
-			}
 		}
-		//根据指派获得的ID过滤用户组角色  获得角色集合
+//		//根据指派获得的ID过滤用户组角色  获得角色集合.
+		Set<Role> roles = new HashSet<Role>();
 		for (GroupRole groupRole : groupRoles){
 			for (String roleid : roleids){
 				if(groupRole.getRole().getRoleID().toString().equals(roleid.toString())){
@@ -430,7 +429,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		StringBuffer deleteRoleTasksql = new StringBuffer();
 		List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
 		deleteRoleTasksql.append("delete ge_rms_roletask t where t.roleID='"+roleID+"' and t.taskAuthid in (");
-		deleteRoleTasksql.append(" select taskauthid from ge_rms_task_auth a where a.comcode=");
+		deleteRoleTasksql.append(" select taskauthid from ge_rms_task_auth a where a.comCode='*' or a.comcode=");
 		deleteRoleTasksql.append("'" + loginComCode + "')");
 		getSession().createSQLQuery(deleteRoleTasksql.toString())
 		.executeUpdate();
@@ -438,7 +437,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		List<TaskAuth> taskAuths=new ArrayList<TaskAuth>();
 		if(TaskIDs.size()>0){
 			QueryRule queryTaskAuth=QueryRule.getInstance();
-			queryTaskAuth.addEqual("comCode", loginComCode);
+			queryTaskAuth.addIn("comCode", loginComCode,"*");
 			queryTaskAuth.addIn("task.taskID", TaskIDs);
 			taskAuths =super.find(TaskAuth.class, queryTaskAuth);
 		}
@@ -456,6 +455,12 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 		Date date = new Date();
 		role.setOperateTime(date);
 		role.setOperateUser(userCode);
+		if(type.toString().equals("default")){
+			role.setFlag("");
+		}
+		if(type.toString().equals("all")){
+			role.setFlag("*");
+		}
 		super.update(role);
 		//判断修改的角色类型 当改成默认类型"default"时
 		if(type.toString().equals("default")){
@@ -551,7 +556,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 //		sql.append("select comCode from ge_rms_company c where c.upperComCode='"+ComCode+"'");
 //		List<String> comcodes=new ArrayList<String>();
 //		comcodes=(List<String>)getSession().createSQLQuery(sql.toString()).list();
-		List<Company> companies =(List<Company>) companyServiceInterface.findNextSubCompany(comCode) ;
+		List<String>  comCodes= companyServiceInterface.findAllNextSubComCodesByComCode(comCode) ;
 		for (RoleDesignate roleDesignate : designates) {
 			//从指派的角色中过滤下级机构代码
 			if(roleDesignate.getId().getComCode().toString().equals("*")){
@@ -563,12 +568,12 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 				roleDesignateInfo.setCreateTime(roleDesignate.getCreateTime());
 				roleDesignateInfos.add(roleDesignateInfo);
 			}else{
-				for (Company company : companies) {
-					if (roleDesignate.getId().getComCode().toString().equals(company.getComCode().toString())) {
+				for (String  cCode : comCodes) {
+					if (roleDesignate.getId().getComCode().toString().equals(cCode.toString())) {
 						RoleDesignateInfo roleDesignateInfo = new RoleDesignateInfo();
 						roleDesignateInfo.setRole(roleDesignate.getRole());
-						roleDesignateInfo.setComCode(company.getComCode());
-						roleDesignateInfo.setComCName(company.getComCName());
+						roleDesignateInfo.setComCode(cCode);
+						roleDesignateInfo.setComCName(companyServiceInterface.findCompanyByComCode(cCode).getComCName());
 						roleDesignateInfo.setCreateUser(roleDesignate.getCreateUser());
 						roleDesignateInfo.setCreateTime(roleDesignate.getCreateTime());
 						roleDesignateInfos.add(roleDesignateInfo);

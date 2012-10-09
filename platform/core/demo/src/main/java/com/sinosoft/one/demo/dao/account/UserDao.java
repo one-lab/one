@@ -26,4 +26,6 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> , QueryD
     List<User> findAllUserByJpql();
 
     List<User> findAllUseuByResourse();
+
+    List<User> findBySpringDataNamedQuery(String name);
 }
