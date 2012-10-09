@@ -16,8 +16,5 @@ import java.lang.annotation.Target;
 public @interface DataAuthority {
     String value() default ""; 
     String tabAlias() default "";
-    String depTab() default "";
     String hqlMod() default "";
-    String depCodeCol()  default "";
-    String pdepCodeCol() default "";
 }

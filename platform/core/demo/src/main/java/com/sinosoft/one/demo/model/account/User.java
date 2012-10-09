@@ -11,6 +11,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.sinosoft.one.demo.model.IdEntity;
 import com.sinosoft.one.demo.utils.Collections3;
@@ -36,9 +39,12 @@ import com.google.common.collect.Lists;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends IdEntity {
 
-	private String loginName;
+    @Null(message = "登录名不能为空")
+    private String loginName;
 	private String password;// 为简化演示使用明文保存的密码
+    @Pattern( regexp = "[A-Za-z0-9]{4,30}",message = "用户名必须是英文或者数字，长度4到30位")
 	private String name;
+    @Size(min=4,max=20,message = "邮箱长度必须是4-20之间")
 	private String email;
 	private List<Group> groupList = Lists.newArrayList();// 有序的关联对象集合
 	private Date createTime;

@@ -10,7 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sinosoft.ebusiness.util.test.SpringTxTestCase;
 import com.sinosoft.one.rms.service.facade.RoleService;
 
 @DirtiesContext

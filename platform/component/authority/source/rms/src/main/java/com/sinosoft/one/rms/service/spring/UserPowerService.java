@@ -4,9 +4,12 @@ import ins.framework.cache.CacheManager;
 import ins.framework.cache.CacheService;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
+import ins.framework.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -15,9 +18,13 @@ import com.sinosoft.one.rms.model.Group;
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
+import com.sinosoft.one.rms.service.facade.TaskService;
 
 @Component
 class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
+
+	private TaskService rmstaskService;
+	
 	private static CacheService cacheManager = CacheManager.getInstance("Group");
 	 /**
      * 根据员工代码机构代码用户组代码配置权限 userPower 同时配置除外功能
@@ -26,7 +33,8 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
      * @param groupIDList
      * @param taskIDs
      */
-	void addUserPower(String userCode, String comCode, List<String > groupIDs,List<String> excTaskIDs) {
+	
+	void addUserPower(String userCode, String comCode, List<String > groupIDs,List<String> roleIDs,List<String> excTaskIDs,String sysFlag) {
 		UserPower userPowe = findUserPowerByComUser(userCode, comCode);
 		if (userPowe == null)
 			userPowe = new UserPower();
@@ -34,6 +42,12 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 		userPowe.setComCode(comCode);
 		userPowe.setIsValidate("1");
 		super.deleteAll(userPowe.getExcPowers());
+		if(roleIDs.size()>0){
+			List<String> rolesTasks;
+			rolesTasks=findTaskByRoleAndsysFlag(roleIDs, comCode, sysFlag);
+			excTaskIDs.addAll(rolesTasks);
+		}
+		
 		List<Task> tasks = new ArrayList<Task>();
 		for (String taskid : excTaskIDs) {
 			Task task = new Task();
@@ -55,7 +69,23 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 			}
 		}
 		userPowe.setExcPowers(excPowers);
-		super.deleteAll(userPowe.getUserGroups());
+//		super.deleteAll(userPowe.getUserGroups());
+		List<String>userGroupIDs=new ArrayList<String>();
+		for (UserGroup userGroup : userPowe.getUserGroups()) {
+			userGroupIDs.add(userGroup.getUserGropuID());
+		}
+		
+		if(userGroupIDs.size()>0){
+			StringBuffer sql=new StringBuffer();
+			sql.append("delete ge_rms_usergroup t where t.USERGROPUID in(");
+			for (String userGroupID : userGroupIDs) {
+				sql.append("'"+userGroupID+"',");
+				
+			}
+			sql.delete(sql.length() - 1, sql.length());
+			sql.append(")");
+			getSession().createSQLQuery(sql.toString()).executeUpdate();
+		}
 		List<UserGroup> userGroups=new ArrayList<UserGroup>();
 		for (String groupid : groupIDs) {
 			UserGroup userGroup=new UserGroup();
@@ -79,8 +109,20 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 	 * @param comCode
 	 */
 	void delete(String userCode,String comCode){
-		UserPower userPowe = findUserPowerByComUser(userCode, comCode);
-		super.delete(userPowe);
+		QueryRule queryRule = QueryRule.getInstance();
+		queryRule.addEqual("userCode", userCode);
+		queryRule.addEqual("comCode", comCode);
+		queryRule.addEqual("isValidate", "1");
+		UserPower userPowe= super.findUnique(UserPower.class, queryRule);
+		StringBuffer sql=new StringBuffer();
+		sql.append("delete ge_rms_usergroup t where t.userpowerid='"+userPowe.getUserPowerID()+"' ");
+		getSession().createSQLQuery(sql.toString()).executeUpdate();
+		sql.setLength(0);
+		sql.append("delete ge_rms_buspower t where t.userpowerid='"+userPowe.getUserPowerID()+"' ");
+		getSession().createSQLQuery(sql.toString()).executeUpdate();
+		sql.setLength(0);
+		sql.append("delete ge_rms_userpower t where t.comCode='"+comCode+"' and t.usercode='"+userCode+"' ");
+		getSession().createSQLQuery(sql.toString()).executeUpdate();
 	}
 	
 	/**
@@ -97,4 +139,38 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 		return super.findUnique(UserPower.class, queryRule);
 	}
 
+
+	 List<String> findTaskByRoleAndsysFlag(List<String> roleIDs,String comCode,String sysFlag) {
+		StringBuffer taskIDSQL = new StringBuffer();
+		taskIDSQL
+				.append(" select taskid from ge_rms_task_auth where taskauthid in (");
+		taskIDSQL
+				.append(" select taskauthid from ge_rms_roletask g where g.isvalidate='1' and g.roleid in (");
+		for (String string : roleIDs) {
+			taskIDSQL.append(" '" + string + "',");
+		}
+		taskIDSQL.delete(taskIDSQL.length() - 1, taskIDSQL.length());
+		taskIDSQL.append("))");
+		List<String> taskIDs = new ArrayList<String>();
+		taskIDs = (List<String>) getSession().createSQLQuery(
+				taskIDSQL.toString()).list();
+		taskIDSQL.setLength(0);
+		// 获取该机构的功能ID
+		taskIDSQL.append("select taskid from ge_rms_task_auth where comcode='"
+				+ comCode + "' or comcode='*'");
+		List<String> comtaskIDs = new ArrayList<String>();
+		comtaskIDs = (List<String>) getSession().createSQLQuery(
+				taskIDSQL.toString()).list();
+		List<String> resultTaskIDs = new ArrayList<String>();
+		// 两功能ID集合去重
+		for (String com_TaskID : comtaskIDs) {
+			for (String role_TaskID : taskIDs) {
+				if (com_TaskID.toString().equals(role_TaskID.toString())) {
+					resultTaskIDs.add(com_TaskID);
+					break;
+				}
+			}
+		}
+		return resultTaskIDs;
+	 }
 }

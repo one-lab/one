@@ -6,6 +6,7 @@ import com.sinosoft.one.rms.model.Employe;
 
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
+import ins.framework.dao.GenericDaoHibernate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,35 +22,44 @@ import org.springframework.stereotype.Component;
  * To change this template use File | Settings | File Templates.
  */
 @Component
-public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String>implements TestService  {
+public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String> implements TestService  {
 
+	@DataAuthority(value = "RMS001" )
+	public List<Employe> testfindQueryRule(String user) {
+		QueryRule queryRule=QueryRule.getInstance();
+		queryRule.addEqual("validStatus", "1");
+		return super.find(queryRule);
+	}
 
-    @DataAuthority(value = "RMS012" ,depCodeCol="comCode",depTab="ge_rms_company",pdepCodeCol="upperComCode")
+	@DataAuthority(value = "RMS001",tabAlias="e")
+	public List<Employe> testfindBySql(){
+		String sql="select * from ge_rms_employe e where VALIDSTATUS in ('1','0')order by usercode";
+		return super.findBySql(sql);
+	}
+	
+	// 如果有内部包含的MODEL属性则需标注 如  hqlMod="Employe.company" 否则不标注
+	@DataAuthority(value = "RMS012",hqlMod="Employe.company",tabAlias="a")
+	public Page findbyHql(int pageNo, int pageSize) {
+		StringBuffer hql=new StringBuffer();
+		hql.append("from Employe a where company.comCode='00' and company.comCode=(select comCode from Company where comCode='11') order by company.comCode");
+		return super.findByHql(hql.toString(), pageNo, pageSize);
+	}
+	
+	
+    @DataAuthority(value = "RMS012" )
     public List  findUser() {
     	QueryRule queryRule=QueryRule.getInstance();
     	queryRule.addEqual("validStatus", "1");
-    	return super.find(queryRule);
+ 	  	return super.find(queryRule);
     }
 
-	@DataAuthority(value = "RMS012" ,depCodeCol="comCode",depTab="ge_rms_company",pdepCodeCol="upperComCode")
+	@DataAuthority(value = "RMS012" )
 	public Page findUser(int pageNo, int pageSize) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("validStatus", "1");
         Page page;
         page=super.find(queryRule, pageNo, pageSize);
 		return page;
-	}
-	@DataAuthority(value = "RMS012" ,depCodeCol="comCode",depTab="ge_rms_company",pdepCodeCol="upperComCode")
-	public List findBySql(){
-		String sql="select * from ge_rms_employe where VALIDSTATUS in ('1','0')order by usercode";
-		return super.findBySql(sql);
-	}
-	// 如果有内部包含的MODEL属性则需标注 如  hqlMod="Employe.company" 否则不标注
-	@DataAuthority(value = "RMS012",depCodeCol="comCode")
-	public Page findbyHql(int pageNo, int pageSize) {
-		StringBuffer hql=new StringBuffer();
-		hql.append("from Group  where comCode='00' order by comCode");
-		return super.findByHql(hql.toString(), pageNo, pageSize);
 	}
 	
 	

@@ -88,9 +88,14 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     
-    
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="defaultTransactionManager"  />
+   
+   	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor">
+  	</bean>
+	
+ 	<bean id="DataRuleStringCreat" class="com.sinosoft.one.rms.client.DataRuleStringCreatImpl"/>
+	
     <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
     
     <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>

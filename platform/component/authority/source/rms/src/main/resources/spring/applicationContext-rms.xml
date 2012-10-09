@@ -28,8 +28,5 @@
     
     <bean id="rmsClientService" class="com.sinosoft.one.rms.clientService.facade.RmsClientServiceImpl"></bean>
     
-    <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
-    
-    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>
     
 </beans> 

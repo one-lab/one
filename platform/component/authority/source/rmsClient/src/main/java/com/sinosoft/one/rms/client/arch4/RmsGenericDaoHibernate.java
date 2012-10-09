@@ -9,11 +9,8 @@ import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.framework.utils.StringUtils;
 
-import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
 import com.sinosoft.one.rms.client.DataRuleStringCreat;
 import com.sinosoft.one.rms.client.EnvContext;
-import com.sinosoft.one.rms.clientService.DataPower;
-import com.sinosoft.one.rms.clientService.User;
 
 
 /**
@@ -46,6 +43,7 @@ public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends 
         return super.find(queryRule,pageNo,pageSize);
     }
 
+	@SuppressWarnings("hiding")
 	public <T> Page find(Class<T> arg0, QueryRule queryRule, int arg2, int arg3 ) {
 		 if(EnvContext.getDataAuthorityTaskId()!=null){
 			 String rule =dataRuleStringCreat.editSqlQueryRule("");
@@ -55,6 +53,7 @@ public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends 
 		return super.find(arg0, queryRule, arg2, arg3);
 	}
 
+	@SuppressWarnings({ "rawtypes", "hiding" })
 	public <T> List find(Class<T> entityClass, QueryRule queryRule) {
 		if(EnvContext.getDataAuthorityTaskId()!=null){
 			String rule =dataRuleStringCreat.editSqlQueryRule("");
@@ -76,6 +75,7 @@ public class RmsGenericDaoHibernate <T extends java.io.Serializable, PK extends 
 	public Page findByHql(String arg0, int arg1, int arg2,Object... arg3) {
 		if(EnvContext.getDataAuthorityTaskId()!=null){
 			arg0=dataRuleStringCreat.editHqlQueryRule(arg0);
+			System.out.println(arg0);
 		}
 		return super.findByHql(arg0, arg1, arg2, arg3);
 	}
