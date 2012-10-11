@@ -154,7 +154,15 @@ public class GenericExporter extends AbstractExporter {
 		if(StringHelper.isEmpty(packageLocation)) {
 			packageLocation = "."; // done to ensure default package classes doesn't end up in the root of the filesystem when outputdir=""
 		}
-		filename = StringHelper.replace(filename, "{package-name}", packageLocation);
+		//@TODO add parent-package-name for dao 2012-9-14 16:24:29 by morgan
+		if(filename.contains("{parent-package-name}")){
+
+			String parentPackageLocation = packageLocation.substring(0,packageLocation.lastIndexOf("/"));
+			filename = StringHelper.replace(filename,"{parent-package-name}",parentPackageLocation);
+		} else {
+			filename = StringHelper.replace(filename, "{package-name}", packageLocation);
+		}
+
 		return filename;
 	}
 

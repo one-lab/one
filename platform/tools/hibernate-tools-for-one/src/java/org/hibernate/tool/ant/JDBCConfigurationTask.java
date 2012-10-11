@@ -7,6 +7,7 @@ package org.hibernate.tool.ant;
 import java.io.File;
 import java.lang.reflect.Constructor;
 
+import com.sinosoft.one.data.strategy.IgnorePrefixSystemProp;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
@@ -117,7 +118,11 @@ public class JDBCConfigurationTask extends ConfigurationTask {
         try {
             Class clazz = ReflectHelper.classForName(className);			
 			Constructor constructor = clazz.getConstructor(new Class[] { ReverseEngineeringStrategy.class });
-            return (ReverseEngineeringStrategy) constructor.newInstance(new Object[] { delegate }); 
+			String ignore_index = getProperties().getProperty("generate.ignore_.index");
+			if(ignore_index != null) {
+				IgnorePrefixSystemProp._NUMBER_PROPS = new String(ignore_index);
+			}
+            return (ReverseEngineeringStrategy) constructor.newInstance(new Object[] { delegate });
         } 
         catch (NoSuchMethodException e) {
 			try {

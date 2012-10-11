@@ -90,6 +90,7 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 	}
 
 	public Iterator getColumns(final String xcatalog, final String xschema, final String xtable, String xcolumn) {
+
 		try {			  
 			final String catalog = caseForSearch( xcatalog );
 			final String schema = caseForSearch( xschema );
@@ -98,7 +99,6 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 			
 			log.debug("getColumns(" + catalog + "." + schema + "." + table + "." + column + ")");
 			ResultSet tableRs = getMetaData().getColumns(catalog, schema, table, column);
-			
 			return new ResultSetIterator(tableRs, getSQLExceptionConverter()) {
 				
 				Map element = new HashMap();
@@ -112,7 +112,7 @@ public class JDBCMetaDataDialect extends AbstractMetaDataDialect {
 					element.put("COLUMN_SIZE", new Integer(rs.getInt("COLUMN_SIZE")));
 					element.put("DECIMAL_DIGITS", new Integer(rs.getInt("DECIMAL_DIGITS")));
 					element.put("REMARKS", rs.getString("REMARKS"));
-					return element;					
+					return element;
 				}
 				protected Throwable handleSQLException(SQLException e) {
 					throw getSQLExceptionConverter().convert(e, "Error while reading column meta data for " + Table.qualify(catalog, schema, table), null);

@@ -141,11 +141,20 @@ abstract public class AbstractMetaDataDialect implements MetaDataDialect {
 		
 		if(name==null) return false;
 	
-		// TODO: use jdbc metadata to decide on this. but for now we just handle the most typical cases.		
-		if(name.indexOf('-')>0) return true;
-		if(name.indexOf(' ')>0) return true;
-		if(name.indexOf('.')>0) return true;
-		return false;
+		// TODO: use jdbc metadata to decide on this. but for now we just handle the most typical cases.
+		try {
+			if("Microsoft SQL Server".equals(metaData.getDatabaseProductName())){
+				return false;
+			}
+			if(name.indexOf('-')>0) return true;
+			if(name.indexOf(' ')>0) return true;
+			if(name.indexOf('.')>0) return true;
+			return false;
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		} finally {
+			return false;
+		}
 	}
 	
 	protected String caseForSearch(String value) throws SQLException  {
