@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;

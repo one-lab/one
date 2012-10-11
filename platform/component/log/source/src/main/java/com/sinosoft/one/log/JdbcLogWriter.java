@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.spi.LoggingEvent;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;

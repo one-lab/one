@@ -8,7 +8,7 @@ import java.lang.reflect.Proxy;
 import java.sql.Timestamp;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
