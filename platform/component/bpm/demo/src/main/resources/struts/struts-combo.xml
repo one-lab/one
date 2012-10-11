@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="combo" extends="struts-default" namespace="/combo">
+		<action name="createCombo" class="comboAction" method="createCombo"></action>
+		<action name="verifyCombo1" class="comboAction" method="verifyCombo1"></action>
+		<action name="getVerify1Combos" class="comboAction" method="getVerify1Combos">
+			<result name="success">/combo/operation/verify1/search.jsp </result>
+		</action>
+		<action name="prepareProcess1" class="comboAction" method="prepareProcess1">
+			<result name="success">/combo/operation/verify1/prepareProcess1.jsp </result>
+		</action>
+		<action name="verifyCombo2" class="comboAction" method="verifyCombo2"></action>
+		<action name="getVerify2Combos" class="comboAction" method="getVerify2Combos">
+			<result name="success">/combo/operation/verify2/search.jsp </result>
+		</action>
+		<action name="prepareProcess2" class="comboAction" method="prepareProcess2">
+			<result name="success">/combo/operation/verify2/prepareProcess2.jsp </result>
+		</action>
+		<action name="deploy" class="comboAction" method="deploy"></action>
+		<action name="getDeployCombos" class="comboAction" method="getDeployCombos">
+			<result name="success">/combo/operation/deploy/search.jsp </result>
+		</action>
+		<action name="prepareDeploy" class="comboAction" method="prepareDeploy">
+			<result name="success">/combo/operation/deploy/prepareDeploy.jsp </result>
+		</action>
+	</package>
+</struts>
