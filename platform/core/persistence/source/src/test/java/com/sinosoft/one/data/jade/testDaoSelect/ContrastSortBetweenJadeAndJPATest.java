@@ -41,11 +41,10 @@ public class ContrastSortBetweenJadeAndJPATest {
         List<User> users = new ArrayList<User>();
         for(int i=0; i<20; i++){
             User user = new User();
-            //user.setId(10000+i);
+            user.setId(10000+i);
             user.setActive(true);
             user.setAge((int)(Math.random()*20));
-            String s ="user"+i+"@sinosoft.com.cn";
-            user.setEmailAddress(s);
+            user.setEmailAddress("user"+i+"@sinosoft.com.cn");
             user.setFirstname("firstname"+(int)(Math.random()*20));
             user.setLastname("lastname"+(int)(Math.random()*20));
             users.add(user);
