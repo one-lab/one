@@ -16,20 +16,20 @@
 <script language="javascript" type="text/javascript"
 	src="${ctx}/response/response.js"></script>   -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>套餐审核二</title>
+<title>套餐发布确认</title>
 </head>
 <body  onload="pageValidate();">
 <div id="header_titleDIV">
 	<div class="header_title_c">
 		<div class="header_title">
-			套餐审核二
+			套餐发布确认
 		</div>
 	</div>
 	<div class="header_title_gap1"></div>
 </div>
 <div class="table_content">
 	<div style="clear: both;"></div>
-<form action="${ctx}/combo/verifyCombo2.do" method="post"
+<form action="${ctx}/combo/deploy2.do" method="post"
 	id="responseUpdate">
 <table class="table_style" align="center" width="98%">
 	<tr>
@@ -59,16 +59,14 @@
 						<table>
 							<tr>
 								
-								<td  class="btnBigOnFocus" onclick="submitUpdate('true');" nowrap>通过</td>
-								<td  class="btnBigOnFocus" onclick="submitUpdate('false');" nowrap>不通过</td>
-								<td  class="btnBigOnFocus" onclick="submitUpdate('end');" nowrap>撤销</td>
+								<td  class="btnBigOnFocus" onclick="submitUpdate();" nowrap>确认发布</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 	
 </table>
-<input type="hidden" id="isPassed" name="isPassed" value="false">
+
 
 </form>
 </div>
@@ -81,10 +79,9 @@ function pageValidate(){
 	new tt.NRV().set(0, '++').add("geMonitorResponse.threshold");
 }
 
-	function submitUpdate(isPassed) {
+	function submitUpdate() {
 		
 		if(tt.validate()){
-			$("#isPassed").val(isPassed);
 			$("#responseUpdate").submit();
 		}
 	}

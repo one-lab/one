@@ -118,6 +118,34 @@ public class ComboServiceSpringImpl implements ComboService {
 		System.out.println("resturn resutl size:" + results.size());
 		return results;
 	}
+	
+	@GetTask(userId = "combo004", businessIdAttibuteName = "comboCode")
+	public List<Combo> getCombos_StepFour(String condation) {
+		System.out.println("--------------getCombos");
+		List<Combo> results = DataStore.getCombos();
+		for (int i = 0; i < 2; i++) {
+			Combo c = new Combo();
+			c.setComboCode("00001" + i);
+			if (i == 0) {
+				Kind k = new Kind();
+				k.setKindName("险种abc");
+				k.setKindCode("abc");
+				k.setComboCode("abc");
+				c.setComboCode("abc");
+				c.setKind(k);
+			} else {
+				Kind k = new Kind();
+				k.setKindName("险种" + i);
+				k.setKindCode("001" + i);
+				k.setComboCode("001" + i);
+				c.setComboCode("001" + i);
+				c.setKind(k);
+			}
+			results.add(c);
+		}
+		System.out.println("resturn resutl size:" + results.size());
+		return results;
+	}
 
 	/**
 	 * 简单类型的解析属性
@@ -164,5 +192,10 @@ public class ComboServiceSpringImpl implements ComboService {
     public Student findStudent(String id) {
         return studentStore.findStudent(id);
     }
+
+    @ProcessTask(userId = "combo004", businessBeanOffset = 1, businessIdAttibuteName = "comboCode")
+	public void processCombo_StepFour(String comboCode, Combo c) {
+		System.out.println("--------------processCombo_StepFour");
+	}
 
 }
