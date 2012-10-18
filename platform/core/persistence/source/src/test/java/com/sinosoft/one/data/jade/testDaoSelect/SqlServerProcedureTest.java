@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:application-context-jade.xml")
-//@Ignore
+@Ignore
 public class SqlServerProcedureTest extends TestSuport {
     @Autowired
     UserSelectDao userSelectDao;
