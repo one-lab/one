@@ -15,6 +15,8 @@
  */
 package com.sinosoft.one.data.jade.dataaccess;
 
+import com.sinosoft.one.data.jade.dataaccess.procedure.ResultSetProcedureResult;
+import com.sinosoft.one.data.jade.rowmapper.RowMapperFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +24,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * {@link com.sinosoft.one.data.jade.dataaccess.DataAccess} 分隔了DAO接口层和数据访问层。
@@ -79,4 +82,13 @@ public interface DataAccess {
 	 */
 	int[] batchUpdate(String sql, List<Object[]> argsList);
 
+    /**
+     * 存储过程的处理
+     *
+     *
+     * @param sql 所要执行的实际SQL语句
+     * @param rsprs
+     * @return
+     */
+    void call(String sql, Object[] args, RowMapperFactory rowMapperFactory, ResultSetProcedureResult[] rsprs);
 }
