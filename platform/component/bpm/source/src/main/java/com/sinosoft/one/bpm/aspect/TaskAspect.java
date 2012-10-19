@@ -12,8 +12,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.jbpm.task.query.TaskSummary;
 import org.springframework.beans.BeanUtils;
@@ -26,12 +24,11 @@ import com.sinosoft.one.bpm.service.facade.BpmService;
  * @author zhujinwei
  *
  */
-@Aspect
 public class TaskAspect {
     @Autowired
     private BpmService bpmService;
-
-    Logger logger = Logger.getLogger(TaskAspect.class);
+    private Logger logger = Logger.getLogger(TaskAspect.class);
+    
     /**
      * Description:拦截标记有GetTask注解的方法,对被拦截方法返回的列表进行过滤,只返回属于该userId的业务任务。
      *
@@ -39,7 +36,6 @@ public class TaskAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(@GetTask * com.sinosoft..*.*(..))")
     public Object getTask(ProceedingJoinPoint pjp) throws Throwable {
         logger.info("into getTask aspect");
         GetTask getTask = parserAnnotation(pjp, GetTask.class);
@@ -75,7 +71,6 @@ public class TaskAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(@ProcessTask * com.sinosoft..*.*(..))")
     public Object processTask(ProceedingJoinPoint pjp) throws Throwable {
         logger.info("into processTask aspect");
         ProcessTask processTask = parserAnnotation(pjp, ProcessTask.class);
@@ -131,7 +126,6 @@ public class TaskAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(@StartProcess * com.sinosoft..*.*(..))")
     public Object startProcess(ProceedingJoinPoint pjp) throws Throwable {
         logger.info("into processTask aspect");
         StartProcess startProcess = parserAnnotation(pjp, StartProcess.class);

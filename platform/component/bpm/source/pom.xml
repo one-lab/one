@@ -36,6 +36,11 @@
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-persistence-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-gwt-shared</artifactId>
+			<version>5.2.0.Final</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>

@@ -3,6 +3,7 @@ package com.sinosoft.one.bpm.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.drools.SystemEventListener;
@@ -10,9 +11,12 @@ import org.drools.SystemEventListenerFactory;
 import org.drools.agent.KnowledgeAgent;
 import org.drools.agent.KnowledgeAgentConfiguration;
 import org.drools.agent.KnowledgeAgentFactory;
+import org.drools.builder.KnowledgeBuilderError;
+import org.drools.builder.KnowledgeBuilderErrors;
 import org.drools.io.Resource;
 import org.drools.io.ResourceChangeScannerConfiguration;
 import org.drools.io.ResourceFactory;
+import org.drools.io.impl.UrlResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +50,12 @@ public class KnowledgeAgentGenerator {
 		Resource r = null;
 		if (null != changeSet && changeSet.startsWith("http")) {
 			r = ResourceFactory.newUrlResource(changeSet);
+			if(r instanceof UrlResource) {
+				UrlResource urlResource = (UrlResource) r;
+				urlResource.setBasicAuthentication(p.getProperty("drools.agent.basicAuthentication"));
+				urlResource.setUsername(p.getProperty("drools.agent.username"));
+				urlResource.setPassword(p.getProperty("drools.agent.password"));
+			}
 		} else {
 			r = ResourceFactory.newClassPathResource("ChangeSet.xml");
 		}
@@ -67,7 +77,7 @@ public class KnowledgeAgentGenerator {
 
 		KnowledgeAgent kAgent = KnowledgeAgentFactory.newKnowledgeAgent(
 				propertiesFilePath, kaconf);
-
+		
 		SystemEventListenerFactory
 				.setSystemEventListener(new LogSystemEventListener());
 
@@ -106,6 +116,13 @@ class LogSystemEventListener implements SystemEventListener {
 	}
 
 	public void warning(String message, Object object) {
+		if(object instanceof KnowledgeBuilderErrors) {
+			KnowledgeBuilderErrors errors = (KnowledgeBuilderErrors )object;
+			Iterator<KnowledgeBuilderError> it = errors.iterator();
+			while(it.hasNext()) {
+				logger.warn(it.next().getMessage());
+			}
+		}
 		// TODO Auto-generated method stub
 		logger.warn(message, object);
 	}

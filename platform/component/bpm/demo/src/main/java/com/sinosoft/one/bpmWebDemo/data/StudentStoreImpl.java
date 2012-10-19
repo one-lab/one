@@ -1,5 +1,6 @@
 package com.sinosoft.one.bpmWebDemo.data;
 
+import org.hibernate.SQLQuery;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.sinosoft.one.bpmWebDemo.domain.Student;

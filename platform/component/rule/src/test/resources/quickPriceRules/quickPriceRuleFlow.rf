@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<process xmlns="http://drools.org/drools-5.0/process"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+         xs:schemaLocation="http://drools.org/drools-5.0/process drools-processes-5.0.xsd"
+         type="RuleFlow" name="flow" id="quickPriceRuleFlow" package-name="com.sinosoft.RuleFlow" >
+
+  <header>
+    <imports>
+      <import name="com.sinosoft.ebusiness.quickprice.domain.CarInfoInputBOM" />
+    </imports>
+  </header>
+
+  <nodes>
+    <start id="1" name="Start" x="465" y="22" width="48" height="48" />
+    <ruleSet id="2" name="É½¶«" x="300" y="247" width="80" height="48" ruleFlowGroup="shandong" />
+    <split id="6" name="Gateway" x="465" y="114" width="49" height="49" type="2" >
+      <constraints>
+        <constraint toNodeId="8" toType="DROOLS_DEFAULT" name="constraint" priority="1" type="rule" dialect="mvel" >CarInfoInputBOM(areaCode=="020")</constraint>
+        <constraint toNodeId="2" toType="DROOLS_DEFAULT" name="constraint" priority="1" type="rule" dialect="mvel" >CarInfoInputBOM(areaCode=="370000")</constraint>
+      </constraints>
+    </split>
+    <join id="7" name="Gateway" x="465" y="389" width="49" height="49" type="2" />
+    <ruleSet id="8" name="ÉîÛÚ" x="616" y="247" width="80" height="48" ruleFlowGroup="shenzhen" />
+    <end id="10" name="End" x="465" y="535" width="48" height="48" />
+  </nodes>
+
+  <connections>
+    <connection from="6" to="2" bendpoints="[492,201;338,201]" />
+    <connection from="1" to="6" />
+    <connection from="2" to="7" bendpoints="[342,340;492,340]" />
+    <connection from="8" to="7" bendpoints="[655,340;492,340]" />
+    <connection from="6" to="8" bendpoints="[492,201;659,201]" />
+    <connection from="7" to="10" />
+  </connections>
+
+</process>
