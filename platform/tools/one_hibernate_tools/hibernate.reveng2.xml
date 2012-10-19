@@ -24,9 +24,11 @@
     <!--<table-filter match-catalog="BAD" match-schema="SCHEMA" match-name=".*" exclude="true" />-->
 
     <!--<table-filter match-schema=".*" match-name="JPA.*" package="one.data.test"/>-->
-    <table-filter match-schema=".*" match-name="P.*" package="com.sinosoft.ydt.model"/>
-    <table-filter match-schema=".*" match-name="Y.*" package="com.sinosoft.ydt.model"/>
-    <table-filter match-schema=".*" match-name="GE.*" package="com.sinosoft.ydt.model"/>
+    <table-filter match-schema="dbo.*" match-name="P.*" package="com.sinosoft.ydt.model"/>
+    <table-filter match-schema="dbo.*" match-name="Y.*" package="com.sinosoft.ydt.model"/>
+    <table-filter match-schema="dbo.*" match-name="GE.*" package="com.sinosoft.ydt.model"/>
+    <!--<table-filter match-schema=".*" match-name="t.*" package="com.sinosoft.ydt.model"/>-->
+    <!--<table-filter match-schema="dbo.*" match-name="PARAMETERS" exclude="true" />-->
     <!--<table-filter match-schema=".*" match-name="T_CHECK_BOOLEAN" package="com.sinosoft.one.data.test2.model"/>-->
 
     <!-- table allows you to override/define how reverse engineering

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_isPassedItem" structureRef="String" />
+
+  <itemDefinition id="_6-dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_6-isPassedItem" structureRef="String" />
+
+  <itemDefinition id="_7-dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_7-isPassedItem" structureRef="String" />
+
+  <itemDefinition id="_9-dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_9-isPassedItem" structureRef="String" />
+
+  <process processType="Private" isExecutable="true" id="comboProcess" name="comboProcess" tns:packageName="combo" tns:version="1.1" >
+
+    <!-- process variables -->
+    <property id="data" itemSubjectRef="_dataItem"/>
+    <property id="isPassed" itemSubjectRef="_isPassedItem"/>
+
+    <!-- nodes -->
+    <startEvent id="_1" name="StartProcess" />
+    <endEvent id="_3" name="EndProcess" >
+        <terminateEventDefinition/>
+    </endEvent>
+    <scriptTask id="_5" name="进入第二步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("----------step into the second ------------");</script>
+    </scriptTask>
+    <userTask id="_6" name="step2" >
+      <ioSpecification>
+        <dataInput id="_6_CommentInput" name="Comment" />
+        <dataInput id="_6_SkippableInput" name="Skippable" />
+        <dataInput id="_6_TaskNameInput" name="TaskName" />
+        <dataInput id="_6_GroupIdInput" name="GroupId" />
+        <dataInput id="_6_PriorityInput" name="Priority" />
+        <dataOutput id="_6_isPassed1Output" name="isPassed1" />
+        <inputSet>
+          <dataInputRefs>_6_CommentInput</dataInputRefs>
+          <dataInputRefs>_6_SkippableInput</dataInputRefs>
+          <dataInputRefs>_6_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_6_GroupIdInput</dataInputRefs>
+          <dataInputRefs>_6_PriorityInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_6_isPassed1Output</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_6_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_6_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_6_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_6_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_6_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">套餐发布</from>
+          <to xsi:type="tFormalExpression">_6_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_6_GroupIdInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_6_GroupIdInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_6_PriorityInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_6_PriorityInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_6_isPassed1Output</sourceRef>
+        <targetRef>isPassed</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo002</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <userTask id="_7" name="step3" >
+      <ioSpecification>
+        <dataInput id="_7_CommentInput" name="Comment" />
+        <dataInput id="_7_SkippableInput" name="Skippable" />
+        <dataInput id="_7_ContentInput" name="Content" />
+        <dataInput id="_7_TaskNameInput" name="TaskName" />
+        <dataInput id="_7_GroupIdInput" name="GroupId" />
+        <dataInput id="_7_PriorityInput" name="Priority" />
+        <inputSet>
+          <dataInputRefs>_7_CommentInput</dataInputRefs>
+          <dataInputRefs>_7_SkippableInput</dataInputRefs>
+          <dataInputRefs>_7_ContentInput</dataInputRefs>
+          <dataInputRefs>_7_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_7_GroupIdInput</dataInputRefs>
+          <dataInputRefs>_7_PriorityInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_7_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_7_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_7_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_7_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_7_ContentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_7_ContentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_7_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_7_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_7_GroupIdInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_7_GroupIdInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_7_PriorityInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_7_PriorityInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo003</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <scriptTask id="_8" name="进入第三步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("----------step into the third ------------");</script>
+    </scriptTask>
+    <userTask id="_9" name="进入第一步" >
+      <ioSpecification>
+        <dataInput id="_9_CommentInput" name="Comment" />
+        <dataInput id="_9_TaskNameInput" name="TaskName" />
+        <inputSet>
+          <dataInputRefs>_9_CommentInput</dataInputRefs>
+          <dataInputRefs>_9_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_9_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Hello!</from>
+          <to xsi:type="tFormalExpression">_9_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_9_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">套餐审批</from>
+          <to xsi:type="tFormalExpression">_9_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo001</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <inclusiveGateway id="_10" name="Gateway" gatewayDirection="Diverging" />
+    <exclusiveGateway id="_11" name="Gateway" gatewayDirection="Converging" />
+    <subProcess id="_12" name="Sub-Process"  >
+    <!-- nodes -->
+    <startEvent id="_12-1" name="Start" />
+    <scriptTask id="_12-2" name="进入第四步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("the sub-process script task execute .");</script>
+    </scriptTask>
+    <endEvent id="_12-3" name="End" />
+    <userTask id="_12-4" name="step4" >
+      <ioSpecification>
+        <dataInput id="_12-4_SkippableInput" name="Skippable" />
+        <inputSet>
+          <dataInputRefs>_12-4_SkippableInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_12-4_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_12-4_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo004</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <!-- connections -->
+    <sequenceFlow id="_12-1-_12-2" sourceRef="_12-1" targetRef="_12-2" />
+    <sequenceFlow id="_12-4-_12-3" sourceRef="_12-4" targetRef="_12-3" />
+    <sequenceFlow id="_12-2-_12-4" sourceRef="_12-2" targetRef="_12-4" />
+    </subProcess>
+    <endEvent id="_13" name="End" >
+        <terminateEventDefinition/>
+    </endEvent>
+    <callActivity id="_14" name="Sub-Process" calledElement="comboSubProcess" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </callActivity>
+    <callActivity id="_15" name="Sub-Process" calledElement="comboSubProcess" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </callActivity>
+
+    <!-- connections -->
+    <sequenceFlow id="_12-_3" sourceRef="_12" targetRef="_3" />
+    <sequenceFlow id="_15-_5" sourceRef="_15" targetRef="_5" />
+    <sequenceFlow id="_5-_6" sourceRef="_5" targetRef="_6" />
+    <sequenceFlow id="_8-_7" sourceRef="_8" targetRef="_7" />
+    <sequenceFlow id="_14-_8" sourceRef="_14" targetRef="_8" />
+    <sequenceFlow id="_1-_9" sourceRef="_1" targetRef="_9" />
+    <sequenceFlow id="_6-_10" sourceRef="_6" targetRef="_10" />
+    <sequenceFlow id="_9-_11" sourceRef="_9" targetRef="_11" />
+    <sequenceFlow id="_10-_11" sourceRef="_10" targetRef="_11" name="不通过" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "false".equals(isPassed);</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_7-_12" sourceRef="_7" targetRef="_12" />
+    <sequenceFlow id="_10-_13" sourceRef="_10" targetRef="_13" name="撤销" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "end".equals(isPassed);</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_10-_14" sourceRef="_10" targetRef="_14" name="通过" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "true".equals(isPassed);</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_11-_15" sourceRef="_11" targetRef="_15" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="comboProcess" >
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="15" y="22" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_3" >
+        <dc:Bounds x="408" y="535" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_5" >
+        <dc:Bounds x="252" y="21" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_6" >
+        <dc:Bounds x="379" y="22" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_7" >
+        <dc:Bounds x="375" y="300" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_8" >
+        <dc:Bounds x="386" y="227" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_9" >
+        <dc:Bounds x="92" y="22" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_10" >
+        <dc:Bounds x="404" y="140" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_11" >
+        <dc:Bounds x="119" y="140" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12" >
+        <dc:Bounds x="123" y="377" width="606" height="125" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12-1" >
+        <dc:Bounds x="131" y="416" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12-2" >
+        <dc:Bounds x="243" y="417" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12-3" >
+        <dc:Bounds x="621" y="419" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12-4" >
+        <dc:Bounds x="395" y="418" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13" >
+        <dc:Bounds x="544" y="140" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14" >
+        <dc:Bounds x="507" y="224" width="110" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_15" >
+        <dc:Bounds x="237" y="93" width="110" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_12-1-_12-2" >
+        <di:waypoint x="32" y="63" />
+        <di:waypoint x="160" y="64" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12-4-_12-3" >
+        <di:waypoint x="322" y="65" />
+        <di:waypoint x="522" y="66" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12-2-_12-4" >
+        <di:waypoint x="160" y="64" />
+        <di:waypoint x="322" y="65" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12-_3" >
+        <di:waypoint x="426" y="439" />
+        <di:waypoint x="432" y="559" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15-_5" >
+        <di:waypoint x="292" y="117" />
+        <di:waypoint x="292" y="45" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5-_6" >
+        <di:waypoint x="292" y="45" />
+        <di:waypoint x="429" y="46" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8-_7" >
+        <di:waypoint x="426" y="251" />
+        <di:waypoint x="425" y="324" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14-_8" >
+        <di:waypoint x="562" y="248" />
+        <di:waypoint x="426" y="251" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_1-_9" >
+        <di:waypoint x="39" y="46" />
+        <di:waypoint x="142" y="46" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6-_10" >
+        <di:waypoint x="429" y="46" />
+        <di:waypoint x="428" y="164" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9-_11" >
+        <di:waypoint x="142" y="46" />
+        <di:waypoint x="143" y="164" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10-_11" >
+        <di:waypoint x="428" y="164" />
+        <di:waypoint x="143" y="164" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7-_12" >
+        <di:waypoint x="425" y="324" />
+        <di:waypoint x="426" y="439" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10-_13" >
+        <di:waypoint x="428" y="164" />
+        <di:waypoint x="568" y="164" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10-_14" >
+        <di:waypoint x="428" y="164" />
+        <di:waypoint x="562" y="248" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11-_15" >
+        <di:waypoint x="143" y="164" />
+        <di:waypoint x="292" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>

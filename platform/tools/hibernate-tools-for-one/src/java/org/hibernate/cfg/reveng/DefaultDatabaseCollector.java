@@ -28,7 +28,7 @@ public class DefaultDatabaseCollector extends AbstractDatabaseCollector  {
 	public Table addTable(String schema, 
 			String catalog, 
 			String name) {
-		
+
         String key = Table.qualify(quote(catalog), quote(schema), quote(name));
 		Table table = (Table) tables.get(key);
 		

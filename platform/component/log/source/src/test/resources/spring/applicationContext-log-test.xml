@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	default-autowire="byName" default-lazy-init="false">
+
+
+	<!-- 消息Queue管理器 -->
+	<bean id="queuesHolder" class="com.sinosoft.one.util.queue.QueuesHolder">
+		<property name="queueSize" value="1000" />
+	</bean>
+
+	<!-- 读出Queue中日志消息写入数据库的任务 -->
+	<bean id="jdbcLogWriter" class="com.sinosoft.one.log.JdbcLogWriter">
+		<property name="queueName" value="dblog" />
+		<property name="appName" value="${log.appname}" />
+		<property name="batchSize" value="${log.batchSize}" />
+		<property name="sql">
+			<value>
+				insert into
+				GE_MONITOR_APPLOG(SERIALNO,APPNAME,TRACEID,METHODNAME,CLASSNAME,INPUTPARAM,OUTPARAM,BEGINTIME,ENDTIME,CONSUMETIME,LOGDESC,LOGGRADE,LOGTIME,LOGTYPE)
+				values(:serialNo,:appName,:traceId,:methodName,:className,:inputParam,:outParam,:beginTime,:endTime,:consumeTime,:logDesc,:logGrade,:logTime,:logType)
+			</value>
+		</property>
+	</bean>
+
+
+
+
+
+
+
+
+
+</beans>

@@ -8,6 +8,7 @@ import org.hibernate.cfg.reveng.dialect.JDBCMetaDataDialect;
 import org.hibernate.cfg.reveng.dialect.MetaDataDialect;
 import org.hibernate.cfg.reveng.dialect.MySQLMetaDataDialect;
 import org.hibernate.cfg.reveng.dialect.OracleMetaDataDialect;
+import org.hibernate.cfg.reveng.dialect.SQLServerMetaDataDialect;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.H2Dialect;
 import org.hibernate.dialect.HSQLDialect;
@@ -15,6 +16,7 @@ import org.hibernate.dialect.MySQLDialect;
 import org.hibernate.dialect.Oracle8iDialect;
 import org.hibernate.dialect.Oracle9Dialect;
 import org.hibernate.util.ReflectHelper;
+import org.hibernate.dialect.SQLServerDialect;
 
 public class MetaDataDialectFactory {
 
@@ -47,9 +49,9 @@ public class MetaDataDialectFactory {
 			return null;
 		}
 	}
-	
+
 	public MetaDataDialect fromDialect(Dialect dialect) {
-		if(dialect!=null) {  
+		if(dialect!=null) {
 			if(dialect instanceof Oracle9Dialect) {
 				return new OracleMetaDataDialect();
 			} else if(dialect instanceof Oracle8iDialect) {
@@ -60,11 +62,13 @@ public class MetaDataDialectFactory {
 				return new MySQLMetaDataDialect();
 			} else if (dialect instanceof HSQLDialect) {
 				return new HSQLMetaDataDialect();
-			}			
+			}else if (dialect instanceof SQLServerDialect) {
+				return new SQLServerMetaDataDialect();
+			}
 		}
 		return null;
 	}
-	
+
 	public MetaDataDialect fromDialectName(String dialect) {
 		if (dialect.toLowerCase().contains("oracle")) {
 			return new OracleMetaDataDialect();
@@ -77,6 +81,9 @@ public class MetaDataDialectFactory {
 		}
 		if (dialect.toLowerCase().contains("hsql")) {
 			return new HSQLMetaDataDialect();
+		}
+		if (dialect.toLowerCase().contains("sqlserver")) {
+			return new SQLServerMetaDataDialect();
 		}
 		return null;
 	}

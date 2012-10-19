@@ -144,6 +144,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.microsoft</groupId>
+            <artifactId>jdbc4</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
         </dependency>

@@ -7,5 +7,9 @@
   <modules>
   	<module>parent</module>
   	<module>authority</module>
+	<module>util</module>
+	<module>bpm</module>
+	<module>log</module>
+	<module>log4jdbc</module>
   </modules>
 </project>
