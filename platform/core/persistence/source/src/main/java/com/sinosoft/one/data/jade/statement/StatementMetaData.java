@@ -146,6 +146,9 @@ public class StatementMetaData {
         return daoMetaData.getDAOClass().getName() + '#' + method.getName();
     }
 
+    /**
+     * 查询语句的正则模板
+     */
     public static Pattern[] SELECT_PATTERNS = new Pattern[] {
             //
             Pattern.compile("^\\s*SELECT\\s+", Pattern.CASE_INSENSITIVE), //
@@ -153,6 +156,10 @@ public class StatementMetaData {
             Pattern.compile("^\\s*DESC\\s+", Pattern.CASE_INSENSITIVE), //
             Pattern.compile("^\\s*DESCRIBE\\s+", Pattern.CASE_INSENSITIVE), //
     };
+    /**
+     * 存储过程的正则模板
+     */
+    public static Pattern CALL_PATTERN = Pattern.compile("^((\\s*|\\s*\\{\\s*)CALL|exec|execute)\\s+", Pattern.CASE_INSENSITIVE);
 
     private SQLType sqlType;
 
@@ -171,6 +178,9 @@ public class StatementMetaData {
                     // 用正则表达式匹配  SELECT 语句
                     if (SELECT_PATTERNS[i].matcher(getSQL()).find()) {
                         sqlType = SQLType.READ;
+                        break;
+                    }else if(CALL_PATTERN.matcher(getSQL()).find()){
+                        sqlType = SQLType.PROCEDURE;
                         break;
                     }
                 }
