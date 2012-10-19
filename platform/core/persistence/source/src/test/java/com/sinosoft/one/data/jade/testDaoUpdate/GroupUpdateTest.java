@@ -71,14 +71,6 @@ public class GroupUpdateTest {
         }
     }
 
-    @Test
-    public void testProc(){
-        groupDao.testProc("group333","g1");
-        String[] ids = {"g1"};
-        List<Group> groups = groupDao.selectGroupById(ids);
-        assertEquals("group333",groups.get(0).getName());
-    }
-
     @After
     public void destroyData(){
         groupDao.deleteAllGroup();
