@@ -95,6 +95,19 @@ public class SqlServerProcedureTest extends TestSuport {
         assertEquals(4,resultSetProcedureResult4.getResult().size());
         assertEquals("group3",resultSetProcedureResult4.getResult().get(2));
     }
+    @Test
+    public void testPrcComplexResult(){
+        String id = "1";
+        ResultSetProcedureResult<List<Group>> resultSetProcedureResult1 = new ResultSetProcedureResult<List<Group>>(Group.class);
+        OutProcedureResult<List<String>> oprt1 = new OutProcedureResult<List<String>>(String.class,Types.VARCHAR);
+        OutProcedureResult<List<String>> oprt2 = new OutProcedureResult<List<String>>(String.class,Types.VARCHAR);
+        userSelectDao.testPrcComplexResult(id,oprt1,oprt2,resultSetProcedureResult1);
+        assertEquals(4,resultSetProcedureResult1.getResult().size());
+        assertEquals("3",resultSetProcedureResult1.getResult().get(2).getId());
+        assertEquals("group3",resultSetProcedureResult1.getResult().get(2).getName());
+        assertEquals("1",oprt1.getResult().get(0));
+        assertEquals("group1",oprt2.getResult().get(0));
+    }
     @After
     public void destroy(){
         booleanCheckDao.clear();
