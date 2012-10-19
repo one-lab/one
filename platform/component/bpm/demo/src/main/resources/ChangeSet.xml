@@ -7,6 +7,8 @@
 			type='PKG' /> -->
 		<resource source='classpath:processes/ComboProcess.bpmn' type="BPMN2">
 		</resource>
+		<resource source='classpath:processes/ComboSubProcess.bpmn' type="BPMN2">
+		</resource>
 	</add>
 
 </change-set>

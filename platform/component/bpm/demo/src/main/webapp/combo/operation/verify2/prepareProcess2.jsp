@@ -61,6 +61,7 @@
 								
 								<td  class="btnBigOnFocus" onclick="submitUpdate('true');" nowrap>通过</td>
 								<td  class="btnBigOnFocus" onclick="submitUpdate('false');" nowrap>不通过</td>
+								<td  class="btnBigOnFocus" onclick="submitUpdate('end');" nowrap>撤销</td>
 							</tr>
 						</table>
 					</td>

@@ -73,6 +73,29 @@ public class ComboAction extends Struts2Action {
 		System.out.println("second step--------verifyCombo2--------");
 
 	}
+	
+	public String getVerify3Combos() {
+		this.page = new Page();
+		List<Combo> results = comboService.getCombos_StepTwo("");
+
+		for (Combo c : results) {
+			page.getResult().add(c);
+		}
+		System.out.println("page size--------" + results.size());
+		return SUCCESS;
+	}
+
+	public String prepareProcess3() {
+		combo = DataStore.dataStore.get(combo.getComboCode());
+		return SUCCESS;
+	}
+
+	public void verifyCombo3() {
+		combo.getKind().setComboCode(combo.getComboCode());
+		comboService.processCombo_StepTwo(combo.getComboCode(), combo, this.getRequest().getParameter("isPassed"));
+		System.out.println("second step--------verifyCombo3--------");
+
+	}
 
 	public String getDeployCombos() {
 		this.page = new Page();
@@ -89,11 +112,34 @@ public class ComboAction extends Struts2Action {
 		combo = DataStore.dataStore.get(combo.getComboCode());
 		return SUCCESS;
 	}
-
+	
 	public void deploy() {
 		combo.getKind().setComboCode(combo.getComboCode());
 		comboService.processCombo_StepThree(combo.getComboCode(), combo);
 		System.out.println("third step--------deployCombo--------");
+
+	}
+	
+	public String getDeploy2Combos() {
+		this.page = new Page();
+		List<Combo> results = comboService.getCombos_StepFour("");
+
+		for (Combo c : results) {
+			page.getResult().add(c);
+		}
+		System.out.println("page size--------" + results.size());
+		return SUCCESS;
+	}
+
+	public String prepareDeploy2() {
+		combo = DataStore.dataStore.get(combo.getComboCode());
+		return SUCCESS;
+	}
+
+	public void deploy2() {
+		combo.getKind().setComboCode(combo.getComboCode());
+		comboService.processCombo_StepFour(combo.getComboCode(), combo);
+		System.out.println("four step--------deployCombo-2222222-------");
 
 	}
 

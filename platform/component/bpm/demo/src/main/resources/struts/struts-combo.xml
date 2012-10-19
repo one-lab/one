@@ -28,5 +28,12 @@
 		<action name="prepareDeploy" class="comboAction" method="prepareDeploy">
 			<result name="success">/combo/operation/deploy/prepareDeploy.jsp </result>
 		</action>
+		<action name="deploy2" class="comboAction" method="deploy2"></action>
+		<action name="getDeploy2Combos" class="comboAction" method="getDeploy2Combos">
+			<result name="success">/combo/operation/deploy2/search.jsp </result>
+		</action>
+		<action name="prepareDeploy2" class="comboAction" method="prepareDeploy2">
+			<result name="success">/combo/operation/deploy2/prepareDeploy.jsp </result>
+		</action>
 	</package>
 </struts>
