@@ -2,6 +2,8 @@ package com.sinosoft.one.data.jade.dao;
 
 import com.sinosoft.one.data.jade.annotation.RowHandler;
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.data.jade.dataaccess.procedure.OutProcedureResult;
+import com.sinosoft.one.data.jade.dataaccess.procedure.ProcedureResult;
 import com.sinosoft.one.data.jade.model.SomePropertis;
 import com.sinosoft.one.data.jade.model.User;
 import com.sinosoft.one.data.jade.model.User1;
@@ -119,4 +121,21 @@ public interface UserSelectDao  extends UserDao {
     @SQL("select * from t_user where id like ?1")
     List<User> selectUsersWithAnooForSort(String a,Sort sort);
 
+    @SQL("{call TESTSTRING(?1,?2)}")
+    void testPrcOutSingle(String in,ProcedureResult... procedureResults);
+
+    @SQL("{call test_02(?1)}") //sqlserver
+    void testPrcResultSingle(String id,ProcedureResult procedureResults);
+
+    @SQL("{call test_02(?1,?2)}") //oracle
+    void testPrcResultSingle1(String id,ProcedureResult procedureResults);
+
+    @SQL("{call test_03()}")
+    void testPrcResultMany(ProcedureResult... procedureResults2);
+
+    @SQL("{call test_03(?1,?2,?3,?4)}") //oracle
+    void testPrcResultMany1(ProcedureResult... procedureResults2);
+
+    @SQL("{call test_04(?1,?2,?3)}")
+    void testPrcComplexResult(String id,ProcedureResult... procedureResults2);
 }
