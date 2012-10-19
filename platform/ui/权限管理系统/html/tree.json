@@ -27,7 +27,6 @@
 			},
 			{
 				"attr" : {"id": "id_2_2"},
-				"attr" : {"id": "id_one"},
 				"data" : { 
 						"title" : "Long format demo", 
 						"attr" : { "href" : "#" } 

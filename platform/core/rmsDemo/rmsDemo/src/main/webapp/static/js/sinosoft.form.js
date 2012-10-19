@@ -83,8 +83,8 @@ $.fn.extend({
 			//如果他没有设宽度，那么就用默认宽度
 			if($(this).css("width") == "0px"){
 				$(this).width(defaultWidth);
-			}		  
-			var id = $(this).attr("id");		
+			}
+			var id = $(this).attr("id");			
 			if(!id || id == "") {
 				$(this).attr("id","select" + "_" + i);
 			}
@@ -94,7 +94,11 @@ $.fn.extend({
 			var selectArea = $(this).next();
 			var currentSelect = $(this);
 			selectArea.css({"width":currentSelect.width() + 21 + 'px'}).prepend("<div class='selectLeft'></div>");
-			selectArea.find("div.selectLeft").before("<div class='selectRight'></div>").after("<div class='selectMain'></div>");
+			if($(this).attr("disabled") == "disabled") {
+				selectArea.find("div.selectLeft").before("<div class='selectRight disabled'></div>").after("<div class='selectMain'></div>");
+			} else {
+				selectArea.find("div.selectLeft").before("<div class='selectRight'></div>").after("<div class='selectMain'></div>");
+			}
 			selectArea.find("div.selectMain").css({"width":currentSelect.width() - 8 + 'px'}).prepend(selected);
 			selectArea.prepend("<ul class='selectList'></ul>");
 			selectArea.find("ul.selectList").css({"width":currentSelect.width() - 3 + 'px'});
@@ -110,20 +114,23 @@ $.fn.extend({
 				$(this).addClass("selectList_hover");
 			})
 			selectArea.find("div.selectRight").click(function(){
-				if(selectList.css("display")=='none'){
-					$("li",selectList).show();
-					selectArea.css("position","relative");
-					selectList.slideDown(260);
+				if($(this).hasClass("disabled")) {
 				}else{
-					selectList.toggle();
-					selectArea.css("position","static");
+					if(selectList.css("display")=='none'){
+						$("li",selectList).show();
+						selectArea.css("position","relative");
+						selectList.slideDown(260);
+					}else{
+						selectList.toggle();
+						selectArea.css("position","static");
+					}	
 				}
 			});
 			selectList.find("li span").click(function(){
 				selectList.toggle();			
 				selectArea.find("div.selectMain").replaceWith("<div class='selectMain'>" + $(this).text() + "</div>");				
 				currentSelect.val($(this).text());
-				selectArea.css("position","static");
+				selectArea.css("position", "static");
 			});
 			selectArea.mouseoutclick(function(){
 				selectArea.css("position","static");

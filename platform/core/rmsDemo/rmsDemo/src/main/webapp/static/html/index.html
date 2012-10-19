@@ -31,9 +31,12 @@ $(function(){
 		leftBarH();
 	});
 });
-function dMenu(){
+function dMenu(){	
 	var a = $(this);
 	var ul = $(this).siblings("ul");
+	var url = a.attr("href");
+	var myfram = $("#pageContent");
+	myfram.attr("src",url);
 	if(ul.length > 0){
 		ul.show();
 		$("#nav").find("a").removeClass("select");
@@ -47,7 +50,8 @@ function dMenu(){
 		$("#nav").find("ul").hide();
 		$("#nav").find("a").removeClass("select");
 		a.addClass("select");
-	};
+	};	
+	return false;
 };
 function leftOnOff(){
 	$.layout.leftOnOff();
@@ -68,8 +72,13 @@ function leftBarH(){
 };
 function myFrame(){
 	var iframeW = $("#layout_center").width();
-	var iframeH = $("#layout_center").height() - 38;
+	var iframeH = $("#layout_center").height() - 42;
 	$("#pageContent").width(iframeW).height(iframeH);
+};
+function changePass(e){
+	var url = $(e).attr("href");	
+	$("#pageContent").attr("src",url);
+	return false;
 };
 </script>
 </head>
@@ -81,7 +90,7 @@ function myFrame(){
     	<img src="../images/system/logo.gif" class="logo"  />
         <p class="user_bar">
         	用户：系统管理员
-            <a href="#" class="pass">修改密码</a>
+            <a href="changePass.html" class="pass" onclick="return  changePass(this)">修改密码</a>
             <a href="login.html" class="quit">重新登录</a>
         </p>
     </div>
@@ -95,18 +104,18 @@ function myFrame(){
         </a>
         <!--左栏菜单-->
         <div id="leftMenu">
-        	<h3>权限管理</h3>
+        	<h3><b class="ac_name">权限管理</b></h3>
             <div>
             	<ul class="nav" id="nav">
-                	<li><a href="#"><span>功能菜单管理</span></a></li>
-                    <li><a href="#"><span>功能授权</span></a></li>
-                    <li><a href="#"><span>角色管理</span></a>
+                	<li><a href="loadTask.html"><span>功能菜单管理</span></a></li>
+                    <li><a href="loadtaskAuth.html"><span>功能授权</span></a></li>
+                    <li><a href="loadRole.html"><span>角色管理</span></a>
                     	<ul>
-                        	<li><a href="#"><span>角色指派</span></a></li>
+                        	<li><a href="loadroleDesignate.html"><span>角色指派</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#"><span>用户组管理</span></a></li>
-                    <li><a href="#"><span>人员配置</span></a></li>
+                    <li><a href="loadGroup.html"><span>用户组管理</span></a></li>
+                    <li><a href="loadEmployeesConfig.html"><span>人员配置</span></a></li>
                 </ul>
             </div>        	
         </div>
