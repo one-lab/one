@@ -107,29 +107,11 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<Task> findTaskAuthByComCodeAndsysFlag(String comCode,String sysFlag) {
-//		List<TaskAuth> taskaAuths=new ArrayList<TaskAuth>();
-//		QueryRule queryRule = QueryRule.getInstance();
-//		queryRule.addEqual("comCode", comCode);
-//		taskaAuths = super.find(TaskAuth.class, queryRule);
-//		if (taskaAuths == null) {
-//			// 异常处理
-//		}
 		StringBuffer taskIDSQL=new StringBuffer();
 		Set<Task> tasks=new HashSet<Task>();
 		taskIDSQL.append("select taskid from ge_rms_task_auth where comcode='"+comCode+"' or comcode='*'");
 		List<String> taskids=new ArrayList<String>();
 		taskids=(List<String>)getSession().createSQLQuery(taskIDSQL.toString()).list();
-//		for (TaskAuth taskAuth : taskaAuths) {
-//			if(taskAuth.getTask().getSysFlag()!=null){
-//				if(sysFlag.toString().equals(taskAuth.getTask().getSysFlag().toString())&&"1".equals(taskAuth.getTask().getIsValidate().toString()))
-//					tasks.add(taskAuth.getTask());
-//				if("RMS".toString().equals(taskAuth.getTask().getSysFlag().toString())&&"1".equals(taskAuth.getTask().getIsValidate().toString()))
-//					tasks.add(taskAuth.getTask());
-//			}
-//		}
-//		for(TaskAuth taskAuth : taskaAuths){
-//			taskids.add(taskAuth.getTask().getTaskID());
-//		}
 		if (taskids.size() > 0) {
 			StringBuffer hql=new StringBuffer();
 			hql.append("from Task where taskID in(");
@@ -283,25 +265,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 		delteComCodeSQL.append(")");
 		getSession().createSQLQuery(delteComCodeSQL.toString()).executeUpdate();
 		// 然后进行查询下一级机构
-		//下面部分交予comService 
-//		StringBuffer comCodesSQL = new StringBuffer();
-//		comCodesSQL.append("select comCode from ge_rms_company where uppercomcode in (");
-//		List<String> subcomCodes = new ArrayList<String>();
-//		i=0;
-//		for (i = 0; i < comCodes.size(); i++) {
-//			comCodesSQL.append(" '" + comCodes.get(i) + "',");
-//			//每如果到了1000则用OR处理
-//			if(i%999==0&&i>=999){
-//				System.out.println(i+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-//				comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
-//				comCodesSQL.append(")");
-//				comCodesSQL.append(" or uppercomcode in(");
-//			}
-//		}
-//		comCodesSQL.delete(comCodesSQL.length() - 1,comCodesSQL.length());
-//		comCodesSQL.append(")");
-//		//是否要删除OR语句的结尾
-//		subcomCodes = (List<String>) getSession().createSQLQuery(comCodesSQL.toString()).list();
+		//交予companyServiceInterface 
 		List<String> subcomCodes = companyServiceInterface.findComCodebySuperComCode(comCodes);
 		if (subcomCodes.size() > 0) {
 			iteraterComCode(subcomCodes, taskIds);
@@ -384,29 +348,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 		super.save(task);
 	}
 
-	public void addTask(String taskId, String name, String menuURL,
-			String menuName, String des,String isAsMenu, String parentId, String loginUserCode,String loginComCode) {
-		Task task=new Task();
-		task.setTaskID(taskId);
-		task.setName(name);
-		task.setMenuURL(menuURL);
-		task.setMenuName(menuName);
-		task.setDes(des);
-		task.setIsValidate("1");
-		task.setIsAsMenu(isAsMenu);
-		if(StringUtils.isNotBlank(parentId))
-			task.setParent(super.get(Task.class, parentId));
-		List<TaskAuth> taskAuths=new ArrayList<TaskAuth>();
-		TaskAuth taskAuth=new TaskAuth();
-		taskAuth.setTask(task);
-		taskAuth.setComCode(loginComCode);
-		taskAuth.setOperateUser(loginUserCode);
-		taskAuth.setTask(task);
-		taskAuths.add(taskAuth);
-		task.setTaskAuths(taskAuths);
-		super.save(task);
-		
-	}
+	
 
 	public void updateTaskHasSysFlag(String taskId, String name, String menuURL,String isValidate,
 			String menuName, String des,String isAsMenu,String sysFlag,String loginComCode) {
@@ -420,6 +362,11 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 			task.setIsValidate(isValidate);
 			task.setSysFlag(sysFlag);
 			task.setIsAsMenu(isAsMenu);
+			if("*".equals(loginComCode)){
+				task.setFlag("*");
+			}else{
+				task.setFlag("");
+			}
 			super.update(task);
 			if(!"*".equals(loginComCode)){
 				QueryRule queryRule=QueryRule.getInstance();
@@ -427,27 +374,22 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 				queryRule.addEqual("comCode", "*");
 				TaskAuth taskAuth=super.findUnique(TaskAuth.class, queryRule);
 				if(taskAuth!=null){
-					taskAuth.setComCode(loginComCode);
-					super.update(taskAuth);
+					QueryRule queryRuleOldAuth=QueryRule.getInstance();
+					queryRuleOldAuth.addEqual("task.taskID", taskId);
+					queryRuleOldAuth.addEqual("comCode", loginComCode);
+					TaskAuth oldTaskAuth=super.findUnique(TaskAuth.class, queryRuleOldAuth);
+					if(oldTaskAuth!=null){
+						taskAuth.setComCode(loginComCode);
+						super.update(taskAuth);
+					}
 				}
+			}
+			if("*".equals(loginComCode)){
+				
 			}
 		}
 	}
 
-	public void updateTask(String taskId, String name, String menuURL,String isValidate,
-			String menuName, String des,String isAsMenu) {
-		Task task=super.get(Task.class, taskId);
-		if (task!=null) {
-			task.setTaskID(taskId);
-			task.setName(name);
-			task.setMenuURL(menuURL);
-			task.setMenuName(menuName);
-			task.setDes(des);
-			task.setIsValidate(isValidate);
-			task.setIsAsMenu(isAsMenu);
-			super.update(task);
-		}
-	}
 
 	public Task findTaskById(String TaskId) {
 		return super.get(Task.class, TaskId);
