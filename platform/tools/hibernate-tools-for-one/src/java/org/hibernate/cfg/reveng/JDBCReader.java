@@ -567,7 +567,6 @@ public class JDBCReader {
 
 	private void processBasicColumns(Table table, ProgressListener progress) {
 		// get the columns
-		
 		String qualify = Table.qualify(table.getCatalog(), table.getSchema(), table.getName() );
 		Iterator columnIterator = null;
 		

@@ -134,7 +134,47 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
 
         return rowMapper;
     }
+    public RowMapper getRowMapper(Class<?> rowType) {
 
+        // BUGFIX: SingleColumnRowMapper 处理  Primitive Type 抛异常
+        if (rowType.isPrimitive()) {
+            rowType = ClassUtils.primitiveToWrapper(rowType);
+        }
+
+        // 根据类型创建  RowMapper
+        RowMapper rowMapper;
+
+        // 返回单列的查询的(或者返回只有2列的Map类型查询的)
+        if (TypeUtils.isColumnType(rowType)) {
+            rowMapper = new SingleColumnRowMapper(rowType);
+        }
+        // 返回多列的，用Bean对象、集合、映射、数组来表示每一行的
+        else {
+            if (rowType == Map.class) {
+                rowMapper = new ColumnMapRowMapper();
+            } else if (rowType.isArray()) {
+                rowMapper = new ArrayRowMapper(rowType);
+            } else if ((rowType == List.class)
+                    || (rowType == Collection.class)
+                    || (rowType == Set.class)) {
+                rowMapper = null;
+            } else {
+                boolean checkColumns = false ;
+                boolean checkProperties = false ;
+                String key = rowType.getName() + "[checkColumns=" + checkColumns
+                        + "&checkProperties=" + checkProperties + "]";
+                rowMapper = rowMappers.get(key);
+                if (rowMapper == null) {
+                    rowMapper = new BeanPropertyRowMapper(rowType, checkColumns, checkProperties); // jade's BeanPropertyRowMapper here
+                    rowMappers.put(key, rowMapper);
+                }
+            }
+        }
+        if(rowMapper==null){
+            throw new IllegalArgumentException();
+        }
+        return rowMapper;
+    }
     // 获得返回的集合元素类型
     private static Class<?> getRowType(StatementMetaData statementMetaData) {
         Class<?> returnClassType = statementMetaData.getMethod().getReturnType();

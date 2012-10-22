@@ -15,6 +15,9 @@
  */
 package com.sinosoft.one.data.jade.dataaccess;
 
+import com.sinosoft.one.data.jade.dataaccess.procedure.OutProcedureResult;
+import com.sinosoft.one.data.jade.dataaccess.procedure.ResultSetProcedureResult;
+import com.sinosoft.one.data.jade.rowmapper.RowMapperFactory;
 import com.sinosoft.one.data.jade.statement.pagesqlsuite.RenderSqlFactory;
 import com.sinosoft.one.data.jade.statement.pagesqlsuite.SuiteDataSourceSql;
 import org.apache.commons.logging.Log;
@@ -119,6 +122,16 @@ public class DataAccessImpl implements DataAccess, Repository {
         return updated;
     }
 
+    /**
+     * 存储过程 2012-10-12
+     */
+    @Transactional
+    public void call(String sql, Object[] args, RowMapperFactory rowMapperFactory, ResultSetProcedureResult[] rsprs) {
+        Session session = em.unwrap(Session.class);
+        CallWork work = new CallWork(sql, args, rsprs,rowMapperFactory);
+        session.doWork(work);
+    }
+
     private void setParams(PreparedStatement ps,Object[] args) throws SQLException{
         if (args != null) {
             for (int i = 0; i < args.length; i++) {
@@ -160,8 +173,74 @@ public class DataAccessImpl implements DataAccess, Repository {
             }
         }
     }
+
     /**
-     * Connection查询操作的类
+     * Connection调用存储过程的类
+     */
+    private class CallWork implements Work {
+        public String sql;
+        public Object[] args;
+        public RowMapperFactory rowMapperFactory;
+        public ResultSetProcedureResult[] rsprs;
+
+        public CallWork(String sql,Object[] args,ResultSetProcedureResult[] rsprs,RowMapperFactory rowMapperFactory){
+            this.sql = sql;
+            this.args = args;
+            this.rowMapperFactory = rowMapperFactory;
+            this.rsprs = rsprs;
+        }
+        @SuppressWarnings("unchecked")
+        public void execute(Connection con) throws SQLException {
+            CallableStatement callableStatement= con.prepareCall(sql);
+            List<OutProcedureResult> oprts = new ArrayList<OutProcedureResult>();
+            for(int i=0,len = args.length;i<len;i++){
+                if(args[i] instanceof OutProcedureResult){
+                    OutProcedureResult oprt = (OutProcedureResult) args[i];
+                    oprt.setIndex(i+1);
+                    callableStatement.registerOutParameter(i+1,oprt.getType());
+                    oprts.add(oprt);
+                } else {
+                    callableStatement.setObject(i+1,args[i]);
+                }
+            }
+            callableStatement.execute();
+            int i = 0;
+            do {
+                if(i< rsprs.length){
+                    ResultSetProcedureResult rsprt = rsprs[i++];
+                    ResultSet rs = callableStatement.getResultSet();
+                    List results = new ArrayList();
+                    RowMapper rowMapper = rowMapperFactory.getRowMapper(rsprt.getContenType());
+                    int rowNum = 0;
+                    while (rs.next()) {
+                        results.add(rowMapper.mapRow(rs, rowNum++)) ;
+                    }
+                    rsprt.setResult(results);
+                }
+            } while(callableStatement.getMoreResults());
+            callableStatement.getUpdateCount();
+            for(i=0;i<oprts.size();i++){
+                OutProcedureResult oprt = oprts.get(i);
+                List results = new ArrayList();
+                Object object = callableStatement.getObject(oprt.getIndex());
+                if(object instanceof ResultSet){
+                    ResultSet rs = (ResultSet) object;
+                    RowMapper rowMapper = rowMapperFactory.getRowMapper(oprt.getContenType());
+                    int rowNum = 0;
+                    while (rs.next()) {
+                        results.add(rowMapper.mapRow(rs, rowNum++)) ;
+                    }
+                    oprt.setResult(results);
+                }else{
+                    results.add(object);
+                    oprt.setResult(results);
+                }
+            }
+        }
+    }
+
+    /**
+     * Connection更新操作的类
      */
     private class UpdateWork implements Work {
         public String sql;
@@ -185,7 +264,9 @@ public class DataAccessImpl implements DataAccess, Repository {
             number = ps.executeUpdate();
         }
     }
-
+    /**
+     * Connection分页排序的类
+     */
     private class RenderSqlWork implements Work {
         private String sql;
         private Pageable pageable;
@@ -200,7 +281,7 @@ public class DataAccessImpl implements DataAccess, Repository {
             this.sort = sort;
         }
         public void execute(Connection con) throws SQLException {
-            String URl = con.getMetaData().getURL();
+            String URl = con.getMetaData().getURL().toLowerCase();
             SuiteDataSourceSql dps = RenderSqlFactory.createPageSql(URl);
             if(sort == null){
                 sql = dps.suiteSql(sql,pageable,null);
@@ -209,5 +290,4 @@ public class DataAccessImpl implements DataAccess, Repository {
             }
         }
     }
-
 }

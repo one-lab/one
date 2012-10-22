@@ -43,7 +43,6 @@ public class SelectTest extends TestSuport {
     @Autowired
     BooleanCheckDao booleanCheckDao;
     @Before
-    @Test
     public void init(){
         booleanCheckDao.clear();
         booleanCheckDao.insert("1","0","false");
@@ -143,11 +142,10 @@ public class SelectTest extends TestSuport {
         boolean flag = false;
         try{
             isTrue = booleanCheckDao.selectBooleanStrWithAnnoById("2");
+            assertTrue(isTrue) ;
         } catch (Exception e) {
-            flag = true;
+            assertTrue(!flag) ;
         }
-        assertTrue(!isTrue) ;
-        assertTrue(flag) ;
     }
     //4.2.1
     @Test
@@ -429,7 +427,6 @@ public class SelectTest extends TestSuport {
         assertEquals("user0",user1.getName());
 
     }
-    @Test
     @After
     public void destroy(){
         booleanCheckDao.clear();

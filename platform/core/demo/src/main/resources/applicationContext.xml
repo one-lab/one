@@ -55,7 +55,6 @@
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<!-- production/local development环境 -->
- 	<beans profile="production,development">
  		<context:property-placeholder ignore-unresolvable="true"
 			location="classpath*:/application.properties" />
 		
@@ -84,7 +83,6 @@
              <constructor-arg ref="dataSourceSpied"/>
          </bean>-->
          <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
-	</beans>
 
 
 </beans>

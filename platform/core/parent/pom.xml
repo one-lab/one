@@ -26,6 +26,7 @@
         <jbpm5.version>5.2.0.Final</jbpm5.version>
         <drools.version>5.3.1.Final</drools.version>
         <struts.version>2.3.4</struts.version>
+        <cglib.version>2.2.2</cglib.version>
         <!-- Plugin的属性定义  -->
         <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -190,7 +191,12 @@
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
-                <version>2.2.2</version>
+                <version>${cglib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib-nodep</artifactId>
+                <version>${cglib.version}</version>
             </dependency>
             <dependency>
                 <groupId>asm</groupId>
@@ -555,6 +561,21 @@
             </dependency>
             <!-- JBPM5 end-->
             <!-- DROOLS begin -->
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-core</artifactId>
+                <version>${drools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-compiler</artifactId>
+                <version>${drools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-decisiontables</artifactId>
+                <version>${drools.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.drools</groupId>
                 <artifactId>drools-spring</artifactId>
@@ -987,7 +1008,7 @@
                 <version>4.2.7</version>
             </dependency>
             <dependency>
-                <groupId>com.google</groupId>
+                <groupId>com.google.code</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>2.3.2</version>
             </dependency>

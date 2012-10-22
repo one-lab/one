@@ -25,20 +25,28 @@
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
             <!-- oracle db connection setting -->
-            <!--<property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />-->
-            <!--<property name="hibernate.connection.url" value="jdbc:oracle:thin:@192.168.18.216:1521:orcl" />-->
-            <!--<property name="hibernate.connection.username" value="platform" />-->
-            <!--<property name="hibernate.connection.password" value="platform123" />-->
-            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />-->
+            <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
+            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@192.168.18.216:1521:orcl" />
+            <property name="hibernate.connection.username" value="platform" />
+            <property name="hibernate.connection.password" value="platform123" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+
+            <!-- sqlserver db connection setting -->
+            <!--<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />-->
+            <!--<property name="hibernate.connection.url" value="jdbc:sqlserver://127.0.0.1:1433;DatabaseName=platformdb" />-->
+            <!--<property name="hibernate.connection.username" value="sa" />-->
+            <!--<property name="hibernate.connection.password" value="root" />-->
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />-->
             <!--<property name="hibernate.hbm2ddl.auto" value="update" />-->
 
             <!-- mysql db connection setting -->
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-            <property name="hibernate.connection.url" value="jdbc:mysql://192.168.18.216:3306/platformdb?useUnicode=true&amp;characterEncoding=utf-8;" />
-            <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="platform123" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
-            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <!--<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />-->
+            <!--<property name="hibernate.connection.url" value="jdbc:mysql://192.168.18.216:3306/platformdb?useUnicode=true&amp;characterEncoding=utf-8;" />-->
+            <!--<property name="hibernate.connection.username" value="root" />-->
+            <!--<property name="hibernate.connection.password" value="platform123" />-->
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />-->
+            <!--<property name="hibernate.hbm2ddl.auto" value="update" />-->
 		</properties>
 	</persistence-unit>
 </persistence>

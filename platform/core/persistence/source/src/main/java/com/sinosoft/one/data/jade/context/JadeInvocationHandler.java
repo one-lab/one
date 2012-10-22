@@ -17,6 +17,9 @@ package com.sinosoft.one.data.jade.context;
 
 import com.sinosoft.one.data.jade.annotation.DAO;
 import com.sinosoft.one.data.jade.annotation.SQLType;
+import com.sinosoft.one.data.jade.dataaccess.procedure.OutProcedureResult;
+import com.sinosoft.one.data.jade.dataaccess.procedure.ProcedureResult;
+import com.sinosoft.one.data.jade.dataaccess.procedure.ResultSetProcedureResult;
 import com.sinosoft.one.data.jade.rowmapper.RowMapperFactory;
 import com.sinosoft.one.data.jade.statement.*;
 import com.sinosoft.one.data.jade.statement.cached.CacheProvider;
@@ -94,13 +97,28 @@ public class JadeInvocationHandler implements InvocationHandler {
             parameters = new HashMap<String, Object>(4);
         } else {
             parameters = new HashMap<String, Object>(args.length * 2 + 4);
+            int ResultSetProcedureResultCount = 1;
             for (int i = 0; i < args.length; i++) {
-                parameters.put(INDEX_NAMES[i], args[i]);
+                if(args[i].getClass() == ResultSetProcedureResult.class){
+                    parameters.put("*rs"+ResultSetProcedureResultCount+++"*",args[i]);
+                }else if(args[i].getClass() == ProcedureResult[].class){
+                    ProcedureResult[] pr = (ProcedureResult[])args[i];
+                    for(int j=0;j<pr.length;j++){
+                        if(pr[j] instanceof ResultSetProcedureResult){
+                            parameters.put("*rs"+ResultSetProcedureResultCount+++"*",pr[j]);
+                        }else if(pr[j] instanceof OutProcedureResult){
+                            parameters.put(INDEX_NAMES[i+j],pr[j]);
+                        }
+                    }
+                }else{
+                    parameters.put(INDEX_NAMES[i], args[i]);
+                }
 				Param sqlParam = statemenetMetaData.getSQLParamAt(i);
                 if (sqlParam != null) {
                     parameters.put(sqlParam.value(), args[i]);
                 }
             }
+            parameters.put("*rscount*",--ResultSetProcedureResultCount);
         }
         // logging
         StringBuilder invocationInfo = null;
@@ -151,6 +169,8 @@ public class JadeInvocationHandler implements InvocationHandler {
                     if (sqlType == SQLType.READ) {
                         RowMapper rowMapper = rowMapperFactory.getRowMapper(smd);
                         querier = new SelectQuerier(em, smd, rowMapper);
+                    } else if(sqlType == SQLType.PROCEDURE){
+                        querier = new CallQuerier(em,rowMapperFactory);
                     } else {
                         querier = new UpdateQuerier(em, smd);
                     }
@@ -202,5 +222,4 @@ public class JadeInvocationHandler implements InvocationHandler {
                 + "[catalog=" + dao.catalog() + "]";
         return toString;
     }
-
 }

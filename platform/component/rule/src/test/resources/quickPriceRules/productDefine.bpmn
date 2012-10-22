@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <process processType="Private" isExecutable="true" id="productDefine" name="productDefine" >
+
+    <!-- nodes -->
+    <startEvent id="_1" name="Start" />
+    <endEvent id="_2" name="End" >
+        <terminateEventDefinition/>
+    </endEvent>
+    <userTask id="_3" name="基础信息定义" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </userTask>
+    <userTask id="_4" name="保全模块定义" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </userTask>
+    <userTask id="_5" name="契约模块定义" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </userTask>
+    <userTask id="_6" name="理赔模块定义" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </userTask>
+    <userTask id="_7" name="产品审核" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </userTask>
+    <userTask id="_8" name="产品测试与发布" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </userTask>
+    <inclusiveGateway id="_11" name="Gateway" gatewayDirection="Diverging" />
+    <exclusiveGateway id="_12" name="Gateway" gatewayDirection="Converging" />
+    <inclusiveGateway id="_13" name="Gateway" gatewayDirection="Diverging" />
+    <userTask id="_14" name="问题件" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </userTask>
+    <inclusiveGateway id="_15" name="Gateway" gatewayDirection="Diverging" />
+    <exclusiveGateway id="_17" name="Gateway" gatewayDirection="Converging" />
+    <exclusiveGateway id="_16" name="Gateway" gatewayDirection="Converging" />
+    <exclusiveGateway id="_19" name="Gateway" gatewayDirection="Converging" />
+    <exclusiveGateway id="_18" name="Gateway" gatewayDirection="Converging" />
+    <exclusiveGateway id="_21" name="Gateway" gatewayDirection="Converging" />
+    <inclusiveGateway id="_20" name="Gateway" gatewayDirection="Diverging" />
+
+    <!-- connections -->
+    <sequenceFlow id="_20-_2" sourceRef="_20" targetRef="_2" name="通过" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_19-_3" sourceRef="_19" targetRef="_3" />
+    <sequenceFlow id="_17-_4" sourceRef="_17" targetRef="_4" />
+    <sequenceFlow id="_16-_5" sourceRef="_16" targetRef="_5" />
+    <sequenceFlow id="_18-_6" sourceRef="_18" targetRef="_6" />
+    <sequenceFlow id="_12-_7" sourceRef="_12" targetRef="_7" />
+    <sequenceFlow id="_13-_8" sourceRef="_13" targetRef="_8" name="通过" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_3-_11" sourceRef="_3" targetRef="_11" />
+    <sequenceFlow id="_5-_12" sourceRef="_5" targetRef="_12" />
+    <sequenceFlow id="_4-_12" sourceRef="_4" targetRef="_12" />
+    <sequenceFlow id="_6-_12" sourceRef="_6" targetRef="_12" />
+    <sequenceFlow id="_7-_13" sourceRef="_7" targetRef="_13" />
+    <sequenceFlow id="_21-_14" sourceRef="_21" targetRef="_14" />
+    <sequenceFlow id="_14-_15" sourceRef="_14" targetRef="_15" />
+    <sequenceFlow id="_15-_17" sourceRef="_15" targetRef="_17" >
+      <conditionExpression xsi:type="tFormalExpression" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_11-_17" sourceRef="_11" targetRef="_17" >
+      <conditionExpression xsi:type="tFormalExpression" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_15-_16" sourceRef="_15" targetRef="_16" >
+      <conditionExpression xsi:type="tFormalExpression" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_11-_16" sourceRef="_11" targetRef="_16" >
+      <conditionExpression xsi:type="tFormalExpression" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_1-_19" sourceRef="_1" targetRef="_19" />
+    <sequenceFlow id="_15-_19" sourceRef="_15" targetRef="_19" >
+      <conditionExpression xsi:type="tFormalExpression" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_15-_18" sourceRef="_15" targetRef="_18" >
+      <conditionExpression xsi:type="tFormalExpression" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_11-_18" sourceRef="_11" targetRef="_18" >
+      <conditionExpression xsi:type="tFormalExpression" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_13-_21" sourceRef="_13" targetRef="_21" name="不通过" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_20-_21" sourceRef="_20" targetRef="_21" name="不通过" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule" ></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_8-_20" sourceRef="_8" targetRef="_20" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="productDefine" >
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="232" y="1" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_2" >
+        <dc:Bounds x="906" y="502" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_3" >
+        <dc:Bounds x="206" y="137" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_4" >
+        <dc:Bounds x="317" y="350" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_5" >
+        <dc:Bounds x="207" y="349" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_6" >
+        <dc:Bounds x="470" y="351" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_7" >
+        <dc:Bounds x="207" y="500" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_8" >
+        <dc:Bounds x="534" y="501" width="129" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_11" >
+        <dc:Bounds x="232" y="207" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12" >
+        <dc:Bounds x="232" y="415" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13" >
+        <dc:Bounds x="365" y="500" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14" >
+        <dc:Bounds x="608" y="349" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_15" >
+        <dc:Bounds x="496" y="72" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_17" >
+        <dc:Bounds x="342" y="276" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_16" >
+        <dc:Bounds x="233" y="277" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_19" >
+        <dc:Bounds x="231" y="72" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_18" >
+        <dc:Bounds x="496" y="275" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_21" >
+        <dc:Bounds x="581" y="416" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_20" >
+        <dc:Bounds x="753" y="501" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_20-_2" >
+        <di:waypoint x="777" y="525" />
+        <di:waypoint x="930" y="526" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_19-_3" >
+        <di:waypoint x="255" y="96" />
+        <di:waypoint x="256" y="161" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_17-_4" >
+        <di:waypoint x="366" y="300" />
+        <di:waypoint x="367" y="374" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_16-_5" >
+        <di:waypoint x="257" y="301" />
+        <di:waypoint x="257" y="373" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_18-_6" >
+        <di:waypoint x="520" y="299" />
+        <di:waypoint x="520" y="375" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12-_7" >
+        <di:waypoint x="256" y="439" />
+        <di:waypoint x="257" y="524" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_13-_8" >
+        <di:waypoint x="389" y="524" />
+        <di:waypoint x="598" y="525" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_3-_11" >
+        <di:waypoint x="256" y="161" />
+        <di:waypoint x="256" y="231" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5-_12" >
+        <di:waypoint x="257" y="373" />
+        <di:waypoint x="256" y="439" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4-_12" >
+        <di:waypoint x="367" y="374" />
+        <di:waypoint x="256" y="439" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6-_12" >
+        <di:waypoint x="520" y="375" />
+        <di:waypoint x="256" y="439" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7-_13" >
+        <di:waypoint x="257" y="524" />
+        <di:waypoint x="389" y="524" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_21-_14" >
+        <di:waypoint x="605" y="440" />
+        <di:waypoint x="658" y="373" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14-_15" >
+        <di:waypoint x="658" y="373" />
+        <di:waypoint x="520" y="96" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15-_17" >
+        <di:waypoint x="520" y="96" />
+        <di:waypoint x="366" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11-_17" >
+        <di:waypoint x="256" y="231" />
+        <di:waypoint x="366" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15-_16" >
+        <di:waypoint x="520" y="96" />
+        <di:waypoint x="257" y="301" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11-_16" >
+        <di:waypoint x="256" y="231" />
+        <di:waypoint x="257" y="301" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_1-_19" >
+        <di:waypoint x="256" y="25" />
+        <di:waypoint x="255" y="96" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15-_19" >
+        <di:waypoint x="520" y="96" />
+        <di:waypoint x="255" y="96" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15-_18" >
+        <di:waypoint x="520" y="96" />
+        <di:waypoint x="520" y="299" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11-_18" >
+        <di:waypoint x="256" y="231" />
+        <di:waypoint x="520" y="299" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_13-_21" >
+        <di:waypoint x="389" y="524" />
+        <di:waypoint x="605" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_20-_21" >
+        <di:waypoint x="777" y="525" />
+        <di:waypoint x="605" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8-_20" >
+        <di:waypoint x="598" y="525" />
+        <di:waypoint x="777" y="525" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>

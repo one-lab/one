@@ -3,29 +3,32 @@
         SYSTEM "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 <hibernate-reverse-engineering>
 
-    <type-mapping>
-        <!-- jdbc-type is name for java.sql.Types -->
-        <sql-type jdbc-type="VARCHAR" length='2' hibernate-type="SomeUserType" />
-        <sql-type jdbc-type="VARCHAR" length='1' hibernate-type="yes_no" />
-        <!-- length, scale and precision can be used to specify the mapping precisely -->
-        <sql-type jdbc-type="NUMERIC"  precision='1' hibernate-type="boolean" />
-        <!-- the type-mappings are ordered. This mapping will be consulted last,
-          thus overridden by the previous one if precision=1 for the column -->
-        <sql-type jdbc-type="NUMERIC"  hibernate-type="long" />
-    </type-mapping>
+    <!--<type-mapping>-->
+        <!--&lt;!&ndash; jdbc-type is name for java.sql.Types &ndash;&gt;-->
+        <!--<sql-type jdbc-type="VARCHAR" length='2' hibernate-type="SomeUserType" />-->
+        <!--<sql-type jdbc-type="VARCHAR" length='1' hibernate-type="yes_no" />-->
+        <!--&lt;!&ndash; length, scale and precision can be used to specify the mapping precisely &ndash;&gt;-->
+        <!--<sql-type jdbc-type="NUMERIC"  precision='1' hibernate-type="boolean" />-->
+        <!--&lt;!&ndash; the type-mappings are ordered. This mapping will be consulted last,-->
+          <!--thus overridden by the previous one if precision=1 for the column &ndash;&gt;-->
+        <!--<sql-type jdbc-type="NUMERIC"  hibernate-type="long" />-->
+    <!--</type-mapping>-->
 
-    <!-- BIN$ is recycle bin tables in Oracle -->
-    <table-filter match-name="BIN$.*" exclude="true" />
+    <!--&lt;!&ndash; BIN$ is recycle bin tables in Oracle &ndash;&gt;-->
+    <!--<table-filter match-name="BIN$.*" exclude="true" />-->
 
-    <!-- Exclude DoNotWantIt from all catalogs/schemas -->
-    <table-filter match-name="DoNotWantIt" exclude="true" />
+    <!--&lt;!&ndash; Exclude DoNotWantIt from all catalogs/schemas &ndash;&gt;-->
+    <!--<table-filter match-name="DoNotWantIt" exclude="true" />-->
 
-    <!-- exclude all tables from the schema SCHEMA in catalog BAD. -->
-    <table-filter match-catalog="BAD" match-schema="SCHEMA" match-name=".*" exclude="true" />
+    <!--&lt;!&ndash; exclude all tables from the schema SCHEMA in catalog BAD. &ndash;&gt;-->
+    <!--<table-filter match-catalog="BAD" match-schema="SCHEMA" match-name=".*" exclude="true" />-->
 
     <!--<table-filter match-schema=".*" match-name="JPA.*" package="one.data.test"/>-->
-    <table-filter match-schema=".*" match-name="C_.*" package="com.sinosoft.one.data.test1.model"/>
-    <table-filter match-schema=".*" match-name="T_.*" package="com.sinosoft.one.data.test2.model"/>
+    <table-filter match-schema="dbo.*" match-name="P.*" package="com.sinosoft.ydt.model"/>
+    <table-filter match-schema="dbo.*" match-name="Y.*" package="com.sinosoft.ydt.model"/>
+    <table-filter match-schema="dbo.*" match-name="GE.*" package="com.sinosoft.ydt.model"/>
+    <!--<table-filter match-schema=".*" match-name="t.*" package="com.sinosoft.ydt.model"/>-->
+    <!--<table-filter match-schema="dbo.*" match-name="PARAMETERS" exclude="true" />-->
     <!--<table-filter match-schema=".*" match-name="T_CHECK_BOOLEAN" package="com.sinosoft.one.data.test2.model"/>-->
 
     <!-- table allows you to override/define how reverse engineering
