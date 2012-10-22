@@ -43,17 +43,12 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 		</dependency>
-
-
 		<!-- spring orm -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
+		
 		<!-- SPRING end -->
 
 		<!-- optional datasource pool -->
@@ -62,21 +57,11 @@
 			<artifactId>commons-dbcp</artifactId>
 		</dependency>
 
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
-		<!-- JSON begin 
-		<dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-      	</dependency>
-      	<dependency>
-			<groupId>com.fasterxml</groupId>
-			<artifactId>jackson-module-hibernate</artifactId>
-		</dependency> 
-		-->
+	
 		<!-- template engine -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -93,7 +78,7 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
 		
-		<!-- j2ee web spec -->
+		<!-- j2ee web spec 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -107,7 +92,7 @@
 			<artifactId>standard</artifactId>
 			<version>1.1.2</version>
 		</dependency>
-
+		-->
 		<!-- slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -130,16 +115,7 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 		</dependency>
-		<!-- CXF begin 
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http</artifactId>
-		</dependency>
-		-->
+		<!-- CXF begin -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-api</artifactId>
@@ -197,6 +173,7 @@
 			<groupId>com.sinosoft.one</groupId>
 			<artifactId>util</artifactId> 
 			<version>1.0.0-SNAPSHOT</version> 
+			 <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
