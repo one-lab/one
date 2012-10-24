@@ -203,7 +203,6 @@ public final class OneJpaQueryLookupStrategy {
             String queryName = m.getDeclaringClass().getName()+"."+m.getName();
             SQL sql = m.getAnnotation(SQL.class);
             String sqlVule = (sql==null?sqlQueries.getQuery(queryName):sql.value());
-            System.out.println(m.getDeclaringClass().getName()+"."+m.getName()+":"+sqlQueries.getQuery(queryName)) ;
             if(sqlVule!=null && StatementMetaData.CALL_PATTERN.matcher(sqlVule).find()){
                 if(m.getReturnType()!=Void.TYPE ){
                     throw new IllegalArgumentException(String.format(
