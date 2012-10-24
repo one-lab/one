@@ -15,6 +15,8 @@
  */
 package com.sinosoft.one.data.jpa.repository.query;
 
+import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.data.jade.statement.StatementMetaData;
 import org.springframework.data.jpa.repository.query.*;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -175,6 +177,7 @@ public final class OneJpaQueryLookupStrategy {
 
 
 		protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries, SqlQueries sqlQueries) {
+
             try {
                 this.jadeStrategy.setMethod(getMethod());
                 this.jadeStrategy.setMetadata(getMetadata());
@@ -195,9 +198,18 @@ public final class OneJpaQueryLookupStrategy {
             super(em, extractor);
         }
 
-
         protected RepositoryQuery resolveQuery(JpaQueryMethod method, EntityManager em, NamedQueries namedQueries, SqlQueries sqlQueries) {
-
+            Method m = getMethod();
+            String queryName = m.getDeclaringClass().getName()+"."+m.getName();
+            SQL sql = m.getAnnotation(SQL.class);
+            String sqlVule = (sql==null?sqlQueries.getQuery(queryName):sql.value());
+            System.out.println(m.getDeclaringClass().getName()+"."+m.getName()+":"+sqlQueries.getQuery(queryName)) ;
+            if(sqlVule!=null && StatementMetaData.CALL_PATTERN.matcher(sqlVule).find()){
+                if(m.getReturnType()!=Void.TYPE ){
+                    throw new IllegalArgumentException(String.format(
+                            "It requires a 'Void type' for the procedure method: %s!", method));
+                }
+            }
             RepositoryQuery query = OneJadeRepositoryQuery.fromSQLAnnotation(new OneJadeQueryMethod(getMethod(), getMetadata()), em, sqlQueries);
 
             if (null != query) {
