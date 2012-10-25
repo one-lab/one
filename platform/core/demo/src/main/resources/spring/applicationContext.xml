@@ -82,7 +82,4 @@
          <!--<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
              <constructor-arg ref="dataSourceSpied"/>
          </bean>-->
-         <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
-
-
 </beans>
