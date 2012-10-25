@@ -48,11 +48,40 @@ CREATE TABLE t_user (
 INSERT INTO t_code_gender VALUES ("0","女"),('1','男'),('3', 'g3'),('4', 'g4'),
 ('5', 'g5'),('6', 'g6'),('7', 'g7'),('8', 'g8'),('9', 'g9');
 
--- Create Procedure testprc
-alter procedure testprc
-@newname varchar(10),
-@uid varchar(3)
+-- ----------------------------
+--  Procedure
+-- ----------------------------
+CREATE proc [dbo].[test_02]
+@PARA1 varCHAR(20)
 as
-begin
-  update t_code_group set name = @newname where id = @uid;
-end;
+select * from t_code_group where id = @PARA1;
+
+CREATE proc [dbo].[test_03]
+as
+select * from t_code_group;
+select * from t_user;
+select * from t_code_group;
+select name from t_code_group;
+
+
+create PROCEDURE [dbo].[test_04]
+	@PARA1 varCHAR(20),
+	@PARA2 varchar(20) OUTPUT,
+	@PARA3 varchar(20) OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT * from t_code_group;
+	SELECT @PARA2 = id FROM T_CODE_GROUP WHERE id = @PARA1;
+	SELECT @PARA3 = name FROM T_CODE_GROUP WHERE id = @PARA1;
+END;
+
+CREATE PROCEDURE [dbo].[TESTSTRING]
+	@PARA1 varCHAR(20),
+	@PARA2 varchar(20) OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT @PARA2 = name FROM T_CODE_GROUP WHERE id = @PARA1;
+END;
+

@@ -26,7 +26,7 @@
 		<properties>
             <!-- oracle db connection setting -->
             <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
-            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@192.168.18.216:1521:orcl" />
+            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@192.168.18.217:1521:orcl" />
             <property name="hibernate.connection.username" value="platform" />
             <property name="hibernate.connection.password" value="platform123" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />

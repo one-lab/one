@@ -82,29 +82,14 @@ public class UserRepositoryTests {
 
 	@Before
 	public void setUp() throws Exception {
-
 		firstUser = new User("Oliver", "Gierke", "gierke@synyx.de");
 		firstUser.setAge(28);
-        Role role = new Role("1");
-        Role role2 = new Role("2");
-        firstUser.addRole(role);
-        firstUser.addRole(role2);
 		secondUser = new User("Joachim", "Arrasz", "arrasz@synyx.de");
 		secondUser.setAge(35);
 		Thread.sleep(10);
 		thirdUser = new User("Dave", "Matthews", "no@email.com");
 		thirdUser.setAge(43);
 	}
-
-    @Test
-    public void testQuerySQL(){
-        em.persist(firstUser);
-        em.persist(secondUser);
-        Session session = em.unwrap(Session.class);
-        String sql = "select * from jpa_user";
-        List<User> l= session.createSQLQuery(sql).addEntity(User.class).list();
-        Assert.assertNotNull(l);
-    }
 
 	@Test
 	public void testCreation() {
