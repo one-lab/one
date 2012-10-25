@@ -10,6 +10,12 @@
     	<param-name>spring.profiles.default</param-name>
     	<param-value>production</param-value>
 	</context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:applicationContext.xml
+        </param-value>
+    </context-param>
 
     <!-- Filter 定义  -->
 	<!-- Character Encoding filter -->
