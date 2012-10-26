@@ -15,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
 import com.sinosoft.one.rms.clientService.facade.RmsClientService;
 
 @DirtiesContext

@@ -12,12 +12,16 @@ import com.sinosoft.one.rms.model.RoleDesignateInfo;
 public interface RoleService {
 
 	/**
-	 * 添加或修改角色
-	 * @param role 角色对象
-	 * @param taskCodes 关联的功能代码集合
+	 *  * 添加角色(角色的可见性类型方式)
+	 * @param comCode
+	 * @param userCode
+	 * @param TaskIDs
+	 * @param roleName
+	 * @param des
+	 * @param type角色的可见性类型 （默认可见类型、全部机构可见类型）
 	 */
-	public void addRole(String comCode,String userCode,List<String> TaskIDs,String roleName,String des);
-
+	public void addRoleByType(String comCode, String userCode, List<String> TaskIDs,String roleName, String des,String type);
+	
 	/**\
 	 * 删除角色
 	 * @param roleId
@@ -65,17 +69,6 @@ public interface RoleService {
 	 */
 	public void roleDesignate(List<String> roleIDs, String comCode,String userCode);
 	
-	 /**
-	  *  更新角色 信息
-	  * @param RoleID
-	  * @param comCode
-	  * @param logingComCode
-	  * @param userCode
-	  * @param TaskIDs
-	  * @param roleName
-	  * @param des
-	  */
-	public void updataRoleByID(String RoleID,List<String> comCode,String logingComCode,String userCode,List<String> TaskIDs,String roleName,String des);
 	
 	/**
 	 * 根据角色查询指派到的机构 及指派信息
@@ -85,17 +78,6 @@ public interface RoleService {
 	 */
 	public  List<RoleDesignateInfo> findComByRoleID(String RoleID,String comCode);
 
-	/**
-	 *  * 添加角色(角色的可见性类型方式)
-	 * @param comCode
-	 * @param userCode
-	 * @param TaskIDs
-	 * @param roleName
-	 * @param des
-	 * @param type角色的可见性类型 （默认可见类型、全部机构可见类型）
-	 */
-	public void addRoleByType(String comCode, String userCode, List<String> TaskIDs,
-			String roleName, String des,String type);
 	
 	/**
 	 *  修改角色(角色的可见性类型方式)

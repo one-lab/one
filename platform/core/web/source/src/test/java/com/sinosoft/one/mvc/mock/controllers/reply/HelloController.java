@@ -93,12 +93,12 @@ public class HelloController {
 	
 	@Get("/sample/success")
     public Reply getSampleSuccess() {
-        return Replys.sample().success();
+        return Replys.simple().success();
     }
 	
 	@Get("/sample/fail")
     public Reply getSampleFail() {
-        return Replys.sample().fail("fail message");
+        return Replys.simple().fail("fail message");
     }
 	
 	@Get("/redirect")

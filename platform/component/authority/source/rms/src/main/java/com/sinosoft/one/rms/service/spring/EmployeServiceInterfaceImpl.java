@@ -3,8 +3,6 @@ package com.sinosoft.one.rms.service.spring;
 import java.util.ArrayList;
 import java.util.List;
 
-import ins.framework.cache.CacheManager;
-import ins.framework.cache.CacheService;
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
@@ -12,7 +10,6 @@ import ins.framework.utils.StringUtils;
 
 import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.UserPower;
-import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 import com.sinosoft.one.rms.service.facade.EmployeServiceInterface;
 
 public class EmployeServiceInterfaceImpl extends GenericDaoHibernate<Employe, String> implements EmployeServiceInterface{

@@ -32,13 +32,6 @@ public interface RmsService {
 	public void deleteUserPower(String userCode, String comCode);
 	
 	/**
-     * 根据人员代码获取引入机构
-     * @param userCode
-     * @return List<Company>
-     */
-//	public List<Company> findComByUserCode(String userCode) ;
-	
-	/**
 	 * 根据机构代码查询该机构下的所有员工（配置页面 已引入）
 	 * @param comCode
 	 * @return
@@ -59,21 +52,8 @@ public interface RmsService {
 	 */
 	public Set<Task> findExcPower(String userCode,String comCode);
 	
-	/**
-	 * 查询直属下级机构
-	 * @param comCode
-	 * @return
-	 */
-//	public List<Company>findNextSubCom(String comCode);
 	
-	/**
-	 * 获取功能集合
-	 * @param userCode
-	 * @param comCode
-	 * @return
-	 */
-	public List<Task> findTaskByUserCode(String userCode,String comCode);
-
+	
 	/**
 	 * 获取功能集合(多系统类型)
 	 * @param userCode
@@ -82,20 +62,6 @@ public interface RmsService {
 	 * @return
 	 */
 	public List<Task> findTaskMultSysByUserCode(String userCode,String comCode,String sysFlag);
-	/**
-	 * 查询单个员工
-	 * @param userCode
-	 * @return
-	 */
-//	public Employe findUserByCode(String userCode);
-	
-	/**
-	 * 判断是否有下属机构
-	 * @param comCode
-	 * @return
-	 */
-//	public boolean  isExtSubCom(String comCode);
-	
 	/**
 	 * 根据userCode,comCode查询USERPOWER
 	 * @param userCode
@@ -122,46 +88,5 @@ public interface RmsService {
 	 * 功能排列
 	 */
 	public List<Task> taskArrange(Set<Task> ts);
-	/**
-	 * 修改密码
-	 * @param employe
-	 */
-//	public void updatePassword(Employe employe);
-	
-	
-	/**
-	 * 查询没有权限的 机构下的员工
-	 * @param comCode
-	 * @return
-	 */
-//	public List<Employe> findUserByComCode(String comCode);
-	/**
-	 * 查询四级机构
-	 * @param comCode
-	 * @return
-	 */
-//	public List<Company>findLevFourCom(String comCode);
-	
-	/**
-	 * 根据机构代码获取机构
-	 * @param comCode
-	 * @return
-	 */
-//	public Company findCompanyByComCode(String comCode);
-	
-	/**
-	 * 查询机构及其下级所有机构
-	 * @param comCode
-	 * @return
-	 */
-//	public List<Company> findAllNextLevelCompanyByComCode(String comCode);
-	
-	/**
-	 * 根据父类机构和机构类型 获得机构集合
-	 * @param SuppercomCode
-	 * @param comType
-	 * @return
-	 */
-//	public List<Company>findCompanyBySuperAndType(String SuppercomCode,String comType);
 
 }

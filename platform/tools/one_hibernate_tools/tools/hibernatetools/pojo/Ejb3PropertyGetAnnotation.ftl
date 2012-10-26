@@ -11,6 +11,8 @@ ${pojo.generateAnnIdGenerator()}
     ${pojo.generateManyToOneAnnotation(property)}
 <#--TODO support optional and targetEntity-->    
     ${pojo.generateJoinColumnsAnnotation(property, cfg)}
+<#elseif c2h.isOneToOne(property)>
+    ${pojo.generateOneToOneAnnotation(property, cfg)}
 <#elseif c2h.isCollection(property)>
     ${pojo.generateCollectionAnnotation(property, cfg)}
 <#else>

@@ -78,32 +78,6 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		userCacheManager.clearCache("notInUserPower");
 	}
 	/**
-	 * 根据用户代码 获取机构列表(引入机构,登陆时已引入机构)
-	 */
-//	@SuppressWarnings("unchecked")
-//	public List<Company> findComByUserCode(String userCode){
-//		QueryRule queryRule = QueryRule.getInstance();
-//		queryRule.addEqual("userCode", userCode);
-//		List<UserPower> userPower = super.find(UserPower.class, queryRule);
-//		if (userPower == null || userPower.isEmpty()) {
-//			//异常
-//		}
-//		List<String> comCodes = new ArrayList<String>();
-//		for (Iterator<UserPower> iter = userPower.iterator(); iter.hasNext();) {
-//			comCodes.add(iter.next().getComCode());
-//		}
-//		List<Company> companies=new ArrayList<Company>();
-//		if(comCodes.size()>0){ 
-////			QueryRule queryRuleComcode=QueryRule.getInstance();
-////			queryRuleComcode.addIn("comCode", comCodes);
-////			companies=super.find(Company.class, queryRuleComcode);
-//			companies=(List<Company>) companyServiceInterface.findCompanysByComcodes(comCodes);
-//		}
-////		QueryRule queryComCode = QueryRule.getInstance();
-////		queryComCode.addIn("comCode", comCodes);
-//		return companies;
-//	}
-	/**
 	 * 根据机构代码查询权限员工列表(已引入员工)
 	 * @param comCode
 	 * @return
@@ -130,13 +104,6 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 			for (UserPower userPower : userPowers) {
 				userCodes.add(userPower.getUserCode());
 			}
-//			QueryRule queryEmploye = QueryRule.getInstance();
-//			queryEmploye.addIn("userCode", userCodes);
-//			if(StringUtils.isNotEmpty(userName)){
-//				queryEmploye.addLike("userName", "%"+ userName + "%");
-//			}
-//			//获得引入人员
-//			page=super.find(Employe.class, queryEmploye, pageNo,pageSize );
 			page=employeServiceInterface.findUserInUserCodes(userCodes, userName, userCode, pageNo, pageSize);
 			userCacheManager.putCache(key, page);
 			return page;
@@ -170,19 +137,10 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 			for (UserPower userPower : userPowers) {
 				userCodes.add(userPower.getUserCode());
 			}
-//			QueryRule queryEmploye = QueryRule.getInstance();
-//			queryEmploye.addIn("userCode", userCodes);
-//			if(StringUtils.isNotEmpty(userName)){
-//				queryEmploye.addLike("userName", "%"+ userName + "%");
-//			}
-//			//获得引入人员
-//			page=super.find(Employe.class, queryEmploye, pageNo,pageSize );
 			page=employeServiceInterface.findUserNoInUserCodes(userCodes, comCode, userName, userCode, pageNo, pageSize);
 			userCacheManager.putCache(key, page);
 			return page;
 		}
-//		return employeService.findEmployees(userCode, userName, comCode, pageNo, pageSize);
-//		Page page=employeServiceInterface.findEmployees(userCode, userName, comCode, pageNo, pageSize);
 		page=employeServiceInterface.findUserNoInUserCodes(userCodes, comCode, userName, userCode, pageNo, pageSize);
 		userCacheManager.putCache(key, page);
 		return page;
@@ -204,141 +162,8 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		return tasks;
 	}
 	
-	/**
-	 * 查询下级子机构
-	 */
-//	@SuppressWarnings("unchecked")
-//	public List<Company> findNextSubCom(String comCode) {
-//		return companyService.findNextSubCom(comCode);
-//		String key = companyCacheManager.generateCacheKey("nextSubCom", comCode);
-//		Object result = companyCacheManager.getCache(key);
-//		if (result != null) {
-//			return (List<Company>) result;
-//		}
-//		List<Company> companies= (List<Company>) companyServiceInterface.findNextSubCompany(comCode);
-//		companyCacheManager.putCache(key, companies);
-//		return companies;
-//	}
 	
-	/**
-	 * 获得员工在机构下有效权限集合
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Task> findTaskByUserCode(String userCode, String comCode) {
-		String key = taskCacheManager.generateCacheKey("userTask", comCode
-				+ userCode);
-		Object resut = taskCacheManager.getCache(key);
-		if (resut != null) {
-			return (List<Task>) resut;
-		}
-		List<Task> userTasksResult = new ArrayList<Task>();
-		UserPower userPower = new UserPower();
-		userPower = userpowerSerivce.findUserPowerByComUser(userCode, comCode);
-		List<UserGroup> userGroups = new ArrayList<UserGroup>();
-		if (userPower != null) {
-			userGroups = userPower.getUserGroups();
-			List<Group> groups = new ArrayList<Group>();
-			for (UserGroup usergroup : userGroups) {
-				// 用户组的过滤
-				if (usergroup.getIsValidate().toString().equals("1".toString())) {
-					if (usergroup.getGroup().getComCode().toString()
-							.equals(comCode)) {
-						groups.add(usergroup.getGroup());
-					}
-				}
-			}
-			List<GroupRole> groupRoles = new ArrayList<GroupRole>();
-			for (Group group : groups) {
-				groupRoles.addAll(group.getGroupRoles());
-			}
-			// 根据机构获得指派的信息 取得roleID 过滤用户组关联的角色
-			List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
-			QueryRule queryRole = QueryRule.getInstance();
-			queryRole.addIn("id.comCode", comCode);
-			roleDesignates = super.find(RoleDesignate.class, queryRole);
-			// 根据获得的指派角色信息获得角色ID
-			List<String> roleids = new ArrayList<String>();
-			for (RoleDesignate roleDesignate : roleDesignates) {
-				for (GroupRole groupRole : groupRoles) {
-					if (roleDesignate.getId().getRoleID().toString()
-							.equals(groupRole.getRole().getRoleID().toString())) {
-						roleids.add(roleDesignate.getId().getRoleID());
-					}
-				}
-			}
-			StringBuffer taskIDSQL = new StringBuffer();
-			List<String> taskIDs = new ArrayList<String>();
-			if (roleids.size() > 0) {
-				// 根据角色ID获得 角色关联的功能id集合
-				taskIDSQL
-						.append(" select taskid from ge_rms_task_auth where taskauthid in (");
-				taskIDSQL
-						.append(" select taskauthid from ge_rms_roletask g where g.isvalidate='1' ");
-				taskIDSQL.append("and g.roleid in (");
-				for (String string : roleids) {
-					taskIDSQL.append(" '" + string + "',");
-				}
-				taskIDSQL.delete(taskIDSQL.length() - 1, taskIDSQL.length());
-				taskIDSQL.append(")");
-				taskIDSQL.append(")");
-				taskIDs = (List<String>) getSession().createSQLQuery(
-						taskIDSQL.toString()).list();
-			}
-			taskIDSQL.setLength(0);
-			// 获取该机构的功能ID
-			taskIDSQL
-					.append("select taskid from ge_rms_task_auth where comcode='"
-							+ comCode + "'");
-			List<String> comtaskIDs = new ArrayList<String>();
-			comtaskIDs = (List<String>) getSession().createSQLQuery(
-					taskIDSQL.toString()).list();
-			List<String> resultTaskIDs = new ArrayList<String>();
-			// 两功能ID集合去重
-			for (String com_TaskID : comtaskIDs) {
-				for (String role_TaskID : taskIDs) {
-					if (com_TaskID.toString().equals(role_TaskID.toString())) {
-						resultTaskIDs.add(com_TaskID);
-						break;
-					}
-				}
-			}
-			// 获得功能对象
-			Set<Task> tasks = new HashSet<Task>();
-			if (resultTaskIDs.size() > 0) {
-				QueryRule queryTask = QueryRule.getInstance();
-				queryTask.addIn("taskID", resultTaskIDs);
-				queryTask.addEqual("isValidate", "1");
-				tasks.addAll(super.find(Task.class, queryTask));
-			}
-			// 获得除外权限 
-			Set<Task> excTasks = new HashSet<Task>();
-			if (userPower != null) {
-				for (ExcPower excpower : userPower.getExcPowers()) {
-					excTasks.add(excpower.getTask());
-				}
-			}
-			Set<Task> result = new HashSet<Task>();
-			// 除外权限和获得的权限过滤
-			for (Task task : tasks) {
-				int i = 0;
-				for (Task etask : excTasks) {
-					if (task.getTaskID().toString()
-							.equals(etask.getTaskID().toString()))
-						i = i + 1;
-				}
-				if (i == 0) {
-					result.add(task);
-				}
-			}
-			Set<Task> ts = new HashSet<Task>();
-			iterateTask(ts, result);
-			userTasksResult = taskArrange(ts);
-			taskCacheManager.putCache(key, userTasksResult);
-			return userTasksResult;
-		} else {
-			return userTasksResult;
-		}
-	}
+	
 	
 	/**
 	 * 获得员工在机构下有效权限集合
@@ -448,21 +273,6 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		iterateTask(ts, result);
 		return taskArrange(ts);
 	}
-	/**
-	 * 查询单个人员对象
-	 */
-//	public Employe findUserByCode(String userCode) {
-////		return 	employeService.findUserByCode(userCode);
-//		return employeServiceInterface.findUserByCode(userCode);
-//	}
-	
-	/**
-	 * 查询是否有下级机构
-	 */
-//	public boolean isExtSubCom(String comCode) {
-////		return companyService.isExtSubCom(comCode);
-//		return companyServiceInterface.isExtSubCom(comCode);
-//	}
 	
 	/**
 	 * 查询人员权限
@@ -470,8 +280,6 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	public UserPower findUserPowerByComUser(String userCode, String comCode) {
 		return userpowerSerivce.findUserPowerByComUser(userCode, comCode);
 	}
-	
-
 	
 	/**
 	 * 循环获得父节点功能
@@ -507,18 +315,6 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		}
 		return tasks;
 	}
-//	/**
-//	 * 更新密码
-//	 */
-//	public void updatePassword(Employe employe) {
-////		employeService.updatePassword(employe);
-//		try {
-//			employeServiceInterface.updatePassword(employe.getUserCode(), employe.getPassword());
-//		} catch (Exception e) {
-//			
-//			e.printStackTrace();
-//		}
-//	}
 
 	public List<UserPower> findUserPowersByUserCode(String userCode) {
 		QueryRule queryRule = QueryRule.getInstance();
@@ -526,46 +322,4 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		return super.find(UserPower.class, queryRule);
 	}
 
-//	
-//	/**
-//	 * 获取4级机构 配送模块
-//	 * @param comCode
-//	 * @return
-//	 */
-//	public List<Company> findLevFourCom(String comCode) {
-////		return companyService.findLevFourCom(comCode);
-//		return (List<Company>) companyServiceInterface.findLevFourCom(comCode);
-//	}
-	
-//	/**
-//	 * 查询机构下的人员（未引入权限）配送模块
-//	 */
-//	public List<Employe> findUserByComCode(String comCode){
-////		return employeService.findUserByComCode(comCode);
-//		return (List<Employe>) employeServiceInterface.findUserByComCode(comCode);
-//	}
-
-//	public Company findCompanyByComCode(String comCode){
-//		Assert.hasText(comCode);
-////		return companyService.findCompanyByComCode(comCode);
-//		return companyServiceInterface.findCompanyByComCode(comCode);
-//	}
-
-//	/**
-//	 * 查询机构及其下级所有机构
-//	 * @param comCode
-//	 * @return
-//	 */
-//	public List<Company> findAllNextLevelCompanyByComCode(String comCode){
-//		Assert.hasText(comCode);
-////		return companyService.findAllNextLevelCompanybyComCode(comCode);
-//	 	return (List<Company>) companyServiceInterface.findAllNextLevelCompanybyComCode(comCode);
-//	}
-	
-//	public List<Company>findCompanyBySuperAndType(String SuppercomCode,String comType){
-//		Assert.hasText(SuppercomCode);
-//		Assert.hasText(comType);
-////		return companyService.findCompanyBySuperAndType(SuppercomCode, comType);
-//		return (List<Company>) companyServiceInterface.findCompanyBySuperAndType(SuppercomCode, comType);
-//	}
 }
