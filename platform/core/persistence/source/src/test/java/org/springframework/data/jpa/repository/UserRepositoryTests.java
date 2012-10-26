@@ -32,6 +32,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -79,7 +82,6 @@ public class UserRepositoryTests {
 
 	@Before
 	public void setUp() throws Exception {
-
 		firstUser = new User("Oliver", "Gierke", "gierke@synyx.de");
 		firstUser.setAge(28);
 		secondUser = new User("Joachim", "Arrasz", "arrasz@synyx.de");

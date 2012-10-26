@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:drools="http://drools.org/schema/drools-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://drools.org/schema/drools-spring http://drools.org/schema/drools-spring/org/drools/container/spring/drools-spring-1.3.0.xsd"
+	default-autowire="byName" default-lazy-init="false">
+
+	<bean id="comboRuleService"
+		class="com.sinosoft.ebusiness.test.rule.service.spring.ComboRuleServiceSpringImpl">
+	</bean>
+	<bean id="otherRuleService"
+		class="com.sinosoft.ebusiness.test.rule.service.spring.OtherRuleServiceSpringImpl">
+	</bean>
+	<bean id="guvnorRuleService"
+		class="com.sinosoft.ebusiness.test.rule.service.spring.GuvnorRuleServiceSpringImpl">
+	</bean>
+	<bean id="quickPriceRuleService"
+		class="com.sinosoft.ebusiness.test.rule.service.spring.QuickPriceRuleServiceSpringImpl">
+	</bean>
+	<bean id="specialClausRuleService"
+		class="com.sinosoft.ebusiness.test.rule.service.spring.SpecialClausRuleServiceSpringImpl">
+	</bean>
+	<bean id="proposalRuleService"
+		class="com.sinosoft.ebusiness.test.rule.service.spring.ProposalRuleServiceSpringImpl">
+	</bean>
+</beans>

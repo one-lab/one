@@ -314,6 +314,8 @@ class OneTransactionalRepositoryProxyPostProcessor implements RepositoryProxyPos
                         Method tempMethod = null;
                         if(sqlType == SQLType.WRITE) {
                             tempMethod = tempClass.getDeclaredMethod("update", String.class, Object[].class, KeyHolder.class);
+                        } else if(sqlType == SQLType.PROCEDURE){
+                            tempMethod = tempClass.getDeclaredMethod("call", String.class, Object[].class, KeyHolder.class);
                         } else {
                             tempMethod = tempClass.getDeclaredMethod("select", String.class, Object[].class, RowMapper.class);
                         }
@@ -357,6 +359,9 @@ class OneTransactionalRepositoryProxyPostProcessor implements RepositoryProxyPos
                 // 用正则表达式匹配  SELECT 语句
                 if (StatementMetaData.SELECT_PATTERNS[i].matcher(sql).find()) {
                     sqlType = SQLType.READ;
+                    break;
+                }else if(StatementMetaData.CALL_PATTERN.matcher(sql).find()){
+                    sqlType = SQLType.PROCEDURE;
                     break;
                 }
             }

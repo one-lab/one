@@ -1,18 +1,27 @@
 package com.sinosoft.one.rms.client;
 
-import com.sinosoft.one.rms.client.annotation.DataAuthority;
-import com.sinosoft.one.rms.client.arch4.RmsGenericDaoHibernate;
-import com.sinosoft.one.rms.model.Employe;
-
 import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
-import ins.framework.dao.GenericDaoHibernate;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.hql.QueryTranslator;
+import org.hibernate.hql.QueryTranslatorFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.orm.hibernate3.AbstractSessionFactoryBean;
+import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 import org.springframework.stereotype.Component;
+
+import com.sinosoft.one.rms.client.annotation.DataAuthority;
+import com.sinosoft.one.rms.client.annotation.RmsAspectBeanSelfAware;
+import com.sinosoft.one.rms.client.arch4.RmsGenericDaoHibernate;
+import com.sinosoft.one.rms.model.Employe;
+import com.sinosoft.one.rms.model.Role;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,46 +30,65 @@ import org.springframework.stereotype.Component;
  * Time: 4:28 PM
  * To change this template use File | Settings | File Templates.
  */
-@Component
-public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String> implements TestService  {
 
-	@DataAuthority(value = "RMS001" )
-	public List<Employe> testfindQueryRule(String user) {
-		QueryRule queryRule=QueryRule.getInstance();
-		queryRule.addEqual("validStatus", "1");
-		return super.find(queryRule);
+public class AnnotationTestService extends RmsGenericDaoHibernate<Employe,String> implements TestService ,RmsAspectBeanSelfAware {
+
+	private TestService self;
+	
+	public void setSelf(Object proxyBean) {
+		if(self==null)
+			self=(TestService)proxyBean;
+	}
+	
+	@DataAuthority("RMS001")
+	public Page testFindByHql() {
+		testFindByHqlforList();
+		StringBuffer HQL=new StringBuffer();
+		HQL.append("select e from Employe e,Role where e.company.comCode='00' and  userCode in (select r.operateUser from Role r )");
+		List<Employe> lEmployes=super.findByHql(HQL.toString());
+		//List<Role> roles=super.findByHql(HQL.toString());
+		return null;
+	}
+	@DataAuthority("RMS001")
+	public List testFindByHqlforList() {
+		System.out.println("do it---------------------------");
+		return null;
 	}
 
-	@DataAuthority(value = "RMS001",tabAlias="e")
-	public List<Employe> testfindBySql(){
-		String sql="select * from ge_rms_employe e where VALIDSTATUS in ('1','0')order by usercode";
-		return super.findBySql(sql);
+	public Page testFindByHqlNoLimit() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	// 如果有内部包含的MODEL属性则需标注 如  hqlMod="Employe.company" 否则不标注
-	@DataAuthority(value = "RMS012",hqlMod="Employe.company",tabAlias="a")
-	public Page findbyHql(int pageNo, int pageSize) {
-		StringBuffer hql=new StringBuffer();
-		hql.append("from Employe a where company.comCode='00' and company.comCode=(select comCode from Company where comCode='11') order by company.comCode");
-		return super.findByHql(hql.toString(), pageNo, pageSize);
-	}
-	
-	
-    @DataAuthority(value = "RMS012" )
-    public List  findUser() {
-    	QueryRule queryRule=QueryRule.getInstance();
-    	queryRule.addEqual("validStatus", "1");
- 	  	return super.find(queryRule);
-    }
 
-	@DataAuthority(value = "RMS012" )
-	public Page findUser(int pageNo, int pageSize) {
-		QueryRule queryRule = QueryRule.getInstance();
-		queryRule.addEqual("validStatus", "1");
-        Page page;
-        page=super.find(queryRule, pageNo, pageSize);
-		return page;
+	public List testFindTopByHql() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void testGetAll() {
+		// TODO Auto-generated method stub
+		
 	}
 	
+	
+	
+	
+	
+	
+	private QueryTranslatorFactory queryTranslatorFactory;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	String hqlParser(String originalHql){
+		SessionFactoryImplementor realsessionFactory = (SessionFactoryImplementor)sessionFactory;
+//		QueryTranslatorImpl queryTranslator = new QueryTranslatorImpl(originalHql, originalHql,
+//		           Collections.EMPTY_MAP, (org.hibernate.engine.SessionFactoryImplementor)getSessionFactory());
+//		        queryTranslator.compile(Collections.EMPTY_MAP, false);
+		queryTranslatorFactory = realsessionFactory.getSettings().getQueryTranslatorFactory();
+		QueryTranslator queryTranslator=queryTranslatorFactory.createQueryTranslator(originalHql, originalHql, Collections.EMPTY_MAP, (org.hibernate.engine.SessionFactoryImplementor)getSessionFactory());
+		queryTranslator.compile(Collections.EMPTY_MAP, false);
+		return  queryTranslator.getSQLString() ; 
+	}
 	
 }

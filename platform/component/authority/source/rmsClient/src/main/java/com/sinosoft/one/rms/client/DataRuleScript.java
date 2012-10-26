@@ -15,7 +15,4 @@ public interface DataRuleScript {
 	
 	public String creatSQL(String sqlOrHql,DataPower dataPower);
 	
-	public String creatHQL(String sqlOrHql,String ModelName,String tableAlias,DataPower dataPower);
-	
-	public String creatHQL(String sqlOrHql,String ModelName,DataPower dataPower);
 }

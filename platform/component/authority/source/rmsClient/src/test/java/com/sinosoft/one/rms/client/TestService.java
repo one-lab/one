@@ -9,13 +9,14 @@ import com.sinosoft.one.rms.model.Employe;
 
 public interface TestService {
 	
-	public List<Employe> testfindQueryRule(String userCode);
+	public Page testFindByHql();
 
-	public  List<Employe> testfindBySql();
+	public List testFindByHqlforList();
+
 	
-//	Page findUser(String hql,int pageNo, int pageSize);
-//
-	public Page findbyHql(int pageNo, int pageSize);
-	
-	
+	public Page testFindByHqlNoLimit();
+
+	public List testFindTopByHql();
+
+	public void testGetAll();
 }

@@ -62,9 +62,31 @@ CREATE TABLE `t_user` (
 INSERT INTO `t_code_gender` VALUES ('0','女'),('1','男'),('3', 'g3'),('4', 'g4'),
 ('5', 'g5'),('6', 'g6'),('7', 'g7'),('8', 'g8'),('9', 'g9');
 
--- Create Procedure testprc
-create procedure testprc(in newname varchar(10), in uid varchar(3))
+-- ----------------------------
+--  Procedure
+-- ----------------------------
+CREATE PROCEDURE `test_02`(in newid varchar(10))
 begin
-  update t_code_group set name = newname where id = trim(uid);
+	select * from t_code_group where id = newid;
 end;
 
+CREATE PROCEDURE `test_03`()
+begin
+	select * from t_code_group;
+	select * from t_user;
+	select * from t_code_group;
+	select name from t_code_group;
+end;
+
+
+CREATE PROCEDURE `test_04`(in newid VARCHAR(10),out out1 VARCHAR(10),out out2 VARCHAR(10))
+BEGIN
+	SELECT * from t_code_group;
+	SELECT id into out1 FROM t_code_group  WHERE id = newid;
+	SELECT name into out2 FROM t_code_group  WHERE id = newid;
+END;
+
+CREATE PROCEDURE `teststring`(IN `para1` varchar(10),OUT `para2` varchar(10))
+BEGIN
+	SELECT name into para2 FROM T_CODE_GROUP WHERE id = para1;
+END;

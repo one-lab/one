@@ -37,13 +37,6 @@ public class LoginToken implements AuthenticationToken{
 		this.passWord = null;
 		this.comCode= null;
 		this.sysFlag= null;
-//		if (this.password != null) {
-//			for (int i = 0; i < password.length; i++) {
-//				this.password[i] = 0x00;
-//			}
-//			this.password = null;
-//		}
-
 	}
 	
 	@Override

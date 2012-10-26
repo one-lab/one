@@ -18,7 +18,7 @@
     default-autowire="byName" default-lazy-init="true">
 
     <description>Spring测试环境配置文件</description>
-
+	
     <context:annotation-config />
     <!-- 使用annotation定义Aspect -->
 	<aop:aspectj-autoproxy/> 
@@ -45,8 +45,12 @@
 		class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 	
     <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
-    <context:component-scan base-package="com.sinosoft.one" />
+    <context:component-scan base-package="com.sinosoft.*" />
     
+    <bean id="realDataSource" class="com.sinosoft.one.rms.client.datasource.RmsDataSource">
+    	 <property name="dataRuleStringCreat" ref="DataRuleStringCreat" />	
+		 <constructor-arg ref="dataSource" />
+    </bean>
     <!-- 
         SpringContextHolder定义 <bean class="org.springside.modules.utils.spring.SpringContextHolder" 
         lazy-init="false" /> --><!-- 
@@ -60,17 +64,20 @@
         <property name="password" value="${jdbc.password}" />
     </bean>
     
+     
+     
+     
     <!-- Hibernate配置 -->
     <bean id="sessionFactory"
         class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="realDataSource" />
         <!-- 大对象处理器 -->
 		<property name="lobHandler" ref="lobHandler" />
 		<!-- 可以同时支持annotatedClasses和hbm -->
-        <property name="packagesToScan">                        
-            <list>                                
-                <value>com.sinosoft.one.rms.**.model</value>              
-            </list>                
+        <property name="packagesToScan">
+            <list>
+                <value>com.sinosoft.one.**.model</value>
+            </list>
         </property>
         <property name="hibernateProperties">
             <props>
@@ -91,13 +98,19 @@
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="defaultTransactionManager"  />
    
-   	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor">
-  	</bean>
-	
- 	<bean id="DataRuleStringCreat" class="com.sinosoft.one.rms.client.DataRuleStringCreatImpl"/>
+     
+  	<bean id="testService" class="com.sinosoft.ebusiness.rms.client.AnnotationTestService"></bean>
+	  
+   	   
+   	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor"></bean>
 	
     <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
     
     <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>
     
+    <bean id="DataRuleStringCreat" class="com.sinosoft.one.rms.client.DataRuleStringCreatImpl"/>
+   
+   	<bean id="jSqlParser" class="com.sinosoft.one.sqlparser.parser.CCJSqlParserManager"></bean> 
+   	
+	<bean class="com.sinosoft.one.rms.client.RmsAspcetBeanSelfProcessor"></bean> 
 </beans>

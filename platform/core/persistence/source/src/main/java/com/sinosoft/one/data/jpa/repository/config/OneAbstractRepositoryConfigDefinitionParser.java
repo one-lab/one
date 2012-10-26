@@ -50,7 +50,7 @@ public abstract class OneAbstractRepositoryConfigDefinitionParser<S extends Glob
 		implements BeanDefinitionParser {
 	private static final Log LOG = LogFactory.getLog(OneAbstractRepositoryConfigDefinitionParser.class);
 
-	private static final String REPOSITORY_INTERFACE_POST_PROCESSOR = "org.springframework.data.repository.core.support.RepositoryInterfaceAwareBeanPostProcessor";
+	private static final String REPOSITORY_INTERFACE_POST_PROCESSOR = "com.sinosoft.one.data.jpa.repository.support.OneRepositoryInterfaceAwareBeanPostProcessor";
 
 	/**
 	 * 定义QUERY_LOOKUP_STRATEGY 为了解决 OneQueryLookupStrategy.key 与 QueryLookupStrategy.key 不匹配
