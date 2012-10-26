@@ -1,4 +1,4 @@
-package com.sinosoft.one.rmsdemo.model;
+package com.sinosoft.one.model;
 
 import java.math.BigDecimal;
 

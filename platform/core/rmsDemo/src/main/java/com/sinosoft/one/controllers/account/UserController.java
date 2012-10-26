@@ -4,8 +4,8 @@ import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
-import com.sinosoft.one.rmsdemo.uiUtils.UIType;
-import com.sinosoft.one.rmsdemo.uiUtils.UIUtil;
+import com.sinosoft.one.uiUtils.UIType;
+import com.sinosoft.one.uiUtils.UIUtil;
 import com.sinosoft.one.service.account.AccountManager;
 
 /**

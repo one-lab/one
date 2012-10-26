@@ -1,4 +1,4 @@
-package com.sinosoft.one.rmsdemo.uiUtils;
+package com.sinosoft.one.uiUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONArray;

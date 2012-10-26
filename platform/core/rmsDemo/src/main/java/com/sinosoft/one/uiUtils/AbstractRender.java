@@ -1,4 +1,4 @@
-package com.sinosoft.one.rmsdemo.uiUtils;
+package com.sinosoft.one.uiUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,8 +32,6 @@ public abstract class AbstractRender<T extends UIable> implements Render {
     public Render as(UIType uiType) {
         if (uiType == UIType.Json) {
             result = converter.toJson(t);
-            System.out.println("结果:");
-            System.out.println(result);
         } else if (uiType == UIType.Xml) {
             result = converter.toXml(t);
         }

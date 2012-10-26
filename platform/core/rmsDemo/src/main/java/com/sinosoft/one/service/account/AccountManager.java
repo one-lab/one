@@ -1,9 +1,9 @@
 package com.sinosoft.one.service.account;
 
-import com.sinosoft.one.rmsdemo.model.NodeEntity;
-import com.sinosoft.one.rmsdemo.model.TestEmployee;
-import com.sinosoft.one.rmsdemo.uiUtils.Gridable;
-import com.sinosoft.one.rmsdemo.uiUtils.Treeable;
+import com.sinosoft.one.model.NodeEntity;
+import com.sinosoft.one.model.TestEmployee;
+import com.sinosoft.one.uiUtils.Gridable;
+import com.sinosoft.one.uiUtils.Treeable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

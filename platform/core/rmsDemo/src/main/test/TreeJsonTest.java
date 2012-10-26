@@ -1,10 +1,10 @@
-import com.sinosoft.one.rmsdemo.model.Course;
-import com.sinosoft.one.rmsdemo.model.NodeEntity;
+import com.sinosoft.one.model.Course;
+import com.sinosoft.one.model.NodeEntity;
 
-import com.sinosoft.one.rmsdemo.model.Student;
-import com.sinosoft.one.rmsdemo.uiUtils.Treeable;
-import com.sinosoft.one.rmsdemo.uiUtils.UIType;
-import com.sinosoft.one.rmsdemo.uiUtils.UIUtil;
+import com.sinosoft.one.model.Student;
+import com.sinosoft.one.uiUtils.Treeable;
+import com.sinosoft.one.uiUtils.UIType;
+import com.sinosoft.one.uiUtils.UIUtil;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @DirtiesContext

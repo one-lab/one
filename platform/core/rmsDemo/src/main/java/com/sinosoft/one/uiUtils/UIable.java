@@ -1,6 +1,4 @@
-package com.sinosoft.one.rmsdemo.uiUtils;
-
-import javax.swing.*;
+package com.sinosoft.one.uiUtils;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package com.sinosoft.one.rmsdemo.uiUtils;
+package com.sinosoft.one.uiUtils;
 
 /**
  * Created with IntelliJ IDEA.

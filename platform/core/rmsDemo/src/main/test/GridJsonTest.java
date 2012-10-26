@@ -1,10 +1,9 @@
-import com.sinosoft.one.mvc.web.Invocation;
-import com.sinosoft.one.rmsdemo.model.Employee;
-import com.sinosoft.one.rmsdemo.model.Test1Date;
-import com.sinosoft.one.rmsdemo.model.TestEmployee;
-import com.sinosoft.one.rmsdemo.uiUtils.Gridable;
-import com.sinosoft.one.rmsdemo.uiUtils.UIType;
-import com.sinosoft.one.rmsdemo.uiUtils.UIUtil;
+import com.sinosoft.one.model.Employee;
+import com.sinosoft.one.model.Test1Date;
+import com.sinosoft.one.model.TestEmployee;
+import com.sinosoft.one.uiUtils.Gridable;
+import com.sinosoft.one.uiUtils.UIType;
+import com.sinosoft.one.uiUtils.UIUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

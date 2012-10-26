@@ -12,7 +12,7 @@
        default-lazy-init="true">
 
 	<description>Spring公共配置 </description>
-    <bean id="nodeEntity" class="com.sinosoft.one.rmsdemo.model.NodeEntity" >
+    <bean id="nodeEntity" class="com.sinosoft.one.model.NodeEntity" >
         <property name="id" value=""></property>
         <property name="title" value=""></property>
         <property name="children" value=""></property>

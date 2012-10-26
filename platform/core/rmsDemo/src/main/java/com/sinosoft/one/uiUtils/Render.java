@@ -1,4 +1,4 @@
-package com.sinosoft.one.rmsdemo.uiUtils;
+package com.sinosoft.one.uiUtils;
 
 
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.sinosoft.one.rmsdemo.model;
+package com.sinosoft.one.model;
 
 /**
  * Created with IntelliJ IDEA.
