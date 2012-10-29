@@ -23,15 +23,19 @@ public class GridConverter<T> implements Converter<Gridable> {
     private static final String cellElement = "cell";
 
     public String toJson(Gridable gridable) {
-        Page page = gridable.getPage();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(totalElement, page.getTotalElements());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (gridable == null) {
+            return null;
+        } else {
+            Page page = gridable.getPage();
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put(totalElement, page.getTotalElements());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            jsonObject.put(rowsElement, addSubItemObject(gridable.getPage().getContent(), gridable));
+            return jsonObject.toString();
         }
-        jsonObject.put(rowsElement, addSubItemObject(gridable.getPage().getContent(), gridable));
-        return jsonObject.toString();
     }
 
     private JSONArray addSubItemObject(Object children, Gridable gridable) {
