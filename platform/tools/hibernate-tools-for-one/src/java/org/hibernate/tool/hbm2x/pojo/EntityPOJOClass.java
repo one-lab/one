@@ -421,7 +421,11 @@ public class EntityPOJOClass extends BasicPOJOClass {
 		List types = new ArrayList();
 		while ( st.hasMoreElements() ) {
 			String element = ( (String) st.nextElement() ).toLowerCase();
-			if ( "persist".equals( element ) ) {
+
+			//@TODO 2012-10-29 set the all to default cascades
+			if("none".equals(element)) {
+				types.add(importType( "javax.persistence.CascadeType") + ".ALL");
+			} else if ( "persist".equals( element ) ) {
 				types.add(importType( "javax.persistence.CascadeType" ) + ".PERSIST");
 			}
 			else if ( "merge".equals( element ) ) {

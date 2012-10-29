@@ -1,4 +1,4 @@
-${pojo.getPackageDeclaration().substring(0,pojo.getPackageDeclaration().lastIndexOf("."))}.dao;
+${pojo.getPackageDeclaration().substring(0,pojo.getPackageDeclaration().lastIndexOf("."))}.repository;
 // Generated ${date} by One Data Tools ${version}
 <#assign classbody>
 <#assign declarationName = pojo.importType(pojo.getDeclarationName())>
