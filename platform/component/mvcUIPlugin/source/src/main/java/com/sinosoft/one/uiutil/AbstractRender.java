@@ -38,4 +38,8 @@ public abstract class AbstractRender<T extends UIable> implements Render {
         }
         return this;
     }
+
+    public String getResultForTest() {
+        return result;
+    }
 }
