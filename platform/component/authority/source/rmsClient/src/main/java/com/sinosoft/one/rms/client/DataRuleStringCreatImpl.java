@@ -15,8 +15,8 @@ import com.sinosoft.one.sqlparser.statement.select.PlainSelect;
 import com.sinosoft.one.sqlparser.statement.select.Select;
 
 public class DataRuleStringCreatImpl implements DataRuleStringCreat {
-	@Autowired
-	private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
+//	@Autowired
+//	private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
 	
 	@Autowired
 	private JSqlParser jSqlParser;
@@ -40,12 +40,12 @@ public class DataRuleStringCreatImpl implements DataRuleStringCreat {
 					if (StringUtils.isNotBlank(EnvContext.getTableAlias())) {
 						tableAlias = EnvContext.getTableAlias();
 						for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
-							rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule,tableAlias, dataPower);
+//							rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule,tableAlias, dataPower);
 						}
 						
 					} else {
 						for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
-							rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, dataPower);
+//							rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, dataPower);
 						}
 					}
 				}
