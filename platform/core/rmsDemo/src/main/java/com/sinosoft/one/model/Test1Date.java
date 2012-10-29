@@ -12,6 +12,8 @@ public class Test1Date {
     private String name;
     private Integer age;
 
+    public Test1Date(){}
+
     public Test1Date(Long id,String name, Integer age){
         this.id = id;
         this.age = age;

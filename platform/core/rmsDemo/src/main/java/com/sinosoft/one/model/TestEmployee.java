@@ -17,6 +17,8 @@ public class TestEmployee {
     private String organization;
     private String operation;
 
+    public TestEmployee(){}
+
     public TestEmployee(Long id, BigDecimal employeeNo, String name, String company, String organization, String operation) {
         this.id = id;
         this.employeeNo=employeeNo;
