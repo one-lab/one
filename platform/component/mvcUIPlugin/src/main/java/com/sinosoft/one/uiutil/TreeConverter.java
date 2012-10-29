@@ -28,8 +28,12 @@ public class TreeConverter<T> implements Converter<Treeable> {
     private JSONArray jsonArray;
 
     public String toJson(Treeable treeable) {
-        jsonArray = addSubItemObject(treeable.getContent(), treeable);
-        return jsonArray.toString();
+        if (treeable == null) {
+            return null;
+        } else {
+            jsonArray = addSubItemObject(treeable.getContent(), treeable);
+            return jsonArray.toString();
+        }
     }
 
     private JSONArray addSubItemObject(Object children, Treeable treeable) {
