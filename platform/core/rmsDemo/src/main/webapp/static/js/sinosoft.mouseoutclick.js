@@ -1,0 +1,1 @@
+$(function(){$.fn.mouseoutclick=function(c){var b=$(this);var a="isMouseover";b.mouseleave(function(){b.data(a,0);});b.mouseenter(function(){b.data(a,1);});$(document).bind("mouseup",function(){if(!b.data(a)||b.data(a)==0){if(typeof(c)=="function"){c();}else{b.hide();}}});};});
