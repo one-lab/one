@@ -23,7 +23,7 @@
                 },
                 "json_data":{
                     "ajax":{
-                        "url":"${ctx}/account/user/treeNodes"
+                        "url":"${ctx}/account/user/viewCompanyInfo"
                     }
                 },
                 "plugins":["themes","json_data","ui"]
@@ -53,7 +53,7 @@
                 },
                 "json_data":{
                     "ajax":{
-                        "url":"${ctx}/account/user/treeNodes"
+                        "url":"${ctx}/account/user/viewCompanyInfo"
                     }
                 },
                 "plugins":["themes","json_data","ui"]
