@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class Gridable<T> implements UIable {
     private String idField;
-    private List<String> cellField;
-    private Page page;
+    private List<String> cellField;//@todo cellFields 还可以是 String "a,b,c" 和 String[] 类型的 需要提供重载方法。
+    private Page page;//@todo content 可以使page 或者list page需要明确泛型
 
     public Gridable(Page page) {
         this.page = page;
@@ -24,7 +24,7 @@ public class Gridable<T> implements UIable {
         this.idField = idField;
         this.cellField = cellField;
     }
-
+	//@todo
     public Render getRender() {
         return new TreeRender(new GridConverter(), this);
     }

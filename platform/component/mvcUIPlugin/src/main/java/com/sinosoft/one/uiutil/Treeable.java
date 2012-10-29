@@ -18,10 +18,12 @@ public class Treeable<T> implements UIable {
     private String stateField;
     private List<T> content;
 
+	// @todo private Treeable<?> subTreeable;
+
     public Treeable(List<T> content) {
         this.content = content;
     }
-
+	//@todo 需要根据不同的情况增加足够的构造方法，能够覆盖所有使用情况。
     public Treeable(String idField, String titleField, String classField, String urlField, String childrenField, String stateField) {
         this.idField = idField;
         this.titleField = titleField;

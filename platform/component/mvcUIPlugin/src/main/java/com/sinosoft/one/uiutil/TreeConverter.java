@@ -15,6 +15,7 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class TreeConverter<T> implements Converter<Treeable> {
+	//@todo 常量需要用大写和下划线定义 ID_ELEMENT = "id";
     private static final String idElement = "id";
     private static final String attrElement = "attr";
     private static final String dataElement = "data";
@@ -31,6 +32,7 @@ public class TreeConverter<T> implements Converter<Treeable> {
         if (treeable == null) {
             return null;
         } else {
+			//@todo 同GridConverter处理
             jsonArray = addSubItemObject(treeable.getContent(), treeable);
             return jsonArray.toString();
         }

@@ -17,6 +17,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class GridConverter<T> implements Converter<Gridable> {
+
+	//@todo 所有处理类都需要增加日志
+
     private static final String totalElement = "total";
     private static final String rowsElement = "rows";
     private static final String idElement = "id";
@@ -33,11 +36,13 @@ public class GridConverter<T> implements Converter<Gridable> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+			//@todo 需要增加collection的判断，要有明确的错误提示。
             jsonObject.put(rowsElement, addSubItemObject(gridable.getPage().getContent(), gridable));
             return jsonObject.toString();
         }
     }
-
+	//@todo method name change to addNextItemObject
+	//@todo 方法参数类型修改成Collecion，
     private JSONArray addSubItemObject(Object children, Gridable gridable) {
         JSONArray jsonArray = new JSONArray();
         if (children instanceof Collection) {
