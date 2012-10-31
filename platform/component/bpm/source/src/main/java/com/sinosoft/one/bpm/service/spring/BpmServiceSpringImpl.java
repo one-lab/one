@@ -75,6 +75,20 @@ public class BpmServiceSpringImpl implements BpmService {
 			logger.error("init BpmService exception.", e);
 		}
 	}
+	
+	public void destory() {
+		try {
+			if (JbpmAPIUtil.taskService != null)
+				JbpmAPIUtil.taskService.disconnect();
+			if (JbpmAPIUtil.ksession != null)
+				JbpmAPIUtil.ksession.dispose();
+			if (JbpmAPIUtil.dbLogger != null)
+				JbpmAPIUtil.dbLogger.dispose();
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			logger.error("destory jbpm instance exception.", e);
+		}
+	}
 
 	/*
 	 * 用JbpmAPIUtil的session创建流程
@@ -89,6 +103,7 @@ public class BpmServiceSpringImpl implements BpmService {
 				.getSession("drools.properties");
 		ProcessInstance pi = ksession.startProcess(processId, params);
 		ksession.fireAllRules();
+		JbpmAPIUtil.processInstanceIds.put(params.get("businessId").toString(), pi.getId());
 		return pi.getId();
 	}
 

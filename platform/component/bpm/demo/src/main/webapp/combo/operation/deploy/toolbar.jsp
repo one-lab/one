@@ -21,6 +21,9 @@
 		<td onclick="doEdit();" onmouseover="changeTD_style(this);"
 			onmouseout="changeTD_style(this);">发布</td>
 		<td>&nbsp;</td>
+		<td onclick="showImage();" onmouseover="changeTD_style(this);"
+			onmouseout="changeTD_style(this);">查看流程状态</td>
+		<td>&nbsp;</td>
 		<td onclick="doDelete();" onmouseover="changeTD_style(this);"
 			onmouseout="changeTD_style(this);">删除</td>
 		<td>&nbsp;</td>
@@ -126,6 +129,13 @@
 		//alert(idStr);
 		window.open(
 				"${ctx}/combo/prepareDeploy.do?combo.comboCode=" + comboCode, "套餐发布",
+				"top=100, left=100, width=900,height=600,toolbar=yes");
+	}
+	
+	function showImage() {
+		var comboCode=top.frames[1].frames[2].frames[2].document.getElementById("comboToProcess").value;
+		window.open(
+				"${ctx}/combo/showImage.do?combo.comboCode=" + comboCode, "流程展示",
 				"top=100, left=100, width=900,height=600,toolbar=yes");
 	}
 	//删除

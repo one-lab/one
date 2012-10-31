@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionContext;
+import com.sinosoft.one.bpm.util.JbpmAPIUtil;
 import com.sinosoft.one.bpmWebDemo.data.DataStore;
 import com.sinosoft.one.bpmWebDemo.domain.Combo;
 import com.sinosoft.one.bpmWebDemo.service.facade.ComboService;
@@ -141,6 +142,12 @@ public class ComboAction extends Struts2Action {
 		comboService.processCombo_StepFour(combo.getComboCode(), combo);
 		System.out.println("four step--------deployCombo-2222222-------");
 
+	}
+	
+	public String showImage() {
+		String s = JbpmAPIUtil.getImageInfoes("comboProcess", combo.getComboCode(), this.getRequest().getContextPath() + "/process-images/ComboProcess-image.png");
+		this.renderHtml(s);
+		return NONE;
 	}
 
 	public Combo getCombo() {
