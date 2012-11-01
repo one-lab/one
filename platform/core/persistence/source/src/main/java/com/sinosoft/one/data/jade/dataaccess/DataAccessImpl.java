@@ -197,7 +197,7 @@ public class DataAccessImpl implements DataAccess, Repository {
                 if(args[i] instanceof OutProcedureResult){
                     OutProcedureResult oprt = (OutProcedureResult) args[i];
                     oprt.setIndex(i+1);
-                    callableStatement.registerOutParameter(i+1,oprt.getType());
+                    callableStatement.registerOutParameter(i+1,oprt.getJdbcType());
                     oprts.add(oprt);
                 } else {
                     callableStatement.setObject(i+1,args[i]);
@@ -218,7 +218,7 @@ public class DataAccessImpl implements DataAccess, Repository {
                     rsprt.setResult(results);
                 }
             } while(callableStatement.getMoreResults());
-            callableStatement.getUpdateCount();
+
             for(i=0;i<oprts.size();i++){
                 OutProcedureResult oprt = oprts.get(i);
                 List results = new ArrayList();
