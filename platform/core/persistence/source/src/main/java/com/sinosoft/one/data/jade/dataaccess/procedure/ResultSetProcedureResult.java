@@ -10,14 +10,14 @@ import java.util.List;
  * 存放ResultSet的存储过程结果集.
  */
 public class ResultSetProcedureResult<T extends List<?>> implements ProcedureResult<T> {
-    private final Class contentType;
+    private final Class CONTENT_TYPE;
     private T result;
 
     public ResultSetProcedureResult(Class contentType){
-        this.contentType = contentType;
+        this.CONTENT_TYPE = contentType;
     }
     public Class getContenType(){
-         return this.contentType;
+         return this.CONTENT_TYPE;
     }
     public void setResult(T result){
         this.result = result;
