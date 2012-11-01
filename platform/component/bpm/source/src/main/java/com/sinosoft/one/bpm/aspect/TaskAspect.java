@@ -3,10 +3,12 @@ package com.sinosoft.one.bpm.aspect;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +41,19 @@ public class TaskAspect {
     public Object getTask(ProceedingJoinPoint pjp) throws Throwable {
         logger.info("into getTask aspect");
         GetTask getTask = parserAnnotation(pjp, GetTask.class);
-        List<TaskSummary> tasks = bpmService.getTasks(getTask.userId());
+        String userId = getTask.userId();
+        if(StringUtils.isBlank(userId)) {
+        	int userIdBeanOffset = getTask.userIdBeanOffset();
+        	if(userIdBeanOffset == -1) {
+        		throw new IllegalArgumentException("getTask annotation must assign userId or userIdBeanOffset.");
+        	}
+        	userId = this.parserAttributeValue(pjp.getArgs()[userIdBeanOffset], getTask.userIdAttributeName());
+        }
+        String businessIdAttributeName = getTask.businessIdAttibuteName();
+        if(StringUtils.isBlank(businessIdAttributeName)) {
+        	throw new IllegalArgumentException("@getTask's property[businessIdAttributeName]  can't be empty .");
+        }
+        List<TaskSummary> tasks = bpmService.getTasks(userId);
         HashMap<String, String> taskAndBusiness = new HashMap<String, String>();
         for (TaskSummary task : tasks) {
             String businessId = bpmService.getBusinessId(task
@@ -48,20 +62,50 @@ public class TaskAspect {
                 taskAndBusiness.put(businessId, String.valueOf(task.getId()));
             }
         }
-        List<?> results = null;
-        results = (List<?>) pjp.proceed();
-        Iterator it = results.iterator();
+        
+        Object result = pjp.proceed();
+        Iterator<?> it = getIterator(result);
+        String realBusinessIdAttributeName = businessIdAttributeName;
+        if(it == null) {
+        	String[] attributeNames = businessIdAttributeName.split("\\.");
+        	int len = attributeNames.length;
+        	realBusinessIdAttributeName = attributeNames[len-1].trim();
+        	Object tempResult = result;
+        	String currentAttributeName = "";
+        	for(int i=0; i<len-1; i++) {
+        		currentAttributeName = attributeNames[i];
+        		tempResult = PropertyUtils.getProperty(tempResult, currentAttributeName);
+        	}
+        	it = getIterator(tempResult);
+    		if(it == null) {
+    			throw new IllegalArgumentException("the property [" + currentAttributeName + "]' value must be Collection or Map.");
+    		}
+        }
+       
         while (it.hasNext()) {
             Object bean = it.next();
             String businessId = parserBusinessId(bean,
-                    getTask.businessIdAttibuteName());
+            		realBusinessIdAttributeName);
             String taskId = taskAndBusiness.get(businessId);
             if (taskId == null || "".equals(taskId)) {
                 it.remove();
             }
         }
         logger.info("out getTask aspect");
-        return results;
+        return result;
+    }
+    
+    private Iterator<?> getIterator(Object target) {
+    	Iterator<?> it = null;
+    	 if(target instanceof List) {
+         	it = ((List<?>) target).iterator();
+         } else if(target instanceof Set) {
+         	it = ((Set<?>) target).iterator();
+         } else if(target instanceof Map) {
+         	Collection<?> values = ((Map<?, ?>) target).values();
+         	it = values != null ? values.iterator() : null;
+         } 
+    	 return it;
     }
 
     /**
@@ -159,6 +203,9 @@ public class TaskAspect {
         if (BeanUtils.isSimpleProperty(bean.getClass())) {
         	value = bean.toString();
         } else {
+        	if(StringUtils.isBlank(attributeName)) {
+        		throw new IllegalArgumentException("the attribute value [" + attributeName + "] is invalid.");
+        	}
         	value = PropertyUtils.getProperty(bean, attributeName)
                     .toString();
         }
@@ -184,5 +231,4 @@ public class TaskAspect {
         }
         return (T) m.getAnnotation(annotationClass);
     }
-
 }

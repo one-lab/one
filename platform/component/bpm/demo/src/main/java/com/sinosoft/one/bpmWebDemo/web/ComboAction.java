@@ -30,13 +30,8 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String getVerify1Combos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepOne("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo001", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
@@ -53,13 +48,8 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String getVerify2Combos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepTwo("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo002", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
@@ -76,13 +66,8 @@ public class ComboAction extends Struts2Action {
 	}
 	
 	public String getVerify3Combos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepTwo("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo003", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
@@ -99,13 +84,8 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String getDeployCombos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepThree("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo003", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
