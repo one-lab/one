@@ -1,5 +1,8 @@
 package com.sinosoft.one.bpmWebDemo.service.facade;
 
+
+import ins.framework.common.Page;
+
 import java.util.List;
 
 import com.sinosoft.one.bpmWebDemo.domain.Combo;
@@ -7,11 +10,7 @@ import com.sinosoft.one.bpmWebDemo.domain.Student;
 
 
 public interface ComboService {
-	public List<Combo> getCombos_StepOne(String condation);
-
-	public List<Combo> getCombos_StepTwo(String condation);
-
-	public List<Combo> getCombos_StepThree(String condation);
+	public Page getCombos(String userId, String condation);
 	
 	public List<Combo> getCombos_StepFour(String condation);
 
