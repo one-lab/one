@@ -1,11 +1,13 @@
 package com.sinosoft.one.uiutil;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sinosoft.one.util.reflection.ReflectionUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,21 +17,23 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class TreeConverter<T> implements Converter<Treeable> {
-	//@todo 常量需要用大写和下划线定义 ID_ELEMENT = "id";
-    private static final String idElement = "id";
-    private static final String attrElement = "attr";
-    private static final String dataElement = "data";
-    private static final String titleElement = "title";
-    private static final String classElement = "class";
-    private static final String hrefElement = "href";
-    private static final String childrenElement = "children";
-    private static final String stateElement = "state";
-    private static final String emptyClass = "";
-    private static final String emptyHref = "javascript:void(0);";
+    private static Log log= LogFactory.getLog(TreeConverter.class);
+	//@todo 常量需要用大写和下划线定义 ID_ELEMENT = "id"(OK);
+    private static final String  ID_ELEMENT= "id";
+    private static final String  ATTR_ELEMENT= "attr";
+    private static final String  DATA_ELEMENT= "data";
+    private static final String  TITLE_ELEMENT= "title";
+    private static final String  CLASS_ELEMENT= "class";
+    private static final String  HREF_ELEMENT= "href";
+    private static final String  CHILDREN_ELEMENT= "children";
+    private static final String  STATE_ELEMENT= "state";
+    private static final String  CLASS_DEFAULT_VALUE= "";
+    private static final String  HREF_DEFAULT_VALUE= "javascript:void(0);";
     private JSONArray jsonArray;
 
     public String toJson(Treeable treeable) {
         if (treeable == null) {
+            log.info("the treeable object is null.");
             return null;
         } else {
 			//@todo 同GridConverter处理
@@ -48,32 +52,34 @@ public class TreeConverter<T> implements Converter<Treeable> {
                 JSONObject dataItemObject = new JSONObject();
                 JSONObject dataAttrItemObject = new JSONObject();
                 try {
-                    jsonAttrObject.put(idElement, BeanUtils.getProperty(obj, treeable.getIdField()));
-                    jsonObject.put(attrElement, jsonAttrObject);
-                    dataItemObject.put(titleElement, BeanUtils.getProperty(obj, treeable.getTitleField()));
+                    jsonAttrObject.put(ID_ELEMENT, BeanUtils.getProperty(obj, treeable.getIdField()));
+                    jsonObject.put(ATTR_ELEMENT, jsonAttrObject);
+                    dataItemObject.put(TITLE_ELEMENT, BeanUtils.getProperty(obj, treeable.getTitleField()));
                     if (BeanUtils.getProperty(obj, treeable.getClassField()) == null || BeanUtils.getProperty(obj, treeable.getClassField()).isEmpty()) {
-                        dataAttrItemObject.put(classElement, emptyClass);
+                        dataAttrItemObject.put(CLASS_ELEMENT, CLASS_DEFAULT_VALUE);
                     } else {
-                        dataAttrItemObject.put(classElement, BeanUtils.getProperty(obj, treeable.getClassField()));
+                        dataAttrItemObject.put(CLASS_ELEMENT, BeanUtils.getProperty(obj, treeable.getClassField()));
                     }
                     if (BeanUtils.getProperty(obj, treeable.getUrlField()) == null || BeanUtils.getProperty(obj, treeable.getUrlField()).isEmpty()) {
-                        dataAttrItemObject.put(hrefElement, emptyHref);
+                        dataAttrItemObject.put(HREF_ELEMENT, HREF_DEFAULT_VALUE);
                     } else {
-                        dataAttrItemObject.put(hrefElement, BeanUtils.getProperty(obj, treeable.getUrlField()));
+                        dataAttrItemObject.put(HREF_ELEMENT, BeanUtils.getProperty(obj, treeable.getUrlField()));
                     }
-                    dataItemObject.put(attrElement, dataAttrItemObject);
-                    jsonObject.put(dataElement, dataItemObject);
+                    dataItemObject.put(ATTR_ELEMENT, dataAttrItemObject);
+                    jsonObject.put(DATA_ELEMENT, dataItemObject);
                     if (hasSubNode(obj, treeable)) {
                         Object subSubChildren = ReflectionUtils.getFieldValue(obj, treeable.getChildrenField());
-                        jsonObject.put(childrenElement, addSubItemObject(subSubChildren, treeable));
+                        jsonObject.put(CHILDREN_ELEMENT, addSubItemObject(subSubChildren, treeable));
                     }
-                    jsonObject.put(stateElement, BeanUtils.getProperty(obj, treeable.getStateField()));
+                    jsonObject.put(STATE_ELEMENT, BeanUtils.getProperty(obj, treeable.getStateField()));
                     jsonArray.add(jsonObject);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             return jsonArray;
+        }else {
+            log.error("the children node's type must be a 'Collection' type.");
         }
         return jsonArray;
     }

@@ -13,20 +13,34 @@ import java.util.List;
  */
 public class Gridable<T> implements UIable {
     private String idField;
-    private List<String> cellField;
+    //@todo String[],String
+    private String cellStringField;
+    private String[] cellStringArrayField;
+    private List<String> cellListStringField;
+
     private Page page;
 
     public Gridable(Page page) {
         this.page = page;
     }
 
-    public Gridable(String idField, List<String> cellField) {
+    public Gridable(String idField, List<String> cellListStringField) {
         this.idField = idField;
-        this.cellField = cellField;
+        this.cellListStringField = cellListStringField;
+    }
+
+    public Gridable(String idField, String[] cellStringArrayField) {
+        this.idField = idField;
+        this.cellStringArrayField = cellStringArrayField;
+    }
+
+    public Gridable(String idField, String cellStringField) {
+        this.idField = idField;
+        this.cellStringField = cellStringField;
     }
 
     public Render getRender() {
-        return new TreeRender(new GridConverter(), this);
+        return new GridRender(new GridConverter(), this);
     }
 
     public String getIdField() {
@@ -37,12 +51,28 @@ public class Gridable<T> implements UIable {
         this.idField = idField;
     }
 
-    public List<String> getCellField() {
-        return cellField;
+    public String getCellStringField() {
+        return cellStringField;
     }
 
-    public void setCellField(List<String> cellField) {
-        this.cellField = cellField;
+    public void setCellStringField(String cellStringField) {
+        this.cellStringField = cellStringField;
+    }
+
+    public String[] getCellStringArrayField() {
+        return cellStringArrayField;
+    }
+
+    public void setCellStringArrayField(String[] cellStringArrayField) {
+        this.cellStringArrayField = cellStringArrayField;
+    }
+
+    public List<String> getCellListStringField() {
+        return cellListStringField;
+    }
+
+    public void setCellListStringField(List<String> cellListStringField) {
+        this.cellListStringField = cellListStringField;
     }
 
     public Page getPage() {

@@ -1,8 +1,8 @@
 package com.sinosoft.one.uiutil;
 
 import com.sinosoft.one.uiutil.model.Employee;
-import com.sinosoft.one.uiutil.model.Test1Date;
 import com.sinosoft.one.uiutil.model.TestEmployee;
+import com.sinosoft.one.uiutil.model.UserInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,26 +39,14 @@ public class GridJsonTest {
     private String company;
     private String organization;
     private String operation;
-    /*    private Long id=1L;
- private String name="zhangsan";
- private Integer age=Integer.valueOf(20);
- private String gender="male";
- private Date birthday=new Date(Long.valueOf(19800101));*/
     private Employee firstEmployee,secondEmployee,thirdEmployee,fourthEmployee,fiveEmployee,sixthEmployee,seventhEmployee;
     private List<Employee> employeeList=new ArrayList<Employee>();
-    private List<TestEmployee> testEmployeeList=new ArrayList<TestEmployee>();
-    private List<Test1Date> test1DateList = new ArrayList<Test1Date>();
+    private List<TestEmployee> testEmployeeList1=new ArrayList<TestEmployee>();
+    private List<TestEmployee> testEmployeeList2=new ArrayList<TestEmployee>();
+    private List<UserInfo> userInfoList = new ArrayList<UserInfo>();
     private List<String> employeeAttributes=new ArrayList<String>();
     private List<String> testEmployeeAttributes=new ArrayList<String>();
 
-    @Before
-    public void setUp1(){
-        id = 1L;
-        name = "张张";
-        age = 21;
-        Test1Date test1Date = new Test1Date(id,name, age);
-        test1DateList.add(test1Date);
-    }
     @Before
     public void setUp(){
         for (int i=0;i<12;i++){
@@ -76,19 +66,65 @@ public class GridJsonTest {
             organization="<a href='#' class='agency' onclick='openWindow()'></a>";
             operation = "<a href='javascript:;' class='set' onclick='openQX();'>权限</a><a href='#' title='no operation' class='set dis'>数据 set</a>";
             TestEmployee testEmployee=new TestEmployee(id,employeeNo,name,company,organization,operation);
-            testEmployeeList.add(testEmployee);
+            testEmployeeList2.add(testEmployee);
         }
     }
     @Test
-    public void testGridConvertTojson1Date(){
-        Page page = new PageImpl(test1DateList);
-        Gridable<Test1Date> gridable = new Gridable<Test1Date>(page);
+    public void testGridConvertToJsonWithOneData(){
+        List<TestEmployee> testEmployeeList=new ArrayList<TestEmployee>();
+        String gridJson="{\"rows\":[{\"cell\":[1001,\"张三\",\"山东分公司\",\"机构\",\"权限\"],\"id\":\"1\"}],\"total\":1}";
+        TestEmployee testEmployee = new TestEmployee(1L,BigDecimal.valueOf(1001), "张三","山东分公司","机构","权限");
+        testEmployeeList.add(testEmployee);
+        Page page = new PageImpl(testEmployeeList);
+        Gridable<TestEmployee> gridable = new Gridable<TestEmployee>(page);
         gridable.setIdField("id");
-        employeeAttributes.add("name");
-        employeeAttributes.add("age");
-        gridable.setCellField(employeeAttributes);
-        UIUtil.with(gridable).as(UIType.Json);
+        testEmployeeAttributes.add("employeeNo");
+        testEmployeeAttributes.add("name");
+        testEmployeeAttributes.add("company");
+        testEmployeeAttributes.add("organization");
+        testEmployeeAttributes.add("operation");
+        gridable.setCellListStringField(testEmployeeAttributes);
+        AbstractRender abstractRender=(GridRender)UIUtil.with(gridable).as(UIType.Json);
+        assertEquals(gridJson, abstractRender.getResultForTest());
     }
+
+    @Test
+    public void testGridConvertToJsonWithNullObject(){
+        String gridJson = null;
+        Page page = new PageImpl(null);
+        Gridable<TestEmployee> gridable = new Gridable<TestEmployee>(page);
+        gridable.setIdField("id");
+        testEmployeeAttributes.add("employeeNo");
+        testEmployeeAttributes.add("name");
+        testEmployeeAttributes.add("company");
+        testEmployeeAttributes.add("organization");
+        testEmployeeAttributes.add("operation");
+        gridable.setCellListStringField(testEmployeeAttributes);
+        AbstractRender abstractRender=(GridRender)UIUtil.with(gridable).as(UIType.Json);
+        assertEquals(gridJson,abstractRender.getResultForTest());
+
+    }
+
+    @Test
+    public void testGridConvertToJsonWithNullAttribute(){
+        List<TestEmployee> testEmployeeList=new ArrayList<TestEmployee>();
+        String gridJson = "{\"rows\":[{\"cell\":[1001,\"张三\",\"山东分公司\",null,\"权限\"],\"id\":\"1\"}],\"total\":1}";
+        TestEmployee testEmployee = new TestEmployee(1L,BigDecimal.valueOf(1001), "张三","山东分公司",null,"权限");
+        testEmployeeList.add(testEmployee);
+        Page page = new PageImpl(testEmployeeList);
+        Gridable<TestEmployee> gridable = new Gridable<TestEmployee>(page);
+        gridable.setIdField("id");
+        testEmployeeAttributes.add("employeeNo");
+        testEmployeeAttributes.add("name");
+        testEmployeeAttributes.add("company");
+        testEmployeeAttributes.add("organization");
+        testEmployeeAttributes.add("operation");
+        gridable.setCellListStringField(testEmployeeAttributes);
+        AbstractRender abstractRender=(GridRender)UIUtil.with(gridable).as(UIType.Json);
+        assertEquals(gridJson,abstractRender.getResultForTest());
+
+    }
+
     @Test
     public void testGridConvertToJson1(){
         Page page=new PageImpl(employeeList);
@@ -98,13 +134,13 @@ public class GridJsonTest {
         employeeAttributes.add("age");
         employeeAttributes.add("gender");
         employeeAttributes.add("birthday");
-        gridable.setCellField(employeeAttributes);
-        UIUtil.with(gridable).as(UIType.Json);
+        gridable.setCellListStringField(employeeAttributes);
+        AbstractRender abstractRender=(GridRender)UIUtil.with(gridable).as(UIType.Json);
     }
 
     @Test
     public void testGridConvertToJson2(){
-        Page page=new PageImpl(testEmployeeList);
+        Page page=new PageImpl(testEmployeeList2);
         Gridable<TestEmployee> gridable=new Gridable<TestEmployee>(page);
         gridable.setIdField("id");
         testEmployeeAttributes.add("employeeNo");
@@ -112,7 +148,7 @@ public class GridJsonTest {
         testEmployeeAttributes.add("company");
         testEmployeeAttributes.add("organization");
         testEmployeeAttributes.add("operation");
-        gridable.setCellField(testEmployeeAttributes);
+        gridable.setCellListStringField(testEmployeeAttributes);
         UIUtil.with(gridable).as(UIType.Json);
     }
 }
