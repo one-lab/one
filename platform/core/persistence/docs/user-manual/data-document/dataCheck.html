@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ONE-Data使用手册</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css" />
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+    <link href="css/tips.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            $("#API > tbody > tr:odd").addClass("even");
+            var i = 1;
+            $("li.on_off").each(function(){
+                var theID = "on_off" + i;
+                $(this).attr("id",theID);
+                i++
+            });
+            i=1
+            $("div.code_cont").each(function(){
+                var theID = "code_cont" + i;
+                $(this).attr("id",theID);
+                i++
+            });
+            $("li.on_off").click(function(){
+                var conID = $(this).attr("id").substring(6,8);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+            var bodyTop = $(window).height()/2
+            $(window).scroll(function(){
+
+                var offsetTop = bodyTop + $(window).scrollTop() +"px";
+                $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+                if($(window).scrollTop() > 10){
+
+                    $("#toTop").show();
+                }else{
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function(){toTop()});
+        });
+        function toTop(){
+            $("#toTop").hide();
+            $("html,body").animate({scrollTop: $("body").offset().top},500);
+        }
+    </script>
+    <style>
+        .new{padding:10px;line-height:22px;}
+        .img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+        .new span{color:#F30;font-weight:bold;padding:0 4px;}
+        #next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+            /*customTip*/
+        .example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+        .text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+        .email_ex{padding:4px 6px;text-align:center;color:#333}
+        .email_ex a{color:#005590}
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1 class="logo"><b>Sinosoft</b> ONE-Data(V1.0.0)</h1>
+    <h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">高级特性</span>
+</div>
+<div class="content">
+    <div class="title">
+        校验
+    </div>
+    <div class="introduce">
+        <p>本节介绍了数据校验功能，在数据校验的时候，使用约束条件</p>
+        <p>具体约束条件如下：</p>
+    </div>
+
+
+<div class="content">
+
+    <div class="introduce">
+
+    </div>
+    <div class="introduce">
+        <table border="1">
+            <tr>
+                <th>约束</th>
+                <th>解释</th>
+            </tr>
+            <tr>
+                <td>@Null</td>
+                <td>检验被注解属性为null</td>
+
+            </tr>
+            <tr>
+                <td>@NotNull</td>
+                <td>检验被注解属性为非null</td>
+
+            </tr>
+            <tr>
+                <td>@AssertFalse</td>
+                <td>检验被注解元素是false.</td>
+
+            </tr>
+            <tr>
+                <td>@AssertTrue</td>
+                <td>检验被注解元素是 true</td>
+
+            </tr>
+            <tr>
+                <td>@DecimalMax</td>
+                <td>被标注的值必须不大于约束中指定的最大值. 这个约束的参数是一个通过BigDecimal定义的最大值的字符串表示</td>
+
+            </tr>
+            <tr>
+                <td>@DecimalMin</td>
+                <td>被标注的值必须不小于约束中指定的最小值. 这个约束的参数是一个通过BigDecimal定义的最小值的字符串表示</td>
+
+            </tr>
+            <tr>
+                <td>@Digits(integer=,fraction=)</td>
+                <td>检验被注解的值是一个最多可有整数位数和分数的小数位数.</td>
+
+            </tr>
+            <tr>
+                <td>@Future</td>
+                <td>检查给定的日期是否比现在晚</td>
+
+            </tr>
+            <tr>
+                <td>@Max</td>
+                <td>检查该值是否小于或等于约束条件中指定的最大值</td>
+
+            </tr>
+            <tr>
+                <td>@Min</td>
+                <td>检查该值是否大于或等于约束条件中规定的最小值</td>
+
+            </tr>
+            <tr>
+                <td>@Past</td>
+                <td>检查标注对象中的值表示的日期比当前早</td>
+
+            </tr>
+            <tr>
+                <td>@Pattern(regex=,flag=)</td>
+                <td>检查该字符串是否能够在match指定的情况下被regex定义的正则表达式匹配</td>
+
+            </tr>
+            <tr>
+                <td>@Size(min=, max=)</td>
+                <td>检验被注解元素长度在min和max之间.</td>
+
+            </tr>
+            <tr>
+                <td>@Valid</td>
+                <td>递归的对关联对象进行校验, 如果关联对象是个集合或者数组,那么对其中的元素进行递归校验,如果是一个map,则对其中的值部分进行校验.(是否进行递归验证)</td>
+
+            </tr>
+            <tr>
+                <td>@CreditCardNumber</td>
+                <td>信用卡验证</td>
+
+            </tr>
+            <tr>
+                <td>@Email</td>
+                <td>检验字符串是否为有效的电子邮件地址.</td>
+
+            </tr>
+            <tr>
+                <td>@Length(min=, max=)</td>
+                <td>验证之间的最小和最大的字符串</td>
+
+            </tr>
+            <tr>
+                <td>@NotBlank</td>
+                <td>检查约束字符串是不是Null还有被Trim的长度是否大于0,与@NoEmpty不同的是该约束只对字符串且会自动忽略尾空格</td>
+
+            </tr>
+            <tr>
+                <td>@NotEmpty</td>
+                <td>检查约束元素是否为NULL或者是EMPTY</td>
+
+            </tr>
+            <tr>
+                <td>@Range(min=, max=)</td>
+                <td>检查是否注解指定最小和最大之间的包容性值</td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+    <div class="content">
+    <p>下面是校验功能的一段示例代码：</p>
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>Java代码<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="code_cont" style="display: block;">
+                    <h3>UserRepository.java文件</h3>
+                    <textarea name="code" class="java" >
+                        @Null(message = "登录名不能为空")
+                        private String loginName;
+                        private String password;// 为简化演示使用明文保存的密码
+                        @Pattern( regexp = "[A-Za-z0-9]{4,30}",message = "用户名必须是英文或者数字，长度4到30位")
+                        private String name;
+                        @Size(min=4,max=20,message = "邮箱长度必须是4-20之间")
+                        private String email;
+                        private List<Group> groupList = Lists.newArrayList();// 有序的关联对象集合
+                        private Date createTime;
+                        private UserInfo userInfo;
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <p>其中（message：）后内容为验证失败时返回的字符串</p>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="footer">
+    Designed by <b>Sinosoft</b>
+</div>
+
+</body>
+</html>
