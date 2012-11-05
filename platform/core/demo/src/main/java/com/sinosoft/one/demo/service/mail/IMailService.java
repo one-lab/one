@@ -11,8 +11,6 @@ public interface IMailService {
 
     public void sendTextMail(String from, String to, String caption, String content );
 
-    public void sendMimeMail(String from, String to, String caption, String content);
-
-    public void sendMailAndAdjunct(String from, String to, String caption, String content,String filePath);
+    public void sendMimeMail();
 
 }

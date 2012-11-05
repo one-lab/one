@@ -147,8 +147,8 @@ public class UserController {
 	
 	@Get("/pipe1")
 	public String pipe1(Invocation inv){ 
-		List<User> users = accountManager.getAllUser();
-		inv.addModel("users", users);
+//		List<User> users = accountManager.getAllUser();
+//		inv.addModel("users", users);
 		return "userListPipe";
 	}
 	

@@ -1,16 +1,23 @@
 package com.sinosoft.one.demo.service.mail;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.sinosoft.one.demo.dao.mail.MailDao;
+import com.sinosoft.one.demo.model.MailModel;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Intro:
@@ -22,9 +29,14 @@ import java.io.File;
 @Service("mailService")
 public class MailServiceImpl implements IMailService {
 
-    private ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-    private JavaMailSender mailSender = (JavaMailSender)ctx.getBean("MailSender");
+    @Autowired
+    private JavaMailSender mailSender;
 
+    @Autowired
+    MailDao mailDao;
+
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
 
     public void sendTextMail(String from, String to, String caption, String content) {
 
@@ -37,38 +49,56 @@ public class MailServiceImpl implements IMailService {
         mailSender.send(mail);
     }
 
-    public void sendMimeMail(String from, String to, String caption, String content) {
+    public void sendMimeMail() {
+        MailModel mailModel = mailDao.findById("001");
+        String content = generateEmailContent("mailTemplate.ftl",mailModel.getSendTo(),mailModel.getContent());
 
-        JavaMailSenderImpl senderImpl = new JavaMailSenderImpl();
-        MimeMessage msg = senderImpl.createMimeMessage();
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper;
         try {
-            //设置编码格式以防止乱码
-            MimeMessageHelper helper = new MimeMessageHelper(msg,true,"utf-8");
-            helper.setFrom(from);
-            helper.setTo(to);
-            helper.setSubject(caption);
+            helper = new MimeMessageHelper(message, true, "utf-8");
+            helper.setFrom("yangming841022@163.com");
+            helper.setTo(mailModel.getSendTo());
+            helper.setSubject(mailModel.getSubject());
             helper.setText(content,true);
+            helper.addAttachment("tu.gif",new File(mailModel.getFilePath()));
 
-            mailSender.send(msg);
+//            String fileName = null;
+//            if(attachementFiles != null && attachementFiles.size() > 0){
+//                for(File f : attachementFiles) {
+//                    fileName = f.getPath();
+//                    fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
+//
+//                    try {
+//                        helper.addAttachment(MimeUtility.encodeWord(fileName, encoding,null), f);
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                        helper.addAttachment(fileName, f);
+//                    }
+//                }
+//            }
+
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+        mailSender.send(message);
     }
 
-    public void sendMailAndAdjunct(String from, String to, String caption, String content, String filePath) {
+    @SuppressWarnings("unchecked")
+    public String generateEmailContent(String templateName,String sendto,String content) {
+        Map<String,String> map = new HashMap<String, String>();
 
-        JavaMailSenderImpl senderImpl = new JavaMailSenderImpl();
-        MimeMessage msg = senderImpl.createMimeMessage();
+        map.put("sendto",sendto);
+        map.put("content",content);
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(msg, true, "utf-8");
-            helper.setFrom(from);
-            helper.setTo(to);
-            helper.setSubject(caption);
-            helper.addInline("file01",new File(filePath));
-
-            mailSender.send(msg);
-        } catch (MessagingException e) {
+            Template temp = freeMarkerConfigurer.getConfiguration().getTemplate(templateName);
+            return FreeMarkerTemplateUtils.processTemplateIntoString(temp, map);
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }  catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
+
 }

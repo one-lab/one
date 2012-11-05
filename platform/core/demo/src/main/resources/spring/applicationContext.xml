@@ -78,25 +78,6 @@
 			<property name="minEvictableIdleTimeMillis" value="3600000" />
 		</bean>
 
-    <!-- 添加邮件功能配置 start by kylin-->
-    <bean id="MailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
-        <property name="host">
-            <value>smtp.163.com</value>
-        </property>
-        <property name="javaMailProperties">
-            <props>
-                <prop key="mail.stmp.auth">true</prop>
-                <prop key="mail.stmp.timeput">20000</prop>
-            </props>
-        </property>
-        <property name="username">
-            <value>yangming841022@163.com</value>
-        </property>
-        <property name="password">
-            <value>2203812233</value>
-        </property>
-    </bean>
-    <!-- 添加邮件功能配置 end by kylin-->
 
 		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
 		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
@@ -105,9 +86,5 @@
          <!--<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
              <constructor-arg ref="dataSourceSpied"/>
          </bean>-->
-<<<<<<< HEAD:platform/core/demo/src/main/resources/applicationContext.xml
-         <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
 
-=======
->>>>>>> 6c5b2aa5365ca2961bf7be1dc41ecf4add5d0569:platform/core/demo/src/main/resources/spring/applicationContext.xml
 </beans>

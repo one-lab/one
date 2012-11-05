@@ -1,8 +1,11 @@
 package com.sinosoft.one.demo.service.timer;
 
 import com.sinosoft.one.demo.dao.account.UserDao;
+import com.sinosoft.one.demo.model.account.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Intro:
@@ -13,11 +16,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class QuartzService {
-//    @Autowired
-//    private UserDao userDao;
+    @Autowired
+    private UserDao userDao;
     public void invoke() {
         System.out.println("quartz service invoke method begin...............");
-//        userDao.findAll();
-        System.out.println("quartz service invoke method end...............");
+        List<User> users = (List<User>)userDao.findAll();
+        System.out.println("quartz service invoke method end...............users.size():"+users.size());
     }
 }
