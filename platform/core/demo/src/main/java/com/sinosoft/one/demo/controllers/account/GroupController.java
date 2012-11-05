@@ -60,8 +60,8 @@ public class GroupController {
 	
 	@Get("/pipe2")
 	public String pipe2(Invocation inv,Window window){
-		List<Group> groups = accountManager.getAllGroup();
-		inv.addModel("groups", groups);
+//		List<Group> groups = accountManager.getAllGroup();
+//		inv.addModel("groups", groups);
 		return "groupListPipe";
 	}
 }

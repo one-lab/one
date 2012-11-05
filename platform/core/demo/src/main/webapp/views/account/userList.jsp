@@ -17,7 +17,6 @@
 	
 </script>
 
-
 </head>
 
 <body>
@@ -54,7 +53,8 @@
 							<td>${user.groupNames}</td>
 							<td><fmt:formatDate value="${user.createTime }" pattern="yyyy-MM-dd HH:mm:ss" />
 							<td><a href="update/${user.id}" id="editLink-${user.name}">修改</a>
-								<a href="javascript:void(0);" onClick="viewUser(${user.id});" id="viewLink-${user.name}">查看</a> 
+								<a href="javascript:void(0);" onClick="viewUser(${user.id});" id="viewLink-${user.name}">查看</a>
+                                <a href="javascript:void(0);" onClick="openMail(${user.id});" id="openMail-${user.name}">发邮件</a>
 								<a href="delete/${user.id}">删除</a>
 								</td>
 						</tr>
@@ -129,9 +129,79 @@
 			</form:form>
 
 		</div>
+
+
 		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
 	</div>
 <script type="text/javascript">
+
+    var openMail = function(uId) {
+        openWindow();
+    };
+
+    function openWindow(){
+        $("body").window({
+            "id":"window1",
+            "url":"",
+            "title":"发送邮件",
+            "content":"<table width='100%' border='0' cellspacing='1' cellpadding='0' class='tableBorder' >"+
+                "<tr>"+
+                "<td align='right'>主题 ：</td>"+
+                "<td><input type='text' name='caption' id='caption' class='editable' style='width:200px'/></td>"+
+                "</tr>"+
+                "<tr>"+
+                "<td align='right'>发送至：</td>"+
+                "<td><input type='text' name='sendto' id='sendto' class='editable' style='width:200px'/></td>"+
+                "</tr>"+
+                "<tr >"+
+                "<td align='right'>内容：</td>"+
+                "<td ><textarea name='mailContent' id='mailContent' rows='7' cols = '190' class='editable'></textarea></td>"+
+                "</tr>"+
+                "</table>",
+            "hasIFrame":false,
+            "width":380,
+            "height":350,
+            "resizing":false,
+            "diyButton":[{
+                "id": "btOne",
+                "class": "def_btn",
+                "value": "发 送",
+                "btFun": function() {
+                    $.ajax({
+                        type : "POST",
+                        url : "${ctx}/account/user/sendmail",
+                        dataType : "json",
+                        data : {
+                            caption : $("#caption").val(),
+                            sendto : $("#sendto").val(),
+                            mailContent : $("#mailContent").val()
+                        },
+                        success : function(data) {
+                            if(data != null){
+                                alert("发送成功！");
+                            }
+                        },
+                        error:function(){
+                            alert("暂时无法获取用户信息");
+                        }
+                    });
+
+                    $("#window1").remove();
+                    $(".all_shadow").remove();
+                }
+            }, {
+                "id": "btTwo",
+                "class": "def_btn",
+                "value": "关 闭",
+                "btFun": function() {
+                    $("#window1").remove();
+                    $(".all_shadow").remove();
+                }
+            }
+            ]
+        });
+    };
+
 var viewUser=function (uId) {
 		$.ajax({
 			type : "post",

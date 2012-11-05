@@ -13,7 +13,11 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
+<<<<<<< HEAD
+            classpath*:applicationContext.xml
+=======
             classpath*:/spring/applicationContext*.xml
+>>>>>>> 6c5b2aa5365ca2961bf7be1dc41ecf4add5d0569
         </param-value>
     </context-param>
 
