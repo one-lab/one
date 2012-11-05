@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Gridable<T> implements UIable {
     private String idField;
-    //@todo String[],String
+    //@todo String[],String(OK)
     private String cellStringField;
     private String[] cellStringArrayField;
     private List<String> cellListStringField;
@@ -24,17 +24,20 @@ public class Gridable<T> implements UIable {
         this.page = page;
     }
 
-    public Gridable(String idField, List<String> cellListStringField) {
+    public Gridable(Page page, String idField, List<String> cellListStringField) {
+        this.page = page;
         this.idField = idField;
         this.cellListStringField = cellListStringField;
     }
 
-    public Gridable(String idField, String[] cellStringArrayField) {
+    public Gridable(Page page, String idField, String[] cellStringArrayField) {
+        this.page = page;
         this.idField = idField;
         this.cellStringArrayField = cellStringArrayField;
     }
 
-    public Gridable(String idField, String cellStringField) {
+    public Gridable(Page page, String idField, String cellStringField) {
+        this.page = page;
         this.idField = idField;
         this.cellStringField = cellStringField;
     }

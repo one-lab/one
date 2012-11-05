@@ -17,7 +17,21 @@ public class NodeEntity {
     private List<NodeEntity> children;
     private String state;
 
-    public NodeEntity(){}
+    public NodeEntity(){
+
+    }
+
+    public NodeEntity(String id,String title,String state){
+        this.id =id;
+        this.title =title;
+        this.state =state;
+    }
+
+    public NodeEntity(String id,String title,String state,List<NodeEntity> children){
+        this(id, title ,state );
+        this.children =children;
+    }
+
     public NodeEntity(String id,String title,String classTag,String url,String state){
         this.id =id;
         this.title =title;

@@ -32,7 +32,7 @@ public class TreeConverter<T> implements Converter<Treeable> {
     private JSONArray jsonArray;
 
     public String toJson(Treeable treeable) {
-        if (treeable == null) {
+        if (treeable == null||treeable.getContent()==null) {
             log.info("the treeable object is null.");
             return null;
         } else {

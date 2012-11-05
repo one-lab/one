@@ -29,7 +29,7 @@ public class GridConverter<T> implements Converter<Gridable> {
     private static final String CELL_ELEMENT = "cell";
 
     public String toJson(Gridable gridable) {
-        if (gridable==null||gridable.getPage().getContent() == null) {
+        if (gridable==null||gridable.getPage() == null) {
             return null;
         } else {
             Page page = gridable.getPage();

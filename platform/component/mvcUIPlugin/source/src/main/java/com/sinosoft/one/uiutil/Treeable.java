@@ -18,9 +18,9 @@ public class Treeable<T> implements UIable {
     private String stateField;
     private List<T> content;
 
-    public Treeable(List<T> content) {
+    /*public Treeable(List<T> content) {
         this.content = content;
-    }
+    }*/
 
     public Treeable(String idField, String titleField, String classField, String urlField, String childrenField, String stateField) {
         this.idField = idField;
@@ -29,6 +29,45 @@ public class Treeable<T> implements UIable {
         this.urlField = urlField;
         this.childrenField = childrenField;
         this.stateField = stateField;
+    }
+
+    public static class Builder<T>{
+        private List<T> content;
+        private String idField;
+        private String titleField;
+        private String childrenField;
+        private String stateField;
+        private String classField;
+        private String urlField;
+
+        public Builder(List<T> content,String idField,String titleField,String childrenField,String stateField){
+            this.content=content;
+            this.idField=idField;
+            this.titleField=titleField;
+            this.childrenField=childrenField;
+            this.stateField=stateField;
+        }
+        public Builder classField(String val){
+            classField=val;
+            return this;
+        }
+        public Builder urlField(String val){
+            urlField=val;
+            return this;
+        }
+        public Treeable builder(){
+            return new Treeable(this);
+        }
+    }
+
+    private Treeable(Builder builder){
+        content=builder.content;
+        idField=builder.idField;
+        titleField=builder.titleField;
+        childrenField=builder.childrenField;
+        stateField=builder.stateField;
+        classField=builder.classField;
+        urlField=builder.urlField;
     }
 
     public String getIdField() {

@@ -13,6 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:application-context.xml")
@@ -63,7 +65,37 @@ public class TreeJsonTest {
         nodeStudentList1.add(firstStrudent);
         nodeStudentList1.add(secondStudent);
     }
+
     @Test
+    public void testConvertToJsonWithNullObject(){
+        String treeJson=null;
+        Treeable<NodeEntity> treeable=new Treeable.Builder<NodeEntity>(null,"id","title","children","state").classField("classTag").urlField("url").builder();
+        /*treeable .setIdField("id");
+        treeable .setTitleField("title");
+        treeable.setClassField("classTag");
+        treeable .setUrlField("url");
+        treeable .setStateField("state");
+        treeable .setChildrenField("children");*/
+        AbstractRender abstractRender=(TreeRender)UIUtil.with(treeable ).as(UIType.Json);
+        assertEquals(treeJson,abstractRender.getResultForTest());
+    }
+
+    /*@Test
+    public void testConvertToJsonWithNullAttribute(){
+        NodeEntity nodeEntity=new NodeEntity();
+        String treeJson=null;
+        Treeable<NodeEntity> treeable=new Treeable<NodeEntity>(null);
+        treeable .setIdField("id");
+        treeable .setTitleField("title");
+        treeable.setClassField("classTag");
+        treeable .setUrlField("url");
+        treeable .setStateField("state");
+        treeable .setChildrenField("children");
+        AbstractRender abstractRender=(TreeRender)UIUtil.with(treeable ).as(UIType.Json);
+        assertEquals(treeJson,abstractRender.getResultForTest());
+    }*/
+
+   /* @Test
     public void testConvertToJson(){
         Treeable<NodeEntity> treeable=new Treeable<NodeEntity>(nodeEntityList3);
         treeable .setIdField("id");
@@ -73,7 +105,6 @@ public class TreeJsonTest {
         treeable .setStateField("state");
         treeable .setChildrenField("children");
         UIUtil.with(treeable ).as(UIType.Json);
-
     }
     @Test
     public void testConverToJson2(){
@@ -85,7 +116,7 @@ public class TreeJsonTest {
         treeable .setStateField("state");
         treeable .setChildrenField("children");
         UIUtil.with(treeable ).as(UIType.Json);
-    }
+    }*/
     @Test
     public void  testConvertToJson2(){}
 
