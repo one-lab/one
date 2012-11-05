@@ -53,7 +53,7 @@ public abstract interface CompanyServiceInterface {
      * @param comCode
      * @return
      */
-    public <T extends CompanyModelInterface>T findCompanyByComCode(String comCode);
+    public <T extends CompanyModelInterface> T findCompanyByComCode(String comCode);
     
     /**
      * 根据机构代码查询所有下级机构的机构代码

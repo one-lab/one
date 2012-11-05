@@ -11,8 +11,6 @@
 	http://www.springframework.org/schema/context/spring-context.xsd"
 	default-autowire="byName" default-lazy-init="false">
 
-
-
 	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
 		<property name="url" value="${jdbc.url}" />
@@ -44,7 +42,6 @@
 		<property name="entityManagerFactory" ref="bpmEmf" />
 	</bean>
 	
-	
 	<aop:config>
 		<aop:aspect ref="bpmTraceAspect">
 			<aop:around method="getTask" pointcut="execution(${bpm.aspect.expression}) and @annotation(com.sinosoft.one.bpm.aspect.GetTask)"/>
@@ -55,7 +52,7 @@
 	
 	<bean id="bpmService" scope="singleton"
 		class="com.sinosoft.one.bpm.service.spring.BpmServiceSpringImpl"
-		init-method="init">
+		init-method="init" destroy-method="destory">
 	</bean>
 
 	<bean id="bpmTraceAspect" class="com.sinosoft.one.bpm.aspect.TaskAspect">

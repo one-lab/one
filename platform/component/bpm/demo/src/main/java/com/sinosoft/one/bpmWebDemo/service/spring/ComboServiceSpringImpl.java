@@ -1,5 +1,7 @@
 package com.sinosoft.one.bpmWebDemo.service.spring;
 
+import ins.framework.common.Page;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -33,8 +35,8 @@ public class ComboServiceSpringImpl implements ComboService {
 	/**
 	 * 支持嵌套
 	 */
-	@GetTask(userId = "combo001", businessIdAttibuteName = "comboCode")
-	public List<Combo> getCombos_StepOne(String condation) {
+	@GetTask(userIdBeanOffset=0, businessIdAttibuteName = "result.comboCode")
+	public Page getCombos(String userId, String condation) {
 		System.out.println("--------------getCombos");
 		List<Combo> results = DataStore.getCombos();
 		for (int i = 0; i < 2; i++) {
@@ -58,66 +60,11 @@ public class ComboServiceSpringImpl implements ComboService {
 			results.add(c);
 		}
 		System.out.println("resturn resutl size:" + results.size());
-		return results;
+		Page page = new Page();
+		page.getResult().addAll(results);
+		return page;
 	}
 
-	@GetTask(userId = "combo002", businessIdAttibuteName = "comboCode")
-	public List<Combo> getCombos_StepTwo(String condation) {
-		// 在此处抛异常测试
-		// int j=10/0;
-		System.out.println("--------------getCombos");
-		List<Combo> results = DataStore.getCombos();
-		for (int i = 0; i < 2; i++) {
-			Combo c = new Combo();
-			c.setComboCode("00001" + i);
-			if (i == 0) {
-				Kind k = new Kind();
-				k.setKindName("险种abc");
-				k.setKindCode("abc");
-				k.setComboCode("abc");
-				c.setComboCode("abc");
-				c.setKind(k);
-			} else {
-				Kind k = new Kind();
-				k.setKindName("险种" + i);
-				k.setKindCode("001" + i);
-				k.setComboCode("001" + i);
-				c.setComboCode("001" + i);
-				c.setKind(k);
-			}
-			results.add(c);
-		}
-		System.out.println("resturn resutl size:" + results.size());
-		return results;
-	}
-
-	@GetTask(userId = "combo003", businessIdAttibuteName = "comboCode")
-	public List<Combo> getCombos_StepThree(String condation) {
-		System.out.println("--------------getCombos");
-		List<Combo> results = DataStore.getCombos();
-		for (int i = 0; i < 2; i++) {
-			Combo c = new Combo();
-			c.setComboCode("00001" + i);
-			if (i == 0) {
-				Kind k = new Kind();
-				k.setKindName("险种abc");
-				k.setKindCode("abc");
-				k.setComboCode("abc");
-				c.setComboCode("abc");
-				c.setKind(k);
-			} else {
-				Kind k = new Kind();
-				k.setKindName("险种" + i);
-				k.setKindCode("001" + i);
-				k.setComboCode("001" + i);
-				c.setComboCode("001" + i);
-				c.setKind(k);
-			}
-			results.add(c);
-		}
-		System.out.println("resturn resutl size:" + results.size());
-		return results;
-	}
 	
 	@GetTask(userId = "combo004", businessIdAttibuteName = "comboCode")
 	public List<Combo> getCombos_StepFour(String condation) {

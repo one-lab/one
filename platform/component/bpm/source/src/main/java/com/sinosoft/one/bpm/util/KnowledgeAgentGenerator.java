@@ -52,9 +52,9 @@ public class KnowledgeAgentGenerator {
 			r = ResourceFactory.newUrlResource(changeSet);
 			if(r instanceof UrlResource) {
 				UrlResource urlResource = (UrlResource) r;
-				urlResource.setBasicAuthentication(p.getProperty("drools.agent.basicAuthentication"));
-				urlResource.setUsername(p.getProperty("drools.agent.username"));
-				urlResource.setPassword(p.getProperty("drools.agent.password"));
+				urlResource.setBasicAuthentication(p.getProperty("drools.agent.basicAuthentication", "disabled"));
+				urlResource.setUsername(p.getProperty("drools.agent.username", ""));
+				urlResource.setPassword(p.getProperty("drools.agent.password", ""));
 			}
 		} else {
 			r = ResourceFactory.newClassPathResource("ChangeSet.xml");

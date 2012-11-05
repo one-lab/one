@@ -1,5 +1,6 @@
 package com.sinosoft.one.rms.service.spring;
 
+import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import ins.framework.cache.CacheManager;
 import ins.framework.cache.CacheService;
 import ins.framework.common.Page;
@@ -417,7 +418,9 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 						RoleDesignateInfo roleDesignateInfo = new RoleDesignateInfo();
 						roleDesignateInfo.setRole(roleDesignate.getRole());
 						roleDesignateInfo.setComCode(cCode);
-						roleDesignateInfo.setComCName(companyServiceInterface.findCompanyByComCode(cCode).getComCName());
+                        CompanyModelInterface cmi =  companyServiceInterface.findCompanyByComCode(cCode);
+                        String comCName = cmi.getComCName();
+						roleDesignateInfo.setComCName(comCName);
 						roleDesignateInfo.setCreateUser(roleDesignate.getCreateUser());
 						roleDesignateInfo.setCreateTime(roleDesignate.getCreateTime());
 						roleDesignateInfos.add(roleDesignateInfo);
