@@ -1,6 +1,8 @@
 package com.sinosoft.one.uiutil;
 
 
+import com.sinosoft.one.uiutil.exception.ConverterException;
+
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -13,5 +15,5 @@ import javax.servlet.http.HttpServletResponse;
 public interface Render {
     void render(HttpServletResponse response);
 
-    Render as(UIType uiType);
+    Render as(UIType uiType) throws ConverterException;
 }

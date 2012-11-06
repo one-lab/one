@@ -1,5 +1,6 @@
 package com.sinosoft.one.uiutil;
 
+import com.sinosoft.one.uiutil.exception.ConverterException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,7 +15,7 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class AbstractRender<T extends UIable> implements Render {
-    private static Log log= LogFactory.getLog(AbstractRender.class);
+    private static Log log = LogFactory.getLog(AbstractRender.class);
     private Converter converter;
     private String result;
     private T t;
@@ -34,14 +35,13 @@ public abstract class AbstractRender<T extends UIable> implements Render {
         }
     }
 
-    public Render as(UIType uiType) {
+    public Render as(UIType uiType) throws ConverterException {
         if (uiType == UIType.Json) {
             result = converter.toJson(t);
-            log.info("the json string is:"+result);
-            System.out.println("结果："+result);
+            log.info("the json string is:" + result);
         } else if (uiType == UIType.Xml) {
             result = converter.toXml(t);
-            log.info("the json string is:"+result);
+            log.info("the json string is:" + result);
         }
         return this;
     }
