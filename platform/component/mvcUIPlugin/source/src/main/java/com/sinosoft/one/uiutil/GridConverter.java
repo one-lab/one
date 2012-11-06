@@ -23,8 +23,6 @@ import java.util.List;
  */
 public class GridConverter<T> implements Converter<Gridable> {
     private static Log log = LogFactory.getLog(GridConverter.class);
-
-    //@todo 所有处理类都需要增加日志(OK)
     private static final String TOTAL_ELEMENT = "total";
     private static final String ROWS_ELEMENT = "rows";
     private static final String ID_ELEMENT = "id";
@@ -36,33 +34,27 @@ public class GridConverter<T> implements Converter<Gridable> {
         } else {
             Page page = gridable.getPage();
             JSONObject jsonObject = new JSONObject();
-
             jsonObject.put(TOTAL_ELEMENT, page.getTotalElements());
-
-            //@todo 需要增加collection的判断，要有明确的错误提示。(是否需要增加自定义一异常--OK)
             if (gridable.getPage().getContent() instanceof Collection) {
                 Collection nextItemObject = (Collection) gridable.getPage().getContent();
                 jsonObject.put(ROWS_ELEMENT, addCellObjectWithListString(nextItemObject, gridable));
             } else {
-                log.error("the result type must be a 'Collection' type.");
+                log.error("The result type must be a 'Collection' type.");
             }
 
             return jsonObject.toString();
         }
     }
 
-    //@todo method name change to addNextItemObject(OK)
-    //@todo 方法参数类型修改成Collecion，(OK)
     private JSONArray addCellObjectWithListString(Collection nextItemObject, Gridable gridable) throws GridConverterException {
         JSONArray jsonArray = new JSONArray();
         for (Object obj : nextItemObject) {
             JSONObject jsonObject = new JSONObject();
-
             try {
                 jsonObject.put(ID_ELEMENT, BeanUtils.getProperty(obj, gridable.getIdField()));
             } catch (IllegalAccessException e) {
                 log.error(e.getMessage());
-                throw new GridConverterException("the current method does not  have permission to access the member.", e);
+                throw new GridConverterException("The current method does not  have permission to access the member.", e);
             } catch (InvocationTargetException e) {
                 log.error(e.getMessage());
                 throw new GridConverterException(e.getTargetException());
@@ -88,7 +80,6 @@ public class GridConverter<T> implements Converter<Gridable> {
                 jsonObject.put(CELL_ELEMENT, cellJsonArray);
             }
             jsonArray.add(jsonObject);
-
         }
         return jsonArray;
     }

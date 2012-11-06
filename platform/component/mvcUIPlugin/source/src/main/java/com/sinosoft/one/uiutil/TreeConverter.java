@@ -20,7 +20,6 @@ import java.util.Collection;
  */
 public class TreeConverter<T> implements Converter<Treeable> {
     private static Log log = LogFactory.getLog(TreeConverter.class);
-    //@todo 常量需要用大写和下划线定义 ID_ELEMENT = "id"(OK);
     private static final String ID_ELEMENT = "id";
     private static final String ATTR_ELEMENT = "attr";
     private static final String DATA_ELEMENT = "data";
@@ -35,10 +34,9 @@ public class TreeConverter<T> implements Converter<Treeable> {
 
     public String toJson(Treeable treeable) throws TreeConverterException {
         if (treeable == null || treeable.getContent() == null) {
-            log.info("the treeable object is null.");
+            log.info("The treeable object is null.");
             return null;
         } else {
-            //@todo 同GridConverter处理(OK)
             jsonArray = addSubItemObject(treeable.getContent(), treeable);
             return jsonArray.toString();
         }
@@ -88,7 +86,7 @@ public class TreeConverter<T> implements Converter<Treeable> {
             }
             return jsonArray;
         } else {
-            log.error("the children node's type must be a 'Collection' type.");
+            log.error("The children node's type must be a 'Collection' type.");
         }
         return jsonArray;
     }
@@ -102,6 +100,6 @@ public class TreeConverter<T> implements Converter<Treeable> {
     }
 
     public String toXml(Treeable treeable) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 }

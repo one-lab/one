@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class Gridable<T> implements UIable {
     private String idField;
-    //@todo String[],String(OK)
     private String cellStringField;
     private String[] cellStringArrayField;
     private List<String> cellListStringField;

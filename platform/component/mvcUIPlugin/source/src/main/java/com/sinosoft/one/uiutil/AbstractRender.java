@@ -27,7 +27,7 @@ public abstract class AbstractRender<T extends UIable> implements Render {
 
     public void render(HttpServletResponse response) throws Exception {
         try {
-            log.info("return the json result to the client.");
+            log.info("Return the json result to the client.");
             response.getWriter().write(result);
             response.flushBuffer();
         } catch (IOException e) {
@@ -39,10 +39,10 @@ public abstract class AbstractRender<T extends UIable> implements Render {
     public Render as(UIType uiType) throws ConverterException {
         if (uiType == UIType.Json) {
             result = converter.toJson(t);
-            log.info("the json string is:" + result);
+            log.info("The json string is:" + result);
         } else if (uiType == UIType.Xml) {
             result = converter.toXml(t);
-            log.info("the json string is:" + result);
+            log.info("The json string is:" + result);
         }
         return this;
     }
