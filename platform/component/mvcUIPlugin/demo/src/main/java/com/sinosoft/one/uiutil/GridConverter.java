@@ -2,10 +2,15 @@ package com.sinosoft.one.uiutil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sinosoft.one.uiutil.exception.GridConverterException;
 import com.sinosoft.one.util.reflection.ReflectionUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,46 +22,83 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class GridConverter<T> implements Converter<Gridable> {
-    private static final String totalElement = "total";
-    private static final String rowsElement = "rows";
-    private static final String idElement = "id";
-    private static final String cellElement = "cell";
+    private static Log log = LogFactory.getLog(GridConverter.class);
+    private static final String TOTAL_ELEMENT = "total";
+    private static final String ROWS_ELEMENT = "rows";
+    private static final String ID_ELEMENT = "id";
+    private static final String CELL_ELEMENT = "cell";
 
-    public String toJson(Gridable gridable) {
-        Page page = gridable.getPage();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(totalElement, page.getTotalElements());
-        } catch (Exception e) {
-            e.printStackTrace();
+    public String toJson(Gridable gridable) throws GridConverterException {
+        if (gridable == null || gridable.getPage() == null) {
+            return null;
+        } else {
+            Page page = gridable.getPage();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(TOTAL_ELEMENT, page.getTotalElements());
+            if (gridable.getPage().getContent() instanceof Collection) {
+                Collection nextItemObject = (Collection) gridable.getPage().getContent();
+                jsonObject.put(ROWS_ELEMENT, addCellObjectWithListString(nextItemObject, gridable));
+            } else {
+                log.error("The result type must be a 'Collection' type.");
+            }
+
+            return jsonObject.toString();
         }
-        jsonObject.put(rowsElement, addSubItemObject(gridable.getPage().getContent(), gridable));
-        return jsonObject.toString();
     }
 
-    private JSONArray addSubItemObject(Object children, Gridable gridable) {
+    private JSONArray addCellObjectWithListString(Collection nextItemObject, Gridable gridable) throws GridConverterException {
         JSONArray jsonArray = new JSONArray();
-        if (children instanceof Collection) {
-            Collection subChildren = (Collection) children;
-            for (Object obj : subChildren) {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put(idElement, BeanUtils.getProperty(obj, gridable.getIdField()));
-                    List<String> attributeNames = gridable.getCellField();
-                    if (attributeNames != null && attributeNames.size() > 0) {
-                        JSONArray cellJsonArray = new JSONArray();
-                        for (String attributeName : attributeNames) {
-                            cellJsonArray.add(ReflectionUtils.getFieldValue(obj, attributeName));
-                        }
-                        jsonObject.put(cellElement, cellJsonArray);
-                    }
-                    jsonArray.add(jsonObject);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (Object obj : nextItemObject) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put(ID_ELEMENT, BeanUtils.getProperty(obj, gridable.getIdField()));
+            } catch (IllegalAccessException e) {
+                log.error(e.getMessage());
+                throw new GridConverterException("The current method does not  have permission to access the member.", e);
+            } catch (InvocationTargetException e) {
+                log.error(e.getMessage());
+                throw new GridConverterException(e.getTargetException());
+            } catch (NoSuchMethodException e) {
+                log.error(e.getMessage());
+                throw new GridConverterException(e);
             }
+            List<String> attributeNames = new ArrayList<String>();
+            if (gridable.getCellListStringField() != null) {
+                attributeNames = gridable.getCellListStringField();
+            } else if (gridable.getCellStringArrayField() != null) {
+                attributeNames = convertToList(gridable.getCellStringArrayField());
+            } else if (gridable.getCellStringField() != null) {
+                attributeNames = convertToList(gridable.getCellStringField());
+            } else {
+                attributeNames = null;
+            }
+            if (attributeNames != null && attributeNames.size() > 0) {
+                JSONArray cellJsonArray = new JSONArray();
+                for (String attributeName : attributeNames) {
+                    cellJsonArray.add(ReflectionUtils.getFieldValue(obj, attributeName));
+                }
+                jsonObject.put(CELL_ELEMENT, cellJsonArray);
+            }
+            jsonArray.add(jsonObject);
         }
         return jsonArray;
+    }
+
+    private List<String> convertToList(String[] cellField) {
+        List<String> attributeNames = new ArrayList<String>();
+        for (String str : cellField) {
+            attributeNames.add(str);
+        }
+        return attributeNames;
+    }
+
+    private List<String> convertToList(String cellField) {
+        String[] cellStringArrayField = cellField.split(",");
+        List<String> attributeNames = new ArrayList<String>();
+        for (String str : cellStringArrayField) {
+            attributeNames.add(str);
+        }
+        return attributeNames;
     }
 
     public String toXml(Gridable gridable) {

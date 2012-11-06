@@ -13,20 +13,36 @@ import java.util.List;
  */
 public class Gridable<T> implements UIable {
     private String idField;
-    private List<String> cellField;//@todo cellFields 还可以是 String "a,b,c" 和 String[] 类型的 需要提供重载方法。
-    private Page page;//@todo content 可以使page 或者list page需要明确泛型
+    private String cellStringField;
+    private String[] cellStringArrayField;
+    private List<String> cellListStringField;
+
+    private Page page;
 
     public Gridable(Page page) {
         this.page = page;
     }
 
-    public Gridable(String idField, List<String> cellField) {
+    public Gridable(Page page, String idField, List<String> cellListStringField) {
+        this.page = page;
         this.idField = idField;
-        this.cellField = cellField;
+        this.cellListStringField = cellListStringField;
     }
-	//@todo
+
+    public Gridable(Page page, String idField, String[] cellStringArrayField) {
+        this.page = page;
+        this.idField = idField;
+        this.cellStringArrayField = cellStringArrayField;
+    }
+
+    public Gridable(Page page, String idField, String cellStringField) {
+        this.page = page;
+        this.idField = idField;
+        this.cellStringField = cellStringField;
+    }
+
     public Render getRender() {
-        return new TreeRender(new GridConverter(), this);
+        return new GridRender(new GridConverter(), this);
     }
 
     public String getIdField() {
@@ -37,12 +53,28 @@ public class Gridable<T> implements UIable {
         this.idField = idField;
     }
 
-    public List<String> getCellField() {
-        return cellField;
+    public String getCellStringField() {
+        return cellStringField;
     }
 
-    public void setCellField(List<String> cellField) {
-        this.cellField = cellField;
+    public void setCellStringField(String cellStringField) {
+        this.cellStringField = cellStringField;
+    }
+
+    public String[] getCellStringArrayField() {
+        return cellStringArrayField;
+    }
+
+    public void setCellStringArrayField(String[] cellStringArrayField) {
+        this.cellStringArrayField = cellStringArrayField;
+    }
+
+    public List<String> getCellListStringField() {
+        return cellListStringField;
+    }
+
+    public void setCellListStringField(List<String> cellListStringField) {
+        this.cellListStringField = cellListStringField;
     }
 
     public Page getPage() {
