@@ -24,13 +24,13 @@ public class UserController {
     }
 
     @Post("viewUserInfo")
-    public void viewInfo(Invocation inv) {
+    public void viewInfo(Invocation inv) throws Exception {
         AccountManager accountManager=new AccountManager();
         UIUtil.with(accountManager.getGridableData()).as(UIType.Json).render(inv.getResponse());
     }
 
     @Post("viewCompanyInfo")
-    public void viewComInfo(Invocation inv) {
+    public void viewComInfo(Invocation inv) throws Exception {
         AccountManager accountManager=new AccountManager();
         UIUtil.with(accountManager.getTreeableData()).as(UIType.Json).render(inv.getResponse());
     }

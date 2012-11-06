@@ -65,7 +65,7 @@ public class AccountManager {
         testEmployeeAttributes.add("company");
         testEmployeeAttributes.add("organization");
         testEmployeeAttributes.add("operation");
-        gridable.setCellField(testEmployeeAttributes);
+        gridable.setCellListStringField(testEmployeeAttributes);
         return gridable;
     }
 
@@ -85,13 +85,7 @@ public class AccountManager {
         nodeEntityList3.add(thirdNodeEntity);
         nodeEntityList3.add(fiveNodeEntity );
 
-        Treeable<NodeEntity> treeable=new Treeable<NodeEntity>(nodeEntityList3);
-        treeable .setIdField("id");
-        treeable .setTitleField("title");
-        treeable.setClassField("classTag");
-        treeable .setUrlField("url");
-        treeable .setStateField("state");
-        treeable .setChildrenField("children");
+        Treeable<NodeEntity> treeable=new Treeable.Builder<NodeEntity>(nodeEntityList3,"id","title","state","children").classField("classTag").urlField("url").builder();
         return treeable;
     }
 
