@@ -25,13 +25,14 @@ public abstract class AbstractRender<T extends UIable> implements Render {
         this.t = t;
     }
 
-    public void render(HttpServletResponse response) {
+    public void render(HttpServletResponse response) throws Exception {
         try {
             log.info("return the json result to the client.");
             response.getWriter().write(result);
             response.flushBuffer();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+            throw e;
         }
     }
 

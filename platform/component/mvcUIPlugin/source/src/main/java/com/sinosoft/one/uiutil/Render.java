@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * To change this template use File | Settings | File Templates.
  */
 public interface Render {
-    void render(HttpServletResponse response);
+    void render(HttpServletResponse response) throws Exception;
 
     Render as(UIType uiType) throws ConverterException;
 }
