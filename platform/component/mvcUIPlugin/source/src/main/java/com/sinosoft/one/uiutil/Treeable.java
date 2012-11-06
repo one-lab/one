@@ -18,15 +18,6 @@ public class Treeable<T> implements UIable {
     private String stateField;
     private List<T> content;
 
-    public Treeable(String idField, String titleField, String classField, String urlField, String childrenField, String stateField) {
-        this.idField = idField;
-        this.titleField = titleField;
-        this.classField = classField;
-        this.urlField = urlField;
-        this.childrenField = childrenField;
-        this.stateField = stateField;
-    }
-
     public static class Builder<T> {
         private List<T> content;
         private String idField;

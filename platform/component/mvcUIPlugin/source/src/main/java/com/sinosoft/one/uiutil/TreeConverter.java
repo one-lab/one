@@ -55,12 +55,12 @@ public class TreeConverter<T> implements Converter<Treeable> {
                     jsonAttrObject.put(ID_ELEMENT, BeanUtils.getProperty(obj, treeable.getIdField()));
                     jsonObject.put(ATTR_ELEMENT, jsonAttrObject);
                     dataItemObject.put(TITLE_ELEMENT, BeanUtils.getProperty(obj, treeable.getTitleField()));
-                    if (BeanUtils.getProperty(obj, treeable.getClassField()) == null || BeanUtils.getProperty(obj, treeable.getClassField()).isEmpty()) {
+                    if (treeable.getClassField() == null || BeanUtils.getProperty(obj, treeable.getClassField()) == null || BeanUtils.getProperty(obj, treeable.getClassField()).isEmpty()) {
                         dataAttrItemObject.put(CLASS_ELEMENT, CLASS_DEFAULT_VALUE);
                     } else {
                         dataAttrItemObject.put(CLASS_ELEMENT, BeanUtils.getProperty(obj, treeable.getClassField()));
                     }
-                    if (BeanUtils.getProperty(obj, treeable.getUrlField()) == null || BeanUtils.getProperty(obj, treeable.getUrlField()).isEmpty()) {
+                    if (treeable.getUrlField() == null || BeanUtils.getProperty(obj, treeable.getUrlField()) == null || BeanUtils.getProperty(obj, treeable.getUrlField()).isEmpty()) {
                         dataAttrItemObject.put(HREF_ELEMENT, HREF_DEFAULT_VALUE);
                     } else {
                         dataAttrItemObject.put(HREF_ELEMENT, BeanUtils.getProperty(obj, treeable.getUrlField()));
