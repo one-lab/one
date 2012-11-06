@@ -2,11 +2,13 @@ package com.sinosoft.one.uiutil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sinosoft.one.uiutil.exception.TreeConverterException;
 import com.sinosoft.one.util.reflection.ReflectionUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 /**
@@ -17,32 +19,32 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public class TreeConverter<T> implements Converter<Treeable> {
-    private static Log log= LogFactory.getLog(TreeConverter.class);
-	//@todo 常量需要用大写和下划线定义 ID_ELEMENT = "id"(OK);
-    private static final String  ID_ELEMENT= "id";
-    private static final String  ATTR_ELEMENT= "attr";
-    private static final String  DATA_ELEMENT= "data";
-    private static final String  TITLE_ELEMENT= "title";
-    private static final String  CLASS_ELEMENT= "class";
-    private static final String  HREF_ELEMENT= "href";
-    private static final String  CHILDREN_ELEMENT= "children";
-    private static final String  STATE_ELEMENT= "state";
-    private static final String  CLASS_DEFAULT_VALUE= "";
-    private static final String  HREF_DEFAULT_VALUE= "javascript:void(0);";
+    private static Log log = LogFactory.getLog(TreeConverter.class);
+    //@todo 常量需要用大写和下划线定义 ID_ELEMENT = "id"(OK);
+    private static final String ID_ELEMENT = "id";
+    private static final String ATTR_ELEMENT = "attr";
+    private static final String DATA_ELEMENT = "data";
+    private static final String TITLE_ELEMENT = "title";
+    private static final String CLASS_ELEMENT = "class";
+    private static final String HREF_ELEMENT = "href";
+    private static final String CHILDREN_ELEMENT = "children";
+    private static final String STATE_ELEMENT = "state";
+    private static final String CLASS_DEFAULT_VALUE = "";
+    private static final String HREF_DEFAULT_VALUE = "javascript:void(0);";
     private JSONArray jsonArray;
 
-    public String toJson(Treeable treeable) {
-        if (treeable == null||treeable.getContent()==null) {
+    public String toJson(Treeable treeable) throws TreeConverterException {
+        if (treeable == null || treeable.getContent() == null) {
             log.info("the treeable object is null.");
             return null;
         } else {
-			//@todo 同GridConverter处理
+            //@todo 同GridConverter处理(OK)
             jsonArray = addSubItemObject(treeable.getContent(), treeable);
             return jsonArray.toString();
         }
     }
 
-    private JSONArray addSubItemObject(Object children, Treeable treeable) {
+    private JSONArray addSubItemObject(Object children, Treeable treeable) throws TreeConverterException {
         JSONArray jsonArray = new JSONArray();
         if (children instanceof Collection) {
             Collection subChildren = (Collection) children;
@@ -73,12 +75,19 @@ public class TreeConverter<T> implements Converter<Treeable> {
                     }
                     jsonObject.put(STATE_ELEMENT, BeanUtils.getProperty(obj, treeable.getStateField()));
                     jsonArray.add(jsonObject);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    log.error(e.getMessage());
+                    throw new TreeConverterException("the current method does not  have permission to access the member.", e);
+                } catch (InvocationTargetException e) {
+                    log.error(e.getMessage());
+                    throw new TreeConverterException(e.getTargetException());
+                } catch (NoSuchMethodException e) {
+                    log.error(e.getMessage());
+                    throw new TreeConverterException(e);
                 }
             }
             return jsonArray;
-        }else {
+        } else {
             log.error("the children node's type must be a 'Collection' type.");
         }
         return jsonArray;

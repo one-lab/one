@@ -1,5 +1,7 @@
 package com.sinosoft.one.uiutil;
 
+import com.sinosoft.one.uiutil.exception.ConverterException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: seline
@@ -8,7 +10,7 @@ package com.sinosoft.one.uiutil;
  * To change this template use File | Settings | File Templates.
  */
 public interface Converter<T extends UIable> {
-    String toJson(T t);
+    String toJson(T t) throws ConverterException;
 
-    String toXml(T t);
+    String toXml(T t) throws ConverterException;
 }
