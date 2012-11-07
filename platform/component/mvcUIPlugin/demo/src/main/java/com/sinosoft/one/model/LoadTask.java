@@ -19,7 +19,8 @@ public class LoadTask extends IdEntity {
     private String state;
     private String functionType;
 
-    public LoadTask(){}
+    public LoadTask() {
+    }
 
     public String getFunctionType() {
         return functionType;

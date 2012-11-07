@@ -17,14 +17,15 @@ public class Course {
     private String url;
     private String state;
 
-    public Course(String id,String title,String classTag,String url,String state){
+    public Course(String id, String title, String classTag, String url, String state) {
         this.id = id;
-        this .title = title;
-        this .classTag = classTag;
+        this.title = title;
+        this.classTag = classTag;
         this.url = url;
         this.state = state;
 
     }
+
     public String getId() {
         return id;
     }

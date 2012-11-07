@@ -17,17 +17,20 @@ public class NodeEntity {
     private List<NodeEntity> children;
     private String state;
 
-    public NodeEntity(){}
-    public NodeEntity(String id,String title,String classTag,String url,String state){
-        this.id =id;
-        this.title =title;
-        this.classTag =classTag;
-        this.url =url;
-        this.state =state;
+    public NodeEntity() {
     }
-    public NodeEntity(String id,String title,String classTag,String url,String state,List<NodeEntity> children){
-        this(id, title ,classTag,url ,state );
-        this.children =children;
+
+    public NodeEntity(String id, String title, String classTag, String url, String state) {
+        this.id = id;
+        this.title = title;
+        this.classTag = classTag;
+        this.url = url;
+        this.state = state;
+    }
+
+    public NodeEntity(String id, String title, String classTag, String url, String state, List<NodeEntity> children) {
+        this(id, title, classTag, url, state);
+        this.children = children;
     }
 
     public String getId() {

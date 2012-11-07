@@ -10,12 +10,15 @@ package com.sinosoft.one.model;
 public class FunctionList extends IdEntity {
     private String branchOfficeName;
     private String shopName;
-    public FunctionList(){}
 
-    public FunctionList(String branchOfficeName,String shopName){
+    public FunctionList() {
+    }
+
+    public FunctionList(String branchOfficeName, String shopName) {
         this.branchOfficeName = branchOfficeName;
         this.shopName = shopName;
     }
+
     public String getBranchOfficeName() {
         return branchOfficeName;
     }
