@@ -11,7 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.sinosoft.one.bpm.service.facade.BpmService;
-import com.sinosoft.one.bpm.util.JbpmAPIUtil;
+import com.sinosoft.one.bpm.util.BpmServiceSupport;
 import com.sinosoft.one.service.facade.ComboService;
 import com.sinosoft.one.test.domain.Combo;
 import com.sinosoft.one.test.domain.Kind;
@@ -25,14 +25,16 @@ public class BpmServiceImplTest extends SpringContextTestCase {
 	public BpmService bpmService;
 	@Autowired
 	public ComboService comboService;
+	@Autowired
+	public BpmServiceSupport bpmServiceSupport;
 
 	@Test
 	public void testComboService() {
 		try {
-			JbpmAPIUtil.getSession("drools.properties");
-			JbpmAPIUtil.getTaskService();
+			bpmServiceSupport.getSession("drools.properties");
+			bpmServiceSupport.getTaskService();
 			System.out.println("===only in update mode test  begin===");
-			List<TaskSummary> tasks = JbpmAPIUtil.getTaskService()
+			List<TaskSummary> tasks = bpmServiceSupport.getTaskService()
 					.getTasksOwned("combo001", "en-UK");
 			System.out.println("======task belong to combo001 size is:"
 					+ tasks.size());

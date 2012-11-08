@@ -7,8 +7,6 @@ import org.jbpm.task.query.TaskSummary;
 
 public interface BpmService {
 
-	public abstract void init();
-
 	public abstract long createProcess(String processId,
 			Map<String, Object> params) throws Exception;
 
@@ -24,4 +22,5 @@ public interface BpmService {
 	public String getBusinessId(long processInstanceId) throws Exception;
 
 	public long getTaskId(String userId, String businessId) throws Exception;
+	
 }

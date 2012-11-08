@@ -58,7 +58,7 @@ public class TaskAspect {
         for (TaskSummary task : tasks) {
             String businessId = bpmService.getBusinessId(task
                     .getProcessInstanceId());
-            if (businessId != null) {
+            if (StringUtils.isNotBlank(businessId)) {
                 taskAndBusiness.put(businessId, String.valueOf(task.getId()));
             }
         }
@@ -86,8 +86,7 @@ public class TaskAspect {
             Object bean = it.next();
             String businessId = parserBusinessId(bean,
             		realBusinessIdAttributeName);
-            String taskId = taskAndBusiness.get(businessId);
-            if (taskId == null || "".equals(taskId)) {
+            if (!taskAndBusiness.containsKey(businessId)) {
                 it.remove();
             }
         }
