@@ -131,7 +131,7 @@ public class AccountManager {
         }
         name = "%" + name + "%";
         ProcedureResult<List<Long>> procedureResultId = new OutProcedureResult<List<Long>>(Long.class, Types.BIGINT);
-        ProcedureResult<List<String>> procedureResultName = new OutProcedureResult<List<String>>(String.class, Types.VARCHAR);
+        ProcedureResult<List<String>> procedureResultName = new OutProcedureResult<List<String>>(String.class, Types.BIGINT);
         ProcedureResult<List<UserInfo>> procedureResultUserInfo = new ResultSetProcedureResult<List<UserInfo>>(UserInfo.class);
         userDao.procedureResultWithMysql(id, name, procedureResultId, procedureResultName, procedureResultUserInfo);
         Map<String, ProcedureResult> procedureResultMap = new HashMap<String, ProcedureResult>();
