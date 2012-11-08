@@ -36,7 +36,7 @@ INSERT INTO acct_user_group VALUES(4,2);
 INSERT INTO acct_user_group VALUES(5,2);
 INSERT INTO acct_user_group VALUES(6,2);
 
-CREATE PROCEDURE `MYSQL_PRO_FOR_DEMO`(IN `P_ID` bigint(20),IN `P_NAME` varchar(255),OUT `P_OUTPRO1` bigint(20),OUT `P_OUTPRO2` varchar(255))
+CREATE PROCEDURE `MYSQL_PRO_FOR_DEMO`(IN `P_ID` bigint(20),IN `P_NAME` varchar(255),OUT `P_OUTPRO1` bigint(20),OUT `P_OUTPRO2` bigint(20))
 BEGIN
 	SELECT COUNT(*) INTO P_OUTPRO1 FROM acct_user a WHERE a.id>=P_ID;
 	SELECT COUNT(*) INTO P_OUTPRO2 FROM acct_user b WHERE b.name LIKE P_NAME;
