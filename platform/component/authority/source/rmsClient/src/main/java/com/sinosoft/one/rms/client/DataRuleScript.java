@@ -10,9 +10,6 @@ import com.sinosoft.one.rms.clientService.DataPower;
  */
 public interface DataRuleScript {
 	
-	//以下为改进的接口 
-	public String creatSQL(String sqlOrHql,String tableAlias,DataPower dataPower);
-	
-	public String creatSQL(String sqlOrHql,DataPower dataPower);
+	public String creatSQL(String tableNameAlias,DataPower dataPower);
 	
 }
