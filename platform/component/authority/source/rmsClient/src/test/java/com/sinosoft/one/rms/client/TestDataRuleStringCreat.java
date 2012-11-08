@@ -11,11 +11,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sinosoft.one.rms.client.EnvContext;
 import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.clientService.facade.RmsClientService;
 
 
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/spring/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/spring/applicationContext-test.xml","classpath*:spring/applicationContext-rms.xml" })
 public class TestDataRuleStringCreat extends AbstractJUnit4SpringContextTests{
 
 	@Autowired
@@ -23,11 +24,8 @@ public class TestDataRuleStringCreat extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void test(){
 //		User user= rmsClientService.login("admin", "00","RMS");
-		User user=new User();
-		user.setUserCode("admin");
-		user.setLoginComCode("00");
-		EnvContext.setLoginInfo(user);
-		testService.testFindByHql();
+//		testService.testFindByHql();
+		testService.testFindByHqlNoLimit();
 	}
 	
 }

@@ -25,10 +25,6 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
 
     @Autowired
     private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
-    @Autowired
-	private RmsClientService rmsClientService;
-    @Autowired
-    private TestService testService;
     @Test
     public void getDataRule(){
 ////    	User user= rmsClientService.login("admin", "00","RMS");
@@ -40,8 +36,5 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
 //    	}
 //    	Assert.assertEquals(rule,"select * from ge_rms_group where isvalidate='1'  and comCode=(select comCode from ge_rms_company where comCode='00') order by comCode");
 //    	testService.find(rule);
-    	String str="select s.* from (from Role where operateUser='admin') s left outer join ge_rms_company g on g.comCode=s.comCode where s.comCode='00')";
-    	String str2="from Role r where r.operateUser='admin' left outer join Company c on c.comCode=r.comCode where r.comCode='00'";
-    	String str3="from Role where operateUser='admin' and comCode in (select comCode from Company where comCode='00') order by roleID";
     }
 }
