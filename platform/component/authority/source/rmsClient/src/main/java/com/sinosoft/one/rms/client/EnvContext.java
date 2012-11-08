@@ -22,12 +22,6 @@ public class EnvContext {
 
     private static final String DATA = "DATA";
     
-    private static final String EMPLOYE="EMPLOYE";
-    
-    private static final String TABLEALIAS="TABLEALIAS";
- 
-    private static final String MATHODNAME="MATHODNAME";
-    
     private static final String CLASSNAME="MATHOD";
       
     public static void setDataAuthorityTaskId(String value) {
@@ -55,73 +49,9 @@ public class EnvContext {
 		linkedList.remove();
 	}
     
-    public static void setLoginInfo(User loginUser) {
-    	Map<String,Object >  context = threadLocal.get();
-        if(context == null){
-        	 context = new HashMap<String,Object >();
-        	 threadLocal.set(context);
-        }
-        context.put(EMPLOYE, loginUser);
-    }
-    
-    public static User getLoginInfo() {
-        if(threadLocal.get() == null)
-            return null;
-        return (User)threadLocal.get().get(EMPLOYE);
-    }
     
     
-
-	public static void setTableAlias(String tableAlias) {
-		Map<String,Object >  context = threadLocal.get();
-        if(context == null){
-        	 context = new HashMap<String,Object >();
-        	 threadLocal.set(context);
-        }
-        if( context.get(TABLEALIAS)==null){
-        	context.put(TABLEALIAS, new LinkedList ());
-        }
-        LinkedList linkedList= (LinkedList) context.get(TABLEALIAS);
-        linkedList.add(tableAlias);
-	}
-	
-	public static String getTableAlias(){
-    	if(threadLocal.get() == null)
-    		 return null;
-    	LinkedList linkedList= (LinkedList) threadLocal.get().get(TABLEALIAS);
-        return (String)linkedList.peek();
-    }
-	
-	public static void removeTableAlias(){
-		LinkedList linkedList= (LinkedList) threadLocal.get().get(TABLEALIAS);
-		linkedList.remove();
-	}
-	
-	public static void setMethodName(String methodName) {
-		Map<String,Object >  context = threadLocal.get();
-        if(context == null){
-        	 context = new HashMap<String,Object >();
-        	 threadLocal.set(context);
-        }
-        if( context.get(MATHODNAME)==null){
-        	context.put(MATHODNAME, new LinkedList ());
-        }
-        LinkedList linkedList= (LinkedList) context.get(MATHODNAME);
-        linkedList.add(methodName);
-	}
-	
-	public static String getMethodName(){
-    	if(threadLocal.get() == null)
-    		 return null;
-    	LinkedList linkedList= (LinkedList) threadLocal.get().get(MATHODNAME);
-        return (String)linkedList.peek();
-    }
-	
-	public static void removeMethodName(){
-		LinkedList linkedList= (LinkedList) threadLocal.get().get(MATHODNAME);
-		linkedList.remove();
-	}
-	
+    
 	public static void setClassName(String calssName) {
 		Map<String,Object >  context = threadLocal.get();
         if(context == null){

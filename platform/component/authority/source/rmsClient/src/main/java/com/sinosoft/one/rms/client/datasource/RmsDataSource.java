@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.rms.client.DataRuleStringCreat;
 
@@ -18,6 +17,10 @@ public class RmsDataSource implements DataSource {
 	
 	public RmsDataSource(DataSource dataSource) {
 		this.realDataSource = dataSource;
+	}
+	
+	public RmsDataSource() {
+		
 	}
 
 	public Connection getConnection() throws SQLException {

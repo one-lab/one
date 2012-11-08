@@ -1,6 +1,8 @@
 package com.sinosoft.one.rms.client;
 
 import ins.framework.common.Page;
+import ins.framework.common.QueryRule;
+import ins.framework.dao.GenericDaoHibernate;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,27 +27,28 @@ import com.sinosoft.one.rms.model.Employe;
  */
 
 @Service
-public class AnnotationTestService implements TestService  {
+public class AnnotationTestService extends GenericDaoHibernate<Employe, String>implements TestService  {
 
 	
 	@DataAuthority("RMS001")
 	public Page testFindByHql() {
 		testFindByHqlforList();
-		testFindByHqlNoLimit();
 		return new Page();
 	}
 	@DataAuthority("RMS002")
 	public List testFindByHqlforList() {
 		System.out.println("do it---------------------------");
-		testFindByHqlNoLimit();
 		return null;
 	}
-	@DataAuthority("RMS001")
 	public Page testFindByHqlNoLimit() {
+		QueryRule queryRule=QueryRule.getInstance();
+		queryRule.addEqual("validStatus", "1");
+		super.find(queryRule, 1, 10);
 		return null;
 	}
 
 	public List testFindTopByHql() {
+		
 		return null;
 	}
 

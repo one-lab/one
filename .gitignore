@@ -23,7 +23,7 @@ atlassian-ide-plugin.xml
 
 #secret stuff
 *.log
-logs/*.log
+*.log.*
 
 test-output/
 /platform/core/demo/logs

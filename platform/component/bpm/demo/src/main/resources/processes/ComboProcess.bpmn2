@@ -249,10 +249,10 @@
     <sequenceFlow id="_14-_8" sourceRef="_14" targetRef="_8" />
     <sequenceFlow id="_1-_9" sourceRef="_1" targetRef="_9" />
     <sequenceFlow id="_6-_10" sourceRef="_6" targetRef="_10" />
-    <sequenceFlow id="_9-_11" sourceRef="_9" targetRef="_11" />
     <sequenceFlow id="_10-_11" sourceRef="_10" targetRef="_11" name="不通过" tns:priority="1" >
       <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "false".equals(isPassed);</conditionExpression>
     </sequenceFlow>
+    <sequenceFlow id="_9-_11" sourceRef="_9" targetRef="_11" />
     <sequenceFlow id="_7-_12" sourceRef="_7" targetRef="_12" />
     <sequenceFlow id="_10-_13" sourceRef="_10" targetRef="_13" name="撤销" tns:priority="1" >
       <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "end".equals(isPassed);</conditionExpression>
@@ -357,12 +357,12 @@
         <di:waypoint x="440" y="46" />
         <di:waypoint x="440" y="164" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_9-_11" >
-        <di:waypoint x="143" y="46" />
-        <di:waypoint x="143" y="164" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_10-_11" >
         <di:waypoint x="440" y="164" />
+        <di:waypoint x="143" y="164" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9-_11" >
+        <di:waypoint x="143" y="46" />
         <di:waypoint x="143" y="164" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_7-_12" >
