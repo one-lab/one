@@ -18,37 +18,9 @@ public class queryRuleAccordCompany implements DataRuleScript {
    @Autowired
    private JSqlParser jSqlParser;
  	
-   public String creatSQL(String sqlOrHql,String tableAlias,DataPower dataPower){
+   public String creatSQL(String tableAlias,DataPower dataPower){
   		String tempSqlOrHQl=""
-  		String comCode 
-  		if(StringUtils.isNotBlank(tableAlias)){
-  			tableAlias=tableAlias+"."
-  		}else{
-  			tableAlias=" "
-  		}
-  		List groupBy=new ArrayList();
-  		List orderBy=new ArrayList();
-  		Limit limit=new Limit();
-  		PlainSelect plainSelect
-  		if(StringUtils.isNotBlank(sqlOrHql)){
-  			plainSelect = (PlainSelect) ((Select) jSqlParser.parse(new StringReader(sqlOrHql))).getSelectBody();
-			if(plainSelect.getGroupByColumnReferences()!=null){
-				groupBy=plainSelect.getGroupByColumnReferences();
-				plainSelect.setGroupByColumnReferences(null);
-			}
-			if(plainSelect.getOrderByElements()!=null){
-				orderBy=plainSelect.getOrderByElements();
-				plainSelect.setOrderByElements(null);
-			}
-			if(plainSelect.getLimit()!=null){
-				limit=plainSelect.getLimit();
-				plainSelect.setLimit(null);
-				
-			}
-			tempSqlOrHQl=plainSelect.toString();
-		}else{
-			tempSqlOrHQl=sqlOrHql
-		}
+  		String comCode =
 		if(StringUtils.isNotBlank(dataPower.getParam())){
 			Map<String,String> tempMap = (Map<String, String>)JSON.parse(dataPower.getParam());
 			int i=0;
@@ -56,16 +28,12 @@ public class queryRuleAccordCompany implements DataRuleScript {
     			String table=busDataInfo.getBusDataTable()
     			String column=busDataInfo.getBusDataColumn()
     			if(i>0){
-    				tempSqlOrHQl=tempSqlOrHQl+" and "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
+    				tempSqlOrHQl=tempSqlOrHQl+" and "+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
     			}else{
-    				tempSqlOrHQl=tempSqlOrHQl+" "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
+    				tempSqlOrHQl=tempSqlOrHQl+" "+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
     			}
     			i++
 			}
-	//		plainSelect = (PlainSelect) ((Select) jSqlParser.parse(new StringReader(tempSqlOrHQl))).getSelectBody();
-	//		plainSelect.setGroupByColumnReferences(groupBy);
-	//		plainSelect.setOrderByElements(orderBy);
-	//		plainSelect.setLimit(limit);	
 			return tempSqlOrHQl 
 		}else{
 			int i=0;
@@ -74,23 +42,16 @@ public class queryRuleAccordCompany implements DataRuleScript {
     			String column=busDataInfo.getBusDataColumn()
     			if(i>0){
     				if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" and "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
+    					tempSqlOrHQl=tempSqlOrHQl+" and "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
 				}else{
 					if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
+    					tempSqlOrHQl=tempSqlOrHQl+" "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
 				}
 				i++
 			}
-	//		plainSelect = (PlainSelect) ((Select) jSqlParser.parse(new StringReader(tempSqlOrHQl))).getSelectBody();
-		//	plainSelect.setGroupByColumnReferences(groupBy);
-	//		plainSelect.setOrderByElements(orderBy);
-	//		plainSelect.setLimit(limit);	
 			return tempSqlOrHQl 
 		}
   	}
   
-  	public String creatSQL(String sqlOrHql,DataPower dataPower){
-		 return creatSQL(sqlOrHql,null,dataPower)
-  	}
   	
 }

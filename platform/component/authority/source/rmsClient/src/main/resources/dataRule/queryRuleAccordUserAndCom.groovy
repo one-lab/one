@@ -9,14 +9,9 @@ import com.sinosoft.one.rms.client.DataRuleScript;
 
 public class testqueryRuleAccordUserAndCom implements DataRuleScript {
  	
-  	public String creatSQL(String sqlOrHql,String tableAlias,DataPower dataPower){
+  	public String creatSQL(String tableAlias,DataPower dataPower){
   		String tempSqlOrHQl=""
   		String orderBy=""
-  		if(StringUtils.isNotBlank(tableAlias)){
-  			tableAlias=tableAlias+"."
-  		}else{
-  			tableAlias=""
-  		}
   		if(StringUtils.isNotBlank(sqlOrHql)){
   			if(sqlOrHql.contains("order by")){
   				if(sqlOrHql.contains(")")&&(sqlOrHql.substring(sqlOrHql.lastIndexOf(")"), sqlOrHql.length()).contains("order by"))){
@@ -39,9 +34,9 @@ public class testqueryRuleAccordUserAndCom implements DataRuleScript {
     			String table=busDataInfo.getBusDataTable()
     			String column=busDataInfo.getBusDataColumn()
     			if(i>0){
-    				tempSqlOrHQl=tempSqlOrHQl+" and "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
+    				tempSqlOrHQl=tempSqlOrHQl+" and "+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
     			}else{
-    				tempSqlOrHQl=tempSqlOrHQl+" "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
+    				tempSqlOrHQl=tempSqlOrHQl+" "+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
     			}
     			i++
 			}	
@@ -54,14 +49,14 @@ public class testqueryRuleAccordUserAndCom implements DataRuleScript {
     			
     			if(i>0){
     				if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" and "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
+    					tempSqlOrHQl=tempSqlOrHQl+" and "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
     				if("userCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" and "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getUserCode()+"')"
+    					tempSqlOrHQl=tempSqlOrHQl+" and "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getUserCode()+"')"
 				}else{
 					if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
+    					tempSqlOrHQl=tempSqlOrHQl+" "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
     				if("userCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getUserCode()+"')"
+    					tempSqlOrHQl=tempSqlOrHQl+" "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getUserCode()+"')"
 				}
 				i++
 			}	
@@ -70,9 +65,4 @@ public class testqueryRuleAccordUserAndCom implements DataRuleScript {
 		println tempSqlOrHQl
   		return tempSqlOrHQl
   	}
-  
-  	public String creatSQL(String sqlOrHql,DataPower dataPower){
-		return creatSQL( sqlOrHql, null, dataPower)
-	}
-  
 }
