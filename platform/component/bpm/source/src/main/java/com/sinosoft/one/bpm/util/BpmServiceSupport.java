@@ -332,12 +332,16 @@ public class BpmServiceSupport {
 	}
 
 	public List<ActiveNodeInfo> getActiveNodeInfo(String processId, String businessId) {
-		long instanceId = cache.getProcessInstanceId(processId, businessId);
+		Long instanceId = cache.getProcessInstanceId(processId, businessId);
+		if (instanceId == null) {
+			throw new IllegalArgumentException(
+					"Could not find process instance by [ " + processId + ", " + businessId + " ]" );
+		}
 		ProcessInstanceLog processInstance = processInstanceDbLog
 				.findProcessInstance(instanceId);
 		if (processInstance == null) {
 			throw new IllegalArgumentException(
-					"Could not find process instance " + instanceId);
+					"Could not find process instance by instance id : " + instanceId);
 		}
 		Map<String, NodeInstanceLog> nodeInstances = new HashMap<String, NodeInstanceLog>();
 		List<NodeInstanceLog> nodeInstanceList = processInstanceDbLog.findNodeInstances(instanceId);
