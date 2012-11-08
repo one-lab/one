@@ -83,8 +83,8 @@
     <div class="title">
         自定义接口实现
     </div>
-    <p>通常情况下可以为少数的仓库方法提供一个自定义的实现，用来扩展仓库接口</p>
-    <p>一般是自定义一个接口，然后提供一个实现类来实现所需要的功能，让需要使用这个功能的接口继承自定义的接口即可</p>
+    <p>通常情况下可以为用户接口提供一个自定义的实现，用来扩展用户接口的行为</p>
+    <p>一般是提供一个自定义接口，然后提供一个实现类来实现自定义接口，用户接口只需继承自定义的接口即可</p>
     <div class="content">
         <ul class="tabs">
             <li class="select"><span class="name"><b></b>示例代码 .java<font>Example</font></span><span></span></li>
@@ -96,25 +96,20 @@
                     <div class="code_cont" style="display: block">
                         <textarea name="code" class="java" >
                             //自定义的接口
-                            public interface UserRepositoryCustom {
-
-                            public void someCustomMethod(User user);
+                            public interface UserDaoCustom {
+                            public List<User> findFromMultipleAttributeAndFir();
                             }
-
                             //自定义的接口的实现类
-                            class UserRepositoryImpl implements UserRepositoryCustom {
-
-                            public void someCustomMethod(User user) {
-                            // Your custom implementation
+                            class UserDaoImpl implements UserDaoCustom {
+                            public List<User> findFromMultipleAttributeAndFir() {
+                            // 实现方法...
                             }
                             }
-
-                            public interface UserRepository extends CrudRepository<User, Long>, UserRepositoryCustom {
-
-                            // Declare query methods here
+                            //用户接口只需继承UserDaoCustom接口即可
+                            public interface UserDao extends PagingAndSortingRepository<User, BigDecimal>, UserDaoCustom {
                             }
                         </textarea>
-                        <p>UserRepository接口拥有增删改查功能，同时拥有自定义的功能（someCustomMethod()）</p>
+                        <p>UserDao接口拥有增删改查等功能，同时拥有自定义的功能（findFromMultipleAttributeAndFir()）</p>
                     </div>
                 </div>
             </div>
@@ -123,8 +118,10 @@
 </div>
 
 <div class="content">
-    <p>通过在配置文件中设置repository-impl-postfix的值，可以统一定义自定义接口实现类的后缀</p>
-    <p>基层库会自动查找以这个后缀结尾的类作为自定义接口的实现类，默认的后缀是Impl</p>
+    <div class="title">
+        自定义接口实现类的后缀设置
+    </div>
+    <p>通过在配置文件中设置repository-impl-postfix的值，可以统一定义自定义接口实现类的后缀，默认的后缀是Impl</p>
     <div class="content">
         <ul class="tabs">
             <li class="select"><span class="name"><b></b>applicationContext.xml<font>Example</font></span><span></span></li>
@@ -136,16 +133,16 @@
                     <div class="code_cont" style="display: block">
                         <h3>applicationContext.xml文件</h3>
                         <textarea name="code" class="xml" >
-                            <repositories base-package="com.acme.repository">
-                                <repository id="userRepository" />
+                            <repositories base-package="com.sinosoft.one.data">
+                                <repository id="userDao" />
                             </repositories>
 
-                            <repositories base-package="com.acme.repository" repository-impl-postfix="FooBar">
-                                <repository id="userRepository" />
+                            <repositories base-package="com.sinosoft.one.data" repository-impl-postfix="FooBar">
+                                <repository id="userDao" />
                             </repositories>
                         </textarea>
-                        <p>第一种配置将会查找com.acme.repository.UserRepositoryImpl作为自定义实现类（使用默认的后缀）</p>
-                        <p>第二种配置将会查找com.acme.repository.UserRepositoryFooBar作为自定义实现类（使用自定义的后缀）</p>
+                        <p>第一种配置将会查找com.sinosoft.one.data.UserDaoImpl作为自定义实现类（使用默认的后缀）</p>
+                        <p>第二种配置将会查找com.sinosoft.one.data.UserDaoFooBar作为自定义实现类（使用自定义的后缀）</p>
                     </div>
                 </div>
             </div>
@@ -166,15 +163,15 @@
                     <div class="code_cont" style="display: block">
                         <h3>applicationContext.xml文件</h3>
                         <textarea name="code" class="xml" >
-                            <repositories base-package="com.acme.repository">
-                                <repository id="userRepository" repository-impl-ref="customRepositoryImplementation" />
+                            <repositories base-package="com.sinosoft.one.data">
+                                <repository id="userDao" repository-impl-ref="customDaoImplementation" />
                             </repositories>
 
-                            <bean id="customRepositoryImplementation" class="…">
+                            <bean id="customDaoImplementation" class="com.sinosoft.one.data.CustomDaoImplementation">
                                 <!-- further configuration -->
                             </bean>
                         </textarea>
-                        <p>上面例子说明自定义实现类是id为customRepositoryImplementation的Bean</p>
+                        <p>上面例子说明自定义实现类是com.sinosoft.one.data.CustomDaoImplementation</p>
                     </div>
                 </div>
             </div>

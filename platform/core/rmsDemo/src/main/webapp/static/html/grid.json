@@ -20,7 +20,7 @@
 				"<a href='#' class='agency' onclick='openWindow()'></a>",
 				"<a href='javascript:;' class='set' onclick='openQX();'>权限设置</a><a href='#' class='set' onclick='openSJ();'>数据设置</a>",
 				null
-			]            
+			]
         },{
             "id":"3",
 			"cell": [
@@ -30,7 +30,7 @@
 				"<a href='#' class='agency' onclick='openWindow()'></a>",
 				"<a href='javascript:;' class='set' onclick='openQX();'>权限设置</a><a href='#' title='该人员未配置权限，无法操作' class='set dis'>数据设置</a>",
 				null
-			]            
+			]
         },{
            "id":"4",
 		   "cell": [
@@ -40,7 +40,7 @@
 				"<a href='#' class='agency' onclick='openWindow()'></a>",
 				"<a href='javascript:;' class='set' onclick='openQX();'>权限设置</a><a href='#' title='该人员未配置权限，无法操作' class='set dis'>数据设置</a>",
 				null
-			]            
+			]
         },{
 			"id":"5",
 			"cell": [
@@ -80,7 +80,7 @@
 				"<a href='#' class='agency' onclick='openWindow()'></a>",
 				"<a href='javascript:;' class='set' onclick='openQX();'>权限设置</a><a href='#' title='该人员未配置权限，无法操作' class='set dis'>数据设置</a>",
 				null
-			]            
+			]
         },{
             "id":"3",
 			"cell": [
@@ -90,7 +90,7 @@
 				"<a href='#' class='agency' onclick='openWindow()'></a>",
 				"<a href='javascript:;' class='set' onclick='openQX();'>权限设置</a><a href='#' title='该人员未配置权限，无法操作' class='set dis'>数据设置</a>",
 				null
-			]            
+			]
         },{
            "id":"4",
 		   "cell": [
@@ -100,7 +100,7 @@
 				"<a href='#' class='agency' onclick='openWindow()'></a>",
 				"<a href='javascript:;' class='set' onclick='openQX();'>权限设置</a><a href='#' title='该人员未配置权限，无法操作' class='set dis'>数据设置</a>",
 				null
-			]            
+			]
         },{
 			"id":"5",
 			"cell": [

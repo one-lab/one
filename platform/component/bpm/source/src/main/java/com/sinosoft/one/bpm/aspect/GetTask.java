@@ -15,8 +15,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface GetTask {
-	String userId();
+	String userId() default "";
 
+	int userIdBeanOffset() default -1;
+	
+	String userIdAttributeName() default "";
+	
 	String businessIdAttibuteName();
-
 }

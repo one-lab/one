@@ -85,19 +85,21 @@ function toTop(){
         @Sql查询
     </div>
     <div class="introduce">
-        <p>使用@Sql的先决条件是在配置文件中配置好one-data</p>
+        <p>在使用原生Sql的时候、我们使用@Sql的形式</p>
+        <p>对于特定场景方案的解决、例如报表、审计等对非单一表获取数据有其独特的优势</p>
+        <p>使用@Sql的先决条件是在配置文件中做相应配置</p>
         <p>在配置文件中添加如下代码</p>
     </div>
     <ul class="tabs">
         <li class="select"><span class="name"><b></b>ApplicationContext.xml<font>Example</font></span><span></span></li>
-        <li class="on_off select"><span class="name"><font></font>查看源代码</span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
     </ul>
     <div class="code_box">
         <div class="intr_line">
             <div class="info">
                 <div class="content">
                     <p id="news" class="new">
-                    <div class="code_cont">
+                    <div class="code_cont" style="display: block;">
                         <h3>ApplicationContext.xml</h3>
                         <textarea name="code" class="xml" >
 
@@ -116,43 +118,44 @@ function toTop(){
 
     <ul class="tabs">
         <li class="select"><span class="name"><b></b>Dao层代码<font>Example</font></span><span></span></li>
-        <li class="on_off select"><span class="name"><font></font>查看源代码</span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
     </ul>
     <div class="code_box">
         <div class="intr_line">
             <div class="info">
                 <div class="content">
-                    <p> 除了单一传值外、也可以使用对象、数组或集合类型作为参数</p>
-                    <p>集合类型指实现Collection接口的一些类型，比如List、Set等。集合类型、数组 参数用于处理 in 的情况，而且这个数组或集合类型的元素应该是一些数据库列相对应的Java类型</p>
-                    <div class="code_cont">
+                    <p>@Sql除了单一传值外、也支持使用对象、数组或集合类型作为参数</p>
+                    <p>在处理批量更新时，可以使用数组或集合作为参数，并作为第一个参数传入</p>
+                    <p>比如List、Set等。集合类型、数组 参数用于处理 in 的情况</p>
+                    <p>而且这个数组或集合类型的元素应该是一些数据库列相对应的Java类型</p>
+                    <p>通常，数组、集合、对象传值时我们建议使用@param("")</p>
+
+
+                    <div class="code_cont" style="display: block;" >
                         <h3>UserDao.java</h3>
                         <textarea name="code" class="java" >
-                            Public interface UserDao extends PagingAndSortingRepository<org.springframework.data.jpa.domain.sample.User, String> {
 
-                            @SQL("select * from t_user where id = ?1")
-                            public User selectById(String id);
+                           // 基本类型参数传值
+                            @SQL("update t_code_group set name=?2 " + "where id=?1")
+                            void updateGroupWithAnnoUseMultiParam(String id,String name);
 
+                          // 数组类型参数传值
                             @SQL("select * from t_user where id in (?1)")
                             public List<User> selectByIds(String[] ids);
 
-                            @SQL("insert into t_code_group values(?1.id,?1.name)")
-                            void addBatchGroupWithAnnoUseEntityParam(List<Group> group);
+                          //集合类型参数传值（批量增加），如果参数较多，集合Group必须作为第一个参数传入
+                            @SQL("insert into t_code_group values(:group.id,:group.name)")
+                            void addBatchGroupWithAnnoUseEntityParam(param("group") List<Group> group);
 
-                                @SQL("update t_code_group set name=?2 " + "where id=?1")
-                                void updateGroupWithAnnoUseMultiParam(String id,String name);
+                          //对象方式传值
+                            @SQL("delete from t_user where id=:user.id")
+                            public void deleteByUser(@param("user") User user);
 
-                                @SQL("delete from t_user where id=?1")
-                                public void deleteById(String id);
 
-                                @SQL("delete from t_user")
-                                public void deleteUserAll();
-
-                                @SQL("delete from t_user where id=?1.id")
-                                public void deleteByUser(User user);
-                                }
-                        </textarea>
-                            <p>参数中 “?1”代表方法中第一个参数、以此类推”?2”表示第二个参数</p>
-                            <p>引用属性时用”.”</p>
+                        </textarea>    </br>
+                        <p>约定：利用param时我们在Sql中用对象方式传值“:”，基本类型传值时用"？"</p>
+                        <p>参数中 “?1”代表方法中第一个参数、以此类推”?2”表示第二个参数</p>
+                        <p>引用属性时用”.”</p>
                         </div>
                     </div>
                 </div>
@@ -161,6 +164,90 @@ function toTop(){
     </div>
 </div>
 </div>
+
+<div class="content">
+    <div class="title">
+        SqlQuery
+    </div>
+    <div class="introduce">
+        <p>@Sql还支持一种在配置文件中配置Sql的方式</p>
+        <p>这样做实现代码复用、而且易于管理、修改时也方便快捷。</p>
+        <p>首先我们要在配置文件添加下面的支持，这里我们用sql-queries-location指定SqlQuery配置文件的路径</p>
+
+    </div>
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>ApplicationContext.xml<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <p  class="new">
+                    <div class="code_cont" style="display: block;">
+                        <h3>ApplicationContext.xml</h3>
+                        <textarea name="code" class="xml" >
+
+                            <!-- Spring Data Jpa配置 -->
+                            <onejpa:repositories base-package="com.sinosoft.one.demo"  transaction-manager-ref="transactionManager"
+                                                 entity-manager-factory-ref="entityManagerFactory"
+                                                 sql-queries-location="classpath:META-INF/sqlquery/*"/>
+
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="introduce">
+            <p>在上面对应sql-queries-location对应位置创建资源文件，下面以在META-INF/sqlquery目录下创建一个one-sql-queries.properties为例</p>
+        </div>
+        <p><font size="3">示例代码</font></p>
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>one-sql-queries.properties代码<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="content">
+                        <p  class="new">
+                        <div class="code_cont" style="display: block;">
+                            <h3>ApplicationContext.xml</h3>
+                            <textarea name="code" class="xml" >
+
+                                com.sinosoft.one.data.jade.dao.UserSelectDao.selectUserAgeWithSqlQueryById=select age from t_user where id= ?1
+
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p>资源文件中"="前面表示所指定Dao方法的包名+类名+方法名，"="后面表示该方法所执行的Sql语句</p>
+        <p>例如下面的Dao方法即对应于上述资源文件</p>  <br>
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>Dao层代码<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="content">
+                        <div class="code_cont" style="display: block;>
+                            <textarea name="code" class="java" >
+
+                                int selectUserAgeWithSqlQueryById(String id);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

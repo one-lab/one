@@ -97,7 +97,7 @@
                     <div class="code_cont" style="display: block;">
                         <h3>UserDao.java文件</h3>
                         <textarea name="code" class="java" >
-                            public interface UserDao extends CrudRepository<User,Long> {
+                            public interface UserDao extends PagingAndSortingRepository<User, BigDecimal> {
 
                             @Query("select u from User u where u.name=?1")                                     //使用位置参数
                             User findByAnnoQuery(String name);
@@ -117,16 +117,16 @@
     <p>但是，分页和动态排序不支持原生SQL语句</p>
     <div class="content">
         <ul class="tabs">
-            <li class="select"><span class="name"><b></b>UserRepository.java<font>Example</font></span><span></span></li>
+            <li class="select"><span class="name"><b></b>UserDao.java<font>Example</font></span><span></span></li>
             <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
         </ul>
         <div class="code_box">
             <div class="intr_line">
                 <div class="info">
                     <div class="code_cont" style="display: block;">
-                        <h3>UserRepository.java文件</h3>
+                        <h3>UserDao.java文件</h3>
                         <textarea name="code" class="java" >
-                            public interface UserRepository extends Repository<User, Long> {
+                            public interface UserDao extends PagingAndSortingRepository<User, BigDecimal> {
 
                             @Query(value = "SELECT * FROM TEST_USER WHERE EMAIL_ADDRESS=?0",nativeQuery = true)        //支持原生SQL语句
                             User findByQuery(String name);

@@ -156,10 +156,7 @@
     <div class="title">
         配置文件
     </div>
-        <p>为定义的Dao接口创建实例，可以在Spring的配置文件中，使用&lt;repositories/&gt;元素定义一个基础包（例如&lt;repositories base-package="com.sinosoft.one.data"/&gt;）</p>
-        <p>Spring会自动扫描base-package指定的包目录及其子目录，为继承Repository或其子接口的接口创建代理对象，用来调用查询方法</p>
-        <p>这些代理都会注册为Spring Bean，注册时使用的名字来自对应接口的名字，首字母小写（例如：接口名字是“UserDao”，代理名字就是“userDao”）</p>
-        <p>基础包的属性允许使用通配符，因此可以扫描路径格式匹配的包</p>
+        <p>使用&lt;repositories/&gt;元素定义一个基础包（例如&lt;repositories base-package="com.sinosoft.one.data"/&gt;）</p>
     <ul class="tabs">
         <li class="select"><span class="name"><b></b>applicationContext.xml<font>Example</font></span><span></span></li>
         <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
@@ -272,13 +269,14 @@
                             import javax.persistence.GenerationType;
                             import javax.persistence.Id;
                             import javax.persistence.Table;
+                            import java.math.BigDecimal;
 
                             @Entity
                             @Table(name = "test_user")
                             public class User {
                             @Id
                             @GeneratedValue(strategy = GenerationType.AUTO)
-                            private Long id;
+                            private BigDecimal id;
                             private String name;
                             private Integer age;
                             private String gender;
@@ -315,7 +313,8 @@
                             package com.sinosoft.one.demo.dao.account;
                             import org.springframework.data.repository.PagingAndSortingRepository;
                             import com.sinosoft.one.demo.model.account.User;
-                            public interface UserDao extends PagingAndSortingRepository<User, Long> {
+                            import java.math.BigDecimal;
+                            public interface UserDao extends PagingAndSortingRepository<User, BigDecimal> {
                             }
                         </textarea>
                         <p>UserDao接口继承PagingAndSortingRepository接口，拥有一系列增删改查方法，在Service中可直接调用</p>
@@ -342,12 +341,13 @@
                             import com.sinosoft.one.data.domain.sample.User;
                             import com.sinosoft.one.data.repository.sample.UserDao;
                             import org.springframework.beans.factory.annotation.Autowired;
+                            import java.math.BigDecimal;
 
                             public class AccountManager {
 
                             private UserDao userDao;
 
-                            public User getUser(Long id) {
+                            public User getUser(BigDecimal id) {
                             return userDao.findOne(id);                      //查询User对象
                             }
                             public void saveUser(User entity){
@@ -356,7 +356,7 @@
                             public User updateUser(User entity){
                             return userDao.save(entity);                     //修改User对象
                             }
-                            public void deleteUser(Long id){
+                            public void deleteUser(BigDecimal id){
                             userDao.delete(id);                              //删除User对象
                             }
                             @Autowired

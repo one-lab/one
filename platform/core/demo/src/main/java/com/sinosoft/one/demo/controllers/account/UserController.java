@@ -11,6 +11,8 @@ import java.util.Map;
 import com.sinosoft.one.demo.model.account.User;
 import com.sinosoft.one.demo.model.account.UserInfo;
 import com.sinosoft.one.demo.service.account.AccountManager;
+import com.sinosoft.one.demo.service.mail.IMailService;
+import com.sinosoft.one.demo.service.mail.MailServiceImpl;
 import com.sinosoft.one.mvc.util.MvcPathUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -56,6 +58,9 @@ public class UserController {
 
 	@Autowired
 	private GroupListEditor groupListEditor;
+
+    @Autowired
+    private IMailService mailService;
 
 	@InitBinder
 	public void initBinder(WebDataBinder b) {
@@ -142,8 +147,8 @@ public class UserController {
 	
 	@Get("/pipe1")
 	public String pipe1(Invocation inv){ 
-		List<User> users = accountManager.getAllUser();
-		inv.addModel("users", users);
+//		List<User> users = accountManager.getAllUser();
+//		inv.addModel("users", users);
 		return "userListPipe";
 	}
 	
@@ -157,6 +162,16 @@ public class UserController {
 		}
 		return "@e";
 	}
+
+    @Post("sendmail")
+    public Object sendMail(Invocation invocation){
+        String caption = invocation.getRequest().getParameter("caption");
+        String sendto = invocation.getRequest().getParameter("sendto");
+        String mailContent = invocation.getRequest().getParameter("mailContent");
+        System.out.println("caption:"+caption+" sendto:"+sendto+" mailContent:"+mailContent+"++++++++++++++++");
+        mailService.sendTextMail("yangming841022@163.com",sendto,caption,mailContent);
+        return Replys.simple().success();
+    }
 	
 	@Post("viewUserInfo/{id:[0-9]+}")
 	public Object viewUserInfo(@Param("id") Long id, Invocation inv){

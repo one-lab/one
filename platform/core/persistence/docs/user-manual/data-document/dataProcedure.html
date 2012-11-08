@@ -88,15 +88,13 @@ function toTop(){
     <p>在配置文件中添加如下代码</p>
     <ul class="tabs">
         <li class="select"><span class="name"><b></b>ApplicationContext.xml代码<font>Example</font></span><span></span></li>
-        <li class="on_off select"><span class="name"><font></font>查看源代码</span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
     </ul>
     <div class="code_box">
         <div class="intr_line">
             <div class="info">
                 <div class="content">
-                    <p>除了单一传值外、也可以使用对象、数组或集合类型作为参数<br/></p>
-                    <p>集合类型指实现Collection接口的一些类型，比如List、Set等。集合类型、数组 参数用于处理 in 的情况，而且这个数组或集合类型的元素应该是一些数据库列相对应的Java类型</p>
-                    <div class="code_cont">
+                    <div class="code_cont" style="display: block;">
                         <h3>ApplicationContext.xml</h3>
                         <textarea name="code" class="xml" >
 
@@ -109,25 +107,26 @@ function toTop(){
             </div>
         </div>
     </div>
+    <p>下面我们看一下Dao层代码：</p>
     <br>
     <p><font size="3">示例代码</font></p></br>
 
     <ul class="tabs">
         <li class="select"><span class="name"><b></b>Dao层代码<font>Example</font></span><span></span></li>
-        <li class="on_off select"><span class="name"><font></font>查看源代码</span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
     </ul>
     <div class="code_box">
         <div class="intr_line">
             <div class="info">
                 <div class="content">
-                    <div class="code_cont">
+                    <div class="code_cont" style="display: block;">
                         <h3>Java代码</h3>
                         <textarea name="code" class="java" >
 
                             @SQL(value = "call testprc(?1,?2)")
                             void testProc(String newname,String id);
                         </textarea>
-                            <p>这里的用法如@Sql中用法、不一一列举、直接调用即可</p>
+                            <p>用法如@Sql中用法、在这里就不一一列举、直接调用即可</p>
                         </div>
                     </div>
                 </div>

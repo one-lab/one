@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 添加邮件功能配置 start by kylin-->
+    <!--邮件发送器-->
+    <bean id="MailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
+        <property name="host">
+            <value>smtp.163.com</value>
+        </property>
+
+        <property name="username">
+            <value>yangming841022@163.com</value>
+        </property>
+        <property name="password">
+            <value>2203812233</value>
+        </property>
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.stmp.auth">true</prop>
+                <prop key="mail.stmp.timeput">20000</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- FreeMarker配置管理器 -->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPaths" value="classpath:META-INF" />
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- 添加邮件功能配置 end by kylin-->
+
+</beans>

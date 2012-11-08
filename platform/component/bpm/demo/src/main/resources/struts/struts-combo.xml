@@ -35,5 +35,8 @@
 		<action name="prepareDeploy2" class="comboAction" method="prepareDeploy2">
 			<result name="success">/combo/operation/deploy2/prepareDeploy.jsp </result>
 		</action>
+		<action name="showImage" class="comboAction" method="showImage">
+			<result name="success">/combo/showimage.jsp </result>
+		</action>
 	</package>
 </struts>

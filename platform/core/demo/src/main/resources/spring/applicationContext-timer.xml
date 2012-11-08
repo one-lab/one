@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 要调用的工作类 -->
+    <bean id="TimerTask1" class="com.sinosoft.one.demo.service.timer.QuartzService"></bean>
+
+    <!-- 定义调用对象和调用对象的方法 -->
+    <bean id="QuartzJob1" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--定义调用的类-->
+        <property name="targetObject">
+            <ref bean="TimerTask1" />
+        </property>
+        <!--定义调用的方法-->
+        <property name="targetMethod">
+            <value>invoke</value>
+        </property>
+    </bean>
+
+    <!-- 定义触发时间 -->
+    <bean id="ExcQuartzJob1" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <!--指定执行的任务-->
+        <property name="jobDetail">
+            <ref local="QuartzJob1" />
+        </property>
+        <!--定义执行频率 ，表达式相关资料见附带文档-->
+        <property name="cronExpression">
+            <value>0/1 * * * * ?</value>
+        </property>
+    </bean>
+    <!--==============================分割线==========================-->
+    <bean id="mailTask" class="com.sinosoft.one.demo.service.mail.MailServiceImpl"></bean>
+
+    <!-- 定义调用对象和调用对象的方法 -->
+    <bean id="MialJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--定义调用的类-->
+        <property name="targetObject">
+            <ref bean="mailTask" />
+        </property>
+        <!--定义调用的方法-->
+        <property name="targetMethod">
+            <value>sendMimeMail</value>
+        </property>
+    </bean>
+
+    <!-- 定义触发时间 -->
+    <bean id="ExcMailJob" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <!--指定执行的任务-->
+        <property name="jobDetail">
+            <ref local="MialJob" />
+        </property>
+        <!--定义执行频率 ，表达式相关资料见附带文档-->
+        <property name="cronExpression">
+            <value>0 0/1 * * * ?</value>
+        </property>
+    </bean>
+    <!--==============================分割线============================================-->
+    <!--总任务调度，只有一个，每个定时任务都添加一个“ref”。lazy-init='false'，容器启动就会执行调度程序 -->
+    <bean id="startQuartz" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <!--<ref bean="ExcQuartzJob1" />-->
+                <!--<ref bean="ExcMailJob" />-->
+            </list>
+        </property>
+    </bean>
+
+
+</beans>

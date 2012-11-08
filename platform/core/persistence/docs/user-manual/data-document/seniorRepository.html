@@ -87,14 +87,14 @@
         <ul style="list-style-type: decimal;">
             <p>在接口中定义查询方法时，最简单也是最常用的方式是按照一个命名约定来定义方法名，这样框架会自动生成对应的查询语句</p>
             <li>框架在进行方法名解析时，会先把方法名多余的前缀截取掉，比如 find、findBy、read、readBy、get、getBy，然后对剩下部分进行解析。
-                以findByUserAddressZip()方法为例，先判断userAddressZip是否为AccountInfo（假设方法针对的域对象为AccountInfo）的一个属性，如果是，则表示根据该属性进行查询；如果没有该属性，继续第二步</li>
-            <li>从右往左截取第一个大写字母开头的字符串（此处为 Zip），然后检查剩下的字符串是否为AccountInfo的一个属性，如果是，则表示根据该属性进行查询；
-                如果没有该属性，则重复第二步，继续从右往左截取；最后假设user为AccountInfo的一个属性</li>
-            <li>接着处理剩下部分（ AddressZip），先判断user所对应的类型是否有addressZip属性，如果有，则表示该方法最终是根据 "AccountInfo.user.addressZip" 的取值进行查询；
-                否则继续按照步骤2的规则从右往左截取，最终表示根据 "AccountInfo.user.address.zip" 的值进行查询</li>
+                以findByUserinfoAddressZip()方法为例，先判断userinfoAddressZip是否为User（假设方法针对的域对象为User）的一个属性，如果是，则表示根据该属性进行查询；如果没有该属性，继续第二步</li>
+            <li>从右往左截取第一个大写字母开头的字符串（此处为 Zip），然后检查剩下的字符串是否为User的一个属性，如果是，则表示根据该属性进行查询；
+                如果没有该属性，则重复第二步，继续从右往左截取；最后假设userinfo为User的一个属性</li>
+            <li>接着处理剩下部分（ AddressZip），先判断user所对应的类型是否有addressZip属性，如果有，则表示该方法最终是根据 "User.userinfo.addressZip" 的取值进行查询；
+                否则继续按照步骤2的规则从右往左截取，最终表示根据 "User.userinfo.address.zip" 的值进行查询</li>
         </ul>
-        <p>可能会存在一种特殊情况，比如AccountInfo包含一个user的属性，也有一个userAddress属性，此时会存在混淆,这时可以在属性之间加上"_"以显式表达意图，
-            比如"findByUser_AddressZip()"或者"findByUserAddress_Zip()"</p>
+        <p>可能会存在一种特殊情况，比如User包含一个userinfo的属性，也有一个userinfoAddress属性，此时会存在混淆,这时可以在属性之间加上"_"以显式表达意图，
+            比如"findByUserinfo_AddressZip()"或者"findByUserinfoAddress_Zip()"</p>
     </div>
     <ul class="tabs">
         <li class="select"><span class="name"><b></b>UserDao.java<font>Example</font></span><span></span></li>
@@ -109,7 +109,7 @@
                         package com.sinosoft.one.data.dao;
                         import com.sinosoft.one.data.model.User;
                         import org.springframework.data.repository.PagingAndSortingRepository;
-                        public interface UserDao extends PagingAndSortingRepository<User, Long> {
+                        public interface UserDao extends PagingAndSortingRepository<User, BigDecimal> {
                         User findByNameAndGender(String name,String gender);        //通过解析方法名指定查询语句
                         }
                     </textarea>
@@ -196,7 +196,7 @@
                 <td>… where x.firstname like ?1 (parameter bound with prepended %)</td>
             </tr>
             <tr>
-                <td>ngWith</td>
+                <td>EndingWith</td>
                 <td>findByFirstnameEndingWith</td>
                 <td>… where x.firstname like ?1 (parameter bound with appended %)</td>
             </tr>
