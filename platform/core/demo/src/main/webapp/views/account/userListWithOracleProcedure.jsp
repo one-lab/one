@@ -12,7 +12,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //聚焦第一个输入框
-            $("#oracleprocedure-tab").addClass("active");
+            $("#oracleProcedure-tab").addClass("active");
         });
 
     </script>
@@ -23,7 +23,7 @@
 <div class="container">
     <%@ include file="/WEB-INF/layouts/header.jsp" %>
     <div id="view" class="span12">
-        <form name="form" action="selectUserWithProResult" method="post">
+        <form name="form" action="selectUserWithOracleProResult" method="post">
             用户ID：<input name="id" id="idFrom" type="text"/>
             用户名：<input name="name" id="nameForm" type="text"/>
             <input type="submit" onClick="viewUser();" value="查询"/>
