@@ -9,6 +9,7 @@
 <%@ include file="/WEB-INF/layouts/base.jsp"%>
 <script>
 	$(document).ready(function() {
+		
 		$("#group-tab").addClass("active");
 		$("#inputForm").validate();
 	});

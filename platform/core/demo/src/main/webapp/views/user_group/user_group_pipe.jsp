@@ -14,8 +14,10 @@
 	type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	alert(1111);
 	//聚焦第一个输入框
 	$("#pipe-tab").addClass("active");
+	${ctx};
 });
 </script>
 </head>
