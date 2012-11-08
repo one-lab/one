@@ -46,7 +46,7 @@ public class PGSelectParser extends SQLSelectParser {
         return new PGExprParser(lexer);
     }
 
-    @Override
+
     public SQLSelectQuery query() {
         PGSelectQueryBlock queryBlock = new PGSelectQueryBlock();
 

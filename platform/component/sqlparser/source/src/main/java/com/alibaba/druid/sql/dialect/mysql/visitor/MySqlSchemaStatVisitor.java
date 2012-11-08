@@ -139,7 +139,7 @@ public class MySqlSchemaStatVisitor extends SchemaStatVisitor implements MySqlAS
         return true;
     }
     
-    @Override
+
     public String getDbType() {
         return JdbcUtils.MYSQL;
     }
@@ -175,12 +175,12 @@ public class MySqlSchemaStatVisitor extends SchemaStatVisitor implements MySqlAS
         setAliasMap(null);
     }
 
-    @Override
+
     public void endVisit(MySqlInsertStatement x) {
         setModeOrigin(x);
     }
 
-    @Override
+
     public boolean visit(MySqlInsertStatement x) {
         setMode(x, Mode.Insert);
 
@@ -210,1002 +210,1002 @@ public class MySqlSchemaStatVisitor extends SchemaStatVisitor implements MySqlAS
         return false;
     }
 
-    @Override
+
     public boolean visit(MySqlBooleanExpr x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlBooleanExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(Limit x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(Limit x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlTableIndex x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlTableIndex x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlKey x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlKey x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlPrimaryKey x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlPrimaryKey x) {
 
     }
 
-    @Override
+
     public void endVisit(MySqlIntervalExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlIntervalExpr x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlExtractExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlExtractExpr x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlMatchAgainstExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlMatchAgainstExpr x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlBinaryExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlBinaryExpr x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlPrepareStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlPrepareStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlExecuteStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlExecuteStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlLoadDataInFileStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlLoadDataInFileStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlLoadXmlStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlLoadXmlStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlReplaceStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlReplaceStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlSelectGroupBy x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlSelectGroupBy x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlStartTransactionStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlStartTransactionStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlCommitStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlCommitStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlRollbackStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlRollbackStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlShowColumnsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowColumnsStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlShowTablesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowTablesStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlShowDatabasesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowDatabasesStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlShowWarningsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowWarningsStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlShowStatusStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowStatusStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(CobarShowStatus x) {
 
     }
 
-    @Override
+
     public boolean visit(CobarShowStatus x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlKillStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlKillStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlBinlogStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlBinlogStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlResetStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlResetStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlCreateUserStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlCreateUserStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(UserSpecification x) {
 
     }
 
-    @Override
+
     public boolean visit(UserSpecification x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlDropUser x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDropUser x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlDropTableStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDropTableStatement x) {
         return visit((SQLDropTableStatement) x);
     }
 
-    @Override
+
     public void endVisit(MySqlPartitionByKey x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlPartitionByKey x) {
         accept(x.getColumns());
         return false;
     }
 
-    @Override
+
     public boolean visit(MySqlSelectQueryBlock x) {
         return this.visit((SQLSelectQueryBlock) x);
     }
 
-    @Override
+
     public void endVisit(MySqlSelectQueryBlock x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlOutFileExpr x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlOutFileExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDescribeStatement x) {
         getTableStat(x.getObject().toString());
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlDescribeStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlUpdateStatement x) {
         return visit((SQLUpdateStatement) x);
     }
 
-    @Override
+
     public void endVisit(MySqlUpdateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlSetTransactionIsolationLevelStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSetTransactionIsolationLevelStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlSetNamesStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSetNamesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlSetCharSetStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSetCharSetStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowAuthorsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowAuthorsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowBinaryLogsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowBinaryLogsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowMasterLogsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowMasterLogsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCollationStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCollationStatement x) {
 
     }
     
-    @Override
+
     public boolean visit(MySqlShowBinLogEventsStatement x) {
         return false;
     }
     
-    @Override
+
     public void endVisit(MySqlShowBinLogEventsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowCharacterSetStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCharacterSetStatement x) {
         
     }
     
-    @Override
+
     public boolean visit(MySqlShowContributorsStatement x) {
         return false;
     }
     
-    @Override
+
     public void endVisit(MySqlShowContributorsStatement x) {
         
     }
     
-    @Override
+
     public boolean visit(MySqlShowCreateDatabaseStatement x) {
         return false;
     }
     
-    @Override
+
     public void endVisit(MySqlShowCreateDatabaseStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateEventStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateEventStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateFunctionStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateFunctionStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateProcedureStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateProcedureStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateTableStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateTableStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateTriggerStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateTriggerStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateViewStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateViewStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowEngineStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowEngineStatement x) {
         
     }
     
-    @Override
+
     public boolean visit(MySqlShowEnginesStatement x) {
         return false;
     }
     
-    @Override
+
     public void endVisit(MySqlShowEnginesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowErrorsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowErrorsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowEventsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowEventsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowFunctionCodeStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowFunctionCodeStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowFunctionStatusStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowFunctionStatusStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowGrantsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowGrantsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlUserName x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUserName x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowIndexesStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowIndexesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowKeysStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowKeysStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowMasterStatusStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowMasterStatusStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowOpenTablesStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowOpenTablesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowPluginsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowPluginsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowPrivilegesStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowPrivilegesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowProcedureCodeStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProcedureCodeStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowProcedureStatusStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProcedureStatusStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowProcessListStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProcessListStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowProfileStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProfileStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowProfilesStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProfilesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowRelayLogEventsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowRelayLogEventsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowSlaveHostsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowSlaveHostsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowSlaveStatusStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowSlaveStatusStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowTableStatusStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowTableStatusStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowTriggersStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowTriggersStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlShowVariantsStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowVariantsStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableAddColumn x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableAddColumn x) {
         
     }
     
-    @Override
+
     public boolean visit(MySqlCreateIndexStatement x) {
         return false;
     }
     
-    @Override
+
     public void endVisit(MySqlCreateIndexStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlRenameTableStatement.Item x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlRenameTableStatement.Item x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlRenameTableStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlRenameTableStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlDropViewStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(MySqlDropViewStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlUnionQuery x) {
         return visit((SQLUnionQuery) x);
     }
 
-    @Override
+
     public void endVisit(MySqlUnionQuery x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlUseIndexHint x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUseIndexHint x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlIgnoreIndexHint x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlIgnoreIndexHint x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlLockTableStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlLockTableStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlUnlockTablesStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUnlockTablesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlForceIndexHint x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlForceIndexHint x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableChangeColumn x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableChangeColumn x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableCharacter x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableCharacter x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableAddIndex x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableAddIndex x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableOption x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableOption x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlCreateTableStatement x) {
         return super.visit((SQLCreateTableStatement) x);
     }
 
-    @Override
+
     public void endVisit(MySqlCreateTableStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlHelpStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlHelpStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlCharExpr x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlCharExpr x) {
         
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableAddUnique x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableAddUnique x) {
         
     }

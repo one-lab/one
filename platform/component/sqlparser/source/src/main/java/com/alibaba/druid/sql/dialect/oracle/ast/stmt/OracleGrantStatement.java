@@ -45,7 +45,7 @@ public class OracleGrantStatement extends OracleStatementImpl implements OracleS
         this.privileges = privileges;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, on);

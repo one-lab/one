@@ -86,7 +86,7 @@ public class SQLSelectQueryBlock extends SQLSelectQuery {
         this.from = from;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.selectList);

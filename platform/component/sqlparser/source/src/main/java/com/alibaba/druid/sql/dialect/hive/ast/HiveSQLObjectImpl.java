@@ -23,7 +23,7 @@ public abstract class HiveSQLObjectImpl extends SQLObjectImpl implements HiveSQL
 
     private static final long serialVersionUID = 1L;
 
-    @Override
+
     public void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof HiveASTVisitor) {
             accept0((HiveASTVisitor) visitor);

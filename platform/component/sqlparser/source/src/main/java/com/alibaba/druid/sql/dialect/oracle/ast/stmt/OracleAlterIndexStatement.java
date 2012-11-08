@@ -39,7 +39,7 @@ public class OracleAlterIndexStatement extends OracleStatementImpl {
 
     private SQLExpr           parallel;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, name);
@@ -119,7 +119,7 @@ public class OracleAlterIndexStatement extends OracleStatementImpl {
             this.option = option;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, option);

@@ -441,7 +441,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         return null;
     }
 
-    @Override
+
     public boolean visit(SQLTruncateStatement x) {
         setMode(x, Mode.Delete);
 
@@ -468,7 +468,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLDropTableStatement x) {
         setMode(x, Mode.Insert);
 
@@ -494,7 +494,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLInsertStatement x) {
         setMode(x, Mode.Insert);
 
@@ -893,7 +893,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         return true;
     }
 
-    @Override
+
     public boolean visit(SQLInSubQueryExpr x) {
         if (x.isNot()) {
             handleCondition(x.getExpr(), "NOT IN");
@@ -947,17 +947,17 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLCallStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLCommentStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLCommentStatement x) {
         return false;
     }
@@ -966,7 +966,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLAlterTableAddColumn x) {
         SQLAlterTableStatement stmt = (SQLAlterTableStatement) x.getParent();
         String table = stmt.getName().toString();
@@ -978,7 +978,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLAlterTableAddColumn x) {
 
     }

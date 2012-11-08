@@ -33,7 +33,7 @@ public class OracleSysdateExpr extends OracleSQLObjectImpl implements SQLExpr {
         this.option = option;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         visitor.visit(this);
         visitor.endVisit(this);

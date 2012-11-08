@@ -24,7 +24,7 @@ public class SQLAlterTableDropColumnItem extends SQLObjectImpl implements SQLAlt
     private static final long serialVersionUID = 1L;
     private SQLName           columnName;
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, columnName);

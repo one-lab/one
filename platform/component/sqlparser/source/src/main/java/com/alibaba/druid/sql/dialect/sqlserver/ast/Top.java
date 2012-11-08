@@ -53,7 +53,7 @@ public class Top extends SQLServerObjectImpl {
         this.withTies = withTies;
     }
 
-    @Override
+
     public void accept0(SQLServerASTVisitor visitor) {
         visitor.visit(this);
         visitor.endVisit(this);

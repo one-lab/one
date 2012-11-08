@@ -76,7 +76,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
         this.query = query;
     }
 
-    @Override
+
     public void output(StringBuffer buf) {
         if (Type.GLOBAL_TEMPORARY.equals(this.type)) {
             buf.append("CREATE TEMPORARY TABLE ");
@@ -113,7 +113,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
         this.ifNotExiists = ifNotExiists;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);

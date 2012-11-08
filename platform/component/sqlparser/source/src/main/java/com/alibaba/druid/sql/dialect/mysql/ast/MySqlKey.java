@@ -35,7 +35,7 @@ public class MySqlKey extends SQLConstaintImpl implements SQLUniqueConstraint, S
 
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);
@@ -50,7 +50,7 @@ public class MySqlKey extends SQLConstaintImpl implements SQLUniqueConstraint, S
         visitor.endVisit(this);
     }
 
-    @Override
+
     public List<SQLExpr> getColumns() {
         return columns;
     }

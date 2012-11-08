@@ -58,7 +58,7 @@ public class SQLServerObjectReferenceExpr extends SQLServerObjectImpl implements
         return server;
     }
 
-    @Override
+
     public void accept0(SQLServerASTVisitor visitor) {
         visitor.visit(this);
         visitor.endVisit(this);

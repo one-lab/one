@@ -24,7 +24,7 @@ public class OracleAlterTableAddConstaint extends OracleAlterTableItem {
 
     private SQLConstaint      constraint;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, constraint);

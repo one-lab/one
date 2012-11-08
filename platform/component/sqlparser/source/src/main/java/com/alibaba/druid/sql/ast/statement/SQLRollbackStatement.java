@@ -25,7 +25,7 @@ public class SQLRollbackStatement extends SQLStatementImpl {
 
     private SQLName           to;
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, to);

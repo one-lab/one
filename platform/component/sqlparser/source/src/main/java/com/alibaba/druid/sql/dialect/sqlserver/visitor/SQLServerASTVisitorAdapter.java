@@ -22,32 +22,32 @@ import com.alibaba.druid.sql.visitor.SQLASTVisitorAdapter;
 
 public class SQLServerASTVisitorAdapter extends SQLASTVisitorAdapter implements SQLServerASTVisitor {
 
-    @Override
+
     public boolean visit(SQLServerSelectQueryBlock x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLServerSelectQueryBlock x) {
 
     }
 
-    @Override
+
     public boolean visit(Top x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(Top x) {
 
     }
     
-    @Override
+
     public boolean visit(SQLServerObjectReferenceExpr x) {
         return true;
     }
     
-    @Override
+
     public void endVisit(SQLServerObjectReferenceExpr x) {
         
     }

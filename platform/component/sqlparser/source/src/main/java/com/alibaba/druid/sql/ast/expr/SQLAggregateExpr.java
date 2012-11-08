@@ -70,7 +70,7 @@ public class SQLAggregateExpr extends SQLExprImpl implements Serializable {
         buf.append(")");
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.arguments);
@@ -79,7 +79,7 @@ public class SQLAggregateExpr extends SQLExprImpl implements Serializable {
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -89,7 +89,7 @@ public class SQLAggregateExpr extends SQLExprImpl implements Serializable {
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

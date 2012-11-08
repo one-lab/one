@@ -57,7 +57,7 @@ public class OracleInsertStatement extends SQLInsertStatement implements OracleS
         this.errorLogging = errorLogging;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }

@@ -106,7 +106,7 @@ public class SQLMergeTest extends TestCase {
                 return false;
             }
 
-            @Override
+
             public boolean visit(MySqlInsertStatement x) {
                 print("INSERT ");
 

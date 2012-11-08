@@ -31,7 +31,7 @@ public class MySqlAlterTableChangeColumn extends MySqlObjectImpl implements SQLA
 
     private Boolean             first;
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, columnName);

@@ -23,7 +23,7 @@ public class MySqlHexadecimalExpr extends MySqlExprImpl implements SQLLiteralExp
 
     private static final long serialVersionUID = 1L;
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         
     }

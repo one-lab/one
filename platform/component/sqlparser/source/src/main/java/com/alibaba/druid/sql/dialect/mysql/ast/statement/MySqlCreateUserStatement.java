@@ -36,7 +36,7 @@ public class MySqlCreateUserStatement extends MySqlStatementImpl {
         this.users = users;
     }
     
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, users);
@@ -75,7 +75,7 @@ public class MySqlCreateUserStatement extends MySqlStatementImpl {
             this.authPlugin = authPlugin;
         }
 
-        @Override
+
         public void accept0(MySqlASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, user);

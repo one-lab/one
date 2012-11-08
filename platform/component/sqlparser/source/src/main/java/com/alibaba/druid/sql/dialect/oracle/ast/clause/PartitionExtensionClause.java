@@ -50,7 +50,7 @@ public class PartitionExtensionClause extends OracleSQLObjectImpl {
         return target;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, partition);

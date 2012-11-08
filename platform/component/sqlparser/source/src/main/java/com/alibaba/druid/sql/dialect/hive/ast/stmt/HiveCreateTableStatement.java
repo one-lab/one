@@ -36,12 +36,12 @@ public class HiveCreateTableStatement extends SQLCreateTableStatement implements
         this.partitionedBy = partitionedBy;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((HiveASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(HiveASTVisitor visitor) {
         if (visitor.visit(this)) {
             this.acceptChild(visitor, tableSource);
@@ -73,7 +73,7 @@ public class HiveCreateTableStatement extends SQLCreateTableStatement implements
             this.type = type;
         }
 
-        @Override
+
         public void accept0(HiveASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, type);

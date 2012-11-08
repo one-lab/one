@@ -1406,7 +1406,7 @@ public class MySqlStatementParser extends SQLStatementParser {
         return stmt;
     }
 
-    @Override
+
     public MySqlRollbackStatement parseRollback() {
         acceptIdentifier("ROLLBACK");
 

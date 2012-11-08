@@ -41,13 +41,13 @@ public class SQLCurrentOfCursorExpr extends SQLExprImpl {
         this.cursorName = cursorName;
     }
 
-    @Override
+
     public void output(StringBuffer buf) {
         buf.append("CURRENT OF ");
         cursorName.output(buf);
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.cursorName);
@@ -55,7 +55,7 @@ public class SQLCurrentOfCursorExpr extends SQLExprImpl {
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -63,7 +63,7 @@ public class SQLCurrentOfCursorExpr extends SQLExprImpl {
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

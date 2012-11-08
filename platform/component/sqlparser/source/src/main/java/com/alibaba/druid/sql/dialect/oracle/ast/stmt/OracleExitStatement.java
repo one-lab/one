@@ -31,7 +31,7 @@ public class OracleExitStatement extends OracleStatementImpl {
         this.when = when;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, when);

@@ -33,7 +33,7 @@ public class ModelClause extends OracleSQLObjectImpl {
     private final List<ReferenceModelClause> referenceModelClauses = new ArrayList<ReferenceModelClause>();
     private MainModelClause                  mainModel;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, returnRowsClause);
@@ -101,7 +101,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.all = all;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             visitor.visit(this);
         }
@@ -134,7 +134,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.subQuery = subQuery;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
 
         }
@@ -172,7 +172,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.alias = alias;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, queryPartitionClause);
@@ -206,7 +206,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.alias = alias;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, expr);
@@ -228,7 +228,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.exprList = exprList;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, exprList);
@@ -274,7 +274,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.mainModelName = mainModelName;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, mainModelName);
@@ -317,7 +317,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             return cellAssignmentItems;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, iterate);
@@ -384,7 +384,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.expr = expr;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, cellAssignment);
@@ -413,7 +413,7 @@ public class ModelClause extends OracleSQLObjectImpl {
             this.measureColumn = measureColumn;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, measureColumn);

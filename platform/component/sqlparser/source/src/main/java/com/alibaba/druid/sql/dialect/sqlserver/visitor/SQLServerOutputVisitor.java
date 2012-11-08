@@ -65,12 +65,12 @@ public class SQLServerOutputVisitor extends SQLASTOutputVisitor implements SQLSe
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLServerSelectQueryBlock x) {
 
     }
 
-    @Override
+
     public boolean visit(Top x) {
         print("TOP ");
         x.getExpr().accept(this);
@@ -78,18 +78,18 @@ public class SQLServerOutputVisitor extends SQLASTOutputVisitor implements SQLSe
         return false;
     }
 
-    @Override
+
     public void endVisit(Top x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLServerObjectReferenceExpr x) {
         print(x.toString());
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLServerObjectReferenceExpr x) {
         
     }

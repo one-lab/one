@@ -35,7 +35,7 @@ public class OraclePartitionByRangeClause extends OracleSQLObjectImpl implements
 
     private List<OracleRangeValuesClause> ranges           = new ArrayList<OracleRangeValuesClause>();
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, columns);

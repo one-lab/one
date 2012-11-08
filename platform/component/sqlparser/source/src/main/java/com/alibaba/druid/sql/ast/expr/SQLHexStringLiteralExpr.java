@@ -36,7 +36,7 @@ public class SQLHexStringLiteralExpr extends SQLExprImpl implements SQLLiteralEx
         this.value = value;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         visitor.visit(this);
 
@@ -49,7 +49,7 @@ public class SQLHexStringLiteralExpr extends SQLExprImpl implements SQLLiteralEx
         buf.append("'");
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -57,7 +57,7 @@ public class SQLHexStringLiteralExpr extends SQLExprImpl implements SQLLiteralEx
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

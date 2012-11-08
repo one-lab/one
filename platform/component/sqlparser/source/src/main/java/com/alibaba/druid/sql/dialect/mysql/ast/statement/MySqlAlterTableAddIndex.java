@@ -35,7 +35,7 @@ public class MySqlAlterTableAddIndex extends SQLAlterTableAddIndex implements SQ
         this.using = using;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);

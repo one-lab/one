@@ -71,7 +71,7 @@ public class OracleCreateIndexStatement extends SQLCreateIndexStatement implemen
         accept0((OracleASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, getName());

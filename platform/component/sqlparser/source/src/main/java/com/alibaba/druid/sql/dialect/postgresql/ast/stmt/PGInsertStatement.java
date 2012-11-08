@@ -71,7 +71,7 @@ public class PGInsertStatement extends SQLInsertStatement implements PGSQLStatem
         accept0((PGASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(PGASTVisitor visitor) {
         if (visitor.visit(this)) {
             this.acceptChild(visitor, with);

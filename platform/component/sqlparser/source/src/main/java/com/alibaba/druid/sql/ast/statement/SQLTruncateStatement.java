@@ -39,7 +39,7 @@ public class SQLTruncateStatement extends SQLStatementImpl {
         this.tableSources.add(new SQLExprTableSource(name));
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, tableSources);

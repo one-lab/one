@@ -30,7 +30,7 @@ public class OracleAlterTableStatement extends SQLAlterTableStatement implements
         accept0((OracleASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, getTableSource());

@@ -24,7 +24,7 @@ public class NotNullConstraint extends SQLConstaintImpl implements SQLColumnCons
 
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         visitor.visit(this);
         visitor.endVisit(this);

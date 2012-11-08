@@ -70,7 +70,7 @@ public class SQLCreateTableStatement extends SQLStatementImpl implements SQLDDLS
         return tableElementList;
     }
 
-    @Override
+
     public void output(StringBuffer buf) {
         buf.append("CREATE TABLE ");
         if (Type.GLOBAL_TEMPORARY.equals(this.type)) {
@@ -92,7 +92,7 @@ public class SQLCreateTableStatement extends SQLStatementImpl implements SQLDDLS
         buf.append(")");
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             this.acceptChild(visitor, tableSource);

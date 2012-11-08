@@ -30,7 +30,7 @@ public class OracleRangeValuesClause extends OracleSQLObjectImpl {
     private SQLName           name;
     private List<SQLExpr>     values           = new ArrayList<SQLExpr>();
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, name);

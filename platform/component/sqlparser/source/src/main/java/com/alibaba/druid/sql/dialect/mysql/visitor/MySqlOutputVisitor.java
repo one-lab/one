@@ -149,7 +149,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
     public void endVisit(MySqlBooleanExpr x) {
     }
 
-    @Override
+
     public boolean visit(SQLSelectQueryBlock select) {
         if (select instanceof MySqlSelectQueryBlock) {
             return visit((MySqlSelectQueryBlock) select);
@@ -335,17 +335,17 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(Limit x) {
 
     }
 
-    @Override
+
     public void endVisit(MySqlTableIndex x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlTableIndex x) {
         print("INDEX");
         if (x.getName() != null) {
@@ -421,17 +421,14 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
     public void endVisit(MySqlKey x) {
 
     }
 
-    @Override
     public void endVisit(MySqlPrimaryKey x) {
 
     }
 
-    @Override
     public boolean visit(MySqlKey x) {
         if (x.getName() != null) {
             print("CONSTRAINT ");
@@ -459,7 +456,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public boolean visit(MySqlPrimaryKey x) {
         if (x.getName() != null) {
             print("CONSTRAINT ");
@@ -602,12 +599,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return super.visit(x);
     }
 
-    @Override
+
     public void endVisit(MySqlIntervalExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlIntervalExpr x) {
         print("INTERVAL ");
         x.getValue().accept(this);
@@ -616,7 +613,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public boolean visit(MySqlExtractExpr x) {
         print("EXTRACT(");
         print(x.getUnit().name());
@@ -626,17 +623,17 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlExtractExpr x) {
 
     }
 
-    @Override
+
     public void endVisit(MySqlMatchAgainstExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlMatchAgainstExpr x) {
         print("MATCH (");
         printAndAccept(x.getColumns(), ", ");
@@ -653,12 +650,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlBinaryExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlBinaryExpr x) {
         print("b'");
         print(x.getValue());
@@ -667,11 +664,11 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlPrepareStatement x) {
     }
 
-    @Override
+
     public boolean visit(MySqlPrepareStatement x) {
         print("PREPARE ");
         x.getName().accept(this);
@@ -680,12 +677,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlExecuteStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlExecuteStatement x) {
         print("EXECUTE ");
         x.getStatementName().accept(this);
@@ -696,12 +693,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlDeleteStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDeleteStatement x) {
         print("DELETE ");
 
@@ -753,12 +750,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlInsertStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlInsertStatement x) {
         print("INSERT ");
 
@@ -824,12 +821,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlLoadDataInFileStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlLoadDataInFileStatement x) {
         print("LOAD DATA ");
 
@@ -902,12 +899,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlReplaceStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlReplaceStatement x) {
         print("REPLACE ");
 
@@ -957,12 +954,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSelectGroupBy x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlSelectGroupBy x) {
         super.visit(x);
 
@@ -973,12 +970,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlStartTransactionStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlStartTransactionStatement x) {
         print("START TRANSACTION");
         if (x.isConsistentSnapshot()) {
@@ -996,12 +993,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlCommitStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlCommitStatement x) {
         print("COMMIT");
 
@@ -1028,12 +1025,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlRollbackStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlRollbackStatement x) {
         print("ROLLBACK");
 
@@ -1061,12 +1058,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowColumnsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowColumnsStatement x) {
         if (x.isFull()) {
             print("SHOW FULL COLUMNS");
@@ -1097,12 +1094,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowTablesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowTablesStatement x) {
         if (x.isFull()) {
             print("SHOW FULL TABLES");
@@ -1129,12 +1126,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowDatabasesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowDatabasesStatement x) {
         print("SHOW DATABASES");
 
@@ -1152,12 +1149,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowWarningsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowWarningsStatement x) {
         if (x.isCount()) {
             print("SHOW COUNT(*) WARNINGS");
@@ -1172,12 +1169,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowStatusStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowStatusStatement x) {
         print("SHOW ");
 
@@ -1205,12 +1202,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlLoadXmlStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlLoadXmlStatement x) {
         print("LOAD XML ");
 
@@ -1259,23 +1256,23 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(CobarShowStatus x) {
 
     }
 
-    @Override
+
     public boolean visit(CobarShowStatus x) {
         print("SHOW COBAR_STATUS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlKillStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlKillStatement x) {
         if (MySqlKillStatement.Type.CONNECTION.equals(x.getType())) {
             print("KILL CONNECTION ");
@@ -1286,24 +1283,24 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlBinlogStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlBinlogStatement x) {
         print("BINLOG ");
         x.getExpr().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlResetStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlResetStatement x) {
         print("RESET ");
         for (int i = 0; i < x.getOptions().size(); ++i) {
@@ -1315,24 +1312,24 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlCreateUserStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlCreateUserStatement x) {
         print("CREATE USER ");
         printAndAccept(x.getUsers(), ", ");
         return false;
     }
 
-    @Override
+
     public void endVisit(UserSpecification x) {
 
     }
 
-    @Override
+
     public boolean visit(UserSpecification x) {
         x.getUser().accept(this);
 
@@ -1348,24 +1345,24 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlDropUser x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDropUser x) {
         print("DROP USER ");
         printAndAccept(x.getUsers(), ", ");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlDropTableStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDropTableStatement x) {
         if (x.isTemporary()) {
             print("DROP TEMPORARY TABLE ");
@@ -1385,12 +1382,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlPartitionByKey x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlPartitionByKey x) {
         print("PARTITION BY KEY (");
         printAndAccept(x.getColumns(), ", ");
@@ -1403,12 +1400,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSelectQueryBlock x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlOutFileExpr x) {
         print("OUTFILE ");
         x.getFile().accept(this);
@@ -1455,24 +1452,24 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlOutFileExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDescribeStatement x) {
         print("DESC ");
         x.getObject().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlDescribeStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlUpdateStatement x) {
         print("UPDATE ");
 
@@ -1514,17 +1511,17 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUpdateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlSetTransactionIsolationLevelStatement x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSetTransactionIsolationLevelStatement x) {
         if (x.getGlobal() == null) {
             print("SET TRANSACTION ISOLATION LEVEL ");
@@ -1536,7 +1533,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         print(x.getLevel());
     }
 
-    @Override
+
     public boolean visit(MySqlSetNamesStatement x) {
         print("SET NAMES ");
         if (x.isDefault()) {
@@ -1551,12 +1548,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSetNamesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlSetCharSetStatement x) {
         print("SET CHARACTER SET ");
         if (x.isDefault()) {
@@ -1571,45 +1568,45 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlSetCharSetStatement x) {
 
     }
 
-    @Override
+
     public void endVisit(MySqlShowAuthorsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowAuthorsStatement x) {
         print("SHOW AUTHORS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowBinaryLogsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowBinaryLogsStatement x) {
         print("SHOW BINARY LOGS");
         return false;
     }
 
-    @Override
+
     public boolean visit(MySqlShowMasterLogsStatement x) {
         print("SHOW MASTER LOGS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowMasterLogsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCollationStatement x) {
         print("SHOW COLLATION");
         if (x.getPattern() != null) {
@@ -1623,12 +1620,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCollationStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowBinLogEventsStatement x) {
         print("SHOW BINLOG EVENTS");
         if (x.getIn() != null) {
@@ -1646,12 +1643,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowBinLogEventsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCharacterSetStatement x) {
         print("SHOW CHARACTER SET");
         if (x.getPattern() != null) {
@@ -1665,107 +1662,107 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCharacterSetStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowContributorsStatement x) {
         print("SHOW CONTRIBUTORS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowContributorsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateDatabaseStatement x) {
         print("SHOW CREATE DATABASE ");
         x.getDatabase().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateDatabaseStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateEventStatement x) {
         print("SHOW CREATE EVENT ");
         x.getEventName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateEventStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateFunctionStatement x) {
         print("SHOW CREATE FUNCTION ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateFunctionStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateProcedureStatement x) {
         print("SHOW CREATE PROCEDURE ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateProcedureStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateTableStatement x) {
         print("SHOW CREATE TABLE ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateTableStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateTriggerStatement x) {
         print("SHOW CREATE TRIGGER ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateTriggerStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowCreateViewStatement x) {
         print("SHOW CREATE VIEW ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowCreateViewStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowEngineStatement x) {
         print("SHOW ENGINE ");
         x.getName().accept(this);
@@ -1774,12 +1771,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowEngineStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowEventsStatement x) {
         print("SHOW EVENTS");
         if (x.getSchema() != null) {
@@ -1800,24 +1797,24 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowEventsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowFunctionCodeStatement x) {
         print("SHOW FUNCTION CODE ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowFunctionCodeStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowFunctionStatusStatement x) {
         print("SHOW FUNCTION STATUS");
         if (x.getLike() != null) {
@@ -1833,12 +1830,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowFunctionStatusStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowEnginesStatement x) {
         if (x.isStorage()) {
             print("SHOW STORAGE ENGINES");
@@ -1848,12 +1845,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowEnginesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowErrorsStatement x) {
         if (x.isCount()) {
             print("SHOW COUNT(*) ERRORS");
@@ -1867,12 +1864,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowErrorsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowGrantsStatement x) {
         print("SHOW GRANTS");
         if (x.getUser() != null) {
@@ -1882,12 +1879,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowGrantsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlUserName x) {
         print(x.getUserName());
         if (x.getHost() != null) {
@@ -1897,12 +1894,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUserName x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowIndexesStatement x) {
         print("SHOW INDEX");
 
@@ -1918,12 +1915,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowIndexesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowKeysStatement x) {
         print("SHOW KEYS");
 
@@ -1938,23 +1935,23 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowKeysStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowMasterStatusStatement x) {
         print("SHOW MASTER STATUS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowMasterStatusStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowOpenTablesStatement x) {
         print("SHOW OPEN TABLES");
 
@@ -1976,46 +1973,46 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowOpenTablesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowPluginsStatement x) {
         print("SHOW PLUGINS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowPluginsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowPrivilegesStatement x) {
         print("SHOW PRIVILEGES");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowPrivilegesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowProcedureCodeStatement x) {
         print("SHOW PROCEDURE CODE ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProcedureCodeStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowProcedureStatusStatement x) {
         print("SHOW PROCEDURE STATUS");
         if (x.getLike() != null) {
@@ -2030,12 +2027,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProcedureStatusStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowProcessListStatement x) {
         if (x.isFull()) {
             print("SHOW FULL PROCESSLIST");
@@ -2045,12 +2042,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProcessListStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowProfileStatement x) {
         print("SHOW PROFILE");
         for (int i = 0; i < x.getTypes().size(); ++i) {
@@ -2074,23 +2071,23 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProfileStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowProfilesStatement x) {
         print("SHOW PROFILES");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowProfilesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowRelayLogEventsStatement x) {
         print("SHOW RELAYLOG EVENTS");
 
@@ -2112,34 +2109,34 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowRelayLogEventsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowSlaveHostsStatement x) {
         print("SHOW SLAVE HOSTS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowSlaveHostsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowSlaveStatusStatement x) {
         print("SHOW SLAVE STATUS");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowSlaveStatusStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowTableStatusStatement x) {
         print("SHOW TABLE STATUS");
         if (x.getDatabase() != null) {
@@ -2160,12 +2157,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowTableStatusStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowTriggersStatement x) {
         print("SHOW TRIGGERS");
 
@@ -2188,12 +2185,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowTriggersStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlShowVariantsStatement x) {
         print("SHOW ");
 
@@ -2221,12 +2218,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlShowVariantsStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableStatement x) {
         if (x.isIgnore()) {
             print("ALTER IGNORE TABLE ");
@@ -2247,12 +2244,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableAddColumn x) {
         print("ADD COLUMN ");
         printAndAccept(x.getColumns(), ", ");
@@ -2263,12 +2260,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableAddColumn x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlCreateIndexStatement x) {
         print("CREATE ");
         if (x.getType() != null) {
@@ -2292,12 +2289,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlCreateIndexStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlRenameTableStatement.Item x) {
         x.getName().accept(this);
         print(" TO ");
@@ -2305,24 +2302,24 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlRenameTableStatement.Item x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlRenameTableStatement x) {
         print("RENAME TABLE ");
         printAndAccept(x.getItems(), ", ");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlRenameTableStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlDropViewStatement x) {
         print("DROP VIEW ");
         if (x.isIfExists()) {
@@ -2338,12 +2335,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlDropViewStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlUnionQuery x) {
         {
             boolean needParen = false;
@@ -2397,12 +2394,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUnionQuery x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlUseIndexHint x) {
         print("USE INDEX ");
         if (x.getOption() != null) {
@@ -2416,12 +2413,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUseIndexHint x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlIgnoreIndexHint x) {
         print("IGNORE INDEX ");
         if (x.getOption() != null) {
@@ -2435,7 +2432,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlIgnoreIndexHint x) {
 
     }
@@ -2456,7 +2453,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public boolean visit(MySqlLockTableStatement x) {
         print("LOCK TABLES ");
         x.getTableSource().accept(this);
@@ -2467,23 +2464,23 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlLockTableStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlUnlockTablesStatement x) {
         print("UNLOCK TABLES");
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlUnlockTablesStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlForceIndexHint x) {
         print("FORCE INDEX ");
         if (x.getOption() != null) {
@@ -2497,12 +2494,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlForceIndexHint x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableChangeColumn x) {
         print("CHANGE COLUMN ");
         x.getColumnName().accept(this);
@@ -2519,12 +2516,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableChangeColumn x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableCharacter x) {
         print("CHARACTER SET = ");
         x.getCharacterSet().accept(this);
@@ -2537,12 +2534,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableCharacter x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableAddIndex x) {
         print("ADD ");
         if (x.getType() != null) {
@@ -2567,12 +2564,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableAddIndex x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableAddUnique x) {
         print("ADD ");
         if (x.getType() != null) {
@@ -2597,12 +2594,12 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableAddUnique x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlAlterTableOption x) {
         print(x.getName());
         print(" = ");
@@ -2610,35 +2607,35 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlAlterTableOption x) {
 
     }
 
-    @Override
+
     public void endVisit(MySqlCreateTableStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlHelpStatement x) {
         print("HELP ");
         x.getContent().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlHelpStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(MySqlCharExpr x) {
         print(x.toString());
         return false;
     }
 
-    @Override
+
     public void endVisit(MySqlCharExpr x) {
 
     }

@@ -205,7 +205,7 @@ public class RmsConnection implements Connection {
 	}
 
 	String realDataRule(String sql){
-		String s =dataRuleStringCreat.editSqlQueryRule(sql);
+		String s = dataRuleStringCreat.editSqlQueryRule(sql);
 		return s;
 	}
 	

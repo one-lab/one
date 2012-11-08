@@ -681,7 +681,7 @@ public class OracleSelectParser extends SQLSelectParser {
         }
     }
 
-    @Override
+
     public SQLTableSource parseTableSource() {
         if (lexer.token() == (Token.LPAREN)) {
             lexer.nextToken();

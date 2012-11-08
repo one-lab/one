@@ -58,7 +58,7 @@ public class PGAggregateExpr extends SQLAggregateExpr implements PGSQLObject {
         }
     }
 
-	@Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof PGASTVisitor) {
             this.accept0((PGASTVisitor) visitor);

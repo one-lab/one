@@ -57,7 +57,7 @@ public class SearchClause extends OracleSQLObjectImpl {
         this.orderingColumn = orderingColumn;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, items);

@@ -106,7 +106,7 @@ public class OracleStatementParser extends SQLStatementParser {
         super(new OracleExprParser(lexer));
     }
 
-    @Override
+
     public OracleExprParser getExprParser() {
         return (OracleExprParser) exprParser;
     }
@@ -129,7 +129,7 @@ public class OracleStatementParser extends SQLStatementParser {
         }
     }
 
-    @Override
+
     public void parseStatementList(List<SQLStatement> statementList) {
         parseStatementList(statementList, -1);
     }

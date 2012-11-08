@@ -17,6 +17,7 @@ package com.alibaba.druid.sql;
 
 import java.util.List;
 
+import com.alibaba.druid.DruidRuntimeException;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLObject;
 import com.alibaba.druid.sql.ast.SQLStatement;

@@ -25,37 +25,37 @@ import com.alibaba.druid.util.JdbcUtils;
 
 public class SQLServerSchemaStatVisitor extends SchemaStatVisitor implements SQLServerASTVisitor {
 
-    @Override
+
     public String getDbType() {
         return JdbcUtils.SQL_SERVER;
     }
     
-    @Override
+
     public boolean visit(SQLServerSelectQueryBlock x) {
         return visit((SQLSelectQueryBlock) x);
     }
 
-    @Override
+
     public void endVisit(SQLServerSelectQueryBlock x) {
         endVisit((SQLSelectQueryBlock) x);
     }
 
-    @Override
+
     public boolean visit(Top x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(Top x) {
         
     }
 
-    @Override
+
     public boolean visit(SQLServerObjectReferenceExpr x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLServerObjectReferenceExpr x) {
         
     }

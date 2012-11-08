@@ -32,7 +32,7 @@ public class MySqlPartitionByKey extends MySqlObjectImpl implements SQLPartition
 
     private SQLExpr           partitionCount;
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, columns);

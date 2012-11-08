@@ -289,7 +289,7 @@ public class OracleExprParser extends SQLExprParser {
         }
     }
     
-    @Override
+
     protected SQLExpr methodRest(SQLExpr expr, boolean acceptLPAREN) {
         if (acceptLPAREN) {
             accept(Token.LPAREN);
@@ -498,7 +498,7 @@ public class OracleExprParser extends SQLExprParser {
         return timestamp;
     }
 
-    @Override
+
     public OracleOrderBy parseOrderBy() {
         if (lexer.token() == (Token.ORDER)) {
             OracleOrderBy orderBy = new OracleOrderBy();
@@ -637,12 +637,12 @@ public class OracleExprParser extends SQLExprParser {
         throw new ParserException("syntax error");
     }
 
-    @Override
+
     public OracleSelectParser createSelectParser() {
         return new OracleSelectParser(this);
     }
 
-    @Override
+
     public OracleOrderByItem parseSelectOrderByItem() {
         OracleOrderByItem item = new OracleOrderByItem();
 

@@ -41,7 +41,7 @@ public class SQLIntervalLiteralExpr extends SQLExprImpl implements SQLLiteralExp
 
     }
 
-    @Override
+
     public void output(StringBuffer buf) {
         buf.append("INTERVAL");
         if (sign != null) {
@@ -50,14 +50,14 @@ public class SQLIntervalLiteralExpr extends SQLExprImpl implements SQLLiteralExp
         throw new RuntimeException("TODO");
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         visitor.visit(this);
 
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -65,7 +65,7 @@ public class SQLIntervalLiteralExpr extends SQLExprImpl implements SQLLiteralExp
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

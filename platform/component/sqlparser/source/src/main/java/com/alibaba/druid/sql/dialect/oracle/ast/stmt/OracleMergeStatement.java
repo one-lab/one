@@ -145,7 +145,7 @@ public class OracleMergeStatement extends OracleStatementImpl {
             this.deleteWhere = deleteWhere;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, items);
@@ -165,7 +165,7 @@ public class OracleMergeStatement extends OracleStatementImpl {
         private List<SQLExpr>     values           = new ArrayList<SQLExpr>();
         private SQLExpr           where;
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, columns);

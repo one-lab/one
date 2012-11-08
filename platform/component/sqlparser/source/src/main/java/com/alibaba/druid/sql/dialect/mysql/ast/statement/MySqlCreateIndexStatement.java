@@ -40,7 +40,7 @@ public class MySqlCreateIndexStatement extends SQLCreateIndexStatement implement
         accept0((MySqlASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, getName());

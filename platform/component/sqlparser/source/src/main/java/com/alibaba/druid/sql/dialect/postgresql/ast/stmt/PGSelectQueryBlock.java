@@ -53,7 +53,7 @@ public class PGSelectQueryBlock extends SQLSelectQueryBlock {
         this.intoOption = intoOption;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         accept0((PGASTVisitor) visitor);
     }
@@ -163,7 +163,7 @@ public class PGSelectQueryBlock extends SQLSelectQueryBlock {
             this.definition = definition;
         }
 
-        @Override
+
         public void accept0(PGASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, name);
@@ -200,7 +200,7 @@ public class PGSelectQueryBlock extends SQLSelectQueryBlock {
             this.count = count;
         }
 
-        @Override
+
         public void accept0(PGASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, count);
@@ -246,7 +246,7 @@ public class PGSelectQueryBlock extends SQLSelectQueryBlock {
             this.noWait = noWait;
         }
 
-        @Override
+
         public void accept0(PGASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, of);

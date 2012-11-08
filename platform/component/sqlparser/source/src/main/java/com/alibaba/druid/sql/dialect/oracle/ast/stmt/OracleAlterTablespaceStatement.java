@@ -25,7 +25,7 @@ public class OracleAlterTablespaceStatement extends OracleStatementImpl {
     private SQLName                   name;
     private OracleAlterTablespaceItem item;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, name);

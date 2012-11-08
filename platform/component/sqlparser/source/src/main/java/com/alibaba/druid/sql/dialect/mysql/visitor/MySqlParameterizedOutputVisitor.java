@@ -86,7 +86,7 @@ public class MySqlParameterizedOutputVisitor extends MySqlOutputVisitor {
         return false;
     }
 
-    @Override
+
     public boolean visit(MySqlInsertStatement x) {
         print("INSERT ");
 

@@ -27,7 +27,7 @@ public class MySqlAlterTableCharacter extends MySqlObjectImpl implements SQLAlte
     private SQLExpr           characterSet;
     private SQLExpr           collate;
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, characterSet);

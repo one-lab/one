@@ -27,7 +27,7 @@ public class OracleErrorLoggingClause extends OracleSQLObjectImpl {
     private SQLExpr           simpleExpression;
     private SQLExpr           limit;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, into);

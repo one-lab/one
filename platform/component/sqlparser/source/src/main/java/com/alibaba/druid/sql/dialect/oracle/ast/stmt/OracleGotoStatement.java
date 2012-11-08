@@ -31,7 +31,7 @@ public class OracleGotoStatement extends OracleStatementImpl {
         this.label = label;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, label);

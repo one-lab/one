@@ -89,7 +89,7 @@ public class SQLCreateViewStatement extends SQLStatementImpl implements SQLDDLSt
         }
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.name);

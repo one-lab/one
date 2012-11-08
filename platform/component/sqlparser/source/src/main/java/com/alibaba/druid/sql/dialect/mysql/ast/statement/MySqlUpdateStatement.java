@@ -38,7 +38,7 @@ public class MySqlUpdateStatement extends SQLUpdateStatement implements MySqlSta
         this.limit = limit;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);

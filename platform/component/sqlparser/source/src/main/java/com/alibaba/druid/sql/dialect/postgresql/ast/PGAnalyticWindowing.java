@@ -31,7 +31,7 @@ public class PGAnalyticWindowing extends SQLObjectImpl implements PGExpr {
 
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((PGASTVisitor) visitor);
     }

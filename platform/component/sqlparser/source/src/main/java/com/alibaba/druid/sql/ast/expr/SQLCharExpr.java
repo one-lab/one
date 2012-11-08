@@ -29,7 +29,7 @@ public class SQLCharExpr extends SQLTextLiteralExpr {
         super(text);
     }
 
-    @Override
+
     public void output(StringBuffer buf) {
         if ((this.text == null) || (this.text.length() == 0)) {
             buf.append("NULL");

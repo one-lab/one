@@ -83,7 +83,7 @@ public class OracleIntervalExpr extends SQLExprImpl implements SQLLiteralExpr, O
         this.toFactionalSecondsPrecision = toFactionalSecondsPrecision;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }
@@ -93,7 +93,7 @@ public class OracleIntervalExpr extends SQLExprImpl implements SQLLiteralExpr, O
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -106,7 +106,7 @@ public class OracleIntervalExpr extends SQLExprImpl implements SQLLiteralExpr, O
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

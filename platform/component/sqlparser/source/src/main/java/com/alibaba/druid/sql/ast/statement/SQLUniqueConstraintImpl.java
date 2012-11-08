@@ -30,7 +30,7 @@ public class SQLUniqueConstraintImpl extends SQLConstaintImpl implements SQLUniq
 
     private List<SQLExpr> columns = new ArrayList<SQLExpr>();
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.getName());
@@ -39,7 +39,7 @@ public class SQLUniqueConstraintImpl extends SQLConstaintImpl implements SQLUniq
         visitor.endVisit(this);
     }
 
-    @Override
+
     public List<SQLExpr> getColumns() {
         return columns;
     }

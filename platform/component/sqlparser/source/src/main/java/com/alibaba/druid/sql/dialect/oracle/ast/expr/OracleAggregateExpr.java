@@ -75,7 +75,7 @@ public class OracleAggregateExpr extends SQLAggregateExpr implements Serializabl
         }
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof OracleASTVisitor) {
             this.accept0((OracleASTVisitor) visitor);

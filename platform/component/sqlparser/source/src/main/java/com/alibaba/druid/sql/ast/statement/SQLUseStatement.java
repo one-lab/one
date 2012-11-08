@@ -33,7 +33,7 @@ public class SQLUseStatement extends SQLStatementImpl implements SQLStatement {
         this.database = database;
     }
 
-    @Override
+
     public void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, database);

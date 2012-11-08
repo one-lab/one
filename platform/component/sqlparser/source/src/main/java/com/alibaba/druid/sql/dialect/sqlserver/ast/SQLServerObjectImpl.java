@@ -27,7 +27,7 @@ public abstract class SQLServerObjectImpl extends SQLObjectImpl implements SQLSe
 
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((SQLServerASTVisitor) visitor);
     }

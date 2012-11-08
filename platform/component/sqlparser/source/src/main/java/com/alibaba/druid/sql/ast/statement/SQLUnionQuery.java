@@ -63,7 +63,7 @@ public class SQLUnionQuery extends SQLSelectQuery {
         this.orderBy = orderBy;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, left);

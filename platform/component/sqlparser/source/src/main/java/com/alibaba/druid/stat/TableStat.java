@@ -218,7 +218,7 @@ public class TableStat {
             this.operator = operator;
         }
 
-        @Override
+
         public int hashCode() {
             final int prime = 31;
             int result = 1;
@@ -228,7 +228,7 @@ public class TableStat {
             return result;
         }
 
-        @Override
+
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
@@ -264,7 +264,7 @@ public class TableStat {
             return true;
         }
 
-        @Override
+
         public String toString() {
             return left + " " + operator + " " + right;
         }
@@ -298,7 +298,7 @@ public class TableStat {
             return values;
         }
 
-        @Override
+
         public int hashCode() {
             final int prime = 31;
             int result = 1;
@@ -307,7 +307,7 @@ public class TableStat {
             return result;
         }
 
-        @Override
+
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;

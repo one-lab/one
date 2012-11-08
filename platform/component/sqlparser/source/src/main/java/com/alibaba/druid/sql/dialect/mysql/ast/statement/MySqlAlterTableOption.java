@@ -34,7 +34,7 @@ public class MySqlAlterTableOption extends MySqlObjectImpl implements SQLAlterTa
     public MySqlAlterTableOption(){
     }
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         visitor.visit(this);
         visitor.endVisit(this);

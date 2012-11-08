@@ -24,7 +24,7 @@ public class OracleSavePointStatement extends OracleStatementImpl {
 
     private SQLName           to;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, to);

@@ -43,7 +43,7 @@ public class MySqlOutFileExpr extends MySqlObjectImpl implements SQLExpr {
         this.file = file;
     }
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, file);

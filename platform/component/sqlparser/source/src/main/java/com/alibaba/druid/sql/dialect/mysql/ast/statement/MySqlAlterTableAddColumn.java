@@ -35,7 +35,7 @@ public class MySqlAlterTableAddColumn extends SQLAlterTableAddColumn implements 
         this.after = after;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);
