@@ -13,7 +13,7 @@
     </parent>
 
 	<packaging>jar</packaging>
-	<name>druid</name>
+	<name>druid::sqlparser</name>
 	<description>An JDBC datasource implementation.</description>
 	<url>https://github.com/AlibabaTech/druid</url>
 	<inceptionYear>2012</inceptionYear>
