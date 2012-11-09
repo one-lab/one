@@ -40,5 +40,5 @@ CREATE PROCEDURE `MYSQL_PRO_FOR_DEMO`(IN `P_ID` bigint(20),IN `P_NAME` varchar(2
 BEGIN
 	SELECT COUNT(*) INTO P_OUTPRO1 FROM acct_user a WHERE a.id>=P_ID;
 	SELECT COUNT(*) INTO P_OUTPRO2 FROM acct_user b WHERE b.name LIKE P_NAME;
-	SELECT * FROM acct_userinfo c WHERE c.id IN (SELECT a.id FROM acct_user a WHERE a.id>=P_ID AND a.name LIKE P_NAME);
+	SELECT * FROM acct_userinfo c WHERE c.ID IN (SELECT a.id FROM acct_user a WHERE a.id>=P_ID AND a.name LIKE P_NAME);
 END;
