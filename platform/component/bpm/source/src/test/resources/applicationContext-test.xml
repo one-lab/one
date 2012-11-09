@@ -31,10 +31,7 @@
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="com.sinosoft.one" />
 	<aop:aspectj-autoproxy />
-	<bean id="bpmService" scope="singleton"
-		class="com.sinosoft.one.bpm.service.spring.BpmServiceSpringImpl"
-		init-method="init">
-	</bean>
+
 	<bean id="comboService"
 		class="com.sinosoft.one.service.spring.ComboServiceSpringImpl">
 	</bean>
@@ -71,5 +68,23 @@
 
 	<bean id="bpmTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="bpmEmf" />
+	</bean>
+	
+	<bean id="processInstanceBOService" class="com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSpringImpl">
+	</bean>
+	
+	<bean id="processInstanceBOCache" class="com.sinosoft.one.bpm.util.ProcessInstanceBOCache">
+		<property name="processInstanceBOService" ref="processInstanceBOService" />
+	</bean>
+	
+	<bean id="bpmServiceSupport" scope="singleton" class="com.sinosoft.one.bpm.util.BpmServiceSupport" init-method="init" destroy-method="destory">
+		<property name="bpmEmf" ref="bpmEmf" />
+		<property name="bpmTxManager" ref="bpmTxManager" />
+		<property name="cache" ref="processInstanceBOCache" />
+	</bean>
+	
+	<bean id="bpmService" class="com.sinosoft.one.bpm.service.spring.BpmServiceSpringImpl">
+		<property name="cache" ref="processInstanceBOCache" />
+		<property name="bpmServiceSupport" ref="bpmServiceSupport" />
 	</bean>
 </beans>

@@ -9,7 +9,10 @@
   	<module>authority</module>
 	<module>util</module>
 	<module>bpm</module>
+	<module>rule</module>
 	<module>log</module>
 	<module>log4jdbc</module>
+	<module>sqlparser</module>
+	<module>mvcUIPlugin</module>
   </modules>
 </project>

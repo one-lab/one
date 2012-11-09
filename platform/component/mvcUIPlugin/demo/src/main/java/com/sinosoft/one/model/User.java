@@ -14,10 +14,12 @@ public class User {
     public User() {
 
     }
-    public User(String loginName,String password){
+
+    public User(String loginName, String password) {
         this.loginName = loginName;
         this.password = password;
     }
+
     public String getPassword() {
         return password;
     }

@@ -37,5 +37,5 @@
         </property>
     </bean>
     <!-- 添加邮件功能配置 end by kylin-->
-
+	<import resource="../application_cxf.xml"/>
 </beans>

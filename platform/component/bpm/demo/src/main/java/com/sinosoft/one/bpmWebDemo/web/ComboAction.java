@@ -125,7 +125,8 @@ public class ComboAction extends Struts2Action {
 	}
 	
 	public String showImage() {
-		String s = JbpmAPIUtil.getImageInfoes("comboProcess", combo.getComboCode(), this.getRequest().getContextPath() + "/process-images/ComboProcess-image.png");
+		String contextPath = this.getRequest().getContextPath();
+		String s = JbpmAPIUtil.getImageInfoes("comboProcess", combo.getComboCode(), contextPath + "/process-images/ComboProcess-image.png", contextPath);
 		this.renderHtml(s);
 		return NONE;
 	}

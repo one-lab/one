@@ -22,7 +22,7 @@ public class LoginController {
 
     @Post("/login/userLogin")
     public String loginPost(Invocation inv) {
-            return "r:account/user/login";
+        return "r:account/user/login";
     }
 
 }
