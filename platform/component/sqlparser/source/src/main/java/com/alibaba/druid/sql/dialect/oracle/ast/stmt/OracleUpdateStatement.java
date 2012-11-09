@@ -56,7 +56,7 @@ public class OracleUpdateStatement extends SQLUpdateStatement implements OracleS
         this.returningInto = returningInto;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof OracleASTVisitor) {
             accept0((OracleASTVisitor) visitor);

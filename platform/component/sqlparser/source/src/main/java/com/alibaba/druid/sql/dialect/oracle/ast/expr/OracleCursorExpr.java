@@ -43,7 +43,7 @@ public class OracleCursorExpr extends SQLExprImpl implements OracleExpr {
         this.query = query;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }
@@ -54,7 +54,7 @@ public class OracleCursorExpr extends SQLExprImpl implements OracleExpr {
         }
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -62,7 +62,7 @@ public class OracleCursorExpr extends SQLExprImpl implements OracleExpr {
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

@@ -57,13 +57,13 @@ public class JakartaCommonsLoggingImpl implements com.alibaba.druid.support.logg
         warnCount++;
     }
 
-    @Override
+
     public void warn(String s, Throwable e) {
         log.warn(s, e);
         warnCount++;
     }
 
-    @Override
+
     public int getWarnCount() {
         return warnCount;
     }
@@ -72,30 +72,30 @@ public class JakartaCommonsLoggingImpl implements com.alibaba.druid.support.logg
         return errorCount;
     }
 
-    @Override
+
     public void resetStat() {
         errorCount = 0;
         warnCount = 0;
         infoCount = 0;
     }
 
-    @Override
+
     public boolean isInfoEnabled() {
         return log.isInfoEnabled();
     }
 
-    @Override
+
     public void info(String msg) {
         log.info(msg);
         infoCount++;
     }
     
-    @Override
+
     public int getInfoCount() {
         return infoCount;
     }
 
-    @Override
+
     public boolean isWarnEnabled() {
         return log.isWarnEnabled();
     }

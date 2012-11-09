@@ -36,7 +36,7 @@ public class SQLServerSelectQueryBlock extends SQLSelectQueryBlock {
         this.top = top;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         accept0((SQLServerASTVisitor) visitor);
     }

@@ -77,7 +77,7 @@ public class PGDeleteStatement extends SQLDeleteStatement implements PGSQLStatem
         accept0((PGASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(PGASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, with);

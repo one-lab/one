@@ -34,7 +34,7 @@ public class MySqlUnionQuery extends SQLUnionQuery implements MySqlStatement {
         this.limit = limit;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);
@@ -43,7 +43,7 @@ public class MySqlUnionQuery extends SQLUnionQuery implements MySqlStatement {
         }
     }
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, getLeft());

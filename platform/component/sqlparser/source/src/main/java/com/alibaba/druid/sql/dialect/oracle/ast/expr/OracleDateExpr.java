@@ -38,7 +38,7 @@ public class OracleDateExpr extends SQLExprImpl implements SQLLiteralExpr, Oracl
         this.literal = literal;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }
@@ -48,7 +48,7 @@ public class OracleDateExpr extends SQLExprImpl implements SQLLiteralExpr, Oracl
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -56,7 +56,7 @@ public class OracleDateExpr extends SQLExprImpl implements SQLLiteralExpr, Oracl
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

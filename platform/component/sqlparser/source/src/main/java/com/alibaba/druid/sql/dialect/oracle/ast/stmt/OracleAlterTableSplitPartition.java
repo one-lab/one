@@ -35,7 +35,7 @@ public class OracleAlterTableSplitPartition extends OracleAlterTableItem {
 
     private UpdateIndexesClause            updateIndexes    = null;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, name);
@@ -94,7 +94,7 @@ public class OracleAlterTableSplitPartition extends OracleAlterTableItem {
 
         private List<SQLObject>   segmentAttributeItems = new ArrayList<SQLObject>();
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, partition);
@@ -134,7 +134,7 @@ public class OracleAlterTableSplitPartition extends OracleAlterTableItem {
             this.tablespace = tablespace;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, tablespace);
@@ -156,7 +156,7 @@ public class OracleAlterTableSplitPartition extends OracleAlterTableItem {
         private static final long serialVersionUID = 1L;
         private List<SQLObject>   items            = new ArrayList<SQLObject>();
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, items);

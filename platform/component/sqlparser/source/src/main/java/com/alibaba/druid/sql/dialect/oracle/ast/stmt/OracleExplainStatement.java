@@ -28,7 +28,7 @@ public class OracleExplainStatement extends OracleStatementImpl {
     private SQLExpr           into;
     private SQLStatement      forStatement;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, statementId);

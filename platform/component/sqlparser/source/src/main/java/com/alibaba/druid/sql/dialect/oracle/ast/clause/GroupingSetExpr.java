@@ -32,7 +32,7 @@ public class GroupingSetExpr extends SQLExprImpl {
         return parameters;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         accept0((OracleASTVisitor) visitor);
     }
@@ -44,7 +44,7 @@ public class GroupingSetExpr extends SQLExprImpl {
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -52,7 +52,7 @@ public class GroupingSetExpr extends SQLExprImpl {
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

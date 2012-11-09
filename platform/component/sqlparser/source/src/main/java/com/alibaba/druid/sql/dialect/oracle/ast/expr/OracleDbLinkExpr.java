@@ -57,7 +57,7 @@ public class OracleDbLinkExpr extends SQLExprImpl implements SQLName, OracleExpr
         buf.append(this.dbLink);
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }
@@ -70,7 +70,7 @@ public class OracleDbLinkExpr extends SQLExprImpl implements SQLName, OracleExpr
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -79,7 +79,7 @@ public class OracleDbLinkExpr extends SQLExprImpl implements SQLName, OracleExpr
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

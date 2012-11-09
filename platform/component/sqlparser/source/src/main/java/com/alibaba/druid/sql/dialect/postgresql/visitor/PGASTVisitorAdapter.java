@@ -34,158 +34,158 @@ import com.alibaba.druid.sql.visitor.SQLASTVisitorAdapter;
 
 public class PGASTVisitorAdapter extends SQLASTVisitorAdapter implements PGASTVisitor {
 
-    @Override
+
     public void endVisit(WindowClause x) {
 
     }
 
-    @Override
+
     public boolean visit(WindowClause x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(FetchClause x) {
 
     }
 
-    @Override
+
     public boolean visit(FetchClause x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(ForClause x) {
 
     }
 
-    @Override
+
     public boolean visit(ForClause x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(PGWithQuery x) {
 
     }
 
-    @Override
+
     public boolean visit(PGWithQuery x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(PGWithClause x) {
 
     }
 
-    @Override
+
     public boolean visit(PGWithClause x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(PGTruncateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGTruncateStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(PGDeleteStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGDeleteStatement x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(PGInsertStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGInsertStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(PGSelectStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGSelectStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(PGUpdateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGUpdateStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(PGSelectQueryBlock x) {
 
     }
 
-    @Override
+
     public boolean visit(PGSelectQueryBlock x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(PGAggregateExpr x) {
     }
 
-    @Override
+
     public boolean visit(PGAggregateExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(PGAnalytic x) {
     }
 
-    @Override
+
     public boolean visit(PGAnalytic x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(PGParameter x) {
 
     }
 
-    @Override
+
     public boolean visit(PGParameter x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(PGFunctionTableSource x) {
 
     }
 
-    @Override
+
     public boolean visit(PGFunctionTableSource x) {
         return true;
     }

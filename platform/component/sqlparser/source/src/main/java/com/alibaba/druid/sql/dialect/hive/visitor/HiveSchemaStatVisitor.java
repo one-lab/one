@@ -23,37 +23,37 @@ import com.alibaba.druid.util.JdbcUtils;
 
 public class HiveSchemaStatVisitor extends SchemaStatVisitor implements HiveASTVisitor {
 
-    @Override
+
     public String getDbType() {
         return JdbcUtils.HIVE;
     }
     
-    @Override
+
     public void endVisit(HiveCreateTableStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(HiveCreateTableStatement x) {
         return visit((SQLCreateTableStatement) x);
     }
 
-    @Override
+
     public void endVisit(HiveCreateTableStatement.PartitionedBy x) {
 
     }
 
-    @Override
+
     public boolean visit(HiveCreateTableStatement.PartitionedBy x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(HiveShowTablesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(HiveShowTablesStatement x) {
         return false;
     }

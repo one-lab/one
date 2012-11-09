@@ -32,7 +32,7 @@ public class SQLReleaseSavePointStatement extends SQLStatementImpl {
         this.name = name;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, name);

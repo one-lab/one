@@ -43,7 +43,7 @@ public class SQLSetStatement extends SQLStatementImpl {
         this.items = items;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.items);

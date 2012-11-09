@@ -35,7 +35,7 @@ public class OracleRangeExpr extends OracleSQLObjectImpl implements SQLExpr {
         this.upBound = upBound;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, lowBound);

@@ -29,7 +29,7 @@ public class OracleStorageClause extends OracleSQLObjectImpl {
     private SQLExpr           bufferPool;
     private SQLExpr           objno;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, initial);

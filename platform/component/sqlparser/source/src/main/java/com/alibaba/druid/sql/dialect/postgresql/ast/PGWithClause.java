@@ -41,7 +41,7 @@ public class PGWithClause extends PGSQLObjectImpl {
 		this.withQuery = withQuery;
 	}
 
-	@Override
+
 	public void accept0(PGASTVisitor visitor) {
 		if (visitor.visit(this)) {
 			acceptChild(visitor, withQuery);

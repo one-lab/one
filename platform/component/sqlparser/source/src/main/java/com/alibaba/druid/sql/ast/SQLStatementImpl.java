@@ -29,7 +29,7 @@ public abstract class SQLStatementImpl extends SQLObjectImpl implements SQLState
         buf.append(super.toString());
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         throw new UnsupportedOperationException(this.getClass().getName());
     }

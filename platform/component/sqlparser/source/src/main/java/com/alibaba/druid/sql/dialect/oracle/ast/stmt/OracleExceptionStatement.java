@@ -58,7 +58,7 @@ public class OracleExceptionStatement extends OracleStatementImpl implements Ora
             this.statements = statements;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, when);
@@ -69,7 +69,7 @@ public class OracleExceptionStatement extends OracleStatementImpl implements Ora
 
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, items);

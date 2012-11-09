@@ -44,48 +44,48 @@ import com.alibaba.druid.util.JdbcUtils;
 
 public class PGSchemaStatVisitor extends SchemaStatVisitor implements PGASTVisitor {
 
-    @Override
+
     public String getDbType() {
         return JdbcUtils.POSTGRESQL;
     }
     
-    @Override
+
     public void endVisit(WindowClause x) {
 
     }
 
-    @Override
+
     public boolean visit(WindowClause x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(FetchClause x) {
 
     }
 
-    @Override
+
     public boolean visit(FetchClause x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(ForClause x) {
 
     }
 
-    @Override
+
     public boolean visit(ForClause x) {
 
         return true;
     }
 
-    @Override
+
     public void endVisit(PGWithQuery x) {
 
     }
 
-    @Override
+
     public boolean visit(PGWithQuery x) {
         Map<String, String> aliasMap = getAliasMap();
         if (aliasMap != null) {
@@ -103,33 +103,33 @@ public class PGSchemaStatVisitor extends SchemaStatVisitor implements PGASTVisit
         return false;
     }
 
-    @Override
+
     public void endVisit(PGWithClause x) {
 
     }
 
-    @Override
+
     public boolean visit(PGWithClause x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(PGTruncateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGTruncateStatement x) {
         this.visit((SQLTruncateStatement) x);
         return false;
     }
 
-    @Override
+
     public void endVisit(PGDeleteStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGDeleteStatement x) {
         if (x.getWith() != null) {
             x.getWith().accept(this);
@@ -163,12 +163,12 @@ public class PGSchemaStatVisitor extends SchemaStatVisitor implements PGASTVisit
         return false;
     }
 
-    @Override
+
     public void endVisit(PGInsertStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGInsertStatement x) {
         setAliasMap();
 
@@ -204,12 +204,12 @@ public class PGSchemaStatVisitor extends SchemaStatVisitor implements PGASTVisit
         return false;
     }
 
-    @Override
+
     public void endVisit(PGSelectStatement x) {
 
     }
     
-    @Override
+
     public boolean visit(PGSelectStatement x) {
         if (x.getWith() != null) {
             x.getWith().accept(this);
@@ -218,12 +218,12 @@ public class PGSchemaStatVisitor extends SchemaStatVisitor implements PGASTVisit
         return visit((SQLSelectStatement) x);
     }
 
-    @Override
+
     public void endVisit(PGUpdateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGUpdateStatement x) {
         Map<String, String> oldAliasMap = getAliasMap();
 
@@ -250,52 +250,52 @@ public class PGSchemaStatVisitor extends SchemaStatVisitor implements PGASTVisit
         return false;
     }
 
-    @Override
+
     public void endVisit(PGSelectQueryBlock x) {
         
     }
 
-    @Override
+
     public boolean visit(PGSelectQueryBlock x) {
         return this.visit((SQLSelectQueryBlock) x);
     }
 
-	@Override
+
 	public void endVisit(PGAggregateExpr x) {
 		
 	}
 
-	@Override
+
 	public boolean visit(PGAggregateExpr x) {
 		return false;
 	}
 
-	@Override
+
 	public void endVisit(PGAnalytic x) {
 		
 	}
 
-	@Override
+
 	public boolean visit(PGAnalytic x) {
 		return false;
 	}
 
-    @Override
+
     public void endVisit(PGParameter x) {
         
     }
 
-    @Override
+
     public boolean visit(PGParameter x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(PGFunctionTableSource x) {
         
     }
 
-    @Override
+
     public boolean visit(PGFunctionTableSource x) {
         return true;
     }

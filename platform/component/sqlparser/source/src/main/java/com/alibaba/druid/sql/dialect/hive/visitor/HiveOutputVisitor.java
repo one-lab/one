@@ -27,12 +27,12 @@ public class HiveOutputVisitor extends SQLASTOutputVisitor implements HiveASTVis
         super(appender);
     }
 
-    @Override
+
     public void endVisit(HiveCreateTableStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(HiveCreateTableStatement x) {
         visit((SQLCreateTableStatement) x);
         
@@ -43,12 +43,12 @@ public class HiveOutputVisitor extends SQLASTOutputVisitor implements HiveASTVis
         return false;
     }
 
-    @Override
+
     public void endVisit(PartitionedBy x) {
         
     }
 
-    @Override
+
     public boolean visit(PartitionedBy x) {
         print("PARTITIONED BY (");
         print(x.getName());
@@ -59,12 +59,12 @@ public class HiveOutputVisitor extends SQLASTOutputVisitor implements HiveASTVis
         return false;
     }
 
-    @Override
+
     public void endVisit(HiveShowTablesStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(HiveShowTablesStatement x) {
         print("SHOW TABLES");
         if (x.getPattern() != null) {

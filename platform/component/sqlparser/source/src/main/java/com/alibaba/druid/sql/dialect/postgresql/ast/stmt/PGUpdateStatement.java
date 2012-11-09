@@ -73,7 +73,7 @@ public class PGUpdateStatement extends SQLUpdateStatement implements PGSQLStatem
         accept0((PGASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(PGASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, with);

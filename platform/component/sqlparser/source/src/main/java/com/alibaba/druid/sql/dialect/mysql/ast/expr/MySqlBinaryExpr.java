@@ -42,7 +42,7 @@ public class MySqlBinaryExpr extends MySqlExprImpl implements MySqlExpr, SQLLite
         this.value = value;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((MySqlASTVisitor) visitor);
     }
@@ -59,7 +59,7 @@ public class MySqlBinaryExpr extends MySqlExprImpl implements MySqlExpr, SQLLite
         buf.append('\'');
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -67,7 +67,7 @@ public class MySqlBinaryExpr extends MySqlExprImpl implements MySqlExpr, SQLLite
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

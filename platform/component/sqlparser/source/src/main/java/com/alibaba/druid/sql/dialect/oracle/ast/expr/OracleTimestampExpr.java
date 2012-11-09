@@ -46,7 +46,7 @@ public class OracleTimestampExpr extends SQLExprImpl implements SQLLiteralExpr, 
         this.timeZone = timeZone;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }
@@ -57,7 +57,7 @@ public class OracleTimestampExpr extends SQLExprImpl implements SQLLiteralExpr, 
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -66,7 +66,7 @@ public class OracleTimestampExpr extends SQLExprImpl implements SQLLiteralExpr, 
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

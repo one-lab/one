@@ -34,7 +34,7 @@ public class OracleBinaryDoubleExpr extends SQLNumericLiteralExpr implements Ora
         this.value = value;
     }
 
-    @Override
+
     public Number getNumber() {
         return value;
     }
@@ -47,7 +47,7 @@ public class OracleBinaryDoubleExpr extends SQLNumericLiteralExpr implements Ora
         this.value = value;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         accept0((OracleASTVisitor) visitor);
     }
@@ -57,7 +57,7 @@ public class OracleBinaryDoubleExpr extends SQLNumericLiteralExpr implements Ora
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -65,7 +65,7 @@ public class OracleBinaryDoubleExpr extends SQLNumericLiteralExpr implements Ora
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -87,7 +87,7 @@ public class OracleBinaryDoubleExpr extends SQLNumericLiteralExpr implements Ora
         return true;
     }
 
-    @Override
+
     public void setNumber(Number number) {
         if (number == null) {
             this.setValue(null);

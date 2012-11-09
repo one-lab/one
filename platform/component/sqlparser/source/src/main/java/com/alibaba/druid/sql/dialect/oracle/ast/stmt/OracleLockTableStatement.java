@@ -60,7 +60,7 @@ public class OracleLockTableStatement extends OracleStatementImpl {
         this.lockMode = lockMode;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, table);

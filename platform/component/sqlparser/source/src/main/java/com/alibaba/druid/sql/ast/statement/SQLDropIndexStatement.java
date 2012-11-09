@@ -42,7 +42,7 @@ public class SQLDropIndexStatement extends SQLStatementImpl implements SQLDDLSta
         this.tableName = tableName;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, indexName);

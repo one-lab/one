@@ -52,7 +52,7 @@ public class SQLUpdateSetItem extends SQLObjectImpl {
         value.output(buf);
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, column);

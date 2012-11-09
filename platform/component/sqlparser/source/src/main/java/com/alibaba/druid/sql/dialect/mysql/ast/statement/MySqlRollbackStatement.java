@@ -49,7 +49,7 @@ public class MySqlRollbackStatement extends SQLRollbackStatement implements MySq
         this.release = release;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);
@@ -58,7 +58,7 @@ public class MySqlRollbackStatement extends SQLRollbackStatement implements MySq
         }
     }
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, getTo());

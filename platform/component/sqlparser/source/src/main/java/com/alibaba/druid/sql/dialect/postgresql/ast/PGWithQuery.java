@@ -49,7 +49,7 @@ public class PGWithQuery extends PGSQLObjectImpl {
         return columns;
     }
 
-    @Override
+
     public void accept0(PGASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, name);

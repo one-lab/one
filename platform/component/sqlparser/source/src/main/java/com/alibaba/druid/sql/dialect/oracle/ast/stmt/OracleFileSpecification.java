@@ -34,7 +34,7 @@ public class OracleFileSpecification extends OracleSQLObjectImpl {
 
     private SQLExpr           autoExtendOn;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, fileNames);

@@ -17,11 +17,8 @@ package com.alibaba.druid.util;
 
 import java.io.Closeable;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Driver;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -39,8 +36,6 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import com.alibaba.druid.support.logging.Log;
-import com.alibaba.druid.support.logging.LogFactory;
 
 /**
  * @author wenshao<szujobs@hotmail.com>
@@ -84,8 +79,6 @@ public final class JdbcUtils {
 
     private static final String     H2_DRIVER         = "org.h2.Driver";
 
-    private final static Log        LOG               = LogFactory.getLog(JdbcUtils.class);
-
     private static final Properties driverUrlMapping  = new Properties();
 
     static {
@@ -106,7 +99,8 @@ public final class JdbcUtils {
                 driverUrlMapping.putAll(property);
             }
         } catch (Exception e) {
-            LOG.error("load druid-driver.properties error", e);
+            e.printStackTrace();
+//            LOG.error("load druid-driver.properties error", e);
         }
     }
 
@@ -115,7 +109,8 @@ public final class JdbcUtils {
             try {
                 x.close();
             } catch (Exception e) {
-                LOG.error("close connection error", e);
+                e.printStackTrace();
+//                LOG.error("close connection error", e);
             }
         }
     }
@@ -125,7 +120,7 @@ public final class JdbcUtils {
             try {
                 x.close();
             } catch (Exception e) {
-                LOG.error("close statement error", e);
+                e.printStackTrace();
             }
         }
     }
@@ -135,7 +130,7 @@ public final class JdbcUtils {
             try {
                 x.close();
             } catch (Exception e) {
-                LOG.error("close resultset error", e);
+                e.printStackTrace();
             }
         }
     }
@@ -145,122 +140,122 @@ public final class JdbcUtils {
             try {
                 x.close();
             } catch (Exception e) {
-                LOG.error("close error", e);
+                e.printStackTrace();
             }
         }
     }
 
-    public final static void printResultSet(ResultSet rs) throws SQLException {
-        printResultSet(rs, System.out);
-    }
+//    public final static void printResultSet(ResultSet rs) throws SQLException {
+//        printResultSet(rs, System.out);
+//    }
 
-    public final static void printResultSet(ResultSet rs, PrintStream out) throws SQLException {
-        ResultSetMetaData metadata = rs.getMetaData();
-        int columnCount = metadata.getColumnCount();
-        for (int columnIndex = 1; columnIndex <= columnCount; ++columnIndex) {
-            if (columnIndex != 1) {
-                out.print('\t');
-            }
-            out.print(metadata.getColumnName(columnIndex));
-        }
-
-        out.println();
-
-        while (rs.next()) {
-
-            for (int columnIndex = 1; columnIndex <= columnCount; ++columnIndex) {
-                if (columnIndex != 1) {
-                    out.print('\t');
-                }
-
-                int type = metadata.getColumnType(columnIndex);
-
-                if (type == Types.VARCHAR || type == Types.CHAR || type == Types.NVARCHAR || type == Types.NCHAR) {
-                    out.print(rs.getString(columnIndex));
-                } else if (type == Types.DATE) {
-                    Date date = rs.getDate(columnIndex);
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(date.toString());
-                    }
-                } else if (type == Types.BIT) {
-                    boolean value = rs.getBoolean(columnIndex);
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(Boolean.toString(value));
-                    }
-                } else if (type == Types.BOOLEAN) {
-                    boolean value = rs.getBoolean(columnIndex);
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(Boolean.toString(value));
-                    }
-                } else if (type == Types.TINYINT) {
-                    byte value = rs.getByte(columnIndex);
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(Byte.toString(value));
-                    }
-                } else if (type == Types.SMALLINT) {
-                    short value = rs.getShort(columnIndex);
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(Short.toString(value));
-                    }
-                } else if (type == Types.INTEGER) {
-                    int value = rs.getInt(columnIndex);
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(Integer.toString(value));
-                    }
-                } else if (type == Types.BIGINT) {
-                    long value = rs.getLong(columnIndex);
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(Long.toString(value));
-                    }
-                } else if (type == Types.TIMESTAMP) {
-                    out.print(String.valueOf(rs.getTimestamp(columnIndex)));
-                } else if (type == Types.DECIMAL) {
-                    out.print(String.valueOf(rs.getBigDecimal(columnIndex)));
-                } else if (type == Types.CLOB) {
-                    out.print(String.valueOf(rs.getString(columnIndex)));
-                } else if (type == Types.JAVA_OBJECT) {
-                    Object objec = rs.getObject(columnIndex);
-
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(String.valueOf(objec));
-                    }
-                } else if (type == Types.LONGVARCHAR) {
-                    Object objec = rs.getString(columnIndex);
-
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(String.valueOf(objec));
-                    }
-                } else {
-                    Object objec = rs.getObject(columnIndex);
-
-                    if (rs.wasNull()) {
-                        out.print("null");
-                    } else {
-                        out.print(String.valueOf(objec));
-                    }
-                }
-            }
-            out.println();
-        }
-    }
+//    public final static void printResultSet(ResultSet rs, PrintStream out) throws SQLException {
+//        ResultSetMetaData metadata = rs.getMetaData();
+//        int columnCount = metadata.getColumnCount();
+//        for (int columnIndex = 1; columnIndex <= columnCount; ++columnIndex) {
+//            if (columnIndex != 1) {
+//                out.print('\t');
+//            }
+//            out.print(metadata.getColumnName(columnIndex));
+//        }
+//
+//        out.println();
+//
+//        while (rs.next()) {
+//
+//            for (int columnIndex = 1; columnIndex <= columnCount; ++columnIndex) {
+//                if (columnIndex != 1) {
+//                    out.print('\t');
+//                }
+//
+//                int type = metadata.getColumnType(columnIndex);
+//
+//                if (type == Types.VARCHAR || type == Types.CHAR || type == Types.NVARCHAR || type == Types.NCHAR) {
+//                    out.print(rs.getString(columnIndex));
+//                } else if (type == Types.DATE) {
+//                    Date date = rs.getDate(columnIndex);
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(date.toString());
+//                    }
+//                } else if (type == Types.BIT) {
+//                    boolean value = rs.getBoolean(columnIndex);
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(Boolean.toString(value));
+//                    }
+//                } else if (type == Types.BOOLEAN) {
+//                    boolean value = rs.getBoolean(columnIndex);
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(Boolean.toString(value));
+//                    }
+//                } else if (type == Types.TINYINT) {
+//                    byte value = rs.getByte(columnIndex);
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(Byte.toString(value));
+//                    }
+//                } else if (type == Types.SMALLINT) {
+//                    short value = rs.getShort(columnIndex);
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(Short.toString(value));
+//                    }
+//                } else if (type == Types.INTEGER) {
+//                    int value = rs.getInt(columnIndex);
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(Integer.toString(value));
+//                    }
+//                } else if (type == Types.BIGINT) {
+//                    long value = rs.getLong(columnIndex);
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(Long.toString(value));
+//                    }
+//                } else if (type == Types.TIMESTAMP) {
+//                    out.print(String.valueOf(rs.getTimestamp(columnIndex)));
+//                } else if (type == Types.DECIMAL) {
+//                    out.print(String.valueOf(rs.getBigDecimal(columnIndex)));
+//                } else if (type == Types.CLOB) {
+//                    out.print(String.valueOf(rs.getString(columnIndex)));
+//                } else if (type == Types.JAVA_OBJECT) {
+//                    Object objec = rs.getObject(columnIndex);
+//
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(String.valueOf(objec));
+//                    }
+//                } else if (type == Types.LONGVARCHAR) {
+//                    Object objec = rs.getString(columnIndex);
+//
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(String.valueOf(objec));
+//                    }
+//                } else {
+//                    Object objec = rs.getObject(columnIndex);
+//
+//                    if (rs.wasNull()) {
+//                        out.print("null");
+//                    } else {
+//                        out.print(String.valueOf(objec));
+//                    }
+//                }
+//            }
+//            out.println();
+//        }
+//    }
 
     public static String getTypeName(int sqlType) {
         switch (sqlType) {
@@ -312,17 +307,17 @@ public final class JdbcUtils {
             case Types.JAVA_OBJECT:
                 return "JAVA_OBJECT";
 
-            case Types.LONGNVARCHAR:
-                return "LONGNVARCHAR";
+//            case Types.LONGNVARCHAR:
+//                return "LONGNVARCHAR";
 
             case Types.LONGVARBINARY:
                 return "LONGVARBINARY";
+//
+//            case Types.NCHAR:
+//                return "NCHAR";
 
-            case Types.NCHAR:
-                return "NCHAR";
-
-            case Types.NCLOB:
-                return "NCLOB";
+//            case Types.NCLOB:
+//                return "NCLOB";
 
             case Types.NULL:
                 return "NULL";
@@ -330,8 +325,8 @@ public final class JdbcUtils {
             case Types.NUMERIC:
                 return "NUMERIC";
 
-            case Types.NVARCHAR:
-                return "NVARCHAR";
+//            case Types.NVARCHAR:
+//                return "NVARCHAR";
 
             case Types.REAL:
                 return "REAL";
@@ -339,14 +334,14 @@ public final class JdbcUtils {
             case Types.REF:
                 return "REF";
 
-            case Types.ROWID:
-                return "ROWID";
+//            case Types.ROWID:
+//                return "ROWID";
 
             case Types.SMALLINT:
                 return "SMALLINT";
 
-            case Types.SQLXML:
-                return "SQLXML";
+//            case Types.SQLXML:
+//                return "SQLXML";
 
             case Types.STRUCT:
                 return "STRUCT";
@@ -434,7 +429,7 @@ public final class JdbcUtils {
         }
     }
 
-    public static String getDbType(String rawUrl, String driverClassName) {
+    public static String getDbType(String rawUrl) {
         if (rawUrl == null) {
             return null;
         }
@@ -497,44 +492,44 @@ public final class JdbcUtils {
             return null;
         }
     }
-    
-    public static Driver createDriver(String driverClassName) throws SQLException {
-        return createDriver(null, driverClassName);
-    }
 
-    public static Driver createDriver(ClassLoader classLoader, String driverClassName) throws SQLException {
-        if (classLoader != null) {
-            try {
-                return (Driver) classLoader.loadClass(driverClassName).newInstance();
-            } catch (IllegalAccessException e) {
-                throw new SQLException(e.getMessage(), e);
-            } catch (InstantiationException e) {
-                throw new SQLException(e.getMessage(), e);
-            } catch (ClassNotFoundException e) {
-                throw new SQLException(e.getMessage(), e);
-            }
-        }
-        
-        try {
-            return (Driver) Class.forName(driverClassName).newInstance();
-        } catch (IllegalAccessException e) {
-            throw new SQLException(e.getMessage(), e);
-        } catch (InstantiationException e) {
-            throw new SQLException(e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            // skip
-        }
+//    public static Driver createDriver(String driverClassName) throws SQLException {
+//        return createDriver(null, driverClassName);
+//    }
 
-        try {
-            return (Driver) Thread.currentThread().getContextClassLoader().loadClass(driverClassName).newInstance();
-        } catch (IllegalAccessException e) {
-            throw new SQLException(e.getMessage(), e);
-        } catch (InstantiationException e) {
-            throw new SQLException(e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            throw new SQLException(e.getMessage(), e);
-        }
-    }
+//    public static Driver createDriver(ClassLoader classLoader, String driverClassName) throws SQLException {
+//        if (classLoader != null) {
+//            try {
+//                return (Driver) classLoader.loadClass(driverClassName).newInstance();
+//            } catch (IllegalAccessException e) {
+//                throw new SQLException(e.getMessage(), e);
+//            } catch (InstantiationException e) {
+//                throw new SQLException(e.getMessage(), e);
+//            } catch (ClassNotFoundException e) {
+//                throw new SQLException(e.getMessage(), e);
+//            }
+//        }
+//        
+//        try {
+//            return (Driver) Class.forName(driverClassName).newInstance();
+//        } catch (IllegalAccessException e) {
+//            throw new SQLException(e.getMessage(), e);
+//        } catch (InstantiationException e) {
+//            throw new SQLException(e.getMessage(), e);
+//        } catch (ClassNotFoundException e) {
+//            // skip
+//        }
+//
+//        try {
+//            return (Driver) Thread.currentThread().getContextClassLoader().loadClass(driverClassName).newInstance();
+//        } catch (IllegalAccessException e) {
+//            throw new SQLException(e.getMessage(), e);
+//        } catch (InstantiationException e) {
+//            throw new SQLException(e.getMessage(), e);
+//        } catch (ClassNotFoundException e) {
+//            throw new SQLException(e.getMessage(), e);
+//        }
+//    }
 
     public static int executeUpdate(DataSource dataSource, String sql, Object... parameters) throws SQLException {
         return executeUpdate(dataSource, sql, Arrays.asList(parameters));
@@ -596,12 +591,12 @@ public final class JdbcUtils {
     }
 
     public static List<Map<String, Object>> executeQuery(DataSource dataSource, String sql, Object... parameters)
-                                                                                                                 throws SQLException {
+            throws SQLException {
         return executeQuery(dataSource, sql, Arrays.asList(parameters));
     }
 
     public static List<Map<String, Object>> executeQuery(DataSource dataSource, String sql, List<Object> parameters)
-                                                                                                                    throws SQLException {
+            throws SQLException {
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
@@ -612,7 +607,7 @@ public final class JdbcUtils {
     }
 
     public static List<Map<String, Object>> executeQuery(Connection conn, String sql, List<Object> parameters)
-                                                                                                              throws SQLException {
+            throws SQLException {
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
 
         PreparedStatement stmt = null;
@@ -676,7 +671,7 @@ public final class JdbcUtils {
     }
 
     public static void insertToTable(DataSource dataSource, String tableName, Map<String, Object> data)
-                                                                                                       throws SQLException {
+            throws SQLException {
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
@@ -694,9 +689,9 @@ public final class JdbcUtils {
 
     public static String makeInsertToTableSql(String tableName, Collection<String> names) {
         StringBuilder sql = new StringBuilder() //
-        .append("insert into ") //
-        .append(tableName) //
-        .append("("); //
+                .append("insert into ") //
+                .append(tableName) //
+                .append("("); //
 
         int nameCount = 0;
         for (String name : names) {

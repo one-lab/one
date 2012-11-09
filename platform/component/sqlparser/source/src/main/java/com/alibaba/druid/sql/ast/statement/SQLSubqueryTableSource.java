@@ -49,7 +49,7 @@ public class SQLSubqueryTableSource extends SQLTableSourceImpl {
         this.select = select;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, select);

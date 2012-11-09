@@ -404,281 +404,281 @@ public class SQLASTVisitorAdapter implements SQLASTVisitor {
     public void endVisit(NotNullConstraint x) {
     }
 
-    @Override
+
     public void endVisit(SQLMethodInvokeExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLMethodInvokeExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLUnionQuery x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLUnionQuery x) {
         return true;
     }
 
-    @Override
+
     public boolean visit(SQLUnaryExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLUnaryExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLHexExpr x) {
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLHexExpr x) {
 
     }
 
-    @Override
+
     public void endVisit(SQLSetStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLSetStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLAssignItem x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLAssignItem x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLCallStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLCallStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLJoinTableSource x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLJoinTableSource x) {
         return true;
     }
 
-    @Override
+
     public boolean visit(ValuesClause x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(ValuesClause x) {
 
     }
 
-    @Override
+
     public void endVisit(SQLSomeExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLSomeExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLAnyExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLAnyExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLAllExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLAllExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLInSubQueryExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLInSubQueryExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLListExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLListExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLSubqueryTableSource x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLSubqueryTableSource x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLTruncateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLTruncateStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLDefaultExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLDefaultExpr x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLCommentStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLCommentStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLUseStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLUseStatement x) {
         return true;
     }
 
-    @Override
+
     public boolean visit(SQLAlterTableAddColumn x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLAlterTableAddColumn x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLAlterTableDropColumnItem x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLAlterTableDropColumnItem x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLDropIndexStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLDropIndexStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLDropViewStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLDropViewStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLSavePointStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLSavePointStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLRollbackStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLRollbackStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLReleaseSavePointStatement x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLReleaseSavePointStatement x) {
     }
 
-    @Override
+
     public boolean visit(SQLCommentHint x) {
         return true;
     }
 
-    @Override
+
     public void endVisit(SQLCommentHint x) {
 
     }
 
-    @Override
+
     public void endVisit(SQLCreateDatabaseStatement x) {
         
     }
 
-    @Override
+
     public boolean visit(SQLCreateDatabaseStatement x) {
         return true;
     }

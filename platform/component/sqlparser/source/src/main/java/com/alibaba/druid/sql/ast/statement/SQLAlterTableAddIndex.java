@@ -32,7 +32,7 @@ public class SQLAlterTableAddIndex extends SQLObjectImpl implements SQLAlterTabl
 
     private String                     type;
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
 
     }

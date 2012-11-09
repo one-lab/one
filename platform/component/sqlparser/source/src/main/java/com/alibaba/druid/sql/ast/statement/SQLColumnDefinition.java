@@ -75,7 +75,7 @@ public class SQLColumnDefinition extends SQLObjectImpl implements SQLTableElemen
         return constaints;
     }
 
-    @Override
+
     public void output(StringBuffer buf) {
         name.output(buf);
         buf.append(' ');
@@ -86,7 +86,7 @@ public class SQLColumnDefinition extends SQLObjectImpl implements SQLTableElemen
         }
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             this.acceptChild(visitor, name);

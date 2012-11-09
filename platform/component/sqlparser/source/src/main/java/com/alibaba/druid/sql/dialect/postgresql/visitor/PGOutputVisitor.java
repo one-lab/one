@@ -41,12 +41,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         super(appender);
     }
 
-    @Override
+
     public void endVisit(WindowClause x) {
 
     }
 
-    @Override
+
     public boolean visit(WindowClause x) {
         print("WINDOW ");
         x.getName().accept(this);
@@ -62,12 +62,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(FetchClause x) {
 
     }
 
-    @Override
+
     public boolean visit(FetchClause x) {
         print("FETCH ");
         if (FetchClause.Option.FIRST.equals(x.getOption())) {
@@ -80,12 +80,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(ForClause x) {
 
     }
 
-    @Override
+
     public boolean visit(ForClause x) {
         print("FOR ");
         if (ForClause.Option.UPDATE.equals(x.getOption())) {
@@ -110,12 +110,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGWithQuery x) {
 
     }
 
-    @Override
+
     public boolean visit(PGWithQuery x) {
         x.getName().accept(this);
 
@@ -138,12 +138,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGWithClause x) {
 
     }
 
-    @Override
+
     public boolean visit(PGWithClause x) {
         print("WITH");
         incrementIndent();
@@ -238,12 +238,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGTruncateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGTruncateStatement x) {
         print("TRUNCATE TABLE ");
         if (x.isOnly()) {
@@ -270,12 +270,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGDeleteStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGDeleteStatement x) {
         if (x.getWith() != null) {
             x.getWith().accept(this);
@@ -316,12 +316,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGInsertStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGInsertStatement x) {
         if (x.getWith() != null) {
             x.getWith().accept(this);
@@ -369,12 +369,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGSelectStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGSelectStatement x) {
         if (x.getWith() != null) {
             x.getWith().accept(this);
@@ -384,12 +384,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return visit((SQLSelectStatement) x);
     }
 
-    @Override
+
     public void endVisit(PGUpdateStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(PGUpdateStatement x) {
         if (x.getWith() != null) {
             x.getWith().accept(this);
@@ -435,17 +435,17 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGSelectQueryBlock x) {
 
     }
 
-    @Override
+
     public void endVisit(PGAggregateExpr x) {
 
     }
 
-    @Override
+
     public boolean visit(PGAggregateExpr x) {
         print(x.getMethodName());
         
@@ -466,12 +466,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGAnalytic x) {
 
     }
 
-    @Override
+
     public boolean visit(PGAnalytic x) {
         print(" OVER (");
         if (x.getPartitionBy().size() > 0) {
@@ -490,12 +490,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGParameter x) {
 
     }
 
-    @Override
+
     public boolean visit(PGParameter x) {
         x.getName().accept(this);
         print(" ");
@@ -505,7 +505,7 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public boolean visit(PGFunctionTableSource x) {
         x.getExpr().accept(this);
 
@@ -523,7 +523,7 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         return false;
     }
 
-    @Override
+
     public void endVisit(PGFunctionTableSource x) {
         
     }

@@ -74,7 +74,7 @@ public class OracleMultiInsertStatement extends OracleStatementImpl {
         this.subQuery = subQuery;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.entries);
@@ -109,7 +109,7 @@ public class OracleMultiInsertStatement extends OracleStatementImpl {
             this.items = items;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, items);
@@ -142,7 +142,7 @@ public class OracleMultiInsertStatement extends OracleStatementImpl {
             this.then = then;
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 acceptChild(visitor, when);
@@ -180,12 +180,12 @@ public class OracleMultiInsertStatement extends OracleStatementImpl {
             this.errorLogging = errorLogging;
         }
 
-        @Override
+
         protected void accept0(SQLASTVisitor visitor) {
             this.accept0((OracleASTVisitor) visitor);
         }
 
-        @Override
+
         public void accept0(OracleASTVisitor visitor) {
             if (visitor.visit(this)) {
                 this.acceptChild(visitor, tableSource);

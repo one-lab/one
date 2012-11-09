@@ -60,7 +60,7 @@ public class SQLDropViewStatement extends SQLStatementImpl implements SQLDDLStat
         tableSources.add(tableSource);
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             this.acceptChild(visitor, tableSources);

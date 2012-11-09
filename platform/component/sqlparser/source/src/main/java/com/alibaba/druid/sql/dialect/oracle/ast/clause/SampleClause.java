@@ -56,7 +56,7 @@ public class SampleClause extends OracleSQLObjectImpl {
         this.seedValue = seedValue;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, seedValue);

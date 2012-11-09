@@ -33,7 +33,7 @@ public class HiveShowTablesStatement extends HiveStatementImpl {
         this.pattern = pattern;
     }
 
-    @Override
+
     public void accept0(HiveASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, pattern);

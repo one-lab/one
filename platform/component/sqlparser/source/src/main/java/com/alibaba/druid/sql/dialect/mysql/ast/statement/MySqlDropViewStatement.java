@@ -27,7 +27,7 @@ public class MySqlDropViewStatement extends SQLDropViewStatement implements MySq
 
     private String            option;
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);

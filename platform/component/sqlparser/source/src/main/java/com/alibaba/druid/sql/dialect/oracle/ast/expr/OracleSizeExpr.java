@@ -36,7 +36,7 @@ public class OracleSizeExpr extends OracleSQLObjectImpl implements OracleExpr {
         this.unit = unit;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, value);

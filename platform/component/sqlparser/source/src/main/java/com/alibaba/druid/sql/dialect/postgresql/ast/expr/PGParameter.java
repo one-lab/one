@@ -43,7 +43,7 @@ public class PGParameter extends PGSQLObjectImpl {
         this.dataType = dataType;
     }
 
-    @Override
+
     public void accept0(PGASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, name);

@@ -24,7 +24,7 @@ public class OracleAlterTableRenameTo extends OracleAlterTableItem {
 
     private SQLExpr           to;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, to);

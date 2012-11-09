@@ -37,7 +37,7 @@ public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType {
         this.name = name;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.arguments);

@@ -35,7 +35,7 @@ public class MySqlAlterTableAddUnique extends SQLAlterTableAddIndex implements S
         this.using = using;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);

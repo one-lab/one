@@ -68,7 +68,7 @@ public class SQLUpdateStatement extends SQLStatementImpl {
         return items;
     }
 
-    @Override
+
     public void output(StringBuffer buf) {
         buf.append("UPDATE ");
 
@@ -88,7 +88,7 @@ public class SQLUpdateStatement extends SQLStatementImpl {
         }
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, tableSource);

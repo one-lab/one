@@ -27,7 +27,7 @@ public abstract class TransactSQLObjectImpl extends SQLObjectImpl implements Tra
 
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }

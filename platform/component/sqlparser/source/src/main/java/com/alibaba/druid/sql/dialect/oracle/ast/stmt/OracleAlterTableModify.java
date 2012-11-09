@@ -27,7 +27,7 @@ public class OracleAlterTableModify extends OracleAlterTableItem {
 
     private List<SQLColumnDefinition> columns          = new ArrayList<SQLColumnDefinition>();
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, columns);

@@ -168,7 +168,7 @@ public class MySqlSelectQueryBlock extends SQLSelectQueryBlock implements MySqlO
         this.limit = limit;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);
@@ -190,7 +190,7 @@ public class MySqlSelectQueryBlock extends SQLSelectQueryBlock implements MySqlO
         visitor.endVisit(this);
     }
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.selectList);
@@ -232,7 +232,7 @@ public class MySqlSelectQueryBlock extends SQLSelectQueryBlock implements MySqlO
             this.offset = offset;
         }
 
-        @Override
+
         protected void accept0(SQLASTVisitor visitor) {
             if (visitor instanceof MySqlASTVisitor) {
                 MySqlASTVisitor mysqlVisitor = (MySqlASTVisitor) visitor;

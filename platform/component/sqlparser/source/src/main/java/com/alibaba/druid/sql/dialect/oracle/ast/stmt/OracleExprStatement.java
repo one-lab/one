@@ -32,7 +32,7 @@ public class OracleExprStatement extends OracleStatementImpl {
         this.expr = expr;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, expr);

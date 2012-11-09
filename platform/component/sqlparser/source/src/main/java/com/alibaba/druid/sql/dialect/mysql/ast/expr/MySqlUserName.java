@@ -40,7 +40,7 @@ public class MySqlUserName extends MySqlExprImpl implements SQLName {
         this.host = host;
     }
 
-    @Override
+
     public void accept0(MySqlASTVisitor visitor) {
         visitor.visit(this);
         visitor.endVisit(this);

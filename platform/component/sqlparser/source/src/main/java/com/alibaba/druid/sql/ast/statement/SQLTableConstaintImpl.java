@@ -24,7 +24,7 @@ public class SQLTableConstaintImpl extends SQLConstaintImpl implements SQLTableC
 
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
 
     }

@@ -27,7 +27,7 @@ public class SQLAlterTableAddColumn extends SQLObjectImpl implements SQLAlterTab
 
     private List<SQLColumnDefinition> columns          = new ArrayList<SQLColumnDefinition>();
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, columns);

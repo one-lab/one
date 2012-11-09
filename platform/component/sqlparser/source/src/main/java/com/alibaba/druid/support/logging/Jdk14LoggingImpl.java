@@ -60,13 +60,13 @@ public class Jdk14LoggingImpl implements Log {
         warnCount++;
     }
 
-    @Override
+
     public void warn(String s, Throwable e) {
         log.logp(Level.WARNING, clazzName, Thread.currentThread().getStackTrace()[1].getMethodName(), s, e);
         warnCount++;
     }
 
-    @Override
+
     public int getWarnCount() {
         return warnCount;
     }
@@ -75,30 +75,30 @@ public class Jdk14LoggingImpl implements Log {
         return errorCount;
     }
 
-    @Override
+
     public void resetStat() {
         errorCount = 0;
         warnCount = 0;
         infoCount = 0;
     }
 
-    @Override
+
     public boolean isInfoEnabled() {
         return log.isLoggable(Level.INFO);
     }
 
-    @Override
+
     public void info(String msg) {
         log.logp(Level.INFO, clazzName, Thread.currentThread().getStackTrace()[1].getMethodName(), msg);
         infoCount++;
     }
 
-    @Override
+
     public int getInfoCount() {
         return infoCount;
     }
 
-    @Override
+
     public boolean isWarnEnabled() {
         return log.isLoggable(Level.WARNING);
     }

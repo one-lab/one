@@ -75,7 +75,7 @@ public class SQLDeleteStatement extends SQLStatementImpl {
         this.tableSource.setAlias(alias);
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, tableSource);

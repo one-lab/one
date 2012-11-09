@@ -46,7 +46,7 @@ public class NoLoggingImpl implements Log {
         warnCount++;
     }
 
-    @Override
+
     public void warn(String s, Throwable e) {
         warnCount++;
     }
@@ -55,29 +55,29 @@ public class NoLoggingImpl implements Log {
         return errorCount;
     }
 
-    @Override
+
     public int getWarnCount() {
         return warnCount;
     }
 
-    @Override
+
     public void resetStat() {
         errorCount = 0;
         warnCount = 0;
         infoCount = 0;
     }
 
-    @Override
+
     public boolean isInfoEnabled() {
         return false;
     }
 
-    @Override
+
     public void info(String s) {
         infoCount++;
     }
 
-    @Override
+
     public boolean isWarnEnabled() {
         return false;
     }

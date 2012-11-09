@@ -822,7 +822,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLUnionQuery x) {
         x.getLeft().accept(this);
         println();
@@ -851,7 +851,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLUnaryExpr x) {
         print(x.getOperator().name);
         SQLExpr expr = x.getExpr();
@@ -869,7 +869,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLHexExpr x) {
         print("0x");
         print(x.getHex());
@@ -883,14 +883,14 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLSetStatement x) {
         print("SET ");
         printAndAccept(x.getItems(), ", ");
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLAssignItem x) {
         x.getTarget().accept(this);
         print(" = ");
@@ -898,7 +898,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLCallStatement x) {
         print("CALL ");
         x.getProcedureName().accept(this);
@@ -908,7 +908,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLJoinTableSource x) {
         x.getLeft().accept(this);
         if (x.getJoinType() == JoinType.COMMA) {
@@ -928,7 +928,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(ValuesClause x) {
         print("(");
         incrementIndent();
@@ -949,7 +949,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLSomeExpr x) {
         print("SOME (");
 
@@ -960,7 +960,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLAnyExpr x) {
         print("ANY (");
 
@@ -971,7 +971,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLAllExpr x) {
         print("ALL (");
 
@@ -982,7 +982,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLInSubQueryExpr x) {
         x.getExpr().accept(this);
         if (x.isNot()) {
@@ -999,7 +999,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLListExpr x) {
         print("(");
         printAndAccept(x.getItems(), ", ");
@@ -1008,7 +1008,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLSubqueryTableSource x) {
         print("(");
         incrementIndent();
@@ -1025,25 +1025,25 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLTruncateStatement x) {
         print("TRUNCATE TABLE ");
         printAndAccept(x.getTableSources(), ", ");
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLDefaultExpr x) {
         print("DEFAULT");
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLCommentStatement x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLCommentStatement x) {
         print("COMMENT ON ");
         if (x.getType() != null) {
@@ -1058,14 +1058,14 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLUseStatement x) {
         print("USE ");
         x.getDatabase().accept(this);
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLAlterTableAddColumn x) {
         print("ADD (");
         printAndAccept(x.getColumns(), ", ");
@@ -1073,19 +1073,19 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLAlterTableDropColumnItem x) {
         print("DROP COLUMN ");
         x.getColumnName().accept(this);
         return false;
     }
 
-    @Override
+
     public void endVisit(SQLAlterTableAddColumn x) {
 
     }
 
-    @Override
+
     public boolean visit(SQLDropIndexStatement x) {
         print("DROP INDEX ");
         x.getIndexName().accept(this);
@@ -1094,21 +1094,21 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLSavePointStatement x) {
         print("SAVEPOINT ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLReleaseSavePointStatement x) {
         print("RELEASE SAVEPOINT ");
         x.getName().accept(this);
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLRollbackStatement x) {
         print("ROLLBACK");
         if (x.getTo() != null) {
@@ -1125,7 +1125,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter {
         return false;
     }
 
-    @Override
+
     public boolean visit(SQLCreateDatabaseStatement x) {
         print("CREATE DATABASE ");
         x.getName().accept(this);

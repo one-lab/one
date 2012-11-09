@@ -32,7 +32,7 @@ public class SQLListExpr extends SQLExprImpl {
         return items;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, items);
@@ -40,7 +40,7 @@ public class SQLListExpr extends SQLExprImpl {
         visitor.endVisit(this);
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -48,7 +48,7 @@ public class SQLListExpr extends SQLExprImpl {
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

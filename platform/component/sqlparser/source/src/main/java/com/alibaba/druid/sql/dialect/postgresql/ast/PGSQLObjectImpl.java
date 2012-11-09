@@ -27,7 +27,7 @@ public abstract class PGSQLObjectImpl extends SQLObjectImpl implements PGSQLObje
 
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((PGASTVisitor) visitor);
     }

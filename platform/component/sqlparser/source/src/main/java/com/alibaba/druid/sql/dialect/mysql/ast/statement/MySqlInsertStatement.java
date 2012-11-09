@@ -92,7 +92,7 @@ public class MySqlInsertStatement extends SQLInsertStatement {
         this.ignore = ignore;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);

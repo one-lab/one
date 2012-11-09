@@ -50,7 +50,7 @@ public class OracleArgumentExpr extends OracleSQLObjectImpl implements SQLExpr {
         this.value = value;
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, value);

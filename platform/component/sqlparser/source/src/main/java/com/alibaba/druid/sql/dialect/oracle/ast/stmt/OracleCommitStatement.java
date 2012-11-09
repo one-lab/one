@@ -25,7 +25,7 @@ public class OracleCommitStatement extends OracleStatementImpl {
     private Boolean           wait;
     private Boolean           immediate;
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         visitor.visit(this);
         visitor.endVisit(this);

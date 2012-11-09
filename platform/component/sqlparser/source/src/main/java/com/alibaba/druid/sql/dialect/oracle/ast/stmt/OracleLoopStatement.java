@@ -27,7 +27,7 @@ public class OracleLoopStatement extends OracleStatementImpl {
 
     private List<SQLStatement> statements       = new ArrayList<SQLStatement>();
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, statements);

@@ -33,7 +33,7 @@ public class MySqlSelectGroupBy extends SQLSelectGroupByClause {
         this.rollUp = rollUp;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);

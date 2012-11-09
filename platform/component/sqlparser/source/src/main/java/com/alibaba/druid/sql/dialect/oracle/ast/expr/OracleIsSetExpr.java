@@ -41,19 +41,19 @@ public class OracleIsSetExpr extends SQLExprImpl implements OracleExpr {
         this.nestedTable = nestedTable;
     }
 
-    @Override
+
     protected void accept0(SQLASTVisitor visitor) {
         this.accept0((OracleASTVisitor) visitor);
     }
 
-    @Override
+
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, nestedTable);
         }
     }
 
-    @Override
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -61,7 +61,7 @@ public class OracleIsSetExpr extends SQLExprImpl implements OracleExpr {
         return result;
     }
 
-    @Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
