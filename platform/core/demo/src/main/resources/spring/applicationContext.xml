@@ -26,8 +26,11 @@
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/> 
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</prop>
-				<prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache-hibernate-local.xml</prop>
+				<!--<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</prop>-->
+
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.SingletonEhCacheRegionFactory</prop>
+
+                <prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache-hibernate-local.xml</prop>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 			</props>
 		</property>
@@ -74,7 +77,8 @@
 			<property name="timeBetweenEvictionRunsMillis" value="3600000" />
 			<property name="minEvictableIdleTimeMillis" value="3600000" />
 		</bean>
-		
+
+
 		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
 		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
 
@@ -82,4 +86,5 @@
          <!--<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
              <constructor-arg ref="dataSourceSpied"/>
          </bean>-->
+
 </beans>

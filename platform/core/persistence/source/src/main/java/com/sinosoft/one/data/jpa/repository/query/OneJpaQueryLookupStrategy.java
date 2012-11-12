@@ -202,8 +202,8 @@ public final class OneJpaQueryLookupStrategy {
             Method m = getMethod();
             String queryName = m.getDeclaringClass().getName()+"."+m.getName();
             SQL sql = m.getAnnotation(SQL.class);
-            String sqlVule = (sql==null?sqlQueries.getQuery(queryName):sql.value());
-            if(sqlVule!=null && StatementMetaData.CALL_PATTERN.matcher(sqlVule).find()){
+            String sqlValue = (sql==null?sqlQueries.getQuery(queryName):sql.value());
+            if(sqlValue!=null && StatementMetaData.CALL_PATTERN.matcher(sqlValue).find()){
                 if(m.getReturnType()!=Void.TYPE ){
                     throw new IllegalArgumentException(String.format(
                             "It requires a 'Void type' for the procedure method: %s!", method));

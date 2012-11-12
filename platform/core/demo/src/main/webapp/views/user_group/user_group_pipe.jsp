@@ -35,11 +35,14 @@ $(document).ready(function() {
 				<div class="content" id="p2"></div>
 			</div>
 		</div>
+        <input type="button" value="加载用户"onclick="showLazyContent('uuuu','p1');" >&nbsp;&nbsp;<input type="button" value="加载权限" onclick="showLazyContent('ytyy','p2');">
 		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
 	</div>
 
 </body>
 </html>
-<mvcpipe:write>${p1}</mvcpipe:write>
+<mvcpipe:writes>
+    <mvcpipe:write id = "uuuu" lazyLoad = "true" targetId="p1" />
+    <mvcpipe:write id = "ytyy" lazyLoad = "true" targetId="p2" />
+</mvcpipe:writes>
 
-<mvcpipe:write>${p2}</mvcpipe:write>

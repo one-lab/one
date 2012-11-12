@@ -83,8 +83,10 @@
     <div class="title">
         QueryDsl
     </div>
-    <p>QueryDsl可用于以编程的方式构建查询，适用于多属性或多表查询</p>
+    <p>QueryDsl可用于以编程的方式构建查询，适用于多属性或多表查询,如果只有一个查询条件，直接使用SQL语句会更好</p>
+    <p>使用了自定义实现的方式，自定义接口UserDaoCustomer，自定义接口的实现类UserDaoImpl，用户接口UserDao继承UserDaoCustomer接口即可</p>
     <p>另外，查询时需要使用到QUser（QUser可用工具自动生成，参照附录）</p>
+    <p>QueryDsl详细用法如下所示：</p>
     <div class="content">
         <ul class="tabs">
             <li class="select"><span class="name"><b></b>UserDaoImpl.java<font>Example</font></span><span></span></li>
@@ -93,15 +95,255 @@
         <div class="code_box">
             <div class="intr_line">
                 <div class="info">
-                    <div class="code_cont">
+                    <div class="code_cont" style="display: block">
                         <h3>UserDaoImpl.java文件</h3>
                         <textarea name="code" class="java" >
-                            public interface UserRepository extends CrudRepository<User,Long>, QueryDslPredicateExecutor<User> {
+                            package com.sinosoft.one.data.dao;
+
+                            import com.mysema.query.jpa.impl.JPADeleteClause;
+                            import com.mysema.query.jpa.impl.JPAQuery;
+                            import com.mysema.query.jpa.impl.JPASubQuery;
+                            import com.mysema.query.jpa.impl.JPAUpdateClause;
+                            import com.sinosoft.one.data.model.QRole;
+                            import com.sinosoft.one.data.model.QUser;
+                            import com.sinosoft.one.data.model.QUserInfo;
+                            import com.sinosoft.one.data.model.User;
+
+                            import javax.persistence.EntityManager;
+                            import javax.persistence.PersistenceContext;
+                            import java.math.BigDecimal;
+                            import java.util.List;
+
+                            public class UserDaoImpl implements UserDaoCustomer   {
+
+                            @PersistenceContext
+                            EntityManager entityManager;
+                            JPAQuery jpaQuery;
+                            QUser user= QUser.user;
+                            QRole role=QRole.role;
+                            QUser u=new QUser("u");
+                            QUserInfo userInfo=QUserInfo.userInfo;
+                            public UserDaoImpl(){
+
+                            }
+                            public User findOneUser(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //查询结果是唯一记录使用uniqueResult
+                                return jpaQuery.from(user).where(user.name.eq("zhangwu")).uniqueResult(user);
+                            }
+                            public List<User> findFromMultipleAttributeAndFir(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //查询结果是列表使用list，where中“,”相当于SQL中的AND关键字
+                                return jpaQuery.from(user).where(user.name.like("%zhang%"),user.gender.eq("male")).list(user);
+                            }
+                            public List<User> findFromMultipleAttributeAndSec(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //返回列表使用list，where中使用and，与上例中“,”等价
+                                return jpaQuery.from(user).where(user.name.like("%zhang%").and(user.gender.eq("male"))).list(user);
+                            }
+                            public List<User> findFromMultipleAttributeOr(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //多属性查询，等价于OR关键字
+                                return jpaQuery.from(user).where(user.name.like("%zhang%").or(user.gender.eq("famale"))).list(user);
+                            }
+                            public List<Object[]> findFromMultipleAttributeListResult(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //返回值是多个表的某些列时，使用如下方式
+                                return jpaQuery.from(user,role).where(user.name.eq(role.name)).distinct().list(user.name,role.address);
+                            }
+                            public List<User> findByJoin(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //连接查询，需要在TEST_USER表中设置外键SUPER_ID，引用字段是TEST_USER表的ID列
+                                //工具会在User实体中自动生成以下属性
+                                //private User user;
+                                //private List<User> users = new ArrayList<User>(0) ;
+                                return jpaQuery.from(user).leftJoin(user.users,user).list(user);
+                            }
+                            public List<User> findUserWithOrder(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //等价于ORDER BY
+                                return jpaQuery.from(user).orderBy(user.name.asc(),user.age.desc()).list(user);
+                            }
+                            public List<? extends Object> findUserWithGroup(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //等价于GROUP BY
+                                return jpaQuery.from(user).groupBy(user.name).list(user.name);
+                            }
+                            public User findUserWithSubQueryForSingleResult(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //子查询使用JPASubQuery类，查询结果是唯一记录使用uniqueResult
+                                return jpaQuery.from(user).where(user.name.in(new JPASubQuery().from(role).where(role.position.eq("boss")).list(role.name))).uniqueResult(user);
+                            }
+                            public List<User> findUserWithSubQueryForListResult(){
+                                JPAQuery jpaQuery=new JPAQuery(entityManager);
+                                //子查询使用JPASubQuery类，查询结果是列表使用user
+                                return jpaQuery.from(user).where(user.name.in(new JPASubQuery().from(role).where(role.position.eq("boss")).list(role.name))).list(user);
+                            }
+                            public long deleteAllUserWithUnconditional(){
+                                JPADeleteClause jpaDeleteClause=new JPADeleteClause(entityManager,user);
+                                //删除所有记录，删除操作使用JPADeleteClause类，返回删除的记录条数
+                                return jpaDeleteClause.execute();
+                            }
+                            public long deleteAllUserWithConditional(){
+                                JPADeleteClause jpaDeleteClause=new JPADeleteClause(entityManager,user);
+                                //删除满足条件的记录，返回删除的记录条数
+                                return jpaDeleteClause.where(user.name.like("Li%")).execute();
+                            }
+                            public long updateUserWithConditional(){
+                                JPAUpdateClause jpaUpdateClause=new JPAUpdateClause(entityManager,user);
+                                //更新满足条件的记录，返回更新的记录条数
+                                return jpaUpdateClause.where(user.name.eq("zhangsan")).set(user.name,"zhangwu").execute();
+                            }
+                            }
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>UserDaoCustomer.java<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="code_cont" style="display: block">
+                        <h3>UserDaoCustomer.java文件</h3>
+                        <textarea name="code" class="java" >
+                            package com.sinosoft.one.data.dao;
+
+                            import com.sinosoft.one.data.model.User;
+                            public interface UserDaoCustomer {
+                            public User findOneUser();
+                            public List<User> findFromMultipleAttributeAndFir();
+                            //省略各种查询方法的声明...
+                            }
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>UserDao.java<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="code_cont" style="display: block">
+                        <h3>UserDao.java文件</h3>
+                        <textarea name="code" class="java" >
+                            package com.sinosoft.one.data.dao;
+
+                            import java.math.BigDecimal;
+                            import org.springframework.data.repository.PagingAndSortingRepository;
+                            import com.sinosoft.one.data.model.User;
+                            public interface UserDao extends PagingAndSortingRepository<User, BigDecimal>,UserDaoCustomer {
+                            }
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="introduce">
+        <p>QueryDsl支持的关键字及其SQL语义如下表所示</p>
+        <table border="1">
+            <tr>
+                <th>关键字</th>
+                <th>对应SQL语义</th>
+            </tr>
+            <tr><td>and</td><td>AND</td></tr>
+            <tr><td>asc</td><td>升序</td></tr>
+            <tr><td>between</td><td>BETWEEN…AND…</td></tr>
+            <tr><td>desc</td><td>降序</td></tr>
+            <tr><td>distinct</td><td>过滤重复记录</td></tr>
+            <tr><td>eq</td><td>=</td></tr>
+            <tr><td>from</td><td>FROM</td></tr>
+            <tr><td>fullJoin</td><td>全连接</td></tr>
+            <tr><td>goe</td><td>>=</td></tr>
+            <tr><td>groupBy</td><td>GROUP BY</td></tr>
+            <tr><td>gt</td><td>></td></tr>
+            <tr><td>having</td><td>GROUP BY的过滤条件</td></tr>
+            <tr><td>in</td><td>IN</td></tr>
+            <tr><td>innerJoin</td><td>内连接</td></tr>
+            <tr><td>isEmpty</td><td>是否为空</td></tr>
+            <tr><td>isNotEmpty</td><td>是否不为空</td></tr>
+            <tr><td>isNotNull</td><td>是否不为NULL</td></tr>
+            <tr><td>isNull</td><td>是否为NULL</td></tr>
+            <tr><td>join</td><td>内连接</td></tr>
+            <tr><td>leftJoin</td><td>左连接</td></tr>
+            <tr><td>like</td><td>LIKE</td></tr>
+            <tr><td>list</td><td>返回结果是List</td></tr>
+            <tr><td>loe</td><td><=</td></tr>
+            <tr><td>lt</td><td><</td></tr>
+            <tr><td>max</td><td>MAX()</td></tr>
+            <tr><td>min</td><td>MIN()</td></tr>
+            <tr><td>ne</td><td>!=</td></tr>
+            <tr><td>notIn</td><td>NOT IN(...)</td></tr>
+            <tr><td>notBetween</td><td>NOT BETWEEN…AND…</td></tr>
+            <tr><td>or</td><td>OR</td></tr>
+            <tr><td>orderBy</td><td>排序</td></tr>
+            <tr><td>uniqueResult</td><td>返回唯一记录</td></tr>
+            <tr><td>where</td><td>WHERE</td></tr>
+            <tr><td>with</td><td>与WHERE等价</td></tr>
+        </table>
+    </div>
+</div>
+
+<div class="content">
+    <div class="title">
+        QueryDslPredicateExecutor
+    </div>
+    <p>使用QueryDsl构建动态查询时，需要提供自定义实现类，如果不想这样做，可以直接继承QueryDslPredicateExecutor接口</p>
+    <div class="content">
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>UserDao.java<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="code_cont" style="display: block">
+                        <h3>UserDao.java文件</h3>
+                        <textarea name="code" class="java" >
+                            public interface UserDao extends PagingAndSortingRepository<User, BigDecimal>, QueryDslPredicateExecutor<User> {
 
                             }
                         </textarea>
-                        <p>QueryDslPredicateExecutor接口允许使用多种方法来执行规范</p>
-                        <p>例如，findAll()方法可以返回所有符合规范的实体：Iterable&lt;T&gt; findAll(Predicate predicate);</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>Service层的方法调用</p>
+    <div class="content">
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>AccountManager.java<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="code_cont" style="display: block">
+                        <h3>AccountManager.java文件</h3>
+                        <textarea name="code" class="xml" >
+                            public class AccountManager {
+                                private UserDao userDao;
+                                public List<User> findAllUserByQSL(){
+                                    BooleanExpression isCalledDave = user.firstname.eq("Dave");
+                                    BooleanExpression isBeauford = user.lastname.eq("Beauford");
+                                    List<User> result = userDao.findAll(isCalledDave.or(isBeauford));
+                                }
+                            }
+                        </textarea>
                     </div>
                 </div>
             </div>
@@ -109,25 +351,50 @@
     </div>
 </div>
 
+
 <div class="content">
-    <p>使用规范可以很容易地针对实体建立一套可扩展的查询</p>
+    <div class="title">
+        动态SQL
+    </div>
+    <p>使用动态Sql的先决条件是在配置文件中配置好one-data</p>
+    <p>在配置文件中添加如下代码</p>
     <div class="content">
         <ul class="tabs">
-            <li class="select"><span class="name"><b></b>示例代码<font>Example</font></span><span></span></li>
+            <li class="select"><span class="name"><b></b>ApplicationContext.xml<font>Example</font></span><span></span></li>
             <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
         </ul>
         <div class="code_box">
             <div class="intr_line">
                 <div class="info">
-                    <div class="code_cont">
-                        <h3>示例代码</h3>
-                        <textarea name="code" class="java" >
-                            BooleanExpression isCalledDave = user.firstname.eq("Dave");
-                            BooleanExpression isBeauford = user.lastname.eq("Beauford");
-
-                            List<User> result = repository.findAll(isCalledDave.or(isBeauford));
+                    <div class="code_cont" style="display: block">
+                        <h3>ApplicationContext.xml文件</h3>
+                        <textarea name="code" class="xml" >
+                            xmlns:onejpa="http://com.sinosoft.one/schema/data/jpa"
+                            http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
                         </textarea>
-                        <p>对于多条件的组合查询，可以使用这种方式（如果只有一个查询条件，直接使用SQL语句会更好）</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>下面是动态Sql的一个演示代码：</p>
+    <div class="content">
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>Dao层代码<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="code_cont" style="display: block">
+                        <h3>java代码</h3>
+                        <textarea name="code" class="java" >
+                            @SQL("SELECT * FROM t_user where id='AAF000' #for(var in :params)
+                            { #if(:var==0) { and 0=:var} #if(:var==1) { and 1=:var}} ")
+                            User selectUserForActiveComplexSql1(@Param("params") int[] params);
+                        </textarea>
+                        <p>其中#for()指var在params中循环遍历、#if后面可写条件</p>
+                        <p>同时，动态Sql也可以写在配置文件中，相关配置如上节的<a href="dataSql.html">SqlQuery</a></p>
                     </div>
                 </div>
             </div>

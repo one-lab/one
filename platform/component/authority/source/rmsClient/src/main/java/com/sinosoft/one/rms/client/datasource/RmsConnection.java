@@ -1,7 +1,5 @@
 package com.sinosoft.one.rms.client.datasource;
 
-import ins.framework.utils.StringUtils;
-
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -12,20 +10,23 @@ import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.rms.client.DataRuleStringCreat;
+import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
 import com.sinosoft.one.rms.client.EnvContext;
+import com.sinosoft.one.rms.client.sqlparser.RmsSQLParser;
 
 public class RmsConnection implements Connection {
 	
+	private RmsSQLParser rmsSQLParser;
 	
-	private DataRuleStringCreat dataRuleStringCreat;
 	private Connection realConnection;
 	
-	public RmsConnection(Connection connection,DataRuleStringCreat dataRuleStringCreat) {
-		this.dataRuleStringCreat=dataRuleStringCreat;
+	private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
+	
+	public RmsConnection(Connection connection ,RmsSQLParser rmsSQLParser,DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor) {
+		this.rmsSQLParser=rmsSQLParser;
 		this.realConnection = connection;
+		this.dataRuleFactoryPostProcessor=dataRuleFactoryPostProcessor;
 	}
 	
 	public Statement createStatement() throws SQLException {
@@ -33,7 +34,11 @@ public class RmsConnection implements Connection {
 	}
 
 	public PreparedStatement prepareStatement(String sql) throws SQLException {
-		realDataRule(sql);
+		try {
+			sql=realDataRule(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return realConnection.prepareStatement(sql);
 	}
 
@@ -171,7 +176,6 @@ public class RmsConnection implements Connection {
 	public PreparedStatement prepareStatement(String sql, int resultSetType,
 			int resultSetConcurrency, int resultSetHoldability)
 			throws SQLException {
-		System.out.println(sql);
 		return realConnection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
 	}
 
@@ -196,17 +200,11 @@ public class RmsConnection implements Connection {
 		return realConnection.prepareStatement(sql, columnNames);
 	}
 
-	public DataRuleStringCreat getDataRuleStringCreat() {
-		return dataRuleStringCreat;
-	}
-
-	public void setDataRuleStringCreat(DataRuleStringCreat dataRuleStringCreat) {
-		this.dataRuleStringCreat = dataRuleStringCreat;
-	}
-
-	String realDataRule(String sql){
-		String s =dataRuleStringCreat.editSqlQueryRule(sql);
-		return s;
+	String realDataRule(String sql) throws Exception{
+		if (EnvContext.getDataAuthorityTaskId() != null ) {
+			sql=rmsSQLParser.parser(realConnection, sql);
+		}
+		return sql;
 	}
 	
 	

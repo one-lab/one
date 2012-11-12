@@ -17,17 +17,20 @@ public class Student {
     private List<Course> children;
     private String state;
 
-    public Student(){}
-    public Student(String id,String title,String classTag,String url,String state){
-        this.id =id;
-        this.title =title;
-        this.classTag =classTag;
-        this.url =url;
-        this.state =state;
+    public Student() {
     }
-    public Student(String id,String title,String classTag,String url,String state,List<Course> children){
-        this(id, title ,classTag,url ,state );
-        this.children =children;
+
+    public Student(String id, String title, String classTag, String url, String state) {
+        this.id = id;
+        this.title = title;
+        this.classTag = classTag;
+        this.url = url;
+        this.state = state;
+    }
+
+    public Student(String id, String title, String classTag, String url, String state, List<Course> children) {
+        this(id, title, classTag, url, state);
+        this.children = children;
     }
 
     public String getId() {

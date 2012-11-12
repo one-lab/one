@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionContext;
+import com.sinosoft.one.bpm.util.JbpmAPIUtil;
 import com.sinosoft.one.bpmWebDemo.data.DataStore;
 import com.sinosoft.one.bpmWebDemo.domain.Combo;
 import com.sinosoft.one.bpmWebDemo.service.facade.ComboService;
@@ -29,13 +30,8 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String getVerify1Combos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepOne("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo001", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
@@ -52,13 +48,8 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String getVerify2Combos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepTwo("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo002", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
@@ -75,13 +66,8 @@ public class ComboAction extends Struts2Action {
 	}
 	
 	public String getVerify3Combos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepTwo("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo003", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
@@ -98,13 +84,8 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String getDeployCombos() {
-		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepThree("");
-
-		for (Combo c : results) {
-			page.getResult().add(c);
-		}
-		System.out.println("page size--------" + results.size());
+		this.page = comboService.getCombos("combo003", "");
+		System.out.println("page size--------" + page.getResult().size());
 		return SUCCESS;
 	}
 
@@ -141,6 +122,13 @@ public class ComboAction extends Struts2Action {
 		comboService.processCombo_StepFour(combo.getComboCode(), combo);
 		System.out.println("four step--------deployCombo-2222222-------");
 
+	}
+	
+	public String showImage() {
+		String contextPath = this.getRequest().getContextPath();
+		String s = JbpmAPIUtil.getImageInfoes("comboProcess", combo.getComboCode(), contextPath + "/process-images/ComboProcess-image.png", contextPath);
+		this.renderHtml(s);
+		return NONE;
 	}
 
 	public Combo getCombo() {

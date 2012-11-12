@@ -15,82 +15,32 @@ import java.util.List;
 
 public class queryRuleAccordCompany implements DataRuleScript {
  	
-   @Autowired
-   private JSqlParser jSqlParser;
+ 	private String TABLENAME="ge_rms_company";
  	
-   public String creatSQL(String sqlOrHql,String tableAlias,DataPower dataPower){
-  		String tempSqlOrHQl=""
-  		String comCode 
-  		if(StringUtils.isNotBlank(tableAlias)){
-  			tableAlias=tableAlias+"."
-  		}else{
-  			tableAlias=" "
-  		}
-  		List groupBy=new ArrayList();
-  		List orderBy=new ArrayList();
-  		Limit limit=new Limit();
-  		PlainSelect plainSelect
-  		if(StringUtils.isNotBlank(sqlOrHql)){
-  			plainSelect = (PlainSelect) ((Select) jSqlParser.parse(new StringReader(sqlOrHql))).getSelectBody();
-			if(plainSelect.getGroupByColumnReferences()!=null){
-				groupBy=plainSelect.getGroupByColumnReferences();
-				plainSelect.setGroupByColumnReferences(null);
-			}
-			if(plainSelect.getOrderByElements()!=null){
-				orderBy=plainSelect.getOrderByElements();
-				plainSelect.setOrderByElements(null);
-			}
-			if(plainSelect.getLimit()!=null){
-				limit=plainSelect.getLimit();
-				plainSelect.setLimit(null);
-				
-			}
-			tempSqlOrHQl=plainSelect.toString();
-		}else{
-			tempSqlOrHQl=sqlOrHql
+ 	private String CLOUNMNAME="comCode";
+ 	
+   	public String creatSQL(String rule,String tableNameAlias,String userCode,String comCode,String prama,String clounmName){
+		String alias="";
+		if(StringUtils.isNotBlank(tableNameAlias)){
+			alias=tableNameAlias;
 		}
-		if(StringUtils.isNotBlank(dataPower.getParam())){
-			Map<String,String> tempMap = (Map<String, String>)JSON.parse(dataPower.getParam());
-			int i=0;
-			for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
-    			String table=busDataInfo.getBusDataTable()
-    			String column=busDataInfo.getBusDataColumn()
-    			if(i>0){
-    				tempSqlOrHQl=tempSqlOrHQl+" and "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
-    			}else{
-    				tempSqlOrHQl=tempSqlOrHQl+" "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
-    			}
-    			i++
-			}
-	//		plainSelect = (PlainSelect) ((Select) jSqlParser.parse(new StringReader(tempSqlOrHQl))).getSelectBody();
-	//		plainSelect.setGroupByColumnReferences(groupBy);
-	//		plainSelect.setOrderByElements(orderBy);
-	//		plainSelect.setLimit(limit);	
-			return tempSqlOrHQl 
+		if(StringUtils.isNotBlank(prama)){
+			Map<String,String> tempMap = (Map<String, String>)JSON.parse(prama);
+    		if(StringUtils.isNotBlank(rule)){
+    			rule=rule+" and "+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
+    		}else{
+    			rule=rule+""+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
+    		}
+			return rule 
 		}else{
-			int i=0;
-			for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
-    			String table=busDataInfo.getBusDataTable()
-    			String column=busDataInfo.getBusDataColumn()
-    			if(i>0){
-    				if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" and "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
-				}else{
-					if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" "+tableAlias+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
-				}
-				i++
+    		if(StringUtils.isNotBlank(rule)){
+    			rule=rule+" and "+alias+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+ comCode+"')"
+			}else{
+    			rule=rule+""+alias+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+ comCode+"')"
 			}
-	//		plainSelect = (PlainSelect) ((Select) jSqlParser.parse(new StringReader(tempSqlOrHQl))).getSelectBody();
-		//	plainSelect.setGroupByColumnReferences(groupBy);
-	//		plainSelect.setOrderByElements(orderBy);
-	//		plainSelect.setLimit(limit);	
-			return tempSqlOrHQl 
+			return rule 
 		}
   	}
   
-  	public String creatSQL(String sqlOrHql,DataPower dataPower){
-		 return creatSQL(sqlOrHql,null,dataPower)
-  	}
   	
 }

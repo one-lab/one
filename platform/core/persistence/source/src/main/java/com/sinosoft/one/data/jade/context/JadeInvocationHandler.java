@@ -97,15 +97,15 @@ public class JadeInvocationHandler implements InvocationHandler {
             parameters = new HashMap<String, Object>(4);
         } else {
             parameters = new HashMap<String, Object>(args.length * 2 + 4);
-            int ResultSetProcedureResultCount = 1;
+            int ResultSetProcedureResultCount = 0;
             for (int i = 0; i < args.length; i++) {
                 if(args[i].getClass() == ResultSetProcedureResult.class){
-                    parameters.put("*rs"+ResultSetProcedureResultCount+++"*",args[i]);
+                    parameters.put("*rs"+(++ResultSetProcedureResultCount)+"*",args[i]);
                 }else if(args[i].getClass() == ProcedureResult[].class){
                     ProcedureResult[] pr = (ProcedureResult[])args[i];
                     for(int j=0;j<pr.length;j++){
                         if(pr[j] instanceof ResultSetProcedureResult){
-                            parameters.put("*rs"+ResultSetProcedureResultCount+++"*",pr[j]);
+                            parameters.put("*rs"+(++ResultSetProcedureResultCount)+"*",pr[j]);
                         }else if(pr[j] instanceof OutProcedureResult){
                             parameters.put(INDEX_NAMES[i+j],pr[j]);
                         }
@@ -118,7 +118,7 @@ public class JadeInvocationHandler implements InvocationHandler {
                     parameters.put(sqlParam.value(), args[i]);
                 }
             }
-            parameters.put("*rscount*",--ResultSetProcedureResultCount);
+            parameters.put("*rscount*",ResultSetProcedureResultCount);
         }
         // logging
         StringBuilder invocationInfo = null;

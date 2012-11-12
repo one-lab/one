@@ -19,7 +19,7 @@ public class TestEmployee {
 
     public TestEmployee(Long id, BigDecimal employeeNo, String name, String company, String organization, String operation) {
         this.id = id;
-        this.employeeNo=employeeNo;
+        this.employeeNo = employeeNo;
         this.name = name;
         this.company = company;
         this.organization = organization;

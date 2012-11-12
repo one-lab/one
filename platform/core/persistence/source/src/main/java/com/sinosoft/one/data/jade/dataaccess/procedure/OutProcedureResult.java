@@ -10,17 +10,17 @@ import java.util.List;
  * 调用存储过程Out参数返回值的Java类
  */
 public class OutProcedureResult<T extends List<?>> implements ProcedureResult<T> {
-    private final Class contentType;
-    private final int type;
+    private final Class CONTENT_TYPE;
+    private final int JDBC_TYPE;
     private int index;
     private T result;
 
     public OutProcedureResult(Class contentType,int type){
-        this.contentType = contentType;
-        this.type = type;
+        this.CONTENT_TYPE = contentType;
+        this.JDBC_TYPE = type;
     }
     public Class getContenType(){
-        return this.contentType;
+        return this.CONTENT_TYPE;
     }
     public void setResult(T result){
         this.result = result;
@@ -28,8 +28,8 @@ public class OutProcedureResult<T extends List<?>> implements ProcedureResult<T>
     public T getResult() {
         return result;
     }
-    public int getType(){
-        return type;
+    public int getJdbcType(){
+        return JDBC_TYPE;
     }
 
     public int getIndex() {

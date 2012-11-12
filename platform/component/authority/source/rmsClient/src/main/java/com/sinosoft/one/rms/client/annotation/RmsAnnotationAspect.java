@@ -27,8 +27,11 @@ public class RmsAnnotationAspect {
 
 	private static CacheService arch4MethodNameCacheManager = CacheManager.getInstance("arch4Method");
 	
-    @Around("execution(* com.sinosoft.one..*.*(..))&&@annotation(DataAuthority)")
-    void register(ProceedingJoinPoint pjp) throws Throwable {
+    @Around("execution(* com.sinosoft.test..*.*(..))")
+    public Object register(ProceedingJoinPoint pjp) throws Throwable {
+    	if(pjp.getThis() == null || pjp.getTarget() == null) {
+    		return pjp.proceed();
+    	}
     	String key = arch4MethodNameCacheManager.generateCacheKey("arch4Method", "arch4Method");
 		Object result = arch4MethodNameCacheManager.getCache(key);
 		Set<String> arch4MethodNames ;
@@ -46,56 +49,52 @@ public class RmsAnnotationAspect {
 			arch4MethodNames.add("findByHql");
 			arch4MethodNames.add("findBySql");
 			arch4MethodNames.add("find");
-			for (String string : arch4MethodNames) {
-				System.out.println(string);
-			}
 			arch4MethodNameCacheManager.putCache(key, arch4MethodNames);
 		}
-//        MethodSignature signature = (MethodSignature) pjp.getSignature();
-//        Method m = signature.getMethod();
-//        if( Proxy.isProxyClass(pjp.getThis().getClass())) {
-//            m = pjp.getTarget().getClass().getMethod(m.getName(), m.getParameterTypes());
-//        }
-        System.out.println(pjp.getTarget().getClass().toString()+"-----------------------aaa");
-//        DataAuthority dataAuthority = m.getAnnotation(DataAuthority.class);
-//        if(m.getName().toString().endsWith("testFindByHqlforList")){
-//        	System.out.println("testFindTopByHql+++++++++++++++++++++++++++++");
-//        }
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
+        Method m = signature.getMethod();
+        if(Proxy.isProxyClass(pjp.getThis().getClass())) {
+            m = pjp.getTarget().getClass().getMethod(m.getName(), m.getParameterTypes());
+        }
+        DataAuthority dataAuthority = m.getAnnotation(DataAuthority.class);
         Object object=null;
-//        String tempDataAuthorityTaskId=null;
-//        if(dataAuthority!=null){
-//        	EnvContext.setClassName(pjp.getTarget().getClass().getName());
-//        	System.out.println(pjp.getTarget().getClass().getName());
-//        	EnvContext.setDataAuthorityTaskId(dataAuthority.value());
-//        	EnvContext.setMethodName(m.getName());
-//        	EnvContext.setTableAlias(dataAuthority.tabAlias());
-//        	object=pjp.proceed();
-//        	EnvContext.removeDataAuthorityTaskId();
-//        	EnvContext.removeTableAlias();
-//        	EnvContext.removeClassName();
-//        	EnvContext.removeMethodName();
-//        }else {
-//        	if(EnvContext.getDataAuthorityTaskId()!=null){
-//        		if(pjp.getTarget().getClass().getName().toString().equals(pjp.getTarget().getClass().getName().toString())){
-//        			for (String methodName : arch4MethodNames) {
-//						if(methodName.equals(m.getName())){
-//							return pjp.proceed();
-//						}
-//					}
-//        			tempDataAuthorityTaskId=EnvContext.getDataAuthorityTaskId();
-					object=pjp.proceed();
-//					EnvContext.setDataAuthorityTaskId(tempDataAuthorityTaskId);
-//					return object;
-//        		}else{
-//        			tempDataAuthorityTaskId=EnvContext.getDataAuthorityTaskId();
-//					object=pjp.proceed();
-//					EnvContext.setDataAuthorityTaskId(tempDataAuthorityTaskId);
-//					return object;
-//				}
-//        	}else {
-//        		return pjp.proceed();
-//			}
-//		}
-//        return object;
+        String tempDataAuthorityTaskId=null;
+        if(dataAuthority != null){
+        	EnvContext.setClassName(pjp.getTarget().getClass().getName());
+        	EnvContext.setDataAuthorityTaskId(dataAuthority.value());
+        	object=pjp.proceed();
+        	EnvContext.removeDataAuthorityTaskId();
+        	EnvContext.removeClassName();
+        }else {
+        	if(EnvContext.getDataAuthorityTaskId()!=null){
+        		if(pjp.getTarget().getClass().getName().toString().equals(EnvContext.getClassName().toString())){
+        			for (String methodName : arch4MethodNames) {
+						if(methodName.equals(m.getName())){
+							return pjp.proceed();
+						}
+					}
+    				return envContextHandle(pjp, object, tempDataAuthorityTaskId);
+        		}else{
+        			EnvContext.setClassName(pjp.getTarget().getClass().getName());
+        			object=envContextHandle(pjp, object, tempDataAuthorityTaskId);
+    				EnvContext.removeClassName();
+    				return object;
+        		}
+        	}else {
+        		return pjp.proceed();
+			}
+		}
+        return object;
+    }
+    
+    Object envContextHandle(ProceedingJoinPoint pjp,Object object, String tempDataAuthorityTaskId) throws Throwable{
+    	tempDataAuthorityTaskId = EnvContext.getDataAuthorityTaskId();
+		EnvContext.removeDataAuthorityTaskId();
+		EnvContext.setDataAuthorityTaskId(null);
+		object = pjp.proceed();
+		EnvContext.removeDataAuthorityTaskId();
+		EnvContext.setDataAuthorityTaskId(tempDataAuthorityTaskId);
+		EnvContext.removeClassName();
+    	return pjp.proceed();
     }
 }

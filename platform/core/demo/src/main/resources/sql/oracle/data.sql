@@ -29,3 +29,11 @@ insert into acct_user_group values(3,2);
 insert into acct_user_group values(4,2);
 insert into acct_user_group values(5,2);
 insert into acct_user_group values(6,2);
+
+CREATE OR REPLACE PROCEDURE ORACLE_PRO_FOR_DEMO(P_ID IN ACCT_USER.ID%TYPE,P_NAME IN ACCT_USER.NAME%TYPE,
+P_OUTPRO1 OUT SYS_REFCURSOR,P_OUTPRO2 OUT SYS_REFCURSOR) IS
+BEGIN
+          OPEN P_OUTPRO1 FOR SELECT * FROM ACCT_USER a WHERE a.ID>=P_ID AND a.Name LIKE P_NAME;
+          OPEN P_OUTPRO2 FOR SELECT PHONE FROM ACCT_USERINFO b WHERE b.ID IN
+          (SELECT a.ID FROM ACCT_USER a WHERE a.ID>=P_ID AND a.Name LIKE P_NAME);
+END ORACLE_PRO_FOR_DEMO;

@@ -224,4 +224,12 @@ public interface Window {
      */
     public void setMayInterruptIfRunning(boolean mayInterruptIfRunning);
 
+    public void setLazyLoad(boolean lazyLoad);
+
+    public void setLazyAreaId(String lazyAreaId);
+
+    public boolean isLazyLoad();
+
+    public String getLazyAreaId();
+
 }

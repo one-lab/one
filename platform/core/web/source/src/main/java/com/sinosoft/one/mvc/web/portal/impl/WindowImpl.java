@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.common.base.Charsets;
 import com.sinosoft.one.mvc.web.portal.Portal;
 import com.sinosoft.one.mvc.web.portal.Window;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -75,6 +76,10 @@ class WindowImpl implements Window {
     private boolean mayInterruptIfRunning = defaultMayInterruptIfRunning;
 
     private boolean interrupted = false;
+
+    private boolean lazyLoad;
+
+    private String lazyAreaId;
 
     /**
      * 窗口请求对象私有的、有别于其他窗口的属性
@@ -185,7 +190,8 @@ class WindowImpl implements Window {
     
     public String getContent() {
         try {
-            return new String(byteArrayOutputStream.toByteArray(), getCharacterEncoding());
+            String content = new String(byteArrayOutputStream.toByteArray(), getCharacterEncoding());
+            return content;
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -286,7 +292,22 @@ class WindowImpl implements Window {
         this.mayInterruptIfRunning = mayInterruptIfRunning;
     }
 
-    
+    public void setLazyLoad(boolean lazyLoad) {
+        this.lazyLoad = lazyLoad;
+    }
+
+    public void setLazyAreaId(String lazyAreaId) {
+        this.lazyAreaId = lazyAreaId;
+    }
+
+    public boolean isLazyLoad() {
+        return lazyLoad;
+    }
+
+    public String getLazyAreaId() {
+        return lazyAreaId;
+    }
+
     public boolean mayInterruptIfRunning() {
         return mayInterruptIfRunning;
     }

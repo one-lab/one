@@ -1,6 +1,7 @@
 package com.sinosoft.one.demo.dao.account;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.data.jade.dataaccess.procedure.ProcedureResult;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -15,12 +16,12 @@ import java.util.List;
  *
  * @author calvin
  */
-public interface UserDao extends PagingAndSortingRepository<User, Long> , QueryDslPredicateExecutor<User> {
+public interface UserDao extends PagingAndSortingRepository<User, Long>, QueryDslPredicateExecutor<User> {
 
     User findByLoginName(String loginName);
 
     @SQL("select * from acct_user where id is not null #if(:name!='') {and name like :name} #if(:email!='') {and email like :email} #if(:id!=null) {and id>=:id}")
-    List<User> selectUserForDynamicComplexSql(@Param("name") String name,@Param("email") String email, @Param("id") Long id);
+    List<User> selectUserForDynamicComplexSql(@Param("name") String name, @Param("email") String email, @Param("id") Long id);
 
     @Query("select u from User u")
     List<User> findAllUserByJpql();
@@ -28,4 +29,10 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> , QueryD
     List<User> findAllUseuByResourse();
 
     List<User> findBySpringDataNamedQuery(String name);
+
+    @SQL("{call oracle_pro_for_demo(?1,?2,?3,?4)}")
+    public void procedureResultWithOracle(Long inId, String inName, ProcedureResult... procedureResults);
+
+    @SQL("{call mysql_pro_for_demo(?1,?2,?3,?4)}")
+    public void procedureResultWithMysql(Long inId, String inName, ProcedureResult... procedureResults);
 }

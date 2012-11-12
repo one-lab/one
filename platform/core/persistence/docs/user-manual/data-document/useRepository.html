@@ -137,25 +137,57 @@
                         <h3>JAVA代码</h3>
                         <textarea name="code" class="java" >
                             public interface CrudRepository<T, ID extends Serializable> extends Repository<T, ID> {
-
-                            <S extends T> S save(S entity);                        //保存给定实体
-                            <S extends T> Iterable<S> save(Iterable<S> entities);  //批量操作，保存所有给定的实体；
-                                                                                   //如果实体为null，抛出IllegalArgumentException异常
-                            T findOne(ID id);                                      //返回给定id的实体，如果没有对应实体则返回null；
-                                                                                   //如果id为null，抛出IllegalArgumentException异常
-                            boolean exists(ID id);                                 //判断是否存在给定id的实体，存在返回true，不存在返回false；
-                                                                                   //id不能为null，否则抛出IllegalArgumentException异常
-                            Iterable<T> findAll();                                 //查找所有的实体，返回Iterable<T>，T为对应的实体类型
-                            Iterable<T> findAll(Iterable<ID> ids);                 //批量操作，根据id查找所有的实体；
-                                                                                   //返回Iterable<T>，T为对应的实体类型
-                            long count();                                          //返回实体对应的记录总数
-                            void delete(ID id);                                    //根据id删除实体；
-                                                                                   //id不能为null，否则抛出IllegalArgumentException异常
-                            void delete(T entity);                                 //删除一个给定的实体；
-                                                                                   //如果实体为null，抛出IllegalArgumentException异常
-                            void delete(Iterable<? extends T> entities);           //批量操作，删除一组给定的实体；
-                                                                                   //如果传入的Iterable为null，抛出IllegalArgumentException异常
-                            void deleteAll();                                      //删除所有实体
+                            /**
+                            * 保存给定实体
+                            */
+                            <S extends T> S save(S entity);
+                            /*
+                            *批量操作，保存所有给定的实体；
+                            *如果实体为null，抛出IllegalArgumentException异常
+                            */
+                            <S extends T> Iterable<S> save(Iterable<S> entities);
+                            /*
+                            *返回给定id的实体，如果没有对应实体则返回null；
+                            *如果id为null，抛出IllegalArgumentException异常
+                            */
+                            T findOne(ID id);
+                            /*
+                            *判断是否存在给定id的实体，存在返回true，不存在返回false；
+                            *id不能为null，否则抛出IllegalArgumentException异常
+                            */
+                            boolean exists(ID id);
+                            /*
+                            *查找所有的实体，返回Iterable<T>，T为对应的实体类型
+                            */
+                            Iterable<T> findAll();
+                            /*
+                            *批量操作，根据id查找所有的实体；
+                            *返回Iterable<T>，T为对应的实体类型
+                            */
+                            Iterable<T> findAll(Iterable<ID> ids);
+                            /*
+                            *返回实体对应的记录总数
+                            */
+                            long count();
+                            /*
+                            *根据id删除实体；
+                            *id不能为null，否则抛出IllegalArgumentException异常
+                            */
+                            void delete(ID id);
+                            /*
+                            *删除一个给定的实体；
+                            *如果实体为null，抛出IllegalArgumentException异常
+                            */
+                            void delete(T entity);
+                            /*
+                            *批量操作，删除一组给定的实体；
+                            *如果传入的Iterable为null，抛出IllegalArgumentException异常
+                            */
+                            void delete(Iterable<? extends T> entities);
+                            /*
+                            *删除所有实体
+                            */
+                            void deleteAll();
                             }
                         </textarea>
                     </div>

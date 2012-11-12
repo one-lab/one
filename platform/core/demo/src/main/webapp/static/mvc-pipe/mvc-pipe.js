@@ -7,6 +7,22 @@ function MvcPipe() {
 	this.loadedWindows = [];
 	this.hangedWindows = [];
 }
+
+function getLazyContent(lazyAreaId){
+    return $("#" + lazyAreaId).val();
+}
+function showLazyContent(lazyAreaId){
+
+    if($("#" + lazyAreaId).length>0){
+        var lazyHtml = getLazyContent(lazyAreaId);
+        var targetId = $("#" + lazyAreaId).attr("targetid");
+        $("#" + lazyAreaId).remove();
+
+        $("#" + targetId).append(lazyHtml);
+    }
+
+}
+
 ( function MvcPipePrototype() {
 	var head = document.getElementsByTagName('head')[0];
 
@@ -75,7 +91,11 @@ function MvcPipe() {
 
 	// 添加模块
 	this.doAddWindow = function(module) {
-		$("#"+module.id).html(module.html);
+        var html = module.html;
+        if(module.lazyLoad == "true") {
+            html = "<textarea id='"+ module.lazyAreaId +"' targetid = '"+module.targetId+"' style='display:none;'>"+ html.replace(/^<\/textarea$/g, "&lt;/textarea")+"</textarea>";
+        }
+		$("#" + module.id).html(html);
 
 		// Load CSS
 		if (module.css) {
@@ -98,6 +118,9 @@ function MvcPipe() {
 }).call(MvcPipe.prototype);
 
 function MvcPipeWindow(params) {
+    this.targetId = params.targetId ||'';
+    this.lazyLoad = params.lazyLoad ||'';
+    this.lazyAreaId = params.lazyAreaId ||'';
 	this.id = params.id || '';
 	this.html = params.content || '';
 	this.css = params && params.css ? params.css : [];
