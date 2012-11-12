@@ -161,7 +161,22 @@ public class WindowForView implements Window {
         inner.setMayInterruptIfRunning(mayInterruptIfRunning);
     }
 
-    
+    public void setLazyLoad(boolean lazyLoad) {
+        inner.setLazyLoad(lazyLoad);
+    }
+
+    public void setLazyAreaId(String lazyAreaId) {
+        inner.setLazyAreaId(lazyAreaId);
+    }
+
+    public boolean isLazyLoad() {
+        return inner.isLazyLoad();
+    }
+
+    public String getLazyAreaId() {
+        return inner.getLazyAreaId();
+    }
+
     public void setThrowable(Throwable throwable) {
         inner.setThrowable(throwable);
     }
