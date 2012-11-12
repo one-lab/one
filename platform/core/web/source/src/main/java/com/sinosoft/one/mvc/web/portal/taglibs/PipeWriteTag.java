@@ -15,16 +15,11 @@
  */
 package com.sinosoft.one.mvc.web.portal.taglibs;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import com.sinosoft.one.mvc.web.Invocation;
-import com.sinosoft.one.mvc.web.InvocationUtils;
-import com.sinosoft.one.mvc.web.portal.PortalUtils;
-import com.sinosoft.one.mvc.web.portal.impl.PipeImpl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,38 +34,54 @@ public class PipeWriteTag extends TagSupport {
 
     private static final long serialVersionUID = -6302408795675569266L;
 
-    private static Log logger = LogFactory.getLog(PipeWriteTag.class);
+    private boolean lazyLoad = true;
 
+    private String id;
+
+    private String targetId;
+
+    private static Log logger = LogFactory.getLog(PipeWriteTag.class);
     @Override
     public int doStartTag() throws JspException {
-        Invocation inv = InvocationUtils.getCurrentThreadInvocation();
-        if (inv == null) {
-            if (logger.isWarnEnabled()) {
-                logger.warn("it is not in a mvc request: '"
-                        + ((HttpServletRequest) pageContext.getRequest()).getRequestURI() + "'");
-            }
-            return SKIP_BODY;
-        }
-        PipeImpl pipe = (PipeImpl) PortalUtils.getPipe(inv);
-        if (pipe == null) {
-            if (logger.isWarnEnabled()) {
-                logger.warn("there is not pipe for this jsp: '"
-                        + ((HttpServletRequest) pageContext.getRequest()).getRequestURI() + "'");
-            }
-            return SKIP_BODY;
-        }
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("writing " + pipe + "...");
-            }
-            pipe.write(pageContext.getOut());
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("writing " + pipe + "... done");
-            }
-        } catch (IOException e) {
-            throw new JspException(e);
+        Map<String, Map<String, String>> pipeWriters = (Map<String, Map<String, String>>)pageContext.getAttribute("pipeWrites");
+
+        if(pipeWriters == null) {
+            pipeWriters = new HashMap<String, Map<String, String>>();
         }
+
+        final Map<String, String> pipeWriter = new HashMap<String, String>();
+        pipeWriter.put("lazyLoad", String.valueOf(lazyLoad));
+        pipeWriter.put("lazyAreaId", id);
+        pipeWriter.put("targetId", targetId);
+
+        pipeWriters.put(targetId, pipeWriter);
+        pageContext.setAttribute("pipeWrites", pipeWriters);
+
         return SKIP_BODY;
+    }
+
+    public boolean isLazyLoad() {
+        return lazyLoad;
+    }
+
+    public void setLazyLoad(boolean lazyLoad) {
+        this.lazyLoad = lazyLoad;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
     }
 }

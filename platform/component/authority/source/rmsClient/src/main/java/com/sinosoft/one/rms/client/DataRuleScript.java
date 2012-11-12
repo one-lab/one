@@ -10,6 +10,6 @@ import com.sinosoft.one.rms.clientService.DataPower;
  */
 public interface DataRuleScript {
 	
-	public String creatSQL(String tableNameAlias,DataPower dataPower);
+	public String creatSQL(String rule,String tableNameAlias,String userCode,String comCode,String prama,String clounmName);
 	
 }

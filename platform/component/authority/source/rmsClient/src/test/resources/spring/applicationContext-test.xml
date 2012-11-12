@@ -26,16 +26,17 @@
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
     <context:component-scan base-package="com.sinosoft.one" />
     
-    <bean id="testService" class="com.sinosoft.one.rms.client.AnnotationTestService"></bean>
+    
+    <bean id="testService" class="com.sinosoft.test.AnnotationTestService"></bean>
    	   
    	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor"></bean>
-	
+   
+   	<bean id= "rmsSQLParser" class="com.sinosoft.one.rms.client.sqlparser.RmsSQLParserSupport" ></bean>
+   	
     <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
     
     <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>
    
-   	<bean id="jSqlParser" class="com.sinosoft.one.sqlparser.parser.CCJSqlParserManager"></bean> 
-   	
     <!-- 定义受环境影响易变的变量 -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
@@ -56,10 +57,6 @@
 	<!-- 大对象处理器 -->
 	<bean id="lobHandler" lazy-init="true"
 		class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
-	
-    
-    <bean id="dataRuleStringCreat" class="com.sinosoft.one.rms.client.DataRuleStringCreatImpl"/>
-   
     <!-- 
         SpringContextHolder定义 <bean class="org.springside.modules.utils.spring.SpringContextHolder" 
         lazy-init="false" /> --><!-- 
@@ -76,8 +73,9 @@
      
      	 
     <bean id="realDataSource" class="com.sinosoft.one.rms.client.datasource.RmsDataSource">
-    	 <property name="dataRuleStringCreat" ref="dataRuleStringCreat" />	
-		 <constructor-arg ref="dataSource" />
+    	<property name="rmsSQLParser" ref="rmsSQLParser"></property>
+    	<property name="dataRuleFactoryPostProcessor" ref="dataRuleFactory"></property>
+		<constructor-arg ref="dataSource" />
     </bean>
      
     <!-- Hibernate配置 -->

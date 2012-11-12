@@ -4,6 +4,7 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlASTVisitorAdapter;
 import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.oracle.visitor.OracleASTVisitorAdapter;
+import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +14,12 @@ import com.alibaba.druid.sql.dialect.oracle.visitor.OracleASTVisitorAdapter;
  * To change this template use File | Settings | File Templates.
  */
 public class RmsMySqlASTVisitor extends MySqlASTVisitorAdapter {
+	private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
+	
+	public RmsMySqlASTVisitor(DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor){
+		this.dataRuleFactoryPostProcessor=dataRuleFactoryPostProcessor;
+	}
     public boolean visit(MySqlSelectQueryBlock x) {
-        return RmsVisitorUtils.visit(x);
+        return RmsSQLASTVisitorSupport.visit(x,dataRuleFactoryPostProcessor);
     }
 }

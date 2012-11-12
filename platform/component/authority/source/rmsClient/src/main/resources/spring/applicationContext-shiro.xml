@@ -45,6 +45,4 @@
   	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor">
   	</bean>
 	
- 	<bean id="DataRuleStringCreat" class="com.sinosoft.one.rms.client.DataRuleStringCreatImpl"/>
-	
 </beans>

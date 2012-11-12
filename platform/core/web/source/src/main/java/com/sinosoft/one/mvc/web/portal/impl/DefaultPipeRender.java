@@ -34,23 +34,35 @@ import com.alibaba.fastjson.JSONObject;
  * 
  */
 public class DefaultPipeRender implements WindowRender {
-
     public void render(Writer out, Window window) throws IOException {
 
         JSONObject json = new JSONObject();
-        json.put("content", window.getContent());
+        json.put("content", getContent(window));
         json.put("id", window.getName());
+        json.put("lazyAreaId",window.getLazyAreaId());
+        json.put("targetId",window.getName());
+        json.put("lazyLoad",String .valueOf(window.isLazyLoad()));
 
         // javascript
-        JSONArray js = getAttributeAsArray(window, PipeImpl.WINDIW_JS);
-        if (js != null && js.size() > 0) {
-            json.put("js", js);
-        }
+        putAttributeArray(json, window, PipeImpl.WINDIW_JS, "js");
         // css
-        JSONArray css = getAttributeAsArray(window, PipeImpl.WINDOW_CSS);
-        if (css != null && css.size() > 0) {
-            json.put("css", css);
+        putAttributeArray(json, window, PipeImpl.WINDOW_CSS, "css");
+
+        out(out, json);
+    }
+
+    String getContent(Window window) {
+        return window.getContent();
+    }
+
+    private void putAttributeArray(JSONObject json, Window window, String type, String name) {
+        JSONArray attributeAsArray = getAttributeAsArray(window, type);
+        if (attributeAsArray != null && attributeAsArray.size() > 0) {
+            json.put(name, attributeAsArray);
         }
+    }
+
+    private void out(Writer out, JSONObject json) throws IOException{
         out.append("<script type=\"text/javascript\">");
         out.append("mvcpipe.addWindow(");
         out.append(json.toString());

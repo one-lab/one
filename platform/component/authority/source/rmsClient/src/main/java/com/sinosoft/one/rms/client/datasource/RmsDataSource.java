@@ -6,14 +6,17 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
+import com.sinosoft.one.rms.client.sqlparser.RmsSQLParser;
 
-import com.sinosoft.one.rms.client.DataRuleStringCreat;
 
 public class RmsDataSource implements DataSource {
 	
 	private DataSource realDataSource;
 	
-	private DataRuleStringCreat dataRuleStringCreat;
+	private RmsSQLParser rmsSQLParser;
+	
+	private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
 	
 	public RmsDataSource(DataSource dataSource) {
 		this.realDataSource = dataSource;
@@ -24,7 +27,7 @@ public class RmsDataSource implements DataSource {
 	}
 
 	public Connection getConnection() throws SQLException {
-		return new RmsConnection(realDataSource.getConnection(),dataRuleStringCreat);
+		return new RmsConnection(realDataSource.getConnection(),rmsSQLParser,dataRuleFactoryPostProcessor);
 	}
 
 	public Connection getConnection(String username, String password)
@@ -47,13 +50,20 @@ public class RmsDataSource implements DataSource {
 	public int getLoginTimeout() throws SQLException {
 		return realDataSource.getLoginTimeout();
 	}
+	
+	
+	
 
-	public DataRuleStringCreat getDataRuleStringCreat() {
-		return dataRuleStringCreat;
+	public void setRmsSQLParser(RmsSQLParser rmsSQLParser) {
+		this.rmsSQLParser = rmsSQLParser;
 	}
 
-	public void setDataRuleStringCreat(DataRuleStringCreat dataRuleStringCreat) {
-		this.dataRuleStringCreat = dataRuleStringCreat;
+	public void setDataRuleFactoryPostProcessor(
+			DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor) {
+		this.dataRuleFactoryPostProcessor = dataRuleFactoryPostProcessor;
 	}
 
+	
+	
+	
 }

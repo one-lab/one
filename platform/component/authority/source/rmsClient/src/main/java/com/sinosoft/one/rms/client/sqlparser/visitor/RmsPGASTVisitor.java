@@ -4,6 +4,7 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlASTVisitorAdapter;
 import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.postgresql.visitor.PGASTVisitorAdapter;
+import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +14,13 @@ import com.alibaba.druid.sql.dialect.postgresql.visitor.PGASTVisitorAdapter;
  * To change this template use File | Settings | File Templates.
  */
 public class RmsPGASTVisitor extends PGASTVisitorAdapter {
-    public boolean visit(PGSelectQueryBlock x) {
-        return RmsVisitorUtils.visit(x);
+	
+	private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
+	
+	public RmsPGASTVisitor(DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor){
+		this.dataRuleFactoryPostProcessor=dataRuleFactoryPostProcessor;
+	}
+	public boolean visit(PGSelectQueryBlock x) {
+        return RmsSQLASTVisitorSupport.visit(x,dataRuleFactoryPostProcessor);
     }
 }

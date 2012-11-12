@@ -23,6 +23,8 @@ public class EnvContext {
     private static final String DATA = "DATA";
     
     private static final String CLASSNAME="MATHOD";
+    
+    private static final String USER="USER";
       
     public static void setDataAuthorityTaskId(String value) {
 		Map<String,Object >  context = threadLocal.get();
@@ -50,8 +52,6 @@ public class EnvContext {
 	}
     
     
-    
-    
 	public static void setClassName(String calssName) {
 		Map<String,Object >  context = threadLocal.get();
         if(context == null){
@@ -77,4 +77,19 @@ public class EnvContext {
 		linkedList.remove();
 	}
 	
+	//-------------------------------------------------------------//
+	public static void setLogin(User value) {
+		Map<String, Object> context = threadLocal.get();
+		if (context == null) {
+			context = new HashMap<String, Object>();
+			threadLocal.set(context);
+		}
+		context.put(USER, value);
+	}
+	
+	public static User getLogin() {
+		if(threadLocal.get() == null)
+            return null;
+		return (User)threadLocal.get().get(USER);
+	}
 }
