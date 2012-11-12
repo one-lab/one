@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+           version="2.5">
+<!--    <context-param>
+        <param-name>portalExecutorCorePoolSize</param-name>
+        <param-value>200</param-value>
+    </context-param>
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>production</param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:/spring/applicationContext*.xml
+        </param-value>
+    </context-param>-->
+
+    <!-- Filter 定义  -->
+    <!-- Character Encoding filter -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--<servlet>
+        <servlet-name>StartServlet</servlet-name>
+        <servlet-class>com.sinosoft.platform.platformDemo.web.StartServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>-->
+
+
+    <!-- Open Entity Manager in View filter -->
+<!--    <filter>
+        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+
+    <listener>
+        <listener-class>com.sinosoft.one.mvc.crypto.listener.CryotpSessionListener</listener-class>
+    </listener>
+
+
+    <filter>
+        <filter-name>cryptoFilter</filter-name>
+        <filter-class>com.sinosoft.one.mvc.crypto.filter.CryptoFilter</filter-class>
+        <init-param>
+            <param-name>cryptoConfigLocation</param-name>
+            <param-value>/WEB-INF/crypto/crypto_config.xml</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>cryptoFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>mvcFilter</filter-name>
+        <filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>mvcFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>

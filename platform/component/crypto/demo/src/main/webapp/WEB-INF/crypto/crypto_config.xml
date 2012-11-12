@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<CryptoConfig xmlns="http://com.sinosoft.one/schema/mvc/cryptoconfig"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://com.sinosoft.one/schema/mvc/cryptoconfig ">
+
+    <crpyto url="/demo/views/cryp1.jsp" >
+        <property includes="name,money,main" name="user" />
+        <property excludes="name,money" name="roles" />
+        <property includes="name,money,info" name="groups" />
+    </crpyto>
+    <crpyto url="/demo/ajax" >
+        <property includes="name,money,main" name="user" />
+
+    </crpyto>
+    <crpyto url="/demo/views/uncrypto.jsp">
+        <property includes="id,name,info2" name="user"/>
+    </crpyto>
+
+
+    <uncrypto url="/demo/send"></uncrypto>
+    <uncrypto url="/demo/uncrypto"></uncrypto>
+    <uncrypto url="/demo/ajaxParam"></uncrypto>
+    <uncrypto url="/demo/cryp/uncrpy1"></uncrypto>
+
+</CryptoConfig>
