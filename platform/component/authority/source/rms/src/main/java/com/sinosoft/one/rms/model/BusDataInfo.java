@@ -25,9 +25,6 @@ public class BusDataInfo  implements java.io.Serializable {
 	/** 属性业务数据表(BusDataTable) */
 	private String busDataTable;
 	
-	/** 属性业务数据实体(BusDataModel) */
-	private String busDataModel;
-	
 	/** 属性业务数据列(BusDataColumn) */
 	private String busDataColumn;
 	
@@ -88,21 +85,6 @@ public class BusDataInfo  implements java.io.Serializable {
 		this.busDataTable = busDataTable;
 	}
 	
-	/**
-	 * 属性业务数据实体(BusDataModel)的getter方法
-	 */
-	@Column(name = "BUSDATAMODEL")
-	public String getBusDataModel() {
-		return busDataModel;
-	}
-
-	/**
-	 * 属性业务数据实体(BusDataModel)的Setter方法
-	 */
-	public void setBusDataModel(String busDataModel) {
-		this.busDataModel = busDataModel;
-	}
-
 	/**
 	 * 属性业务数据列(BusDataColumn)的getter方法
 	 */

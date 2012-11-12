@@ -27,7 +27,7 @@ public class RmsAnnotationAspect {
 
 	private static CacheService arch4MethodNameCacheManager = CacheManager.getInstance("arch4Method");
 	
-    @Around("execution(* com.sinosoft.e..*.*(..))")
+    @Around("execution(* com.sinosoft.test..*.*(..))")
     public Object register(ProceedingJoinPoint pjp) throws Throwable {
     	if(pjp.getThis() == null || pjp.getTarget() == null) {
     		return pjp.proceed();

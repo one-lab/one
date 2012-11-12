@@ -15,41 +15,30 @@ import java.util.List;
 
 public class queryRuleAccordCompany implements DataRuleScript {
  	
-   @Autowired
-   private JSqlParser jSqlParser;
+ 	private String TABLENAME="ge_rms_company";
  	
-   public String creatSQL(String tableAlias,DataPower dataPower){
-  		String tempSqlOrHQl=""
-  		String comCode =
-		if(StringUtils.isNotBlank(dataPower.getParam())){
-			Map<String,String> tempMap = (Map<String, String>)JSON.parse(dataPower.getParam());
-			int i=0;
-			for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
-    			String table=busDataInfo.getBusDataTable()
-    			String column=busDataInfo.getBusDataColumn()
-    			if(i>0){
-    				tempSqlOrHQl=tempSqlOrHQl+" and "+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
-    			}else{
-    				tempSqlOrHQl=tempSqlOrHQl+" "+column+"=(select "+column+" from "+table+" where "+column+"='"+tempMap.get(column)+"')"
-    			}
-    			i++
-			}
-			return tempSqlOrHQl 
+ 	private String CLOUNMNAME="comCode";
+ 	
+   	public String creatSQL(String rule,String tableNameAlias,String userCode,String comCode,String prama,String clounmName){
+		String alias="";
+		if(StringUtils.isNotBlank(tableNameAlias)){
+			alias=tableNameAlias;
+		}
+		if(StringUtils.isNotBlank(prama)){
+			Map<String,String> tempMap = (Map<String, String>)JSON.parse(prama);
+    		if(StringUtils.isNotBlank(rule)){
+    			rule=rule+" and "+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
+    		}else{
+    			rule=rule+""+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
+    		}
+			return rule 
 		}else{
-			int i=0;
-			for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
-    			String table=busDataInfo.getBusDataTable()
-    			String column=busDataInfo.getBusDataColumn()
-    			if(i>0){
-    				if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" and "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
-				}else{
-					if("comCode".equals(column))
-    					tempSqlOrHQl=tempSqlOrHQl+" "+column+"=(select "+column+" from "+table+" where "+column+"='"+ dataPower.getComCode()+"')"
-				}
-				i++
+    		if(StringUtils.isNotBlank(rule)){
+    			rule=rule+" and "+alias+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+ comCode+"')"
+			}else{
+    			rule=rule+""+alias+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+ comCode+"')"
 			}
-			return tempSqlOrHQl 
+			return rule 
 		}
   	}
   
