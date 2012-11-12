@@ -4,6 +4,7 @@ import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.oracle.visitor.OracleASTVisitorAdapter;
 import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.sqlserver.visitor.SQLServerASTVisitorAdapter;
+import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +14,13 @@ import com.alibaba.druid.sql.dialect.sqlserver.visitor.SQLServerASTVisitorAdapte
  * To change this template use File | Settings | File Templates.
  */
 public class RmsSQLServerASTVisitor extends SQLServerASTVisitorAdapter {
+	
+	private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
+	
+	public RmsSQLServerASTVisitor(DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor){
+		this.dataRuleFactoryPostProcessor=dataRuleFactoryPostProcessor;
+	}
     public boolean visit(SQLServerSelectQueryBlock x) {
-        return RmsVisitorUtils.visit(x);
+        return RmsSQLASTVisitorSupport.visit(x,dataRuleFactoryPostProcessor);
     }
 }
