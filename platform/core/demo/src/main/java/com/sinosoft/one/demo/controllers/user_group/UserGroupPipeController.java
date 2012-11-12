@@ -25,10 +25,11 @@ public class UserGroupPipeController {
         List<User> users = accountManager.getAllUser();
         inv.addModel("users", users);
 
-        List<Group> groups = accountManager.getAllGroup();
+		p.addWindow("p1", "/account/user/pipe1");
+		
+		List<Group> groups = accountManager.getAllGroup();
         inv.addModel("groups", groups);
 
-		p.addWindow("p1", "/account/user/pipe1");
 		p.addWindow("p2", "/account/group/pipe2");
 		
 //		p.addWindow("p1", "/user_group/pipe/p1");
