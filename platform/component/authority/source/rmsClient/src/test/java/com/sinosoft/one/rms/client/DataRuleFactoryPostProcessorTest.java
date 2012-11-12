@@ -9,6 +9,8 @@ package com.sinosoft.one.rms.client;
  */
 
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -27,14 +29,11 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
     private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
     @Test
     public void getDataRule(){
-////    	User user= rmsClientService.login("admin", "00","RMS");
-//  
-//    	String rule=null;
-//    	for (DataPower dataPower : user.getDataPowers()) {
-//    	  	String sqlOrHql="select * from ge_rms_group where isvalidate='1' order by comCode";
-//    		rule=dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(sqlOrHql, dataPower);
-//    	}
-//    	Assert.assertEquals(rule,"select * from ge_rms_group where isvalidate='1'  and comCode=(select comCode from ge_rms_company where comCode='00') order by comCode");
-//    	testService.find(rule);
+    	String rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("", "a", "admin", "00", "{comCode:11}", "comCode");
+    	Assert.assertEquals("comCode=(select comCode from ge_rms_company where comCode='11')",rule);
+    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("comCode=(select comCode from ge_rms_company where comCode='11')", "a", "admin", "00", "{comCode:11}", "comCode");
+    	Assert.assertEquals("comCode=(select comCode from ge_rms_company where comCode='11') and comCode=(select comCode from ge_rms_company where comCode='11')",rule);
+    	
     }
+    
 }
