@@ -122,6 +122,13 @@ public class TaskAspect {
         String businessId = parserBusinessId(bean,
                 processTask.businessIdAttibuteName());
         String userId = processTask.userId();
+        if(StringUtils.isBlank(userId)) {
+        	int userIdBeanOffset = processTask.userIdBeanOffset();
+        	if(userIdBeanOffset == -1) {
+        		throw new IllegalArgumentException("processTask annotation must assign userId or userIdBeanOffset.");
+        	}
+        	userId = this.parserAttributeValue(pjp.getArgs()[userIdBeanOffset], processTask.userIdAttributeName());
+        }
         Object result = null;
         
         Map<String, Object> paramData = new HashMap<String, Object>();

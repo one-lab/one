@@ -1,78 +1,126 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>One-Data使用手册</title>
-<link href="css/templet.css" rel="stylesheet" type="text/css" />
-<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
-<link href="css/tips.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="js/jquery-1.7.1.js"></script>
-<script language="javascript" src="js/code/shCore.js"></script>
-<script language="javascript" src="js/code/shBrushXml.js"></script>
-<script language="javascript" src="js/code/shBrushJScript.js"></script>
-<script language="javascript" src="js/code/shBrushJava.js"></script>
-<script language="javascript" src="js/tips.js"></script>
-<script type="text/javascript">
-$(function(){
-	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
-	dp.SyntaxHighlighter.HighlightAll("code");
-	$("#API > tbody > tr:odd").addClass("even");
-	var i = 1;
-	$("li.on_off").each(function(){		
-		var theID = "on_off" + i;
-		$(this).attr("id",theID);
-		i++
-	});
-	i=1
-	$("div.code_cont").each(function(){
-		var theID = "code_cont" + i;
-		$(this).attr("id",theID);
-		i++
-	});
-	$("li.on_off").click(function(){
-		var conID = $(this).attr("id").substring(6,7);
-		var theId = $("#code_cont" + conID);
-		$(this).toggleClass("select");
-		theId.slideToggle("normal")
-	});
-    $("#toTop").tips({type:"toolTip",tipPostion:"right"});
-    var bodyTop = $(window).height()/2
-    $(window).scroll(function(){
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>One-Data使用手册</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css"/>
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css"/>
+    <link href="css/tips.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            $("#API > tbody > tr:odd").addClass("even");
+            var i = 1;
+            $("li.on_off").each(function () {
+                var theID = "on_off" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            i = 1
+            $("div.code_cont").each(function () {
+                var theID = "code_cont" + i;
+                $(this).attr("id", theID);
+                i++
+            });
+            $("li.on_off").click(function () {
+                var conID = $(this).attr("id").substring(6, 7);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip", tipPostion:"right"});
+            var bodyTop = $(window).height() / 2
+            $(window).scroll(function () {
 
-        var offsetTop = bodyTop + $(window).scrollTop() +"px";
-        $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
-        if($(window).scrollTop() > 10){
+                var offsetTop = bodyTop + $(window).scrollTop() + "px";
+                $("#toTop").animate({top:offsetTop }, { duration:600, queue:false });
+                if ($(window).scrollTop() > 10) {
 
-            $("#toTop").show();
-        }else{
+                    $("#toTop").show();
+                } else {
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function () {
+                toTop()
+            });
+        });
+        function toTop() {
             $("#toTop").hide();
+            $("html,body").animate({scrollTop:$("body").offset().top}, 500);
         }
-    });
-    $("#toTop").click(function(){toTop()});
-});
-function toTop(){
-    $("#toTop").hide();
-    $("html,body").animate({scrollTop: $("body").offset().top},500);
-}
-</script>
-<style>
-.new{padding:10px;line-height:22px;}
-.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
-.new span{color:#F30;font-weight:bold;padding:0 4px;}
-#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
-/*customTip*/
-.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
-.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
-.email_ex{padding:4px 6px;text-align:center;color:#333}
-.email_ex a{color:#005590}
-</style>
+    </script>
+    <style>
+        .new {
+            padding: 10px;
+            line-height: 22px;
+        }
+
+        .img_ex01 {
+            float: right;
+            border: #ccc 1px solid;
+            margin-left: 10px;
+        }
+
+        .new span {
+            color: #F30;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        #next_news {
+            border: #72a89a 1px solid;
+            line-height: 24px;
+            height: 24px;
+            display: block;
+            width: 120px;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            background: #72b0a1
+        }
+
+            /*customTip*/
+        .example {
+            border-top: #DFDFDF 1px solid;
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+
+        .text_ex {
+            border: #DFDFDF 1px solid;
+            line-height: 18px;
+            height: 18px;
+            padding: 2px;
+            width: 79%
+        }
+
+        .email_ex {
+            padding: 4px 6px;
+            text-align: center;
+            color: #333
+        }
+
+        .email_ex a {
+            color: #005590
+        }
+    </style>
 </head>
 
 <body>
 
 <div class="header">
-	<h1 class="logo"><b>Sinosoft</b> One-DATA(V1.0.0)</h1>
-    <h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+    <h1 class="logo"><b>Sinosoft</b> One-DATA(V1.0.0)</h1>
+
+    <h2 align="right"><font size="3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
 </div>
 <div class="content bread_crumb">
     <a href="index.html">首页</a>
@@ -80,39 +128,32 @@ function toTop(){
     <span class="select">执行存储过程</span>
 </div>
 <div class="content">
-
     <div class="title">
-        执行存储过程
+        执行存储过程需要遵循以下规则
     </div>
-    <p>使用存储过程的先决条件是在配置文件中配置好one-data</p>
-    <p>在配置文件中添加如下代码</p>
-    <ul class="tabs">
-        <li class="select"><span class="name"><b></b>ApplicationContext.xml代码<font>Example</font></span><span></span></li>
-        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
-    </ul>
-    <div class="code_box">
-        <div class="intr_line">
-            <div class="info">
-                <div class="content">
-                    <div class="code_cont" style="display: block;">
-                        <h3>ApplicationContext.xml</h3>
-                        <textarea name="code" class="xml" >
-
-                            xmlns:onejpa="http://com.sinosoft.one/schema/data/jpa"
-                            http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
-                            <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
-                        </textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <p>在Dao接口中定义调用存储过程的方法，返回值类型为void</p>
+    <p>使用@SQL方式或<a href="dataSql.html">SQLQuery方式</a>注入存储过程，推荐使用@SQL方式</p>
+    <p>调用存储过程的SQL语句支持以下三种形式（第一、二种方式支持ORACLE、MYSQL数据库，第二、三种方式支持MYSQL、SQLServer数据库，推荐使用第二种方式）：</p>
+    <div class="introduce">
+        <ul style="list-style-type: decimal;">
+            <li>call 存储过程名(?1,?2,...)</li>
+            <li>{ call 存储过程名(?1,?2,...)}</li>
+            <li>exec | execute 存储过程名 ?1,?2,...</li>
+        </ul>
     </div>
-    <p>下面我们看一下Dao层代码：</p>
+    <p>方法中的参数有以下三种类型：</p>
+    <div class="introduce">
+        <ul style="list-style-type: decimal;">
+            <li>普通参数：与存储过程的in参数相对应</li>
+            <li>OutProcedureResult类型参数：与存储过程的Out参数相对应</li>
+            <li>ResultSetProcedureResult类型参数：接收存储过程结果集的参数（调用MYSQL、SQLServer存储过程时使用）</li>
+        </ul>
+    </div>
+    <p>方法中的参数位置有以下约束：普通参数、OutProcedureResult类型参数与存储过程的in参数、out参数在位置上一一对应，ResultSetProcedureResult类型参数置于参数列表尾部</p>
     <br>
-    <p><font size="3">示例代码</font></p></br>
-
+    <p><font size="3">Dao层示例代码</font></p></br>
     <ul class="tabs">
-        <li class="select"><span class="name"><b></b>Dao层代码<font>Example</font></span><span></span></li>
+        <li class="select"><span class="name"><b></b>UserDao.java<font>Example</font></span><span></span></li>
         <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
     </ul>
     <div class="code_box">
@@ -120,24 +161,178 @@ function toTop(){
             <div class="info">
                 <div class="content">
                     <div class="code_cont" style="display: block;">
-                        <h3>Java代码</h3>
-                        <textarea name="code" class="java" >
+                        <h3>UserDao.java</h3>
+                        <textarea name="code" class="java">
+                            //调用ORACLE存储过程
+                            @SQL("{call oracle_pro_for_demo(?1,?2,?3,?4)}")
+                            public void procedureResultWithOracle(Long inId, String inName, ProcedureResult...procedureResults);
 
-                            @SQL(value = "call testprc(?1,?2)")
-                            void testProc(String newname,String id);
+                            //调用MYSQL存储过程
+                            @SQL("{call mysql_pro_for_demo(?1,?2,?3,?4)}")
+                            public void procedureResultWithMysql(Long inId, String inName, ProcedureResult...procedureResults);
                         </textarea>
-                            <p>用法如@Sql中用法、在这里就不一一列举、直接调用即可</p>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <p><font size="3">Service层示例代码</font></p></br>
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>AccountManager.java<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="code_cont" style="display: block;">
+                        <h3>AccountManager.java</h3>
+                        <textarea name="code" class="java">
+                            //ORACLE存储过程的调用
+                            public Map<String, OutProcedureResult> findAllUserByOracleProcedure(Long id, String name) {
+                                //初始化OutProcedureResult参数
+                                //OutProcedureResult构造方法中第一个参数为对应的泛型参数类型，第二个参数为存储过程中相应的参数对应的JDBC类型
+                                ProcedureResult<List<User>> procedureResultUser = new OutProcedureResult<List<User>>(User.class, OracleTypes.CURSOR);
+
+                                //初始化OutProcedureResult参数，接收游标形式的返回值，在这里对应的是String类型
+                                ProcedureResult<List<String>> procedureResultPhone = new OutProcedureResult<List<String>>(String.class, OracleTypes.CURSOR);
+
+                                //调用方法，方法中的两个OutProcedureResult参数与存储过程中的Out参数在位置上一一对应
+                                userDao.procedureResultWithOracle(id, name, procedureResultUser, procedureResultPhone);
+
+                                Map<String, OutProcedureResult> outProcedureResultMap = new HashMap<String, OutProcedureResult>();
+                                outProcedureResultMap.put("users", (OutProcedureResult) procedureResultUser);
+                                outProcedureResultMap.put("phones", (OutProcedureResult) procedureResultPhone);
+                                return outProcedureResultMap;
+                            }
+
+                            //MYSQL存储过程的调用
+                            public Map<String, ProcedureResult> findAllUserByMysqlProcedure(Long id, String name) {
+                                //初始化OutProcedureResult参数，接收BIGINT类型的返回值
+                                ProcedureResult<List<Long>> procedureResultId = new OutProcedureResult<List<Long>>(Long.class, Types.BIGINT);
+
+                                //初始化OutProcedureResult参数，接收BIGINT类型的返回值
+                                ProcedureResult<List<Long>> procedureResultName = new OutProcedureResult<List<Long>>(Long.class, Types.BIGINT);
+
+                                //初始化ResultSetProcedureResult参数，接收UserInfo类型的返回值
+                                //ResultSetProcedureResult构造方法中的参数为对应的泛型参数类型
+                                ProcedureResult<List<UserInfo>> procedureResultUserInfo = new ResultSetProcedureResult<List<UserInfo>>(UserInfo.class);
+
+                                //调用方法，方法中的两个OutProcedureResult参数与存储过程中的Out参数在位置上一一对应，ResultSetProcedureResult参数位于参数列表尾部
+                                userDao.procedureResultWithMysql(id, name, procedureResultId, procedureResultName, procedureResultUserInfo);
+
+                                Map<String, ProcedureResult> procedureResultMap = new HashMap<String, ProcedureResult>();
+                                procedureResultMap.put("ids", procedureResultId);
+                                procedureResultMap.put("names", procedureResultName);
+                                procedureResultMap.put("userInfos", procedureResultUserInfo);
+                                return procedureResultMap;
+                            }
+                        </textarea>
+                        <p>在有多个ResultSetProcedureResult参数时，ResultSetProcedureResult参数的位置顺序还要与存储过程中相应的SQL语句的顺序一致</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>OutProcedureResult构造方法中的第二个参数推荐使用java.sql.Types中的相应类型参数</p>
+    <p>如果所使用的数据库中相应的类型与java.sql.Types中的对应类型有差异，再使用当前数据库的相应类型参数（例如：OracleTypes.CURSOR）</p><br>
+    <p><font size="3">存储过程示例代码</font></p></br>
+    <ul class="tabs">
+        <li class="select"><span class="name"><b></b>存储过程<font>Example</font></span><span></span></li>
+        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+    </ul>
+    <div class="code_box">
+        <div class="intr_line">
+            <div class="info">
+                <div class="content">
+                    <div class="code_cont" style="display: block;">
+                        <h3>存储过程</h3>
+                        <textarea name="code" class="java">
+                            //ORACLE存储过程
+                            CREATE OR REPLACE PROCEDURE ORACLE_PRO_FOR_DEMO(P_ID IN ACCT_USER.ID%TYPE,P_NAME IN ACCT_USER.NAME%TYPE,
+                            P_OUTPRO1 OUT SYS_REFCURSOR,P_OUTPRO2 OUT SYS_REFCURSOR) IS
+                            BEGIN
+                            OPEN P_OUTPRO1 FOR SELECT * FROM ACCT_USER a WHERE a.ID>=P_ID AND a.Name LIKE P_NAME;
+                            OPEN P_OUTPRO2 FOR SELECT PHONE FROM ACCT_USERINFO b WHERE b.ID IN
+                            (SELECT a.ID FROM ACCT_USER a WHERE a.ID>=P_ID AND a.Name LIKE P_NAME);
+                            END ORACLE_PRO_FOR_DEMO;
+
+                            //MYSQL存储过程
+                            CREATE PROCEDURE `MYSQL_PRO_FOR_DEMO`(IN `P_ID` bigint(20),IN `P_NAME` varchar(255),OUT `P_OUTPRO1` bigint(20),OUT `P_OUTPRO2` bigint(20))
+                            BEGIN
+                            SELECT COUNT(*) INTO P_OUTPRO1 FROM acct_user a WHERE a.id>=P_ID;
+                            SELECT COUNT(*) INTO P_OUTPRO2 FROM acct_user b WHERE b.name LIKE P_NAME;
+                            SELECT * FROM acct_userinfo c WHERE c.ID IN (SELECT a.id FROM acct_user a WHERE a.id>=P_ID AND a.name LIKE P_NAME);
+                            END;
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="title">
+        类型对照表
+    </div>
+        <p>JDBC数据类型（java.sql.Types）与java数据类型对照表</p>
+        <table border="1">
+            <tr>
+                <th>JDBC数据类型</th>
+                <th>Java数据类型</th>
+            </tr>
+            <tr><td>ARRAY</td><td>java.sql.Array</td></tr>
+            <tr><td>BIGINT</td><td>long</td></tr>
+            <tr><td>BINARY</td><td>byte[]</td></tr>
+            <tr><td>BIT</td><td>boolean</td></tr>
+            <tr><td>BLOB</td><td>java.sql.Blob</td></tr>
+            <tr><td>BOOLEAN</td><td>boolean</td></tr>
+            <tr><td>CHAR</td><td>String</td></tr>
+            <tr><td>CLOB</td><td>java.sql.Clob</td></tr>
+            <tr><td>DATALINK</td><td>java.net.URL</td></tr>
+            <tr><td>DATE</td><td>java.sql.Date</td></tr>
+            <tr><td>DECIMAL</td><td>java.math.BigDecimal</td></tr>
+            <tr><td>DISTINCT</td><td>N/A</td></tr>
+            <tr><td>DOUBLE</td><td>double</td></tr>
+            <tr><td>FLOAT</td><td>float</td></tr>
+            <tr><td>INTEGER</td><td>int</td></tr>
+            <tr><td>JAVA_OBJECT</td><td>Object</td></tr>
+            <tr><td>LONGVARBINARY</td><td>byte[]</td></tr>
+            <tr><td>LONGVARCHAR</td><td>String</td></tr>
+            <tr><td>NULL</td><td>null</td></tr>
+            <tr><td>NUMERIC</td><td>java.math.BigDecimal</td></tr>
+            <tr><td>OTHER</td><td>N/A</td></tr>
+            <tr><td>LONGNVARCHAR</td><td>String</td></tr>
+            <tr><td>NCHAR</td><td>String</td></tr>
+            <tr><td>NCLOB</td><td>N/A</td></tr>
+            <tr><td>NVARCHAR</td><td>String</td></tr>
+            <tr><td>SQLXML</td><td>SQLXML</td></tr>
+            <tr><td>REAL</td><td>float</td></tr>
+            <tr><td>REF</td><td>java.sql.Ref</td></tr>
+            <tr><td>ROWID</td><td>N/A</td></tr>
+            <tr><td>SMALLINT</td><td>short</td></tr>
+            <tr><td>STRUCT</td><td>java.sql.Struct</td></tr>
+            <tr><td>TIME</td><td>java.sql.Time</td></tr>
+            <tr><td>TIMESTAMP</td><td>java.sql.Timestamp</td></tr>
+            <tr><td>TINYINT</td><td>byte</td></tr>
+            <tr><td>VARBINARY</td><td>byte[]</td></tr>
+            <tr><td>VARCHAR</td><td>String</td></tr>
+        </table><br>
+        <p>在ORACLE数据库中，有一些数据类型是java.sql.Types所不具备的，这时就需要使用oracle.jdbc.OracleTypes提供的数据类型</p>
+        <p>具体的数据类型和对应的Java类型如下表所示：</p>
+        <table border="1">
+            <tr>
+                <th>oracle.jdbc.OracleTypes</th>
+                <th>Java数据类型</th>
+            </tr>
+            <tr><td>CURSOR</td><td>java.sql.ResultSet</td></tr>
+            <tr><td>RAW</td><td>byte[]</td></tr>
+            <tr><td>TIMESTAMPLTZ</td><td>java.sql.Timestamp</td></tr>
+            <tr><td>TIMESTAMPTZ</td><td>java.sql.Timestamp</td></tr>
+        </table>
 </div>
 
 <a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
 <div class="footer">
-Designed by <b>Sinosoft</b>
+    Designed by <b>Sinosoft</b>
 </div>
 </body>
 </html>

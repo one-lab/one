@@ -87,33 +87,8 @@ function toTop(){
     <div class="introduce">
         <p>在使用原生Sql的时候、我们使用@Sql的形式</p>
         <p>对于特定场景方案的解决、例如报表、审计等对非单一表获取数据有其独特的优势</p>
-        <p>使用@Sql的先决条件是在配置文件中做相应配置</p>
-        <p>在配置文件中添加如下代码</p>
     </div>
-    <ul class="tabs">
-        <li class="select"><span class="name"><b></b>ApplicationContext.xml<font>Example</font></span><span></span></li>
-        <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
-    </ul>
-    <div class="code_box">
-        <div class="intr_line">
-            <div class="info">
-                <div class="content">
-                    <p id="news" class="new">
-                    <div class="code_cont" style="display: block;">
-                        <h3>ApplicationContext.xml</h3>
-                        <textarea name="code" class="xml" >
 
-                            xmlns:onejpa="http://com.sinosoft.one/schema/data/jpa"
-                            http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
-                            <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
-
-                        </textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
     <p><font size="3">示例代码</font></p></br>
 
     <ul class="tabs">
@@ -167,12 +142,12 @@ function toTop(){
 
 <div class="content">
     <div class="title">
-        SqlQuery
+        SQLQuery
     </div>
     <div class="introduce">
         <p>@Sql还支持一种在配置文件中配置Sql的方式</p>
         <p>这样做实现代码复用、而且易于管理、修改时也方便快捷。</p>
-        <p>首先我们要在配置文件添加下面的支持，这里我们用sql-queries-location指定SqlQuery配置文件的路径</p>
+        <p>首先我们要在配置文件添加下面的支持，这里我们用sql-queries-location指定SQLQuery配置文件的路径</p>
 
     </div>
     <ul class="tabs">

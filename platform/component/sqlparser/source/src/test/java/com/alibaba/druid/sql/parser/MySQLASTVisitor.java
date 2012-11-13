@@ -5,10 +5,7 @@ import com.alibaba.druid.sql.ast.expr.SQLBinaryOpExpr;
 import com.alibaba.druid.sql.ast.expr.SQLBinaryOperator;
 import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import com.alibaba.druid.sql.ast.statement.*;
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelect;
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectJoin;
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectQueryBlock;
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectSubqueryTableSource;
+import com.alibaba.druid.sql.dialect.oracle.ast.stmt.*;
 import com.alibaba.druid.sql.dialect.oracle.visitor.OracleASTVisitorAdapter;
 import com.alibaba.druid.sql.visitor.SQLASTVisitorAdapter;
 
@@ -26,6 +23,12 @@ public class MySQLASTVisitor extends OracleASTVisitorAdapter {
     public boolean visit(OracleSelectQueryBlock x) {
         Map<String, String> tableAlias = new HashMap<String, String>();
 
+
+        if(x.getHierachicalQueryClause() != null) {
+            OracleSelectHierachicalQueryClause hierachicalQueryClause = x.getHierachicalQueryClause();
+            hierachicalQueryClause.getStartWith();
+            hierachicalQueryClause.getConnectBy();
+        }
         if (x.getFrom() instanceof SQLExprTableSource) {
             recordTableSource((SQLExprTableSource)x.getFrom(), tableAlias);
         } else if(x.getFrom() instanceof SQLJoinTableSource) {

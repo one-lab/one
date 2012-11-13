@@ -356,27 +356,6 @@
     <div class="title">
         动态SQL
     </div>
-    <p>使用动态Sql的先决条件是在配置文件中配置好one-data</p>
-    <p>在配置文件中添加如下代码</p>
-    <div class="content">
-        <ul class="tabs">
-            <li class="select"><span class="name"><b></b>ApplicationContext.xml<font>Example</font></span><span></span></li>
-            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
-        </ul>
-        <div class="code_box">
-            <div class="intr_line">
-                <div class="info">
-                    <div class="code_cont" style="display: block">
-                        <h3>ApplicationContext.xml文件</h3>
-                        <textarea name="code" class="xml" >
-                            xmlns:onejpa="http://com.sinosoft.one/schema/data/jpa"
-                            http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
-                        </textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <p>下面是动态Sql的一个演示代码：</p>
     <div class="content">
         <ul class="tabs">
@@ -394,7 +373,7 @@
                             User selectUserForActiveComplexSql1(@Param("params") int[] params);
                         </textarea>
                         <p>其中#for()指var在params中循环遍历、#if后面可写条件</p>
-                        <p>同时，动态Sql也可以写在配置文件中，相关配置如上节的<a href="dataSql.html">SqlQuery</a></p>
+                        <p>同时，动态Sql也可以写在配置文件中，相关配置如上节的<a href="dataSql.html">SQLQuery</a></p>
                     </div>
                 </div>
             </div>
