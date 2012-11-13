@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://com.sinosoft.one/schema/mvc/cryptoconfig" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="CryptoConfig" type="cry:CryptoConfigType" xmlns:cry="http://com.sinosoft.one/schema/mvc/cryptoconfig"/>
-  <xs:complexType name="crpytoType">
+  <xs:complexType name="uncryptoType" mixed="true">
     <xs:sequence>
       <xs:element type="cry:propertyType" name="property" maxOccurs="unbounded" minOccurs="0" xmlns:cry="http://com.sinosoft.one/schema/mvc/cryptoconfig"/>
     </xs:sequence>
     <xs:attribute type="xs:string" name="url" use="optional"/>
   </xs:complexType>
-  <xs:complexType name="uncryptoType">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute type="xs:string" name="url" use="optional"/>
-      </xs:extension>
-    </xs:simpleContent>
+  <xs:complexType name="cryptoType">
+    <xs:sequence>
+      <xs:element type="cry:propertyType" name="property" maxOccurs="unbounded" minOccurs="0" xmlns:cry="http://com.sinosoft.one/schema/mvc/cryptoconfig"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="url" use="optional"/>
   </xs:complexType>
   <xs:complexType name="CryptoConfigType">
-    <xs:sequence>
-      <xs:element type="cry:crpytoType" name="crpyto" maxOccurs="unbounded" minOccurs="0" xmlns:cry="http://com.sinosoft.one/schema/mvc/cryptoconfig"/>
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="cry:cryptoType" name="crypto" maxOccurs="unbounded" minOccurs="0" xmlns:cry="http://com.sinosoft.one/schema/mvc/cryptoconfig"/>
       <xs:element type="cry:uncryptoType" name="uncrypto" maxOccurs="unbounded" minOccurs="0" xmlns:cry="http://com.sinosoft.one/schema/mvc/cryptoconfig"/>
-    </xs:sequence>
+    </xs:choice>
   </xs:complexType>
   <xs:complexType name="propertyType">
     <xs:simpleContent>

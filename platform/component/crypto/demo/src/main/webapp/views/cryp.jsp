@@ -42,7 +42,7 @@
 
                 $(".miwen").val(enText);
                 $(".miwen2").val(b64);
-
+                alert(b64)
                 $.ajax({
                     url:"/demo/send",
                     type:"post",
@@ -50,6 +50,7 @@
                         data:b64
                     },
                     success : function (data) {
+                        alert(data);
                         $(".result").val(data);
                     },
                     error : function() {

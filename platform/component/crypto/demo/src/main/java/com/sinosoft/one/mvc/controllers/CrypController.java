@@ -43,13 +43,14 @@ public class CrypController {
 	}
 
 	@Post("send")
-	public String getCrpy(Invocation inv,@Param("data") String data) {
+	public Reply getCrpy(Invocation inv,@Param("data") String data) {
 		String md5 = (String) inv.getRequest().getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
-		String result = null;
 
-		result = CryptoCodec.decode(md5,data);
-
-		return "@"+result;
+		User user = new User() ;
+		user.setId("1");
+		user.setEmail("aaaaaaaaaaaaaa");
+		user.setInfo("asdfdsfs");
+		return Replys.with(user).as(Json.class);
 	}
 	@Post("uncrypto")
 	public String formUncrypto(Invocation inv,@Param("group.name") String groupName,
