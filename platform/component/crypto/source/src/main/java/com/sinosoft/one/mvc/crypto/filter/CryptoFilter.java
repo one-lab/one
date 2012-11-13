@@ -31,16 +31,24 @@ import java.util.*;
  */
 public class CryptoFilter implements Filter {
 
-
 	private Log logger = LogFactory.getLog(CryptoFilter.class);
 	private static String configLocation;
 	private FilterConfig filterConfig;
-	private ServletContext servletContext;
+	private static ServletContext servletContext;
 	private static CryptoConfig cryptoConfig = CryptoConfig.getInstance();
 
-	public static CryptoConfig getCryptoConfig() {
-		return cryptoConfig;
+	public static InputStream getConfigFileAsStream() {
+		return servletContext.getResourceAsStream(configLocation);
 	}
+
+	public static ServletContext getServletCotext() {
+		return servletContext;
+	}
+
+	public static String getConfigFileRealPath() {
+		return servletContext.getRealPath(configLocation);
+	}
+
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;

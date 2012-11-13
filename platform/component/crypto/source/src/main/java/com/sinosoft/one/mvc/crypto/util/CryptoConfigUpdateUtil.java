@@ -15,7 +15,6 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,39 +29,21 @@ public final class CryptoConfigUpdateUtil {
 	private static Log logger = LogFactory.getLog(CryptoConfigUpdateUtil.class);
 
 	private static final String UNCRYPTO_ELEMENT_NAME = "uncrypto";
+
 	private static final String CRYPTO_ELEMENT_NAME = "crypto";
+
 	private static final String CRYPTO_CHILD_NAME = "property";
+
 	private static final String CRYPTO_CHILD_ATTR_INCLUDES = "includes";
+
 	private static final String CRYPTO_CHILD_ATTR_EXCLUDES = "excludes";
+
 	private static final String CRYPTO_CHILD_ATTR_NAME = "name";
 
-	static String tempPath = "D:/git-source/platform-repo/platform/component/crypto/demo/src/main/webapp/WEB-INF/crypto/crypto_config.xml";
 
-	public static void main(String[] args) {
-
-
+	public static void deleteCryptoConfigs(String... urls) {
 		try {
-//			saveUnCryptoConfig("/demo/test/save4","/demo/test/save2","/demo/test/save3");
-//			deleteUnCryptoConfig("/demo/test/save");
-//			List<Crypto> list = new ArrayList<Crypto>();
-//			list.add(new Crypto("/demo/views/a.jsp","id,name",null,"testname"));
-//			list.add(new Crypto("/demo/views/a.jsp",null,"id,name","testname"));
-//			list.add(new Crypto("/demo/views/a.jsp","id,name",null,"testname"));
-//			saveCryptoConfig("/demo/views/a.jsp", list);
-			deleteCryptoConfigs("/demo/views/a.jsp","/demo/ajax");
-		} catch (FileNotFoundException e) {
-
-		}
-
-
-	}
-
-	public static void deleteCryptoConfigs(String... urls) throws FileNotFoundException {
-		InputStream is = new FileInputStream(tempPath);
-		XMLWriter writer = null;
-		SAXReader reader = new SAXReader();
-		try {
-			Document document = reader.read(is);
+			Document document = new SAXReader().read(CryptoFilter.getConfigFileAsStream());
 			Element root = document.getRootElement();
 			for( String url : urls ) {
 				boolean canDelete = false;
@@ -78,9 +59,7 @@ public final class CryptoConfigUpdateUtil {
 					CryptoConfig.getInstance().deleteCrypto(url);
 				}
 			}
-			writer = new XMLWriter(new FileWriter(tempPath), getOutPutFormat());
-			writer.write(document);
-			writer.close();
+			writeConfigFile(document);
 		} catch (DocumentException e) {
 			logger.error(e);
 		} catch (IOException e) {
@@ -88,14 +67,16 @@ public final class CryptoConfigUpdateUtil {
 		}
 	}
 
-	public static void saveCryptoConfig(String url,List<Crypto> cryptos) throws FileNotFoundException {
-		InputStream is = new FileInputStream(tempPath);
-		XMLWriter writer = null;
-		SAXReader reader = new SAXReader();
-		try {
-			Document document = reader.read(is);
-			Element root = document.getRootElement();
+	private static void writeConfigFile(Document document) throws IOException {
+		XMLWriter writer = new XMLWriter(new FileWriter(CryptoFilter.getConfigFileRealPath()), getOutPutFormat());
+		writer.write(document);
+		writer.close();
+	}
 
+	public static void saveCryptoConfig(String url,List<Crypto> cryptos) {
+		try {
+			Document document = new SAXReader().read(CryptoFilter.getConfigFileAsStream());
+			Element root = document.getRootElement();
 			boolean isOld = false;
 			for(Iterator<Element> it = root.elementIterator();it.hasNext();){
 				Element el = it.next();
@@ -115,13 +96,9 @@ public final class CryptoConfigUpdateUtil {
 					} else if(cry.getExcludes() != null) {
 						property.addAttribute(CRYPTO_CHILD_ATTR_EXCLUDES,cry.getExcludes());
 					}
-
 				}
 			}
-
-			writer = new XMLWriter(new FileWriter(tempPath), getOutPutFormat());
-			writer.write(document);
-			writer.close();
+			writeConfigFile(document);
 		} catch (DocumentException e) {
 			logger.error(e);
 		} catch (IOException e) {
@@ -136,12 +113,9 @@ public final class CryptoConfigUpdateUtil {
 		return format;
 	}
 
-	public static void deleteUnCryptoConfigs(String... urls) throws FileNotFoundException {
-		InputStream is = new FileInputStream(tempPath);
-		XMLWriter writer = null;
-		SAXReader reader = new SAXReader();
+	public static void deleteUnCryptoConfigs(String... urls){
 		try {
-			Document document = reader.read(is);
+			Document document = new SAXReader().read(CryptoFilter.getConfigFileAsStream());
 			Element root = document.getRootElement();
 			for( String url : urls ) {
 				boolean canDelete = false;
@@ -158,9 +132,7 @@ public final class CryptoConfigUpdateUtil {
 					CryptoConfig.getInstance().deleteUnCrypto(url);
 				}
 			}
-			writer = new XMLWriter(new FileWriter(tempPath), getOutPutFormat());
-			writer.write(document);
-			writer.close();
+			writeConfigFile(document);
 		} catch (DocumentException e) {
 			logger.error(e);
 		} catch (IOException e) {
@@ -168,15 +140,9 @@ public final class CryptoConfigUpdateUtil {
 		}
 	}
 
-	public static void saveUnCryptoConfig(String... urls) throws FileNotFoundException {
-		InputStream is = new FileInputStream(tempPath);
-		XMLWriter writer = null;
-		OutputFormat format = OutputFormat.createPrettyPrint();
-		format.setEncoding("UTF-8");// 设置XML文件的编码格式
-
-		SAXReader reader = new SAXReader();
+	public static void saveUnCryptoConfig(String... urls) {
 		try {
-			Document document = reader.read(is);
+			Document document = new SAXReader().read(CryptoFilter.getConfigFileAsStream());
 			Element root = document.getRootElement();
 			for( String url : urls ) {
 				boolean isOld = false;
@@ -190,18 +156,31 @@ public final class CryptoConfigUpdateUtil {
 				}
 				if(isOld)
 					continue;
-
 				UnCrypto unCrypto = new UnCrypto(url);
 				CryptoConfig.getInstance().addUnCrypto(url, unCrypto);
 				root.addElement(UNCRYPTO_ELEMENT_NAME).addAttribute("url", url);
 			}
-			writer = new XMLWriter(new FileWriter(tempPath), format);
-			writer.write(document);
-			writer.close();
+			writeConfigFile(document);
 		} catch (DocumentException e) {
 			logger.error(e);
 		} catch (IOException e) {
 			logger.error(e);
 		}
 	}
+	public static void main(String[] args) {
+
+//		try {
+////			saveUnCryptoConfig("/demo/test/save4","/demo/test/save2","/demo/test/save3");
+////			deleteUnCryptoConfig("/demo/test/save");
+////			List<Crypto> list = new ArrayList<Crypto>();
+////			list.add(new Crypto("/demo/views/a.jsp","id,name",null,"testname"));
+////			list.add(new Crypto("/demo/views/a.jsp",null,"id,name","testname"));
+////			list.add(new Crypto("/demo/views/a.jsp","id,name",null,"testname"));
+////			saveCryptoConfig("/demo/views/a.jsp", list);
+//			deleteCryptoConfigs("/demo/views/a.jsp","/demo/ajax");
+//		} catch (FileNotFoundException e) {
+//
+//		}
+	}
+
 }
