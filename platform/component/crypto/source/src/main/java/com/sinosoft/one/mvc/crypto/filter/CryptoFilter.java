@@ -18,6 +18,7 @@ import org.dom4j.io.SAXReader;
 import javax.servlet.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +36,11 @@ public class CryptoFilter implements Filter {
 	private static String configLocation;
 	private FilterConfig filterConfig;
 	private ServletContext servletContext;
-	private CryptoConfig cryptoConfig = new CryptoConfig();
+	private static CryptoConfig cryptoConfig = CryptoConfig.getInstance();
+
+	public static CryptoConfig getCryptoConfig() {
+		return cryptoConfig;
+	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
@@ -80,24 +85,47 @@ public class CryptoFilter implements Filter {
 
 	}
 
+	/**
+	 *
+	 * @param request
+	 * @param response
+	 * @param chain
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-		String requestUrl = ((HttpServletRequest) request).getRequestURI();
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
+		String requestUrl = httpRequest.getRequestURI();
+		logger.info("in do Filter requestURI:" + requestUrl);
 
-//		System.out.println(request.getParameterMap());
 
+		//匹配加解密配置文件的url
 		CryptoMatchResult matchResult = cryptoConfig.quickMatch(requestUrl);
 		if( matchResult != null ) {
-			String key = (String) ((HttpServletRequest) request).getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
+			String key = (String) httpRequest.getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
+			//匹配结果为后台配置文件的解密url
 			if( CryptoMatchResult.UNCRYPTO_MATCH_RESULT.equals( matchResult ) ) {
 				String uncryptos = request.getParameter(CryptoConfig.CRUPTO_ATTR_NAMES);
 				//解密用的requestwapper
-				request = new CryptoRequestWapper((HttpServletRequest)request,
+				request = new CryptoRequestWapper(httpRequest,
 						new HashMap<String,String[]>(request.getParameterMap()), key,uncryptos);
 
-			}else if( CryptoMatchResult.CRYPTO_MATCH_RESULT.equals( matchResult )) {
+			} else if( CryptoMatchResult.CRYPTO_MATCH_RESULT.equals( matchResult )) {
+				//匹配结果为后台配置文件的加密url
 				try {
+					//@todo 判断是否ajax 需要替换response 这种方式不太好 建议提供API的方式。
+					// 但是API的不灵活不能适应已开发好的系统。 新系统建议使用Api的方式。  CryptoCoded.encode(request,"",user);
+//					if( isAjaxRequest( httpRequest ) ) {
+//						//@todo ajax的后台加密
+//						cryptoResponst(request, response);
+//					} else {
+//						//非ajax的后台加密
+//
+//					}
 					cryptoRequest(request, response, requestUrl);
+
 				} catch (Exception e) {
 					logger.error("crypto the data has exception!!",e);
 				}
@@ -105,11 +133,28 @@ public class CryptoFilter implements Filter {
 			logger.info("requestURI:" + requestUrl);
 		}
 
-		//@todo 判断是否ajax 需要替换response 这种方式不太好 建议提供API的方式。但是API的不灵活不能适应已开发好的系统。 新系统建议使用Api的方式。  CryptoCoded.encode(request,"",user);
+
 
 		chain.doFilter(request,response);
 	}
 
+	/**
+	 * 加密response
+	 * @param request
+	 * @param response
+	 */
+	private void cryptoResponst(ServletRequest request, ServletResponse response) {
+//		String key = (String) ((HttpServletRequest) request).getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
+		logger.info("is ajax response!!!");
+	}
+
+	/**
+	 * 加密request中的attribute
+	 * @param request
+	 * @param response
+	 * @param url
+	 * @throws Exception
+	 */
 	private void cryptoRequest(ServletRequest request, ServletResponse response,String url) throws Exception{
 		String key = (String) ((HttpServletRequest) request).getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
 		List<Crypto> cryptoList = cryptoConfig.getCryptoMap().get(url);
@@ -161,5 +206,14 @@ public class CryptoFilter implements Filter {
 		this.cryptoConfig = null;
 		this.servletContext = null;
 
+	}
+
+	/**
+	 * isAjaxRequest:判断请求是否为Ajax请求. <br/>
+	 */
+	private boolean isAjaxRequest(HttpServletRequest req){
+		String header = req.getHeader("X-Requested-With");
+		boolean isAjax = "XMLHttpRequest".equals(header) ? true:false;
+		return isAjax;
 	}
 }

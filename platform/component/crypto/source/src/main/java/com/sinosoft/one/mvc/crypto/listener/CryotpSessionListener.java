@@ -18,6 +18,7 @@ public class CryotpSessionListener implements HttpSessionListener {
 	public void sessionCreated(HttpSessionEvent se) {
 		se.getSession().setAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME,
 				CryptoCodec.getCryptoKey(se.getSession().getId()));
+
 		if(logger.isDebugEnabled()) {
 			logger.debug("CryotpSessionListener session created");
 		}
