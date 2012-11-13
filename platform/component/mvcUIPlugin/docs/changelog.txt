@@ -1,0 +1,7 @@
+ONE MVC UI PLUGIN CHANGELOG
+==========================
+
+
+Changes in version 1.0.1
+-------------------------------------
+* 

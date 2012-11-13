@@ -14,9 +14,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:application-context.xml")
 public class TreeJsonTest {
     private NodeEntity firstNodeEntity, secondNodeEntity, thirdNodeEntity, fourthNodeEntity, fiveNodeEntity, sixthNodeEntity, seventhNodeEntity;
     private List<NodeEntity> nodeEntityList1 = new ArrayList<NodeEntity>();

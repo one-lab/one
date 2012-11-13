@@ -1,0 +1,7 @@
+ONE DATA CHANGELOG
+==========================
+
+
+Changes in version 0.2.9-SNAPSHOT
+-------------------------------------
+* 
