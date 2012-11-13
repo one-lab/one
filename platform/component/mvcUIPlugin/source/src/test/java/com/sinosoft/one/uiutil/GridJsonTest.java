@@ -24,9 +24,7 @@ import static org.junit.Assert.assertEquals;
  * Time: 下午5:48
  * To change this template use File | Settings | File Templates.
  */
-@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:application-context.xml")
+
 public class GridJsonTest {
     private Long id;
     private String name;
