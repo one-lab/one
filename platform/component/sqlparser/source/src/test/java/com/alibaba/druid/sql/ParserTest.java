@@ -1,4 +1,4 @@
-package com.alibaba.druid.test;
+package com.alibaba.druid.sql;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -67,6 +67,8 @@ public class ParserTest {
                 "this_.VALIDSTATUS=? ) TEMP "+
                 "where "+
                 "rownum <= 10";
+//        sql = "select * from ge_rms_company start with comCode ='11' connect by prior comCode=UPPERCOMCODE";
+        sql = "select * from ge_rms_company start with comcode = '00' connect by nocycle prior comcode = uppercomcode";
         return sql;
     }
     public static void abc(){
@@ -185,7 +187,7 @@ public class ParserTest {
         List<SQLStatement> stmtList = parser.parseStatementList();
         SQLASTVisitor visitor = new MySQLASTVisitor();
         StringBuilder out = new StringBuilder();
-        SQLASTVisitor outVisitor = new OracleOutputVisitor(out);
+        SQLASTVisitor outVisitor = new OracleOutputVisitor(out, false);
         for(SQLStatement statement : stmtList) {
             statement.accept(visitor);
             statement.accept(outVisitor);

@@ -63,7 +63,7 @@ public final class Resources extends Object {
      * 
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static URL getResourceURL(String resource) throws IOException {
         return getResourceURL(getClassLoader(), resource);
@@ -75,7 +75,7 @@ public final class Resources extends Object {
      * @param loader The classloader used to load the resource
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static URL getResourceURL(ClassLoader loader, String resource) throws IOException {
         URL url = null;
@@ -100,7 +100,7 @@ public final class Resources extends Object {
      * 
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static InputStream getResourceAsStream(String resource) throws IOException {
         return getResourceAsStream(getClassLoader(), resource);
@@ -112,7 +112,7 @@ public final class Resources extends Object {
      * @param loader The classloader used to load the resource
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static InputStream getResourceAsStream(ClassLoader loader, String resource) throws IOException {
         InputStream in = null;
@@ -133,7 +133,7 @@ public final class Resources extends Object {
      * 
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static Properties getResourceAsProperties(String resource) throws IOException {
         Properties props = new Properties();
@@ -151,7 +151,7 @@ public final class Resources extends Object {
      * @param loader The classloader used to load the resource
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static Properties getResourceAsProperties(ClassLoader loader, String resource) throws IOException {
         Properties props = new Properties();
@@ -168,7 +168,7 @@ public final class Resources extends Object {
      * 
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static Reader getResourceAsReader(String resource) throws IOException {
         Reader reader;
@@ -187,7 +187,7 @@ public final class Resources extends Object {
      * @param loader The classloader used to load the resource
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static Reader getResourceAsReader(ClassLoader loader, String resource) throws IOException {
         Reader reader;
@@ -205,7 +205,7 @@ public final class Resources extends Object {
      * 
      * @param resource The resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static File getResourceAsFile(String resource) throws IOException {
         return new File(getResourceURL(resource).getFile());
@@ -217,7 +217,7 @@ public final class Resources extends Object {
      * @param loader - the classloader used to load the resource
      * @param resource - the resource to find
      * @return The resource
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static File getResourceAsFile(ClassLoader loader, String resource) throws IOException {
         return new File(getResourceURL(loader, resource).getFile());
@@ -228,7 +228,7 @@ public final class Resources extends Object {
      * 
      * @param urlString - the URL to get
      * @return An input stream with the data from the URL
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static InputStream getUrlAsStream(String urlString) throws IOException {
         URL url = new URL(urlString);
@@ -241,7 +241,7 @@ public final class Resources extends Object {
      * 
      * @param urlString - the URL to get
      * @return A Reader with the data from the URL
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static Reader getUrlAsReader(String urlString) throws IOException {
         return new InputStreamReader(getUrlAsStream(urlString));
@@ -252,7 +252,7 @@ public final class Resources extends Object {
      * 
      * @param urlString - the URL to get
      * @return A Properties object with the data from the URL
-     * @throws java.io.IOException If the resource cannot be found or read
+     * @throws IOException If the resource cannot be found or read
      */
     public static Properties getUrlAsProperties(String urlString) throws IOException {
         Properties props = new Properties();

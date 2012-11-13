@@ -192,10 +192,12 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
                 return;
             }
 
-            if (x.getParent() != null) {
-                print(";");
-            } else {
-                println(";");
+            if(isPrettyFormat()) {
+                if (x.getParent() != null) {
+                    print(";");
+                } else {
+                    println(";");
+                }
             }
         }
     }

@@ -421,13 +421,16 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         return false;
     }
 
+
     public void endVisit(MySqlKey x) {
 
     }
 
+
     public void endVisit(MySqlPrimaryKey x) {
 
     }
+
 
     public boolean visit(MySqlKey x) {
         if (x.getName() != null) {
@@ -485,7 +488,15 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
     }
 
     public boolean visit(SQLCharExpr x) {
-        print(x.toString());
+        print('\'');
+        
+        String text = x.getText();
+        text = text.replaceAll("'", "''");
+        text = text.replaceAll("\\\\", "\\\\");
+        
+        print(text);
+        
+        print('\'');
         return false;
     }
 

@@ -16,6 +16,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ProcessTask {
 	String userId();
+	
+	int userIdBeanOffset() default -1;
+	
+	String userIdAttributeName() default "";
 
 	int businessBeanOffset();
 
