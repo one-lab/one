@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ProcessTask {
-	String userId();
+	String userId() default "";
 	
 	int userIdBeanOffset() default -1;
 	
