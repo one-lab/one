@@ -72,14 +72,14 @@ final class WindowTask implements Runnable {
          //   request.setAttribute("$$one-mvc-portal.window", window);
             request.setAttribute("$$one-mvc-portal.window."+window.getName(), window);
 
-            String list = (String)request.getAttribute("$$one-mvc-portal.window.names");
-            if(list==null){
-                list = window.getName();
-            }
-            else{
-                list = list+","+window.getName();
-            }
-            request.setAttribute("$$one-mvc-portal.window.names",list);
+//            String list = (String)request.getAttribute("$$one-mvc-portal.window.names");
+//            if(list==null){
+//                list = window.getName();
+//            }
+//            else{
+//                list = list+","+window.getName();
+//            }
+//            request.setAttribute("$$one-mvc-portal.window.names",list);
 
             if (this.response.isCommitted()) {
                 if (logger.isDebugEnabled()) {
