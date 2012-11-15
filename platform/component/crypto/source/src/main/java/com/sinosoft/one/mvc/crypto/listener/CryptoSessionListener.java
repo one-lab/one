@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSessionListener;
  * Date: 12-11-8
  * Time: 上午9:56
  */
-public class CryotpSessionListener implements HttpSessionListener {
-	private static Log logger = LogFactory.getLog(CryotpSessionListener.class);
+public class CryptoSessionListener implements HttpSessionListener {
+	private static Log logger = LogFactory.getLog(CryptoSessionListener.class);
 	public void sessionCreated(HttpSessionEvent se) {
 		se.getSession().setAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME,
 				CryptoCodec.getCryptoKey(se.getSession().getId()));

@@ -3,7 +3,7 @@
 <CryptoConfig xmlns="http://com.sinosoft.one/schema/mvc/cryptoconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://com.sinosoft.one/schema/mvc/cryptoconfig ">  
     <crypto url="/demo/views/cryp1.jsp"> 
         <property includes="name,money,main" name="user"/>  
-        <property excludes="name,money" name="roles"/>  
+        <property excludes="" name="roles"/>
         <property includes="name,money,info" name="groups"/> 
     </crypto>  
     <crypto url="/demo/views/uncrypto.jsp"> 

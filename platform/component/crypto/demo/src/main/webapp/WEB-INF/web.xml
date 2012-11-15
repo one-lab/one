@@ -55,7 +55,7 @@
     </filter-mapping>-->
 
     <listener>
-        <listener-class>com.sinosoft.one.mvc.crypto.listener.CryotpSessionListener</listener-class>
+        <listener-class>com.sinosoft.one.mvc.crypto.listener.CryptoSessionListener</listener-class>
     </listener>
 
 
