@@ -230,19 +230,20 @@ public class AnnotationConfigValidator implements ParamValidator{
                            Object target, Errors errors) {
 
         if(logger.isDebugEnabled()){
-            logger.debug("[annotation config validate] "+"use validator: "
-                    +" to validate "+target);
+            logger.debug("[annotation config validate] "+"use validator: to validate "+target);
         }
 
         Validation configValidation = metaData.getAnnotation(Validation.class);
         String errorPath = configValidation.errorPath();
-        if(isContainsRules(configValidation)){
-            Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
-            if(!result.isEmpty()) {
-                return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
-            }
-
-        } else if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
+		//@todo 验证可能完全是bean级别的。2012年11月13日17:42:02 只需要判断是不是基础类型即可
+//        if(isContainsRules(configValidation)){
+//            Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
+//            if(!result.isEmpty()) {
+//                return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
+//            }
+//
+//        } else
+		if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
 
             MethodValidator methodValidator = javax.validation.Validation.byProvider(HibernateValidator.class).configure()
                     .buildValidatorFactory().getValidator().unwrap(MethodValidator.class);
@@ -254,7 +255,12 @@ public class AnnotationConfigValidator implements ParamValidator{
                 return this.isAjaxRequest(inv) ? methodErrorAjaxResponse(result, inv.getMethodParameterNames()) :
                         methodErrorCommonResponse(inv, result, errorPath, inv.getMethodParameterNames());
             }
-        }
+        } else {
+			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
+			if(!result.isEmpty()) {
+				return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
+			}
+		}
 
         return null;
     }
