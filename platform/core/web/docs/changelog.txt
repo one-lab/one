@@ -5,3 +5,4 @@ ONE MVC CHANGELOG
 Changes in version 1.0.1
 -------------------------------------
 * 
+2012年11月15日10:25:16 杨明光 解决使用@Validation验证控制器方法时，如果不写验证条件，则不进行Bean验证的Bug。
