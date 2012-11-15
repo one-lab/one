@@ -360,25 +360,25 @@ public class MvcFilter extends GenericFilterBean {
         // 这个代码为mvcpipe所用，以避免mvcpipe的"Cannot forward after response has been committed"异常
         // @see com.sinosoft.one.mvc.web.portal.impl.PortalWaitInterceptor
 
-        String windowNames = (String)httpRequest.getAttribute(MvcConstants.WINDOW_ATTR+".names");
-        if(StringUtils.isNotBlank(windowNames)){
-            for(String windowName:StringUtils.split(windowNames,",")){
+//        String windowNames = (String)httpRequest.getAttribute(MvcConstants.WINDOW_ATTR+".names");
+        String windowName = (String)httpRequest.getAttribute(MvcConstants.WINDOW_ATTR+".name");
+        if(StringUtils.isNotBlank(windowName)){
 
-                Object window = httpRequest.getAttribute(MvcConstants.WINDOW_ATTR+"."+windowName);
+            Object window = httpRequest.getAttribute(MvcConstants.WINDOW_ATTR+"."+windowName);
 
-                if (window != null && window.getClass().getName().startsWith("com.sinosoft.one.mvc.web.portal")) {
-                    httpRequest.setAttribute(MvcConstants.PIPE_WINDOW_IN, Boolean.TRUE);
-                    if (logger.isDebugEnabled()) {
-                        try {
-                            logger.debug("notify window '"
-                                    + httpRequest.getAttribute("$$one-mvc-portal.window.name") + "'");
-                        } catch (Exception e) {
-                            logger.error("", e);
-                        }
+            if (window != null && window.getClass().getName().startsWith("com.sinosoft.one.mvc.web.portal")) {
+                httpRequest.setAttribute(MvcConstants.PIPE_WINDOW_IN, Boolean.TRUE);
+                if (logger.isDebugEnabled()) {
+                    try {
+                        logger.debug("notify window '"
+                                + httpRequest.getAttribute("$$one-mvc-portal.window.name") + "'");
+                    } catch (Exception e) {
+                        logger.error("", e);
                     }
-                    synchronized (window) {
-                        window.notifyAll();
-                    }
+                }
+                synchronized (window) {
+                    window.notifyAll();
+                    httpRequest.removeAttribute(MvcConstants.WINDOW_ATTR+".name");
                 }
             }
         }
