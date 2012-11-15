@@ -39,7 +39,7 @@
                 <property key="ejb3" value="true" />
             </hbmtemplate>
 
-            <hbmtemplate templateprefix="pojo/" template="onedatadao.ftl" filepattern="{parent-package-name}/dao/{class-name}Dao.java" />
+            <hbmtemplate templateprefix="pojo/" template="onedatadao.ftl" filepattern="{parent-package-name}/repository/{class-name}Repository.java" />
             <!--<hbmtemplate templateprefix="pojo/" template="manager.ftl" filepattern="manager/{package-name}/{class-name}Manager.java" />-->
         </hibernatetool>
 

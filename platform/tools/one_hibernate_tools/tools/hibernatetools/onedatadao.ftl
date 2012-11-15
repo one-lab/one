@@ -4,7 +4,7 @@ ${pojo.getPackageDeclaration().substring(0,pojo.getPackageDeclaration().lastInde
 <#assign declarationName = pojo.importType(pojo.getDeclarationName())>
 <#assign entityName = declarationName?uncap_first>
 
-public interface ${declarationName}Dao extends ${pojo.importType("org.springframework.data.repository.PagingAndSortingRepository")}<${declarationName}, ${pojo.getJavaTypeName(clazz.identifierProperty, true)}> {
+public interface ${declarationName}Repository extends ${pojo.importType("org.springframework.data.repository.PagingAndSortingRepository")}<${declarationName}, ${pojo.getJavaTypeName(clazz.identifierProperty, true)}> {
 }
 </#assign>
 
