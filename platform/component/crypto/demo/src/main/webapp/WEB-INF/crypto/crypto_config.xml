@@ -3,7 +3,7 @@
 <CryptoConfig xmlns="http://com.sinosoft.one/schema/mvc/cryptoconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://com.sinosoft.one/schema/mvc/cryptoconfig ">  
     <crypto url="/demo/views/cryp1.jsp"> 
         <property includes="name,money,main" name="user"/>  
-        <property excludes="" name="roles"/>
+        <property excludes="" name="roles"/>  
         <property includes="name,money,info" name="groups"/> 
     </crypto>  
     <crypto url="/demo/views/uncrypto.jsp"> 
@@ -12,5 +12,10 @@
     <uncrypto url="/demo/send"/>  
     <uncrypto url="/demo/uncrypto"/>  
     <uncrypto url="/demo/ajaxParam"/>  
-    <uncrypto url="/demo/cryp/uncrpy1"/> 
+    <uncrypto url="/demo/cryp/uncrpy1"/>  
+    <crypto url="/demo/views/adduncrypto.jsp"> 
+        <property name="user" includes="info,id,name"/>  
+        <property name="user2" includes="info,id,name"/> 
+    </crypto>  
+    <uncrypto url="/demo/testAddedUncrypto"/>
 </CryptoConfig>

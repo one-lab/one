@@ -190,7 +190,7 @@ public class CryptoFilter implements Filter {
 						for( PropertyDescriptor property : properties ) {
 							String pName = property.getName();
 							if(property.getPropertyType().getName().contains("String") &&
-									!excludes.contains(pName)) {
+									!isContains(excludes,pName)) {
 								unCryptoNames.append(pName).append(",");
 								popMap.put(pName, CryptoCodec.encode(key,BeanUtils.getProperty(attr, pName)));
 							}
@@ -214,6 +214,13 @@ public class CryptoFilter implements Filter {
 		this.cryptoConfig = null;
 		this.servletContext = null;
 
+	}
+
+	private boolean isContains(String arrayString, String simpleString) {
+		for(String s : arrayString.split(","))
+			if(simpleString.equals(s))
+				return true;
+		return false;
 	}
 
 	/**

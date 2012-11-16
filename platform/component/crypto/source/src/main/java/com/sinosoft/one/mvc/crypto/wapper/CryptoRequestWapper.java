@@ -30,13 +30,18 @@ public class CryptoRequestWapper extends HttpServletRequestWrapper {
 	public CryptoRequestWapper(HttpServletRequest request) {
 		super(request);
 	}
-
+	private boolean isContains(String arrayString, String simpleString) {
+		for(String s : arrayString.split(","))
+			if(simpleString.equals(s))
+				return true;
+		return false;
+	}
 
 	public String getParameter(String name) {
 		String result = "";
 		boolean isCrypto = false;
 		Object v = params.get(name);
-		if(unCryptoParams == null || unCryptoParams.equals("") || unCryptoParams.contains(name))
+		if(unCryptoParams == null || unCryptoParams.equals("") || isContains(unCryptoParams,name))
 			isCrypto = true;
 		if (v == null) {
 			result = null;
@@ -73,7 +78,7 @@ public class CryptoRequestWapper extends HttpServletRequestWrapper {
 	public String[] getParameterValues(String name) {
 		String[] result = null;
 		boolean isCrypto = false;
-		if(unCryptoParams == null || unCryptoParams.equals("") || unCryptoParams.contains(name))
+		if(unCryptoParams == null || unCryptoParams.equals("") || isContains(unCryptoParams,name))
 			isCrypto = true;
 		Object v = params.get(name);
 		if (v == null) {

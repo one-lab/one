@@ -1,7 +1,9 @@
 package com.sinosoft.one.mvc.controllers;
 
 import com.sinosoft.one.mvc.crypto.CryptoCodec;
+import com.sinosoft.one.mvc.crypto.config.Crypto;
 import com.sinosoft.one.mvc.crypto.config.CryptoConfig;
+import com.sinosoft.one.mvc.crypto.util.CryptoConfigUpdateUtil;
 import com.sinosoft.one.mvc.model.User;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -83,5 +87,40 @@ public class CrypController {
 		inv.addModel("user",user);
 		return "uncrypto";
 	}
+	@Get("testAdd")
+	public String testAdd() {
+		return "adduncrypto";
+	}
+
+	@Get("addUncrypto")
+	public String addUncryptoUrl() {
+		CryptoConfigUpdateUtil.saveUnCryptoConfig("/demo/testAddedUncrypto");
+		return "adduncrypto";
+	}
+	@Get("deleteUncrypto")
+	public String deleteUncryptoUrl() {
+		CryptoConfigUpdateUtil.deleteUnCryptoConfigs("/demo/testAddedUncrypto");
+		return "adduncrypto";
+	}
+	@Get("addCrypto")
+	public String addCrypto() {
+		List<Crypto> list = new ArrayList<Crypto>();
+		list.add(new Crypto("/demo/views/adduncrypto.jsp","info,id,name",null,"user"));
+		list.add(new Crypto("/demo/views/adduncrypto.jsp","info,id,name",null,"user2"));
+		CryptoConfigUpdateUtil.saveCryptoConfig("/demo/views/adduncrypto.jsp",list);
+		return "adduncrypto";
+	}
+	@Get("deleteCrypto")
+	public String deleteCrypto() {
+		CryptoConfigUpdateUtil.deleteCryptoConfigs("/demo/views/adduncrypto.jsp");
+		return "adduncrypto";
+	}
+
+	@Post("/testAddedUncrypto")
+	public String testAddedUncrypto(User user, Invocation inv) {
+		inv.addModel("user",user);
+		return "adduncrypto";
+	}
+
 
 }
