@@ -20,13 +20,13 @@ public interface UserDao extends PagingAndSortingRepository<User, Long>, QueryDs
 
     User findByLoginName(String loginName);
 
-    @SQL("select * from acct_user where id is not null #if(:name!='') {and name like :name} #if(:email!='') {and email like :email} #if(:id!=null) {and id>=:id}")
+    @SQL("select * from acct_user where id is not null #if(:name!='') {and name like :name} #if(:email!='') {and email like :email} #if(:id<=1) {and id>=:id} #if(:id>1) {and id<=:id}")
     List<User> selectUserForDynamicComplexSql(@Param("name") String name, @Param("email") String email, @Param("id") Long id);
 
     @Query("select u from User u")
     List<User> findAllUserByJpql();
 
-    List<User> findAllUseuByResourse();
+    List<User> findAllUserByResource();
 
     List<User> findBySpringDataNamedQuery(String name);
 

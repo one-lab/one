@@ -14,6 +14,7 @@ import com.sinosoft.one.demo.model.account.User;
 import com.sinosoft.one.demo.model.account.UserInfo;
 import com.sinosoft.one.demo.service.ServiceException;
 import oracle.jdbc.OracleTypes;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,11 +69,14 @@ public class AccountManager {
      * 动态QSL方式.
      */
     public List<User> findAllUserByDynamicSQL(String name, String email, Long id) {
-        if (!name.isEmpty()) {
+        if (!StringUtils.isBlank(name)) {
             name = "%" + name + "%";
         }
-        if (!email.isEmpty()) {
+        if (!StringUtils.isBlank(email)) {
             email = "%" + email + "%";
+        }
+        if (id == null || StringUtils.isBlank(Long.toString(id))) {
+            id = Long.valueOf(1);
         }
         return userDao.selectUserForDynamicComplexSql(name, email, id);
     }
@@ -88,7 +92,7 @@ public class AccountManager {
      * SQL资源文件方式.
      */
     public List<User> findAllUserTwo() {
-        return userDao.findAllUseuByResourse();
+        return userDao.findAllUserByResource();
     }
 
     /**
