@@ -15,7 +15,12 @@
         <body-content>JSP</body-content>
         <attribute>
             <name>eIds</name>
-            <required>true</required>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>eClasses</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
