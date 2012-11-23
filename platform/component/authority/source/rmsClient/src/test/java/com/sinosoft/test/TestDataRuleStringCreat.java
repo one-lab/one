@@ -24,10 +24,25 @@ public class TestDataRuleStringCreat extends AbstractJUnit4SpringContextTests{
 	@Autowired
 	private RmsClientService rmsClientService;
 	@Test
-	public void test(){
+	public void testFindBySql(){
 		User user= rmsClientService.login("admin", "00","RMS");
 		EnvContext.setLogin(user);
 		testService.testFindBySql();
+		
+	}
+	@Test
+	public void testGetAll(){
+		User user= rmsClientService.login("admin", "00","RMS");
+		EnvContext.setLogin(user);
+		testService.testGetAll();
+		
 	}
 	
+	@Test
+	public void testFindByHql(){
+		User user= rmsClientService.login("admin", "00","RMS");
+		EnvContext.setLogin(user);
+		testService.testFindByHql();
+		
+	}
 }
