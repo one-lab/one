@@ -21,6 +21,6 @@ public class RmsPGASTVisitor extends PGASTVisitorAdapter {
 		this.dataRuleFactoryPostProcessor=dataRuleFactoryPostProcessor;
 	}
 	public boolean visit(PGSelectQueryBlock x) {
-        return RmsSQLASTVisitorSupport.visit(x,dataRuleFactoryPostProcessor);
+        return super.visit(x);
     }
 }

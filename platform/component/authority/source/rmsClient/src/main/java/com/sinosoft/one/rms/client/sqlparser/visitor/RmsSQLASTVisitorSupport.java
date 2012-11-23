@@ -1,5 +1,7 @@
 package com.sinosoft.one.rms.client.sqlparser.visitor;
 
+import ins.framework.utils.StringUtils;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,8 +34,8 @@ import com.sinosoft.one.rms.model.BusDataInfo;
 public class RmsSQLASTVisitorSupport {
     
 	
-    public static boolean visit(SQLSelectQueryBlock x ,DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor) {
-    	Map<String, String> tableAlias = new HashMap<String, String>();
+	public static Map<String, String> getTableAlias(SQLSelectQueryBlock x) {
+		Map<String, String> tableAlias = new HashMap<String, String>();
         
         if (x.getFrom() instanceof SQLExprTableSource) {
         	recordTableSource((SQLExprTableSource)x.getFrom(), tableAlias);
@@ -64,38 +66,57 @@ public class RmsSQLASTVisitorSupport {
                 }
             }
         }
-        String rule="";
-//        displayTableAlias(tableAlias);
-//        User user= ShiroLoginUser.getLoginUser();
-        User user= EnvContext.getLogin();
-        for (DataPower dataPower : user.getDataPowers()) {
-        	if (dataPower.getTaskId().toString().equals(EnvContext.getDataAuthorityTaskId().toString())) {
-        		for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
-        			for(String key : tableAlias.keySet()) {
-        				if (tableAlias.get(key).equals(busDataInfo.getBusDataTable().toString())&&!key.toString().equals(tableAlias.get(key).toString()))
-        					rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, key, dataPower.getUserCode(), dataPower.getComCode(), dataPower.getParam(),busDataInfo.getBusDataColumn());
-        				else 
-        					rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, null, dataPower.getUserCode(), dataPower.getComCode(), dataPower.getParam(),busDataInfo.getBusDataColumn());
-        			}
-        		}
-        	}
-        }
-        SQLExpr whereExpr = x.getWhere();
-        SQLBinaryOpExpr sqlBinaryOpExpr = (SQLBinaryOpExpr)whereExpr;
-        SQLBinaryOpExpr mySqlBinaryOpExpr = new SQLBinaryOpExpr();
-        mySqlBinaryOpExpr.setRight(sqlBinaryOpExpr);
-        SQLExprParser exprParser = new SQLExprParser(rule);
-        mySqlBinaryOpExpr.setLeft(exprParser.expr());
-        mySqlBinaryOpExpr.setOperator(SQLBinaryOperator.BooleanAnd);
-        x.setWhere(mySqlBinaryOpExpr);
-        return true;
-    }
-
-//    private static void displayTableAlias(Map<String, String> tableAlias) {
-//        for(String key : tableAlias.keySet()) {
-//            System.out.println(key + ":" + tableAlias.get(key));
-//        }
-//    }
+        return tableAlias;
+	}
+	
+	public static String getRule(SQLSelectQueryBlock x ,DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor) {
+		Map<String, String> tableAlias = getTableAlias(x);
+		String rule="";
+//      displayTableAlias(tableAlias);
+//      User user= ShiroLoginUser.getLoginUser();
+		User user= EnvContext.getLogin();
+		for (DataPower dataPower : user.getDataPowers()) {
+			if (dataPower.getTaskId().toString().equals(EnvContext.getDataAuthorityTaskId().toString())) {
+				for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
+					for(String key : tableAlias.keySet()) {
+						if (tableAlias.get(key).equals(busDataInfo.getBusDataTable().toString().toLowerCase())){
+							if(!key.toString().equals(tableAlias.get(key).toString()))
+								rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, key, dataPower.getUserCode(), dataPower.getComCode(), dataPower.getParam(),busDataInfo.getBusDataColumn());
+							else 
+								rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, null, dataPower.getUserCode(), dataPower.getComCode(), dataPower.getParam(),busDataInfo.getBusDataColumn());
+						}
+					}
+				}
+			}
+		}
+		return rule;
+	}
+	
+	public static boolean appendWhereClause(SQLSelectQueryBlock x, DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor) {
+		SQLExpr whereExpr;
+		whereExpr = x.getWhere();
+		String rule = getRule(x, dataRuleFactoryPostProcessor);
+		if(StringUtils.isNotBlank(rule)){
+			if(x.getWhere()!=null){
+			
+				SQLBinaryOpExpr sqlBinaryOpExpr = (SQLBinaryOpExpr) whereExpr;
+				SQLBinaryOpExpr mySqlBinaryOpExpr = new SQLBinaryOpExpr();
+				mySqlBinaryOpExpr.setRight(sqlBinaryOpExpr);
+				SQLExprParser exprParser = new SQLExprParser(rule);
+				mySqlBinaryOpExpr.setLeft(exprParser.expr());
+				mySqlBinaryOpExpr.setOperator(SQLBinaryOperator.BooleanAnd);
+				x.setWhere(mySqlBinaryOpExpr);
+				return true;
+			}else{
+				SQLExprParser exprParser = new SQLExprParser(rule);
+				x.setWhere(exprParser.expr());
+			}
+		}
+			
+		return true;
+	}
+	
+    
     private static void doSQLJoinTableSource(SQLJoinTableSource tableSource, Map<String, String> tableAlias) {
         if (tableSource.getLeft() instanceof SQLExprTableSource) {
             recordTableSource((SQLExprTableSource)tableSource.getLeft(), tableAlias);
@@ -110,8 +131,11 @@ public class RmsSQLASTVisitorSupport {
 
     private static void recordTableSource(SQLExprTableSource x, Map<String, String> tableAlias) {
         if (x.getExpr() instanceof SQLIdentifierExpr) {
-            String tableName = ((SQLIdentifierExpr) x.getExpr()).getName();
-            String alias = x.getAlias();
+            String tableName = ((SQLIdentifierExpr) x.getExpr()).getName().toLowerCase();
+            String alias=null;
+            if(StringUtils.isNotBlank(x.getAlias())){
+            	alias  = x.getAlias().toLowerCase();;
+            }
             if (alias != null) {
                 tableAlias.put(alias, tableName);
             }else{
