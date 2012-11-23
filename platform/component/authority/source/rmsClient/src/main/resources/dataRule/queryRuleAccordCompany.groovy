@@ -22,14 +22,14 @@ public class queryRuleAccordCompany implements DataRuleScript {
    	public String creatSQL(String rule,String tableNameAlias,String userCode,String comCode,String prama,String clounmName){
 		String alias="";
 		if(StringUtils.isNotBlank(tableNameAlias)){
-			alias=tableNameAlias;
+			alias=tableNameAlias+".";
 		}
 		if(StringUtils.isNotBlank(prama)){
 			Map<String,String> tempMap = (Map<String, String>)JSON.parse(prama);
     		if(StringUtils.isNotBlank(rule)){
-    			rule=rule+" and "+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
+    			rule=rule+" and "+alias+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
     		}else{
-    			rule=rule+""+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
+    			rule=rule+""+alias+clounmName+"=(select "+CLOUNMNAME+" from "+TABLENAME+" where "+CLOUNMNAME+"='"+tempMap.get(clounmName)+"')"
     		}
 			return rule 
 		}else{
