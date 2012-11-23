@@ -10,9 +10,9 @@ import com.sinosoft.one.rms.model.Company;
  * @author Administrator
  *
  */
-public interface ClientService {
+public interface GetUserService {
 	 /**
-	  * 客户端本地调用
+	  * 获取用户接口
 	  * @param userCode
 	  * @param password
 	  * @param comCode

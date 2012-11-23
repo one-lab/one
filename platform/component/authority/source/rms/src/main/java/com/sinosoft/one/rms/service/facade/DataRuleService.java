@@ -3,6 +3,7 @@ package com.sinosoft.one.rms.service.facade;
 import java.util.List;
 
 
+import com.sinosoft.one.rms.model.BusDataInfo;
 import com.sinosoft.one.rms.model.BusPower;
 import com.sinosoft.one.rms.model.DataRule;
 
@@ -40,12 +41,7 @@ public interface DataRuleService {
 	 * @param busPowerID
 	 * @return
 	 */
-	public List<BusPower> findBusPowerByTaskID(String userCode,String taskId);
+	public List<BusPower> findBusPowerByTaskID(String userCode,String comCode ,String taskId);
 	
-	/**
-	 * 查询人员下的数据权限
-	 * @param userCode
-	 * @return
-	 */
-	public List<BusPower> findBusPowerByUserCode(String userCode);
+	
 }

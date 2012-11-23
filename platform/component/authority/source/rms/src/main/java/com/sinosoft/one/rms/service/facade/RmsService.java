@@ -62,6 +62,16 @@ public interface RmsService {
 	 * @return
 	 */
 	public List<Task> findTaskMultSysByUserCode(String userCode,String comCode,String sysFlag);
+	
+	/**
+	 * 获取可配置数据权限功能集合(多系统类型)
+	 * @param userCode
+	 * @param comCode
+	 *  @param sysFlag
+	 * @return
+	 */
+	public List<Task> findDataRuleTaskMultSysByComUser(String userCode,String comCode,String sysFlag);
+	
 	/**
 	 * 根据userCode,comCode查询USERPOWER
 	 * @param userCode
@@ -89,4 +99,6 @@ public interface RmsService {
 	 */
 	public List<Task> taskArrange(Set<Task> ts);
 
+	
+	 public  List<Task> findTaskByUserCode(String paramString1, String paramString2);
 }

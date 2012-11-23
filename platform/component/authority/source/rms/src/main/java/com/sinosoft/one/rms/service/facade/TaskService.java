@@ -54,7 +54,7 @@ public interface TaskService {
 	 * @param des
 	 * @param parentId
 	 */
-	public void addTaskHasSysFlag(String taskId,String name ,String menuURL,String menuName ,String des,String isAsMenu,String parentId,String loginUserCode,String loginComCode,String SysFlag);
+	public void addTaskHasSysFlag(String taskId,String name ,String menuURL,String menuName ,String des,String isAsMenu,String parentId,String loginUserCode,String loginComCode,String SysFlag,String isConfigDataRule);
 	
 	
 	/**
@@ -67,7 +67,7 @@ public interface TaskService {
 	 * @param des
 	 * @param parentId
 	 */
-	public void updateTaskHasSysFlag(String taskId,String name ,String menuURL,String isValidate,String menuName ,String des,String isAsMenu,String SysFlag,String loginComCode);
+	public void updateTaskHasSysFlag(String taskId,String name ,String menuURL,String isValidate,String menuName ,String des,String isAsMenu,String SysFlag,String loginComCode,String isConfigDataRule);
 	
 	/**
 	 * 修改功能菜单 无系统标志类型
