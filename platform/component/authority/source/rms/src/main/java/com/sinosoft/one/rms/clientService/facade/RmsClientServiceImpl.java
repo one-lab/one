@@ -4,23 +4,31 @@ package com.sinosoft.one.rms.clientService.facade;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.rms.clientService.User;
-import com.sinosoft.one.rms.service.facade.ClientService;
+import com.sinosoft.one.rms.service.facade.GetUserService;
 
-// 服务端对外的接口 可同时发布成webService接口
+/**
+ * 外部调用实现类、webService接口实现类
+ * 创建登陆用户
+ * @author Administrator
+ *
+ */
 public class RmsClientServiceImpl implements RmsClientService{
+	/**
+	 * 创建登陆用户具体实现的接口GetUserService
+	 */
 	@Autowired
-	private ClientService clientService;
+	private GetUserService getUserService;
 
 	public User login(String userCode, String comCode,String sysFlag) {
-		return clientService.getUserByUserCodeComCode(userCode, comCode, sysFlag);
+		return getUserService.getUserByUserCodeComCode(userCode, comCode, sysFlag);
 	}
 
-	public ClientService getClientService() {
-		return clientService;
+	public GetUserService getClientService() {
+		return getUserService;
 	}
 
-	public void setClientService(ClientService clientService) {
-		this.clientService = clientService;
+	public void setClientService(GetUserService clientService) {
+		this.getUserService = clientService;
 	}
 
 	

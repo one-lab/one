@@ -40,7 +40,7 @@ public class RmsSQLParserSupport implements RmsSQLParser {
 	
     public  String parser(Connection connection, String sql) throws Exception{
         String url = connection.getMetaData().getURL();
-        String dbType = JdbcUtils.getDbType(url);
+        String dbType = JdbcUtils.getDbType(url,  connection.getMetaData().getDriverName());
         SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, dbType);
         List<SQLStatement> stmtList = parser.parseStatementList();
         StringBuilder out = new StringBuilder();
@@ -55,26 +55,30 @@ public class RmsSQLParserSupport implements RmsSQLParser {
 
     public static SQLASTOutputVisitor createOutputVisitor(StringBuilder out, String dbType) {
         if (JdbcUtils.ORACLE.equals(dbType) || JdbcUtils.ALI_ORACLE.equals(dbType)) {
-            return new OracleOutputVisitor(out,false);
+        	OracleOutputVisitor oracleOutputVisitor=  new OracleOutputVisitor(out);
+        	oracleOutputVisitor.setPrettyFormat(false);
+            return oracleOutputVisitor;
         }
 
         if (JdbcUtils.MYSQL.equals(dbType)) {
-            return new MySqlOutputVisitor(out,false);
+        	MySqlOutputVisitor mySqlOutputVisitor=new MySqlOutputVisitor(out);
+        	mySqlOutputVisitor.setPrettyFormat(false);
+            return mySqlOutputVisitor;
         }
 
         if (JdbcUtils.POSTGRESQL.equals(dbType)) {
-            return new PGOutputVisitor(out,false);
+        	PGOutputVisitor pgOutputVisitor=new PGOutputVisitor(out);
+        	pgOutputVisitor.setPrettyFormat(false);
+            return pgOutputVisitor;
         }
 
         if (JdbcUtils.SQL_SERVER.equals(dbType)) {
-            return new SQLServerOutputVisitor(out,false);
+        	SQLServerOutputVisitor sqlServerOutputVisitor= new SQLServerOutputVisitor(out);
+        	sqlServerOutputVisitor.setPrettyFormat(false);
+            return sqlServerOutputVisitor;
         }
 
-        if (JdbcUtils.H2.equals(dbType)) {
-            return new MySqlOutputVisitor(out,false);
-        }
-
-        return new SQLASTOutputVisitor(out,false);
+        return new SQLASTOutputVisitor(out);
     }
 
     public  SQLASTVisitor createSQLParserVisitor(String dbType) {

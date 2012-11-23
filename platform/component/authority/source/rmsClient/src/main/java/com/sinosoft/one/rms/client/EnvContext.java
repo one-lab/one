@@ -36,14 +36,18 @@ public class EnvContext {
         	context.put(DATA, new LinkedList ());
         }
         LinkedList linkedList= (LinkedList) context.get(DATA);
-        linkedList.add(value);
+        linkedList.addFirst(value);
+        
     }
 
     public static String getDataAuthorityTaskId() {
         if(threadLocal.get() == null)
             return null;
         LinkedList linkedList= (LinkedList) threadLocal.get().get(DATA);
-        return (String)linkedList.peek();
+        if(linkedList!=null){
+        	return (String)linkedList.peek();
+        }
+        return null;
     }
     
     public static void removeDataAuthorityTaskId (){
@@ -62,7 +66,7 @@ public class EnvContext {
         	context.put(CLASSNAME, new LinkedList ());
         }
         LinkedList linkedList= (LinkedList) context.get(CLASSNAME);
-        linkedList.add(calssName);
+        linkedList.addFirst(calssName);
 	}
 	
 	public static String getClassName(){

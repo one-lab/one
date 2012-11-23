@@ -132,7 +132,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	 */
 	public Page findRole(String comCode, String roleName, int pageNo,
 			int pageSize) {
-		String key = cacheManager.generateCacheKey("comCodeRole", comCode+roleName+pageNo);
+		String key = cacheManager.generateCacheKey("comCodeRole", comCode+roleName+pageNo+pageSize);
 		Object result = cacheManager.getCache(key);
 		if (result != null) {
 			return (Page) result;
@@ -259,10 +259,6 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 			comCodes.add(comCode);
 			iteraterComCode(comCodes, deleteRoldIDs);
 		}
-		//对当前机构的操作
-//		roleIdSQL.append("delete  ge_rms_role_designate t where t.comcode = ");
-//		roleIdSQL.append("'" + comCode + "'");
-//		getSession().createSQLQuery(roleIdSQL.toString()).executeUpdate();
 		//指派操做开始
 		List<RoleDesignate> roleDesignates = new ArrayList<RoleDesignate>();
 		for (String roleID : designateRoldIDs) {
@@ -344,41 +340,49 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 			sql.append("update ge_rms_role_designate t set  t.comcode='"+loginComCode+"' where  t.comcode='*'  and t.roleid ='"+roleID+"'");
 			getSession().createSQLQuery(sql.toString()).executeUpdate();
 			// comCodes为选中的机构 不 delete comCodes的机构指派
+			sql.setLength(0);
+			sql.append("delete ge_rms_role_designate t where t.comcode!='"+loginComCode+"' and t.roleid ='"+roleID+"'");
+			//删除不指派的用户组角色数据
+			StringBuffer deleteGroupRoleSql = new StringBuffer();
+			deleteGroupRoleSql.append("delete ge_rms_grouprole gr where gr.groupid  in (select groupid from ge_rms_group where comcode!='"+loginComCode+"'");
 			if (comCodes.size() > 0) {
-				sql.setLength(0);
-				sql.append("delete ge_rms_role_designate t where t.comcode!='"+loginComCode+"' and t.roleid ='"+roleID+"'");
-				sql.append(" and t.comcode not in (");
-				for (String string : comCodes) {
-					sql.append("'" + string + "',");
+				List<String >alradyComCodes=new ArrayList<String>();
+				for (RoleDesignate roleDesignate : role.getRoleDesignates()) {
+					alradyComCodes.add(roleDesignate.getId().getComCode().toString());
 				}
-//				sql.append("'*',");
+				sql.append(" and t.comcode not in (");
+				deleteGroupRoleSql.append("and comCode not in (");
+				for (String comCode : comCodes) {
+					sql.append("'" + comCode + "',");
+					deleteGroupRoleSql.append("'" + comCode + "',");
+					//不包含的表示新增的需要新增指派
+					if (!alradyComCodes.contains(comCode.toString())) {
+						RoleDesignate roleDesignate = new RoleDesignate();
+						RoleDesignateId roleDesignateId = new RoleDesignateId();
+						roleDesignateId.setComCode(comCode);
+						roleDesignateId.setRoleID(roleID);
+						roleDesignate.setId(roleDesignateId);
+						roleDesignate.setCreateTime(date);
+						roleDesignate.setOperateTime(date);
+						roleDesignate.setCreateUser(userCode);
+						roleDesignate.setOperateUser(userCode);
+						roleDesignate.setRole(role);
+						roleDesignates.add(roleDesignate);
+						super.save(roleDesignate);
+					}
+					// 操作当前循环的机构默认用户组
+					editDefaultGroup(comCode, userCode, role);
+				}
 				sql.delete(sql.length() - 1, sql.length());
 				sql.append(")");
-				getSession().createSQLQuery(sql.toString()).executeUpdate();
-			
-			List<String >alradyComCodes=new ArrayList<String>();
-			for (RoleDesignate roleDesignate : role.getRoleDesignates()) {
-				alradyComCodes.add(roleDesignate.getId().getComCode().toString());
+				//删除不指派的用户组角色数据
+				
+				deleteGroupRoleSql.delete(deleteGroupRoleSql.length() - 1, deleteGroupRoleSql.length());
+				deleteGroupRoleSql.append(")");
 			}
-			for (String comCode : comCodes) {
-				if (!alradyComCodes.contains(comCode.toString())) {
-					RoleDesignate roleDesignate = new RoleDesignate();
-					RoleDesignateId roleDesignateId = new RoleDesignateId();
-					roleDesignateId.setComCode(comCode);
-					roleDesignateId.setRoleID(roleID);
-					roleDesignate.setId(roleDesignateId);
-					roleDesignate.setCreateTime(date);
-					roleDesignate.setOperateTime(date);
-					roleDesignate.setCreateUser(userCode);
-					roleDesignate.setOperateUser(userCode);
-					roleDesignate.setRole(role);
-					roleDesignates.add(roleDesignate);
-					super.save(roleDesignate);
-				}
-				// 操作当前循环的机构默认用户组
-				editDefaultGroup(comCode, userCode, role);
-			}
-		}
+			getSession().createSQLQuery(sql.toString()).executeUpdate();	
+			deleteGroupRoleSql.append(") and gr.roleid='"+roleID+"'");
+			getSession().createSQLQuery(deleteGroupRoleSql.toString()).executeUpdate();
 		}
 		//判断修改的角色类型 当改成全可见类型"all"时
 		if(type.toString().equals("all")){
@@ -530,28 +534,42 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	void iteraterComCode(List<String> comCodes ,List<String> roleids){
 		// 每次执行 先进行删除操作
 		StringBuffer delteDesignatSQL = new StringBuffer();
+		StringBuffer delteGroupRoleSQL = new StringBuffer();
 		delteDesignatSQL.append("delete ge_rms_role_designate where  roleid in (");
+		delteGroupRoleSQL.append("delete ge_rms_grouprole gr where gr.roleid in(");
 		for (String string : roleids) {
 			delteDesignatSQL.append(" '" + string + "',");
+			delteGroupRoleSQL.append(" '" + string + "',");
 		}
-		delteDesignatSQL.delete(delteDesignatSQL.length() - 1,
-				delteDesignatSQL.length());
+		delteDesignatSQL.delete(delteDesignatSQL.length() - 1,delteDesignatSQL.length());
 		delteDesignatSQL.append(")");
 		delteDesignatSQL.append("and comcode in(");
+		delteGroupRoleSQL.delete(delteGroupRoleSQL.length() - 1,delteGroupRoleSQL.length());
+		delteGroupRoleSQL.append(")");
+		delteGroupRoleSQL.append("and gr.groupid in(select groupid from ge_rms_group where comcode in (");
 		int i=0;
 		for ( i = 0; i < comCodes.size() ; i++) {
 			delteDesignatSQL.append(" '" + comCodes.get(i) + "',");
+			delteGroupRoleSQL.append(" '" + comCodes.get(i) + "',");
 			//每如果到了1000则用OR处理
 			if(i>=999&&i%999==0){
-				delteDesignatSQL.delete(delteDesignatSQL.length() - 1,
-						delteDesignatSQL.length());
+				delteDesignatSQL.delete(delteDesignatSQL.length() - 1,delteDesignatSQL.length());
 				delteDesignatSQL.append(")");
 				delteDesignatSQL.append(" or comcode in(");
+				delteGroupRoleSQL.delete(delteDesignatSQL.length() - 1,delteDesignatSQL.length());
+				delteGroupRoleSQL.append(")");
+				delteGroupRoleSQL.append(" or comcode in(");
 			}
 		}
 		delteDesignatSQL.delete(delteDesignatSQL.length() - 1,	delteDesignatSQL.length());
 		delteDesignatSQL.append(")");
+		delteGroupRoleSQL.delete(delteGroupRoleSQL.length() - 1,	delteGroupRoleSQL.length());
+		delteGroupRoleSQL.append("))");
 		getSession().createSQLQuery(delteDesignatSQL.toString()).executeUpdate();
+		getSession().createSQLQuery(delteGroupRoleSQL.toString()).executeUpdate();
+		//删除所有已经指派的角色关联到的用户组中的记录
+		delteDesignatSQL.setLength(0);
+		delteGroupRoleSQL.setLength(0);
 		// 然后进行查询下一级机构
 		//交予companyServiceInterface
 		List<String> subcomCodes = companyServiceInterface.findComCodebySuperComCode(comCodes);

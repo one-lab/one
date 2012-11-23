@@ -13,7 +13,7 @@ public interface TestService {
 
 	public List testFindByHqlforList();
 
-	public List testFindBySql();
+	public void testFindBySql();
 	public Page testFindByHqlNoLimit();
 
 	public List testFindTopByHql();

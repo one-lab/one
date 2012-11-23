@@ -9,15 +9,11 @@ import ins.framework.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
-import com.sinosoft.one.rms.model.Company;
-import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.ExcPower;
 import com.sinosoft.one.rms.model.Group;
 import com.sinosoft.one.rms.model.GroupRole;
@@ -84,7 +80,7 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	 */
 	@SuppressWarnings("unchecked")
 	public Page findEmployees(String comCode,String userCode,String userName,int pageNo,int pageSize) {
-		String key = userCacheManager.generateCacheKey("inUserPower", userCode+userName+comCode+pageNo+"in");
+		String key = userCacheManager.generateCacheKey("inUserPower", userCode+userName+comCode+pageNo+pageSize+"in");
 		Object result = userCacheManager.getCache(key);
 		if (result != null) {
 			return (Page) result;
@@ -117,7 +113,7 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	@SuppressWarnings("unchecked")
 	public Page findNEmployees(String userCode, String userName,
 			String comCode, int pageNo, int pageSize) {
-		String key = userCacheManager.generateCacheKey("notInUserPower", userCode+userName+comCode+pageNo+"notIn");
+		String key = userCacheManager.generateCacheKey("notInUserPower", userCode+userName+comCode+pageNo+pageSize+"notIn");
 		Object result = userCacheManager.getCache(key);
 		if (result != null) {
 			return (Page) result;
@@ -170,6 +166,89 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Task> findTaskMultSysByUserCode(String userCode, String comCode,String sysFlag) {
+		Set<Task> result=getTaskResultByComUserMultSysFlag(userCode, comCode, sysFlag);
+		Set<Task> ts = new HashSet<Task>();
+		iterateTask(ts, result);
+		return taskArrange(ts);
+	}
+	
+	/**
+	 * 查询人员可配置数据规则的权限
+	 */
+	public List<Task> findDataRuleTaskMultSysByComUser(String userCode, String comCode,String sysFlag) {
+		Set<Task> result=getTaskResultByComUserMultSysFlag(userCode, comCode, sysFlag);
+		Set<Task> ts = new HashSet<Task>();
+		iterateTask(ts, result);
+		return dataRuletask(ts);
+	}
+	
+	/**
+	 * 查询人员权限
+	 */
+	public UserPower findUserPowerByComUser(String userCode, String comCode) {
+		return userpowerSerivce.findUserPowerByComUser(userCode, comCode);
+	}
+	/**
+	 * 查询人员权限集合
+	 */
+	public List<UserPower> findUserPowersByUserCode(String userCode) {
+		return userpowerSerivce.findUserPowersByUserCode(userCode);
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 循环获得父节点功能
+	 */
+	public void iterateTask(Set<Task> tsks,Set<Task> tasks){
+		for (Task task : tasks) {
+			this.getSuppTask(tsks, task);
+		}
+	}
+	
+	void getSuppTask(Set<Task> result,Task task){
+		if(task.getIsValidate().toString().equals("1")){
+			result.add(task);
+		}
+		if (task.getParent()!=null) {
+			getSuppTask(result,task.getParent());
+		}
+	}
+	
+	//对功能集合排序
+	@SuppressWarnings("unchecked")
+	public List<Task> taskArrange(Set<Task> ts){
+		List<String>ids=new ArrayList<String>();
+		for (Task task : ts) {
+			ids.add(task.getTaskID());
+		}
+		List<Task> tasks=new ArrayList<Task>();
+		if(ids.size()>0){
+			QueryRule queryRule = QueryRule.getInstance();
+			queryRule.addIn("taskID", ids);
+			queryRule.addAscOrder("sort");
+			tasks=super.find(Task.class, queryRule);
+		}
+		return tasks;
+	}
+	
+	//对功能集合排序
+	@SuppressWarnings("unchecked")
+	public List<Task> dataRuletask (Set<Task> ts){
+		List<Task> tasks=new ArrayList<Task>();
+		for (Task task : ts) {
+			if(StringUtils.isNotBlank(task.getIsConfigDataRule())&&task.getIsConfigDataRule().toString().equals("1")){
+				tasks.add(task);
+			}
+		}
+		return tasks;
+	}
+	
+
+	Set<Task> getTaskResultByComUserMultSysFlag(String userCode, String comCode,String sysFlag ){
 		UserPower userPower =new UserPower();
 		userPower=	userpowerSerivce.findUserPowerByComUser(userCode, comCode);
 		List<UserGroup>userGroups=new  ArrayList<UserGroup>();
@@ -178,7 +257,8 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		for (UserGroup usergroup : userGroups) {
 			//用户组的过滤
 			if(usergroup.getIsValidate().toString().equals("1".toString())){
-				if(usergroup.getGroup().getComCode().toString().equals(comCode)){
+				//过滤获取当前机构的用户组或者 所有可见的用户组
+				if(usergroup.getGroup().getComCode().toString().equals(comCode)||usergroup.getGroup().getComCode().toString().equals("*")){
 					groups.add(usergroup.getGroup());
 				}
 			}
@@ -190,7 +270,8 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 		//根据机构获得指派的信息 取得roleID 过滤用户组关联的角色
 		List<RoleDesignate> roleDesignates=new ArrayList<RoleDesignate>();
 		QueryRule queryRole = QueryRule.getInstance();
-		queryRole.addIn("id.comCode", comCode);
+		//查询登陆机构的指派以及所有可见的指派
+		queryRole.addIn("id.comCode", comCode,"*");
 		roleDesignates=super.find(RoleDesignate.class, queryRole);
 		//根据获得的指派角色信息获得角色ID
 		List<String> roleids=new ArrayList<String>();
@@ -269,57 +350,13 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 				result.add(task);
 			}
 		}
-		Set<Task> ts = new HashSet<Task>();
-		iterateTask(ts, result);
-		return taskArrange(ts);
-	}
-	
-	/**
-	 * 查询人员权限
-	 */
-	public UserPower findUserPowerByComUser(String userCode, String comCode) {
-		return userpowerSerivce.findUserPowerByComUser(userCode, comCode);
-	}
-	
-	/**
-	 * 循环获得父节点功能
-	 */
-	public void iterateTask(Set<Task> tsks,Set<Task> tasks){
-		for (Task task : tasks) {
-			this.getSuppTask(tsks, task);
-		}
-	}
-	
-	void getSuppTask(Set<Task> result,Task task){
-		if(task.getIsValidate().toString().equals("1")){
-			result.add(task);
-		}
-		if (task.getParent()!=null) {
-			getSuppTask(result,task.getParent());
-		}
-	}
-	
-	//对功能集合排序
-	@SuppressWarnings("unchecked")
-	public List<Task> taskArrange(Set<Task> ts){
-		List<String>ids=new ArrayList<String>();
-		for (Task task : ts) {
-			ids.add(task.getTaskID());
-		}
-		List<Task> tasks=new ArrayList<Task>();
-		if(ids.size()>0){
-			QueryRule queryRule = QueryRule.getInstance();
-			queryRule.addIn("taskID", ids);
-			queryRule.addAscOrder("taskID");
-			tasks=super.find(Task.class, queryRule);
-		}
-		return tasks;
+		return result;
 	}
 
-	public List<UserPower> findUserPowersByUserCode(String userCode) {
-		QueryRule queryRule = QueryRule.getInstance();
-		queryRule.addEqual("userCode", userCode);
-		return super.find(UserPower.class, queryRule);
+	public List<Task> findTaskByUserCode(String paramString1,
+			String paramString2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
+	
 }

@@ -56,6 +56,12 @@ public class Task implements java.io.Serializable {
 	/** 属性是否为菜单字段(sysFalg) */
 	private String isAsMenu;
 	
+	/** 属性排序字段(sort) */
+	private String sort;
+	
+	/** 属性是否可配置规则字段(isConfigDataRule) */
+	private String isConfigDataRule;
+	
 	/** 属性excPowers */
 	private List<ExcPower> excPowers = new ArrayList<ExcPower>(0);
 
@@ -221,6 +227,35 @@ public class Task implements java.io.Serializable {
 		this.isAsMenu = isAsMenu;
 	}
 	
+	/**
+	 * 属性排序字段(sort)的getter方法
+	 */
+	@Column(name = "SORT")
+	public String getSort() {
+		return sort;
+	}
+
+	/**
+	 * 属性排序字段(sort)的setter方法
+	 */
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	/**
+	 * 属性是否可配置规则字段(isConfigDataRule)的getter方法
+	 */
+	@Column(name = "ISCOFIGDATARULE")
+	public String getIsConfigDataRule() {
+		return isConfigDataRule;
+	}
+
+	/**
+	 * 属性是否可配置规则字段(isConfigDataRule)的setter方法
+	 */
+	public void setIsConfigDataRule(String isConfigDataRule) {
+		this.isConfigDataRule = isConfigDataRule;
+	}
 	
 //	/**
 //	 * 属性父功能ID(ParentID)的getter方法

@@ -203,6 +203,7 @@ public class RmsConnection implements Connection {
 	String realDataRule(String sql) throws Exception{
 		if (EnvContext.getDataAuthorityTaskId() != null ) {
 			sql=rmsSQLParser.parser(realConnection, sql);
+			System.out.println(sql+"----------------------");
 		}
 		return sql;
 	}

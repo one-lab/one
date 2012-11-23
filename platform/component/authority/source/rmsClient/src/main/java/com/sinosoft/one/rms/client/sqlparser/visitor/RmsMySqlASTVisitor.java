@@ -20,6 +20,6 @@ public class RmsMySqlASTVisitor extends MySqlASTVisitorAdapter {
 		this.dataRuleFactoryPostProcessor=dataRuleFactoryPostProcessor;
 	}
     public boolean visit(MySqlSelectQueryBlock x) {
-        return RmsSQLASTVisitorSupport.visit(x,dataRuleFactoryPostProcessor);
+        return super.visit(x);
     }
 }

@@ -27,7 +27,8 @@ public class RmsAnnotationAspect {
 
 	private static CacheService arch4MethodNameCacheManager = CacheManager.getInstance("arch4Method");
 	
-    @Around("execution(* com.sinosoft.test..*.*(..))")
+//  @Around("execution(* ins..*service..*Service*Impl.*(..))") 
+	@Around("execution(* com.sinosoft.test..*.*(..))") 
     public Object register(ProceedingJoinPoint pjp) throws Throwable {
     	if(pjp.getThis() == null || pjp.getTarget() == null) {
     		return pjp.proceed();
@@ -38,7 +39,7 @@ public class RmsAnnotationAspect {
 		if (result != null) {
 			arch4MethodNames=(HashSet<String>)result;
 		}else{
-			arch4MethodNames=new HashSet<String>();
+			arch4MethodNames=new HashSet<String>(); 
 			arch4MethodNames.add("findUnionBySql");
 			arch4MethodNames.add("findUnionByHqls");
 			arch4MethodNames.add("findByHqlNoLimit");
@@ -94,7 +95,6 @@ public class RmsAnnotationAspect {
 		object = pjp.proceed();
 		EnvContext.removeDataAuthorityTaskId();
 		EnvContext.setDataAuthorityTaskId(tempDataAuthorityTaskId);
-		EnvContext.removeClassName();
-    	return pjp.proceed();
+    	return object;
     }
 }

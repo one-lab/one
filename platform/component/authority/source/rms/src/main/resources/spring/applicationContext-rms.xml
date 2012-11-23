@@ -24,7 +24,7 @@
      
     <bean id="dataRuleService" class="com.sinosoft.one.rms.service.spring.DataRuleServiceSpringImpl"></bean>
     
-    <bean id="clientService" class="com.sinosoft.one.rms.service.spring.ClientServiceSpringImpl"></bean>
+    <bean id="getUserService" class="com.sinosoft.one.rms.service.spring.GetUserServiceSpringImpl"></bean>
     
     <bean id="rmsClientService" class="com.sinosoft.one.rms.clientService.facade.RmsClientServiceImpl"></bean>
     

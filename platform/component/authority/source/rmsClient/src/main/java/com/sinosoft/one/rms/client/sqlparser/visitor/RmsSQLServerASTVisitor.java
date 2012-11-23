@@ -21,6 +21,6 @@ public class RmsSQLServerASTVisitor extends SQLServerASTVisitorAdapter {
 		this.dataRuleFactoryPostProcessor=dataRuleFactoryPostProcessor;
 	}
     public boolean visit(SQLServerSelectQueryBlock x) {
-        return RmsSQLASTVisitorSupport.visit(x,dataRuleFactoryPostProcessor);
+        return super.visit(x);
     }
 }

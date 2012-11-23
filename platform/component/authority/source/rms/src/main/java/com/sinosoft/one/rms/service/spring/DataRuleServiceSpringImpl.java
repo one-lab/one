@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ins.framework.cache.CacheManager;
 import ins.framework.cache.CacheService;
+import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 import ins.framework.utils.StringUtils;
 
@@ -20,6 +21,8 @@ import com.sinosoft.one.rms.service.facade.DataRuleService;
 public class DataRuleServiceSpringImpl extends GenericDaoHibernate<BusPower, String> implements DataRuleService{
 	
 	private static CacheService cacheManager = CacheManager.getInstance("Role");
+	
+	private static CacheService baseDataRuleTableInfoManager = CacheManager.getInstance("baseDataRuleTableInfo");
 	
 	
 	public void addBusPower( String powerID,String dataRuleID, String taskID,
@@ -84,32 +87,22 @@ public class DataRuleServiceSpringImpl extends GenericDaoHibernate<BusPower, Str
 			return (List<DataRule>) result;
 		}
 		List<DataRule> dataRules=new ArrayList<DataRule>();
-		dataRules=super.getAll(DataRule.class);
+		QueryRule queryRule =QueryRule.getInstance();
+		queryRule.addEqual("isValidate", "1");
+		dataRules=super.find(DataRule.class, queryRule);
 		cacheManager.putCache(key, dataRules);
 		return dataRules;
 	}
 
-	public List<BusPower> findBusPowerByTaskID(String userCode,String taskId) {
+	public List<BusPower> findBusPowerByTaskID(String userCode,String comCode,String taskId) {
 		List<BusPower>busPowers=new ArrayList<BusPower>();
 		StringBuilder hql = new StringBuilder();
-		hql.append("from BusPower b where b.userPower.userPowerID =(select userPowerID from UserPower where userCode='"+userCode+"')");
+		hql.append("from BusPower b where b.userPower.userPowerID =(select userPowerID from UserPower where userCode='"+userCode+"' and comCode='"+comCode+"')");
 		hql.append(" and b.task.taskID='"+taskId+"'");
 		busPowers=super.findByHql(hql.toString());
 		return busPowers;
 	}
 
-	public List<BusPower> findBusPowerByUserCode(String userCode) {
-		String key = cacheManager.generateCacheKey("UserBusPowers", userCode);
-		Object result = cacheManager.getCache(key);
-		if (result != null) {
-			return (List<BusPower>) result;
-		}
-		List<BusPower>busPowers=new ArrayList<BusPower>();
-		StringBuilder hql = new StringBuilder();
-		hql.append("from BusPower b where b.userPower.userPowerID in(select userPowerID from UserPower where userCode='"+userCode+"')");
-		busPowers=super.findByHql(hql.toString());
-		cacheManager.putCache(key, busPowers);
-		return busPowers;
-	}
+
 
 }
