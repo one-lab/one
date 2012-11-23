@@ -70,7 +70,7 @@ public class CryptoFilter implements Filter {
 				Element el = it.next();
 				String url = el.attributeValue(new QName("url"));
 				//todo url mast not be null!!!
-				if(el.getName().equalsIgnoreCase("crpyto")) {
+				if(el.getName().equalsIgnoreCase("crypto")) {
 
 					Crypto crypto = null;
 					List<Crypto> list = new ArrayList<Crypto>();
