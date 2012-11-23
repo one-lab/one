@@ -59,6 +59,27 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+    <listener>
+        <listener-class>com.sinosoft.one.mvc.crypto.listener.CryptoSessionListener</listener-class>
+    </listener>
+
+
+    <filter>
+        <filter-name>cryptoFilter</filter-name>
+        <filter-class>com.sinosoft.one.mvc.crypto.filter.CryptoFilter</filter-class>
+        <init-param>
+            <param-name>cryptoConfigLocation</param-name>
+            <param-value>/WEB-INF/crypto/crypto_config.xml</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>cryptoFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+
 	<filter>
 		<filter-name>mvcFilter</filter-name>
 		<filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>

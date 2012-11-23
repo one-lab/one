@@ -203,7 +203,7 @@
 				for(var i = 0; i < defaults.diyButton.length; i++) {
 					var $inputButton = $("<input type='button' />");
 					var btId = defaults.diyButton[i].id;
-					var btClass = defaults.diyButton[i].class;
+					var btClass = defaults.diyButton[i].btClass;
 					var btName = defaults.diyButton[i].value;
 					var btFun = defaults.diyButton[i].btFun;
 					if( btId != undefined) {

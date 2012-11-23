@@ -12,3 +12,6 @@
 <script src="${ctx}/static/jquery-validation/1.9.0/jquery.validate.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/jquery-validation/1.9.0/messages_cn.js" type="text/javascript"></script>
 <script src="${ctx}/static/window/sinosoft.window.js" type="text/javascript"></script>
+<script src="${ctx}/static/crypto/cryptocore.js" type="text/javascript"></script>
+<script src="${ctx}/static/crypto/crypto_codec.js" type="text/javascript"></script>
+<script src="${ctx}/static/crypto/enAndDe.js" type="text/javascript"></script>

@@ -32,6 +32,11 @@
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>com.sinosoft.one</groupId>
+            <artifactId>mvc-crypto</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-tools</artifactId>
             <exclusions>

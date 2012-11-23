@@ -30,6 +30,7 @@
             <li id="jparesource-tab"><a href="${ctx}/account/user/namedQuerylList">JPA资源文件查询</a></li>
             <li id="oracleProcedure-tab"><a href="${ctx}/account/user/selectUserWithOraclePro">ORACLE存储过程</a></li>
             <li id="mysqlProcedure-tab"><a href="${ctx}/account/user/selectUserWithMysqlPro">MYSQL存储过程</a></li>
+            <li id="cryptoAndUncrypto-tab"><a href="${ctx}/crypto_uncrypto/cryptoUncrypto/cryptoAndUncrypto">加密解密</a></li>
         </ul>
     </div>
 </div>
