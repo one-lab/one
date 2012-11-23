@@ -173,4 +173,11 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 		}
 		return resultTaskIDs;
 	 }
+	 
+	 List<UserPower> findUserPowersByUserCode(String userCode) {
+		 QueryRule queryRule = QueryRule.getInstance();
+		 queryRule.addEqual("userCode", userCode);
+		 return super.find(UserPower.class, queryRule);
+	 }
+	 
 }

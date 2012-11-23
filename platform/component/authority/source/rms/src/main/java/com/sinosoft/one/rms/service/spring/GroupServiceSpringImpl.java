@@ -82,7 +82,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	 * 查询用户组下的成员
 	 */
 	public Page findEmployeByGroup(String groupId, String comCode, String userName,String usCode,int pageNo,int pageSize) {
-		String key = userCacheManager.generateCacheKey("inGroup", groupId+comCode+userName+userName+pageNo);
+		String key = userCacheManager.generateCacheKey("inGroup", groupId+comCode+usCode+userName+pageNo+pageSize);
 		Object result = userCacheManager.getCache(key);
 		if (result != null) {
 			return (Page) result;
@@ -135,7 +135,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	 * 查询未添加到用户组下的成员
 	 */
 	public Page findNEmployeByGroup(String groupId, String comCode, String userName,String usCode,int pageSize,int pageNo) {
-		String key = userCacheManager.generateCacheKey("notInGroup", groupId+comCode+userName+usCode+pageNo);
+		String key = userCacheManager.generateCacheKey("notInGroup", groupId+comCode+userName+usCode+pageNo+pageSize);
 		Object result = userCacheManager.getCache(key);
 		if (result != null) {
 			return (Page) result;
@@ -198,7 +198,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	 * 查询用户组（comCode默认条件,名字查询,查询页面) 
 	 */
 	public Page findGroup(String groupName, String comCode, int pageNo, int pageSize) {
-		String key = groupCacheManager.generateCacheKey("comCodeGroup", comCode+groupName);
+		String key = groupCacheManager.generateCacheKey("comCodeGroup", comCode+groupName+pageNo+pageSize);
 		Object result = groupCacheManager.getCache(key);
 		if (result != null) {
 			return (Page) result;

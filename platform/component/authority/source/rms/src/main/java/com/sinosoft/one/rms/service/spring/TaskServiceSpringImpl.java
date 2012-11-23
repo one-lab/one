@@ -321,7 +321,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	
 	public void addTaskHasSysFlag(String taskId, String name, String menuURL,
 			String menuName, String des,String isAsMenu, String parentId,String loginUserCode,String loginComCode,
-			String sysFlag) {
+			String sysFlag,String isConfigDataRule) {
 		Task task=new Task();
 		task.setTaskID(taskId);
 		task.setName(name);
@@ -332,6 +332,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 		task.setIsValidate("1");
 		task.setParent(super.get(Task.class, parentId));
 		task.setIsAsMenu(isAsMenu);
+		task.setIsConfigDataRule(isConfigDataRule);
 		List<TaskAuth> taskAuths=new ArrayList<TaskAuth>();
 		TaskAuth taskAuth=new TaskAuth();
 		taskAuth.setTask(task);
@@ -351,7 +352,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	
 
 	public void updateTaskHasSysFlag(String taskId, String name, String menuURL,String isValidate,
-			String menuName, String des,String isAsMenu,String sysFlag,String loginComCode) {
+			String menuName, String des,String isAsMenu,String sysFlag,String loginComCode,String isConfigDataRule) {
 		Task task=super.get(Task.class, taskId);
 		if (task!=null) {
 			task.setTaskID(taskId);
@@ -362,6 +363,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 			task.setIsValidate(isValidate);
 			task.setSysFlag(sysFlag);
 			task.setIsAsMenu(isAsMenu);
+			task.setIsConfigDataRule(isConfigDataRule);
 			if("*".equals(loginComCode)){
 				task.setFlag("*");
 			}else{

@@ -32,13 +32,13 @@ import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
 import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import com.sinosoft.one.rms.model.service.EmployeModelInterface;
-import com.sinosoft.one.rms.service.facade.ClientService;
+import com.sinosoft.one.rms.service.facade.GetUserService;
 import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
 import com.sinosoft.one.rms.service.facade.EmployeServiceInterface;
 
 @Service
-public class ClientServiceSpringImpl extends
-		GenericDaoHibernate<Employe, String> implements ClientService {
+public class GetUserServiceSpringImpl extends
+		GenericDaoHibernate<Employe, String> implements GetUserService {
 
 	@Autowired
 	private EmployeServiceInterface employeServiceInterface;
