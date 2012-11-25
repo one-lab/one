@@ -14,7 +14,7 @@ public interface ComboService {
 	
 	public List<Combo> getCombos_StepFour(String condation);
 
-	public void processCombo_StepOne(String comboCode, Combo c);
+	public void processCombo_StepOne(String userId, String comboCode, Combo c);
 
 	public void processCombo_StepTwo(String comboCode, Combo c, String isPassed);
 
@@ -22,6 +22,8 @@ public interface ComboService {
 	
 	public void processCombo_StepFour(String comboCode, Combo c);
 
-	public Student createCombo(String comboCode, Combo c);
+	public void createCombo(String comboCode, Combo c);
+	
+	public Combo getCombo(String comboCode);
 
 }

@@ -9,7 +9,6 @@
 	<persistence-unit name="org.drools.persistence.jpa.local"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<!-- <jta-data-source>jdbc/testDS1 </jta-data-source> -->
 		<mapping-file>config/META-INF/JBPMorm.xml</mapping-file>
 		<mapping-file>config/META-INF/Taskorm.xml</mapping-file>
 		<mapping-file>config/META-INF/ProcessInstanceorm.xml</mapping-file>
@@ -44,23 +43,5 @@
 		<class>org.jbpm.task.User</class>
 		<class>com.sinosoft.one.bpm.model.ProcessInstanceBOInfo</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-		 
-		<!-- my persistent variables <class>org.drools.container.spring.beans.persistence.MyEntity</class> 
-			<class>org.drools.container.spring.beans.persistence.MyEntityMethods</class> 
-			<class>org.drools.container.spring.beans.persistence.MyEntityOnlyFields</class> -->
-		<!--<properties>-->
-
-			<!--<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />-->
-            <!--	<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />-->
-			<!--property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/ -->
-			<!--property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/ -->
-            <!--<property name="hibernate.hbm2ddl.auto" value="update" />-->
-			<!--<property name="hibernate.max_fetch_depth" value="3" />
-			<property name="hibernate.show_sql" value="true" />-->
-
-			<!-- <property name="hibernate.connection.autocommit" value="false" /> 
-				<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.BTMTransactionManagerLookup" 
-				/> -->
-		<!--</properties>-->
 	</persistence-unit>
 </persistence>
