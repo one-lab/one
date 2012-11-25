@@ -29,4 +29,5 @@ public interface PDLMCalModeService {
 	 */
 	String deleteCalMode(String calCode);
 
+    PDLMCalMode saveCalMode(PDLMCalMode pdlmCalMode);
 }

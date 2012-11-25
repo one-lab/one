@@ -200,5 +200,7 @@ public class ParserTest {
         String sql = getSql();
         System.out.println(sql);
         getSelectList(getSql());
+
+        System.out.println(System.getProperty("java.home"));
     }
 }
