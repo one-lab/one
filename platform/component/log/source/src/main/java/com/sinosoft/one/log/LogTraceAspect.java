@@ -106,7 +106,7 @@ public class LogTraceAspect {
             if(interfaceTraced != null) {
                 String description = formatDescription(interfaceTraced.description(),pjp.getArgs());
                 //检查当前环境与防止因为代理反复切入的问题
-                if(checkEnvironment(interfaceTraced.env())&&!AopUtils.isCglibProxyClass(targetClass)) {
+                if(checkEnvironment(interfaceTraced.env())&&!ClassUtils.isCglibProxyClass(targetClass)) {
                     //获取追踪ID
                     String traceId = TraceUtils.getTraceId();
                     if (traceId == null || "".equals(traceId))

@@ -10,24 +10,19 @@ package com.sinosoft.one.log;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.spi.LoggingEvent;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-
 import com.sinosoft.one.util.queue.BlockingConsumer;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -47,7 +42,7 @@ public class JdbcLogWriter extends BlockingConsumer {
 	protected int batchSize = 10;
 
 	protected List<LoggingEvent> eventsBuffer = Lists.newArrayList();
-	protected SimpleJdbcTemplate jdbcTemplate;
+	protected NamedParameterJdbcTemplate jdbcTemplate;
 	protected TransactionTemplate transactionTemplate;
 
     /**
@@ -71,7 +66,7 @@ public class JdbcLogWriter extends BlockingConsumer {
 	 */
 	@Resource
 	public void setMonitorDataSource(DataSource monitordataSource) {
-		jdbcTemplate = new SimpleJdbcTemplate(monitordataSource);
+		jdbcTemplate = new NamedParameterJdbcTemplate(monitordataSource);
 	}
 
 	/**
