@@ -80,7 +80,7 @@ public class BpmServiceSupport {
 				dbLogger.dispose();
 			Thread.sleep(1000);
 		} catch (Exception e) {
-			logger.error("destory jbpm instance exception.", e);
+			logger.warn("destory jbpm instance exception.");
 		}
 	}
 	/**
