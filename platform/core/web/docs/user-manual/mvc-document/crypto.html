@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ONE MVC 使用手册</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJava.js"></script>
+<script language="javascript" src="js/tips.js"></script>
+<script type="text/javascript">
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+	
+	
+	var i = 1;
+	$("li.on_off").each(function(){		
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	
+	$("li.on_off").click(function(){
+		var conID = $(this).attr("id").substring(6,7);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	});
+    $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+    var bodyTop = $(window).height()/2
+    $(window).scroll(function(){
+
+        var offsetTop = bodyTop + $(window).scrollTop() +"px";
+        $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+        if($(window).scrollTop() > 10){
+
+            $("#toTop").show();
+        }else{
+            $("#toTop").hide();
+        }
+    });
+    $("#toTop").click(function(){toTop()});
+});
+function toTop(){
+    $("#toTop").hide();
+    $("html,body").animate({scrollTop: $("body").offset().top},500);
+}
+</script>
+<style>
+.new{padding:10px;line-height:22px;}
+.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+.new span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="header">
+
+	<h1 class="logo"><b>Sinosoft</b> ONE MVC (V1.0.0)</h1>
+    <h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">加密解密</span>
+</div>
+<div class="content">
+    <div class="title">
+        加密解密
+    </div>
+</div>
+<div class="content">
+    <div class="introduce">
+        <p>加密解密整体来说分为两种：前端加密，后端解密；后端加密，前端解密</p>
+    </div>
+    <div class="title">
+        配置文件
+    </div>
+    <div class="introduce">
+        <p>CryptoSessionListener负责监听session的创建，同时创建密钥</p>
+        <p>CryptoFilter是加解密的核心过滤器，需要在web.xml中配置</p>
+        <textarea name="code" class="xml" >
+            <!-- CryptoSessionListener -->
+            <listener>
+                <listener-class>com.sinosoft.one.mvc.crypto.listener.CryptoSessionListener</listener-class>
+            </listener>
+            <!-- CryptoFilter -->
+            <filter>
+                <filter-name>cryptoFilter</filter-name>
+                <filter-class>com.sinosoft.one.mvc.crypto.filter.CryptoFilter</filter-class>
+                <init-param>
+                    <param-name>cryptoConfigLocation</param-name>
+                    <!-- crypto_config.xml是后台加解密的配置文件 -->
+                    <param-value>/WEB-INF/crypto/crypto_config.xml</param-value>
+                </init-param>
+            </filter>
+            <filter-mapping>
+                <filter-name>cryptoFilter</filter-name>
+                <url-pattern>/*</url-pattern>
+                <dispatcher>REQUEST</dispatcher>
+                <dispatcher>FORWARD</dispatcher>
+                <dispatcher>INCLUDE</dispatcher>
+            </filter-mapping>
+        </textarea>
+    </div>
+	<div class="title">
+        前端加密，后端解密
+    </div>
+    <div class="introduce">
+    <p>JSP的form表单中使用onsubmit属性来进行加密事件，在onsubmit中使用加密标签“cryptoForm”</p>
+    <p>加密标签“cryptoForm”有两个属性，“formId”是当前form表单的唯一id（因此，form表单必须提供“id”属性值），“includes”指定哪些属性是需要加密的，如果不写includes，那么默认全部加密</p>
+    <p>includes中的值是需要加密的属性的属性名，多个属性名之间使用“,”分隔</p>
+        <textarea name="code" class="html" >
+            <%--form必须指定唯一的“id”--%>
+            <form id="frontend1" action="frontendCrypto" method="post"
+            <%--onsubmit中是加密事件，包括formId，includes--%>
+                  onsubmit="<f:cryptoForm formId="frontend1" includes="name,email"/>">
+            用户名：<input name="name" id="name1" type="text"/>
+            用户邮箱：<input name="email" id="email1" type="text"/>
+            用户邮箱：<input name="gender" id="gender1" type="text"/>
+            <input type="submit" onClick="viewUser();" value="前端加密"/>
+            </form>
+        </textarea>
+    </div>
+    <p>前端设置加密之后，需要在加解密的配置文件crypto_config.xml中配置后端解密的URL</p>
+    <p>使用解密标签&lt;/uncrypto&gt;，它只有一个属性：url</p>
+    <p>url路径与后台的action相对应，只有这样，才会自动解密。整个解密过程对开发人员是透明的，后台得到的是已经解密过的数据</p>
+    <textarea name="code" class="xml" >
+        <?xml version="1.0" encoding="UTF-8"?>
+
+        <CryptoConfig xmlns="http://com.sinosoft.one/schema/mvc/cryptoconfig"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://com.sinosoft.one/schema/mvc/cryptoconfig ">
+            <!--后台对应的action，只有这样才会自动解密-->
+            <uncrypto url="/demo/crypto_uncrypto/cryptoUncrypto/backgroundUncrypto"/>
+            <!--后台对应的action，只有这样才会自动解密-->
+            <uncrypto url="/demo/crypto_uncrypto/cryptoUncrypto/frontendAjaxCrypto"/>
+        </CryptoConfig>
+    </textarea>
+</div>
+</div>
+<div class="content">
+    <div class="title">
+        后端加密，前端解密
+    </div>
+    <div class="introduce">
+        <p>需要在加解密的配置文件crypto_config.xml中配置后端加密的URL和加密属性</p>
+        <p>使用加密标签&lt;/crypto&gt;，它有以下属性：url,includes,excludes,name</p>
+        <p>url的值是对应的JSP页面，使用绝对路径；includes的值是需要加密的属性名；excludes的值是不需要加密的属性名；name的值是对应的对象或者单一属性名</p>
+        <p>includes和excludes只在“name”是对象的时候才使用；如果是单一属性，就直接使用[name="属性名"]即可</p>
+        <textarea name="code" class="xml" >
+            <CryptoConfig xmlns="http://com.sinosoft.one/schema/mvc/cryptoconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://com.sinosoft.one/schema/mvc/cryptoconfig ">
+                <!--url对应前端JSP页面，使用绝对路径-->
+                <crypto url="/demo/views/crypto_uncrypto/cryptoAndUncryptoList.jsp">
+                    <!--单一属性，不使用includes和excludes-->
+                    <property name="name3"/>
+                    <!--单一属性，不使用includes和excludes-->
+                    <property name="name4"/>
+                </crypto>
+                <!--url对应前端JSP页面，使用绝对路径-->
+                <crypto url="/demo/views/uncrypto.jsp">
+                    <!--user是对象，使用includes，说明user的"loginName,password,name,email"四个属性需要加密-->
+                    <property includes="loginName,password,name,email" name="user"/>
+                </crypto>
+
+                <crypto url="/demo/views/adduncrypto.jsp">
+                    <!--user是对象，使用includes，说明user的"info,id,name"三个属性需要加密-->
+                    <property name="user" includes="info,id,name"/>
+                    <!--user2是对象，使用excludes，说明user2的"gender,cardNo"属性不需要加密，其余属性全加密-->
+                    <property name="user2" excludes="gender,cardNo"/>
+                </crypto>
+            </CryptoConfig>
+        </textarea>
+        <p>后端设置加密之后，JSP页面需要引用解密标签</p>
+        <p>然后在JSP中使用解密标签：&lt;x:inputs/&gt;，&lt;/co:unCmn&gt;</p>
+        <p>&lt;x:inputs/&gt;标签没有属性，不需要配置解密哪些属性，是根据后台的配置自动解密的；放在JSP的最后面；针对有“value”属性的标签</p>
+        <p>&lt;/co:unCmn&gt;标签属性有：eIds，eClasses，放在JSP的最后面</p>
+        <p>unCmn是UnCryptoCommon的缩写，意思是解密其他常用元素，目前支持td,textarea,div,..等无value属性的元素；需要配置解密元素的id值；但是不支持多个&lt;/td&gt;等类似情况</p>
+        <p>eClasses补充了unCmn，支持无value属性的元素，支持多个&lt;/td&gt;等类似情况；需要配置解密元素的class属性（class属性值取无意义的且唯一的值）</p>
+        <textarea name="code" class="html" >
+            <%--引用以下三个标签，顺序不能乱--%>
+            <%@ taglib uri="http://mvc.one.sinosoft.com/crypto/inputs" prefix="x" %>
+            <%@ taglib uri="http://mvc.one.sinosoft.com/crypto/form" prefix="f" %>
+            <%@ taglib uri="http://mvc.one.sinosoft.com/crypto/commons" prefix="co" %>
+
+            <div id="view4" class="span12">
+                <form id="frontendUncrypto" action="frontendUncrypto" method="post">
+                    <%--需要解密的属性，使用了EL表达式--%>
+                    解密后的用户名：<input name="name4" value="${name4}"/>
+                    <input type="submit" onClick="viewUser4();" value="后端加密前端解密"/>
+                </form>
+            </div>
+            <div>
+                <!--<textarea id="un1" >${user.loginName}</textarea><br/>
+                <span  id="un2">${user.password}</span><br/>
+                <table>
+                    <tr>
+                        <td class="unClass1">${user.name}</td>
+                        <td class="unClass2">${user.email}</td>
+                    </tr>
+                </table>
+                <div id="un4">${user.info}</div>-->
+
+            </div>
+            <%--使用解密标签<x:inputs/>;，对“name4”的值进行解密--%>
+            <x:inputs/>
+            <%--使用解密标签</x:unCmn/>;，对非value的属性的值进行解密--%>
+            <co:unCmn eIds="un1,un2" eClasses="unClass1,unClass2"/>
+        </textarea>
+    </div>
+</div>
+<div class="content">
+    <div class="title">
+        ajax前端加密，后端解密
+    </div>
+    <div class="introduce">
+        <p>需要引入前端解密JS：enAndDe.js</p>
+        <p>JSP页面中需要得到密钥：${sessionScope.crypto_key_attr_name}</p>
+        <p>需要在加解密的配置文件crypto_config.xml中配置后端解密的URL</p>
+        <textarea name="code" class="html" >
+            <head>
+                <script type="text/javascript">
+                    function sendMessage() {
+                        var name = $("input:[name='ajaxName']").val();
+                        var age = $(".input_one").eq(0).val();
+                        var selectGender = $("select").val();
+                        if ($("input:[type='checkbox']").attr("checked") == undefined) {
+                            var checkbox = "no";
+                        } else {
+                            var checkbox = $("input:[type='checkbox']").val();
+                        }
+                        var textarea = $("#area").val();
+                        $.packageAjax({
+                            type:"POST", //请求的方法
+                            //后台处理ajax请求的URL
+                            url:"${ctx}/crypto_uncrypto/cryptoUncrypto/frontendAjaxCrypto",
+                            dataType:"json", //返回的数据类型
+                            data:{
+                                name:name,
+                                age:age,
+                                selectGender:selectGender,
+                                checkbox:checkbox,
+                                textarea:textarea,
+                                children:[
+                                    {
+                                        id1:"123",
+                                        name1:"name111"
+                                    },
+                                    {
+                                        id2:"321",
+                                        name2:"name222"
+                                    }
+                                ]
+                            },
+                            isEncryption:true,
+                            success:function (data) {
+                                if (data != null) {
+                                    alert("success,解密后的数据（其中children为测试数据）:\n" + data.name);
+                                }
+                            },
+                            error:function () {
+                                alert("Ajax请求数据失败!");
+                            }
+                        });
+                    }
+
+                </script>
+            </head>
+            <body>
+            <!--JSP页面得到密钥-->
+            <input id="key" value="${sessionScope.crypto_key_attr_name}" type="hidden">
+
+            <!--<div id="view5" class="span12">
+                <form id="ajaxForm">
+                    姓名：<input type="text" name="ajaxName"/>
+                    年龄：<input class="input_one" type="text" name="ajaxAge"/>
+                    <select name="selectGender">
+                        <option value="0">男</option>
+                        <option value="1">女</option>
+                    </select>
+                    <input type="checkbox" name="ajaxCheckbox"/>
+                    <textarea id="area" name="ajaxArea"></textarea>
+                    <input type="button" value="ajax前端加密" onclick="sendMessage();"/>
+                </form>
+            </div>-->
+        </textarea>
+    </div>
+
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>
