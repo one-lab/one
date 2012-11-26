@@ -5,6 +5,8 @@
     <crypto url="/demo/views/crypto_uncrypto/cryptoAndUncryptoList.jsp">
         <property name="name3"/>
         <property name="name4"/>
+        <property name="email4"/>
+        <property name="email5"/>
     </crypto>
     <!--<crypto url="/demo/views/uncrypto.jsp">
         <property includes="loginName,password,name,email" name="user"/>

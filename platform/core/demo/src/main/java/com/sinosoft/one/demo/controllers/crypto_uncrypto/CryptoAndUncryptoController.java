@@ -61,7 +61,8 @@ public class CryptoAndUncryptoController {
         String key = (String) inv.getRequest().getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
         inv.addModel("ciphertext4", key);
         inv.addModel("name4", "aaaa");
-        inv.addModel("email4", email);
+        inv.addModel("email4", "email4@demo.com");
+        inv.addModel("email5", "email5@demo.com");
         return "cryptoAndUncryptoList";
     }
 

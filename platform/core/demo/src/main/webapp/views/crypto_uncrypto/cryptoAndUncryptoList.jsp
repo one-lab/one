@@ -72,41 +72,15 @@
 
 <div class="container">
     <%@ include file="/WEB-INF/layouts/header.jsp" %>
+    <div>
+        <p><span style="color: red;">为了演示方便，在crypto_codec.js和enAndDe.js文件中加入了“alert()”语句，所以页面初始化的弹窗属正常现象</span></p>
+    </div>
     <div id="view1" class="span12">
         <form id="frontend1" action="frontendCrypto" method="post"
               onsubmit="<f:cryptoForm formId="frontend1" includes="name"/>">
             用户名：<input name="name" id="name1" type="text"/>
             用户邮箱：<input name="email" id="email1" type="text"/>
             <input type="submit" onClick="viewUser1();" value="前端加密"/>
-        </form>
-    </div>
-    <div id="view2" class="span12">
-        <form id="background2" action="backgroundUncrypto" method="post"
-              onsubmit="<f:cryptoForm formId="background2" includes="name"/>">
-            用户名：<input name="name" id="name2" type="text"/>
-            用户邮箱：<input name="email" id="email2" type="text"/>
-            <input type="submit" onClick="viewUser2();" value="前端加密后端解密"/>
-        </form>
-    </div>
-
-    <div id="view4" class="span12">
-        <form id="frontendUncrypto" action="frontendUncrypto" method="post">
-            解密后的用户名：<input name="name4" value="${name4}"/>
-            <%--用户邮箱：<input name="email" id="email4" type="text" />--%>
-            <input type="submit" onClick="viewUser3();" value="后端加密前端解密"/>
-        </form>
-    </div>
-    <div id="view5" class="span12">
-        <form id="ajaxForm">
-            姓名：<input type="text" name="ajaxName"/>
-            年龄：<input class="input_one" type="text" name="ajaxAge"/>
-            <select name="selectGender">
-                <option value="0">男</option>
-                <option value="1">女</option>
-            </select>
-            <input type="checkbox" name="ajaxCheckbox"/>
-            <textarea id="area" name="ajaxArea"></textarea>
-            <input type="button" value="ajax前端加密" onclick="sendMessage();"/>
         </form>
     </div>
     <div id="view1" class="span12">
@@ -130,6 +104,14 @@
         </table>
     </div>
     <div id="view2" class="span12">
+        <form id="background2" action="backgroundUncrypto" method="post"
+              onsubmit="<f:cryptoForm formId="background2" includes="name"/>">
+            用户名：<input name="name" id="name2" type="text"/>
+            用户邮箱：<input name="email" id="email2" type="text"/>
+            <input type="submit" onClick="viewUser2();" value="前端加密后端解密"/>
+        </form>
+    </div>
+    <div id="view2" class="span12">
         <table id="contentTable2"
                class="table table-striped table-bordered table-condensed">
             <thead>
@@ -148,6 +130,27 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    <div id="view4" class="span12">
+        <form id="frontendUncrypto" action="frontendUncrypto" method="post">
+            解密后的用户名：<input name="name4" value="${name4}"/>
+            解密后的邮箱4：<textarea class="email4" name="email4">${email4}</textarea><br>
+            解密后的邮箱5：<textarea class="email5" name="email5">${email5}</textarea>
+            <input type="submit" onClick="viewUser3();" value="后端加密前端解密"/>
+        </form>
+    </div>
+    <div id="view5" class="span12">
+        <form id="ajaxForm">
+            姓名：<input type="text" name="ajaxName"/>
+            年龄：<input class="input_one" type="text" name="ajaxAge"/>
+            <select name="selectGender">
+                <option value="0">男</option>
+                <option value="1">女</option>
+            </select>
+            <input type="checkbox" name="ajaxCheckbox"/>
+            <textarea id="area" name="ajaxArea"></textarea>
+            <input type="button" value="ajax前端加密" onclick="sendMessage();"/>
+        </form>
     </div>
     <%@ include file="/WEB-INF/layouts/footer.jsp" %>
 </div>
@@ -168,5 +171,6 @@
     }
 </script>
 <x:inputs/>
+<co:unCmn eClasses="email4,email5"/>
 </body>
 </html>
