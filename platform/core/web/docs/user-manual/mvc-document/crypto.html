@@ -304,7 +304,69 @@ function toTop(){
             </div>-->
         </textarea>
     </div>
+</div>
+<div class="content">
+    <div class="title">
+        动态更新加解密配置文件（crypto_config.xml）
+    </div>
+    <div class="introduce">
+        <p>CryptoConfig是加解密配置文件（crypto_config.xml）的加载结果类</p>
+        <p>CryptoConfig是单例的，服务启动后，只能通过调用加解密工具类CryptoConfigUpdateUtil.java的一系列方法，达到动态更新加解密配置文件的目的</p>
+        <textarea name="code" class="java" >
+            //向配置文件中增加后台解密的URL
+            @Get("addUncrypto")
+            public String addUncryptoUrl() {
+            CryptoConfigUpdateUtil.saveUnCryptoConfig("/demo/testAddedUncrypto");
+            return "adduncrypto";
+            }
 
+            //从配置文件中删除后台解密的URL
+            @Get("deleteUncrypto")
+            public String deleteUncryptoUrl() {
+            CryptoConfigUpdateUtil.deleteUnCryptoConfigs("/demo/testAddedUncrypto");
+            return "adduncrypto";
+            }
+
+            //向配置文件中增加后台加密的URL和相应的加密属性
+            @Get("addCrypto")
+            public String addCrypto() {
+            List<Crypto> list = new ArrayList<Crypto>();
+            list.add(new Crypto("/demo/views/adduncrypto.jsp","info,id,name",null,"user"));
+            list.add(new Crypto("/demo/views/adduncrypto.jsp","info,id,name",null,"user2"));
+            CryptoConfigUpdateUtil.saveCryptoConfig("/demo/views/adduncrypto.jsp",list);
+            return "adduncrypto";
+            }
+
+            //从配置文件中删除后台加密的URL
+            @Get("deleteCrypto")
+            public String deleteCrypto() {
+            CryptoConfigUpdateUtil.deleteCryptoConfigs("/demo/views/adduncrypto.jsp");
+            return "adduncrypto";
+            }
+        </textarea>
+        <p>Crypto.java的参数说明</p>
+        <textarea name="code" class="java">
+            public class Crypto {
+
+                //需要加密的JSP页面对应的URL
+                private String url;
+                //需要加密的属性名（针对一个对象加密时，使用这个属性）
+                private String includes;
+                //不要要加密的属性名（针对一个对象加密时，使用这个属性）
+                private String excludes;
+                //加密的属性名，或者是加密的对象（例如：user，user2）
+                private String name;
+
+                public Crypto(String url,String includes,String excludes, String name) {
+                this.url = url;
+                this.includes = includes;
+                this.excludes = excludes ;
+                this.name = name;
+                }
+            }
+        </textarea>
+    </div>
+</div>
 <div class="footer">
 Designed by <b>Sinosoft</b>
 </div>
