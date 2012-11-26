@@ -136,6 +136,21 @@
             解密后的用户名：<input name="name4" value="${name4}"/>
             解密后的邮箱4：<textarea class="email4" name="email4">${email4}</textarea><br>
             解密后的邮箱5：<textarea class="email5" name="email5">${email5}</textarea>
+            <table id="contentTable"
+                   class="table table-striped table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th>解密后的登录名</th>
+                    <th>解密后的密码</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="loginName4">${user.loginName}</td>
+                    <td class="password4">${user.password}</td>
+                </tr>
+                </tbody>
+            </table>
             <input type="submit" onClick="viewUser3();" value="后端加密前端解密"/>
         </form>
     </div>
@@ -171,6 +186,6 @@
     }
 </script>
 <x:inputs/>
-<co:unCmn eClasses="email4,email5"/>
+<co:unCmn eClasses="email4,email5,loginName4,password4"/>
 </body>
 </html>

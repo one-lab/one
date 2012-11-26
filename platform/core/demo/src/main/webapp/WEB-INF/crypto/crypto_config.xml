@@ -7,6 +7,7 @@
         <property name="name4"/>
         <property name="email4"/>
         <property name="email5"/>
+        <property name="user" includes="loginName,password"/>
     </crypto>
     <!--<crypto url="/demo/views/uncrypto.jsp">
         <property includes="loginName,password,name,email" name="user"/>

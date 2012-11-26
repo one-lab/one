@@ -63,6 +63,10 @@ public class CryptoAndUncryptoController {
         inv.addModel("name4", "aaaa");
         inv.addModel("email4", "email4@demo.com");
         inv.addModel("email5", "email5@demo.com");
+        User user = new User();
+        user.setLoginName("ZhangSan");
+        user.setPassword("abc123d");
+        inv.addModel("user", user);
         return "cryptoAndUncryptoList";
     }
 
