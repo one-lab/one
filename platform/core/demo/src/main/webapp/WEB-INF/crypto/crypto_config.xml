@@ -2,14 +2,12 @@
 
 <CryptoConfig xmlns="http://com.sinosoft.one/schema/mvc/cryptoconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://com.sinosoft.one/schema/mvc/cryptoconfig ">
     <uncrypto url="/demo/crypto_uncrypto/cryptoUncrypto/backgroundUncrypto"/>
-    <uncrypto url="/demo/crypto_uncrypto/cryptoUncrypto/frontendAjaxCrypto"/>
-
     <crypto url="/demo/views/crypto_uncrypto/cryptoAndUncryptoList.jsp">
         <property name="name3"/>
         <property name="name4"/>
     </crypto>
-<!--    <crypto url="/demo/views/uncrypto.jsp">
-        <property includes="id,name,info2" name="user"/> 
+    <!--<crypto url="/demo/views/uncrypto.jsp">
+        <property includes="loginName,password,name,email" name="user"/>
     </crypto>  
     <uncrypto url="/demo/send"/>  
     <uncrypto url="/demo/uncrypto"/>  
