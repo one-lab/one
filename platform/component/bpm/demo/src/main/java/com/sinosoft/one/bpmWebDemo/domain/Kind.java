@@ -1,10 +1,18 @@
 package com.sinosoft.one.bpmWebDemo.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "BPM_DEMO_KIND")
 public class Kind {
 	private String kindName;
 	private String kindCode;
 	private String comboCode;
 
+	@Column(name = "kindName")
 	public String getKindName() {
 		return kindName;
 	}
@@ -13,6 +21,7 @@ public class Kind {
 		this.kindName = kindName;
 	}
 
+	@Column(name = "kindCode")
 	public String getKindCode() {
 		return kindCode;
 	}
@@ -21,6 +30,7 @@ public class Kind {
 		this.kindCode = kindCode;
 	}
 
+	@Id
 	public String getComboCode() {
 		return comboCode;
 	}

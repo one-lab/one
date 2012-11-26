@@ -129,7 +129,7 @@ public class BpmServiceSpringImpl implements BpmService {
 		List<TaskSummary> tasks = this.getTasks(userId);
 		for (TaskSummary task : tasks) {
 			long processInstanceId = task.getProcessInstanceId();
-			if (this.getBusinessId(processInstanceId).equals(businessId)) {
+			if (businessId.equals(this.getBusinessId(processInstanceId))) {
 				taskId = task.getId();
 				break;
 			}

@@ -36,13 +36,13 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String prepareProcess1() {
-		combo = DataStore.dataStore.get(combo.getComboCode());
+		combo = comboService.getCombo(combo.getComboCode());
 		return SUCCESS;
 	}
 
 	public void verifyCombo1() {
 		combo.getKind().setComboCode(combo.getComboCode());
-		comboService.processCombo_StepOne(combo.getComboCode(), combo);
+		comboService.processCombo_StepOne("combo001", combo.getComboCode(), combo);
 		System.out.println("fisrt step--------verifyCombo1--------");
 		System.out.println("-------verifyCombo1--------success");
 	}
@@ -54,7 +54,7 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String prepareProcess2() {
-		combo = DataStore.dataStore.get(combo.getComboCode());
+		combo = comboService.getCombo(combo.getComboCode());
 		return SUCCESS;
 	}
 
@@ -72,7 +72,7 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String prepareProcess3() {
-		combo = DataStore.dataStore.get(combo.getComboCode());
+		combo = comboService.getCombo(combo.getComboCode());
 		return SUCCESS;
 	}
 
@@ -90,7 +90,7 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String prepareDeploy() {
-		combo = DataStore.dataStore.get(combo.getComboCode());
+		combo = comboService.getCombo(combo.getComboCode());
 		return SUCCESS;
 	}
 	
@@ -113,7 +113,7 @@ public class ComboAction extends Struts2Action {
 	}
 
 	public String prepareDeploy2() {
-		combo = DataStore.dataStore.get(combo.getComboCode());
+		combo = comboService.getCombo(combo.getComboCode());
 		return SUCCESS;
 	}
 

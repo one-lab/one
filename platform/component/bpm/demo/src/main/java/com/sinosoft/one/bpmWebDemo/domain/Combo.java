@@ -1,5 +1,15 @@
 package com.sinosoft.one.bpmWebDemo.domain;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "BPM_DEMO_COMBO")
 public class Combo {
 	private String comboCode;
 	private int no;
@@ -13,6 +23,7 @@ public class Combo {
 		this.no = no;
 	}
 
+	@Id
 	public String getComboCode() {
 		return comboCode;
 	}
@@ -21,6 +32,8 @@ public class Combo {
 		this.comboCode = comboCode;
 	}
 
+	@OneToOne(cascade={CascadeType.ALL})
+	@JoinColumn(name="comboCode")
 	public Kind getKind() {
 		return kind;
 	}

@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</tr>
 			<tr>
 				<td class="left">产品险种代码：</td>
-				<td class="right"><input name="pdLMRisk.riskCode" id="riskCode" class="common" type="text" value='<s:property value="riskCode"/>'></td>
+				<td class="right"><input name="pdLMRisk.riskCode" id="riskCode" class="common" type="text" value='${riskCode}'></td>
 				<td class="left">申请日期：</td>
 				<td class="right">
 					<input name="pdLMRisk.makeDate" id="makeDate" class="common" type="text"  style="width: 73%" value='<s:if test="makeDate==null"><%= new SimpleDateFormat("yyyy-MM-dd").format(new Date())%></s:if><s:else><s:date name="makeDate" format="yyyy-MM-dd"/></s:else>'/>
@@ -72,16 +72,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 			</thead>
 			<tbody id = "ApplingRiskDetail">
-			  <s:iterator value="page.result" var="temp" status="index">
-			  <tr class="content">
-				<td width="4%"><input type='radio' name='selectApplingRadio' value='<s:property value="#temp.riskCode" />' /></td>
-				<td width="5%"><s:property value="#index.count"/></td>
-				<td width="15%"><s:property value="#temp.riskCode" /></td>
-				<td width="40%"><s:property value="#temp.riskName" /></td>
-				<td width="16%"><s:date name="#temp.makeDate" format="yyyy-MM-dd"/></td>
-				<td width="20%"><s:property value="#temp.operator" /></td>
-			  </tr>	
-			  </s:iterator>			
+                <c:forEach var="temp" items="${page.result}" varStatus="index">
+                    <tr class="content">
+                        <td width="4%"><input type='radio' name='selectApplingRadio' value='${temp.riskCode}' /></td>
+                        <td width="5%">${index.count}</td>
+                        <td width="15%">${temp.riskCode}</td>
+                        <td width="40%">${temp.riskName}</td>
+                        <td width="16%"><fmt:formatDate value="${temp.makeDate}" pattern="yyyy-MM-dd"/></td>
+                        <td width="20%">${temp.operator}</td>
+                    </tr>
+                </c:forEach>
 			</tbody>
 		</table>
 	 

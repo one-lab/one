@@ -59,6 +59,9 @@
     <bean id="studentStore" class="com.sinosoft.one.bpmWebDemo.data.StudentStoreImpl">
         <property name="hibernateTemplate" ref="hibernateTemplate" />
     </bean>
+    <bean id="dataStore" class="com.sinosoft.one.bpmWebDemo.data.DataStoreImpl">
+        <property name="hibernateTemplate" ref="hibernateTemplate" />
+    </bean>
     <tx:advice id="txAdvice">
         <tx:attributes>
             <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
