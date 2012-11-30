@@ -1,6 +1,6 @@
 package com.sinosoft.one.rms.client;
 
-import com.sinosoft.one.rms.clientService.DataPower;
+import com.sinosoft.one.rms.DataPower;
 
 /**
  * 数据权限规则接口，所有数据规则的groovy文件必须实现此接口
