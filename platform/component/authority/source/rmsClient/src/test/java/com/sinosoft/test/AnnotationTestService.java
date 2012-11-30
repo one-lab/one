@@ -4,14 +4,8 @@ import ins.framework.common.Page;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 
-import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.hql.QueryTranslator;
-import org.hibernate.hql.QueryTranslatorFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.rms.client.annotation.DataAuthority;
