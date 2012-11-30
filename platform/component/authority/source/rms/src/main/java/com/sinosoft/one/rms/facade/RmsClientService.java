@@ -1,10 +1,10 @@
-package com.sinosoft.one.rms.clientService.facade;
+package com.sinosoft.one.rms.facade;
 
 
 import javax.jws.WebService;
 
 
-import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.User;
 
 /**
  * 外部调用接口、同时为webService接口

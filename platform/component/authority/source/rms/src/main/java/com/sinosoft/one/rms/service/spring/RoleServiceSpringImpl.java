@@ -26,13 +26,13 @@ import com.sinosoft.one.rms.model.RoleDesignateId;
 import com.sinosoft.one.rms.model.RoleDesignateInfo;
 import com.sinosoft.one.rms.model.RoleTask;
 import com.sinosoft.one.rms.model.TaskAuth;
-import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
+import com.sinosoft.one.rms.service.facade.CompanyModelService;
 import com.sinosoft.one.rms.service.facade.RoleService;
 
 public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, String>
 		implements RoleService {
 	@Autowired
-	private CompanyServiceInterface companyServiceInterface;
+	private CompanyModelService companyServiceInterface;
 	
 	private static CacheService cacheManager = CacheManager.getInstance("Role");
 	

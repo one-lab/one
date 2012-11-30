@@ -19,13 +19,13 @@ import com.sinosoft.one.rms.model.GroupRole;
 import com.sinosoft.one.rms.model.Role;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
-import com.sinosoft.one.rms.service.facade.EmployeServiceInterface;
+import com.sinosoft.one.rms.service.facade.EmployeModelService;
 import com.sinosoft.one.rms.service.facade.GroupService;
 
 public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> implements GroupService{
 
 	@Autowired
-	private EmployeServiceInterface employeServiceInterface;
+	private EmployeModelService employeServiceInterface;
 	/**
 	 * 初始缓存实例
 	 */

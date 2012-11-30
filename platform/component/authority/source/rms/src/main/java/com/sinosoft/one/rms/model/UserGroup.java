@@ -1,7 +1,6 @@
 package com.sinosoft.one.rms.model;
 // 采用工具 Hibernate Tools 3.2.4.GA (sinosoft version) 生成，请勿手工修改。
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
