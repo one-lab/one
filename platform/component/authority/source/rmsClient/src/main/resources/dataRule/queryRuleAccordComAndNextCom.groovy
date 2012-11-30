@@ -1,4 +1,4 @@
-import com.sinosoft.one.rms.clientService.DataPower;
+import com.sinosoft.one.rms.DataPower;
 import com.sinosoft.one.rms.client.DataRuleScript
 import com.alibaba.fastjson.JSON;
 import ins.framework.utils.StringUtils;
