@@ -3,8 +3,6 @@ package com.sinosoft.one.rms.service.facade;
 import java.util.List;
 
 
-import com.sinosoft.one.rms.model.Employe;
-import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 
 import ins.framework.common.Page;

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
  
 
-import com.sinosoft.one.rms.model.Company;
-import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.UserPower;
 

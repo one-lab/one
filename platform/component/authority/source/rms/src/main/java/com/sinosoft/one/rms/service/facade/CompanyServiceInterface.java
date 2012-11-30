@@ -2,7 +2,6 @@ package com.sinosoft.one.rms.service.facade;
 
 import java.util.List;
 
-import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 
 /**
