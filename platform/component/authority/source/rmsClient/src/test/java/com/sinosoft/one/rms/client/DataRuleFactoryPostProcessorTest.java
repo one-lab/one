@@ -18,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
-import com.sinosoft.one.rms.clientService.facade.RmsClientService;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-test.xml",
@@ -30,10 +29,12 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
     @Test
     public void getDataRule(){
     	String rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("", "a", "admin", "00", "{comCode:11}", "comCode");
-    	Assert.assertEquals("comCode=(select comCode from ge_rms_company where comCode='11')",rule);
-    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("comCode=(select comCode from ge_rms_company where comCode='11')", "a", "admin", "00", "{comCode:11}", "comCode");
-    	Assert.assertEquals("comCode=(select comCode from ge_rms_company where comCode='11') and comCode=(select comCode from ge_rms_company where comCode='11')",rule);
-    	
+    	Assert.assertEquals("a.comCode=(select comCode from ge_rms_company where comCode='11')",rule);
+    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL(rule, "a", "admin", "00", "{comCode:11}", "comCode");
+    	Assert.assertEquals("a.comCode=(select comCode from ge_rms_company where comCode='11')"+" and a.comCode=(select comCode from ge_rms_company where comCode='11')",rule);
+    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordComAndNextCom").creatSQL("", "a", "admin", "00", "{comCode:11}", "comCode");
+    	Assert.assertEquals("a.comCode in  (select comCode from ge_rms_company start with comCode in ('11') connect by prior comCode=upperComCode)", rule);
+    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordInsurance").creatSQL("", "a", "admin", "00", "{comCode:'11'}", "test");
     }
     
 }
