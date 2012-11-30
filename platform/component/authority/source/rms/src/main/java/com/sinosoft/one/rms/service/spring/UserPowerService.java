@@ -4,12 +4,9 @@ import ins.framework.cache.CacheManager;
 import ins.framework.cache.CacheService;
 import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
-import ins.framework.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -18,12 +15,10 @@ import com.sinosoft.one.rms.model.Group;
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
-import com.sinosoft.one.rms.service.facade.TaskService;
 
 @Component
 class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 
-	private TaskService rmstaskService;
 	
 	private static CacheService cacheManager = CacheManager.getInstance("Group");
 	 /**
@@ -62,7 +57,7 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 			excPower.setIsValidate("1");
 			excPowers.add(excPower);
 			//如果不ID不为空 则为修改 需要更新数据规则表
-			if(userPowe.equals(null)){
+			if(!userPowe.equals(null)){
 				StringBuffer sql=new StringBuffer();
 				sql.append("delete ge_rms_buspower t where t.userpowerid='"+userPowe.getUserPowerID()+"' and t.taskid='"+task.getTaskID()+"' ");
 				getSession().createSQLQuery(sql.toString()).executeUpdate();
@@ -121,6 +116,9 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 		sql.append("delete ge_rms_buspower t where t.userpowerid='"+userPowe.getUserPowerID()+"' ");
 		getSession().createSQLQuery(sql.toString()).executeUpdate();
 		sql.setLength(0);
+		sql.append("delete ge_rms_excpower t where t.powerid='"+userPowe.getUserPowerID()+"' ");
+		getSession().createSQLQuery(sql.toString()).executeUpdate();
+		sql.setLength(0);
 		sql.append("delete ge_rms_userpower t where t.comCode='"+comCode+"' and t.usercode='"+userCode+"' ");
 		getSession().createSQLQuery(sql.toString()).executeUpdate();
 	}
@@ -140,7 +138,8 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 	}
 
 
-	 List<String> findTaskByRoleAndsysFlag(List<String> roleIDs,String comCode,String sysFlag) {
+	 @SuppressWarnings("unchecked")
+	List<String> findTaskByRoleAndsysFlag(List<String> roleIDs,String comCode,String sysFlag) {
 		StringBuffer taskIDSQL = new StringBuffer();
 		taskIDSQL
 				.append(" select taskid from ge_rms_task_auth where taskauthid in (");
@@ -174,6 +173,7 @@ class UserPowerService<T, E> extends GenericDaoHibernate<UserPower, String>{
 		return resultTaskIDs;
 	 }
 	 
+	 @SuppressWarnings("unchecked")
 	 List<UserPower> findUserPowersByUserCode(String userCode) {
 		 QueryRule queryRule = QueryRule.getInstance();
 		 queryRule.addEqual("userCode", userCode);

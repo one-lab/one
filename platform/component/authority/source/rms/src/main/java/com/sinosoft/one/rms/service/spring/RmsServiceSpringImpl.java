@@ -21,7 +21,6 @@ import com.sinosoft.one.rms.model.RoleDesignate;
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
-import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
 import com.sinosoft.one.rms.service.facade.EmployeServiceInterface;
 import com.sinosoft.one.rms.service.facade.RmsService;
 public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String>implements RmsService
@@ -33,13 +32,8 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	
 	private static CacheService userCacheManager = CacheManager.getInstance("User");
 	
-	private static CacheService companyCacheManager = CacheManager.getInstance("Company");
-	
 	private static CacheService groupCacheManager = CacheManager.getInstance("Group");
 	
-	
-	@Autowired
-	private CompanyServiceInterface companyServiceInterface;
 	
 	@Autowired
 	private EmployeServiceInterface employeServiceInterface;
@@ -164,7 +158,6 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	/**
 	 * 获得员工在机构下有效权限集合
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Task> findTaskMultSysByUserCode(String userCode, String comCode,String sysFlag) {
 		Set<Task> result=getTaskResultByComUserMultSysFlag(userCode, comCode, sysFlag);
 		Set<Task> ts = new HashSet<Task>();
@@ -236,7 +229,6 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	}
 	
 	//对功能集合排序
-	@SuppressWarnings("unchecked")
 	public List<Task> dataRuletask (Set<Task> ts){
 		List<Task> tasks=new ArrayList<Task>();
 		for (Task task : ts) {
@@ -248,6 +240,7 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	Set<Task> getTaskResultByComUserMultSysFlag(String userCode, String comCode,String sysFlag ){
 		UserPower userPower =new UserPower();
 		userPower=	userpowerSerivce.findUserPowerByComUser(userCode, comCode);

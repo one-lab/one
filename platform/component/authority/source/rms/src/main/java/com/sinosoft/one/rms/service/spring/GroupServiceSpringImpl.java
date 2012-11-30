@@ -35,7 +35,6 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	
 	private static CacheService taskCacheManager = CacheManager.getInstance("Task");
 	
-	private static CacheService companyCacheManager = CacheManager.getInstance("Company");
 	
 	/**
 	 * 增加用户组
@@ -235,6 +234,7 @@ public class GroupServiceSpringImpl extends GenericDaoHibernate<Group, String> i
 	/**
 	 * 查询用户所在的用户组
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Group> findGroupByUser(String userCode) {
 		String key = groupCacheManager.generateCacheKey("userHasGroups", userCode);
 		Object result = groupCacheManager.getCache(key);

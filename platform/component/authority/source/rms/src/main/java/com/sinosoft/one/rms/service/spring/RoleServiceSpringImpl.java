@@ -18,7 +18,6 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.Group;
 import com.sinosoft.one.rms.model.GroupRole;
 import com.sinosoft.one.rms.model.Role;
@@ -130,6 +129,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	/**
 	 * 查询页面 查询角色
 	 */
+	@SuppressWarnings("unchecked")
 	public Page findRole(String comCode, String roleName, int pageNo,
 			int pageSize) {
 		String key = cacheManager.generateCacheKey("comCodeRole", comCode+roleName+pageNo+pageSize);
@@ -168,6 +168,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	/**
 	 * 根据机构查询 角色指派
 	 */
+	@SuppressWarnings("unchecked")
 	public List<RoleDesignate> findRoleByCom(String comCode ) {
 		QueryRule queryRule = QueryRule.getInstance();
 		List<String> comCodes= new ArrayList<String>();
@@ -181,6 +182,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	/**
 	 * 根据用户组查询关联的角色
 	 */
+	@SuppressWarnings("unchecked")
 	public Set<Role> findRoleByGroup(List<String> groupIDs ,String comCode) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addIn("groupID", groupIDs);
@@ -221,6 +223,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	/**
 	 * 指派页面 单独指派的方法
 	 */
+	@SuppressWarnings("unchecked")
 	public void roleDesignate(List<String> roleIDs, String comCode,String userCode) {
 		//comCodes 以机构为维度操作指派
 		
@@ -399,6 +402,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	 * 根据角色查询已指派到的信息
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public List<RoleDesignateInfo> findComByRoleID(String RoleID, String comCode) {
 		List<RoleDesignateInfo> roleDesignateInfos = new ArrayList<RoleDesignateInfo>();
 		QueryRule queryRule = QueryRule.getInstance();
@@ -436,6 +440,7 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	}
 	
 	//查询机构下用户组 如果没有 创建默认用户组 并关联当前角色 
+	@SuppressWarnings("unchecked")
 	void editDefaultGroup(String comCode,String userCode,Role role){
 		QueryRule queryRule =QueryRule.getInstance();
 		queryRule.addEqual("comCode", comCode);
@@ -530,7 +535,6 @@ public class RoleServiceSpringImpl<T, E> extends GenericDaoHibernate<Role, Strin
 	}
 	
 	//递归删除操作
-	@SuppressWarnings("unchecked")
 	void iteraterComCode(List<String> comCodes ,List<String> roleids){
 		// 每次执行 先进行删除操作
 		StringBuffer delteDesignatSQL = new StringBuffer();

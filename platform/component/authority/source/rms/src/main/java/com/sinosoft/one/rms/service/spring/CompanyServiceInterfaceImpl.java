@@ -4,14 +4,11 @@ import ins.framework.common.QueryRule;
 import ins.framework.dao.GenericDaoHibernate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Query;
 
 import com.sinosoft.one.rms.model.Company;
-import com.sinosoft.one.rms.model.UserPower;
-import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
 
 
@@ -22,6 +19,7 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
 	 * @param comCode
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Company> findComAndNextSubCom(String comCode) {
 		 return super.findByHql("from Company c where c.upperComCode='"+comCode+"' or c.comCode='"+comCode+"'");
 	}
@@ -43,6 +41,7 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
      * @param comCode
      * @return
      */
+	@SuppressWarnings("unchecked")
 	public List<String>findNextSubComCodes(String comCode){
 		StringBuffer sql=new StringBuffer();
 		sql.append("select comCode from ge_rms_company c where c.upperComCode='"+comCode+"'");
@@ -96,6 +95,7 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
      * @param comCode
      * @return
      */
+	@SuppressWarnings("unchecked")
 	public List<String>findAllNextSubComCodesByComCode(String comCode){
 		StringBuffer sql=new StringBuffer();
 		sql.append("select comCode from ge_rms_company start with comCode='"+comCode+"' connect by prior comcode=upperComcode");
@@ -110,6 +110,7 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
      * @param comCode
      * @return
      */
+	@SuppressWarnings("unchecked")
 	public List<Company> findAllNextLevelCompanybyComCode(
 			String comCode) {
 		StringBuffer sql=new StringBuffer();
@@ -140,6 +141,7 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
      * @param comCode
      * @return
      */
+	@SuppressWarnings("unchecked")
 	public List<String> findComCodebySuperComCode(List<String> comCodes) {
 		StringBuffer comCodesSQL = new StringBuffer();
 		comCodesSQL.append("select comCode from ge_rms_company where uppercomcode in (");
@@ -179,6 +181,7 @@ public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, St
      * @param comCodes
      * @return
      */
+	@SuppressWarnings("unchecked")
 	public List<Company> findCompanysByComcodes(
 			List<String> comCodes) {
 		QueryRule queryRuleComcode=QueryRule.getInstance();

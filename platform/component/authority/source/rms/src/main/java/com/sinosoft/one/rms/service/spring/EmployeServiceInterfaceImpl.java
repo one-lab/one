@@ -17,6 +17,7 @@ public class EmployeServiceInterfaceImpl extends GenericDaoHibernate<Employe, St
 	/**
 	 * 根据员工代码和机构代码查询员工)
 	 */
+	@SuppressWarnings("unchecked")
 	public Page findEmployees(String userCode, String userName, String comCode,
 			int pageNo, int pageSize) {
 		QueryRule queryRule = QueryRule.getInstance();
@@ -62,6 +63,7 @@ public class EmployeServiceInterfaceImpl extends GenericDaoHibernate<Employe, St
 	 * @param userCode
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public Employe findUserByCode(String userCode) {
 		QueryRule queryRule = QueryRule.getInstance();
 		queryRule.addEqual("userCode", userCode);

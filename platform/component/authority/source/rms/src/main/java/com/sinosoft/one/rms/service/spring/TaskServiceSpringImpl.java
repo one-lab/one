@@ -170,6 +170,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 		return tasks;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Set<Task> findTaskByRoleAndsysFlag(List<String> RoleIDs,String comCode,String sysFlag) {
 		//获取角色关联的功能ID
 		StringBuffer taskIDSQL=new StringBuffer();
@@ -235,7 +236,6 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	}
 	
 	//迭代删除机构的所有子机构 的功能
-	@SuppressWarnings("unchecked")
 	void iteraterComCode(List<String> comCodes ,List<String> taskIds){
 		// 每次执行 先进行删除操作
 		//删除操作时先删外键记录
@@ -272,6 +272,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 		}
 		// 继续循环
 	}
+	@SuppressWarnings("unchecked")
 	void deleteRoleTask(List<String> comCodes ,List<String> taskIds){
 		//先删除外键记录(RoleTask)
 		StringBuffer deleteRoleTaskSQL=new StringBuffer();
