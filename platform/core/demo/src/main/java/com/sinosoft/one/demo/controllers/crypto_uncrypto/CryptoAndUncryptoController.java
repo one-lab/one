@@ -71,12 +71,12 @@ public class CryptoAndUncryptoController {
         inv.addModel("nameForm1", "abc123");
         inv.addModel("name1", "aaaa");
         inv.addModel("name2", "bbbb");
-        inv.addModel("email1", "email4@demo.com");
-        inv.addModel("email2", "email5@demo.com");
+        inv.addModel("email1", "email1@demo.com");
+        inv.addModel("email2", "email2@demo.com");
         User user = new User();
         user.setLoginName("ZhangSan");
         user.setPassword("abc123d");
-        user.setEmail("email6@demo.com");
+        user.setEmail("email3@demo.com");
         inv.addModel("user", user);
         return "backgroundCrypto";
     }
