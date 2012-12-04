@@ -22,8 +22,6 @@
 </head>
 <body>
 
-<input id="key" value="${sessionScope.crypto_key_attr_name}" type="hidden">
-
 <div class="container">
     <%@ include file="/WEB-INF/layouts/header.jsp" %>
     <div>
