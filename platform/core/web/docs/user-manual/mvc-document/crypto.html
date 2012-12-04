@@ -172,14 +172,14 @@ function toTop(){
                 <!--url对应前端JSP页面，使用绝对路径-->
                 <crypto url="/demo/views/crypto_uncrypto/cryptoAndUncryptoList.jsp">
                     <!--单一属性，不使用includes和excludes-->
-                    <property name="name3"/>
+                    <property name="nameForm1"/>
                     <!--单一属性，不使用includes和excludes-->
-                    <property name="name4"/>
-                </crypto>
-                <!--url对应前端JSP页面，使用绝对路径-->
-                <crypto url="/demo/views/uncrypto.jsp">
+                    <property name="name1"/>
+                    <property name="name2"/>
+                    <property name="email1"/>
+                    <property name="email2"/>
                     <!--user是对象，使用includes，说明user的"loginName,password,name,email"四个属性需要加密-->
-                    <property includes="loginName,password,name,email" name="user"/>
+                    <property name="user" includes="loginName,password,email"/>
                 </crypto>
 
                 <crypto url="/demo/views/adduncrypto.jsp">
@@ -192,7 +192,9 @@ function toTop(){
         </textarea>
         <p>后端设置加密之后，JSP页面需要引用解密标签</p>
         <p>然后在JSP中使用解密标签：&lt;x:inputs/&gt;，&lt;/co:unCmn&gt;</p>
-        <p>&lt;x:inputs/&gt;标签没有属性，不需要配置解密哪些属性，是根据后台的配置自动解密的；放在JSP的最后面；针对有“value”属性的标签</p>
+        <p>&lt;x:inputs/&gt;只有一个属性：formIds，放在JSP的最后面，针对有“value”属性的标签</p>
+        <p>formIds是需要解密的那些标签（例如&lt;/input&gt;）所属的form表单的id属性名，id属性名唯一</p>
+        <p>formIds的属性值可以是多个form表单的id，中间以“，”隔开</p>
         <p>&lt;/co:unCmn&gt;标签属性有：eIds，eClasses，放在JSP的最后面</p>
         <p>unCmn是UnCryptoCommon的缩写，意思是解密其他常用元素，目前支持td,textarea,div,..等无value属性的元素；需要配置解密元素的id值；但是不支持多个&lt;/td&gt;等类似情况</p>
         <p>eClasses补充了unCmn，支持无value属性的元素，支持多个&lt;/td&gt;等类似情况；需要配置解密元素的class属性（class属性值取无意义的且唯一的值）</p>
@@ -209,22 +211,41 @@ function toTop(){
                     <input type="submit" onClick="viewUser4();" value="后端加密前端解密"/>
                 </form>
             </div>
-            <div>
-                <!--<textarea id="un1" >${user.loginName}</textarea><br/>
-                <span  id="un2">${user.password}</span><br/>
-                <table>
-                    <tr>
-                        <td class="unClass1">${user.name}</td>
-                        <td class="unClass2">${user.email}</td>
-                    </tr>
-                </table>
-                <div id="un4">${user.info}</div>-->
-
+            <div id="view1" class="span12">
+                <form id="frontendUncrypto1">
+                    form1：<br>
+                    解密后的用户名：<input name="nameForm1" value="${nameForm1}"/>
+                </form>
             </div>
-            <%--使用解密标签<x:inputs/>;，对“name4”的值进行解密--%>
-            <x:inputs/>
+            <div id="view2" class="span12">
+                <form id="frontendUncrypto2" action="frontendUncrypto" method="get">
+                    form2：<br>
+                    解密后的用户名1：<input name="name1" value="${name1}"/>
+                    解密后的用户名2：<input name="name2" value="${name2}"/><br>
+                    <!--解密后的邮箱1：<textarea class="email1" name="email1">${email1}</textarea>
+                    解密后的邮箱2：<textarea class="email2" name="email2">${email2}</textarea><br>
+                    解密后的邮箱3：<textarea id="email3">${user.email}</textarea>
+                    <table id="contentTable"
+                           class="table table-striped table-bordered table-condensed">
+                        <thead>
+                        <tr>
+                            <th>解密后的登录名</th>
+                            <th>解密后的密码</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="loginName">${user.loginName}</td>
+                            <td class="password">${user.password}</td>
+                        </tr>
+                        </tbody>
+                    </table>-->
+                </form>
+            </div>
+            <%--使用解密标签<x:inputs/>;，属性值是两个form表单的id属性名，对两个form表单中有value属性的标签（例如input）进行解密--%>
+            <x:inputs formIds="frontendUncrypto1,frontendUncrypto2"/>
             <%--使用解密标签</x:unCmn/>;，对非value的属性的值进行解密--%>
-            <co:unCmn eIds="un1,un2" eClasses="unClass1,unClass2"/>
+            <co:unCmn eIds="email3" eClasses="email1,email2,loginName,password"/>
         </textarea>
     </div>
 </div>
