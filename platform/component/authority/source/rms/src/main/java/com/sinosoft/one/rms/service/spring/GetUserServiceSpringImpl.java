@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.sinosoft.one.rms.clientService.DataPower;
-import com.sinosoft.one.rms.clientService.Menu;
-import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.DataPower;
+import com.sinosoft.one.rms.Menu;
+import com.sinosoft.one.rms.User;
 import com.sinosoft.one.rms.model.BusPower;
 import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.Employe;
@@ -33,18 +33,18 @@ import com.sinosoft.one.rms.model.UserPower;
 import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 import com.sinosoft.one.rms.service.facade.GetUserService;
-import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
-import com.sinosoft.one.rms.service.facade.EmployeServiceInterface;
+import com.sinosoft.one.rms.service.facade.CompanyModelService;
+import com.sinosoft.one.rms.service.facade.EmployeModelService;
 
 @Service
 public class GetUserServiceSpringImpl extends
 		GenericDaoHibernate<Employe, String> implements GetUserService {
 
 	@Autowired
-	private EmployeServiceInterface employeServiceInterface;
+	private EmployeModelService employeServiceInterface;
 	
 	@Autowired
-	private CompanyServiceInterface companyServiceInterface;
+	private CompanyModelService companyServiceInterface;
 	
 	// private RmsService rmsService;
 	// private RoleService roleService;
@@ -53,6 +53,7 @@ public class GetUserServiceSpringImpl extends
 	/**
 	 * 创建USER对象
 	 */
+	@SuppressWarnings("unused")
 	public User getUserByUserCodeComCode(String userCode, String comCode,String sysFlag) {
 		try{
 			

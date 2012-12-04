@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.rms.model.Company;
-import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
 
 
 class CompanyService extends GenericDaoHibernate<Company, String> {
@@ -59,6 +57,7 @@ class CompanyService extends GenericDaoHibernate<Company, String> {
 	} 
   
 
+	@SuppressWarnings("unchecked")
 	List<Company> findAllNextLevelCompanybyComCode(String comCode){
 		StringBuffer sql=new StringBuffer();
 		sql.append("select comCode from ge_rms_company start with comCode='"+comCode+"' connect by prior comcode=upperComcode");

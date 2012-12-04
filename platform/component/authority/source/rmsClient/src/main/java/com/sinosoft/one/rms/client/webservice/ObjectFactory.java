@@ -24,64 +24,14 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _LoginResponse_QNAME = new QName("http://facade.clientService.rms.one.sinosoft.com/", "loginResponse");
-    private final static QName _FindCompanysByUserCodeAndPasswordResponse_QNAME = new QName("http://facade.clientService.rms.one.sinosoft.com/", "findCompanysByUserCodeAndPasswordResponse");
-    private final static QName _FindCompanysByUserCodeAndPassword_QNAME = new QName("http://facade.clientService.rms.one.sinosoft.com/", "findCompanysByUserCodeAndPassword");
-    private final static QName _Login_QNAME = new QName("http://facade.clientService.rms.one.sinosoft.com/", "login");
+    private final static QName _LoginResponse_QNAME = new QName("http://facade.rms.one.sinosoft.com/", "loginResponse");
+    private final static QName _Login_QNAME = new QName("http://facade.rms.one.sinosoft.com/", "login");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.sinosoft.one.rms.client.webservice
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link User }
-     * 
-     */
-    public User createUser() {
-        return new User();
-    }
-
-    /**
-     * Create an instance of {@link FindCompanysByUserCodeAndPassword }
-     * 
-     */
-    public FindCompanysByUserCodeAndPassword createFindCompanysByUserCodeAndPassword() {
-        return new FindCompanysByUserCodeAndPassword();
-    }
-
-    /**
-     * Create an instance of {@link Login }
-     * 
-     */
-    public Login createLogin() {
-        return new Login();
-    }
-
-    /**
-     * Create an instance of {@link LoginResponse }
-     * 
-     */
-    public LoginResponse createLoginResponse() {
-        return new LoginResponse();
-    }
-
-    /**
-     * Create an instance of {@link DataPower }
-     * 
-     */
-    public DataPower createDataPower() {
-        return new DataPower();
-    }
-
-    /**
-     * Create an instance of {@link Company }
-     * 
-     */
-    public Company createCompany() {
-        return new Company();
     }
 
     /**
@@ -93,45 +43,67 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FindCompanysByUserCodeAndPasswordResponse }
+     * Create an instance of {@link DataRule }
      * 
      */
-    public FindCompanysByUserCodeAndPasswordResponse createFindCompanysByUserCodeAndPasswordResponse() {
-        return new FindCompanysByUserCodeAndPasswordResponse();
+    public DataRule createDataRule() {
+        return new DataRule();
+    }
+
+    /**
+     * Create an instance of {@link LoginResponse }
+     * 
+     */
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
+    }
+
+    /**
+     * Create an instance of {@link User }
+     * 
+     */
+    public User createUser() {
+        return new User();
+    }
+
+    /**
+     * Create an instance of {@link DataPower }
+     * 
+     */
+    public DataPower createDataPower() {
+        return new DataPower();
+    }
+
+    /**
+     * Create an instance of {@link BusDataInfo }
+     * 
+     */
+    public BusDataInfo createBusDataInfo() {
+        return new BusDataInfo();
+    }
+
+    /**
+     * Create an instance of {@link Login }
+     * 
+     */
+    public Login createLogin() {
+        return new Login();
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link LoginResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://facade.clientService.rms.one.sinosoft.com/", name = "loginResponse")
+    @XmlElementDecl(namespace = "http://facade.rms.one.sinosoft.com/", name = "loginResponse")
     public JAXBElement<LoginResponse> createLoginResponse(LoginResponse value) {
         return new JAXBElement<LoginResponse>(_LoginResponse_QNAME, LoginResponse.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link FindCompanysByUserCodeAndPasswordResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://facade.clientService.rms.one.sinosoft.com/", name = "findCompanysByUserCodeAndPasswordResponse")
-    public JAXBElement<FindCompanysByUserCodeAndPasswordResponse> createFindCompanysByUserCodeAndPasswordResponse(FindCompanysByUserCodeAndPasswordResponse value) {
-        return new JAXBElement<FindCompanysByUserCodeAndPasswordResponse>(_FindCompanysByUserCodeAndPasswordResponse_QNAME, FindCompanysByUserCodeAndPasswordResponse.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link FindCompanysByUserCodeAndPassword }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://facade.clientService.rms.one.sinosoft.com/", name = "findCompanysByUserCodeAndPassword")
-    public JAXBElement<FindCompanysByUserCodeAndPassword> createFindCompanysByUserCodeAndPassword(FindCompanysByUserCodeAndPassword value) {
-        return new JAXBElement<FindCompanysByUserCodeAndPassword>(_FindCompanysByUserCodeAndPassword_QNAME, FindCompanysByUserCodeAndPassword.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Login }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://facade.clientService.rms.one.sinosoft.com/", name = "login")
+    @XmlElementDecl(namespace = "http://facade.rms.one.sinosoft.com/", name = "login")
     public JAXBElement<Login> createLogin(Login value) {
         return new JAXBElement<Login>(_Login_QNAME, Login.class, null, value);
     }

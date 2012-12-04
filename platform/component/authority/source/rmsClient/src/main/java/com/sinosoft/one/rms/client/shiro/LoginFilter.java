@@ -15,7 +15,7 @@ import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.User;
 
 
 public class LoginFilter extends AuthenticatingFilter {

@@ -10,22 +10,20 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for dataPower complex type.
+ * <p>Java class for dataRule complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="dataPower">
+ * &lt;complexType name="dataRule">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="busDataInfos" type="{http://facade.rms.one.sinosoft.com/}busDataInfo" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="comCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="param" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="dataRuleID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="des" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="isValidate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="rule" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="ruleId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="taskId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="userCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,25 +33,21 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "dataPower", propOrder = {
+@XmlType(name = "dataRule", propOrder = {
     "busDataInfos",
-    "comCode",
-    "param",
-    "rule",
-    "ruleId",
-    "taskId",
-    "userCode"
+    "dataRuleID",
+    "des",
+    "isValidate",
+    "rule"
 })
-public class DataPower {
+public class DataRule {
 
     @XmlElement(nillable = true)
     protected List<BusDataInfo> busDataInfos;
-    protected String comCode;
-    protected String param;
+    protected String dataRuleID;
+    protected String des;
+    protected String isValidate;
     protected String rule;
-    protected String ruleId;
-    protected String taskId;
-    protected String userCode;
 
     /**
      * Gets the value of the busDataInfos property.
@@ -85,51 +79,75 @@ public class DataPower {
     }
 
     /**
-     * Gets the value of the comCode property.
+     * Gets the value of the dataRuleID property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getComCode() {
-        return comCode;
+    public String getDataRuleID() {
+        return dataRuleID;
     }
 
     /**
-     * Sets the value of the comCode property.
+     * Sets the value of the dataRuleID property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setComCode(String value) {
-        this.comCode = value;
+    public void setDataRuleID(String value) {
+        this.dataRuleID = value;
     }
 
     /**
-     * Gets the value of the param property.
+     * Gets the value of the des property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getParam() {
-        return param;
+    public String getDes() {
+        return des;
     }
 
     /**
-     * Sets the value of the param property.
+     * Sets the value of the des property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setParam(String value) {
-        this.param = value;
+    public void setDes(String value) {
+        this.des = value;
+    }
+
+    /**
+     * Gets the value of the isValidate property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIsValidate() {
+        return isValidate;
+    }
+
+    /**
+     * Sets the value of the isValidate property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIsValidate(String value) {
+        this.isValidate = value;
     }
 
     /**
@@ -154,78 +172,6 @@ public class DataPower {
      */
     public void setRule(String value) {
         this.rule = value;
-    }
-
-    /**
-     * Gets the value of the ruleId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRuleId() {
-        return ruleId;
-    }
-
-    /**
-     * Sets the value of the ruleId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRuleId(String value) {
-        this.ruleId = value;
-    }
-
-    /**
-     * Gets the value of the taskId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTaskId() {
-        return taskId;
-    }
-
-    /**
-     * Sets the value of the taskId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTaskId(String value) {
-        this.taskId = value;
-    }
-
-    /**
-     * Gets the value of the userCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getUserCode() {
-        return userCode;
-    }
-
-    /**
-     * Sets the value of the userCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUserCode(String value) {
-        this.userCode = value;
     }
 
 }

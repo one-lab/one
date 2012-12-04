@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import com.sinosoft.one.rms.model.Company;
-import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
+import com.sinosoft.one.rms.service.facade.CompanyModelService;
 import com.sinosoft.one.rms.service.facade.RmsService;
 
 @DirtiesContext
@@ -22,7 +22,7 @@ import com.sinosoft.one.rms.service.facade.RmsService;
 @TransactionConfiguration(transactionManager = "defaultTransactionManager",defaultRollback=false)
 public class RmsServiceSpringImplTest extends AbstractJUnit4SpringContextTests {
 	@Autowired
-	private CompanyServiceInterface companyServiceInterface;
+	private CompanyModelService companyServiceInterface;
 	@Autowired
 	private RmsService rmsService;
 	@Test

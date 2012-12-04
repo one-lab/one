@@ -3,8 +3,6 @@ package com.sinosoft.one.rms.service.facade;
 import java.util.List;
 
 
-import com.sinosoft.one.rms.model.Employe;
-import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 import com.sinosoft.one.rms.model.service.EmployeModelInterface;
 
 import ins.framework.common.Page;
@@ -13,7 +11,7 @@ import ins.framework.common.Page;
  * @author Administrator
  *
  */
-public interface EmployeServiceInterface {
+public interface EmployeModelService {
 	
 	/**
 	 * 根据员工代码和机构代码查询员工(未引入员工，引入页面)

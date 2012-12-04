@@ -18,10 +18,10 @@ import com.alibaba.druid.sql.ast.statement.SQLJoinTableSource;
 import com.alibaba.druid.sql.ast.statement.SQLSelectItem;
 import com.alibaba.druid.sql.ast.statement.SQLSelectQueryBlock;
 import com.alibaba.druid.sql.parser.SQLExprParser;
+import com.sinosoft.one.rms.DataPower;
+import com.sinosoft.one.rms.User;
 import com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor;
 import com.sinosoft.one.rms.client.EnvContext;
-import com.sinosoft.one.rms.clientService.DataPower;
-import com.sinosoft.one.rms.clientService.User;
 import com.sinosoft.one.rms.model.BusDataInfo;
 
 /**

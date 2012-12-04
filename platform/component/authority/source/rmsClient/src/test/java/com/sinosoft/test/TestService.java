@@ -5,7 +5,6 @@ import ins.framework.common.Page;
 
 import java.util.List;
 
-import com.sinosoft.one.rms.model.Employe;
 
 public interface TestService {
 	
