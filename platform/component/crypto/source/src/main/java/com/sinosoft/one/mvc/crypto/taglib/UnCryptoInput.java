@@ -29,7 +29,6 @@ public class UnCryptoInput extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-
         JspWriter out = pageContext.getOut();
         String key = (String) ((HttpServletRequest) pageContext.getRequest()).getSession()
                 .getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
