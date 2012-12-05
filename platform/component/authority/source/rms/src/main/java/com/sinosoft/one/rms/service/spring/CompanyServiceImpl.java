@@ -12,7 +12,7 @@ import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.service.facade.CompanyModelService;
 
 
-public class CompanyServiceInterfaceImpl extends GenericDaoHibernate<Company, String> implements CompanyModelService {
+public class CompanyServiceImpl extends GenericDaoHibernate<Company, String> implements CompanyModelService {
 	
 	/**
 	 * 查询下级机构 包含当前机构

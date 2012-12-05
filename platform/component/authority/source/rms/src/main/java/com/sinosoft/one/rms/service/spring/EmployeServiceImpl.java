@@ -12,7 +12,7 @@ import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.UserPower;
 import com.sinosoft.one.rms.service.facade.EmployeModelService;
 
-public class EmployeServiceInterfaceImpl extends GenericDaoHibernate<Employe, String> implements EmployeModelService{
+public class EmployeServiceImpl extends GenericDaoHibernate<Employe, String> implements EmployeModelService{
 	
 	/**
 	 * 根据员工代码和机构代码查询员工)
