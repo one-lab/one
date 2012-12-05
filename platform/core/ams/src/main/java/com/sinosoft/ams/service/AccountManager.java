@@ -1,7 +1,13 @@
 package com.sinosoft.ams.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import javax.swing.tree.TreeModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,12 +21,15 @@ import com.sinosoft.ams.role.repositories.GeRmsRoleRepository;
 import com.sinosoft.ams.task.model.GeRmsTask;
 import com.sinosoft.ams.task.repositories.GeRmsTaskRepository;
 import com.sinosoft.ams.task_auth.model.GeRmsCompany;
+import com.sinosoft.ams.task_auth.model.GeRmsTaskAuth;
 import com.sinosoft.ams.task_auth.repositories.GeRmsCompanyRepository;
 import com.sinosoft.ams.task_auth.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.ams.user_group.model.GeRmsGroup;
 import com.sinosoft.ams.user_group.model.User;
 import com.sinosoft.ams.user_group.repositories.GeRmsGroupRepository;
 import com.sinosoft.ams.user_group.repositories.UserDao;
+import com.sinosoft.ams.utils.uiutil.NodeEntity;
+import com.sinosoft.ams.utils.uiutil.Treeable;
 
 @Component
 public class AccountManager {
@@ -167,15 +176,7 @@ public class AccountManager {
 		return group;
 	}
 	
-	public Page<GeRmsRole> roleList(String groupId,Pageable pageable){
-		Page<GeRmsRole> roleList = geRmsGroupRoleRepository.findByGroupId(groupId,pageable);
-		return roleList;
-	}
 	
-	public GeRmsRole findByRoleId(String roleId){
-		GeRmsRole role = geRmsRoleRepository.findByRoleId(roleId);
-		return role;
-	}
 	
 	public Page<User> findUserByGroupId(String groupId,Pageable pageable){
 		Page<User> userList = geRmsUserGroupRepository.findUserByGroupId(groupId,pageable);
@@ -187,6 +188,102 @@ public class AccountManager {
 		return userList;
 	}
 	
+	//-----------------------------角色部分---------------------------//
 	
-
+	public Page<GeRmsRole> roleList(String groupId,Pageable pageable){
+		Page<GeRmsRole> roleList = geRmsGroupRoleRepository.findByGroupId(groupId,pageable);
+		return roleList;
+	}
+	
+	//查询角色信息
+	public GeRmsRole findRoleById(String roleId){
+		//查询角色对象
+		GeRmsRole role = geRmsRoleRepository.findRoleById(roleId);
+		//查询角色类型  default/all
+		List<String> rolesComCodes=geRmsRoleRepository.findRoleTypById(roleId);
+		if(rolesComCodes.size()>0&&rolesComCodes!=null){
+			role.setFlag("default");
+			for (String comcode : rolesComCodes) {
+				if(comcode.toString().equals("*"))
+					role.setFlag("all");
+					break;
+			}
+		}
+		return role;
+	}
+	
+	public Page<GeRmsRole> findRole(String comCode,String name,Pageable pageable){
+		Page<GeRmsRole> page =null;
+		if(name!=null&&!"".equals(name))
+			page = geRmsRoleRepository.findRoleByName(comCode, name, pageable);
+		else
+			page = geRmsRoleRepository.findRole(comCode, pageable);
+		return page;
+	}
+	
+	//根据角色ID查询角色关联的功能
+	public List<GeRmsTask> findTaskByRole(String roleId){
+		//先查询角色关联的授权
+		List<GeRmsTaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByRole(roleId);
+		List<String> taskIds=new ArrayList<String>();
+		for (GeRmsTaskAuth geRmsTaskAuth : geRmsTaskAuths) {
+			taskIds.add(geRmsTaskAuth.getTaskID());
+		}
+		//根据授权获得的功能ID获取功能集合
+		List<GeRmsTask> geRmsTasks =geRmsTaskRepository.findTaskByTaskAuthIds(taskIds);
+		
+		return geRmsTasks;
+	}
+	
+	//根据机构查询所有可用的功能
+	public List<GeRmsTask> findTaskByComCode(String comCode){
+		List<GeRmsTask>geRmsTasks =geRmsTaskRepository.findTaskByComCode(comCode);
+		return geRmsTasks;
+	}
+	
+	//----------------------------------工具------------------------------//
+	
+	public  Treeable<NodeEntity> creatTaskTreeAble(List<GeRmsTask> checkedTasks,List<GeRmsTask> showTasks){
+		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
+		
+		for (GeRmsTask geRmsTask : showTasks) {
+			if(geRmsTask.getParentID()==null){
+				NodeEntity nodeEntity=new NodeEntity();
+				nodeEntity.setId(geRmsTask.getTaskID());
+				nodeEntity.setTitle(geRmsTask.getName());
+				nodeEntity.setChildren(creatSubNode(geRmsTask,checkedTasks, showTasks));
+				for (GeRmsTask checkedTask : checkedTasks) {
+					if(checkedTask.getTaskID().toString().equals(geRmsTask.getTaskID().toString())){
+						nodeEntity.setClassField("jstree-checked");
+					}
+				}
+				nodeEntitys.add(nodeEntity);
+			}
+		}
+		Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").classField("classField").urlField("urlField").builder();
+		return treeable;
+	}
+	
+	List<NodeEntity> creatSubNode(GeRmsTask superTask ,List<GeRmsTask> checkedTasks,List<GeRmsTask> showTasks){
+		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
+		for (GeRmsTask geRmsTask : showTasks) {
+			if(geRmsTask.getParentID()!=null&&!geRmsTask.getParentID().toString().equals("")){
+				if (geRmsTask.getParentID().toString().equals(superTask.getTaskID().toString())) {
+					NodeEntity nodeEntity = new NodeEntity();
+					nodeEntity.setId(geRmsTask.getTaskID());
+					nodeEntity.setTitle(geRmsTask.getName());
+					nodeEntity.setChildren(creatSubNode(geRmsTask,checkedTasks,
+							showTasks));
+					for (GeRmsTask checkedTask : checkedTasks) {
+						if(checkedTask.getTaskID().toString().equals(geRmsTask.getTaskID().toString())){
+							nodeEntity.setClassField("jstree-closed jstree-unchecked");
+						}
+					}
+					nodeEntitys.add(nodeEntity);
+				}
+			}
+		}
+		return nodeEntitys;
+	}
+	
 }
