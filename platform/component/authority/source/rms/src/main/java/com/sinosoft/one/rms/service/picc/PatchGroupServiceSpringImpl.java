@@ -20,10 +20,12 @@ public class PatchGroupServiceSpringImpl extends GroupServiceSpringImpl implemen
 	/**
 	 * 初始缓存实例
 	 */
+	@SuppressWarnings("unused")
 	private static CacheService cacheManager = CacheManager.getInstance("Group");
 	/**
 	 * 查询用户组下的成员
 	 */
+	@SuppressWarnings("unchecked")
 	public Page findEmployeByGroupType( String Type,String loginComCode,String userName,String comCode,String comCName,String isValidate,int pageSize,int pageNo) {
 		List<UserGroup>userGroups=new ArrayList<UserGroup>();
 		QueryRule queryRule = QueryRule.getInstance();

@@ -3,7 +3,7 @@ package com.sinosoft.one.rms.client.util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
-import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.User;
 
 public class ShiroLoginUser {
 

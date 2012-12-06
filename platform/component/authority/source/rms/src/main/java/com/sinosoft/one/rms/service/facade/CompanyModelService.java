@@ -2,7 +2,6 @@ package com.sinosoft.one.rms.service.facade;
 
 import java.util.List;
 
-import com.sinosoft.one.rms.model.Company;
 import com.sinosoft.one.rms.model.service.CompanyModelInterface;
 
 /**
@@ -10,7 +9,7 @@ import com.sinosoft.one.rms.model.service.CompanyModelInterface;
  * @author Administrator
  *
  */
-public abstract interface CompanyServiceInterface {
+public abstract interface CompanyModelService {
 	
 	/**
 	 * 查询下级机构 包含当前机构

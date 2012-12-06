@@ -10,13 +10,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>加密解密演示</title>
-    <%--<form id="ajaxForm" action="frontendAjaxCrypto" method="post">--%>
+    <title>前端加密后端解密</title>
     <%@ include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
         $(document).ready(function () {
             //聚焦第一个输入框
-            $("#cryptoAndUncrypto-tab").addClass("active");
+            $("#frontendCrypto-tab").addClass("active");
         });
 
     </script>
@@ -55,6 +54,7 @@
                 isEncryption:true,
                 success:function (data) {
                     if (data != null) {
+                        // alert($("input[name='abc']").val());
                         alert("success,解密后的数据（其中children为测试数据）:\n" + data.name);
                     }
                 },
@@ -72,9 +72,6 @@
 
 <div class="container">
     <%@ include file="/WEB-INF/layouts/header.jsp" %>
-    <div>
-        <p><span style="color: red;">为了演示方便，在crypto_codec.js和enAndDe.js文件中加入了“alert()”语句，所以页面初始化的弹窗属正常现象</span></p>
-    </div>
     <div id="view1" class="span12">
         <form id="frontend1" action="frontendCrypto" method="post"
               onsubmit="<f:cryptoForm formId="frontend1" includes="name"/>">
@@ -131,30 +128,8 @@
             </tbody>
         </table>
     </div>
-    <div id="view4" class="span12">
-        <form id="frontendUncrypto" action="frontendUncrypto" method="post">
-            解密后的用户名：<input name="name4" value="${name4}"/>
-            解密后的邮箱4：<textarea class="email4" name="email4">${email4}</textarea><br>
-            解密后的邮箱5：<textarea class="email5" name="email5">${email5}</textarea>
-            <table id="contentTable"
-                   class="table table-striped table-bordered table-condensed">
-                <thead>
-                <tr>
-                    <th>解密后的登录名</th>
-                    <th>解密后的密码</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="loginName4">${user.loginName}</td>
-                    <td class="password4">${user.password}</td>
-                </tr>
-                </tbody>
-            </table>
-            <input type="submit" onClick="viewUser3();" value="后端加密前端解密"/>
-        </form>
-    </div>
-    <div id="view5" class="span12">
+
+    <div id="view3" class="span12">
         <form id="ajaxForm">
             姓名：<input type="text" name="ajaxName"/>
             年龄：<input class="input_one" type="text" name="ajaxAge"/>
@@ -181,11 +156,9 @@
     }
 </script>
 <script type="text/javascript">
-    var viewUser4 = function () {
-        $("#view4").show();
+    var viewUser3 = function () {
+        $("#view3").show();
     }
 </script>
-<x:inputs/>
-<co:unCmn eClasses="email4,email5,loginName4,password4"/>
 </body>
 </html>

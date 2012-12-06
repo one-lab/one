@@ -1,4 +1,4 @@
-package com.sinosoft.ams.service;
+package test;
 
 import java.util.List;
 

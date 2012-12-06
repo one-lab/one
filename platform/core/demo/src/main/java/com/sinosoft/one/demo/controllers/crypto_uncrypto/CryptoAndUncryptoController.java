@@ -24,9 +24,9 @@ public class CryptoAndUncryptoController {
     @Autowired
     private AccountManager accountManager;
 
-    @Get("cryptoAndUncrypto")
+    @Get("frontendCrypto")
     public String cryptoAndUnCrypto() {
-        return "cryptoAndUncryptoList";
+        return "frontendCrypto";
     }
 
     @Post("frontendCrypto")
@@ -35,7 +35,7 @@ public class CryptoAndUncryptoController {
         inv.addModel("ciphertext1", key);
         inv.addModel("name1", name);
         inv.addModel("email1", email);
-        return "cryptoAndUncryptoList";
+        return "frontendCrypto";
     }
 
     @Post("backgroundUncrypto")
@@ -44,35 +44,11 @@ public class CryptoAndUncryptoController {
         inv.addModel("ciphertext2", key);
         inv.addModel("name2", name);
         inv.addModel("email2", email);
-        return "cryptoAndUncryptoList";
-    }
-
-    @Post("backgroundCrypto")
-    public String backgroundCrypto(Invocation inv, @Param("name3") String name, @Param("email") String email) {
-        String key = (String) inv.getRequest().getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
-        inv.addModel("ciphertext3", key);
-        inv.addModel("name3", name);
-        inv.addModel("email3", email);
-        return "cryptoAndUncryptoList";
-    }
-
-    @Post("frontendUncrypto")
-    public String frontendUncrypto(Invocation inv, @Param("name4") String name, @Param("email") String email) {
-        String key = (String) inv.getRequest().getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
-        inv.addModel("ciphertext4", key);
-        inv.addModel("name4", "aaaa");
-        inv.addModel("email4", "email4@demo.com");
-        inv.addModel("email5", "email5@demo.com");
-        User user = new User();
-        user.setLoginName("ZhangSan");
-        user.setPassword("abc123d");
-        inv.addModel("user", user);
-        return "cryptoAndUncryptoList";
+        return "frontendCrypto";
     }
 
     @Post("frontendAjaxCrypto")
     public Object frontendAjaxCrypto(Invocation inv) {
-        String key = (String) inv.getRequest().getSession().getAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME);
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("name:" + inv.getParameter("name"));
         stringBuffer.append(",age:" + inv.getParameter("age"));
@@ -88,5 +64,20 @@ public class CryptoAndUncryptoController {
         User user = new User();
         user.setName(jsonString);
         return Replys.with(user).as(Json.class);
+    }
+
+    @Get("backgroundCrypto")
+    public String frontendUncrypto(Invocation inv, @Param("name4") String name, @Param("email") String email) {
+        inv.addModel("nameForm1", "abc123");
+        inv.addModel("name1", "aaaa");
+        inv.addModel("name2", "bbbb");
+        inv.addModel("email1", "email1@demo.com");
+        inv.addModel("email2", "email2@demo.com");
+        User user = new User();
+        user.setLoginName("ZhangSan");
+        user.setPassword("abc123d");
+        user.setEmail("email3@demo.com");
+        inv.addModel("user", user);
+        return "backgroundCrypto";
     }
 }

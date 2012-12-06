@@ -20,4 +20,8 @@ public interface GeRmsTaskAuthRepository extends PagingAndSortingRepository<GeRm
 	
 	@SQL("select taskId from GE_RMS_TASK_AUTH where comcode=?1")
 	List<String> findByComCode(String comCode);
+	
+	//根据角色id查询角色关联的授权
+	@SQL("select * from GE_RMS_TASK_AUTH where taskAuthID in(select taskAuthID from ge_rms_roletask where roleid=?1)")
+	List<GeRmsTaskAuth> findTaskAuthByRole(String roleId);
 }

@@ -1,4 +1,4 @@
-package com.sinosoft.one.rms.clientService;
+package com.sinosoft.one.rms;
 
 import java.util.List;
 

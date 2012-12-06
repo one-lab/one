@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Map;
 
-import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.User;
 
 
 /**

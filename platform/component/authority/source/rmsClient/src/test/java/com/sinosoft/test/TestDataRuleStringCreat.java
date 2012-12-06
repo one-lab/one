@@ -9,9 +9,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.sinosoft.one.rms.User;
 import com.sinosoft.one.rms.client.EnvContext;
-import com.sinosoft.one.rms.clientService.User;
-import com.sinosoft.one.rms.clientService.facade.RmsClientService;
+import com.sinosoft.one.rms.facade.RmsClientService;
 
 
 @DirtiesContext

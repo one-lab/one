@@ -2,7 +2,6 @@ package com.sinosoft.one.rms.model;
 
 import java.util.Date;
 
-import com.sinosoft.one.rms.model.Company;
 
 /**
  * 指派信息封装类

@@ -1,6 +1,6 @@
 package com.sinosoft.one.rms.client;
 
-import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.User;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,4 +12,6 @@ import com.sinosoft.one.rms.clientService.User;
 public interface AccountManager {
 	
     User findUserByLoginName(String loginName,String comCode,String sysFlag);
+    
+    com.sinosoft.one.rms.client.webservice.User findUserByLoginNameWs(String loginName,String comCode,String sysFlag);
 }

@@ -1,9 +1,9 @@
-package com.sinosoft.one.rms.clientService.facade;
+package com.sinosoft.one.rms.facade;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.rms.clientService.User;
+import com.sinosoft.one.rms.User;
 import com.sinosoft.one.rms.service.facade.GetUserService;
 
 /**

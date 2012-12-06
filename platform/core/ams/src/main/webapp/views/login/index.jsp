@@ -113,9 +113,9 @@ function changePass(e){
             	<ul class="nav" id="nav">
                 	<li><a href="${ctx}/views/task/loadTask.jsp"><span>功能菜单管理</span></a></li>
                     <li><a href="${ctx}/views/task_auth/loadtaskAuth.jsp"><span>功能授权</span></a></li>
-                    <li><a href="${ctx}/views/common/loadRole.jsp"><span>角色管理</span></a>
+                    <li><a href="${ctx}/views/role/loadRole.jsp"><span>角色管理</span></a>
                     	<ul>
-                        	<li><a href="${ctx}/views/common/loadroleDesignate.jsp"><span>角色指派</span></a></li>
+                        	<li><a href="${ctx}/views/role/loadroleDesignate.jsp"><span>角色指派</span></a></li>
                         </ul>
                     </li>
                     <li><a href="${ctx}/views/user_group/loadGroup.jsp"><span>用户组管理</span></a></li>

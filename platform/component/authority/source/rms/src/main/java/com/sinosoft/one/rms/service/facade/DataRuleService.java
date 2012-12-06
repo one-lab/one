@@ -3,7 +3,6 @@ package com.sinosoft.one.rms.service.facade;
 import java.util.List;
 
 
-import com.sinosoft.one.rms.model.BusDataInfo;
 import com.sinosoft.one.rms.model.BusPower;
 import com.sinosoft.one.rms.model.DataRule;
 
