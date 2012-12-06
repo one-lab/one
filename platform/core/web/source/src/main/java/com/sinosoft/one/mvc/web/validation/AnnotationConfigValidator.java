@@ -34,6 +34,7 @@ import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.ParamValidator;
 import com.sinosoft.one.mvc.web.paramresolver.ParamMetaData;
 import com.sinosoft.one.mvc.web.validation.enumation.ErrorMessageType;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.HibernateValidator;
@@ -235,6 +236,12 @@ public class AnnotationConfigValidator implements ParamValidator{
 
         Validation configValidation = metaData.getAnnotation(Validation.class);
         String errorPath = configValidation.errorPath();
+        String[] params = StringUtils.substringsBetween(errorPath, "{", "}");
+        for(String param : params) {
+            String paramValue = inv.getParameter(param);
+            errorPath = errorPath.replace("{" + param + "}", paramValue);
+        }
+
 		//@todo 验证可能完全是bean级别的。2012年11月13日17:42:02 只需要判断是不是基础类型即可
 //        if(isContainsRules(configValidation)){
 //            Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
