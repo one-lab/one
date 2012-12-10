@@ -21,7 +21,7 @@ import com.sinosoft.one.rms.model.RoleDesignate;
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.UserGroup;
 import com.sinosoft.one.rms.model.UserPower;
-import com.sinosoft.one.rms.service.facade.EmployeModelService;
+import com.sinosoft.one.rms.service.facade.EmployeService;
 import com.sinosoft.one.rms.service.facade.RmsService;
 public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String>implements RmsService
 		 {
@@ -36,7 +36,7 @@ public class RmsServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String
 	
 	
 	@Autowired
-	private EmployeModelService employeServiceInterface;
+	private EmployeService employeServiceInterface;
 	
 //	@Autowired
 //	private CompanyService companyService;

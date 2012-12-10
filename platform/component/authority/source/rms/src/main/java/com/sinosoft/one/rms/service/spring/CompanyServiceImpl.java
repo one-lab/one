@@ -9,10 +9,10 @@ import java.util.List;
 import org.hibernate.Query;
 
 import com.sinosoft.one.rms.model.Company;
-import com.sinosoft.one.rms.service.facade.CompanyModelService;
+import com.sinosoft.one.rms.service.facade.CompanyService;
 
 
-public class CompanyServiceImpl extends GenericDaoHibernate<Company, String> implements CompanyModelService {
+public class CompanyServiceImpl extends GenericDaoHibernate<Company, String> implements CompanyService {
 	
 	/**
 	 * 查询下级机构 包含当前机构

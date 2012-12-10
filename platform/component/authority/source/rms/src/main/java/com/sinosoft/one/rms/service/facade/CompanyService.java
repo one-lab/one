@@ -9,7 +9,7 @@ import com.sinosoft.one.rms.model.service.CompanyModelInterface;
  * @author Administrator
  *
  */
-public abstract interface CompanyModelService {
+public abstract interface CompanyService {
 	
 	/**
 	 * 查询下级机构 包含当前机构
