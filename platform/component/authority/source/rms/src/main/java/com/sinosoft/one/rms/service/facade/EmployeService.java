@@ -11,7 +11,7 @@ import ins.framework.common.Page;
  * @author Administrator
  *
  */
-public interface EmployeModelService {
+public interface EmployeService {
 	
 	/**
 	 * 根据员工代码和机构代码查询员工(未引入员工，引入页面)
