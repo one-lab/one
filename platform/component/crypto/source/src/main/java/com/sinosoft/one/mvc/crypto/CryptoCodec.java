@@ -121,18 +121,15 @@ public final class CryptoCodec {
 		}
 	}
 
-	public static String getCryptoKey(String md5) {
+	public static String getCryptoKey(String sessionId) {
+        //sessionId进行MD5运算，确保结果为32位
+        String md5=toMD5(sessionId);
 		int random1 = (int) (new Random().nextDouble() * 16) + 16;
 		int random2 = (int) (new Random().nextDouble() * 16);
 		String new1 = md5.substring(random1);
-		md5 = md5.substring(0,random1);
+        md5 = md5.substring(0,random1);
 		String new2 = md5.substring(random2);
-		md5 = md5.substring(0,random2);
+        md5 = md5.substring(0,random2);
 		return  new1 + new2 + md5;
-	}
-
-	public static void main(String args[]) {
-		String md5 = toMD5("1123");
-		String cryptokey = getCryptoKey(md5);
 	}
 }

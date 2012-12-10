@@ -54,13 +54,19 @@ public class TreeConverter<T> implements Converter<Treeable> {
                 JSONObject dataAttrItemObject = new JSONObject();
                 try {
                     jsonAttrObject.put(ID_ELEMENT, BeanUtils.getProperty(obj, treeable.getIdField()));
+                    /*根据具体情况，将class属性放在<li>标签中*/
+                    if (treeable.getClassField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getClassField()))) {
+                        jsonAttrObject.put(CLASS_ELEMENT, CLASS_DEFAULT_VALUE);
+                    } else {
+                        jsonAttrObject.put(CLASS_ELEMENT, BeanUtils.getProperty(obj, treeable.getClassField()));
+                    }
                     jsonObject.put(ATTR_ELEMENT, jsonAttrObject);
                     dataItemObject.put(TITLE_ELEMENT, BeanUtils.getProperty(obj, treeable.getTitleField()));
-                    if (treeable.getClassField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getClassField()))) {
+                   /* if (treeable.getClassField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getClassField()))) {
                         dataAttrItemObject.put(CLASS_ELEMENT, CLASS_DEFAULT_VALUE);
                     } else {
                         dataAttrItemObject.put(CLASS_ELEMENT, BeanUtils.getProperty(obj, treeable.getClassField()));
-                    }
+                    }*/
                     if (treeable.getUrlField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getUrlField()))) {
                         dataAttrItemObject.put(HREF_ELEMENT, HREF_DEFAULT_VALUE);
                     } else {
