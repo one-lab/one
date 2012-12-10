@@ -1,7 +1,9 @@
 package com.sinosoft.one.rms.service.spring;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -49,26 +51,38 @@ public class DataRuleServiceSpringImpl extends GenericDaoHibernate<BusPower, Str
 		baseDataRuleTableInfoManager.clearCache("UserBusPowers");
 	}
 	
-	public void addBusPower( String powerID,String dataRuleID, String taskID,
-			String dataRuleParam ,String busDataTable,String busDataColumn) {
-		BusPower busPower=new BusPower();
+	public void addBusPower( String powerID,String dataRuleID, List<String> taskIDs,
+			String dataRuleParam ) {
+		
 		UserPower userPower=super.get(UserPower.class, powerID);
 		Assert.assertNotNull(userPower);
-		StringBuffer deletesql=new StringBuffer();
-		deletesql.append("delete ge_rms_busPower where dataRuleid='"+dataRuleID + "' and userPowerid='"+ userPower.getUserPowerID() + "' and taskid='"+taskID+"'");
-		getSession().createSQLQuery(deletesql.toString()).executeUpdate();
-		deletesql.setLength(0);
-		busPower.setUserPower(userPower);
-		DataRule dataRule=super.get(DataRule.class, dataRuleID);
-		Assert.assertNotNull(dataRule);
-		busPower.setDataRule(dataRule);
-		Task task=super.get(Task.class, taskID);
-		busPower.setTask(task);
-		if(StringUtils.isNotEmpty(dataRuleParam)){
-			busPower.setDataRuleParam(dataRuleParam);
+		StringBuffer sql=new StringBuffer();
+		sql.append("delete ge_rms_busPower where dataRuleid='"+dataRuleID + "' and userPowerid='"+ userPower.getUserPowerID() + "'");
+		getSession().createSQLQuery(sql.toString()).executeUpdate();
+		sql.setLength(0);
+		if(taskIDs.size()>0){
+			sql.append("from Task where taskId in(");
+			for (String string : taskIDs) {
+				sql.append(" '" + string + "',");
+			}
+			sql.delete(sql.length() - 1, sql.length());
+			sql.append(")");
+			List<Task> tasks = super.findByHql(sql.toString());
+			Assert.assertNotNull(tasks);
+			DataRule dataRule = super.get(DataRule.class, dataRuleID);
+			Assert.assertNotNull(dataRule);
+			for (Task task : tasks) {
+				BusPower busPower = new BusPower();
+				busPower.setUserPower(userPower);
+				busPower.setDataRule(dataRule);
+				busPower.setTask(task);
+				if (StringUtils.isNotEmpty(dataRuleParam)) {
+					busPower.setDataRuleParam(dataRuleParam);
+				}
+				busPower.setIsValidate("1");
+				super.save(busPower);
+			}
 		}
-		busPower.setIsValidate("1");
-		super.save(busPower);
 		baseDataRuleTableInfoManager.clearCache("UserBusPowers");
 	}
 
@@ -101,6 +115,26 @@ public class DataRuleServiceSpringImpl extends GenericDaoHibernate<BusPower, Str
 		busPowers=super.findByHql(hql.toString());
 		return busPowers;
 	}
+
+	public List<BusPower> findBusPowerByUserAndCom(String userCode, String comCode) {
+		List<BusPower>userbusPowers=new ArrayList<BusPower>();
+		StringBuilder hql = new StringBuilder();
+		hql.append("from BusPower b where b.userPower.userPowerID =(select userPowerID from UserPower where userCode='"+userCode+"' and comCode='"+comCode+"')");
+		List<BusPower> busPowers=super.findByHql(hql.toString());
+		hql.setLength(0);
+		hql.append("select dataruleid from ge_rms_dataRule");
+		List<String>dataruleids=super.findBySql(hql.toString());
+		Map<String,BusPower> temp=new HashMap<String,BusPower>();
+		for (BusPower BusPower : busPowers) {
+			if(dataruleids.contains(BusPower.getDataRule().getDataRuleID().toString())){
+				temp.put(BusPower.getDataRule().getDataRuleID().toString(), BusPower);
+			}
+		}
+		userbusPowers.addAll(temp.values());
+		return userbusPowers;
+	}
+
+	
 
 
 

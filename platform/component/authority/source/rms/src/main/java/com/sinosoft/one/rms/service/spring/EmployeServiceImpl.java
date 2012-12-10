@@ -10,9 +10,9 @@ import ins.framework.utils.StringUtils;
 
 import com.sinosoft.one.rms.model.Employe;
 import com.sinosoft.one.rms.model.UserPower;
-import com.sinosoft.one.rms.service.facade.EmployeModelService;
+import com.sinosoft.one.rms.service.facade.EmployeService;
 
-public class EmployeServiceImpl extends GenericDaoHibernate<Employe, String> implements EmployeModelService{
+public class EmployeServiceImpl extends GenericDaoHibernate<Employe, String> implements EmployeService{
 	
 	/**
 	 * 根据员工代码和机构代码查询员工)

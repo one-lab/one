@@ -16,7 +16,7 @@ import ins.framework.utils.StringUtils;
 
 import com.sinosoft.one.rms.model.Task;
 import com.sinosoft.one.rms.model.TaskAuth;
-import com.sinosoft.one.rms.service.facade.CompanyModelService;
+import com.sinosoft.one.rms.service.facade.CompanyService;
 import com.sinosoft.one.rms.service.facade.TaskService;
 
 public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, String>
@@ -24,7 +24,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	private static CacheService cacheManager = CacheManager.getInstance("Task");
 	
 	@Autowired
-	private CompanyModelService companyServiceInterface;
+	private CompanyService companyServiceInterface;
 	/**
 	 * 为机构授权操作
 	 */
