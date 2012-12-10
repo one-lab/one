@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.sinosoft.one.rms.service.facade.CompanyServiceInterface;
+import com.sinosoft.one.rms.service.facade.CompanyService;
 
 public class queryRuleAccordComAndNextCom implements DataRuleScript {
 
   @Autowired
-  private CompanyServiceInterface companyServiceInterface;
+  private CompanyService companyServiceInterface;
   
   private String TABLENAME="ge_rms_company";
  	
