@@ -18,10 +18,6 @@
    
     <bean id="userpowerSerivce" class="com.sinosoft.one.rms.service.spring.UserPowerService"></bean>
     
-    <bean id="companyService" class="com.sinosoft.one.rms.service.spring.CompanyService"></bean>
-    
-    <bean id="employeService" class="com.sinosoft.one.rms.service.spring.EmployeService"></bean>
-     
     <bean id="dataRuleService" class="com.sinosoft.one.rms.service.spring.DataRuleServiceSpringImpl"></bean>
     
     <bean id="getUserService" class="com.sinosoft.one.rms.service.spring.GetUserServiceSpringImpl"></bean>
