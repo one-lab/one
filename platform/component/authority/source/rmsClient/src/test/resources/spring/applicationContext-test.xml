@@ -33,9 +33,10 @@
    
    	<bean id= "rmsSQLParser" class="com.sinosoft.one.rms.client.sqlparser.RmsSQLParserSupport" ></bean>
    	
-    <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceInterfaceImpl"></bean>
+     <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceImpl"></bean>
     
-    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceInterfaceImpl"></bean>
+    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceImpl"></bean>
+    
    
     <!-- 定义受环境影响易变的变量 -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
