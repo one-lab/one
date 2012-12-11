@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.sinosoft.one.ams.utils.uiutil.exception.TreeConverterException;
 import com.sinosoft.one.util.reflection.ReflectionUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -53,14 +54,20 @@ public class TreeConverter<T> implements Converter<Treeable> {
                 JSONObject dataAttrItemObject = new JSONObject();
                 try {
                     jsonAttrObject.put(ID_ELEMENT, BeanUtils.getProperty(obj, treeable.getIdField()));
+                    /*根据具体情况，将class属性放在<li>标签中*/
+                    if (treeable.getClassField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getClassField()))) {
+                        jsonAttrObject.put(CLASS_ELEMENT, CLASS_DEFAULT_VALUE);
+                    } else {
+                        jsonAttrObject.put(CLASS_ELEMENT, BeanUtils.getProperty(obj, treeable.getClassField()));
+                    }
                     jsonObject.put(ATTR_ELEMENT, jsonAttrObject);
                     dataItemObject.put(TITLE_ELEMENT, BeanUtils.getProperty(obj, treeable.getTitleField()));
-                    if (treeable.getClassField() == null || BeanUtils.getProperty(obj, treeable.getClassField()) == null || BeanUtils.getProperty(obj, treeable.getClassField()).isEmpty()) {
+                   /* if (treeable.getClassField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getClassField()))) {
                         dataAttrItemObject.put(CLASS_ELEMENT, CLASS_DEFAULT_VALUE);
                     } else {
                         dataAttrItemObject.put(CLASS_ELEMENT, BeanUtils.getProperty(obj, treeable.getClassField()));
-                    }
-                    if (treeable.getUrlField() == null || BeanUtils.getProperty(obj, treeable.getUrlField()) == null || BeanUtils.getProperty(obj, treeable.getUrlField()).isEmpty()) {
+                    }*/
+                    if (treeable.getUrlField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getUrlField()))) {
                         dataAttrItemObject.put(HREF_ELEMENT, HREF_DEFAULT_VALUE);
                     } else {
                         dataAttrItemObject.put(HREF_ELEMENT, BeanUtils.getProperty(obj, treeable.getUrlField()));

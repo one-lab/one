@@ -13,7 +13,7 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.tree.js"></script>
 <script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript">
-$(function(){
+ $(function(){
 	$("#treeTow").jstree({ 
 			"themes" : {
 				"theme" : "default",
@@ -23,7 +23,7 @@ $(function(){
 				
 				"ajax" : {
 						"type":"post",
-						"url" : "${ctx}/role/findTaskByRole/"+"${roleId}"
+						"url" : "${ctx}/role/findTask/"+"${roleId}"
 				}
 			},
 			"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
@@ -46,29 +46,21 @@ function fitHeight(){
       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="info_form">
           <tr>
             <td align="right">角色名称：</td>
-            <td><input type="text" style="width:160px;" id="updateRoleName" value="${name}"/>
-            	  <input type="text" style="width:160px;" id="updateRoleId" value="${roleId}"/>
-            </td>
-       	  </tr>
+            <td><input type="text" style="width:160px;" id="name" value="${name}"/></td>
+        </tr>
           <tr>
             <td align="right">类型：</td>
             <td>
-            	<select name="select" id="updateRoleType">
-           	 		<c:if test="${flag eq 'all'}" >
+            	<select name="select">
 							 	<option value="default" >默认</option>
-	                   			<option value="all" selected="selected">所有可见</option>
-	          		</c:if>          		
-               		<c:if test="${flag eq 'default'}">
-               		 	<option value="default" selected="selected">默认</option>
-               			<option value="all" >所有可见</option>
-               		</c:if>     
+	                   			<option value="all" >所有可见</option>
                 </select>
             </td>
         </tr>
           <tr>
             <td align="right">角色描述：</td>
             <td>
-            	<textarea name="textarea" cols="30" rows="4" style="width:160px;" id="updateRoleDes">${des}</textarea>
+            	<textarea name="textarea" cols="30" rows="4" style="width:160px;">${des}</textarea>
             </td>
           </tr>
       </table>

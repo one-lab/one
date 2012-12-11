@@ -1,6 +1,7 @@
 package com.sinosoft.one.ams.controllers.role;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 
-@Path("role")
-public class RoleController {
+@Path
+public class GeRmsRoleController {
 
 	@Autowired
 	private AccountManager accountManager;
@@ -38,43 +39,24 @@ public class RoleController {
 	
 	private List<String> roleAttribute = new ArrayList<String>();
 	
-	// 角色列表
-	@Post({ "roleAll" })
-	public Reply roleAll(@Param("name") String name,
-			@Param("pageNo") int pageNo, @Param("rowNum") int rowNum,
-			Invocation inv) throws Exception {
-		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
-		System.out.println(name);
-
-		Gridable<GeRmsRole> ge = new Gridable<GeRmsRole>(null);
-
-		Gridable<GeRmsRole> gridable = roleService.findAllRole(ge, pageable,
-				roleAttribute);
-
-		inv.getResponse().setContentType("text/html;charset=UTF-8");
-		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-		render.render(inv.getResponse());
-		return null;
-	}
-
-	@Post("roleList/{groupId}")
-	@Get("roleList/{groupId}")
-	public Reply roleList(@Param("groupId") String groupId,
-			@Param("pageNo") int pageNo, @Param("rowNum") int rowNum,
-			Invocation inv) throws Exception {
-
-		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
-
-		Gridable<GeRmsRole> gridable = new Gridable<GeRmsRole>(null);
-
-		gridable = roleService.getGridable(pageable, groupId, gridable,
-				roleAttribute);
-
-		inv.getResponse().setContentType("text/html;charset=UTF-8");
-		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-		render.render(inv.getResponse());
-		return null;
-	}
+//	@Post("roleList/{groupId}")
+//	@Get("roleList/{groupId}")
+//	public Reply roleList(@Param("groupId") String groupId,
+//			@Param("pageNo") int pageNo, @Param("rowNum") int rowNum,
+//			Invocation inv) throws Exception {
+//
+//		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
+//
+//		Gridable<GeRmsRole> gridable = new Gridable<GeRmsRole>(null);
+//
+//		gridable = roleService.getGridable(pageable, groupId, gridable,
+//				roleAttribute);
+//
+//		inv.getResponse().setContentType("text/html;charset=UTF-8");
+//		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
+//		render.render(inv.getResponse());
+//		return null;
+//	}
 
 	// 角色列表
 	@Post({ "rolelist/{name}", "rolelist" })
@@ -112,6 +94,26 @@ public class RoleController {
 		return null;
 	}
 
+	// 增加角色页面的查询功能树 
+	@Post("findTask")
+	public Reply findTask(Invocation inv)
+			throws Exception {
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getComCode();
+		// 根据角色ID查询角色关联功能
+		List<GeRmsTask> rolesTasks =new ArrayList<GeRmsTask>();
+		// 根据机构代码查询可见功能
+		List<GeRmsTask> comsTasks = roleService.findTaskByComCode(comCode);
+		// 构建树对象
+		Treeable<NodeEntity> treeable = accountManager.creatTaskTreeAble(
+				rolesTasks, comsTasks);
+		inv.getResponse().setContentType("text/html;charset=UTF-8");
+		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+		System.out.println(render.getResultForTest());
+		render.render(inv.getResponse());
+		return null;
+	}
+	
 	@Post("role/{groupId}")
 	@Get("role/{groupId}")
 	public Reply groupRoleList(@Param("groupId") String groupId,
@@ -135,7 +137,8 @@ public class RoleController {
 		render.render(inv.getResponse());
 		return null;
 	}
-
+	
+	//查询角色页面 修改/查看页面
 	@Get("findRoleById/{roleId}")
 	public String findRoleById(@Param("roleId") String roleId, Invocation inv) {
 		GeRmsRole role = roleService.findRoleById(roleId);
@@ -145,5 +148,19 @@ public class RoleController {
 		inv.addModel("flag", role.getFlag());
 		return "loadRoleInfo";
 	}
-
+	//准备增加角色 打开增加页面
+	@Get("prepareAddRole")
+	public String prepareAddRole(){
+		return "addRole";
+	}
+	
+	@Post("update/{roleId}/{name}/{des}/{roleType}/{taskId}")
+	public Reply updateRole(@Param("roleId") String roleId,@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getComCode();
+		taskid=taskid.substring(0, taskid.length()-1);
+		roleService.updateRole(roleId, comCode, name, des, roleType, Arrays.asList(taskid.split(",")));
+		return null;
+	}
+	
 }
