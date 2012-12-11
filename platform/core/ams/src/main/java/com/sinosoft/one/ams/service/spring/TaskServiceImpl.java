@@ -73,7 +73,9 @@ public class TaskServiceImpl implements TaskService{
 		// TODO Auto-generated method stub
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
 		GeRmsTask taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
-		
+		if(task.getFlag().equals("")){
+			task.setFlag(user.getComCode());
+		}
 		if(taskCheck == null){
 			geRmsTaskRepository.save(task);
 			taskAuth.setTaskID(task.getTaskID());
@@ -90,7 +92,7 @@ public class TaskServiceImpl implements TaskService{
 		}else{
 			geRmsTaskRepository.updateTask(task.getName(), task.getMenuName(), task.getMenuURL(), task.getDes(), task.getParentID(), task.getIsValidate(), task.getIsAsMenu(),task.getFlag(), task.getTaskID());
 			if(!task.getFlag().equals(taskCheck.getFlag())){
-				geRmsTaskAuthRepository.updateTask(task.getFlag(), user.getComCode(), task.getTaskID());
+				geRmsTaskAuthRepository.updateTaskAuth(task.getFlag(), user.getComCode(), task.getTaskID());
 			}
 		}
 		
