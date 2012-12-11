@@ -16,4 +16,6 @@ public interface Render {
     void render(HttpServletResponse response) throws Exception;
 
     Render as(UIType uiType) throws ConverterException;
+
+    Render encoding(String encode) throws ConverterException;
 }
