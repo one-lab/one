@@ -47,6 +47,7 @@ $(function(){
 				$(".des").val(data.des);
 				$(".isValidate").val(data.isValidate);
 				$(".isAsMenu").val(data.isAsMenu);
+				$(".flag").val(data.flag)
 			},
 			error:function(){
 				alert("失败！");
