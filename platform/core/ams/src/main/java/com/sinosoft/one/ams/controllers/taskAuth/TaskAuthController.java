@@ -1,4 +1,4 @@
-package com.sinosoft.one.ams.controllers;
+package com.sinosoft.one.ams.controllers.taskAuth;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

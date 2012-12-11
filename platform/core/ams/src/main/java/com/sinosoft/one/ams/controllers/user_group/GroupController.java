@@ -1,4 +1,4 @@
-package com.sinosoft.one.ams.controllers;
+package com.sinosoft.one.ams.controllers.user_group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import com.sinosoft.one.ams.model.GeRmsGroup;
 import com.sinosoft.one.ams.model.GeRmsGroupRole;
 import com.sinosoft.one.ams.model.User;
+import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.ams.service.facade.UserGroupService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
@@ -27,6 +28,8 @@ import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 @Path("group")
 public class GroupController {
 	
+	@Autowired
+	private AccountManager accountManager;
 	@Autowired
 	private UserGroupService userGroupService;
 	
@@ -125,5 +128,22 @@ public class GroupController {
 		
 		return Replys.with("success");
 	}
+	@Post("update/{groupId}")
+	public Reply update(@Param("groupId") String groupId, Invocation inv) {
+		System.out.println(groupId + "+++++++++++++++++++++++++++++++++++");
+		if (groupId != null) {
+			accountManager.updateGroup(groupId);
+			return Replys.with("success");
+		} else {
+			return Replys.with("false");
+		}
 
+	}
+	
+	//将groupId传到dataQuery页面，并跳到dataQuery页面
+	@Get("groupId/{groupId}")
+	public String page(@Param("groupId") String groupId, Invocation inv) {
+		inv.addModel("groupId", groupId);
+		return "dataQuery";
+	}	
 }

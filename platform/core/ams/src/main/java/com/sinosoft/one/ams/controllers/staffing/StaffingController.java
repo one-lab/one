@@ -1,4 +1,4 @@
-package com.sinosoft.one.ams.controllers;
+package com.sinosoft.one.ams.controllers.staffing;
 
 import java.util.ArrayList;
 import java.util.List;
