@@ -62,7 +62,7 @@ public class TreeConverter<T> implements Converter<Treeable> {
                     }
                     jsonObject.put(ATTR_ELEMENT, jsonAttrObject);
                     dataItemObject.put(TITLE_ELEMENT, BeanUtils.getProperty(obj, treeable.getTitleField()));
-                   /* if (treeable.getClassField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getClassField()))) {
+                    /* if (treeable.getClassField() == null || StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getClassField()))) {
                         dataAttrItemObject.put(CLASS_ELEMENT, CLASS_DEFAULT_VALUE);
                     } else {
                         dataAttrItemObject.put(CLASS_ELEMENT, BeanUtils.getProperty(obj, treeable.getClassField()));
@@ -78,7 +78,11 @@ public class TreeConverter<T> implements Converter<Treeable> {
                         Object subSubChildren = ReflectionUtils.getFieldValue(obj, treeable.getChildrenField());
                         jsonObject.put(CHILDREN_ELEMENT, addSubItemObject(subSubChildren, treeable));
                     }
-                    jsonObject.put(STATE_ELEMENT, BeanUtils.getProperty(obj, treeable.getStateField()));
+                    //如果state属性不为空字符串或者null的判断，json字符串中增加state属性；
+                    //如果state属性为空字符串或者null的判断，json字符串中没有state属性，交由前端处理（前端默认是关闭）
+                    if (!StringUtils.isBlank(treeable.getStateField())) {
+                        jsonObject.put(STATE_ELEMENT, BeanUtils.getProperty(obj, treeable.getStateField()));
+                    }
                     jsonArray.add(jsonObject);
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
@@ -99,10 +103,16 @@ public class TreeConverter<T> implements Converter<Treeable> {
     }
 
     private Boolean hasSubNode(Object object, Treeable treeable) {
-        if (ReflectionUtils.getFieldValue(object, treeable.getChildrenField()) != null) {
+        //子节点的属性children不是必须的，如果没有children属性，则不作任何处理
+        /*if (ReflectionUtils.getFieldValue(object, treeable.getChildrenField()) != null) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
+        }*/
+        if (StringUtils.isBlank(treeable.getChildrenField()) || (ReflectionUtils.getFieldValue(object, treeable.getChildrenField()) == null)) {
+            return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
         }
     }
 
