@@ -16,7 +16,7 @@ public interface GeRmsTaskAuthRepository extends PagingAndSortingRepository<GeRm
 	void deleteTask(String comCode,String taskId);
 	
 	//修改功能授权
-	@SQL("update GE_RMS_TASK_AUTH set comCode = ?1 where comcode=?2 and taskid=?3 or comcode='*'")
+	@SQL("update GE_RMS_TASK_AUTH set comCode = ?1 where (comcode=?2 or comcode='*') and taskid=?3")
 	void updateTask(String flag,String comCode,String taskId);
 	
 	//根据机构ID查询出功能ID
