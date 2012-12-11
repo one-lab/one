@@ -89,6 +89,9 @@ public class TaskServiceImpl implements TaskService{
 			geRmsTaskAuthRepository.save(taskAuth);
 		}else{
 			geRmsTaskRepository.updateTask(task.getName(), task.getMenuName(), task.getMenuURL(), task.getDes(), task.getParentID(), task.getIsValidate(), task.getIsAsMenu(),task.getFlag(), task.getTaskID());
+			if(!task.getFlag().equals(taskCheck.getFlag())){
+				geRmsTaskAuthRepository.updateTask(task.getFlag(), user.getComCode(), task.getTaskID());
+			}
 		}
 		
 		
