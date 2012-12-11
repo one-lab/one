@@ -47,6 +47,12 @@ public class TaskMenuController {
 	@Post("update/{taskId}")
 	public Reply update(@Param("taskId") String taskId, Invocation inv) {
 		GeRmsTask task = taskService.findTaskByTaskId(taskId);
+		if(task.getParentID() == null){
+			task.setParentName("");
+		}else{
+			task.setParentName(taskService.findNameByTaskId(task.getParentID()));
+		}
+		
 		return Replys.with(task).as(Json.class);
 	}
 	

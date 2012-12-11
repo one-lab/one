@@ -3,6 +3,7 @@ package com.sinosoft.one.ams.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "GE_RMS_TASK")
@@ -13,6 +14,7 @@ public class GeRmsTask {
 	private String menuURL;
 	private String des;
 	private String parentID;
+	private String parentName;
 	private String isValidate;
 	private String flag;
 	private String sysFlag;
@@ -54,6 +56,13 @@ public class GeRmsTask {
 	}
 	public void setParentID(String parentID) {
 		this.parentID = parentID;
+	}
+	@Transient
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 	public String getIsValidate() {
 		return isValidate;

@@ -98,6 +98,11 @@ public class TaskServiceImpl implements TaskService{
 		
 		
 	}
+
+	public String findNameByTaskId(String taskId) {
+		// TODO Auto-generated method stub
+		return geRmsTaskRepository.findNameByTaskId(taskId);
+	}
 	
 
 }

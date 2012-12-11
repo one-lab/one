@@ -50,9 +50,12 @@ public interface GeRmsTaskRepository extends PagingAndSortingRepository<GeRmsTas
 	@SQL("select * from GE_RMS_TASK where taskId in (select taskId from GE_RMS_TASK_AUTH where comcode=?1 or comCode='*')")
 	List<GeRmsTask> findTaskByComCode(String comCode);
 	
-
+	//修改功能
 	@SQL("update GE_RMS_TASK set name = ?1,menuName = ?2,menuurl = ?3,des = ?4,parentId = ?5,isValidate = ?6,isAsMenu = ?7,flag = ?8 where taskID = ?9")
 	void updateTask(String name,String menuName,String menuUrl,String des,String parentId,String isValidate,String isAsMenu,String flag,String taskID);
+	
+	@SQL("select name from GE_RMS_TASK where taskId = ?1")
+	String findNameByTaskId(String taskId);
 
 	
 }
