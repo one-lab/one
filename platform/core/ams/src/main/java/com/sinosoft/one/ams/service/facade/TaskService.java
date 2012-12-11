@@ -13,9 +13,11 @@ public interface TaskService {
 	
 	public void pushTask(NodeEntity nodeEntity, List<GeRmsTask> taskList);
 	
+	//利用递归将全部功能存入NodeEntity对象中
 	public void recursionTask(NodeEntity nodeEntity, String parentId);
 	
-	GeRmsTask findTaskByTaskId(String taskId);
+	public GeRmsTask findTaskByTaskId(String taskId);
 	
+	//新建或修改功能，保存
 	public void save(GeRmsTask task, GeRmsTaskAuth taskAuth);
 }

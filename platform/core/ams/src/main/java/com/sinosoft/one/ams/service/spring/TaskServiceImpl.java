@@ -42,17 +42,18 @@ public class TaskServiceImpl implements TaskService{
 		
 	}
 	
-	//递归功能，并存入nodeEntity
+	//利用递归，将全部功能存入NodeEntity对象中
 	public void recursionTask(NodeEntity nodeEntity, String parentId) {
 		// TODO Auto-generated method stub
 		List<GeRmsTask> taskList;
 		if(parentId != null){
-			 taskList = geRmsTaskRepository.findTaskByParentId(parentId);
+			taskList = geRmsTaskRepository.findTaskByParentId(parentId);
 			
 		}else{
 			//根据parentId为空查询出Task集合
 			taskList = geRmsTaskRepository.findTaskByParentId();
 		}
+		//将功能集合送入NodeEntity对象保存
 		pushTask(nodeEntity, taskList);
 		if (taskList != null)
 			for (NodeEntity ne : nodeEntity.getChildren()) {
@@ -71,18 +72,23 @@ public class TaskServiceImpl implements TaskService{
 	public void save(GeRmsTask task,GeRmsTaskAuth taskAuth) {
 		// TODO Auto-generated method stub
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
-		geRmsTaskRepository.save(task);
+		GeRmsTask taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
 		
-		taskAuth.setTaskID(task.getTaskID());
-		taskAuth.setOperateUser(user.getUserName());
-		if (task.getFlag().equals("*")) {
-			taskAuth.setComCode("*");
-			taskAuth.setTaskAuthID(task.getTaskID() + "*");
-		} else {
-			taskAuth.setComCode(user.getComCode());
-			taskAuth.setTaskAuthID(task.getTaskID() + user.getComCode());
+		if(taskCheck == null){
+			geRmsTaskRepository.save(task);
+			taskAuth.setTaskID(task.getTaskID());
+			taskAuth.setOperateUser(user.getUserName());
+			if (task.getFlag().equals("*")) {
+				taskAuth.setComCode("*");
+				taskAuth.setTaskAuthID(task.getTaskID() + "*");
+			} else {
+				taskAuth.setComCode(user.getComCode());
+				taskAuth.setTaskAuthID(task.getTaskID() + user.getComCode());
+			}
+			
+			geRmsTaskAuthRepository.save(taskAuth);
 		}
-		geRmsTaskAuthRepository.save(taskAuth);
+		
 		
 	}
 	

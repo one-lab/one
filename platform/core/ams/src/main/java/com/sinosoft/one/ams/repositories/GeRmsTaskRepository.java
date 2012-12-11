@@ -50,4 +50,6 @@ public interface GeRmsTaskRepository extends PagingAndSortingRepository<GeRmsTas
 	@SQL("select * from GE_RMS_TASK where taskId in (select taskId from GE_RMS_TASK_AUTH where comcode=?1 or comCode='*')")
 	List<GeRmsTask> findTaskByComCode(String comCode);
 	
+	@SQL("update GE_RMS_TASK set name = ?1,menuName = ?2,menuurl = ?3,des = ?4,parentId = ?5,")
+	
 }
