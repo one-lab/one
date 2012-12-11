@@ -15,14 +15,8 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 @Path
 public class LoginController {
     @Get("/login")
+    @Post("/login")
     public String loginGet(Invocation inv) {
-        inv.getRequest().getSession().setAttribute("loginName", null);
-        return "login";
+        return "index";
     }
-
-    @Post("/login/userLogin")
-    public String loginPost(Invocation inv) {
-        return "r:account/user/login";
-    }
-
 }
