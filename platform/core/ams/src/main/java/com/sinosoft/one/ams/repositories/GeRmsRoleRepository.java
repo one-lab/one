@@ -11,9 +11,6 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface GeRmsRoleRepository extends PagingAndSortingRepository<GeRmsRole, String> {
 
-	@SQL("select * from GE_RMS_ROLE where roleId = ?1")
-	GeRmsRole findRoleById(String roleId);
-	
 	@SQL("select * from GE_RMS_ROLE where name like ?1")
 	Page<GeRmsRole> findRoleByName(String name, Pageable pageable);
 	
@@ -28,4 +25,9 @@ public interface GeRmsRoleRepository extends PagingAndSortingRepository<GeRmsRol
 	
 	@SQL("select comCode from GE_RMS_ROLE_DESIGNATE where roleId = ?1")
 	List<String> findRoleTypById(String roleId);
+	
+	@SQL("delete GE_RMS_ROLETASK t where t.roleID=?1 and t.taskAuthid in (select taskauthid from ge_rms_task_auth a where a.comCode='*' or a.comcode=?2)")
+	void deleteRoleTask(String roleId,String comCode);
+	
+	
 }

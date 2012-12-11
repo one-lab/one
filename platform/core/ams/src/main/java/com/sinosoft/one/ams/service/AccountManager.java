@@ -92,7 +92,7 @@ public class AccountManager {
 	}
 
 	public GeRmsRole findByRoleId(String roleId) {
-		GeRmsRole role = geRmsRoleRepository.findRoleById(roleId);
+		GeRmsRole role = geRmsRoleRepository.findOne(roleId);
 		return role;
 	}
 	
