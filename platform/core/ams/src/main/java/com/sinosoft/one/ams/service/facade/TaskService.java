@@ -22,4 +22,10 @@ public interface TaskService {
 	public void save(Task task, TaskAuth taskAuth);
 	//查询功能名称
 	public String findNameByTaskId(String taskId);
+	
+	
+	
+	//_---------------------------------------//
+	
+	public List<Task> findAllTasks();
 }

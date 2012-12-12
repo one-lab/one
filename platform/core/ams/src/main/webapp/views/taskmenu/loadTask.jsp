@@ -25,7 +25,7 @@ $(function(){
 		"json_data":{
 			"ajax":{
 				"type":"post",
-				"url":"${ctx}/taskmenu/task/taskAll"
+				"url":"${ctx}/taskmenu/taskTree"
 			}
 		},
 		"plugins":["themes","json_data","ui"]
@@ -59,26 +59,6 @@ $(function(){
 		$("#selectParent").hide();
 	})
 	fitHeight();
-	//$(".info_form").forms({defaultWidth:70});	
-	$("#treeTow").jstree({ 
-		"themes" : {
-			"dots" : false,
-			"icons" : false
-		},
-		"json_data":{
-			"ajax":{
-				"type":"post",
-				"url":"${ctx}/taskmenu/task/parentTask"
-			}
-		},
-		"plugins":["themes","json_data","ui"]
-	}).bind("select_node.jstree", function (event, data) {
-		var taskId = data.rslt.obj.attr("id");
-		var text = $.trim(data.rslt.obj.children("a").text());
-		$("#parentName").val(text);
-		$(".parentID").val(taskId);
-		$("#rightBox").hide();
-	});
 /*	.bind("is_select", function(){
 		alert($(this).attr("id"))
 		$(this).find('.select').removeClass("select");
