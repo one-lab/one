@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
@@ -31,17 +32,37 @@ public class TaskServiceImpl implements TaskService{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	//根据主键查出Task对象
 	public Task findTaskByTaskId(String taskId) {
-		// TODO Auto-generated method stub
-		return null;
+		Task task = geRmsTaskRepository.findOne(taskId);
+		return task;
 	}
 	
-	public String findNameByTaskId(String taskId) {
-//		return geRmsTaskRepository.findNameByTaskId(taskId);
-		return null;
-	}
-	public void save(Task task, TaskAuth taskAuth) {
+	//保存功能和功能授权
+	public void save(Task task,String parentId, TaskAuth taskAuth) {
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		Task taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
 		
+		if(taskCheck == null){
+			task.setSysFlag("RMS");
+			Task parentTask = geRmsTaskRepository.findOne(parentId);
+			task.setParent(parentTask);
+			geRmsTaskRepository.save(task);
+			taskAuth.setTask(task);
+			taskAuth.setOperateUser(user.getUserName());
+			if (task.getFlag().equals("*")) {
+				taskAuth.setComCode("*");
+			} else {
+				taskAuth.setComCode(user.getCompany().getComCode());
+			}
+			System.out.println("check----------1");
+			geRmsTaskAuthRepository.save(taskAuth);
+			System.out.println("check----------2");
+		}else{
+			
+//			geRmsTaskRepository.updateTask(task.getName(), task.getMenuName(), task.getMenuURL(), task.getDes(), task.getParentID(), task.getIsValidate(), task.getIsAsMenu(),task.getFlag(), task.getTaskID());
+		}
 	}
 	
 	//获取所有Task集合
@@ -123,7 +144,7 @@ public class TaskServiceImpl implements TaskService{
 //		return task;
 //	}
 //	
-//	//保存功能和功能授权
+//	
 //	public void save(GeRmsTask task,GeRmsTaskAuth taskAuth) {
 //		User user = (User) inv.getRequest().getSession().getAttribute("user");
 //		GeRmsTask taskCheck = geRmsTaskRepository.findOne(task.getTaskID());

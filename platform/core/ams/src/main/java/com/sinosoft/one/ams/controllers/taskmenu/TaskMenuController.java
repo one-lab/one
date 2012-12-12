@@ -31,9 +31,9 @@ public class TaskMenuController {
 	@Autowired
 	private TaskService taskService;
 	
-	@SuppressWarnings("rawtypes")
-	@Post("taskTree")
+	@Post({"taskTree","parentTask"})
 	public Reply taskAll(Invocation inv) throws Exception {
+		System.out.println("++++++++++++++++++++++++");
 		List<Task>showTasks=taskService.findAllTasks();
 		Map<String, Task> filter = new HashMap<String, Task>();
 		List<Task> topList = new ArrayList<Task>();
@@ -54,38 +54,24 @@ public class TaskMenuController {
 	//根据功能Id得到Task对象，并返回页面
 	@Post("update/{taskId}")
 	public Reply update(@Param("taskId") String taskId, Invocation inv) {
+		
 		Task task = taskService.findTaskByTaskId(taskId);
-//		if(task.getParentID() == null){
-//			task.setParentName("");
-//		}else{
-//			task.setParentName(taskService.findNameByTaskId(task.getParent().getTaskID()));
-//		}
+		
+		if(task.getParent() == null){
+			inv.addModel("parentName", "");
+		}else{
+			inv.addModel("parentName", task.getParent().getName());
+		}
 		
 		return Replys.with(task).as(Json.class);
 	}
 	
-	//获取功能并返回到页面
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Post("parentTask")
-	public Reply parentTask(Invocation inv) throws Exception {
-		
-		NodeEntity nodeEntity = new NodeEntity("RMS000", "权限", "close");
-		taskService.recursionTask(nodeEntity, null);
-		Treeable<NodeEntity> treeable = new Treeable.Builder(nodeEntity.getChildren(), "id", "title", "children", "state").builder();
-		
-		inv.getResponse().setContentType("text/html;charset=UTF-8");
-		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-		render.render(inv.getResponse());
-		return null;
-	}
-	
 	//新建或修改功能，保存
-	@Post("saveTask")
-	public Reply save(Task task, Invocation inv) {
-		
-		task.setSysFlag("RMS");
+	@Post("saveTask/{parentID}")
+	public Reply save(Task task,@Param("parentID")String parentId, Invocation inv) {
+
 		TaskAuth taskAuth = new TaskAuth();
-		taskService.save(task,taskAuth);
+		taskService.save(task,parentId,taskAuth);
 		
 		return Replys.simple().success("success");
 	}
