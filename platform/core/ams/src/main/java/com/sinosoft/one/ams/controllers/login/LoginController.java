@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.service.AccountManager;
+import com.sinosoft.one.ams.service.facade.EmployeeService;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
@@ -14,12 +15,11 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 @Path
 public class LoginController {
 	@Autowired
-	private AccountManager accountManager;
-
+	private EmployeeService  employeeService;
 	@Post
 	public String login(Employe user, Invocation inv) {
 
-		Employe checkUser = accountManager.findByUsername(user.getUserName());
+		Employe checkUser = employeeService.findEmployeByUserCode(user.getUserName());
 
 		if (checkUser != null
 				&& checkUser.getPassword().equals(user.getPassword())) {

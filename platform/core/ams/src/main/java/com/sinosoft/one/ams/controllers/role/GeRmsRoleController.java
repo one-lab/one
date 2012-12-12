@@ -2,7 +2,9 @@ package com.sinosoft.one.ams.controllers.role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -68,8 +70,15 @@ public class GeRmsRoleController {
 		// 根据机构代码查询可见功能
 		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
-		Treeable<NodeEntity> treeable = accountManager.creatTaskTreeAble(
-				rolesTasks, comsTasks);
+		Map<String, Task> filter = new HashMap<String, Task>();
+		List<Task> topList = new ArrayList<Task>();
+		for (Task task : comsTasks) {
+			filter.put(task.getTaskID(), task);
+			if (task.getParent() == null) {
+				topList.add(task);
+			}
+		}
+		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,filter,rolesTasks);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
 		System.out.println(render.getResultForTest());
@@ -88,8 +97,16 @@ public class GeRmsRoleController {
 		// 根据机构代码查询可见功能
 		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
-		Treeable<NodeEntity> treeable = accountManager.creatTaskTreeAble(
-				rolesTasks, comsTasks);
+		
+		Map<String, Task> filter = new HashMap<String, Task>();
+		List<Task> topList = new ArrayList<Task>();
+		for (Task task : comsTasks) {
+			filter.put(task.getTaskID(), task);
+			if (task.getParent() == null) {
+				topList.add(task);
+			}
+		}
+		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,filter,rolesTasks);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
 		System.out.println(render.getResultForTest());
@@ -122,5 +139,37 @@ public class GeRmsRoleController {
 		roleService.updateRole(roleId, comCode, name, des, roleType, Arrays.asList(taskid.split(",")));
 		return null;
 	}
+
+	//-----------------------------------------------------------//
+	/**
+	 * 构建功能树 topTasks父节点 filter所有节点
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public  Treeable<NodeEntity> creatTaskTreeAble(List<Task> topTasks,Map<String,Task> filter,List<Task>checkedTask){
+		List<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
+		nodeEntitys=creatSubNode(topTasks, filter,checkedTask);
+		Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").classField("classField").urlField("urlField").builder();
+		return treeable;
+	}
 	
+	List<NodeEntity> creatSubNode(List<Task> topTasks,Map<String,Task> filter,List<Task>checkedTask){
+		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
+		for (Task geRmsTask : topTasks) {
+			if(!filter.containsKey(geRmsTask.getTaskID()))
+                continue;
+				NodeEntity nodeEntity = new NodeEntity();
+				nodeEntity.setId(geRmsTask.getTaskID());
+				nodeEntity.setTitle(geRmsTask.getName());
+				for (Task checkTask : checkedTask) {
+					if(geRmsTask.getTaskID().toString().equals(checkTask.getTaskID().toString())){
+						nodeEntity.setClassField("jstree-checked");
+					}
+				}
+				if(!geRmsTask.getChildren().isEmpty()){
+					nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter,checkedTask));
+				}
+				nodeEntitys.add(nodeEntity);
+			}
+		return nodeEntitys;
+	}
 }
