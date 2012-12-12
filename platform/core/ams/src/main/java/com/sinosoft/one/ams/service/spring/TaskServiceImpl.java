@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.support.TaskUtils;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Employe;
@@ -60,8 +61,19 @@ public class TaskServiceImpl implements TaskService{
 			geRmsTaskAuthRepository.save(taskAuth);
 			System.out.println("check----------2");
 		}else{
+			Task parentTask = geRmsTaskRepository.findOne(parentId);
+//			geRmsTaskRepository.updateTask(task.getName(), task.getMenuName(), task.getMenuURL(), task.getDes(), parentTask.getTaskID(), task.getIsValidate(), task.getIsAsMenu(),task.getFlag(), task.getTaskID());
 			
-//			geRmsTaskRepository.updateTask(task.getName(), task.getMenuName(), task.getMenuURL(), task.getDes(), task.getParentID(), task.getIsValidate(), task.getIsAsMenu(),task.getFlag(), task.getTaskID());
+			if(task.getFlag() == ""){
+				System.out.println("+++++++++++++++++++"+user.getCompany().getComCode());
+				task.setFlag(user.getCompany().getComCode());
+			}
+//			taskAuth = geRmsTaskAuthRepository.findTaskAuthByComCode(user.getCompany().getComCode(), task.getTaskID());
+			System.out.println(taskAuth+"+++++++++++++==============");
+			if(!task.getFlag().equals(taskAuth.getComCode())){
+				geRmsTaskAuthRepository.updateTaskAuth(task.getFlag(), user.getCompany().getComCode(), task.getTaskID());
+			}
+			
 		}
 	}
 	

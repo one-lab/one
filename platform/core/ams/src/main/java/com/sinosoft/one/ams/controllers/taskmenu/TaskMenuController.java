@@ -57,12 +57,6 @@ public class TaskMenuController {
 		
 		Task task = taskService.findTaskByTaskId(taskId);
 		
-		if(task.getParent() == null){
-			inv.addModel("parentName", "");
-		}else{
-			inv.addModel("parentName", task.getParent().getName());
-		}
-		
 		return Replys.with(task).as(Json.class);
 	}
 	

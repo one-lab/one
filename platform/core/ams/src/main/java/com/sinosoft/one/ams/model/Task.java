@@ -15,9 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 
 /**
@@ -278,7 +281,7 @@ public class Task implements java.io.Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	@XmlTransient
-	@JsonIgnore
+	@JSONField(serialize=false)
 	public List<ExcPower> getExcPowers() {
 		return this.excPowers;
 	}
@@ -295,7 +298,7 @@ public class Task implements java.io.Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	@XmlTransient
-	@JsonIgnore
+	@JSONField(serialize=false)
 	public List<BusPower> getBusPowers() {
 		return this.busPowers;
 	}
@@ -312,7 +315,7 @@ public class Task implements java.io.Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	@XmlTransient
-	@JsonIgnore
+	@JSONField(serialize=false)
 	public List<TaskAuth> getTaskAuths() {
 		return this.taskAuths;
 	}

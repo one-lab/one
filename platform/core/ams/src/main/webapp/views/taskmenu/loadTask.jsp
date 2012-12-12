@@ -43,7 +43,7 @@ $(function(){
 				$(".name").val(data.name);
 				$(".menuName").val(data.menuName);
 				$(".parentID").val(data.parent.taskID);
-				$(".parentName").val("${parentName}");
+				$(".parentName").val(data.parent.name);
 				$(".menuURL").val(data.menuURL);
 				$(".des").val(data.des);
 				$(".isValidate").val(data.isValidate);
