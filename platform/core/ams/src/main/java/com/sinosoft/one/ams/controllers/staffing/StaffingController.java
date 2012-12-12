@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.sinosoft.one.ams.model.GeRmsBusPower;
-import com.sinosoft.one.ams.model.GeRmsCompany;
-import com.sinosoft.one.ams.model.GeRmsDataRule;
-import com.sinosoft.one.ams.model.GeRmsGroup;
-import com.sinosoft.one.ams.model.GeRmsRole;
-import com.sinosoft.one.ams.model.GeRmsUserPower;
-import com.sinosoft.one.ams.model.User;
+import com.sinosoft.one.ams.model.BusPower;
+import com.sinosoft.one.ams.model.Company;
+import com.sinosoft.one.ams.model.DataRule;
+import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.model.Group;
+import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.service.facade.StuffingService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
@@ -46,8 +46,8 @@ public class StaffingController {
 	public Reply list(@Param("pageNo") int pageNo, @Param("rowNum")int rowNum,Invocation inv) throws Exception{
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		
-		Gridable<User> ga = new Gridable<User>(null);
-		Gridable<User> gridable = stuffingService.getGridable(ga,pageable,userAttribute);
+		Gridable<Employe> ga = new Gridable<Employe>(null);
+		Gridable<Employe> gridable = stuffingService.getGridable(ga,pageable,userAttribute);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 	    Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
@@ -61,8 +61,8 @@ public class StaffingController {
 	public Reply search(@Param("pageNo") int pageNo, @Param("rowNum")int rowNum,@Param("userCode")String userCode,@Param("comCode")String comCode,Invocation inv) throws Exception{
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		
-		Gridable<User> ga = new Gridable<User>(null);
-		Gridable<User> gridable = stuffingService.getGridable(ga,userCode,comCode, pageable, userAttribute);
+		Gridable<Employe> ga = new Gridable<Employe>(null);
+		Gridable<Employe> gridable = stuffingService.getGridable(ga,userCode,comCode, pageable, userAttribute);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 	    Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
@@ -75,8 +75,8 @@ public class StaffingController {
 	@Get("user/{userCode}")
 	public Reply list(@Param("userCode")String userCode,Invocation inv) throws Exception{
 		
-		List<GeRmsCompany> companyList = new ArrayList<GeRmsCompany>();
-		List<GeRmsUserPower> userPowerList = new ArrayList<GeRmsUserPower>();
+		List<Company> companyList = new ArrayList<Company>();
+		List<UserPower> userPowerList = new ArrayList<UserPower>();
 		
 		NodeEntity nodeEntity = new NodeEntity("comCode", "comCName", "close");
 		nodeEntity = stuffingService.getNodeEntity(nodeEntity,userCode,companyList,userPowerList);
@@ -91,7 +91,7 @@ public class StaffingController {
 	@Get("ruleAll/{taskId}/{userPowerId}")
 	public Reply ruleAll(@Param("taskId")String taskId,@Param("userPowerId")String userPowerId,Invocation inv) throws Exception {
 		
-		List<GeRmsDataRule> ruleAll = stuffingService.getRuleAll(userPowerId, taskId);
+		List<DataRule> ruleAll = stuffingService.getRuleAll(userPowerId, taskId);
 		
 		return Replys.with(ruleAll).as(Json.class);
 	}
@@ -102,7 +102,7 @@ public class StaffingController {
 		
 		String[]ruleIdArr = ruleIdStr.split(",");
 		String[]paramArr = paramStr.split(",");
-		GeRmsBusPower busPower = new GeRmsBusPower();
+		BusPower busPower = new BusPower();
 		
 		String result = stuffingService.saveBusPower(busPower, ruleIdArr, paramArr, userPowerId, taskId);
 		
@@ -127,14 +127,14 @@ public class StaffingController {
 	//查询机构的用户组，并返回页面
 	@Get("group/{comCode}")
 	public Reply groupList(@Param("comCode")String comCode,Invocation inv){
-		List<GeRmsGroup> groupList = stuffingService.findGroupByComCode(comCode);
+		List<Group> groupList = stuffingService.findGroupByComCode(comCode);
 		return Replys.with(groupList).as(Json.class);
 	}
 	
 	//查询用户组的角色，并返回页面
 	@Get("roleList/{groupId}")
 	public Reply role(@Param("groupId")String groupId,Invocation  inv){
-		List<GeRmsRole> groupRoleList = stuffingService.findRoleByGroupId(groupId);
+		List<Role> groupRoleList = stuffingService.findRoleByGroupId(groupId);
 		System.out.println(groupId);
 		System.out.println(groupRoleList.size()+"+++++++++++++++++++++++++++++++++");
 		return Replys.with(groupRoleList).as(Json.class);

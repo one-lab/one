@@ -7,19 +7,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.sinosoft.one.ams.model.GeRmsGroup;
+import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.data.jade.annotation.SQL;
 
-public interface GeRmsGroupRepository extends PagingAndSortingRepository<GeRmsGroup, String>{
+public interface GeRmsGroupRepository extends PagingAndSortingRepository<Group, String>{
 	
 	@SQL("select * from GE_RMS_GROUP where name like ?1")
-	Page<GeRmsGroup> findGroupByName(String name,Pageable pageable);
+	Page<Group> findGroupByName(String name,Pageable pageable);
 	
 	@SQL("select * from GE_RMS_GROUP where groupId = ?1")
-	GeRmsGroup findGroupByGroupId(String groupId);
+	Group findGroupByGroupId(String groupId);
 	
 	@SQL("select * from GE_RMS_GROUP where isvalidate = '1'")
-	Page<GeRmsGroup> findAllGroup(Pageable pageable);
+	Page<Group> findAllGroup(Pageable pageable);
 	
 	@SQL("update GE_RMS_GROUP set isvalidate='0' where groupid = ?1")
 	void updateIsvalidateByGroupId(String groupId);
@@ -31,6 +31,6 @@ public interface GeRmsGroupRepository extends PagingAndSortingRepository<GeRmsGr
 	void insertGroup(String groupId,String name,String des,String comcode,Date createTime,String createUser);
 	
 	@SQL("select * from GE_RMS_GROUP where comCode = ?1")
-	List<GeRmsGroup> findGroupByComCode(String comCode);
+	List<Group> findGroupByComCode(String comCode);
 
 }

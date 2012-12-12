@@ -1,4 +1,5 @@
 package com.sinosoft.one.ams.model;
+// 采用工具 Hibernate Tools 3.2.4.GA (sinosoft version) 生成，请勿手工修改。
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,20 +12,22 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-
+/**
+ * POJO类roleTask
+ */
 @Entity
 @Table(name = "GE_RMS_ROLETASK")
-public class GeRmsRoleTask implements java.io.Serializable {
+public class RoleTask implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 属性角色功能ID(RoleTaskID) */
 	private String roleTaskID;
 
 	/** 属性taskAuth */
-	private GeRmsTaskAuth taskAuth;
+	private TaskAuth taskAuth;
 
 	/** 属性role */
-	private GeRmsRole role;
+	private Role role;
 
 	/** 属性是否有效(IsValidate) */
 	private String isValidate;
@@ -35,7 +38,7 @@ public class GeRmsRoleTask implements java.io.Serializable {
 	/**
 	 * 类roleTask的默认构造方法
 	 */
-	public GeRmsRoleTask() {
+	public RoleTask() {
 	}
 
 	/**
@@ -61,14 +64,14 @@ public class GeRmsRoleTask implements java.io.Serializable {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TASKAUTHID")
-	public GeRmsTaskAuth getTaskAuth() {
+	public TaskAuth getTaskAuth() {
 		return this.taskAuth;
 	}
 
 	/**
 	 * 属性taskAuth的setter方法
 	 */
-	public void setTaskAuth(GeRmsTaskAuth taskAuth) {
+	public void setTaskAuth(TaskAuth taskAuth) {
 		this.taskAuth = taskAuth;
 	}
 
@@ -77,14 +80,14 @@ public class GeRmsRoleTask implements java.io.Serializable {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ROLEID")
-	public GeRmsRole getRole() {
+	public Role getRole() {
 		return this.role;
 	}
 
 	/**
 	 * 属性role的setter方法
 	 */
-	public void setRole(GeRmsRole role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 
@@ -119,4 +122,5 @@ public class GeRmsRoleTask implements java.io.Serializable {
 	public void setFlag(String flag) {
 		this.flag = flag;
 	}
+
 }

@@ -3,8 +3,8 @@ package com.sinosoft.one.ams.controllers.taskmenu;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.ams.model.GeRmsTask;
-import com.sinosoft.one.ams.model.GeRmsTaskAuth;
+import com.sinosoft.one.ams.model.Task;
+import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Render;
@@ -46,7 +46,7 @@ public class TaskMenuController {
 	//根据功能Id得到Task对象，并返回页面
 	@Post("update/{taskId}")
 	public Reply update(@Param("taskId") String taskId, Invocation inv) {
-		GeRmsTask task = taskService.findTaskByTaskId(taskId);
+		Task task = taskService.findTaskByTaskId(taskId);
 		return Replys.with(task).as(Json.class);
 	}
 	
@@ -67,10 +67,10 @@ public class TaskMenuController {
 	
 	//新建或修改功能，保存
 	@Post("saveTask")
-	public Reply save(GeRmsTask task, Invocation inv) {
+	public Reply save(Task task, Invocation inv) {
 		
 		task.setSysFlag("RMS");
-		GeRmsTaskAuth taskAuth = new GeRmsTaskAuth();
+		TaskAuth taskAuth = new TaskAuth();
 		taskService.save(task,taskAuth);
 		
 		return Replys.simple().success("success");

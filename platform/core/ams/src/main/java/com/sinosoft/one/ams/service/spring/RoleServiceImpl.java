@@ -8,17 +8,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import com.sinosoft.one.ams.model.GeRmsRole;
-import com.sinosoft.one.ams.model.GeRmsRoleTask;
-import com.sinosoft.one.ams.model.GeRmsTask;
-import com.sinosoft.one.ams.model.GeRmsTaskAuth;
-import com.sinosoft.one.ams.model.User;
+import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.RoleTask;
+import com.sinosoft.one.ams.model.Task;
+import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
 import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
 import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
-import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.ams.service.facade.RoleService;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.mvc.web.Invocation;
@@ -43,36 +41,17 @@ public class RoleServiceImpl implements RoleService{
 	
 	private List<String> roleAttribute = new ArrayList<String>();
 	
-	public Page<GeRmsRole> findRoleByName(String name,  Pageable pageable) {
-		if(name.equals("null")){
-			name = "";
-		}
-		Page<GeRmsRole> page = geRmsRoleRepository.findRoleByName("%"+name+"%",pageable);
-		List<GeRmsRole> roleList = page.getContent();
-		for(GeRmsRole role : roleList){
-			role.setButton("<a href='#' class='set' onclick='openWindow()'>修 改</a><a href='#' class='set' onclick='delRow(this)'>删 除</a>");
-		}
-		return page;
-	}
 
-	public Page<GeRmsRole> findAll(Pageable pageable) {
-		Page<GeRmsRole> page = geRmsRoleRepository.findAll(pageable);
-		List<GeRmsRole> roleAll = page.getContent();
-		for(GeRmsRole role : roleAll){
-			role.setButton("<a href='#' class='set' onclick='openWindow()'>修 改</a><a href='#' class='set' onclick='delRow(this)'>删 除</a>");
-		}
-		return page;
-	}
 	
-	public Page<GeRmsRole> roleList(String groupId,Pageable pageable){
-		Page<GeRmsRole> roleList = geRmsGroupRoleRepository.findByGroupId(groupId,pageable);
+	public Page<Role> roleList(String groupId,Pageable pageable){
+		Page<Role> roleList = geRmsGroupRoleRepository.findByGroupId(groupId,pageable);
 		return roleList;
 	}
 	
 	//查询角色信息
-	public GeRmsRole findRoleById(String roleId){
+	public Role findRoleById(String roleId){
 		//查询角色对象
-		GeRmsRole role = geRmsRoleRepository.findOne(roleId);
+		Role role = geRmsRoleRepository.findOne(roleId);
 		//查询角色类型  default/all
 		List<String> rolesComCodes=geRmsRoleRepository.findRoleTypById(roleId);
 		if(rolesComCodes.size()>0&&rolesComCodes!=null){
@@ -86,8 +65,8 @@ public class RoleServiceImpl implements RoleService{
 		return role;
 	}
 	
-	public Page<GeRmsRole> findRole(String comCode,String name,Pageable pageable){
-		Page<GeRmsRole> page =null;
+	public Page<Role> findRole(String comCode,String name,Pageable pageable){
+		Page<Role> page =null;
 		if(name!=null&&!"".equals(name))
 			page = geRmsRoleRepository.findRoleByName(comCode, name, pageable);
 		else
@@ -96,81 +75,35 @@ public class RoleServiceImpl implements RoleService{
 	}
 	
 	//根据角色ID查询角色关联的功能
-	public List<GeRmsTask> findTaskByRole(String roleId){
+	public List<Task> findTaskByRole(String roleId){
 		//先查询角色关联的授权
-		List<GeRmsTaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByRole(roleId);
+		List<TaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByRole(roleId);
 		List<String> taskIds=new ArrayList<String>();
-		for (GeRmsTaskAuth geRmsTaskAuth : geRmsTaskAuths) {
-			taskIds.add(geRmsTaskAuth.getTaskID());
+		for (TaskAuth geRmsTaskAuth : geRmsTaskAuths) {
+			taskIds.add(geRmsTaskAuth.getTask().getTaskID());
 		}
 		//根据授权获得的功能ID获取功能集合
-		List<GeRmsTask> geRmsTasks =geRmsTaskRepository.findTaskByTaskAuthIds(taskIds);
-		
+		List<Task> geRmsTasks =geRmsTaskRepository.findTaskByTaskAuthIds(taskIds);
 		return geRmsTasks;
 	}
 	
 	//根据机构查询所有可用的功能
-	public List<GeRmsTask> findTaskByComCode(String comCode){
-		List<GeRmsTask>geRmsTasks =geRmsTaskRepository.findTaskByComCode(comCode);
+	public List<Task> findTaskByComCode(String comCode){
+		List<Task>geRmsTasks =geRmsTaskRepository.findTaskByComCode(comCode);
 		return geRmsTasks;
 	}
 
-	public Gridable<GeRmsRole> findAllRole(Gridable<GeRmsRole> gridable,
-			Pageable pageable,List<String> roleAttribute) {
-		// TODO Auto-generated method stub
-		
-		Page<GeRmsRole> page = null;
-		//查询机构下所有可见的角色
-		page = geRmsRoleRepository.findAll(pageable);
-		String button = "<a href='#' class='set' onclick='openWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
-		List<GeRmsRole> geRmsRoles = page.getContent();
-		for (GeRmsRole geRmsRole : geRmsRoles) {
-			geRmsRole.setButton(button);
-		} 
-		gridable.setPage(page);
-		gridable.setIdField("roleID");
-		roleAttribute.add("name");
-		roleAttribute.add("des");
-		roleAttribute.add("createTime");
-		roleAttribute.add("operateTime");
-		roleAttribute.add("button");
-		gridable.setCellListStringField(roleAttribute);
-		
-		return gridable;
-	}
 
-	public Gridable<GeRmsRole> getGridable(Pageable pageable,String groupId,
-			Gridable<GeRmsRole> gridable, List<String> roleAttribute) {
-		// TODO Auto-generated method stub
+	public Gridable<Role> getGridable(Gridable<Role> gridable,
+			String comCode,String name, Pageable pageable) {
 		
-		Page<GeRmsRole> page =  geRmsGroupRoleRepository.findByGroupId(groupId, pageable);
-		
-		gridable.setPage(page);
-		gridable.setIdField("roleID");
-		roleAttribute.add("name");
-		roleAttribute.add("roleID");
-		roleAttribute.add("createTime");
-		roleAttribute.add("operateTime");
-		roleAttribute.add("button");
-		gridable.setCellListStringField(roleAttribute);
-		
-		return gridable;
-	}
-
-	public Gridable<GeRmsRole> getGridable(Gridable<GeRmsRole> gridable,
-			String name, Pageable pageable) {
-		// TODO Auto-generated method stub
-		
-		User user = (User) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getComCode();
-		System.out.println(name);
-		Page<GeRmsRole> page = null;
+		Page<Role> page = null;
 		//查询机构下所有可见的角色
 		page = findRole(comCode,name,pageable);
 		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
-		List<GeRmsRole> geRmsRoles = page.getContent();
-		for (GeRmsRole geRmsRole : geRmsRoles) {
-			geRmsRole.setButton(button);
+		List<Role> geRmsRoles = page.getContent();
+		for (Role geRmsRole : geRmsRoles) {
+			geRmsRole.setFlag(button);
 		} 
 		gridable.setPage(page);
 		gridable.setIdField("roleID");
@@ -186,12 +119,12 @@ public class RoleServiceImpl implements RoleService{
 
 	public void updateRole(String roleId,  String comCode,String name, String des,
 			String roleTpe, List<String> taskids) {
-		GeRmsRole geRmsRole=geRmsRoleRepository.findOne(roleId);
+		Role geRmsRole=geRmsRoleRepository.findOne(roleId);
 		//删除角色关联的功能
 		geRmsRoleRepository.deleteRoleTask(roleId, comCode);
-		List<GeRmsTaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByComCode(comCode, taskids);
-		for (GeRmsTaskAuth geRmsTaskAuth : geRmsTaskAuths) {
-			GeRmsRoleTask geRmsRoleTask=new GeRmsRoleTask();
+		List<TaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByComCode(comCode, taskids);
+		for (TaskAuth geRmsTaskAuth : geRmsTaskAuths) {
+			RoleTask geRmsRoleTask=new RoleTask();
 			geRmsRoleTask.setRole(geRmsRole);
 			geRmsRoleTask.setTaskAuth(geRmsTaskAuth);
 			geRmsRoleTask.setIsValidate("1");
