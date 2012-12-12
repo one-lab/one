@@ -61,14 +61,12 @@ public class JsonManager {
             testEmployeeList.add(testEmployee);
         }
         Page page = new PageImpl(testEmployeeList);
-        Gridable<TestEmployee> gridable = new Gridable<TestEmployee>(page);
-        gridable.setIdField("id");
         testEmployeeAttributes.add("employeeNo");
         testEmployeeAttributes.add("name");
         testEmployeeAttributes.add("company");
         testEmployeeAttributes.add("organization");
         testEmployeeAttributes.add("operation");
-        gridable.setCellListStringField(testEmployeeAttributes);
+        Gridable<TestEmployee> gridable = new Gridable<TestEmployee>(page,"id",testEmployeeAttributes);
         return gridable;
     }
 
