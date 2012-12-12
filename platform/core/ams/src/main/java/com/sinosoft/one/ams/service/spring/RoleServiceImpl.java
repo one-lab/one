@@ -77,19 +77,17 @@ public class RoleServiceImpl implements RoleService{
 	//根据角色ID查询角色关联的功能
 	public List<Task> findTaskByRole(String roleId){
 		//先查询角色关联的授权
-		List<TaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByRole(roleId);
-		List<String> taskIds=new ArrayList<String>();
-		for (TaskAuth geRmsTaskAuth : geRmsTaskAuths) {
-			taskIds.add(geRmsTaskAuth.getTask().getTaskID());
-		}
+		List<String> taskIds=geRmsTaskAuthRepository.findTaskAuthByRole(roleId);
 		//根据授权获得的功能ID获取功能集合
-		List<Task> geRmsTasks =geRmsTaskRepository.findTaskByTaskAuthIds(taskIds);
+//		List<Task> geRmsTasks =geRmsTaskRepository.findTaskByTaskIds(taskIds);
+		List<Task> geRmsTasks=(List<Task>) geRmsTaskRepository.findAll(taskIds);
 		return geRmsTasks;
 	}
 	
 	//根据机构查询所有可用的功能
 	public List<Task> findTaskByComCode(String comCode){
-		List<Task>geRmsTasks =geRmsTaskRepository.findTaskByComCode(comCode);
+		List<String> taskIds=geRmsTaskAuthRepository.findTaskIdByComCode(comCode);
+		List<Task> geRmsTasks=(List<Task>) geRmsTaskRepository.findAll(taskIds);
 		return geRmsTasks;
 	}
 
@@ -111,7 +109,7 @@ public class RoleServiceImpl implements RoleService{
 		roleAttribute.add("des");
 		roleAttribute.add("createTime");
 		roleAttribute.add("operateTime");
-		roleAttribute.add("button");
+		roleAttribute.add("flag");
 		gridable.setCellListStringField(roleAttribute);
 		
 		return gridable;
