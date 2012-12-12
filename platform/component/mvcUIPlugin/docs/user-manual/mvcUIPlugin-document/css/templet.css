@@ -1,0 +1,46 @@
+*{margin:0;padding:0;}
+table{border-collapse:separate;}
+table,td,th{vertical-align:middle;}
+a img{border:none}
+ul{list-style:none;}
+html,body{font-size:12px;font-family:Gerogia,Tahoma, Geneva,Microsoft Yahei,Verdana,"HelveticaNeue",Helvetica,Arial;color:#333;background:#f1efef url(../images/center_bg.jpg) no-repeat center 0}
+.header,.content,.tabs,.footer{width:900px;margin:0 auto}
+.header{padding:48px 0 50px}
+.logo{padding-left:70px;height:52px;line-height:52px;background:url(../images/sinosoft.gif) no-repeat;font-size:30px;font-family:Gerogia,Tahoma, Geneva, sans-serif;font-weight:normal;font-style:italic;letter-spacing: -1px;text-shadow: 1px 1px 1px #FFFFFF;text-transform:uppercase;color:#069}
+.logo b{color:#10307a;font-size:30px;font-family:Arial, Helvetica, sans-serif;font-style:normal}
+.title{padding:0 5px 0 0;font-weight:bold;font-size:20px;font-family:Georgia,serif;line-height:35px;background:url(../images/star.gif) no-repeat;padding:0 0 20px 35px;}
+.code_box,.intr_line{border:#fff 1px solid;border-width:1px 0}
+.introduce,.API,.code_box{margin-bottom:30px;}
+.intr_line{border-color:#ccc}
+.info,introduce{line-height:22px;padding:12px 6px;}
+.info{background:#e9e8e8;}
+.introduce p{padding:6px 0;
+    line-height:22px;}
+.introduce ul{padding:5px 40px;line-height:20px;list-style:disc}
+.API{background:#cdcdcd}
+.API td,.API th{background:#f8f8f8;padding:6px;}
+.API th{color:#000;font-size:14px;background:#fff;}
+.API .even td{background:#f2f2f2}
+.tabs{height:68px;text-align:center;}
+.tabs li{float:left;font-size:20px;border:#ccc 1px solid;border-width:1px 1px 0 1px}
+.tabs li span{float:left;width:1px;height:68px;overflow:hidden;background:url(../images/tabs.gif) no-repeat;cursor:pointer;color:#069}
+.tabs li font{display:block;padding-top:3px;font-size:9px;}
+.tabs .select span{display:block;cursor:default;color:#000}
+.tabs li span.name{width:auto;padding:14px 40px 0 30px;background:none;display:block;height:55px}
+.tabs .select span.name{background:url(../images/select.gif) repeat-x}
+.tabs .on_off{float:right;font-size:14px;border:none;display:block;width:110px}
+.tabs .select b{background:url(../images/lightbulb.gif) no-repeat;margin:6px 6px 0 0;display:block;width:32px;height:32px;float:left}
+.tabs .on_off span.name{padding:3px 20px 0;line-height:normal;height:auto;background:none;cursor:pointer}
+.tabs .on_off font{display:block;width:77px;background:url(../images/on-off.gif) no-repeat -95px 0;height:27px;margin:6px auto 2px}
+.tabs .select font{background-position: 0 0}
+.code_cont{display:none}
+.footer{padding-bottom:30px;text-align:right;letter-spacing: -1px;text-shadow: 1px 1px 1px #FFFFFF;font-family:Helvetica,Arial,sans-serif;color:#555}
+.footer b{font-family:Arial, Helvetica, sans-serif;text-transform: uppercase;}
+.toTop{position:absolute;width:34px;height:34px;right:0;top:50%;background:url(../images/to_top.gif) no-repeat;display:none}
+.toTop:hover{background-position:0 bottom}
+.bread_crumb{padding-bottom:10px;margin-bottom:25px;}
+.bread_crumb a,.bread_crumb span{font-size:14px;border:#c2c2c2 1px dotted;background:url(../images/tabs.gif) repeat-x 0 -15px;padding:6px 10px;color:#333;text-decoration:none;}
+.bread_crumb .select{background-position:0 -30px;border-style:solid}
+.bread_crumb a:hover{color:#10307A;font-weight:bold;border-color:#069;}
+.introduce .directory{list-style:decimal;line-height:26px;padding-top:10px;}
+.directory a{color:#10307A;text-decoration:none;border-bottom:#10307A 1px inset}

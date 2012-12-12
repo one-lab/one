@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>mvcUIPlugin 使用手册</title>
+<link href="css/templet.css" rel="stylesheet" type="text/css" />
+<link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/code/shCore.js"></script>
+<script language="javascript" src="js/code/shBrushXml.js"></script>
+<script language="javascript" src="js/code/shBrushJava.js"></script>
+<script language="javascript" src="js/tips.js"></script>
+<script type="text/javascript">
+$(function(){
+	dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';	
+	dp.SyntaxHighlighter.HighlightAll("code");
+	$("#API > tbody > tr:odd").addClass("even");
+	
+	
+	var i = 1;
+	$("li.on_off").each(function(){		
+		var theID = "on_off" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	i=1
+	$("div.code_cont").each(function(){
+		var theID = "code_cont" + i;
+		$(this).attr("id",theID);
+		i++
+	});
+	
+	$("li.on_off").click(function(){
+		var conID = $(this).attr("id").substring(6,7);
+		var theId = $("#code_cont" + conID);
+		$(this).toggleClass("select");
+		theId.slideToggle("normal")
+	});
+    $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+    var bodyTop = $(window).height()/2
+    $(window).scroll(function(){
+
+        var offsetTop = bodyTop + $(window).scrollTop() +"px";
+        $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+        if($(window).scrollTop() > 10){
+
+            $("#toTop").show();
+        }else{
+            $("#toTop").hide();
+        }
+    });
+    $("#toTop").click(function(){toTop()});
+});
+function toTop(){
+    $("#toTop").hide();
+    $("html,body").animate({scrollTop: $("body").offset().top},500);
+}
+</script>
+<style>
+.new{padding:10px;line-height:22px;}
+.img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+.new span{color:#F30;font-weight:bold;padding:0 4px;}
+#next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+/*customTip*/
+.example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+.text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+.email_ex{padding:4px 6px;text-align:center;color:#333}
+.email_ex a{color:#005590}
+</style>
+</head>
+
+<body>
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="header">
+
+	<h1 class="logo"><b>Sinosoft</b> mvcUIPlugin (V1.0.1)</h1>
+    <h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+    >
+    <span class="select">UI插件</span>
+</div>
+<div class="content">
+    <div class="title">
+        UI插件
+    </div>
+</div>
+<div class="content">
+    <div class="introduce">
+        <p>UI插件可以把后台数据转换成json（或者xml）格式之后，再传到前端页面以供显示</p>
+        <p>json格式的数据有两种形式：tree和grid，分别对应于Treeable类和Gridable类；Treeable类和Gridable类都实现了UIable接口</p>
+        <p>UI插件的统一调用格式为：
+        <ul style="list-style-type:decimal">
+            <li>不设置字符集的形式，默认为UTF-8：UIUtil.with(UIable).as(UIType.Json).render(HttpServletResponse)</li>
+            <li>设置字符集的形式：UIUtil.with(UIable).as(UIType.Json).encoding(String).render(HttpServletResponse)</li>
+        </ul>
+        <p>UIType是所要转成的数据类型，有json和xml两种，目前只支持json</p>
+        <p>通过render(HttpServletResponse)方法将转成的json数据返回到前台页面</p>
+        <p>所以，使用UI插件，主要工作就是实例化Treeable类和Gridable类</p>
+    </div>
+    <div class="title">
+        Treeable
+    </div>
+    <div class="introduce">
+        <p>Treeable的构造器使用了builder模式，这样可灵活选择那些可选的属性</p>
+        <p>Treeable.java</p>
+        <textarea name="code" class="java" >
+            package com.sinosoft.one.uiutil;
+
+            import java.util.List;
+
+            public class Treeable<T> implements UIable {
+            //idField对应于后台数据的id属性的属性名
+            private String idField;
+            //titleField对应于后台数据的title属性的属性名
+            private String titleField;
+            //classField对应于后台数据的class属性的属性名
+            private String classField;
+            //urlField对应于后台数据的url属性的属性名
+            private String urlField;
+            //childrenField对应于后台数据的children（子节点 ）属性的属性名
+            private String childrenField;
+            //stateField对应于后台数据的state（close或者open）属性的属性名
+            private String stateField;
+            //content对应于后台数据
+            private List<T> content;
+
+                public static class Builder<T> {
+                    private List<T> content;
+                        private String idField;
+                        private String titleField;
+                        private String childrenField;
+                        private String stateField;
+                        private String classField;
+                        private String urlField;
+
+                        public Builder(List<T> content, String idField, String titleField, String childrenField, String stateField) {
+                            this.content = content;
+                            this.idField = idField;
+                            this.titleField = titleField;
+                            this.childrenField = childrenField;
+                            this.stateField = stateField;
+                            }
+
+                            public Builder classField(String val) {
+                            classField = val;
+                            return this;
+                            }
+
+                            public Builder urlField(String val) {
+                            urlField = val;
+                            return this;
+                            }
+
+                            public Treeable builder() {
+                            return new Treeable(this);
+                            }
+                            }
+
+                            private Treeable(Builder builder) {
+                            content = builder.content;
+                            idField = builder.idField;
+                            titleField = builder.titleField;
+                            childrenField = builder.childrenField;
+                            stateField = builder.stateField;
+                            classField = builder.classField;
+                            urlField = builder.urlField;
+                            }
+                            public Render getRender() {
+                            return new TreeRender(new TreeConverter(), this);
+                            }
+                            //getter和setter方法...
+                            }
+
+        </textarea>
+
+
+        <p>使用举例：实例化Treeable</p>
+        <textarea name="code" class="java" >
+            public class JsonManager {
+            private NodeEntity firstNodeEntity, secondNodeEntity, thirdNodeEntity, fourthNodeEntity,
+                               fiveNodeEntity, sixthNodeEntity, seventhNodeEntity;
+            private List<NodeEntity> nodeEntityList1 = new ArrayList<NodeEntity>();
+            private List<NodeEntity> nodeEntityList2 = new ArrayList<NodeEntity>();
+            private List<NodeEntity> nodeEntityList3 = new ArrayList<NodeEntity>();
+            private List<NodeEntity> nodeEntityList4 = new ArrayList<NodeEntity>();
+
+            public Treeable getTreeableData() {
+            //构造各个节点
+            sixthNodeEntity = new NodeEntity("31", "大屯路营业厅", "classA2_1", "www.baiduA2_1.com", "close");
+            seventhNodeEntity = new NodeEntity("32", "北苑路营业厅", "classA2_2", "www.baidu.comA2_2", "close");
+            nodeEntityList4.add(sixthNodeEntity);
+            nodeEntityList4.add(seventhNodeEntity);
+            firstNodeEntity = new NodeEntity("11", "海淀分公司", "classA1", "www.baidu.comA1", "close");
+            secondNodeEntity = new NodeEntity("12", "朝阳分公司", "classA2", "www.baidu.comA2", "close", nodeEntityList4);
+            nodeEntityList1.add(firstNodeEntity);
+            nodeEntityList1.add(secondNodeEntity);
+            thirdNodeEntity = new NodeEntity("1", "财产保险公司北京分公司", "classA", "www.baidu.comA", "close", nodeEntityList1);
+            fourthNodeEntity = new NodeEntity("21", "浦东分公司", "classB1", "www.baidu.comB1", "close");
+            nodeEntityList2.add(fourthNodeEntity);
+            fiveNodeEntity = new NodeEntity("2", "财产保险公司上海分公司", "classB", "www.baidu.comB", "close", nodeEntityList2);
+            nodeEntityList3.add(thirdNodeEntity);
+            nodeEntityList3.add(fiveNodeEntity);
+
+            //以builder方式实例化Treeable,只需传入各属性的属性名即可
+            //NodeEntity各属性与Treeable各属性的对应关系如下
+            //nodeEntityList3::content,id::idField,title::titleField,children::childrenField,state::stateField,
+            //classTag::classField,url::urlField
+            Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList3, "id", "title", "children" ,"state").classField("classTag").urlField("url").builder();
+            return treeable;
+            }
+            }
+        </textarea>
+
+        <p>NodeEntity.java</p>
+        <textarea name="code" class="java" >
+            public class NodeEntity {
+            private String id;
+            private String title;
+            private String classTag;
+            private String url;
+            private List<NodeEntity> children;
+            private String state;
+            //constructor方法，getter和setter方法...
+        </textarea>
+    </div>
+	<div class="title">
+        Gridable
+    </div>
+    <div class="introduce">
+    <p>Gridable有三个属性：id，cell，page</p>
+    <p>Gridable通过String，String[]或者List<String>来存放所要显示的列表的各属性名（也就是cell）</p>
+    <p>page对象对应于后台的数据</p>
+        <textarea name="code" class="java" >
+            package com.sinosoft.one.uiutil;
+
+            import org.springframework.data.domain.Page;
+            import java.util.List;
+
+            public class Gridable<T> implements UIable {
+            //idField对应于后台数据的id属性的属性名
+            private String idField;
+            //cellStringField对应于页面显示列表中各属性的属性名，属性名之间以“,”分隔
+            private String cellStringField;
+            //cellStringArrayField对应于页面显示列表中各属性的属性名，各属性名组成一个String数组
+            private String[] cellStringArrayField;
+            //cellListStringField对应于页面显示列表中各属性的属性名，各属性名组成一个List
+            private List<String> cellListStringField;
+            //page对应于后台的数据
+            private Page page;
+
+                public Gridable(Page page) {
+                this.page = page;
+                }
+                //属性名是List时的构造方法
+                public Gridable(Page page, String idField, List<String> cellListStringField) {
+                    this.page = page;
+                    this.idField = idField;
+                    this.cellListStringField = cellListStringField;
+                    }
+                    //属性名是String数组时的构造方法
+                    public Gridable(Page page, String idField, String[] cellStringArrayField) {
+                    this.page = page;
+                    this.idField = idField;
+                    this.cellStringArrayField = cellStringArrayField;
+                    }
+                    //属性名是string时的构造方法，各属性名之间以逗号分隔
+                    public Gridable(Page page, String idField, String cellStringField) {
+                    this.page = page;
+                    this.idField = idField;
+                    this.cellStringField = cellStringField;
+                    }
+
+                    public Render getRender() {
+                    return new GridRender(new GridConverter(), this);
+                    }
+                    }
+        </textarea>
+
+        <p>使用举例：实例化Gridable</p>
+        <textarea name="code" class="java" >
+            public class JsonManager {
+            private Long id;
+            private BigDecimal employeeNo;
+            private String name;
+            private String company;
+            private String organization;
+            private String operation;
+            private List<TestEmployee> testEmployeeList = new ArrayList<TestEmployee>();
+            private List<String> testEmployeeAttributes = new ArrayList<String>();
+                public Gridable getGridableData() {
+                for (int i = 1; i < 102; i++) {
+                id = 1L + i;
+                employeeNo = BigDecimal.valueOf(1000 + i);
+                name = "王五" + i;
+                company = "山东分公司" + i;
+                organization = "引入机构";
+                operation = "数据设置";
+                TestEmployee testEmployee = new TestEmployee(id, employeeNo, name, company, organization, operation);
+                testEmployeeList.add(testEmployee);
+                }
+                Page page = new PageImpl(testEmployeeList);
+                testEmployeeAttributes.add("employeeNo");
+                testEmployeeAttributes.add("name");
+                testEmployeeAttributes.add("company");
+                testEmployeeAttributes.add("organization");
+                testEmployeeAttributes.add("operation");
+                //实例化Gridable，testEmployeeAttributes参数是各属性名组成的List
+                Gridable<TestEmployee> gridable = new Gridable<TestEmployee>(page,"id",testEmployeeAttributes);
+                    return gridable;
+                }
+             }
+        </textarea>
+
+        <p>TestEmployee.java</p>
+        <textarea name="code" class="java" >
+            package com.sinosoft.one.model;
+
+            import java.math.BigDecimal;
+
+            public class TestEmployee {
+            private Long id;
+            private BigDecimal employeeNo;
+            private String name;
+            private String company;
+            private String organization;
+            private String operation;
+            }
+            //constructor方法，getter和setter方法...
+        </textarea>
+    </div>
+
+</div>
+</div>
+
+</div>
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</body>
+</html>
