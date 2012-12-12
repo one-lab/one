@@ -7,38 +7,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
-import com.sinosoft.one.ams.model.GeRmsRole;
-import com.sinosoft.one.ams.model.GeRmsTask;
+import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 
 
 @Service
 public interface RoleService {
 	
-	Page<GeRmsRole> findRoleByName(String name, Pageable pageable);
-	
-	Page<GeRmsRole> findAll(Pageable pageable);
-	
-	public Page<GeRmsRole> roleList(String groupId,Pageable pageable);
 	
 	//查询角色信息
-	public GeRmsRole findRoleById(String roleId);
+	public Role findRoleById(String roleId);
 	
-	public Page<GeRmsRole> findRole(String comCode,String name,Pageable pageable);
 	
 	//根据角色ID查询角色关联的功能
-	public List<GeRmsTask> findTaskByRole(String roleId);
+	public List<Task> findTaskByRole(String roleId);
 	
 	//根据机构查询所有可用的功能
-	public List<GeRmsTask> findTaskByComCode(String comCode);
-	
-	//查询出所有的角色
-	public Gridable<GeRmsRole> findAllRole(Gridable<GeRmsRole>gridable,Pageable pageable, List<String> roleAttribute);
-	
-	public Gridable<GeRmsRole> getGridable(Pageable pageable,String groupId,Gridable<GeRmsRole> gridable,List<String>roleAttribute);
+	public List<Task> findTaskByComCode(String comCode);
 	
 	//查询机构下所有可见的角色
-	public Gridable<GeRmsRole> getGridable(Gridable<GeRmsRole> gridable,String name,Pageable pageable);
+	public Gridable<Role> getGridable(Gridable<Role> gridable,String comCode,String name,Pageable pageable);
 	
 	//更新角色
 	public void updateRole(String roleid,String comCode,String name,String des,String roleTpe,List<String> taskids);

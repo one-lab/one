@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.sinosoft.one.ams.model.GeRmsExcPower;
+import com.sinosoft.one.ams.model.ExcPower;
 import com.sinosoft.one.data.jade.annotation.SQL;
 
-public interface GeRmsExcPowerRepository extends PagingAndSortingRepository<GeRmsExcPower, String>{
+public interface GeRmsExcPowerRepository extends PagingAndSortingRepository<ExcPower, String>{
 	
 	@SQL("select taskId from GE_RMS_EXCPOWER where powerId = ?1")
 	List<String> findByPowerId(String powerId);

@@ -5,7 +5,7 @@ package com.sinosoft.one.ams.controllers.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.ams.model.User;
+import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -17,9 +17,9 @@ public class LoginController {
 	private AccountManager accountManager;
 
 	@Post
-	public String login(User user, Invocation inv) {
+	public String login(Employe user, Invocation inv) {
 
-		User checkUser = accountManager.findByUsername(user.getUserName());
+		Employe checkUser = accountManager.findByUsername(user.getUserName());
 
 		if (checkUser != null
 				&& checkUser.getPassword().equals(user.getPassword())) {

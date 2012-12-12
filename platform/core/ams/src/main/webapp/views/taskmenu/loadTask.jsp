@@ -25,7 +25,7 @@ $(function(){
 		"json_data":{
 			"ajax":{
 				"type":"post",
-				"url":"${ctx}/taskmenu/task/taskAll"
+				"url":"${ctx}/taskmenu/taskTree"
 			}
 		},
 		"plugins":["themes","json_data","ui"]
@@ -43,11 +43,12 @@ $(function(){
 				$(".name").val(data.name);
 				$(".menuName").val(data.menuName);
 				$(".parentID").val(data.parentID);
+				$(".parentName").val(data.parentName);
 				$(".menuURL").val(data.menuURL);
 				$(".des").val(data.des);
 				$(".isValidate").val(data.isValidate);
 				$(".isAsMenu").val(data.isAsMenu);
-				$(".flag").val(data.flag)
+				$(".flag").val(data.flag);
 			},
 			error:function(){
 				alert("失败！");
@@ -58,26 +59,6 @@ $(function(){
 		$("#selectParent").hide();
 	})
 	fitHeight();
-	//$(".info_form").forms({defaultWidth:70});	
-	$("#treeTow").jstree({ 
-		"themes" : {
-			"dots" : false,
-			"icons" : false
-		},
-		"json_data":{
-			"ajax":{
-				"type":"post",
-				"url":"${ctx}/taskmenu/task/parentTask"
-			}
-		},
-		"plugins":["themes","json_data","ui"]
-	}).bind("select_node.jstree", function (event, data) {
-		var taskId = data.rslt.obj.attr("id");
-		var text = $.trim(data.rslt.obj.children("a").text());
-		$("#parentName").val(text);
-		$(".parentID").val(taskId);
-		$("#rightBox").hide();
-	});
 /*	.bind("is_select", function(){
 		alert($(this).attr("id"))
 		$(this).find('.select').removeClass("select");
@@ -169,7 +150,7 @@ function showRight(){
             <td align="right">菜单名称：</td>
             <td width="144"><input type="text" disabled="disabled"  class="menuName"/></td>
             <td align="right">父功能名称：</td>
-            <td><input type="text" disabled="disabled" id="parentName" /></td>
+            <td><input type="text" disabled="disabled" id="parentName" class="parentName"/></td>
           </tr>
           <tr>
             <td align="right">父功能ID：</td>

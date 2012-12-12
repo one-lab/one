@@ -3,7 +3,7 @@ package com.sinosoft.one.ams.controllers.taskAuth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.ams.model.GeRmsTaskAuth;
+import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.service.facade.TaskAuthService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Render;
@@ -17,7 +17,6 @@ import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
-
 @Path("taskAuth")
 public class TaskAuthController {
 
@@ -53,7 +52,7 @@ public class TaskAuthController {
 	@Post("taskId/{strId}/{comCode}")
 	public Reply result(@Param("strId") String strId,@Param("comCode") String comCode, Invocation inv) {
 		
-		GeRmsTaskAuth taskAuth = new GeRmsTaskAuth();
+		TaskAuth taskAuth = new TaskAuth();
 		//保存当前机构的功能
 		taskAuthService.save(strId,comCode,taskAuth);
 		return Replys.with("success");

@@ -5,13 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.sinosoft.one.ams.model.GeRmsRole;
-import com.sinosoft.one.ams.model.GeRmsTask;
-import com.sinosoft.one.ams.model.User;
+import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.ams.service.facade.RoleService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
@@ -39,33 +38,17 @@ public class GeRmsRoleController {
 	
 	private List<String> roleAttribute = new ArrayList<String>();
 	
-//	@Post("roleList/{groupId}")
-//	@Get("roleList/{groupId}")
-//	public Reply roleList(@Param("groupId") String groupId,
-//			@Param("pageNo") int pageNo, @Param("rowNum") int rowNum,
-//			Invocation inv) throws Exception {
-//
-//		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
-//
-//		Gridable<GeRmsRole> gridable = new Gridable<GeRmsRole>(null);
-//
-//		gridable = roleService.getGridable(pageable, groupId, gridable,
-//				roleAttribute);
-//
-//		inv.getResponse().setContentType("text/html;charset=UTF-8");
-//		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-//		render.render(inv.getResponse());
-//		return null;
-//	}
 
 	// 角色列表
 	@Post({ "rolelist/{name}", "rolelist" })
 	public Reply list(@Param("name") String name, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum, Invocation inv) throws Exception {
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getCompany().getComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 
-		Gridable<GeRmsRole> ga = new Gridable<GeRmsRole>(null);
-		Gridable<GeRmsRole> gridable = roleService.getGridable(ga, name,
+		Gridable<Role> ga = new Gridable<Role>(null);
+		Gridable<Role> gridable = roleService.getGridable(ga,comCode, name,
 				pageable);
 
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
@@ -78,12 +61,12 @@ public class GeRmsRoleController {
 	@Post("findTaskByRole/{roleId}")
 	public Reply findTaskByRole(@Param("roleId") String roleId, Invocation inv)
 			throws Exception {
-		User user = (User) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getComCode();
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getCompany().getComCode();
 		// 根据角色ID查询角色关联功能
-		List<GeRmsTask> rolesTasks = roleService.findTaskByRole(roleId);
+		List<Task> rolesTasks = roleService.findTaskByRole(roleId);
 		// 根据机构代码查询可见功能
-		List<GeRmsTask> comsTasks = roleService.findTaskByComCode(comCode);
+		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
 		Treeable<NodeEntity> treeable = accountManager.creatTaskTreeAble(
 				rolesTasks, comsTasks);
@@ -98,12 +81,12 @@ public class GeRmsRoleController {
 	@Post("findTask")
 	public Reply findTask(Invocation inv)
 			throws Exception {
-		User user = (User) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getComCode();
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getCompany().getComCode();
 		// 根据角色ID查询角色关联功能
-		List<GeRmsTask> rolesTasks =new ArrayList<GeRmsTask>();
+		List<Task> rolesTasks =new ArrayList<Task>();
 		// 根据机构代码查询可见功能
-		List<GeRmsTask> comsTasks = roleService.findTaskByComCode(comCode);
+		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
 		Treeable<NodeEntity> treeable = accountManager.creatTaskTreeAble(
 				rolesTasks, comsTasks);
@@ -114,34 +97,11 @@ public class GeRmsRoleController {
 		return null;
 	}
 	
-	@Post("role/{groupId}")
-	@Get("role/{groupId}")
-	public Reply groupRoleList(@Param("groupId") String groupId,
-			@Param("pageNo") int pageNo, @Param("rowNum") int rowNum,
-			Invocation inv) throws Exception {
-
-		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
-		Page<GeRmsRole> page = accountManager.roleList(groupId, pageable);
-
-		Gridable<GeRmsRole> gridable = new Gridable<GeRmsRole>(page);
-		gridable.setIdField("roleID");
-		roleAttribute.add("name");
-		roleAttribute.add("roleID");
-		roleAttribute.add("createTime");
-		roleAttribute.add("operateTime");
-		roleAttribute.add("button");
-		gridable.setCellListStringField(roleAttribute);
-
-		inv.getResponse().setContentType("text/html;charset=UTF-8");
-		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-		render.render(inv.getResponse());
-		return null;
-	}
 	
 	//查询角色页面 修改/查看页面
 	@Get("findRoleById/{roleId}")
 	public String findRoleById(@Param("roleId") String roleId, Invocation inv) {
-		GeRmsRole role = roleService.findRoleById(roleId);
+		Role role = roleService.findRoleById(roleId);
 		inv.addModel("name", role.getName());
 		inv.addModel("des", role.getDes());
 		inv.addModel("roleId", role.getRoleID());
@@ -156,8 +116,8 @@ public class GeRmsRoleController {
 	
 	@Post("update/{roleId}/{name}/{des}/{roleType}/{taskId}")
 	public Reply updateRole(@Param("roleId") String roleId,@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
-		User user = (User) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getComCode();
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getCompany().getComCode();
 		taskid=taskid.substring(0, taskid.length()-1);
 		roleService.updateRole(roleId, comCode, name, des, roleType, Arrays.asList(taskid.split(",")));
 		return null;
