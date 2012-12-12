@@ -278,6 +278,7 @@ public class Task implements java.io.Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	@XmlTransient
+	@JsonIgnore
 	public List<ExcPower> getExcPowers() {
 		return this.excPowers;
 	}
@@ -294,6 +295,7 @@ public class Task implements java.io.Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	@XmlTransient
+	@JsonIgnore
 	public List<BusPower> getBusPowers() {
 		return this.busPowers;
 	}
@@ -310,6 +312,7 @@ public class Task implements java.io.Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	@XmlTransient
+	@JsonIgnore
 	public List<TaskAuth> getTaskAuths() {
 		return this.taskAuths;
 	}
