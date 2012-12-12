@@ -29,7 +29,7 @@ public class TaskMenuController {
 	@SuppressWarnings("rawtypes")
 	@Post("taskAll")
 	public Reply taskAll(Invocation inv) throws Exception {
-
+		
 		NodeEntity nodeEntity = new NodeEntity("RMS001", "权限管理", "close");
 		
 		// 利用递归,将功能存入nodeEntity

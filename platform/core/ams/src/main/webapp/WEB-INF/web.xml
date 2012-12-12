@@ -29,6 +29,6 @@
         <dispatcher>REQUEST</dispatcher>  
         <dispatcher>FORWARD</dispatcher>  
         <dispatcher>INCLUDE</dispatcher>  
-    </filter-mapping>  
+    </filter-mapping>
   
 </web-app>
