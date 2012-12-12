@@ -1,8 +1,11 @@
 package com.sinosoft.one.ams.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "GE_RMS_TASK_AUTH")
@@ -14,6 +17,8 @@ public class GeRmsTaskAuth {
 	private String flag;
 	
 	@Id
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
 	public String getTaskAuthID() {
 		return taskAuthID;
 	}

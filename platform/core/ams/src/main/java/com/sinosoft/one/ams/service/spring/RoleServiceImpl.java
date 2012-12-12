@@ -9,11 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.GeRmsRole;
+import com.sinosoft.one.ams.model.GeRmsRoleTask;
 import com.sinosoft.one.ams.model.GeRmsTask;
 import com.sinosoft.one.ams.model.GeRmsTaskAuth;
 import com.sinosoft.one.ams.model.User;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
 import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
+import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.service.AccountManager;
@@ -24,8 +26,6 @@ import com.sinosoft.one.mvc.web.Invocation;
 @Component
 public class RoleServiceImpl implements RoleService{
 	
-	@Autowired
-	private AccountManager accountManager;
 	
 	@Autowired
 	private GeRmsRoleRepository geRmsRoleRepository;
@@ -35,6 +35,8 @@ public class RoleServiceImpl implements RoleService{
 	private GeRmsTaskRepository geRmsTaskRepository;
 	@Autowired
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
+	@Autowired
+	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
 	@Autowired
 	private Invocation inv;
 	
@@ -70,7 +72,7 @@ public class RoleServiceImpl implements RoleService{
 	//查询角色信息
 	public GeRmsRole findRoleById(String roleId){
 		//查询角色对象
-		GeRmsRole role = geRmsRoleRepository.findRoleById(roleId);
+		GeRmsRole role = geRmsRoleRepository.findOne(roleId);
 		//查询角色类型  default/all
 		List<String> rolesComCodes=geRmsRoleRepository.findRoleTypById(roleId);
 		if(rolesComCodes.size()>0&&rolesComCodes!=null){
@@ -165,7 +167,7 @@ public class RoleServiceImpl implements RoleService{
 		Page<GeRmsRole> page = null;
 		//查询机构下所有可见的角色
 		page = findRole(comCode,name,pageable);
-		String button = "<a href='#' class='set' onclick='openWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
+		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
 		List<GeRmsRole> geRmsRoles = page.getContent();
 		for (GeRmsRole geRmsRole : geRmsRoles) {
 			geRmsRole.setButton(button);
@@ -180,6 +182,21 @@ public class RoleServiceImpl implements RoleService{
 		gridable.setCellListStringField(roleAttribute);
 		
 		return gridable;
+	}
+
+	public void updateRole(String roleId,  String comCode,String name, String des,
+			String roleTpe, List<String> taskids) {
+		GeRmsRole geRmsRole=geRmsRoleRepository.findOne(roleId);
+		//删除角色关联的功能
+		geRmsRoleRepository.deleteRoleTask(roleId, comCode);
+		List<GeRmsTaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByComCode(comCode, taskids);
+		for (GeRmsTaskAuth geRmsTaskAuth : geRmsTaskAuths) {
+			GeRmsRoleTask geRmsRoleTask=new GeRmsRoleTask();
+			geRmsRoleTask.setRole(geRmsRole);
+			geRmsRoleTask.setTaskAuth(geRmsTaskAuth);
+			geRmsRoleTask.setIsValidate("1");
+			geRmsRoleTaskRepository.save(geRmsRoleTask);
+		}
 	}
 	
 }

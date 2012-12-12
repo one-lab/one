@@ -1,6 +1,7 @@
 package com.sinosoft.one.uiutil;
 
 import com.sinosoft.one.uiutil.exception.ConverterException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,6 +20,7 @@ public abstract class AbstractRender<T extends UIable> implements Render {
     private Converter converter;
     private String result;
     private T t;
+    private String encode = "UTF-8";
 
     public AbstractRender(Converter converter, T t) {
         this.converter = converter;
@@ -28,6 +30,7 @@ public abstract class AbstractRender<T extends UIable> implements Render {
     public void render(HttpServletResponse response) throws Exception {
         try {
             log.info("Return the json result to the client.");
+            response.setCharacterEncoding(encode);
             response.getWriter().write(result);
             response.flushBuffer();
         } catch (IOException e) {
@@ -47,7 +50,24 @@ public abstract class AbstractRender<T extends UIable> implements Render {
         return this;
     }
 
+    public Render encoding(String encode) throws ConverterException {
+        if (StringUtils.isBlank(encode)) {
+            log.info("The encoding parameter must not be 'empty string' or 'null'.");
+            throw new ConverterException("The encoding parameter must not be 'empty string' or 'null'.");
+        }
+        setEncode(encode);
+        return this;
+    }
+
     public String getResultForTest() {
         return result;
+    }
+
+    public String getEncode() {
+        return encode;
+    }
+
+    public void setEncode(String encode) {
+        this.encode = encode;
     }
 }

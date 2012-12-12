@@ -39,4 +39,7 @@ public interface RoleService {
 	
 	//查询机构下所有可见的角色
 	public Gridable<GeRmsRole> getGridable(Gridable<GeRmsRole> gridable,String name,Pageable pageable);
+	
+	//更新角色
+	public void updateRole(String roleid,String comCode,String name,String des,String roleTpe,List<String> taskids);
 }

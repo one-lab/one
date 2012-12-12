@@ -1,6 +1,7 @@
 package com.sinosoft.one.uiutil;
 
 import com.sinosoft.one.uiutil.exception.ConverterException;
+import com.sinosoft.one.uiutil.model.NodeEntity;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,0 +1,30 @@
+# Maven
+target/
+*.ser
+*.ec
+
+# IntelliJ Idea
+.idea/
+out/
+*.ipr
+*.iws
+*.iml
+atlassian-ide-plugin.xml
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+
+# Svn
+.svn/
+
+# Other
+bin/
+
+#secret stuff
+*.log
+
+test-output/
+/platform/core/demo/logs
