@@ -111,7 +111,7 @@ function changePass(e){
         	<h3><b class="ac_name">权限管理</b></h3>
             <div>
             	<ul class="nav" id="nav">
-                	<li><a href="${ctx}/views/task/loadTask.jsp"><span>功能菜单管理</span></a></li>
+                	<li><a href="${ctx}/views/taskmenu/loadTask.jsp"><span>功能菜单管理</span></a></li>
                     <li><a href="${ctx}/views/task_auth/loadtaskAuth.jsp"><span>功能授权</span></a></li>
                     <li><a href="${ctx}/views/role/loadRole.jsp"><span>角色管理</span></a>
                     	<ul>

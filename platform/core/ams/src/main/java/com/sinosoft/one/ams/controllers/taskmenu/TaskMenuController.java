@@ -29,7 +29,7 @@ public class TaskMenuController {
 	@SuppressWarnings("rawtypes")
 	@Post("taskAll")
 	public Reply taskAll(Invocation inv) throws Exception {
-
+		
 		NodeEntity nodeEntity = new NodeEntity("RMS001", "权限管理", "close");
 		
 		// 利用递归,将功能存入nodeEntity
@@ -47,6 +47,12 @@ public class TaskMenuController {
 	@Post("update/{taskId}")
 	public Reply update(@Param("taskId") String taskId, Invocation inv) {
 		Task task = taskService.findTaskByTaskId(taskId);
+//		if(task.getParentID() == null){
+//			task.setParentName("");
+//		}else{
+//			task.setParentName(taskService.findNameByTaskId(task.getParent().getTaskID()));
+//		}
+		
 		return Replys.with(task).as(Json.class);
 	}
 	

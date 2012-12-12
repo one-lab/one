@@ -20,4 +20,6 @@ public interface TaskService {
 	
 	//新建或修改功能，保存
 	public void save(Task task, TaskAuth taskAuth);
+	//查询功能名称
+	public String findNameByTaskId(String taskId);
 }

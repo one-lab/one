@@ -35,6 +35,43 @@ public class TaskServiceImpl implements TaskService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+//	public void save(Task task, TaskAuth taskAuth) {
+//		// TODO Auto-generated method stub
+//<<<<<<< HEAD
+//=======
+//		User user = (User) inv.getRequest().getSession().getAttribute("user");
+//		GeRmsTask taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
+//		if(task.getFlag().equals("")){
+//			task.setFlag(user.getComCode());
+//		}
+//		if(taskCheck == null){
+//			geRmsTaskRepository.save(task);
+//			taskAuth.setTaskID(task.getTaskID());
+//			taskAuth.setOperateUser(user.getUserName());
+//			if (task.getFlag().equals("*")) {
+//				taskAuth.setComCode("*");
+//				taskAuth.setTaskAuthID(task.getTaskID() + "*");
+//			} else {
+//				taskAuth.setComCode(user.getComCode());
+//				taskAuth.setTaskAuthID(task.getTaskID() + user.getComCode());
+//			}
+//			
+//			geRmsTaskAuthRepository.save(taskAuth);
+//		}else{
+//			geRmsTaskRepository.updateTask(task.getName(), task.getMenuName(), task.getMenuURL(), task.getDes(), task.getParentID(), task.getIsValidate(), task.getIsAsMenu(),task.getFlag(), task.getTaskID());
+//			if(!task.getFlag().equals(taskCheck.getFlag())){
+//				geRmsTaskAuthRepository.updateTaskAuth(task.getFlag(), user.getComCode(), task.getTaskID());
+//			}
+//		}
+//		
+//>>>>>>> 961820694854296cf69d9822b5b44a369d2ee74b
+//		
+//	}
+
+	public String findNameByTaskId(String taskId) {
+		// TODO Auto-generated method stub
+		return geRmsTaskRepository.findNameByTaskId(taskId);
+	}
 	public void save(Task task, TaskAuth taskAuth) {
 		// TODO Auto-generated method stub
 		

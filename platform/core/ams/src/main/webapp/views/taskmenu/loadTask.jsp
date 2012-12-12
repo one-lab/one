@@ -43,11 +43,12 @@ $(function(){
 				$(".name").val(data.name);
 				$(".menuName").val(data.menuName);
 				$(".parentID").val(data.parentID);
+				$(".parentName").val(data.parentName);
 				$(".menuURL").val(data.menuURL);
 				$(".des").val(data.des);
 				$(".isValidate").val(data.isValidate);
 				$(".isAsMenu").val(data.isAsMenu);
-				$(".flag").val(data.flag)
+				$(".flag").val(data.flag);
 			},
 			error:function(){
 				alert("失败！");
@@ -169,7 +170,7 @@ function showRight(){
             <td align="right">菜单名称：</td>
             <td width="144"><input type="text" disabled="disabled"  class="menuName"/></td>
             <td align="right">父功能名称：</td>
-            <td><input type="text" disabled="disabled" id="parentName" /></td>
+            <td><input type="text" disabled="disabled" id="parentName" class="parentName"/></td>
           </tr>
           <tr>
             <td align="right">父功能ID：</td>
