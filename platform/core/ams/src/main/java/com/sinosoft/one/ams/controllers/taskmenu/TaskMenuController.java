@@ -12,7 +12,6 @@ import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.Render;
 import com.sinosoft.one.ams.utils.uiutil.TreeRender;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
 import com.sinosoft.one.ams.utils.uiutil.UIType;
@@ -60,7 +59,7 @@ public class TaskMenuController {
 		return Replys.with(task).as(Json.class);
 	}
 	
-	//新建或修改功能，保存
+	//新建或修改功能，并保存
 	@Post("saveTask/{parentID}")
 	public Reply save(Task task,@Param("parentID")String parentId, Invocation inv) {
 
