@@ -36,14 +36,14 @@ $(function(){
 		taskId = data.rslt.obj.attr("id");
 		$.ajax({
 			type:"post",
-			url:"${ctx}/taskmenu/task/update/"+taskId,
+			url:"${ctx}/taskmenu/update/"+taskId,
 			dataType:"json",
 			success:function(data){
 				$(".taskID").val(data.taskID);
 				$(".name").val(data.name);
 				$(".menuName").val(data.menuName);
-				$(".parentID").val(data.parentID);
-				$(".parentName").val(data.parentName);
+				$(".parentID").val(data.parent.taskID);
+				$(".parentName").val(data.parent.name);
 				$(".menuURL").val(data.menuURL);
 				$(".des").val(data.des);
 				$(".isValidate").val(data.isValidate);
@@ -59,6 +59,25 @@ $(function(){
 		$("#selectParent").hide();
 	})
 	fitHeight();
+	$("#treeTow").jstree({ 
+		"themes" : {
+			"dots" : false,
+			"icons" : false
+		},
+		"json_data":{
+			"ajax":{
+				"type":"post",
+				"url":"${ctx}/taskmenu/parentTask"
+			}
+		},
+		"plugins":["themes","json_data","ui"]
+	}).bind("select_node.jstree", function (event, data) {
+		var taskId = data.rslt.obj.attr("id");
+		var text = $.trim(data.rslt.obj.children("a").text());
+		$("#parentName").val(text);
+		$(".parentID").val(taskId);
+		$("#rightBox").hide();
+	});
 /*	.bind("is_select", function(){
 		alert($(this).attr("id"))
 		$(this).find('.select').removeClass("select");
@@ -95,14 +114,16 @@ function evevtCheck(){
 		$("#selectParent").show();
 		$("#centerInfo").find("input:not(#saveBtn),select,textarea").removeAttr("disabled");
 	}else{
+		var parentId = $(".parentID").val();
+		
+		alert(parentId);
 		$.ajax({
 			type:"post",
-			url:"${ctx}/taskmenu/task/saveTask",
+			url:"${ctx}/taskmenu/saveTask/"+parentId,
 			data:{
 				taskID:$(".taskID").val(),
 				name:$(".name").val(),
 				menuName:$(".menuName").val(),
-				parentID:$(".parentID").val(),
 				menuURL:$(".menuURL").val(),
 				des:$(".des").val(),
 				isValidate:$(".isValidate").val(),
