@@ -45,11 +45,12 @@ public class TaskServiceImpl implements TaskService{
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
 		Task taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
 		
+		task.setSysFlag("RMS");
+		Task parentTask = geRmsTaskRepository.findOne(parentId);
+		task.setParent(parentTask);
+		geRmsTaskRepository.save(task);
+		
 		if(taskCheck == null){
-			task.setSysFlag("RMS");
-			Task parentTask = geRmsTaskRepository.findOne(parentId);
-			task.setParent(parentTask);
-			geRmsTaskRepository.save(task);
 			taskAuth.setTask(task);
 			taskAuth.setOperateUser(user.getUserName());
 			if (task.getFlag().equals("*")) {
@@ -61,19 +62,29 @@ public class TaskServiceImpl implements TaskService{
 			geRmsTaskAuthRepository.save(taskAuth);
 			System.out.println("check----------2");
 		}else{
-			Task parentTask = geRmsTaskRepository.findOne(parentId);
-//			geRmsTaskRepository.updateTask(task.getName(), task.getMenuName(), task.getMenuURL(), task.getDes(), parentTask.getTaskID(), task.getIsValidate(), task.getIsAsMenu(),task.getFlag(), task.getTaskID());
 			
+			System.out.println("+++++++++++++++++++"+user.getCompany().getComCode());
 			if(task.getFlag() == ""){
-				System.out.println("+++++++++++++++++++"+user.getCompany().getComCode());
 				task.setFlag(user.getCompany().getComCode());
 			}
-//			taskAuth = geRmsTaskAuthRepository.findTaskAuthByComCode(user.getCompany().getComCode(), task.getTaskID());
-			System.out.println(taskAuth+"+++++++++++++==============");
-			if(!task.getFlag().equals(taskAuth.getComCode())){
-				geRmsTaskAuthRepository.updateTaskAuth(task.getFlag(), user.getCompany().getComCode(), task.getTaskID());
+			String taskAuthId1 = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getCompany().getComCode(), task.getTaskID());
+			if(taskAuthId1 != null){
+				TaskAuth ta1 = geRmsTaskAuthRepository.findOne(taskAuthId1);
+				System.out.println(taskAuth+"+++++++++++++==============");
+				if(!task.getFlag().equals(ta1.getComCode()) && task.getFlag().equals("*")){
+					ta1.setComCode("*");
+					geRmsTaskAuthRepository.save(ta1);
+					return ;
+				}
 			}
-			
+			String taskAuthId2 = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId("*", task.getTaskID());
+			TaskAuth ta2 = geRmsTaskAuthRepository.findOne(taskAuthId2);
+			if(!task.getFlag().equals(ta2.getComCode()) && !task.getFlag().equals("*")){
+				ta2.setComCode(user.getCompany().getComCode());
+				geRmsTaskAuthRepository.deleteTaskAuth(task.getTaskID());
+				geRmsTaskAuthRepository.save(ta2);
+				return ;
+			}
 		}
 	}
 	
