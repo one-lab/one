@@ -31,8 +31,8 @@ public interface GeRmsTaskRepository extends PagingAndSortingRepository<Task, St
 //	@SQL("select * from GE_RMS_TASK where parentid=?1 and taskid in(select taskid from GE_RMS_TASK_AUTH where comcode=?2)")
 //	List<Task> findByParentIdTaskId(String parentId,String comCode);
 //	
-//	@SQL("select parentId from GE_RMS_TASK where taskId=?1")
-//	String findParentIdByTaskId(String taskId);
+	@SQL("select parentId from GE_RMS_TASK where taskId=?1")
+	String findParentIdByTaskId(String taskId);
 //	
 //	//根据功能Id查询出功能对象
 //	@SQL("select * from GE_RMS_TASK where taskId = ?1")
