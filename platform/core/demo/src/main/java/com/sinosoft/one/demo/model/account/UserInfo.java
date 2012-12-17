@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 import com.sinosoft.one.demo.model.IdEntity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author seline
@@ -21,7 +22,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserInfo extends IdEntity {
 
-	private String phone;
+    @NotEmpty
+	private String phone = "";
 	private String idcode;
 	private String strGender;
 	private Gender gender;

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ONE-Data使用手册</title>
+    <link href="css/templet.css" rel="stylesheet" type="text/css" />
+    <link href="css/SyntaxHighlighter.css" rel="stylesheet" type="text/css" />
+    <link href="css/tips.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" src="js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="js/code/shCore.js"></script>
+    <script language="javascript" src="js/code/shBrushXml.js"></script>
+    <script language="javascript" src="js/code/shBrushJScript.js"></script>
+    <script language="javascript" src="js/code/shBrushJava.js"></script>
+    <script language="javascript" src="js/tips.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            dp.SyntaxHighlighter.ClipboardSwf = 'js/code/clipboard.swf';
+            dp.SyntaxHighlighter.HighlightAll("code");
+            $("#API > tbody > tr:odd").addClass("even");
+            var i = 1;
+            $("li.on_off").each(function(){
+                var theID = "on_off" + i;
+                $(this).attr("id",theID);
+                i++
+            });
+            i=1
+            $("div.code_cont").each(function(){
+                var theID = "code_cont" + i;
+                $(this).attr("id",theID);
+                i++
+            });
+            $("li.on_off").click(function(){
+                var conID = $(this).attr("id").substring(6,8);
+                var theId = $("#code_cont" + conID);
+                $(this).toggleClass("select");
+                theId.slideToggle("normal")
+            });
+            $("#toTop").tips({type:"toolTip",tipPostion:"right"});
+            var bodyTop = $(window).height()/2
+            $(window).scroll(function(){
+
+                var offsetTop = bodyTop + $(window).scrollTop() +"px";
+                $("#toTop").animate({top : offsetTop },{ duration:600 , queue:false });
+                if($(window).scrollTop() > 10){
+
+                    $("#toTop").show();
+                }else{
+                    $("#toTop").hide();
+                }
+            });
+            $("#toTop").click(function(){toTop()});
+        });
+        function toTop(){
+            $("#toTop").hide();
+            $("html,body").animate({scrollTop: $("body").offset().top},500);
+        }
+    </script>
+    <style>
+        .new{padding:10px;line-height:22px;}
+        .img_ex01{float:right;border:#ccc 1px solid;margin-left:10px;}
+        .new span{color:#F30;font-weight:bold;padding:0 4px;}
+        #next_news{border:#72a89a 1px solid;line-height:24px;height:24px;display:block;width:120px;text-decoration:none;text-align:center;color:#fff;background:#72b0a1}
+            /*customTip*/
+        .example{border-top:#DFDFDF 1px solid;margin-top:8px;padding-top:8px;}
+        .text_ex{border:#DFDFDF 1px solid;line-height:18px;height:18px;padding:2px;width:79%}
+        .email_ex{padding:4px 6px;text-align:center;color:#333}
+        .email_ex a{color:#005590}
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1 class="logo"><b>Sinosoft</b> ONE-Data(V1.0.0)</h1>
+    <h2 align="right" ><font size = "3" color="#10307a">Author ONE-Platform WorkTeam</font></h2>
+</div>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+	<a href="dataProcedure.html">上一页</a>
+	<a href="namedQuery.html">下一页</a>
+    >
+    <span class="select">SqlQuery</span>
+</div>
+<div class="content">
+    <div class="title">
+        SqlQuery配置文件
+    </div>
+    <p>命名查询要遵循”RepositoryClass全限定名.methodName”的命名规则</p>
+    <div class="content">
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>示例代码<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="code_cont" style="display: block">
+                        <textarea name="code" class="java" >
+				package com.sinosoft.one.demo;
+				@Entity
+				@Table(name = "t_user")
+				public class User implements Serializable {
+				
+				}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <p>命名查询语句可以写在资源文件中，接口中只需定义相应的查询方法名即可</p>
+    <div class="content">
+        <ul class="tabs">
+            <li class="select"><span class="name"><b></b>示例代码<font>Example</font></span><span></span></li>
+            <li class="on_off"><span class="name"><font></font>查看源代码</span></li>
+        </ul>
+        <div class="code_box">
+            <div class="intr_line">
+                <div class="info">
+                    <div class="code_cont" style="display: block">
+                        <h3>sql-named-queries.properties文件</h3>
+                        <textarea name="code" class="java" >
+                            com.sinosoft.one.repository.UserRepository.selectAllUser=select * from t_user
+                        </textarea>
+                        <p>需要在applicationContext.xml的&lt;repositories/&gt;元素里指定文件路径：named-queries-location="classpath:META-INF/sqlquery/*</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="content bread_crumb">
+<a href="index.html">首页</a>
+<a href="dataProcedure.html">上一页</a>
+<a href="namedQuery.html">下一页</a>
+<div class="footer">
+Designed by <b>Sinosoft</b>
+</div>
+</div>
+
+</body>
+</html>

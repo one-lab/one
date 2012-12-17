@@ -237,11 +237,12 @@ public class AnnotationConfigValidator implements ParamValidator{
         Validation configValidation = metaData.getAnnotation(Validation.class);
         String errorPath = configValidation.errorPath();
         String[] params = StringUtils.substringsBetween(errorPath, "{", "}");
-        for(String param : params) {
-            String paramValue = inv.getParameter(param);
-            errorPath = errorPath.replace("{" + param + "}", paramValue);
+        if(params != null && params.length > 0) {
+            for(String param : params) {
+                String paramValue = inv.getParameter(param);
+                errorPath = errorPath.replace("{" + param + "}", paramValue);
+            }
         }
-
 		//@todo 验证可能完全是bean级别的。2012年11月13日17:42:02 只需要判断是不是基础类型即可
 //        if(isContainsRules(configValidation)){
 //            Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
@@ -263,6 +264,7 @@ public class AnnotationConfigValidator implements ParamValidator{
                         methodErrorCommonResponse(inv, result, errorPath, inv.getMethodParameterNames());
             }
         } else {
+
 			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
 			if(!result.isEmpty()) {
 				return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
