@@ -150,7 +150,7 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 				NodeEntity nodeEntity = new NodeEntity();
 				nodeEntity.setId(geRmsTask.getTaskID());
 				nodeEntity.setTitle(geRmsTask.getName());
-				if(taskIdList.contains(geRmsTask.getTaskID()) && geRmsTask.getChildren().isEmpty()){
+				if(taskIdList.contains(geRmsTask.getTaskID())){
 					nodeEntity.setClassField("jstree-checked");
 				}else{
 					nodeEntity.setClassField("");

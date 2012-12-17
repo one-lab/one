@@ -74,6 +74,7 @@ public class TaskAuthController {
 		TaskAuth taskAuth = new TaskAuth();
 		//保存当前机构的功能
 		taskAuthService.save(strId,comCode,taskAuth);
+		inv.addModel("comCode", comCode);
 		return Replys.with("success");
 	}
 	
