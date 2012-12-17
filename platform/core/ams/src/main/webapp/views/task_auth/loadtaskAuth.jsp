@@ -17,7 +17,7 @@
 <script type="text/javascript">
 var comCode = "";
 $(function(){
-	$("#treeOne").jstree({ 
+	$("#treeOne").jstree({
 		"themes" : {
 			"theme" : "default",
 			"dots" : false,
