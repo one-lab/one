@@ -23,7 +23,7 @@
 $(function(){
 	$("#grid").Grid({
 		type:"post",
-		url : "${ctx}/user_group/group/grouplist",
+		url : "${ctx}/group/groupAll",
 		dataType: "json",
 		height: 240,
 		colums:[
@@ -50,7 +50,7 @@ function search(){
 		name='null';
 	$("#grid").Grid({
 		type:"post",
-		url : "${ctx}/user_group/group/search/"+name,
+		url : "${ctx}/group/search/"+name,
 		dataType: "json",
 		height: 240,
 		colums:[
@@ -108,30 +108,85 @@ function addGroup(){
 		"hasIFrame":true,
 		"width":600, 
 		"height":450, 
-		"resizing":false
+		"resizing":false,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "def_btn",
+			"value": "保 存",
+			"btFun": function() {
+				var roleIdStr= "";
+				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
+				$obj.find("table").eq(2).find("input[type='checkbox']").each(function(){
+					if($(this).attr("checked")) {
+						var id = $(this).parent().parent().attr("id");
+						roleIdStr =roleIdStr + id.substr(4) +",";
+					}
+				});
+				var name = $obj.find("table").eq(1).find("#name").val();
+				var des = $obj.find("table").eq(1).find("textarea[name]").val();
+				$.ajax({
+					url : "${ctx}/group/insert/"+name+"/"+des+"/"+roleIdStr,
+					type : "post",
+					success : function(data){
+						msgSuccess("", "保存成功！");
+						$("#window1").remove();
+						$(".all_shadow").remove();
+					},
+					error : function(){
+						alert("新增失败！！");
+					}
+				});
+				}
+			}, {
+			"id": "btTwo",
+			"btClass": "def_btn",
+			"value": "取 消",
+			"btFun": function() {
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}
+			},{
+				"id": "btOne",
+				"btClass": "def_btn",
+				"value": "管理组成员",
+				"btFun": function() {
+						$("body").window({
+							"id":"myTest", 
+							"url":"${ctx}/user_group/usergroup/groupId/"+groupId,
+							"title":"管理组成员", 
+							"content":"",
+							"hasIFrame":true,
+							"width":580,
+							"height":470, 
+							"resizing":false
+						});
+					}	
+				}
+		]
 	});
 }
-function delRow(obj){
-	var id = $(obj).parents('tr').attr('id');
-	var groupId = id.substr(4);
-	$.ajax({
-        type:"post",
-        url:"${ctx}/user_group/group/update/"+groupId,
-        dataType:"html",
-        success:function (data) {  
-            if (data == "success") {  
-				var row = $(obj).parents('tr');
-				row.remove();
-            	msgSuccess("", "删除成功！"); 
-            }else{
-            	alert("删除失败！！"); 
-            }
-        },  
-        error:function () {  
-            alert("删除失败！！");  
-        }  
-    });
 
+	function delRow(obj){
+		var id = $(obj).parents('tr').attr('id');
+		var groupId = id.substr(4);
+		$.ajax({
+	        type:"post",
+	        url:"${ctx}/group/del/"+groupId,
+	        dataType:"html",
+	        success:function (data) {
+	        	alert(data);
+	            if (data == "success") {  
+					var row = $(obj).parents('tr');
+					row.remove();
+	            	msgSuccess("", "删除成功！"); 
+	            }else{
+	            	alert("删除失败！"); 
+	            }
+	        },
+	        error:function () {  
+	            alert("删除失败！！！");  
+	        }  
+	    });
 }
 </script>
 </head>

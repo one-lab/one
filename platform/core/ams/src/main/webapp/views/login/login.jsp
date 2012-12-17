@@ -23,7 +23,7 @@
 	});
 	function alignTop(){
 		var marginTop = $("#layout_center").height()/2 - 180;
-		$("#login").css('margin-top',marginTop)
+		$("#login").css('margin-top',marginTop);
 	};
 	function login(){
 		//alert("check");

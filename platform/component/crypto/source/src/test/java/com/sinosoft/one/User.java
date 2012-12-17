@@ -1,9 +1,5 @@
 package com.sinosoft.one;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * User: Morgan
  * Date: 12-11-8
@@ -12,66 +8,46 @@ import java.util.Map;
 public class User {
 
 	private String id;
-	private String id2;
-	private String id3;
+	private String name;
+	private String gender;
 	private Integer age;
-	private Map aa;
-	private List bb = new ArrayList();
-	private boolean cc;
 
-	public String getId2() {
-		return id2;
-	}
+    public User(String id, String name, String gender, Integer age) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+    }
 
-	public void setId2(String id2) {
-		this.id2 = id2;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getId3() {
-		return id3;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setId3(String id3) {
-		this.id3 = id3;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getGender() {
+        return gender;
+    }
 
-	public Integer getAge() {
-		return age;
-	}
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-	public void setAge(Integer age) {
-		this.age = age;
-	}
+    public Integer getAge() {
+        return age;
+    }
 
-	public Map getAa() {
-		return aa;
-	}
-
-	public void setAa(Map aa) {
-		this.aa = aa;
-	}
-
-	public List getBb() {
-		return bb;
-	}
-
-	public void setBb(List bb) {
-		this.bb = bb;
-	}
-
-	public boolean isCc() {
-		return cc;
-	}
-
-	public void setCc(boolean cc) {
-		this.cc = cc;
-	}
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 }

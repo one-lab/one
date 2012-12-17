@@ -2,71 +2,85 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://mvc.one.sinosoft.com/tags/pipe" prefix="mvcpipe"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>用户组新增</title>
-	</head>
-	<script type="text/javascript" src="${ctx}/js/jquery-1.7.1.js"></script>
-	<script type="text/javascript">
-		function addGroup(){
-			var id=$('#id').attr('value');
-			var name=$('.name').attr('value');
-			var des=$('.des').val();
-			if(id ==''){
-				alert("用户组ID不能为空！！");
-				return;
-			}
-			if(name ==''){
-				alert("用户组名称不能为空！！");
-				return;
-			}
-			if(des ==''){
-				alert("描述不能为空！！");
-				return;
-			}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>æéç®¡ç-åè½èåç®¡ç</title>
+<link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.base.css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.tree2.css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.grid.css" />
+<script type="text/javascript" src="${ctx}/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="${ctx}/js/sinosoft.tree.js"></script>
+<script language="javascript" src="${ctx}/js/sinosoft.grid.js"></script>
+<script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
+<script type="text/javascript">
+$(function(){
+ 	$("#treeTow").jstree({ 
+			"themes" : {
+				"theme" : "default",
+				"dots" : false,
+			},
+			"json_data" : {
+				"ajax" : {
+						"url" : "${ctx}/views/common/tree.json"
+				}
+			},
+			"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
+		});
+	fitHeight();
+	
+	
+	$("#grid").Grid({
+		type : "post",
+		url : "${ctx}/role/roleAll",
+		dataType: "json",
+		height: 220,
+		colums:[
+			{id:'1',text:'角色名称',name:"appellation",index:'1',align:'',color:''},
+			{id:'2',text:'角色编号',name:"Status",index:'1',align:'',color:''},
+			{id:'3',text:'创建日期',name:"Version",index:'1',align:'',color:''},
+			{id:'4',text:'修改日期',name:"degrees",index:'1',align:'',color:''}
+		],
+		rowNum:5,
+		sorts:false,
+		pager : true,
+		number:false,
+		multiselect: true
+	});	
+});
+function fitHeight(){
+	var pageHeight = $(document).height() - 102;
+	$("#treeOne").height(pageHeight);
+	$("#treeTow").height(pageHeight);
+};
+</script>
+</head>
 
-			$.ajax({
-				url : "${ctx}/user_group/group/insert",
-				type : "post",
-				data : {
-					groupId : $('#id').val(),
-					name : $('.name').val(),
-					des : $('.des').val()
-				},
-				dataType : "json",
-				success:function (data) {  
-		           alert("新增成功！！");
-		        },
-		        error:function () {  
-		            alert("新增失败！！");  
-		        }
-			});
-
-			
-		}
-	
-	</script>
-	<body>
-		<form>
-			<table border="1">
-				<tr>
-					<td>用户组ID：</td>
-					<td><input id="id"/> </td>
-				</tr>
-				<tr>
-					<td>用户组名称：</td>
-					<td><input class="name"/> </td>
-				</tr>
-				<tr>
-					<td>描述：</td>
-					<td><input class="des"/> </td>
-				</tr>
-			</table>
-			<input type="button" value="提交" onclick="addGroup();">
-		</form>
-	
-	
-	</body>
+<body>
+<table border="0" cellspacing="0" cellpadding="0" class="authorize">
+  <tr>
+    <td width="568" colspan="3" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="info_form add_user">
+      <tr>
+        <td align="right">用户组名称：</td>
+        <td><input type="text" style="width:160px;" id="name"/></td>
+        <td>类型：</td>
+        <td><select name="select2">
+          <option>默认类型</option>
+          <option>所有可见类型</option>
+          </select></td>
+      </tr>
+      <tr>
+        <td align="right">用户组描述：</td>
+        <td colspan="3"><textarea name="textarea" cols="30" rows="1" style="width:90%;"></textarea></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td colspan="3" valign="top">
+    	<div id="grid"></div>
+    </td>
+  </tr>
+</table>
+</body>
 </html>

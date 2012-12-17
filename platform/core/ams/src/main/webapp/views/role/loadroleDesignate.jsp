@@ -1,27 +1,32 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://mvc.one.sinosoft.com/tags/pipe" prefix="mvcpipe"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>权限管理-功能菜单管理</title>
-<link type="text/css" rel="stylesheet" href="../css/sinosoft.base.css" />
-<link type="text/css" rel="stylesheet" href="../css/sinosoft.tree2.css" />
-<link type="text/css" rel="stylesheet" href="../css/sinosoft.grid.css" />
-<link type="text/css" rel="stylesheet" href="../css/sinosoft.message.css" />
-<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
-<script type="text/javascript" src="../js/sinosoft.tree.js"></script>
-<script type="text/javascript" src="../js/sinosoft.mouseoutclick.js"></script>
-<script language="javascript" src="../js/sinosoft.grid.js"></script>
-<script type="text/javascript" src="../js/sinosoft.message.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.base.css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.tree2.css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.grid.css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.message.css" />
+<script type="text/javascript" src="${ctx}/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="${ctx}/js/sinosoft.tree.js"></script>
+<script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
+<script language="javascript" src="${ctx}/js/sinosoft.grid.js"></script>
+<script type="text/javascript" src="${ctx}/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("#treeOne").jstree({ 
+	$("#treeOne").jstree({
 		"themes" : {
 			"theme" : "default",
 			"dots" : false,
 		},
 		"json_data" : {
 		"ajax" : {
-				"url" : "tree.json",
+				"url" : "${ctx}/views/common/tree.json",
 				"data" : function (n) { 
 					return { id : n.attr ? n.attr("id") : 0 }; 
 				}
@@ -31,7 +36,7 @@ $(function(){
 	}).bind("select_node.jstree", function (event, data) {
 		$("#grid").children().remove();
 		$("#grid").Grid({
-			url : "grid3.json",
+			url : "${ctx}/views/common/grid3.json",
 			dataType: "json",
 			height: 'auto',
 			colums:[
@@ -48,7 +53,7 @@ $(function(){
 	});
 	fitHeight();
 	$("#grid").Grid({
-		url : "grid3.json",
+		url : "${ctx}/views/common/grid3.json",
 		dataType: "json",
 		height: 'auto',
 		colums:[

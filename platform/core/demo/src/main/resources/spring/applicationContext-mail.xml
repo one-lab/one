@@ -7,11 +7,7 @@
     <!--邮件发送器-->
     <bean id="MailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
         <property name="host">
-            <value>localhost</value>
-        </property>
-
-        <property name="port">
-            <value>9026</value>
+            <value>smtp.163.com</value>
         </property>
 
         <property name="username">

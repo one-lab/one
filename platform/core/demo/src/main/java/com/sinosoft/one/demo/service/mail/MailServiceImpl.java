@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Intro:
@@ -48,8 +47,6 @@ public class MailServiceImpl implements IMailService {
         mail.setSubject(caption);
         mail.setText(content);
 
-//        Properties properties = System.getProperties();
-//        properties.setProperty("socks.ProxyHost", "127.0.0.1");
         mailSender.send(mail);
     }
 

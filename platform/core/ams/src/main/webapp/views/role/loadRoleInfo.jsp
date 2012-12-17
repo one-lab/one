@@ -13,8 +13,8 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.tree.js"></script>
 <script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript">
- $(function(){
-	$("#treeTow").jstree({ 
+$(function(){
+	$("#updateTreeTow").jstree({ 
 			"themes" : {
 				"theme" : "default",
 				"dots" : false,
@@ -23,7 +23,7 @@
 				
 				"ajax" : {
 						"type":"post",
-						"url" : "${ctx}/role/role/findTaskByRole/"+"${roleId}"
+						"url" : "${ctx}/role/findTaskByRole/"+"${roleId}"
 				}
 			},
 			"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
@@ -46,12 +46,14 @@ function fitHeight(){
       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="info_form">
           <tr>
             <td align="right">角色名称：</td>
-            <td><input type="text" style="width:160px;" id="name" value="${name}"/></td>
-        </tr>
+            <td><input type="text" style="width:160px;" id="updateRoleName" value="${name}"/>
+            	  <input type="text" style="width:160px;" id="updateRoleId" value="${roleId}"/>
+            </td>
+       	  </tr>
           <tr>
             <td align="right">类型：</td>
             <td>
-            	<select name="select">
+            	<select name="select" id="updateRoleType">
            	 		<c:if test="${flag eq 'all'}" >
 							 	<option value="default" >默认</option>
 	                   			<option value="all" selected="selected">所有可见</option>
@@ -66,7 +68,7 @@ function fitHeight(){
           <tr>
             <td align="right">角色描述：</td>
             <td>
-            	<textarea name="textarea" cols="30" rows="4" style="width:160px;">${des}</textarea>
+            	<textarea name="textarea" cols="30" rows="4" style="width:160px;" id="updateRoleDes">${des}</textarea>
             </td>
           </tr>
       </table>
@@ -74,7 +76,7 @@ function fitHeight(){
     <td width="30" valign="top">&nbsp;</td>
     <td width="269" valign="top">
         <div class="title2"><b>权限列表</b></div>
-        <div id="treeTow" class="tree_view"></div>
+        <div id="updateTreeTow" class="tree_view"></div>
     </td>
   </tr>
 </table>

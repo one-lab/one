@@ -16,14 +16,13 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.tree.js"></script>
 <script language="javascript" src="${ctx}/js/sinosoft.grid.js"></script>
 <script language="javascript" src="${ctx}/js/sinosoft.tips.js"></script>
-<script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript" src="${ctx}/js/sinosoft.message.js"></script>
 <script type="text/javascript" src="${ctx}/js/sinosoft.window.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("#grid").Grid({
 		type:"post",
-		url : "${ctx}/role/role/rolelist",
+		url : "${ctx}/role/rolelist",
 		dataType: "json",
 		height: 240,
 		colums:[
@@ -48,7 +47,7 @@ function search(){
 	var name = $("#roleName").val();
 	$("#grid").Grid({
 		type:"post",
-		url : "${ctx}/role/role/rolelist/"+name,
+		url : "${ctx}/role/rolelist/"+name,
 		dataType: "json",
 		height: 240,
 		colums:[
@@ -67,12 +66,13 @@ function search(){
 }
 
 
-function openWindow(th){
+function openUpdateWindow(th){
 	var id=$(th).parent().parent().parent().attr("id").split("_")[1];
 	alert(id);
+	
 	$("body").window({
 		"id":"window1", 
-		"url":"${ctx}/role/role/findRoleById/"+id,
+		"url":"${ctx}/role/findRoleById/"+id,
 		"title":"角色管理", 
 		"content":"",
 		"hasIFrame":true,
@@ -84,9 +84,120 @@ function openWindow(th){
 			"class": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				msgSuccess("", "保存成功！");
+				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
+				var roleid=$obj.find("table").eq(1).find("#updateRoleId").val();
+				var name=$obj.find("table").eq(1).find("#updateRoleName").val();
+				var des=$obj.find("table").eq(1).find("#updateRoleDes").val();
+				var roleType=$obj.find("table").eq(1).find("#updateRoleType").val();
+				var taskid="";
+				$obj.find("#updateTreeTow").find(".jstree-checked").each(function(){
+					taskid=taskid+$(this).attr("id")+",";
+				});
+				alert(name);
+				alert(des);
+				$.ajax({
+					url : "${ctx}/role/update/"+roleid+"/"+name+"/"+des+"/"+roleType+"/"+taskid,
+					type : "post",
+					success : function(data){
+						msgSuccess("", "保存成功！");
+						$("#window1").remove();
+						$(".all_shadow").remove();
+						$("#grid").text("");
+						$("#grid").Grid({
+							type:"post",
+							url : "${ctx}/role/rolelist",
+							dataType: "json",
+							height: 240,
+							colums:[
+								{id:'1',text:'角色名称',name:"appellation",width:'120',index:'1',align:'',color:''},
+								{id:'2',text:'角色描述',name:"Status",width:'90',index:'1',align:'',color:''},
+								{id:'3',text:'创建日期',name:"Version",index:'1',align:'',color:''},
+								{id:'4',text:'修改日期',name:"degrees",index:'1',align:'',color:''},
+								{id:'5',text:'操作',name:"degrees",index:'1',align:'',color:''}
+							],
+							rowNum:10,
+							sorts:false,
+							pager : true,
+							number:true,
+							multiselect: false
+						});	
+					},
+					error : function(){
+						alert("新增失败！！");
+					}
+				});
+			}	
+		}, 
+			{
+				"id": "btTwo",
+				"class": "def_btn",
+				"value": "取 消",
+				"btFun": function() {
 				$("#window1").remove();
 				$(".all_shadow").remove();
+				}	
+			}
+		]
+	});
+};
+
+function openAddWindow(){
+	$("body").window({
+		"id":"window1", 
+		"url":"${ctx}/role/prepareAddRole/",
+		"title":"角色管理", 
+		"content":"",
+		"hasIFrame":true,
+		"width":600, 
+		"height":450, 
+		"resizing":false,
+		"diyButton":[{
+			"id": "btOne",
+			"class": "def_btn",
+			"value": "保 存",
+			"btFun": function() {
+				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
+				var name=$obj.find("table").eq(1).find("#addRoleName").val();
+				var des=$obj.find("table").eq(1).find("#addRoleDes").val();
+				var roleType=$obj.find("table").eq(1).find("#addRoleType").val();
+				var taskid="";
+				$obj.find("#addTreeTow").find(".jstree-checked").each(function(){
+					taskid=taskid+$(this).attr("id")+",";
+				});
+				alert(name);
+				alert(des);
+				$.ajax({
+					url : "${ctx}/role/add/"+name+"/"+des+"/"+roleType+"/"+taskid,
+					type : "post",
+					success : function(data){
+						msgSuccess("", "保存成功！");
+						$("#window1").remove();
+						$(".all_shadow").remove();
+						$("#grid").text("");
+						$("#grid").Grid({
+							type:"post",
+							url : "${ctx}/role/rolelist",
+							dataType: "json",
+							height: 240,
+							colums:[
+								{id:'1',text:'角色名称',name:"appellation",width:'120',index:'1',align:'',color:''},
+								{id:'2',text:'角色描述',name:"Status",width:'90',index:'1',align:'',color:''},
+								{id:'3',text:'创建日期',name:"Version",index:'1',align:'',color:''},
+								{id:'4',text:'修改日期',name:"degrees",index:'1',align:'',color:''},
+								{id:'5',text:'操作',name:"degrees",index:'1',align:'',color:''}
+							],
+							rowNum:10,
+							sorts:false,
+							pager : true,
+							number:true,
+							multiselect: false
+						});	
+						
+					},
+					error : function(){
+						alert("新增失败！！");
+					}
+				});
 				}	
 			}, {
 			"id": "btTwo",
@@ -99,7 +210,8 @@ function openWindow(th){
 			}
 		]
 	});
-};
+	
+}
 function delRow(e){
 	var row = $(e).parents('tr');
 	row.remove();
@@ -115,7 +227,7 @@ function delRow(e){
     <td width="180"><input id="roleName" type="text" value="" class="seach_text" /></td>
     <td width="120"><input type="button" value=" " class="seach_btn" onclick="search();"/></td>
     <td>
-    	<input type="button" class="new_btn" value="增 加" onclick="openWindow()" />
+    	<input type="button" class="new_btn" value="增 加" onclick="openAddWindow()" />
     </td>
   </tr>
   <tr>

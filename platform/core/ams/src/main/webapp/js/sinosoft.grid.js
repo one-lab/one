@@ -561,6 +561,7 @@
 				}else{
 					return false;
 				};
+				
 				rePage();
 			};
 			function rePage(){
@@ -625,7 +626,7 @@
 					dataTemp.rows[k] = {};
        				dataTemp.rows[k].cell = rowCellsTemp;
 				};
-				initGrid(dataTemp,0,end - str,colAttributesTemp);
+				initGrid(_data,0,end - str,colAttributesTemp);
 				var tr = $("table > tbody > tr",$gView);
 				var hideWidth = 0,tdW = 0;
 				tr.each(function(j){

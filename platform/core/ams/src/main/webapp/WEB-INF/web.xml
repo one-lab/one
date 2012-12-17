@@ -16,21 +16,19 @@
 	</context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>
-            classpath*:/spring/applicationContext*.xml
-        </param-value>
+        <param-value>classpath*:/spring/applicationContext*.xml</param-value>
     </context-param>
-    <filter>  
+    
+    <filter>
         <filter-name>MvcFilter</filter-name>  
         <filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>  
-    </filter> 
-  
+    </filter>
     <filter-mapping>  
         <filter-name>MvcFilter</filter-name>  
         <url-pattern>/*</url-pattern>  
         <dispatcher>REQUEST</dispatcher>  
         <dispatcher>FORWARD</dispatcher>  
         <dispatcher>INCLUDE</dispatcher>  
-    </filter-mapping>  
+    </filter-mapping>
   
 </web-app>
