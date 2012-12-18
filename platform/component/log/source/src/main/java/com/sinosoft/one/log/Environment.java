@@ -1,7 +1,11 @@
 package com.sinosoft.one.log;
 
-public enum Environment {
-	
-	PRODUCT,TEST,DEVLEOP;
+public interface Environment {
+
+    public static final String PRODUCT = "PRODUCT";
+
+    public static final String TEST = "TEST";
+
+    public static final String DEVELOP = "DEVELOP";
 
 }

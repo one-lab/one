@@ -63,9 +63,9 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     </bean>
 
 
-    <bean id="logUser" class="com.sinosoft.one.log.UserImpl" />
+    <bean id="logUser" class="com.sinosoft.one.log.test.UserImpl" />
 
-    <bean id="proposalService" class="com.sinosoft.one.log.ProposalServiceImpl" />
+    <bean id="proposalService" class="com.sinosoft.one.log.test.ProposalServiceImpl" />
 
 
 </beans>

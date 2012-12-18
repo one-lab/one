@@ -19,7 +19,6 @@ public interface RoleService {
 	//查询角色信息
 	public Role findRoleById(String roleId);
 	
-	
 	//根据角色ID查询角色关联的功能
 	public List<Task> findTaskByRole(String roleId);
 	
@@ -30,5 +29,7 @@ public interface RoleService {
 	public Gridable<Role> getGridable(Gridable<Role> gridable,String comCode,String name,Pageable pageable);
 	
 	//更新角色
-	public void updateRole(String roleid,String comCode,String name,String des,String roleTpe,List<String> taskids);
+	public void updateRole(String roleid,String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
+	
+	public void addRole(String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
 }

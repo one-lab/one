@@ -33,4 +33,9 @@ public interface GeRmsGroupRepository extends PagingAndSortingRepository<Group, 
 	@SQL("select * from GE_RMS_GROUP where comCode = ?1")
 	List<Group> findGroupByComCode(String comCode);
 
+	
+	
+	//----------------------------------------//
+	@SQL("select groupid from GE_RMS_GROUP where name =?1 and comcode=?2 ")
+	String findGroupIdbyName(String name,String comCode);
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-autowire="byName" default-lazy-init="false">
+
+
+
+	<!-- 异常配置文件加载 -->
+	<bean id="exceptionConfigInit" scope="singleton"
+		class="com.sinosoft.one.exception.ExceptionConfigInit"
+		init-method="init">
+		<property name="exceptionConfigPath" value="config/ExceptionConfig-test.xml" />
+	</bean>
+
+
+
+	<!-- 消息Queue管理器 -->
+	<bean id="queuesHolder" class="com.sinosoft.chinaelife.ebusiness.sys.util.queue.QueuesHolder">
+		<property name="queueSize" value="1000" />
+	</bean>
+
+	<!-- 读出Queue中日志消息写入数据库的任务 -->
+	<bean id="jdbcExceptionWriter"
+		class="com.sinosoft.one.exception.aspect.JdbcExceptionWriter">
+		<property name="queueName" value="exception" />
+		<property name="appName" value="online" />
+		<property name="batchSize" value="1" />
+		<property name="sql">
+			<value>
+				insert into
+				GE_Monitor_AppException(SERIALNO,APPNAME,ExceptionKind,UserExceptionCode,SubUserExceptionCode,ConcreteExceptionCode,ExceptionDesc,ExceptionReason,ExceptionTime,ExceptionGrade)
+				values(:serialNo,:appName,:exceptionKind,:userExceptionCode,:subUserExceptionCode,:concreteExceptionCode,:exceptionDesc,:exceptionReason,:exceptionTime,:exceptionGrade)
+			</value>
+		</property>
+	</bean>
+
+	<!-- 配置执行TraceUtils的Aspect -->
+	<bean
+		class="com.sinosoft.one.exception.aspect.UserExceptionAspect" />
+
+
+	<bean id="exceptionAspectService"
+		class="com.sinosoft.one.exception.service.spring.ExceptionAspectServiceSpringImpl"
+		scope="prototype" />
+
+	<!-- ExceptionQueueAppender 的单例 -->
+	<bean id="exceptionQueueAppender" scope="singleton"
+		class="com.sinosoft.one.exception.aspect.ExceptionQueueAppender">
+		<property name="queueName" value="exception" />
+	</bean>
+
+	<!-- notification的配置 -->
+	<!-- 读出Queue中消息发送到monitor -->
+	<bean id="notificationDealer"
+		class="com.sinosoft.one.ebusiness.sys.notification.NotificationDealer">
+		<property name="queueName" value="notification" />
+		<property name="appName" value="online" />
+		<property name="url">
+			<value>http://localhost:9001/monitor/monitor/notification.do?</value>
+		</property>
+		<property name="param_tel" value="sms.receiver" />
+		<property name="param_email" value="email.receiver" />
+		<property name="param_title" value="title" />
+		<property name="param_content" value="content" />
+	</bean>
+
+
+	<!-- NotificationQueueAppender 的单例 -->
+	<bean id="notificationQueueAppender" scope="singleton"
+		class="com.sinosoft.one.ebusiness.sys.notification.NotificationQueueAppender">
+		<property name="queueName" value="notification" />
+	</bean>
+	<bean id="notificationService"
+		class="com.sinosoft.one.ebusiness.sys.notification.service.spring.NotificationServiceSpringImpl">
+	</bean>
+
+</beans>

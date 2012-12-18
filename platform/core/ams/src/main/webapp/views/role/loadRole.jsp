@@ -90,7 +90,7 @@ function openUpdateWindow(th){
 				var des=$obj.find("table").eq(1).find("#updateRoleDes").val();
 				var roleType=$obj.find("table").eq(1).find("#updateRoleType").val();
 				var taskid="";
-				$obj.find("#treeTow").find(".jstree-checked").each(function(){
+				$obj.find("#updateTreeTow").find(".jstree-checked").each(function(){
 					taskid=taskid+$(this).attr("id")+",";
 				});
 				alert(name);
@@ -102,6 +102,25 @@ function openUpdateWindow(th){
 						msgSuccess("", "保存成功！");
 						$("#window1").remove();
 						$(".all_shadow").remove();
+						$("#grid").text("");
+						$("#grid").Grid({
+							type:"post",
+							url : "${ctx}/role/rolelist",
+							dataType: "json",
+							height: 240,
+							colums:[
+								{id:'1',text:'角色名称',name:"appellation",width:'120',index:'1',align:'',color:''},
+								{id:'2',text:'角色描述',name:"Status",width:'90',index:'1',align:'',color:''},
+								{id:'3',text:'创建日期',name:"Version",index:'1',align:'',color:''},
+								{id:'4',text:'修改日期',name:"degrees",index:'1',align:'',color:''},
+								{id:'5',text:'操作',name:"degrees",index:'1',align:'',color:''}
+							],
+							rowNum:10,
+							sorts:false,
+							pager : true,
+							number:true,
+							multiselect: false
+						});	
 					},
 					error : function(){
 						alert("新增失败！！");
@@ -137,11 +156,48 @@ function openAddWindow(){
 			"class": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				
-				
-				msgSuccess("", "保存成功！");
-				$("#window1").remove();
-				$(".all_shadow").remove();
+				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
+				var name=$obj.find("table").eq(1).find("#addRoleName").val();
+				var des=$obj.find("table").eq(1).find("#addRoleDes").val();
+				var roleType=$obj.find("table").eq(1).find("#addRoleType").val();
+				var taskid="";
+				$obj.find("#addTreeTow").find(".jstree-checked").each(function(){
+					taskid=taskid+$(this).attr("id")+",";
+				});
+				alert(name);
+				alert(des);
+				$.ajax({
+					url : "${ctx}/role/add/"+name+"/"+des+"/"+roleType+"/"+taskid,
+					type : "post",
+					success : function(data){
+						msgSuccess("", "保存成功！");
+						$("#window1").remove();
+						$(".all_shadow").remove();
+						$("#grid").text("");
+						$("#grid").Grid({
+							type:"post",
+							url : "${ctx}/role/rolelist",
+							dataType: "json",
+							height: 240,
+							colums:[
+								{id:'1',text:'角色名称',name:"appellation",width:'120',index:'1',align:'',color:''},
+								{id:'2',text:'角色描述',name:"Status",width:'90',index:'1',align:'',color:''},
+								{id:'3',text:'创建日期',name:"Version",index:'1',align:'',color:''},
+								{id:'4',text:'修改日期',name:"degrees",index:'1',align:'',color:''},
+								{id:'5',text:'操作',name:"degrees",index:'1',align:'',color:''}
+							],
+							rowNum:10,
+							sorts:false,
+							pager : true,
+							number:true,
+							multiselect: false
+						});	
+						
+					},
+					error : function(){
+						alert("新增失败！！");
+					}
+				});
 				}	
 			}, {
 			"id": "btTwo",

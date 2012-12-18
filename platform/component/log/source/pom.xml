@@ -15,16 +15,11 @@
     <url>http://maven.apache.org</url>
 
     <dependencies>
-        <dependency>
-            <groupId>com.sinosoft.one.plugins</groupId>
-            <artifactId>arch4</artifactId>
-            <version>4.2.7</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- TraceFilter 类要用到该jar包 -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- spring begin -->
         <dependency>
@@ -81,7 +76,7 @@
         <dependency>
             <groupId>com.sinosoft.one</groupId>
             <artifactId>util</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -124,6 +119,17 @@
         </dependency>
 
         <!-- db end -->
+        <!--JMX-->
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
 
         <!-- test begin -->
         <dependency>
@@ -134,13 +140,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
 
         <!-- test end -->

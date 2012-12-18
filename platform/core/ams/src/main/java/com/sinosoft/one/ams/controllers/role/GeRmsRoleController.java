@@ -131,12 +131,22 @@ public class GeRmsRoleController {
 		return "addRole";
 	}
 	
+	
+	@Post("add/{name}/{des}/{roleType}/{taskId}")
+	public Reply addRole(@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getCompany().getComCode();
+		taskid=taskid.substring(0, taskid.length()-1);
+		roleService.addRole(comCode, user.getUserCode(), name, des, roleType, Arrays.asList(taskid.split(",")));
+		return null;
+	}
+	
 	@Post("update/{roleId}/{name}/{des}/{roleType}/{taskId}")
 	public Reply updateRole(@Param("roleId") String roleId,@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
 		String comCode = user.getCompany().getComCode();
 		taskid=taskid.substring(0, taskid.length()-1);
-		roleService.updateRole(roleId, comCode, name, des, roleType, Arrays.asList(taskid.split(",")));
+		roleService.updateRole(roleId, comCode,user.getUserCode(), name, des, roleType, Arrays.asList(taskid.split(",")));
 		return null;
 	}
 

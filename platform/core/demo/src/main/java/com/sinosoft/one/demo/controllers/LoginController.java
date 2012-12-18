@@ -2,6 +2,8 @@ package com.sinosoft.one.demo.controllers;
 
 import com.sinosoft.one.demo.model.account.User;
 import com.sinosoft.one.demo.service.account.AccountManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.mvc.web.Invocation;
@@ -18,7 +20,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 @LoginRequired
 @Path
 public class LoginController {
-
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
 	@Autowired
 	private AccountManager accountManager;
 	
@@ -26,6 +28,7 @@ public class LoginController {
 	@Intercepted(deny={"passport"})
 	public String login(Invocation inv) {
 		inv.getRequest().getSession().setAttribute("loginUserName", null);
+        logger.info("aa{}bb{}", 30, 20);
 		return "login";
 	}
 	

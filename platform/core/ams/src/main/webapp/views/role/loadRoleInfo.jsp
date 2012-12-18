@@ -14,7 +14,7 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("#treeTow").jstree({ 
+	$("#updateTreeTow").jstree({ 
 			"themes" : {
 				"theme" : "default",
 				"dots" : false,
@@ -76,7 +76,7 @@ function fitHeight(){
     <td width="30" valign="top">&nbsp;</td>
     <td width="269" valign="top">
         <div class="title2"><b>权限列表</b></div>
-        <div id="treeTow" class="tree_view"></div>
+        <div id="updateTreeTow" class="tree_view"></div>
     </td>
   </tr>
 </table>

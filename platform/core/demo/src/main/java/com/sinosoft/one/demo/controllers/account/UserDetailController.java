@@ -12,6 +12,7 @@ import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 
+import com.sinosoft.one.mvc.web.validation.annotation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -51,6 +52,7 @@ public class UserDetailController {
  * 
  */
 	@Get("update/{id:[0-9]+}")
+    @Post("update/{id:[0-9]+}")
 	public String updateForm(@Param("id") long id, Invocation inv) {
 		inv.addModel("user", accountManager.getUser(id));
 		inv.addModel("userInfo", accountManager.findUserInfo(id));
@@ -59,17 +61,17 @@ public class UserDetailController {
 	}
 
 	@Post("save/{id}")
-	public String save(@Param("id") long id,@Param("groupList") List<Long> gids ,User user,Invocation inv) {
+	public String save(@Param("id") long id,@Param("groupList") List<Long> gids ,@Validation(errorPath = "a:update/{id}") User user,Invocation inv) {
 		
-		List<Group> groupList = new ArrayList<Group>();
-		for (Long long1 : gids) {
-			Group group = new Group(long1, null);
-			groupList.add(group);
-		}
-		
-		user.setGroupList(groupList);
-		user.setCreateTime(new Date());
-		accountManager.updateUser(user);
+//		List<Group> groupList = new ArrayList<Group>();
+//		for (Long long1 : gids) {
+//			Group group = new Group(long1, null);
+//			groupList.add(group);
+//		}
+//
+//		user.setGroupList(groupList);
+//		user.setCreateTime(new Date());
+//		accountManager.updateUser(user);
 
 		inv.addFlash("message", "修改用户" + user.getLoginName() + "成功");
 		return "r:/account/user/list";

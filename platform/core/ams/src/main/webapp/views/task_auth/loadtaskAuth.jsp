@@ -17,7 +17,7 @@
 <script type="text/javascript">
 var comCode = "";
 $(function(){
-	$("#treeOne").jstree({ 
+	$("#treeOne").jstree({
 		"themes" : {
 			"theme" : "default",
 			"dots" : false,
@@ -42,7 +42,7 @@ $(function(){
 				"json_data" : {
 					"ajax" : {
 							"type":"post",
-							"url" : "${ctx}/taskAuth/tasklist/"+(data.rslt.obj.attr("id")),
+							"url" : "${ctx}/taskAuth/tasklist/"+comCode,
 					},
 				},
 				"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
@@ -72,7 +72,24 @@ function saveFunction(){
         dataType:"html",
         success:function (data) {  
             if (data == "success") {  
-            	msgSuccess("", "保存成功！"); 
+            	msgSuccess("", "保存成功！",function(){
+            		$("#treeTow").jstree({ 
+        				"themes" : {
+        					"theme" : "default",
+        					"dots" : false,
+        				},
+        				"json_data" : {
+        					"ajax" : {
+        							"type":"post",
+        							"url" : "${ctx}/taskAuth/tasklist/"+comCode,
+        					},
+        				},
+        				"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
+        			}).bind("loaded.jstree",function(){
+        				checkRms();
+        			});
+            	}); 
+            	
             }
         },  
         error:function () {  
