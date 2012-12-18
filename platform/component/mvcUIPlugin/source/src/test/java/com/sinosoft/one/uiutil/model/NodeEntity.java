@@ -9,6 +9,7 @@ public class NodeEntity {
     private String state;
     private String classField;
     private String urlField;
+    private String typeField;
 
     public NodeEntity() {
 
@@ -87,5 +88,13 @@ public class NodeEntity {
 
     public void setUrlField(String urlField) {
         this.urlField = urlField;
+    }
+
+    public String getTypeField() {
+        return typeField;
+    }
+
+    public void setTypeField(String typeField) {
+        this.typeField = typeField;
     }
 }
