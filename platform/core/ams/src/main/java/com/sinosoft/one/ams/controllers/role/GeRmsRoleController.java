@@ -34,11 +34,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 public class GeRmsRoleController {
 
 	@Autowired
-	private AccountManager accountManager;
-	@Autowired
 	private RoleService roleService;
-	
-	private List<String> roleAttribute = new ArrayList<String>();
 	
 
 	// 角色列表
@@ -70,6 +66,7 @@ public class GeRmsRoleController {
 		// 根据机构代码查询可见功能
 		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
+		roleService.deleteRole(roleId, comCode);
 		Map<String, Task> filter = new HashMap<String, Task>();
 		List<Task> topList = new ArrayList<Task>();
 		for (Task task : comsTasks) {
@@ -125,6 +122,7 @@ public class GeRmsRoleController {
 		inv.addModel("flag", role.getFlag());
 		return "loadRoleInfo";
 	}
+	
 	//准备增加角色 打开增加页面
 	@Get("prepareAddRole")
 	public String prepareAddRole(){
@@ -150,6 +148,7 @@ public class GeRmsRoleController {
 		return null;
 	}
 
+	
 	//-----------------------------------------------------------//
 	/**
 	 * 构建功能树 topTasks父节点 filter所有节点
