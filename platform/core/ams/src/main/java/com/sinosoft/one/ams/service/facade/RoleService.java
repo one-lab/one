@@ -32,4 +32,6 @@ public interface RoleService {
 	public void updateRole(String roleid,String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
 	
 	public void addRole(String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
+	
+	public void deleteRole(String roleId, String comCode);
 }

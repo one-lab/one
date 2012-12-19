@@ -44,18 +44,10 @@ public class RoleServiceImpl implements RoleService{
 	@Autowired
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
 	@Autowired
-	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
-	@Autowired
 	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
-	@Autowired
-	private Invocation inv;
 	
 	private List<String> roleAttribute = new ArrayList<String>();
 	
-	public Page<Role> roleList(String groupId,Pageable pageable){
-		Page<Role> roleList = geRmsGroupRoleRepository.findByGroupId(groupId,pageable);
-		return roleList;
-	}
 	
 	//查询角色信息
 	public Role findRoleById(String roleId){
@@ -74,7 +66,7 @@ public class RoleServiceImpl implements RoleService{
 		return role;
 	}
 	
-	public Page<Role> findRole(String comCode,String name,Pageable pageable){
+	Page<Role> findRole(String comCode,String name,Pageable pageable){
 		Page<Role> page =null;
 		if(name!=null&&!"".equals(name))
 			page = geRmsRoleRepository.findRoleByName(comCode, name, pageable);
@@ -203,6 +195,13 @@ public class RoleServiceImpl implements RoleService{
 		//操作默认用户组 默认类型的才操作
 		if(roleTpe.toString().equals("default".toString()))
 			editDefaultGroup(comCode, userCode, role);
+	}
+	
+	public void deleteRole(String roleId, String comCode){
+		RoleDesignateId roleDesignateId=new RoleDesignateId();
+		roleDesignateId.setComCode(comCode);
+		roleDesignateId.setRoleID(roleId);
+//		 geRmsRoleDesignateRepository.delete(roleDesignateId);
 	}
 	
 	//操作默认用户组

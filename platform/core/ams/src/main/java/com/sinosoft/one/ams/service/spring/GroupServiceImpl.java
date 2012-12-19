@@ -1,5 +1,6 @@
 package com.sinosoft.one.ams.service.spring;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,29 +9,154 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.ams.model.Group;
+import com.sinosoft.one.ams.model.GroupRole;
+import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
+import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
-import com.sinosoft.one.ams.service.AccountManager;
-import com.sinosoft.one.ams.service.facade.UserGroupService;
+import com.sinosoft.one.ams.service.facade.GroupService;
+import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.mvc.web.Invocation;
 
 @Component
-public class UserGroupServiceImpl implements UserGroupService{
+public class GroupServiceImpl implements GroupService{
 	
-	@Autowired
-	private AccountManager accountManager;
 	@Autowired
 	private GeRmsGroupRepository geRmsGroupRepository;
 	@Autowired
+	private GeRmsRoleRepository geRmsRoleRepository;
+	@Autowired
 	private GeRmsGroupRoleRepositoriy geRmsGroupRoleRepositoriy;
-	@Autowired
-	private GeRmsUserGroupRepository geRmsUserGroupRepository;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private Invocation inv;
+	
+	
+	public Gridable<Group> getGroupGridable(Gridable<Group> gridable,
+			String comCode, String name, Pageable pageable) {
+		Page<Group> page = null;
+		//查询机构下所有可见的角色
+		page = findGroup(comCode,name,pageable);
+		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
+		List<Group> groups = page.getContent();
+		for (Group group : groups) {
+			group.setFlag(button);
+		} 
+		gridable.setPage(page);
+		gridable.setIdField("groupID");
+		List<String> roleAttribute = new ArrayList<String>();
+		roleAttribute.add("name");
+		roleAttribute.add("des");
+		roleAttribute.add("createTime");
+		roleAttribute.add("operateTime");
+		roleAttribute.add("flag");
+		gridable.setCellListStringField(roleAttribute);
+		return gridable;
+	}
+	
+	Page<Group> findGroup(String comCode,String name,Pageable pageable){
+		Page<Group> page =null;
+		if(name!=null&&!"".equals(name))
+			page = geRmsGroupRepository.findGroupByName(comCode, "%"+name+"%", pageable);
+		else
+			page = geRmsGroupRepository.findGroup(comCode, pageable);
+		return page;
+	}
+
+	public Group findGroupById(String groupId) {
+		return geRmsGroupRepository.findOne(groupId);	
+	}
+
+	public Gridable<Role> getRoleGridableByGroupId(Gridable<Role> gridable,
+			String groupId,String comCode, Pageable pageable) {
+		Page<Role> page =null;
+		page=geRmsRoleRepository.findRole(comCode, pageable);
+	
+		Group group =geRmsGroupRepository.findOne(groupId);
+		List<String> roleids=new ArrayList<String>();
+		for (GroupRole groupRole : 	group.getGroupRoles()) {
+			roleids.add(groupRole.getRole().getRoleID());
+		}
+		for (Role role: page.getContent()) {
+			for (String string : roleids) {
+			
+				if(role.getRoleID().toString().equals(string)){
+					role.setChecked("true");
+					break;
+				} 
+			}
+		}
+		gridable.setPage(page);
+		gridable.setIdField("roleID");
+		List<String> roleAttribute = new ArrayList<String>();
+		roleAttribute.add("name");
+		roleAttribute.add("des");
+		roleAttribute.add("createTime");
+		roleAttribute.add("operateTime");
+		roleAttribute.add("checked");
+		gridable.setCellListStringField(roleAttribute);
+		return gridable;
+	}
+
+	public void updateGroup(String groupId, String name, String groupType,
+			List<String> roleIds, String des, String comCode, String userCode) {
+		Group group=geRmsGroupRepository.findOne(groupId);
+		if (group!=null) {
+			geRmsGroupRoleRepositoriy.delete(group.getGroupRoles());
+			group.setName(name);
+			group.setOperateUser(userCode);
+			if (des!=null) {
+				group.setDes(des);
+			}
+			if(groupType.equals("all")){
+				group.setComCode("*");
+			}else {
+				group.setComCode(comCode);
+			}
+			List<Role>roles=(List<Role>) geRmsRoleRepository.findAll(roleIds);
+			List<GroupRole>groupRoles=new ArrayList<GroupRole>();
+			for (Role role : roles) {
+				GroupRole groupRole=new GroupRole();
+				groupRole.setGroup(group);
+				groupRole.setRole(role);
+				groupRole.setIsValidate("1");
+				groupRoles.add(groupRole);
+			}
+			group.setGroupRoles(groupRoles);
+			geRmsGroupRepository.save(group);
+		}
+		
+	}
+
+	public void addGroup(String name, String groupType, List<String> roleIds,
+			String des, String comCode, String userCode) {
+		Group group=new Group();
+		group.setName(name);
+		if (des!=null) {
+			group.setDes(des);
+		}
+		group.setCreateUser(userCode);
+		group.setOperateTime(new Date());
+		group.setIsValidate("1");
+		if(groupType.equals("all")){
+			group.setComCode("*");
+		}else {
+			group.setComCode(comCode);
+		}
+		List<GroupRole> groupRoles=new ArrayList<GroupRole>();
+		for (String string : roleIds) {
+			GroupRole groupRole=new GroupRole();
+			groupRole.setGroup(group);
+			groupRole.setIsValidate("1");
+			groupRole.setRole(geRmsRoleRepository.findOne(string));
+			groupRoles.add(groupRole);
+		}
+		group.setGroupRoles(groupRoles);
+		geRmsGroupRepository.save(group);
+	}
+	
+	
+	
 	
 //	//将数据库中的用户组记录保存在Gridable中，并返回
 //	public Gridable<GeRmsGroup> getGridable(Gridable<GeRmsGroup> gridable, Pageable pageable,List<String> groupAttribute) {
@@ -177,7 +303,6 @@ public class UserGroupServiceImpl implements UserGroupService{
 //	
 //	//根据用户Id和用户组Id修改UserGroup表中数据的isvalidate值
 //	public void del(String userCode, String groupId) {
-//		// TODO Auto-generated method stub
 //		
 //		geRmsUserGroupRepository.updateIsvalidateByUserCodeGroupId(userCode, groupId);
 //		

@@ -30,12 +30,19 @@ public interface GeRmsGroupRepository extends PagingAndSortingRepository<Group, 
 	@SQL("insert into GE_RMS_GROUP values(?1,?2,?3,?4,'1','',?5,?6,'','')")
 	void insertGroup(String groupId,String name,String des,String comcode,Date createTime,String createUser);
 	
-	@SQL("select * from GE_RMS_GROUP where comCode = ?1")
-	List<Group> findGroupByComCode(String comCode);
 
 	
 	
 	//----------------------------------------//
+	@SQL("select * from GE_RMS_GROUP where comCode = ?1")
+	Page<Group> findGroup(String comCode ,Pageable pageable);
+	
+	@SQL("select * from GE_RMS_GROUP where comCode = ?1 and name like ?2")
+	Page<Group> findGroupByName(String comCode ,String name,Pageable pageable);
+	
 	@SQL("select groupid from GE_RMS_GROUP where name =?1 and comcode=?2 ")
 	String findGroupIdbyName(String name,String comCode);
+	
+
+	
 }
