@@ -1,7 +1,9 @@
 package com.sinosoft.one.ams.controllers.staffing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -92,7 +94,20 @@ public class StaffingController {
 	public Reply companyList(Invocation inv) throws Exception{
 
 		//查询出全部机构，并出入treeable中
-		Treeable<NodeEntity> treeable = companyService.getTreeable();
+//		Treeable<NodeEntity> treeable = companyService.getTreeable();
+		
+		List<Company> topCompany = new ArrayList<Company>();
+		Map<String,Company> filter = new HashMap<String,Company>();
+		List<Company> showCompany = (List<Company>) companyService.findAll();
+		for(Company company : showCompany){
+			if(company.getUpperComCode() == null){
+				topCompany.add(company);
+			}
+			filter.put(company.getComCode(), company);
+			
+		}
+		
+		Treeable<NodeEntity> treeable =companyService.creatCompanyTreeAble(topCompany, filter);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);

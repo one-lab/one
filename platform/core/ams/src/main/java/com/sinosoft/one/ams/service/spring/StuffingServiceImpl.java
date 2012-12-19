@@ -96,7 +96,6 @@ public class StuffingServiceImpl implements StuffingService{
 		public List<Task> findTaskByRoleIdComCode(String roleIdStr, String comCode) {
 			
 			List<String> taskIdList = new ArrayList<String>();
-			Set<Task> taskSet = new HashSet<Task>();
 			List<Task> taskList = new ArrayList<Task>();
 			
 			String[] roleIds = roleIdStr.split(",");
@@ -113,17 +112,14 @@ public class StuffingServiceImpl implements StuffingService{
 						Task task = geRmsTaskRepository.findOne(taskId);
 						if(task != null){
 							if(task.getParent() == null){
-								taskSet.add(task);
+								if(!taskList.contains(task)){
+									taskList.add(task);
+								}
 							}
 						}
 					}
 				}
 			}
-			
-			if(!taskSet.isEmpty())
-				for(Task task : taskSet){
-					taskList.add(task);
-				}
 			
 			return taskList;
 		}
