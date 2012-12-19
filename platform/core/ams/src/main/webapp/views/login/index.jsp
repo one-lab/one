@@ -118,7 +118,7 @@ function changePass(e){
                         	<li><a href="${ctx}/views/role/loadroleDesignate.jsp"><span>角色指派</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="${ctx}/views/user_group/loadGroup.jsp"><span>用户组管理</span></a></li>
+                    <li><a href="${ctx}/views/group/loadGroup.jsp"><span>用户组管理</span></a></li>
                     <li><a href="${ctx}/views/staffing/loadEmployeesConfig.jsp"><span>人员配置</span></a></li>
                 </ul>
             </div>        	
