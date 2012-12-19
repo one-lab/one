@@ -76,16 +76,18 @@ function toTop(){
 </div>
 <div class="content bread_crumb">
     <a href="index.html">首页</a>
+	<a href="seniorRepository.html">上一页</a>
+	<a href="annotationQuery.html">下一页</a>
     >
-    <span class="select">使用@Sql查询</span>
+    <span class="select">使用@SQL查询</span>
 
 </div>
 <div class="content">
     <div class="title">
-        @Sql查询
+        @SQL查询
     </div>
     <div class="introduce">
-        <p>在使用原生Sql的时候、我们使用@Sql的形式</p>
+        <p>在使用原生SQL的时候、我们使用@SQL的形式</p>
         <p>对于特定场景方案的解决、例如报表、审计等对非单一表获取数据有其独特的优势</p>
     </div>
 
@@ -99,7 +101,7 @@ function toTop(){
         <div class="intr_line">
             <div class="info">
                 <div class="content">
-                    <p>@Sql除了单一传值外、也支持使用对象、数组或集合类型作为参数</p>
+                    <p>@SQL除了单一传值外、也支持使用对象、数组或集合类型作为参数</p>
                     <p>在处理批量更新时，可以使用数组或集合作为参数，并作为第一个参数传入</p>
                     <p>比如List、Set等。集合类型、数组 参数用于处理 in 的情况</p>
                     <p>而且这个数组或集合类型的元素应该是一些数据库列相对应的Java类型</p>
@@ -120,7 +122,7 @@ function toTop(){
 
                           //集合类型参数传值（批量增加），如果参数较多，集合Group必须作为第一个参数传入
                             @SQL("insert into t_code_group values(:group.id,:group.name)")
-                            void addBatchGroupWithAnnoUseEntityParam(param("group") List<Group> group);
+                            void addBatchGroupWithAnnoUseEntityParam(@param("group") List<Group> group);
 
                           //对象方式传值
                             @SQL("delete from t_user where id=:user.id")
@@ -145,7 +147,7 @@ function toTop(){
         SQLQuery
     </div>
     <div class="introduce">
-        <p>@Sql还支持一种在配置文件中配置Sql的方式</p>
+        <p>@SQL还支持一种在配置文件中配置Sql的方式</p>
         <p>这样做实现代码复用、而且易于管理、修改时也方便快捷。</p>
         <p>首先我们要在配置文件添加下面的支持，这里我们用sql-queries-location指定SQLQuery配置文件的路径</p>
 
@@ -227,8 +229,13 @@ function toTop(){
 
 
 <a class="toTop" id="toTop" title="返回顶部" href="javascript:void(0);"></a>
+<div class="content bread_crumb">
+<a href="index.html">首页</a>
+<a href="seniorRepository.html">上一页</a>
+<a href="annotationQuery.html">下一页</a>
 <div class="footer">
 Designed by <b>Sinosoft</b>
+</div>
 </div>
 </body>
 </html>

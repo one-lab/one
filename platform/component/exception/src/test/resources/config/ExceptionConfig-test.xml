@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ExceptionConfig>
+	<!-- 用户异常的配置 -->
+	<UserExceptions Code="01" Description="用户异常">
+		<!-- 1、业务类异常 -->
+		<UserException Code="0100" Description="业务类异常">
+			<SubUserException Code="010001" Description="投保类异常">
+				<ConcreteException Grade="2">
+					<ExceptionCode>000</ExceptionCode>
+					<ExceptionDesc>无满足条件的记录</ExceptionDesc>
+				</ConcreteException>
+				<ConcreteException Grade="1">
+					<ExceptionCode>001</ExceptionCode>
+					<ExceptionDesc>没有设置参数</ExceptionDesc>
+				</ConcreteException>
+			</SubUserException>
+			<SubUserException Code="010002" Description="核保类异常">
+				<ConcreteException>
+					<ExceptionCode>000</ExceptionCode>
+					<ExceptionDesc>无法核保</ExceptionDesc>
+				</ConcreteException>
+				<ConcreteException Grade="1">
+					<ExceptionCode>001</ExceptionCode>
+					<ExceptionDesc>核保失败</ExceptionDesc>
+				</ConcreteException>
+			</SubUserException>
+			<SubUserException Code="010003" Description="报价类异常">
+				<ConcreteException>
+					<ExceptionCode>000</ExceptionCode>
+					<ExceptionDesc>报价异常</ExceptionDesc>
+				</ConcreteException>
+			</SubUserException>
+		</UserException>
+
+		<!-- 2、数据校验类异常 -->
+		<UserException Code="0101" Description="数据校验类异常">
+			<SubUserException Code="010100" Description="xx数据校验类异常">
+				<ConcreteException>
+					<ExceptionCode>000</ExceptionCode>
+					<ExceptionDesc>数据校验异常1</ExceptionDesc>
+				</ConcreteException>
+				<ConcreteException>
+					<ExceptionCode>001</ExceptionCode>
+					<ExceptionDesc>数据校验异常2</ExceptionDesc>
+				</ConcreteException>
+			</SubUserException>
+		</UserException>
+
+		<!-- 3、权限异常 -->
+		<UserException Code="0102" Description="权限异常">
+			<SubUserException Code="010200" Description="xx权限异常">
+				<ConcreteException Grade="1">
+					<ExceptionCode>000</ExceptionCode>
+					<ExceptionDesc>权限异常1</ExceptionDesc>
+				</ConcreteException>
+				<ConcreteException Grade="1">
+					<ExceptionCode>001</ExceptionCode>
+					<ExceptionDesc>权限异常2</ExceptionDesc>
+				</ConcreteException>
+			</SubUserException>
+		</UserException>
+	</UserExceptions>
+
+	<!-- 异常处理的配置 -->
+<!--电话号码的配置在monitor页面上配置
+	<HandleException>
+		<TelNums>
+			<Tel>15210609387</Tel>
+		</TelNums>
+		<EmailAddresses>
+			<Email>test1@163.com</Email>
+			<Email>test2@163.com</Email>
+			<Email>test3@163.com</Email>
+		</EmailAddresses>
+	</HandleException>
+ -->
+	<!-- 异常处理级别的配置 -->
+	<ExceptionGrades>
+		<ExceptionGrade IsSendSms="0" IsSendEmail="0"
+			Description="异常不严重">0</ExceptionGrade>
+		<ExceptionGrade IsSendSms="0" IsSendEmail="1"
+			Description="异常严重">1</ExceptionGrade>
+		<ExceptionGrade IsSendSms="1" IsSendEmail="0"
+			Description="异常很严重">2</ExceptionGrade>
+		<ExceptionGrade IsSendSms="1" IsSendEmail="1"
+			Description="异常最严重">3</ExceptionGrade>
+	</ExceptionGrades>
+</ExceptionConfig>

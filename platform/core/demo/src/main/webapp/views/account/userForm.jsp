@@ -24,7 +24,28 @@
 	function save() {
 		$('#inputForm').submit();
 	}
-	*/</script>
+	*/
+    function ajaxSubmit() {
+        $.ajax({
+            url: "${ctx}/account/user/save/",
+            type: "POST",
+            data: {
+                "loginName": $("#loginName").val(),
+                "name": $("#name").val(),
+                "password": $("#password").val(),
+                "email": $("#email").val(),
+                "userInfo.gender": "MALE"
+            },
+            dataType: "json",
+            success: function(data) {
+                alert(data.length);
+                for(var i=0;i<data.length;i++){
+                    alert(data[i].propertyPath +":"+data[i].message+"<br/>");
+                }
+            }
+        });
+    }
+</script>
 </head>
 
 <body>
@@ -34,7 +55,7 @@
 	<form:form id="inputForm" modelAttribute="user" 
 	action="${ctx}/account/user/save/${user.id}" method="post" enctype="multipart/form-data"
 	class="form-horizontal">
-		<input type="hidden" name="id" value="${user.id}"/>
+		<%--<input type="hidden" name="id" value="${user.id}"/>--%>
 		<fieldset>
 			<legend><small>管理用户</small></legend>
 			<div id="messageBox" class="alert alert-error" style="display:none">输入有误，请先更正。</div>
@@ -93,6 +114,7 @@
 				<label for="userInfo.phone" class="control-label">手机号码：</label>
 				<div class="controls">
 					<input type="text" name="userInfo.phone" value="${userInfo.phone}" />
+                    <msg:errorMsg property="userInfo.phone" />
 				</div>
 				<br />
 				<label for="userInfo.idcode" class="control-label">身份证号：</label>
@@ -108,7 +130,8 @@
 			</div>
 			</fieldset>
 			<div class="form-actions">
-				<input id="submit" class="btn btn-primary" type="submit" value="提交" />&nbsp;	
+				<input id="submit" class="btn btn-primary" type="submit" value="提交" />&nbsp;
+                <input id="button" class="btn btn-primary" type="button" value="Ajax提交" onclick="ajaxSubmit()" />&nbsp;
 				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>

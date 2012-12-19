@@ -125,6 +125,8 @@
 </div>
 <div class="content bread_crumb">
     <a href="index.html">首页</a>
+	<a href="dataBind.html">上一页</a>
+	<a href="validation.html">下一页</a>
     >
     <span class="select">简单方便的拦截器</span>
 </div>
@@ -147,10 +149,10 @@
 <div class="introduce">
     <p>拦截器有4个重要的方法分别处理控制器方法执行的前、中、后</p>
     <ul style="list-style-type:decimal">
-        <li>before：在controller执行前执行。</li>
-        <li>after：在controller执行中（后）执行，如果一个返回抛出了异常，则不会进来。</li>
-        <li>round：这才是真正的controller执行中执行，不过用得很少。</li>
-        <li>afterCompletion：在controller执行后执行，不论是否异常，都会进来。</li>
+        <li>before：在Controller方法执行前执行。</li>
+        <li>after：在Controller方法执行后执行，如果一个返回抛出了异常，则不会进来。</li>
+        <li>round：在Controller方法执行前后都可以增强。</li>
+        <li>afterCompletion：在Controller执行完成后执行，不论是否异常，都会进来。</li>
     </ul>
 
 </div>
@@ -173,7 +175,7 @@
 
                         public class FristDemoInterceptor extends ControllerInterceptorAdapter {
 
-                            //在controller执行前执行
+                            //在Controller执行前执行
                             @Override
                             protected Object before(Invocation inv) throws Exception {
                                 Date date = new Date();
@@ -182,14 +184,14 @@
                                 return super.before(inv);
                             }
 
-                            //这才是真正的controller执行中执行，不过用得很少。
+                            //在Controller执行前后都可以增强。
                             @Override
                             protected Object round(Invocation inv, InvocationChain chain)
                                         throws Exception {
                                 return super.round(inv, chain);
                             }
 
-                            //在controller执行中（后）执行，如果一个返回抛出了异常，则不会进来。
+                            //在Controller执行后执行，如果一个返回抛出了异常，则不会进来。
                             @Override
                             protected Object after(Invocation inv, Object instruction) throws Exception {
                                 String loginUserName = (String)inv.getRequest().getSession().getAttribute("loginUserName");
@@ -212,7 +214,7 @@
                         <p>需要注意几点：</p>
                         <ul style="list-style-type:decimal">
                             <li>拦截器要放在controllers下</li>
-                            <li>继承om.sinosoft.one.mvc.web.ControllerInterceptorAdapter</li>
+                            <li>继承com.sinosoft.one.mvc.web.ControllerInterceptorAdapter</li>
                             <li>按照实现的方法名，在controller执行前、中、后执行：</li>
                         </ul>
                     </div>
@@ -380,8 +382,7 @@
                     <textarea name="code" class="xml">
                         <?xml version="1.0" encoding="UTF-8"?>
                         <interceptors>
-                            <interceptor>
-                                <com class="sinos"></com>oft.platform.platformDemo.controllers.SecondDemoInterceptor</interceptor>
+                            <interceptor>com.sinosoft.platform.platformDemo.controllers.SecondDemoInterceptor</interceptor>
                             <interceptor>com.sinosoft.platform.platformDemo.controllers.FristDemoInterceptor</interceptor>
                         </interceptors>
                     </textarea>
@@ -395,8 +396,12 @@
 </div>
 </div>
 
-<div class="footer">
-    Designed by <b>Sinosoft</b>
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+	<a href="dataBind.html">上一页</a>
+	<a href="validation.html">下一页</a>
+    <div class="footer">
+Designed by <b>Sinosoft</b>
 </div>
 </body>
 </html>

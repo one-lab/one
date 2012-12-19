@@ -16,6 +16,7 @@ public class Treeable<T> implements UIable {
     private String urlField;
     private String childrenField;
     private String stateField;
+    private String typeField;
     private List<T> content;
 
     public static class Builder<T> {
@@ -26,6 +27,7 @@ public class Treeable<T> implements UIable {
         private String stateField;
         private String classField;
         private String urlField;
+        private String typeField;
 
         public Builder(List<T> content, String idField, String titleField, String childrenField, String stateField) {
             this.content = content;
@@ -45,6 +47,11 @@ public class Treeable<T> implements UIable {
             return this;
         }
 
+        public Builder typeField(String val) {
+            typeField = val;
+            return this;
+        }
+
         public Treeable builder() {
             return new Treeable(this);
         }
@@ -58,6 +65,7 @@ public class Treeable<T> implements UIable {
         stateField = builder.stateField;
         classField = builder.classField;
         urlField = builder.urlField;
+        typeField = builder.typeField;
     }
 
     public String getIdField() {
@@ -116,7 +124,15 @@ public class Treeable<T> implements UIable {
         this.titleField = titleField;
     }
 
+    public String getTypeField() {
+        return typeField;
+    }
+
+    public void setTypeField(String typeField) {
+        this.typeField = typeField;
+    }
+
     public Render getRender() {
-        return new TreeRender(new TreeConverter(), this);  //To change body of implemented methods use File | Settings | File Templates.
+        return new TreeRender(new TreeConverter(), this);
     }
 }

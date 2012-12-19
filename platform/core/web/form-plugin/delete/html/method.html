@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script language="javascript" src="../js/jquery-1.7.1.js"></script>
+<script language="javascript" src="../js/method.js"></script>
+<script type="text/javascript">
+$(function(){
+	
+});
+function Fn1(){
+	alert("自定义事件");
+};
+</script>
+</head>
+
+<body>
+<form method="get">
+<h3>get请求</h3>
+<input type="submit" value="提交查找内容" />
+</form>
+<hr />
+<form method="post">
+<h3>post请求</h3>
+<input type="submit" value="提交查找内容" />
+</form>
+<hr />
+<form method="put">
+<h3>put请求</h3>
+<input type="submit" value="提交查找内容" onclick="Fn1()" />
+</form>
+<hr />
+<form method="delete">
+<h3>delete请求</h3>
+<button onclick="document.forms[3].submit();alert('<button>标签自定义事件')">Button提交内容</button>
+</form>
+</body>
+</html>

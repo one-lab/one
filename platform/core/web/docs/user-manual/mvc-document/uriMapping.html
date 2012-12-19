@@ -80,6 +80,8 @@ function toTop(){
 </div>
 <div class="content bread_crumb">
     <a href="index.html">首页</a>
+	<a href="FirstOne.html">上一页</a>
+	<a href="One-Reply.html">下一页</a>
     >
     <span class="select">控制器和方法的URL映射规则</span>
 </div>
@@ -118,7 +120,7 @@ function toTop(){
 </div>
 <div class="content">
     <div class="title">
-        什么是URI映射
+        什么是URL映射
     </div>
     <div class="introduce">
         <p>URL映射类似配置Struts的一个Action或Action方法的name</p>
@@ -131,7 +133,7 @@ function toTop(){
     <div class="introduce">
         <p>URL最简单的映射方式是不采用任何注解</p>
         <p>映射的规则是：从controllers包开始构建映射路径--> 子包名/+控制器名(TestController的名字就是test)/+方法名</p>
-        <p>例如访问TestController 的helo方法的默认映射路径为: http://localhost:8080/项目名/home(子包名)/test(控制器名)/hello(方法名)</p>
+        <p>例如访问TestController 的hello方法的默认映射路径为: http://localhost:8080/项目名/home(子包名)/test(控制器名)/hello(方法名)</p>
     </div>
 </div>
 <div class="content">
@@ -278,22 +280,26 @@ function toTop(){
 </div>
 <div class="content">
     <div class="title">
-        URI映射的详细规则
+        URL映射的详细规则
     </div>
     <div class="introduce">
         <ul style="list-style-type: decimal;">
-            <li>URI的映射路径从controllers包的子包开始</li>
+            <li>URL的映射路径从controllers包的子包开始</li>
             <li>如果控制器有映射注释则依照映射的配置，否则采用控制器名(首字母小写去掉Controller后缀)作为映射</li>
             <li>控制器名如果是index,home,welcome则必须以@Path("")注释</li>
             <li>如果方法上有映射注释则依照映射的配置，否则采用方法名作为映射(HTTP的请求类型不区分GET和POST)</li>
             <li>路径上的参数作为最低优先级处理。即如果遇到参数内容和映射路径相同则认为是映射路径而不是参数</li>
 
         </ul>
-        <p><span style="color: green;">关于URI映射的更多内容请关注后续章节</span></p>
+        <p><span style="color: green;">关于URL映射的更多内容请关注后续章节</span></p>
     </div>
 </div>
 
-<div class="footer">
+<div class="content bread_crumb">
+    <a href="index.html">首页</a>
+	<a href="FirstOne.html">上一页</a>
+	<a href="One-Reply.html">下一页</a>
+    <div class="footer">
 Designed by <b>Sinosoft</b>
 </div>
 </body>

@@ -7,7 +7,7 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>mvc</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>One :: Mvc</name>
 	
 	<dependencies>
@@ -105,17 +105,12 @@
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
-
         </resources>
 
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
             </plugin>
         </plugins>
 	</build>

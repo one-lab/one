@@ -10,7 +10,7 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 public interface GeRmsTaskAuthRepository extends PagingAndSortingRepository<TaskAuth, String>{
 	
 	//根据机构ID查询出功能ID
-	@SQL("select taskId from GE_RMS_TASK_AUTH where comcode=?1 or comCode='*'")
+	@SQL("select taskId from GE_RMS_TASK_AUTH where comcode in (?1 ,'*')")
 	List<String> findTaskIdByComCode(String comCode);
 	
 	//根据角色id查询角色关联的授权
