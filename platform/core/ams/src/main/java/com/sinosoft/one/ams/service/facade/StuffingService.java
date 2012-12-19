@@ -15,6 +15,7 @@ import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
+import com.sinosoft.one.ams.utils.uiutil.Treeable;
 
 @Service
 public interface StuffingService {
@@ -58,5 +59,8 @@ public interface StuffingService {
 	public List<Role> findRoleByGroupId(String groupId);
 	
 	//根据角色ID和机构ID查询相应的权限
-	public List<Task> findTaskByRoleIdComCode(String roleId,String comCode);
+	public List<Task> findTaskByRoleIdComCode(String roleIdStr,String comCode);
+	
+	//查询当前用户组，当前角色，当前根权限的后代权限
+	public Treeable<NodeEntity> getTreeable(String roleId, String comCode,String taskId);
 }

@@ -17,6 +17,7 @@ var temTreeId = "";
 var temFlag = true;//该变量用来最下边的初始化的。
 var comCode = "";
 var groupId = "";
+var roleId = "";
 $(function(){
 	$(".setup_box").hide();
 	$(".clear").hide(); 
@@ -52,7 +53,7 @@ $(function(){
 						type : "get",
 						success : function(data){
 							for(var i=0;i<data.length;i++){
-								temVal = temVal + "<li onclick='addSelect(this); ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+								temVal = temVal + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this);'></span>"+data[i].name+"</a></li>";
 							};
 					        $(".setup_box").eq(0).children("ul").html(temVal);
 							$(".setup_box").eq(0).show();
@@ -173,18 +174,45 @@ function addThreeSelect(thisLi) {
 }
 function ajaxMethodOne(thisLi) {
 	groupId = thisLi.id;
+	$(thisLi).addClass("select");
+	$(thisLi).siblings().each(function(){
+		if($(this).hasClass("select")) {
+			$(this).removeClass("select");
+		}
+	});
 	if($(thisLi).hasClass("select")) {
 		$.ajax({
 			url : "${ctx}/staffing/roleList/"+thisLi.id,
 			type : "get",
 			success : function(data){
+				var roleIdStr = ",";
 				var temVal = "";
 				if(data != null)
 					for(var i=0;i<data.length;i++){
-						temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+						roleIdStr = roleIdStr + data[i].roleID + ",";
+						temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'>"+data[i].name+"</a></li>";
 					};
 				$(".setup_box").eq(1).children("ul").html(temVal);
 				$(".setup_box").eq(1).show();
+				
+				$.ajax({
+					url : "${ctx}/staffing/taskList/"+comCode+"/"+roleIdStr,
+					type : "get",
+					success : function(data){
+						var temVal = "";
+						for(var i=0;i<data.length;i++){
+							temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+						};
+						$(".setup_box").eq(2).children("ul").html(temVal);
+						$(".setup_box").eq(2).show();
+						$(".clear").show(); 
+						$(".set_info").show();	
+					},
+					error : function(){
+						alert("操作失败！！");
+					}
+
+				});	
 			},
 			error : function(){
 				alert("操作失败！！");
@@ -205,10 +233,10 @@ function ajaxMethodOne(thisLi) {
 	}
 }
 function ajaxMethodTwo(thisLi) {
+	roleId = thisLi.id;
 	if($(thisLi).hasClass("select")) {
-	//	if(false)
 		$.ajax({
-			url : "${ctx}/staffing/taskList/"+comCode+"/"+groupId+"/"+thisLi.id,
+			url : "${ctx}/staffing/taskList/"+comCode+"/"+groupId+"/"+roleId,
 			type : "get",
 			success : function(data){
 				var temVal = "";
@@ -224,18 +252,7 @@ function ajaxMethodTwo(thisLi) {
 				alert("操作失败！！");
 			}
 
-		});
-
-//		var temValOne = "<li id='"+data[i].roleID+"' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
- //       var temValTwo = "<li id='id_22' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>人员授权</a></li>";
- //       var temValThree = "<li id='id_33' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>用户组管理</a></li>";
- //       var temValFour = "<li id='id_44' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>角色管理</a></li>";
- //       var temValFive = "<li id='id_55' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员配置</a></li>";
- //       var temValSix = "<li id='id_66' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员发布</a></li>";
-//		$(".setup_box").eq(2).children("ul").html(temValOne + temValTwo + temValThree + temValFour + temValFive + temValSix);
-//		$(".setup_box").eq(2).show();
-//		$(".clear").show(); 
-//		$(".set_info").show();	
+		});	
 	} else {
 		var tem = true;
 		$(thisLi).siblings().each(function(){
@@ -263,7 +280,7 @@ function ajaxMethodThree(thisLi) {
 				},
 				"json_data":{
 					"ajax":{
-						"url":"${ctx}/views/common/tree.json"
+						"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleId+"/"+thisId
 					}
 				},
 				"plugins":["themes","json_data","checkbox","ui"]
