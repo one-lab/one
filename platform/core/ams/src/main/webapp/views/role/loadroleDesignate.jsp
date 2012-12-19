@@ -26,7 +26,8 @@ $(function(){
 		},
 		"json_data" : {
 		"ajax" : {
-				"url" : "${ctx}/views/common/tree.json",
+				"type":"post",
+				"url" : "${ctx}/role/findDesigNateComTree",
 				"data" : function (n) { 
 					return { id : n.attr ? n.attr("id") : 0 }; 
 				}

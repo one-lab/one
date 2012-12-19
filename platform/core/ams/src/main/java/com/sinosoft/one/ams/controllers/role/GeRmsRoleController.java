@@ -14,6 +14,7 @@ import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.service.AccountManager;
+import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.RoleService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
@@ -36,7 +37,8 @@ public class GeRmsRoleController {
 	@Autowired
 	private RoleService roleService;
 	
-
+	@Autowired
+	private CompanyService companyService;
 	// 角色列表
 	@Post({ "rolelist/{name}", "rolelist" })
 	public Reply list(@Param("name") String name, @Param("pageNo") int pageNo,
@@ -148,6 +150,12 @@ public class GeRmsRoleController {
 		return null;
 	}
 
+	@Post("findDesigNateComTree")
+	public Reply findComTree(Invocation inv){
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getCompany().getComCode();
+		return null;
+	}
 	
 	//-----------------------------------------------------------//
 	/**
