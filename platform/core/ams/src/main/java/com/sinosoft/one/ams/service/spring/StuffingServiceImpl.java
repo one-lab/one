@@ -1,7 +1,9 @@
 package com.sinosoft.one.ams.service.spring;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,7 @@ import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.ams.service.facade.StuffingService;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
+import com.sinosoft.one.ams.utils.uiutil.Treeable;
 
 @Component
 public class StuffingServiceImpl implements StuffingService{
@@ -90,29 +93,103 @@ public class StuffingServiceImpl implements StuffingService{
 		}
 
 		//根据角色ID和机构ID查询相应的根权限
-		public List<Task> findTaskByRoleIdComCode(String roleId, String comCode) {
+		public List<Task> findTaskByRoleIdComCode(String roleIdStr, String comCode) {
+			
 			List<String> taskIdList = new ArrayList<String>();
+			Set<Task> taskSet = new HashSet<Task>();
 			List<Task> taskList = new ArrayList<Task>();
-			List<String> taskAuthIdList = geRmsRoleTaskRepository.findTaskAuthIdByRoleId(roleId);
-			for(String taskAuthId : taskAuthIdList){
-				String taskId = geRmsTaskAuthRepository.findTaskIdByTaskAuthId(taskAuthId,comCode);
-				if(taskId != null){
-					taskIdList.add(taskId);
+			
+			String[] roleIds = roleIdStr.split(",");
+			for(String id : roleIds){
+				List<String> taskAuthIdList = geRmsRoleTaskRepository.findTaskAuthIdByRoleId(id);
+				for(String taskAuthId : taskAuthIdList){
+					String taskId = geRmsTaskAuthRepository.findTaskIdByTaskAuthId(taskAuthId,comCode);
+					if(taskId != null){
+						taskIdList.add(taskId);
+					}
 				}
-			}
-			if(!taskIdList.isEmpty()){
-				for(String taskId : taskIdList){
-					Task task = geRmsTaskRepository.findOne(taskId);
-					if(task != null){
-						if(task.getParent() == null){
-							taskList.add(task);
+				if(!taskIdList.isEmpty()){
+					for(String taskId : taskIdList){
+						Task task = geRmsTaskRepository.findOne(taskId);
+						if(task != null){
+							if(task.getParent() == null){
+								taskSet.add(task);
+							}
 						}
 					}
 				}
 			}
+			
+			if(!taskSet.isEmpty())
+				for(Task task : taskSet){
+					taskList.add(task);
+				}
+			
 			return taskList;
 		}
+		
+		//查询当前用户组，当前角色，当前根权限的后代权限
+		public Treeable<NodeEntity> getTreeable(String roleId, String comCode,String taskId){
+			
+			List<String> taskIdList = new ArrayList<String>();
+			List<Task> topTasks = new ArrayList<Task>();
+			List<String> taskAuthIdList = geRmsRoleTaskRepository.findTaskAuthIdByRoleId(roleId);
+			for(String taskAuthId : taskAuthIdList){
+				String id = geRmsTaskAuthRepository.findTaskIdByTaskAuthId(taskAuthId,comCode);
+				if(id != null){
+					taskIdList.add(id);
+				}
+			}
+//			if(!taskIdList.isEmpty()){
+//				for(String id : taskIdList){
+//					Task task = geRmsTaskRepository.findOne(taskId);
+//					if(task != null){
+//						if(task.getParent() == null){
+//							topTasks.add(task);
+//						}
+//					}
+//				}
+//			}
+			
+			Task task = geRmsTaskRepository.findOne(taskId);
+			topTasks.add(task);
+			
+			Treeable<NodeEntity> treeable = creatTaskTreeAble(topTasks, taskIdList);
+			return treeable;
+		}
 	
+		
+		
+		
+		/**
+		 * 构建功能树 topTasks父节点 filter所有节点
+		 */
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		public  Treeable<NodeEntity> creatTaskTreeAble(List<Task> topTasks,List<String> taskIdList){
+			List<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
+			nodeEntitys=creatSubNode(topTasks,taskIdList);
+			Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").classField("classField").urlField("urlField").builder();
+			return treeable;
+		}
+		
+		List<NodeEntity> creatSubNode(List<Task> topTasks,List<String> taskIdList){
+			ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
+			for (Task geRmsTask : topTasks) {
+				if(!taskIdList.contains(geRmsTask.getTaskID()))
+	                continue;
+					NodeEntity nodeEntity = new NodeEntity();
+					nodeEntity.setId(geRmsTask.getTaskID());
+					nodeEntity.setTitle(geRmsTask.getName());
+					nodeEntity.setClassField("jstree-checked");
+
+					if(!geRmsTask.getChildren().isEmpty()){
+						nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),taskIdList));						
+					}
+					
+					nodeEntitys.add(nodeEntity);
+				}
+			return nodeEntitys;
+		}
 	
 	
 	//保存数据设置

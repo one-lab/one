@@ -119,12 +119,26 @@ public class StaffingController {
 		return Replys.with(groupRoleList).as(Json.class);
 	}
 	
-	//查询当前机构，当前当前用户组，当前角色的权限
-	@Get("taskList/{comCode}/{groupId}/{roleId}")
-	public Reply taskList(@Param("comCode")String comCode,@Param("groupId")String groupId,@Param("roleId")String roleId,Invocation  inv){
-		List<Task> taskList = stuffingService.findTaskByRoleIdComCode(roleId,comCode);
+	//查询当前机构，当前当前用户组，当前角色的根权限
+	@Get("taskList/{comCode}/{roleIdStr}")
+	public Reply taskList(@Param("comCode")String comCode, @Param("roleIdStr")String roleIdStr,Invocation  inv){
+		List<Task> taskList = stuffingService.findTaskByRoleIdComCode(roleIdStr,comCode);
 		return Replys.with(taskList).as(Json.class);
 	}
+	
+	//查询当前机构，当前当前用户组，当前角色的根权限的后代权限
+	@Get("taskChildren/{comCode}/{roleId}/{taskId}")
+	public Reply taskChildren(@Param("comCode")String comCode,@Param("roleId")String roleId,@Param("taskId")String taskId,Invocation  inv) throws Exception{
+		
+		Treeable<NodeEntity> treeable = stuffingService.getTreeable(roleId, comCode, taskId);
+		
+		inv.getResponse().setContentType("text/html;charset=UTF-8");
+		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+		render.render(inv.getResponse());
+		return null;
+	}
+	
+	
 	
 //	//用户的数据权限设置
 //	@SuppressWarnings("unchecked")
