@@ -1,6 +1,7 @@
 package com.sinosoft.one.ams.service.spring;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,31 @@ public class CompanyServiceImpl implements CompanyService{
 		return nodeEntitys;
 	}
 
+	public List<Company> findAll() {
+		return (List<Company>) companyDao.findAll();
+	}
 
+	public List<Company> findAllNextComBySupper(String uppercomcode) {
+		List<Company> companies=new ArrayList<Company>();
+		iteratorComapny(companies, uppercomcode);
+		return companies;
+	}
+
+	
+	void iteratorComapny(List<Company> campanys,String SupercomCode){
+		
+		List<String> comCodes=companyDao.findComCodeByUppercomcode(SupercomCode);
+		if(comCodes.size()>0){
+			List<Company> coms=(List<Company>) companyDao.findAll(comCodes);
+			campanys.addAll(coms);
+			for (String comCode : comCodes) {
+				iteratorComapny(campanys, comCode);
+			}
+		}
+		
+	}
+
+	
 
 	
 
