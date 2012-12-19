@@ -18,5 +18,10 @@ public interface GeRmsUserPowerRepository extends PagingAndSortingRepository<Use
 	@SQL("select * from GE_RMS_USERPOWER where userCode = ?1 and comCode = ?2")
 	UserPower findUserPowerByUserCodeComCode(String userCode ,String comCode);
 	
+	//根据用户ID和机构ID查询用户权限ID
+	@SQL("select userpowerId from GE_RMS_USERPOWER where userCode = ?1 and comCode = ?2")
+	String findIdByUserCodeComCode(String userCode ,String comCode);
+		
+	
 	
 }

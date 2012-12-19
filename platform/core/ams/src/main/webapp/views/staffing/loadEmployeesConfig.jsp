@@ -74,7 +74,7 @@ function openQX(obj) {
 	var userCode = $(obj).parents("tr").find("td").eq(1).find("span").text();
 	$("body").window({
 		"id":"window1",
-		"url":"${ctx}/staffing/userpower/power/"+name+"/"+userCode,
+		"url":"${ctx}/staffing/power/"+name+"/"+userCode,
 		"title":"权限设置", 
 		"hasIFrame":true,
 		"content":"",

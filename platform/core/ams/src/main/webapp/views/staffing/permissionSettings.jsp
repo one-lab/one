@@ -15,6 +15,8 @@
 <script type="text/javascript">
 var temTreeId = "";
 var temFlag = true;//该变量用来最下边的初始化的。
+var comCode = "";
+var groupId = "";
 $(function(){
 	$(".setup_box").hide();
 	$(".clear").hide(); 
@@ -26,7 +28,7 @@ $(function(){
 		},
 		"json_data":{
 			"ajax":{
-				"url":"${ctx}/staffing/companyList/"+"${userCode}"
+				"url":"${ctx}/staffing/companyTree"
 			}
 		},
 		"plugins":["themes","json_data","ui"]
@@ -39,35 +41,45 @@ $(function(){
 			$(".set_info").hide();
 		}
 	}).bind("select_node.jstree", function(e, data){
-		comCode=data.rslt.obj.attr("id");
+		comCode = data.rslt.obj.attr("id");
 		var temVal = "";
-		
 		$.ajax({
-			url : "${ctx}/staffing/group/"+comCode,
-			type : "get",
-			success : function(data){
-				for(var i=0;i<data.length;i++){
-					temVal = temVal + "<li onclick='addSelect(this); ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
-				};
-		        $(".setup_box").eq(0).children("ul").html(temVal);
-				$(".setup_box").eq(0).show();
-				$(".setup_box").eq(1).children("ul").children().remove();
-				$(".setup_box").eq(1).hide();
-				$(".setup_box").eq(2).children("ul").children().remove();
-				$(".setup_box").eq(2).hide();
-				$(".clear").hide(); 
-				$(".set_info").hide();
-			},
-			error : function(){
-				alert("失败！！");
-			}
+			url : "${ctx}/staffing/checkCom/"+comCode+"/${userCode}",
+			success: function(data){
+				if(data == "no"){
+					$.ajax({
+						url : "${ctx}/staffing/group/"+comCode,
+						type : "get",
+						success : function(data){
+							for(var i=0;i<data.length;i++){
+								temVal = temVal + "<li onclick='addSelect(this); ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+							};
+					        $(".setup_box").eq(0).children("ul").html(temVal);
+							$(".setup_box").eq(0).show();
+							$(".setup_box").eq(1).children("ul").children().remove();
+							$(".setup_box").eq(1).hide();
+							$(".setup_box").eq(2).children("ul").children().remove();
+							$(".setup_box").eq(2).hide();
+							$(".clear").hide(); 
+							$(".set_info").hide();
+						},
+						error : function(){
+							alert("操作失败！");
+						}
 
+					});
+				}else{
+					alert("此机构已被引入！！");
+					$(".setup_box").hide();
+				}
+			},
+			error: function(){
+				alert("操作失败！！");
+			}
 		});
 		
-//		var temValOne = "<li onclick='addSelect(this); ajaxMethodOne(this);'><a href='javascript:;'><span></span>权限管理</a></li>"	
-//		var temValTwo = "<li onclick='addSelect(this); ajaxMethodOne(this);'><a href='javascript:;'><span></span>客服专员组</a></li>"
-//      var temValThree = "<li onclick='addSelect(this); ajaxMethodOne(this);'><a href='javascript:;'><span></span>保单配送</a></li>"
-//		$(".setup_box").eq(0).children("ul").html(temValOne + temValTwo + temValThree);
+		
+
 	});
 	
 	fitHeight();
@@ -160,30 +172,25 @@ function addThreeSelect(thisLi) {
 	}
 }
 function ajaxMethodOne(thisLi) {
-//	alert(thisLi.id);
+	groupId = thisLi.id;
 	if($(thisLi).hasClass("select")) {
-		
 		$.ajax({
 			url : "${ctx}/staffing/roleList/"+thisLi.id,
 			type : "get",
 			success : function(data){
-				alert(data.length);
 				var temVal = "";
-				for(var i=0;i<data.length;i++){
-					temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
-				};
+				if(data != null)
+					for(var i=0;i<data.length;i++){
+						temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+					};
 				$(".setup_box").eq(1).children("ul").html(temVal);
 				$(".setup_box").eq(1).show();
 			},
 			error : function(){
-				alert("失败！！");
+				alert("操作失败！！");
 			}
 
 		});
-//		var temValOne = "<li onclick='addSelect(this); ajaxMethodTwo(this);'><a href='javascript:;'><span></span>权限管理</a></li>"
-//		var temValTwo = "<li onclick='addSelect(this); ajaxMethodTwo(this);'><a href='javascript:;'><span></span>客服专员组</a></li>"
-//        var temValThree = "<li onclick='addSelect(this); ajaxMethodTwo(this);'><a href='javascript:;'><span></span>保单配送</a></li>"
-		
 	} else {
 		var tem = 0;
 		$(thisLi).siblings().each(function(){
@@ -199,16 +206,36 @@ function ajaxMethodOne(thisLi) {
 }
 function ajaxMethodTwo(thisLi) {
 	if($(thisLi).hasClass("select")) {
-		var temValOne = "<li id='id_11' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>保单配送</a></li>";
-        var temValTwo = "<li id='id_22' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>人员授权</a></li>";
-        var temValThree = "<li id='id_33' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>用户组管理</a></li>";
-        var temValFour = "<li id='id_44' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>角色管理</a></li>";
-        var temValFive = "<li id='id_55' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员配置</a></li>";
-        var temValSix = "<li id='id_66' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员发布</a></li>";
-		$(".setup_box").eq(2).children("ul").html(temValOne + temValTwo + temValThree + temValFour + temValFive + temValSix);
-		$(".setup_box").eq(2).show();
-		$(".clear").show(); 
-		$(".set_info").show();	
+	//	if(false)
+		$.ajax({
+			url : "${ctx}/staffing/taskList/"+comCode+"/"+groupId+"/"+thisLi.id,
+			type : "get",
+			success : function(data){
+				var temVal = "";
+				for(var i=0;i<data.length;i++){
+					temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+				};
+				$(".setup_box").eq(2).children("ul").html(temVal);
+				$(".setup_box").eq(2).show();
+				$(".clear").show(); 
+				$(".set_info").show();	
+			},
+			error : function(){
+				alert("操作失败！！");
+			}
+
+		});
+
+//		var temValOne = "<li id='"+data[i].roleID+"' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+ //       var temValTwo = "<li id='id_22' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>人员授权</a></li>";
+ //       var temValThree = "<li id='id_33' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>用户组管理</a></li>";
+ //       var temValFour = "<li id='id_44' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>角色管理</a></li>";
+ //       var temValFive = "<li id='id_55' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员配置</a></li>";
+ //       var temValSix = "<li id='id_66' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员发布</a></li>";
+//		$(".setup_box").eq(2).children("ul").html(temValOne + temValTwo + temValThree + temValFour + temValFive + temValSix);
+//		$(".setup_box").eq(2).show();
+//		$(".clear").show(); 
+//		$(".set_info").show();	
 	} else {
 		var tem = true;
 		$(thisLi).siblings().each(function(){
@@ -236,7 +263,7 @@ function ajaxMethodThree(thisLi) {
 				},
 				"json_data":{
 					"ajax":{
-						"url":"tree.json"
+						"url":"${ctx}/views/common/tree.json"
 					}
 				},
 				"plugins":["themes","json_data","checkbox","ui"]
@@ -280,12 +307,7 @@ function ajaxMethodThree(thisLi) {
             	设置权限
             </div>
             <ul>
-            	<li onclick="addSelect(this);"><a href="javascript:;"><span></span>保单配送</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>人员授权</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>用户组管理</a></li>
-                <li class="select" onclick="addSelect(this);"><a href="javascript:;"><span></span>角色管理</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>客服专员配置</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>客服专员发布</a></li>
+            	
             </ul>
         </div>
         <div class="clear setw"><div class="tolge_show up"></div></div>

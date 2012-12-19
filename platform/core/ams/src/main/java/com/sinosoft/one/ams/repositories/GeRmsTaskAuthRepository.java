@@ -29,5 +29,9 @@ public interface GeRmsTaskAuthRepository extends PagingAndSortingRepository<Task
 	@SQL("select taskAuthID from GE_RMS_TASK_AUTH where taskId = ?1")
 	List<String> findTaskAuthIDByTaskId(String taskId);
 	
+	//根据taskAuthId查询出功能ID
+	@SQL("select taskID from GE_RMS_TASK_AUTH where taskAuthId = ?1 and comCode = ?2")
+	String findTaskIdByTaskAuthId(String taskAuthId ,String comCode);
+	
 	
 }

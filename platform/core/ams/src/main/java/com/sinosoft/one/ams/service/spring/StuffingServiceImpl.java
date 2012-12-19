@@ -19,7 +19,10 @@ import com.sinosoft.one.ams.repositories.GeRmsBusPowerRepository;
 import com.sinosoft.one.ams.repositories.GeRmsCompanyRepository;
 import com.sinosoft.one.ams.repositories.GeRmsDataRuleRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
+import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
 import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
+import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
+import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
@@ -48,7 +51,69 @@ public class StuffingServiceImpl implements StuffingService{
 	@Autowired
 	private GeRmsDataRuleRepository geRmsDataRuleRepository;
 	@Autowired
+	private GeRmsGroupRoleRepositoriy geRmsGroupRoleRepository;
+	@Autowired
+	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
+	@Autowired
+	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
+	@Autowired
 	private UserDao userDao;
+	
+	//检查用户权限的id是否存在，存在返回yes，否则返回no
+		public String checkIdByUserCodeComCode(String userCode, String comCode) {
+			System.out.println(userCode);
+			System.out.println(comCode);
+			String id = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+			String result = "no";
+			if(id != null){
+				result = "yes";
+			}
+			return result;
+		}
+
+		//根据机构ID查询本机构的用户组
+		public List<Group> findGroupByComCode(String comCode) {
+			List<Group> groupList = geRmsGroupRepository.findGroupByComCode(comCode);
+			return groupList;
+		}
+		
+		//根据用户组ID查询本用户组的角色
+		public List<Role> findRoleByGroupId(String groupId) {
+			List<String> roleIdList = new ArrayList<String>();
+			roleIdList = geRmsGroupRoleRepository.findRoleIdByGroupId(groupId);
+			
+			List<Role> roles = null;
+			if(!roleIdList.isEmpty()){
+				roles = (List<Role>) geRmsRoleRepository.findAll(roleIdList);
+			}
+			return roles;
+		}
+
+		//根据角色ID和机构ID查询相应的根权限
+		public List<Task> findTaskByRoleIdComCode(String roleId, String comCode) {
+			List<String> taskIdList = new ArrayList<String>();
+			List<Task> taskList = new ArrayList<Task>();
+			List<String> taskAuthIdList = geRmsRoleTaskRepository.findTaskAuthIdByRoleId(roleId);
+			for(String taskAuthId : taskAuthIdList){
+				String taskId = geRmsTaskAuthRepository.findTaskIdByTaskAuthId(taskAuthId,comCode);
+				if(taskId != null){
+					taskIdList.add(taskId);
+				}
+			}
+			if(!taskIdList.isEmpty()){
+				for(String taskId : taskIdList){
+					Task task = geRmsTaskRepository.findOne(taskId);
+					if(task != null){
+						if(task.getParent() == null){
+							taskList.add(task);
+						}
+					}
+				}
+			}
+			return taskList;
+		}
+	
+	
 	
 	//保存数据设置
 //	public String saveBusPower(BusPower busPower, String[] ruleIdArr,String[] paramArr, String userPowerId, String taskId) {
@@ -308,16 +373,6 @@ public class StuffingServiceImpl implements StuffingService{
 			String userCode) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	public List<Group> findGroupByComCode(String comCode) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Role> findRoleByGroupId(String groupId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public Gridable<Employe> getGridable(Gridable<Employe> gridable,

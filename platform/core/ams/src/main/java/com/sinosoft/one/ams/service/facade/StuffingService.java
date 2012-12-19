@@ -34,12 +34,6 @@ public interface StuffingService {
 	//根据userCode和company查询GeRmsUserPower对象并保存在NodeEntity对象中
 	public void pushUserPower(NodeEntity nodeEntity, List<Company> companies,String userCode);
 	
-	//根据机构Id，查询机构的用户组
-	public List<Group> findGroupByComCode(String comCode);
-	
-	//根据用户组的Id，查询用户组的角色
-	public List<Role> findRoleByGroupId(String groupId);
-	
 	//将数据库中的用户记录查出，并保存在Gridable对象中返回
 	public Gridable<Employe> getGridable(Gridable<Employe> gridable,Pageable pageable,List<String> userAttribute);
 	
@@ -51,4 +45,18 @@ public interface StuffingService {
 	
 	//查询出所有的Rule
 	public List<DataRule> getRuleAll(String userPowerId, String taskId);
+	
+	//-----------hening
+	
+	//检查用户权限的id是否存在，存在返回yes，否则返回no
+	public String checkIdByUserCodeComCode(String userCode,String comCode);
+	
+	//根据机构Id，查询机构的用户组
+	public List<Group> findGroupByComCode(String comCode);
+	
+	//根据用户组的Id，查询用户组的角色
+	public List<Role> findRoleByGroupId(String groupId);
+	
+	//根据角色ID和机构ID查询相应的权限
+	public List<Task> findTaskByRoleIdComCode(String roleId,String comCode);
 }
