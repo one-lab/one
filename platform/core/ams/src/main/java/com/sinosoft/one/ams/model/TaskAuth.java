@@ -16,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * POJO类taskAuth
  */
@@ -134,6 +136,7 @@ public class TaskAuth implements java.io.Serializable {
 	 * 属性roleTasks的getter方法
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "taskAuth")
+	@JSONField(serialize=false)
 	public List<RoleTask> getRoleTasks() {
 		return this.roleTasks;
 	}

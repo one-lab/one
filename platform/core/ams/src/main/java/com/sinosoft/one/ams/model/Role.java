@@ -21,6 +21,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * POJO类role
  */
@@ -230,6 +232,7 @@ public class Role implements java.io.Serializable {
 	 * 属性groupRoles的getter方法
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
+	@JSONField(serialize=false)
 	public List<GroupRole> getGroupRoles() {
 		return this.groupRoles;
 	}
