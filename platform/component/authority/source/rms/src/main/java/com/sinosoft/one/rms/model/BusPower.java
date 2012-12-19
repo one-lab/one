@@ -36,6 +36,9 @@ public class BusPower implements java.io.Serializable {
 
 	/** 属性数据规则参数(DataRuleParam) */
 	private String dataRuleParam;
+	
+	/** 属性数据规则参数名(DataRuleParamName) */
+	private String dataRuleParamName;
 
 	/** 属性是否有效(IsValidate) */
 	private String isValidate;
@@ -145,4 +148,20 @@ public class BusPower implements java.io.Serializable {
 		this.isValidate = isValidate;
 	}
 
+	/**
+	 * 属性数据规则参数名(DataRuleParamName)的getter方法
+	 */
+	public String getDataRuleParamName() {
+		return dataRuleParamName;
+	}
+
+	/**
+	 * 属性数据规则参数名(DataRuleParamName)的setter方法
+	 */
+	public void setDataRuleParamName(String dataRuleParamName) {
+		this.dataRuleParamName = dataRuleParamName;
+	}
+
+	
+	
 }

@@ -17,7 +17,7 @@ public class User {
 	
 	private String passWord;
 	
-	
+	private String plaintextPassWord;
 	//权限生效的机构代码
 	private String loginComCode;
 	
@@ -143,6 +143,14 @@ public class User {
 		if(this.dataPowers ==null){
 			this.dataPowers = dataPowers;
 		}
+	}
+
+	public String getPlaintextPassWord() {
+		return plaintextPassWord;
+	}
+
+	public void setPlaintextPassWord(String plaintextPassWord) {
+		this.plaintextPassWord = plaintextPassWord;
 	}
 	
 }
