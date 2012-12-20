@@ -1,9 +1,12 @@
 package com.sinosoft.one.ams.controllers.group;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -93,9 +96,24 @@ public class GroupController {
 		String comCode = user.getCompany().getComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 		Gridable<Role> ga = new Gridable<Role>(null);
-		Gridable<Role> gridable=roleService.getGridable(ga, comCode, null, pageable);
+		Page<Role> page = null;
+		List<String> roleAttribute = new ArrayList<String>();
+		page = roleService.findRole(comCode,null,pageable);
+		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
+		List<Role> geRmsRoles = page.getContent();
+		for (Role geRmsRole : geRmsRoles) {
+			geRmsRole.setFlag(button);
+		} 
+		ga.setPage(page);
+		ga.setIdField("roleID");
+		roleAttribute.add("name");
+		roleAttribute.add("des");
+		roleAttribute.add("createTime");
+		roleAttribute.add("operateTime");
+		roleAttribute.add("flag");
+		ga.setCellListStringField(roleAttribute);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
-		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
+		Render render = (GridRender) UIUtil.with(ga).as(UIType.Json);
 		render.render(inv.getResponse());
 		return null;
 	}
