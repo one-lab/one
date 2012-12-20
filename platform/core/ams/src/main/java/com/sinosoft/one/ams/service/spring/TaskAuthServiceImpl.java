@@ -47,8 +47,8 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 			}
 		} 
 		
-		List<String> taskIdList = geRmsTaskAuthRepository.findTaskIdByComCode(comCode);
-		List<String> parentTaskIdList = geRmsTaskAuthRepository.findTaskIdByComCode(parentComCode);
+		List<String> taskIdList = geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
+		List<String> parentTaskIdList = geRmsTaskAuthRepository.findAllTaskIdByComCode(parentComCode);
 		
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,taskIdList,parentTaskIdList);
 		return treeable;
@@ -61,7 +61,7 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 		String name = user.getUserName();
 		
 		//查询当前机构已有的功能
-		List<String> taskIdAuth = geRmsTaskAuthRepository.findTaskIdByComCode(comCode);
+		List<String> taskIdAuth = geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
 		
 		//从页面传到后台的功能ID
 		String[] taskId = strId.split(",");

@@ -84,33 +84,6 @@ public class StuffingServiceImpl implements StuffingService{
 			return groupList;
 		}
 		
-		//根据用户组ID查询本用户组的角色
-		public List<Role> findRoleByGroupId(String groupId,String comCode) {
-			List<String> roleIds = new ArrayList<String>();
-//			roleIdList = geRmsGroupRoleRepository.findRoleIdByGroupId(groupId);
-			Group group =geRmsGroupRepository.findOne(groupId);
-			List<GroupRole>groupRoles =group.getGroupRoles();
-		
-			for (GroupRole groupRole : groupRoles) {
-				roleIds.add(groupRole.getRole().getRoleID());
-			}
-			List<String>results=new ArrayList<String>();
-			List<String> roleDegNatIds =geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
-			for (String roleDegNatId : roleDegNatIds) {
-				for (String roleId : roleIds) {
-					if(roleDegNatId.toString().equals(roleId)){
-						results.add(roleId);
-					}
-					
-				}
-			}
-			
-			List<Role> roles =(List<Role>) geRmsRoleRepository.findAll(results);
-//			if(!roleIdList.isEmpty()){
-//				roles = (List<Role>) geRmsRoleRepository.findAll(roleIdList);
-//			}
-			return roles;
-		}
 
 		//根据角色ID和机构ID查询相应的根权限
 		public List<Task> findTaskByRoleIdComCode(String roleIdStr, String comCode) {

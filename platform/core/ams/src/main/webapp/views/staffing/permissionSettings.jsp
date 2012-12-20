@@ -182,7 +182,7 @@ function ajaxMethodOne(thisLi) {
 	});
 	if($(thisLi).hasClass("select")) {
 		$.ajax({
-			url : "${ctx}/staffing/roleList/"+thisLi.id,
+			url : "${ctx}/staffing/roleList/"+thisLi.id+"/"+comCode,
 			type : "get",
 			success : function(data){
 				var roleIdStr = ",";

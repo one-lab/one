@@ -77,7 +77,9 @@ public class RoleServiceImpl implements RoleService{
 	//根据角色ID查询角色关联的功能
 	public List<Task> findTaskByRole(String roleId){
 		//先查询角色关联的授权
-		List<String> taskIds=geRmsTaskAuthRepository.findTaskAuthByRole(roleId);
+		List<String> roleids=new ArrayList<String>() ;
+		roleids.add(roleId);
+		List<String> taskIds=geRmsTaskAuthRepository.findTaskAuthByRole(roleids);
 		//根据授权获得的功能ID获取功能集合
 //		List<Task> geRmsTasks =geRmsTaskRepository.findTaskByTaskIds(taskIds);
 		List<Task> geRmsTasks=(List<Task>) geRmsTaskRepository.findAll(taskIds);
@@ -86,7 +88,7 @@ public class RoleServiceImpl implements RoleService{
 	
 	//根据机构查询所有可用的功能
 	public List<Task> findTaskByComCode(String comCode){
-		List<String> taskIds=geRmsTaskAuthRepository.findTaskIdByComCode(comCode);
+		List<String> taskIds=geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
 		List<Task> geRmsTasks=(List<Task>) geRmsTaskRepository.findAll(taskIds);
 		return geRmsTasks;
 	}
@@ -254,6 +256,28 @@ public class RoleServiceImpl implements RoleService{
 				}
 			}
 		}
+	}
+
+	public List<Role> findRoleByGroupId(String groupId, String comCode) {
+		List<String> roleIds = new ArrayList<String>();
+		Group group =geRmsGroupRepository.findOne(groupId);
+		List<GroupRole>groupRoles =group.getGroupRoles();
+	
+		for (GroupRole groupRole : groupRoles) {
+			roleIds.add(groupRole.getRole().getRoleID());
+		}
+		List<String>results=new ArrayList<String>();
+		List<String> roleDegNatIds =geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
+		for (String roleDegNatId : roleDegNatIds) {
+			for (String roleId : roleIds) {
+				if(roleDegNatId.toString().equals(roleId)){
+					results.add(roleId);
+				}
+			}
+		}
+		
+		List<Role> roles =(List<Role>) geRmsRoleRepository.findAll(results);
+		return roles;
 	}
 	
 }

@@ -55,9 +55,6 @@ public interface StuffingService {
 	//根据机构Id，查询机构的用户组
 	public List<Group> findGroupByComCode(String comCode);
 	
-	//根据用户组的Id，查询用户组的角色
-	public List<Role> findRoleByGroupId(String groupId);
-	
 	//根据角色ID和机构ID查询相应的权限
 	public List<Task> findTaskByRoleIdComCode(String roleIdStr,String comCode);
 	

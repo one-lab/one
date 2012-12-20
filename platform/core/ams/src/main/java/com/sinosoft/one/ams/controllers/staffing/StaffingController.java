@@ -19,6 +19,7 @@ import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
+import com.sinosoft.one.ams.service.facade.RoleService;
 import com.sinosoft.one.ams.service.facade.StuffingService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
@@ -46,6 +47,8 @@ public class StaffingController {
 	private EmployeeService employeeService;
 	@Autowired
 	private CompanyService companyService;
+	@Autowired
+	private RoleService roleService;
 	
 	private List<String> userAttribute = new ArrayList<String>();
 	
@@ -128,9 +131,9 @@ public class StaffingController {
 		return Replys.with(groupList).as(Json.class);
 	}
 	//查询当前用户组的角色，并返回页面
-	@Get("roleList/{groupId}")
-	public Reply role(@Param("groupId")String groupId,Invocation  inv){
-		List<Role> groupRoleList = stuffingService.findRoleByGroupId(groupId);
+	@Get("roleList/{groupId}/{comCode}")
+	public Reply role(@Param("groupId")String groupId,@Param("comCode")String comCode,Invocation  inv){
+		List<Role> groupRoleList = roleService.findRoleByGroupId(groupId, comCode);
 		return Replys.with(groupRoleList).as(Json.class);
 	}
 	

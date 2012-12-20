@@ -1,6 +1,8 @@
 package com.sinosoft.one.ams.repositories;
 
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 
@@ -13,7 +15,7 @@ public interface GeRmsTaskRepository extends PagingAndSortingRepository<Task, St
 	String findParentIdByTaskId(String taskId);
 	
 	//根据功能ID查询功能对象
-	@SQL("select * from GE_RMS_TASK where taskId in (?1)")
+	@SQL("select * from GE_RMS_TASK where taskId in (?1) and isValidate='1'")
 	List<Task>findTaskByTaskIds(List<String> taskIds);
 		
 }
