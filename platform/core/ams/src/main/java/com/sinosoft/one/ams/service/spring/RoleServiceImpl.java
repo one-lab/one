@@ -46,7 +46,6 @@ public class RoleServiceImpl implements RoleService{
 	@Autowired
 	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
 	
-	private List<String> roleAttribute = new ArrayList<String>();
 	
 	
 	//查询角色信息
@@ -66,7 +65,7 @@ public class RoleServiceImpl implements RoleService{
 		return role;
 	}
 	
-	Page<Role> findRole(String comCode,String name,Pageable pageable){
+	public Page<Role> findRole(String comCode,String name,Pageable pageable){
 		Page<Role> page =null;
 		if(name!=null&&!"".equals(name))
 			page = geRmsRoleRepository.findRoleByName(comCode, name, pageable);
@@ -93,28 +92,28 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 
-	public Gridable<Role> getGridable(Gridable<Role> gridable,
-			String comCode,String name, Pageable pageable) {
-		
-		Page<Role> page = null;
-		//查询机构下所有可见的角色
-		page = findRole(comCode,name,pageable);
-		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
-		List<Role> geRmsRoles = page.getContent();
-		for (Role geRmsRole : geRmsRoles) {
-			geRmsRole.setFlag(button);
-		} 
-		gridable.setPage(page);
-		gridable.setIdField("roleID");
-		roleAttribute.add("name");
-		roleAttribute.add("des");
-		roleAttribute.add("createTime");
-		roleAttribute.add("operateTime");
-		roleAttribute.add("flag");
-		gridable.setCellListStringField(roleAttribute);
-		
-		return gridable;
-	}
+//	public Gridable<Role> getGridable(Gridable<Role> gridable,
+//			String comCode,String name, Pageable pageable) {
+//		
+//		Page<Role> page = null;
+//		//查询机构下所有可见的角色
+//		page = findRole(comCode,name,pageable);
+//		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
+//		List<Role> geRmsRoles = page.getContent();
+//		for (Role geRmsRole : geRmsRoles) {
+//			geRmsRole.setFlag(button);
+//		} 
+//		gridable.setPage(page);
+//		gridable.setIdField("roleID");
+//		roleAttribute.add("name");
+//		roleAttribute.add("des");
+//		roleAttribute.add("createTime");
+//		roleAttribute.add("operateTime");
+//		roleAttribute.add("flag");
+//		gridable.setCellListStringField(roleAttribute);
+//		
+//		return gridable;
+//	}
 
 	public void updateRole(String roleId,String  comCode, String userCode,String name, String des,
 			String roleTpe, List<String> taskids) {
