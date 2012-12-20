@@ -275,8 +275,10 @@ public class RoleServiceImpl implements RoleService{
 				}
 			}
 		}
-		
-		List<Role> roles =(List<Role>) geRmsRoleRepository.findAll(results);
+		List<Role> roles = null;
+		if(!results.isEmpty()){
+			roles =(List<Role>) geRmsRoleRepository.findAll(results);
+		}
 		return roles;
 	}
 	
