@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
@@ -46,13 +48,26 @@ public class GeRmsRoleController {
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
 		String comCode = user.getCompany().getComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
-
 		Gridable<Role> ga = new Gridable<Role>(null);
-		Gridable<Role> gridable = roleService.getGridable(ga,comCode, name,
-				pageable);
-
+		Page<Role> page = null;
+		//查询机构下所有可见的角色
+		List<String> roleAttribute = new ArrayList<String>();
+		page = roleService.findRole(comCode,name,pageable);
+		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
+		List<Role> geRmsRoles = page.getContent();
+		for (Role geRmsRole : geRmsRoles) {
+			geRmsRole.setFlag(button);
+		} 
+		ga.setPage(page);
+		ga.setIdField("roleID");
+		roleAttribute.add("name");
+		roleAttribute.add("des");
+		roleAttribute.add("createTime");
+		roleAttribute.add("operateTime");
+		roleAttribute.add("flag");
+		ga.setCellListStringField(roleAttribute);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
-		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
+		Render render = (GridRender) UIUtil.with(ga).as(UIType.Json);
 		render.render(inv.getResponse());
 		return null;
 	}
@@ -151,9 +166,21 @@ public class GeRmsRoleController {
 	}
 
 	@Post("findDesigNateComTree")
-	public Reply findComTree(Invocation inv){
+	public Reply findComTree(Invocation inv) throws Exception{
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		String supercomCode=user.getCompany().getComCode();
+		List<Company> showCompany=companyService.findAllNextComBySupper(supercomCode);
+		Map<String, Company> filter = new HashMap<String, Company>();
+		List<Company> topList = new ArrayList<Company>();
+		for (Company company : showCompany) {
+			if(company.getUpperComCode().toString().equals(supercomCode))
+				topList.add(company);
+			filter.put(company.getComCode(), company);
+		}
+		Treeable<NodeEntity> treeable=companyService.creatCompanyTreeAble(topList, filter);
+		inv.getResponse().setContentType("text/html;charset=UTF-8");
+		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+		render.render(inv.getResponse());
 		return null;
 	}
 	
