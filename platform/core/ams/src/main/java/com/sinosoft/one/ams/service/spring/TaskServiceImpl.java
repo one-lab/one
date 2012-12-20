@@ -1,6 +1,9 @@
 package com.sinosoft.one.ams.service.spring;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -101,6 +104,23 @@ public class TaskServiceImpl implements TaskService{
 	//获取所有Task集合
 	public List<Task> findAllTasks() {
 		return (List<Task>)geRmsTaskRepository.findAll();
-	}	
+	}
+
+	public List<Task> findTaskByRoleIds(List<String> roleids,String comCode) {
+		List<String>roletaskids=geRmsTaskAuthRepository.findTaskAuthByRole(roleids);
+		List<String>comtaskids=geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
+		List<String> resultid=new ArrayList<String>();
+		for (String comtaskid : comtaskids) {
+			for (String roletaskid : roletaskids) {
+				if (comtaskid.toString().equals(roletaskid.toString())) {
+					resultid.add(comtaskid);
+					break;
+				}
+			}
+		}
+		List<Task> tasks=(List<Task>) geRmsTaskRepository.findTaskByTaskIds(resultid);
+		return tasks;
+	}
+
 
 }

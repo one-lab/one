@@ -14,6 +14,7 @@ import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Group;
+import com.sinosoft.one.ams.model.GroupRole;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.UserPower;
@@ -22,6 +23,7 @@ import com.sinosoft.one.ams.repositories.GeRmsCompanyRepository;
 import com.sinosoft.one.ams.repositories.GeRmsDataRuleRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
+import com.sinosoft.one.ams.repositories.GeRmsRoleDesignateRepository;
 import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
 import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
@@ -60,6 +62,8 @@ public class StuffingServiceImpl implements StuffingService{
 	@Autowired
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
 	@Autowired
+	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
+	@Autowired
 	private UserDao userDao;
 	
 	//检查用户权限的id是否存在，存在返回yes，否则返回no
@@ -80,17 +84,6 @@ public class StuffingServiceImpl implements StuffingService{
 			return groupList;
 		}
 		
-		//根据用户组ID查询本用户组的角色
-		public List<Role> findRoleByGroupId(String groupId) {
-			List<String> roleIdList = new ArrayList<String>();
-			roleIdList = geRmsGroupRoleRepository.findRoleIdByGroupId(groupId);
-			
-			List<Role> roles = null;
-			if(!roleIdList.isEmpty()){
-				roles = (List<Role>) geRmsRoleRepository.findAll(roleIdList);
-			}
-			return roles;
-		}
 
 		//根据角色ID和机构ID查询相应的根权限
 		public List<Task> findTaskByRoleIdComCode(String roleIdStr, String comCode) {
@@ -99,6 +92,7 @@ public class StuffingServiceImpl implements StuffingService{
 			List<Task> taskList = new ArrayList<Task>();
 			
 			String[] roleIds = roleIdStr.split(",");
+			
 			for(String id : roleIds){
 				List<String> taskAuthIdList = geRmsRoleTaskRepository.findTaskAuthIdByRoleId(id);
 				for(String taskAuthId : taskAuthIdList){

@@ -28,6 +28,8 @@ public interface RoleService {
 	//查询机构下所有可见的角色
 	public Page<Role> findRole(String comCode,String name,Pageable pageable);
 	
+	
+	public List<Role> findRoleByGroupId(String groupId,String comCode);
 	//更新角色
 	public void updateRole(String roleid,String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
 	

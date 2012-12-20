@@ -399,10 +399,10 @@
 					var cell = rows[j].cell;
 					if(cell.length > colLen) {
 						if(rows[j].cell[colLen] == "true") {
-							alert("if");
+					//		alert("if");
 							gTable = gTable + '<tr id="row_' + rows[j].id + '" class="select">';
 						} else {
-							alert("else");
+					//		alert("else");
 							gTable = gTable + '<tr id="row_' + rows[j].id + '">';
 						}
 					} else {

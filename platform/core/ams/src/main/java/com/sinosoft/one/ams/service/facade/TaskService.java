@@ -19,4 +19,7 @@ public interface TaskService {
 	//_---------------------------------------//
 	
 	public List<Task> findAllTasks();
+	
+	
+	public List<Task> findTaskByRoleIds(List<String> roleids,String comCode);
 }

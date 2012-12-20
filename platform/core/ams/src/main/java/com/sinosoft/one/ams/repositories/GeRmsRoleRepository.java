@@ -17,6 +17,7 @@ public interface GeRmsRoleRepository extends PagingAndSortingRepository<Role, St
 	@SQL("select * from GE_RMS_ROLE where roleId in (select roleid from GE_RMS_ROLE_DESIGNATE where comCode= ?1 or comCode='*')")
 	Page<Role> findRole(String comCode,Pageable pageable);
 	
+	
 	@SQL("select * from GE_RMS_ROLE where roleId in (select roleid from GE_RMS_ROLE_DESIGNATE where comCode= ?1 or comCode='*') and name like ?2")
 	Page<Role> findRoleByName(String comCode,String name,Pageable pageable);
 	

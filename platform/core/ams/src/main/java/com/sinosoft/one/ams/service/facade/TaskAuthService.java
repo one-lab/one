@@ -14,5 +14,7 @@ public interface TaskAuthService {
 	
 	//保存当前机构的功能
 	public void save(String strId,String comCode,TaskAuth taskAuth);
+	
+	
 
 }
