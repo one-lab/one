@@ -35,9 +35,11 @@ $(function(){
 		},
 		"plugins" : [ "themes", "json_data", "ui" ]
 	}).bind("select_node.jstree", function (event, data) {
+		var comCode=data.rslt.obj.attr("id");
+		alert(comCode);
 		$("#grid").children().remove();
 		$("#grid").Grid({
-			url : "${ctx}/views/common/grid3.json",
+			url : "${ctx}/role/rolelist",
 			dataType: "json",
 			height: 'auto',
 			colums:[
