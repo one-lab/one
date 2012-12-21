@@ -16,21 +16,10 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("#treeTow").jstree({ 
-			"themes" : {
-				"theme" : "default",
-				"dots" : false,
-			},
-			"json_data" : {
-				"ajax" : {
-						"url" : "${ctx}/views/common/tree.json"
-				}
-			},
-			"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
-		});
 	fitHeight();
-	$("#grid").Grid({
-		url : "${ctx}/role/roleList/"+"${groupId}",
+	$("#updataGrid").Grid({
+		type:"post",
+		url : "${ctx}/group/findRoleByGroupId/"+"${groupId}",
 		dataType: "json",
 		height: 220,
 		colums:[
@@ -39,9 +28,9 @@ $(function(){
 			{id:'3',text:'创建日期',name:"Version",index:'1',align:'',color:''},
 			{id:'4',text:'修改日期',name:"degrees",index:'1',align:'',color:''}
 		],
-		rowNum:5,
+		rowNum:500,
 		sorts:false,
-		pager : true,
+		pager : false,
 		number:false,
 		multiselect: true
 	});	
@@ -60,22 +49,32 @@ function fitHeight(){
     <td width="568" colspan="3" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="info_form add_user">
       <tr>
         <td align="right">用户组名称：</td>
-        <td><input type="text" style="width:160px;" id="name" value="${name}"/></td>
+        <td><input type="text" style="width:160px;" id="updataGroupName" value="${name}"/>
+        	<input type="text" style="width:160px;" id="updataGroupId" value="${groupId}"/>
+        </td>
         <td>类型：</td>
-        <td><select name="select2">
-          <option>默认类型</option>
-          <option>所有可见类型</option>
-          </select></td>
+        <td>
+        	<select name="select" id="updateGroupType">
+           	 		<c:if test="${flag eq 'all'}" >
+							 	<option value="default" >默认</option>
+	                   			<option value="all" selected="selected">所有可见</option>
+	          		</c:if>          		
+               		<c:if test="${flag eq 'default'}">
+               		 	<option value="default" selected="selected">默认</option>
+               			<option value="all" >所有可见</option>
+               		</c:if>     
+                </select>
+                </td>
       </tr>
       <tr>
         <td align="right">用户组描述：</td>
-        <td colspan="3"><textarea name="textarea" id="des" cols="30" rows="1" style="width:90%;">${des}</textarea></td>
+        <td colspan="3"><textarea name="textarea" id="updataGroupDes" cols="30" rows="1" style="width:90%;">${des}</textarea></td>
       </tr>
     </table></td>
   </tr>
   <tr>
     <td colspan="3" valign="top">
-    	<div id="grid"></div>
+    	<div id="updataGrid"></div>
     </td>
   </tr>
 </table>

@@ -1,7 +1,9 @@
 package com.sinosoft.one.ams.service.spring;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Group;
+import com.sinosoft.one.ams.model.GroupRole;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.UserPower;
@@ -19,7 +22,11 @@ import com.sinosoft.one.ams.repositories.GeRmsBusPowerRepository;
 import com.sinosoft.one.ams.repositories.GeRmsCompanyRepository;
 import com.sinosoft.one.ams.repositories.GeRmsDataRuleRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
+import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
+import com.sinosoft.one.ams.repositories.GeRmsRoleDesignateRepository;
 import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
+import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
+import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
@@ -27,6 +34,7 @@ import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.ams.service.facade.StuffingService;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
+import com.sinosoft.one.ams.utils.uiutil.Treeable;
 
 @Component
 public class StuffingServiceImpl implements StuffingService{
@@ -48,7 +56,34 @@ public class StuffingServiceImpl implements StuffingService{
 	@Autowired
 	private GeRmsDataRuleRepository geRmsDataRuleRepository;
 	@Autowired
+	private GeRmsGroupRoleRepositoriy geRmsGroupRoleRepository;
+	@Autowired
+	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
+	@Autowired
+	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
+	@Autowired
+	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
+	@Autowired
 	private UserDao userDao;
+	
+	//检查用户权限的id是否存在，存在返回yes，否则返回no
+		public String checkIdByUserCodeComCode(String userCode, String comCode) {
+			System.out.println(userCode);
+			System.out.println(comCode);
+			String id = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+			String result = "no";
+			if(id != null){
+				result = "yes";
+			}
+			return result;
+		}
+
+		//根据机构ID查询本机构的用户组
+		public List<Group> findGroupByComCode(String comCode) {
+			List<Group> groupList = geRmsGroupRepository.findGroupByComCode(comCode);
+			return groupList;
+		}
+	
 	
 	//保存数据设置
 //	public String saveBusPower(BusPower busPower, String[] ruleIdArr,String[] paramArr, String userPowerId, String taskId) {
@@ -308,16 +343,6 @@ public class StuffingServiceImpl implements StuffingService{
 			String userCode) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	public List<Group> findGroupByComCode(String comCode) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Role> findRoleByGroupId(String groupId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public Gridable<Employe> getGridable(Gridable<Employe> gridable,

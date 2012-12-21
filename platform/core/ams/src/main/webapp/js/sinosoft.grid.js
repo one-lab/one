@@ -4,8 +4,6 @@
  * Mail:zuoliwen@sinosoft.com.cn
  * Date: 2012-07-03
  */
- //问题：：：：：：：对了，MB的忘了传个图片试试，下次传个图片试试，列的高度可能不够啊！！！！！！！！
- //现在就是start和end的问题了！！！！！！！！！！！！（把这两个弄明白！！！！！用的地方很多很多）
 (function ($) {
 	 $.fn.extend({
 		Grid: function(opts){
@@ -15,21 +13,24 @@
 				height    : "auto" ,     
 				width     : "auto",
 				loadText  : "数据加载中…",
-				colums    : "", //我擦~~~，这个colums是什么意思？？？？？？？？？
-				rowNum    : "auto",  //代表每页显示多少条数据
-				rowList   : [10, 20, 30],
-				number    : true,     //代表是否有序号
-				multiselect: true,    //代表是否多选
-				sorts     : false,	  //表示列的排序，包含升序和降序	
-				colDisplay: true,     //每一列点击那个小三角，出现的那个列显示
-				draggable : true,
-				sequence  : true,     //这个是什么意思？？？？？
+				colums    : "", 
+				rowNum    : "auto",  
+				number    : true,     
+				hasSpan   : false,     
+				multiselect: true,    
+				autoColWidth: true, 
+				radioSelect: false,  
+				sorts     : false,	  
+				colDisplay: true,     
+				draggable : true,		
+				sequence  : true, 
+				clickSelect :true,
 				pages     : {
-					pager    : true ,  //
-					renew    : false , //
-					paging   : true ,  //这个的意思就是点一下向右跳转的，点一下向左跳转的那东西有没有
-					goPage   : true ,  //指的是select选择跳转
-					info     : true    //
+					pager    : true ,  
+					renew    : false , 
+					paging   : true ,  
+					goPage   : true ,  
+					info     : true    
 				},
 				callback : {
 					beforeDelData : function(gridNode){},
@@ -37,38 +38,34 @@
 				}
 			};			
 			var defaults = $.extend(defaults,opts);		
-			var g = $(this);  //g代表引用该控件的div
+			var g = $(this);  
 			var $gBox = $('<div class="grid_box"></div>');
-			//$gHeader里边包含$gHeadBox和$needle,其中$needle是列拖动的那个小竖条
+			
 			var $gHeader = $('<div class="grid_head"></div>');
 			var $gHeadBox = $('<div class="head_box"></div>');
-			//$gHeadColumn是每一列的字段名称div
+
 			var $gHeadColumn = $('<div class="gird_head_column"></div>');
-			//列拖拽的那道小竖线
+
 			var $needle = $('<div class="needle"></div>');
-			//放table的div
+
 			var $gView = $('<div class="grid_view"></div>');
 			var $load = $('<div class="loading"><span>' + defaults.loadText + '</span></div>');
-//问题：：：下面这个变量是干什么的？？
-//我觉的就是盛放所有列名的，错了，不是这样的，是放每一列的宽度，字段剧中还是靠左，字体的颜色。			
+			
 			var colAttributes = {};
 			colAttributes.widths = [];
 			colAttributes.aligns = [];
 			colAttributes.colors = [];
-//问题：：：我操！下边这几个变量又是干什么的？？？？？？？			
+	
 			var widths = [],aligns = [],colors = [],allCh = [],hids = [];
 			var $checkBox = $('<input type="checkbox" value="" name="all_sec" class="chex" />');
 			var $gNumber = '';
-			//end代表每页显示多少条数据，即rowNum，但是为什么rowNum一超过20就会出现问题呢？？ 表格最右侧会有一块空白显示
-			//adaptive是没有定义宽度的列的初始化宽度
-//问题：：：：：str代表起始那个意思，具体还得好好分析分析！！！！！！！！！
+
 			var adaptive = 0,str = 0,end = defaults.rowNum,pB = 1;
-			//pageUnclick是那个向左向右按钮不能点击
-			//total代表一共有多少条数据
-			//ps代表一共有多少页
+
 			var onOff,
 				pageUnclik,
 				disb = true,
+				trId,
 				oW,
 				nW,
 				tI,
@@ -85,36 +82,32 @@
 				_stop;
 			var _move=false;
 			var _x;
-//_data是用来存放ajax接收过来的数据的。
+
 			var _data;
-			//g代表$(this)		
+
 			g.append($gBox);
-//下边这个$gBox之所以有宽度，只是因为他添加到了g中，而g是html页面中写好的div，宽度自适应，所以，你懂的
+
 			var $gW = $gBox.width();
-			//auto的作用是计算在调用控件的时候给没有width的列的宽度设置计算出来的默认宽度
+
 			autoWidth(); 
 			
 			createGridHead();
-			//生成grid header（第三遍看这里了，这一次要彻底弄懂所有的东西！！！！！）
-			//在这个方法中会给colAttributes进行初始化赋值
+
 			function createGridHead(){
-			//col是defaults.colums，是你调用控件的时候，传入的所有的列头的信息
+
 				var col = defaults.colums;
-				//是否添加checkbox
+
 				if(defaults.multiselect) {
 					$gHeadColumn.addClass("multiple").append($checkBox);
 					$gHeader.append($gHeadColumn);
 				};
-				//是否添加序号列
+
 				if(defaults.number){
-					//$gNumber是序号的列的div	
 					$gNumber = $('<div class="gird_head_column number"><span class="number">序号</span></div>');
 					$gHeader.append($gNumber);
 				};
 				for(var i = 0; i < col.length; i++){
-//sorts代表？？？？？colDisplay代表？？？？？？？？
-//sorts表示列的排序，包含升序和降序, colDisplay每一列点击那个小三角，出现的那个列显示
-//排序或者列显示只要有一个在每一列的列头就加入<div class="grid_menu"></div>
+
 					if(!defaults.sorts && !defaults.colDisplay) {
 						$gHeadColumn = $('<div class="gird_head_column cols col_' + i +'"></div>');
 					}else{
@@ -136,39 +129,33 @@
 					if(col[i].index){ 
 						$gHeadColumn.attr("index",col[i].index);
 					};
-//下面是给列添加width属性，如果调用控件的时候没给列附加width属性，那么就用上边计算出来的默认的列的宽度
+
 					if(col[i].width){
 						$gHeadColumn.css({"width":col[i].width});
-//colAttributes.widths，ColAttributes是个对象，是每一列列头的属性的集合，widths是个数组，所有列的宽度的汇总
+
 						colAttributes.widths.push(col[i].width);
 					}else{
 						$gHeadColumn.css({"width":adaptive});
 						colAttributes.widths.push(adaptive);
 					};
-//这里是给列赋值align属性，让列中的文字内容居中，居左，还是居右对齐，如果调用控件的时候没有赋值，默认居左				
+			
 					if(col[i].align){
 						colAttributes.aligns.push(col[i].align);
 					}else{
 						colAttributes.aligns.push("left");
 					};
-//问题：：：：这个color好像不是颜色，添加这个属性的地方注意下！！！！！！！！！！！！！！
-//问题：：：：colors:inherit是什么意思，我操！！！！！！
-//我懂了，这个color:inherit表示文字的颜色继承父标签的文字的颜色					
+					
 					if(col[i].color){
 						colAttributes.colors.push(col[i].color);
 					}else{
 						colAttributes.colors.push("inherit");
 					};
-//问题：：：defaults.pages.goPage和defaults.pages.paging分别是什么意思？？？？？？？？
+
 					if(defaults.pages.goPage || defaults.pages.paging){
 						formatHids(i);
 					};
 					$gHeader.append($gHeadColumn);
-//$gHeadColumn.children("div")找的div是<div class="grid_menu"></div>
-//我操，我终于明白为什么鼠标移上去它会显示隐藏的div但是fireBug没有显示了，他是用css控制的
-//因为你鼠标移上去的时候，会有hover这个class，然后上边的css是没有在hover底下找
-//而下边他又写的css是在hover下，然后就出来了，可能在css文件中的改变他反应慢吧，开始的时候他不显示的，所以
-//我就纳闷为什么fireBUG他不显示，但是页面上显示了				
+				
 					$gHeadColumn
 						.bind({"mouseover":changeNeedle,"mouseout":unHover})
 						.children("div").bind("click", colMenuOpt);
@@ -187,8 +174,7 @@
 				};
 				$("div.gird_head_column",$gHeader).wrapAll($gHeadBox);
 			};
-//这个formatHids的作用就是new一个HideInfo对象，然后把这个对象放到hids数组中
-//有几列（除checkbox和序号列），基本就会放入几个对象，除非那个goPage和那个paging都为false			
+			
 			function formatHids(i){
 				var obj = new HideInfo('col_' + i, false);
 				hids.push(obj);
@@ -200,39 +186,123 @@
 					return this.name + ": " + this.isHide;
 				};
 			};
-			//menu操作
-			function colMenuOpt(e){
+
+			function colMenuOpt(e){			
 				var $gM = $gBox.children('div.grid_head_menu');
+			
 				$('div.grid_head_menu', $gBox).hide();
-//问题：：：：$.browser.msie这个好像不起作用。。。				
+			
 				if($.browser.msie && ($.browser.version == "7.0")){
 					$('div.grid_head_menu:last',$gBox).css('border-width','0')
 				}
+
 				var offset = $(this).offset();
 				var nH = $(this).height();
 				var pHead = $(this).parent();
-				//总宽度 - 这个div的左边距 < 有grid_head_menu这个class的div
-				var sm = $gW - offset.left < $gM.width();
-//一旦列的右边的那个小三角被点击，里头那个div就会加入select这个class，所以当你点击别的列头的时候
-//他会首先找到同辈的列头，然后如果有select就给丫儿删了				
+
+				var sm = $gW + g.offset().left - offset.left < $gM.width();
+
 				pHead
 					.siblings().removeClass('select')
 					.children('div.grid_menu').removeClass('clk');
 				$(this).addClass('clk');
 				pHead.addClass('select');
-				if(sm){
-					$gM.css({'left':offset.left - $gM.width() - 5,'top':nH}).show();
-//问题：：：：：：我去，onOff这个是干嘛的啊，什么意思？？？？？？？？？？					
+				
+				if(sm){				
+					$gM.css({'left':offset.left - g.offset().left - $gM.width() + $(this).width(),'top':nH}).show();
+					
 					onOff = false;
-				}else{
-					$gM.css({'left':offset.left - 5,'top':nH}).show();
+				}else{				
+					$gM.css({'left':offset.left - g.offset().left,'top':nH}).show();
 					onOff = true;
 				};
 				$(document).bind("click",bodyClick);
 				e.stopPropagation();
 				var part = $('div.grid_head_menu > ul > li.parting',$gBox);
-				//part.unbind('mouseover',subMopt);
+				
 				part.bind('mouseover',{part:part,onOff:onOff},subMopt);
+			};
+			
+			
+			function subMopt(e){
+				if($.browser.msie&&($.browser.version == "7.0")){
+					$('div.grid_head_menu:last',$gBox).css('border-width','1px')
+				};
+				var part = e.data.part;
+				var onOff = e.data.onOff;
+				var sM = $('div.grid_head_menu > div.grid_head_menu',$gBox);
+					if(onOff){
+						sM.css({'top':part.position().top,'left':part.position().left + 126}).show();
+					}else{
+						sM.css({'top':part.position().top,'left':-128}).show();
+					};
+					$('li',sM).unbind('click');
+					$('li',sM).bind('click',subClick);
+					return false;
+			};
+			
+			function subClick(e){
+				e.stopPropagation();
+				var check = $('div > label',$(this));
+				var index = $(this).index();
+				var head = $("div.col_" + index,$gHeader);
+				var hI = head.index();
+				var bw = $("div.gird_head_column[col]:visible",$gHeader).length;
+				var tb = $("table",$gView);
+				var tr = $("table > tbody > tr",$gView);
+				var ul = check.parents('ul');
+				var oI = hI;				
+				if(defaults.multiselect){
+					oI = oI - 1;
+				};
+				if(defaults.number){
+					oI = oI - 1;
+				};
+				var obj = hids[oI];
+				if(check.hasClass('chected')){
+					if(disb){
+						var tw = tb.width() - head.width();
+						check.removeClass('chected');
+						head.hide();
+						tb.width(tw - bw);
+						tr.each(function(){
+							$("td",$(this)).eq(hI).hide();
+						});
+						obj.isHide=true;			
+					}
+				}else{
+					var tw = tb.width() + head.width();
+					check.addClass('chected')
+					$('label.disabled',ul).removeClass('disabled');
+					head.show();
+					tb.width(tw);
+					tr.each(function(){
+						$("td",$(this)).eq(hI).show();
+					});
+					disb = true;
+					obj.isHide=false;
+				};
+				var cl = $("label.chected",ul).length;
+				if(cl == 1){
+					var last = $('label.chected',ul);
+					last.addClass('disabled');
+					disb = false;					
+				};	
+			}
+			
+			
+			function bodyClick(e){
+				var $gM = $('div.grid_head_menu',$gBox);
+				var pHead = $('div.select',$gHeader);
+				pHead
+					.removeClass('select')
+					.children('div.grid_menu').removeClass('clk');
+				$gM.hide();
+				if($.browser.msie&&($.browser.version == "7.0")){
+					$gM.last().css('border-width','0')
+				};
+				$(document).unbind("click",bodyClick);
+				return false
 			};
 			
 			
@@ -264,7 +334,7 @@
 				greadPage();
 			}
 			$gView.width($gW).height($gView.height());
-			//ajax加载数据
+			
 			function createData(){
 				var url = defaults.url;
 				var dataType = defaults.dataType;
@@ -299,14 +369,13 @@
 				$('tr',$gView).bind('click',trClick);
 			};
 			
-			//问题：：：他这个表格的每一列的宽度是什么时候赋值的？？？我怎么木有发现啊？？？？？			
-			//读取json数据(data, str, end, colAttributes)
+			
 			function readJson(data, startParam, endParam, colParams){
 				var gTable = '<table border="0" cellspacing="0" cellpadding="0">';		
-				rows = data.rows; //表格所有的数据赋值给rows			
-				total = data.total; //total代表总共有多少条数据
-				var colLen = defaults.colums.length; //一共有多少列			
-				var allW = 0; //表格的总体的宽度
+				rows = data.rows; 			
+				total = data.total; 
+				var colLen = defaults.colums.length; 		
+				var allW = 0; 
 				gTable = gTable + '<tr class="th_rows">';
 				if(defaults.multiselect) {
 					gTable = gTable + '<td style="width:22px">&nbsp;</td>';
@@ -317,32 +386,49 @@
 					allW += 30;
 				};
 				for(i = 0; i < colLen; i++){
-//下面这个colParams哪里给赋值的？？？？？？？在createHeader的时候赋值的，看的时候你丫儿又没注意！
 					gTable  = gTable + '<td col="col_' + i + '" style="width:' + colParams.widths[i] + 'px">&nbsp;</td>';
 					allW += Math.abs(colParams.widths[i]);
 				};
 				gTable  = gTable + '</tr>';
-				//下面这个if的意思是如果数据的条数小于规定的每页显示多少条
+				
 				if(rows.length < endParam){
 					endParam = rows.length;
 					pageUnclik = true;
 				};
 				for(j = startParam; j < endParam; j++){
 					var cell = rows[j].cell;
-					gTable = gTable + '<tr id="row_' + rows[j].id + '">';
+					if(cell.length > colLen) {
+						if(rows[j].cell[colLen] == "true") {
+					//		alert("if");
+							gTable = gTable + '<tr id="row_' + rows[j].id + '" class="select">';
+						} else {
+					//		alert("else");
+							gTable = gTable + '<tr id="row_' + rows[j].id + '">';
+						}
+					} else {
+						gTable = gTable + '<tr id="row_' + rows[j].id + '">'
+					}
 					allCh.push(false);
 					if(defaults.multiselect){
-						gTable  = gTable + '<td class="multiple"><input name="g_check" type="checkbox" value="" /></td>';				
-					};
+						if(rows[j].cell[colLen] == "true") {
+							gTable  = gTable + '<td class="multiple"><input name="g_check" type="checkbox" checked="checked" value="" /></td>';
+						} else {
+							gTable  = gTable + '<td class="multiple"><input name="g_check" type="checkbox" value="" /></td>';
+							
+						}
+					} 
 					if(defaults.number){
-						//jjjjjjj
 						var tempIndex = j + 1 + str;
 						gTable = gTable + '<td class="number"><span title="' + tempIndex + '">' + tempIndex + '</span></td>' ;
 					};
 					for(i = 0; i < colLen; i++){
 						var text = cell[i];
-						gTable  = gTable + '<td col="col_' + i + '" style="text-align:' + colParams.aligns[i] + ';color:' + colParams.colors[i] + '"><span title="' + text + '">' + text + '</span></td>';
-					};
+						if(defaults.hasSpan == true) {
+							gTable  = gTable + '<td col="col_' + i + '" style="text-align:' + colParams.aligns[i] + ';color:' + colParams.colors[i] + '"><span title="' + text + '">' + text + '</span></td>';
+						} else {
+							gTable  = gTable + '<td col="col_' + i + '" style="text-align:' + colParams.aligns[i] + ';padding:0 3px;color:' + colParams.colors[i] + '">' + text + '</td>';
+						}
+					}
 					gTable  = gTable + '</tr>';
 				};
 				gTable  = gTable + '</table>';
@@ -350,6 +436,7 @@
 				$('tr:odd',$gView).addClass('odd');
 				$('table',$gView).width(allW);
 			};
+			
 			
 			function isAllSelected(){
 				for(var i = 0, len = allCh.length; i < len; i++){
@@ -360,7 +447,7 @@
 				return true;
 			};
 			
-			//这块一定要弄懂了，删除数据之后的重新加载就靠它了！！！！！！！（不能这么说，这么说不对）
+			
 			function greadPage(){
 				var $gPage = $('<div class="grid_page"><div class="grid_page_box"></div></div>');
 				var $pBox = $('div.grid_page_box',$gPage);
@@ -378,13 +465,13 @@
 				};
 				if(defaults.pages.paging){
 					var $pagings = $('<span><b class="grid_page_fist unclick"></b></span><span><b class="grid_page_prev unclick"></b></span><div class="prick"></div><div class="grid_note"><input name="" type="text" class="page_nub" value="1" />页 共 '+ ps +' 页</div><div class="prick"></div><span><b class="grid_page_next"></b></span><span><b class="grid_page_last"></b></span><div class="prick"></div>');
-					pFirst = $('b.grid_page_fist',$pagings); //跳转到表格的第一页
-					pPrev = $('b.grid_page_prev',$pagings); //跳转到表格的上一页
+					pFirst = $('b.grid_page_fist',$pagings);
+					pPrev = $('b.grid_page_prev',$pagings); 
 					pNub = $('input.page_nub',$pagings);  //页面输入框
 					pNext = $('b.grid_page_next', $pagings); //跳转到表格的下一页
 					pLast = $('b.grid_page_last', $pagings); //跳转到表格的最后一页
-					//pageUnclick是用来判断向左，向右那个按钮是否可以点击的
-//问题：：：但是这里为什么只有右边的按钮的处理，没有左边按钮的处理，不对呀！！！！！！！！！！！！！					
+					
+					
 					if(pageUnclik){
 						pNext.addClass('unclick');
 						pLast.addClass('unclick');
@@ -394,7 +481,7 @@
 					pPrev.bind("click",{b:'prev'},pageFn);
 					pNext.bind("click",{b:'next'},pageFn);
 					pLast.bind("click",{b:'last'},pageFn);
-//问题：：：：输入框那个方式好像不能完成页面的跳转，我记得以前是可以的？？？？？？？？？？？？？？					
+					
 					pNub.bind('keyup',{b:'nub'},jampPage); 
 				};
 				if(defaults.pages.renew){
@@ -409,18 +496,14 @@
 				$gBox.append($gPage);
 			};
 			
-			function jampPage(e){			
-				//如果用bind绑定的时候传参数b，那么取值的时候是e.data.b
-				//$(this)为select或者是nub
-				//unclick代表不能点击，其实只是对跳至第一页，最后一页，上一页，下一页有效，
-				//有unclikc表示不能点击该按钮
+			function jampPage(e){
 				var path = e.data.b,
 					old = pB,
 					on = 'unclick',
-					un = !$(this).hasClass(on), //如果有unclick则un=false，如果没有unclick则un=true
-					//lHas表示pLast是否有unclick这个class
+					un = !$(this).hasClass(on), 
+					
 					lHas = pLast.hasClass(on), 
-					//fHas表示pFirst是否有unclick这个class
+					
 					fHas = pFirst.hasClass(on);
 				if(path == 'nub'){			
 					if(e.keyCode == 13){
@@ -561,15 +644,20 @@
 				}else{
 					return false;
 				};
-				
 				rePage();
 			};
+			function cancelCheck(){
+				if($(".chex").attr("checked")) {
+					$(".chex").attr("checked", false);
+				}
+			}
+			
 			function rePage(){
 				$.ajax({
 					url: defaults.url,
 					dataType: "json",
 					type: "POST",
-					data:"pageNo="+pB + "&rowNum=" + defaults.rowNum + "&pB=" +pB,
+					data:"pageNo="+pB + "&rowNum=" + defaults.rowNum,
 					async:false,
 					processData: false,
 					beforeSend : function(){
@@ -581,11 +669,12 @@
 					success: function(myData){
 						_data = myData;
 						if(_data.total < pB * defaults.rowNum) {
-							//进入if表示数据的总条数 < 当前页数*每页的数据条数
+							
 							end = _data.total;
 						} else {
 							end = pB * defaults.rowNum;
 						}
+						cancelCheck();
 					}
 				});
 				$('table', $gView).remove();
@@ -662,14 +751,10 @@
 				if(defaults.pages.goPage || defaults.pages.paging){
 					var col = defaults.colums;
 					hids = [];
-					for(var i = 0; i < col.length; i++) {
-//把所有的列名对象放入hids对象中						
+					for(var i = 0; i < col.length; i++) {						
 						formatHids(i);
 					};
-				};
-//你知道你为什么看不懂吗？？？？因为你没看一个方法的时候都忘了这个方法是干什么的，
-//你还得重新回去看，然后才能知道这是干什么的，如果你能记住的话，就不是这样的了				
-//问题：：：：这个initGrid是干什么的啊？？？？？？？？？？？我刚刚看过，他妈的就忘了				
+				};			
 				initGrid(_data, 0, end-str, colAttributes);
 				sM.each(function(){
 					if(!$(this).hasClass('chected')){
@@ -695,14 +780,22 @@
 				if(defaults.multiselect){
 					var cInpt = $("td:first > input",$(this));
 					var theI = $(this).index() - 1;
+					if(defaults.radioSelect){
+						$(this).siblings().removeClass("select");
+					};
 					if($(this).hasClass('select')){
 						$(this).removeClass('select');
-						cInpt.attr("checked",false);
+						if(defaults.clickSelect){
+							cInpt.attr("checked",false);
+						}
 						allCh[theI] = false;
 					}else{
 						$(this).addClass('select');
-						cInpt.attr("checked",true);
+						if(defaults.clickSelect){
+							cInpt.attr("checked",true);
+						}
 						allCh[theI] = true;
+						trId = $(this).attr("id");
 					};
 					if(isAllSelected()){
 						$checkBox.attr("checked",true);
@@ -749,41 +842,50 @@
 				};			
 			}
 			
-			//排序
-			function colSequence(){
+			function colSequence(e){
+				if(e.data != null) {
+					var path = e.data.b;
+					var tem = judgeMenu(path);
+					if(tem == false) {
+						return true;
+					}
+				}		
 				var isAsc;
 				var sorts = [];
 				var way = $(this).children("span");
 				var ways = $(this).siblings().find("span");
 				var listData = $('table > tbody > tr:not(:first)',$gView);
-				var tdIndex = $(this).index();
+				
+				var tdIndex = $(this).index();			
 				listData.each(function(i){
 					var colsText = $(this).children('td').eq(tdIndex).text();
-					var obj = new sortInfo(i,colsText);
+					var obj = new sortInfo(i, colsText);
 					sorts.push(obj);
-				});
-				//alert(listData.eq(2).html())
-				
+				});				
 				ways.removeClass();
-				if(way.hasClass('up')){
-					way.removeClass('up').addClass('down');
-				}else{
-					way.removeClass('down').addClass('up');
-				};
+				
+				if(way.parent().text() != "升序排序" && way.parent().text() != "降序排序") {
+					if(way.hasClass('up')){			
+						way.removeClass('up').addClass('down');
+					}else{				
+						way.removeClass('down').addClass('up');
+					}
+				}
+				
 				if(way.hasClass('down')){
 					isAsc = true;
 				}else{
 					isAsc = false;
 				};
-				sortFn(sorts,isAsc);
+				sortFn(sorts,isAsc);				
 				var sortedTrs = "";
 				$('table > tbody > tr:not(:first)',$gView).remove();
 				listData.removeClass("odd");
-				for(var i=0,len=sorts.length; i<len; i++){
+				for(var i=0, len=sorts.length; i<len; i++){
 					var j = i + 1 & 1;
 					var index = sorts[i].index;
 					if(defaults.number){
-						$('td.number',listData.get(index))
+						$('td.number', listData.get(index))
 							.attr("title",i + 1)
 							.children('span').text(i + 1);
 					};
@@ -791,17 +893,38 @@
 						listData.eq(index).addClass("odd");
 					}
 					sortedTrs = sortedTrs + listData.get(index).outerHTML;
-				};
-				listData.remove();
-				$('table > tbody',$gView).append(sortedTrs);
-					
+				};			
+				listData.remove();					
+				$('table > tbody',$gView).append(sortedTrs);	
 			};
+			var upFlag = false;
+			var downFlag = false;
+			function judgeMenu(tem){
+				if(tem == "up") {
+					if(!upFlag) {
+						upFlag = true;
+						downFlag = false;
+						return true;
+					}
+					return false;
+				} else {
+					if(!downFlag) {
+						downFlag = true;
+						upFlag = false;
+						return true;
+					}
+					return false;
+				}
+			}
+			
 			//快速排序
 			function sortFn(arr,isAsc){
-				return quickSort(arr,0,arr.length-1);
+				return quickSort(arr, 0, arr.length - 1);
 				function quickSort(arr,l,r){           
 					if(l<r){        
-						var mid=arr[parseInt((l+r)/2)].text,i=l-1,j=r+1;        
+						var mid=arr[parseInt((l+r)/2)].text,
+							i=l-1,
+							j=r+1;        
 						while(true){
 							if(isAsc){
 								while(arr[++i].text < mid);
@@ -969,8 +1092,8 @@
 				if(defaults.colDisplay){
 					gMb += '<li class="parting"><div><b class="parent"></b><span class="veiw"></span>列显示</div></li></ul>';
 					gMb += '<div class="grid_head_menu"><ul>'
-					for(i = 0;i < defaults.colums.length; i++){
-						var text = defaults.colums[i].j;
+					for(i = 0;i < defaults.colums.length; i++){					
+						var text = defaults.colums[i].text ;
 						gMb += '<li><div><label class="chected">' + text + '</label></div></li>'
 					};
 					gMb += '</div>'
@@ -979,122 +1102,41 @@
 				$gBox.prepend(gMb);
 				$('div.grid_head_menu > ul > li > div:not(.grid_head_menu)',$gBox)
 					.bind('mouseover',function(){$(this).addClass('hover')})
-					.bind('mouseout',function(){$(this).removeClass('hover')});
+					.bind('mouseout',function(){$(this).removeClass('hover')});					
+$('.grid_head_menu .up', $gBox).parent().bind("click", {b:'up'} ,colSequence);
+$('.grid_head_menu .down', $gBox).parent().bind("click", {b:'down'} ,colSequence);	
 			};
 			
-			//子菜单事件
-			function subMopt(e){
-				if($.browser.msie&&($.browser.version == "7.0")){
-					$('div.grid_head_menu:last',$gBox).css('border-width','1px')
-				};
-				var part = e.data.part;
-				var onOff = e.data.onOff;
-				var sM = $('div.grid_head_menu > div.grid_head_menu',$gBox);
-					if(onOff){
-						sM.css({'top':part.position().top,'left':part.position().left + 126}).show();
-					}else{
-						sM.css({'top':part.position().top,'left':-128}).show();
-					};
-					$('li',sM).unbind('click');
-					$('li',sM).bind('click',subClick);
-					return false;
-			};
-			//子菜单点击
-			function subClick(e){
-				e.stopPropagation();
-				var check = $('div > label',$(this));
-				var index = $(this).index();
-				var head = $("div.col_" + index,$gHeader);
-				var hI = head.index();
-				var bw = $("div.gird_head_column[col]:visible",$gHeader).length;
-				var tb = $("table",$gView);
-				var tr = $("table > tbody > tr",$gView);
-				var ul = check.parents('ul');
-				var oI = hI;				
-				if(defaults.multiselect){
-					oI = oI - 1;
-				};
-				if(defaults.number){
-					oI = oI - 1;
-				};
-				var obj = hids[oI];
-				if(check.hasClass('chected')){
-					if(disb){
-						var tw = tb.width() - head.width();
-						check.removeClass('chected');
-						head.hide();
-						tb.width(tw - bw);
-						tr.each(function(){
-							$("td",$(this)).eq(hI).hide();
-						});
-						obj.isHide=true;			
-					}
-				}else{
-					var tw = tb.width() + head.width();
-					check.addClass('chected')
-					$('label.disabled',ul).removeClass('disabled');
-					head.show();
-					tb.width(tw);
-					tr.each(function(){
-						$("td",$(this)).eq(hI).show();
-					});
-					disb = true;
-					obj.isHide=false;
-				};
-				var cl = $("label.chected",ul).length;
-				if(cl == 1){
-					var last = $('label.chected',ul);
-					last.addClass('disabled');
-					disb = false;					
-				};	
-			}
-			
-			//菜单之外点击关闭
-			function bodyClick(e){
-				var $gM = $('div.grid_head_menu',$gBox);
-				var pHead = $('div.select',$gHeader);
-				pHead
-					.removeClass('select')
-					.children('div.grid_menu').removeClass('clk');
-				$gM.hide();
-				if($.browser.msie&&($.browser.version == "7.0")){
-					$gM.last().css('border-width','0')
-				};
-				$(document).unbind("click",bodyClick);
-				return false
-			};
-			//列拖拽
+		
 			function dragCol(e){
-				//dddddddddddddd
 				$('div.grid_head_menu',$gBox).hide();
 				var $c = $("div.th_change",$gHeader);
 				var mL = parseInt($gHeader.css("margin-left"));
 				var oldW = $c.width();
 				var index = $c.index();
-				var colL = $c.position().left;
+				var colL = $c.position().left;				
 				var colW = $c.width();
 				var $rL = $('<div class="ruler left"></div>');
 				var $rR = $('<div class="ruler right"></div>');
 				var x,y,p;
-				if($('div.ruler',$gView).length > 0){
+				if($('div.ruler',$gView).length > 0){				
 					$rL = $('div.left',$gBox);
 					$rR = $('div.right',$gBox);
-					$rL.show().css("left",colL + mL - 1);
-					$rR.show().css("left",colL + colW + mL);
+					$rL.show().css("left",colL + mL + $gView.scrollLeft() - 1);
+					$rR.show().css("left",colL + colW + $gView.scrollLeft() + mL);
 				}else{
 					$rL.css("left",colL - 1);
 					$rR.css("left",colL + colW);
 					$gView.append($rL,$rR);
 				};
-				//$gBox.css("position","relative");
 				_move = true;
 				_x = $c.offset().left;
-				p = _x - colL;
+				p = _x - colL;				
 				$(document).mousemove(function(e){
 					if(_move){
-						x = e.pageX - p + mL;//移动时根据鼠标位置计算控件左上角的绝对位置
-						if(x >= colL + mL + 20){
-							$rR.css("left",x);
+						x = e.pageX - p + mL + $gView.scrollLeft();//移动时根据鼠标位置计算控件左上角的绝对位置
+						if(x >= colL + mL + 20 + $gView.scrollLeft()){
+							$rR.css("left", x);
 						};
 					};
 					return false;
@@ -1103,7 +1145,6 @@
 					$(document).unbind('mousemove mouseup');
 					$rL.hide();
 					$rR.hide();
-					//$gBox.css("position","static");
 					if(e.pageX - _x > 20){
 						$c.width(e.pageX - _x);
 					}else{
@@ -1112,33 +1153,45 @@
 					oW = oldW;
 					nW = $c.width();
 					tI = index;
-					formatWidth(oldW,nW,index);
+					formatWidth(oldW, nW, index);
 					if(defaults.multiselect)
 					tI = index - 1;
 					if(defaults.number)
 					tI = index - 1;
-					colAttributes.widths.splice(tI - 1,1,nW);
+					colAttributes.widths.splice(tI - 1, 1, nW);
+					var sL = $gView.scrollLeft();
+					$gHeader.css('margin-left',-sL);
+					if($("table", $gView).width() < $gBox.width()) {
+						
+						var cWidth = $c.width();
+						var newWidth = cWidth + $gBox.width() - $("table", $gView).width();
+						$c.width(newWidth);
+						var $f = $('table > tbody > tr:first > td', $gView);
+						$f.eq(index).width(newWidth);
+					}
 				});
 				return false;
 			};
 			
 			//改变td宽度
 			function formatWidth(oldW,newW,i){
-				var $f = $('table > tbody > tr:first > td',$gView);
+				var $f = $('table > tbody > tr:first > td', $gView);
 				var tW = $('table',$gView).width();
 				var z = tW + (newW - oldW);
-				var n = tW - (oldW - newW);
+				var n = tW - (oldW - newW) ;
 				$f.eq(i).width(newW);
 				if(newW > oldW){
 					$('table',$gView).width(z);
 					$gHeader.width(z);
-				}else{
+				} else{
 					$('table',$gView).width(n);
-					$gHeader.width(n);
+					if(n > $gBox.width())
+						$gHeader.width(n);
 				};
 				if($checkBox.attr("checked")){
 					$checkBox.attr("checked",false)
 				};
+				
 			};
 			//计算滚动条(一般是不会出现滚动条的)
 			function scrollWidth(){			
@@ -1164,11 +1217,10 @@
 			}
 			//算header中td宽度
 			function autoWidth(){
-				var col = defaults.colums; //sb了，这个不是空的，他是在调用该控件的时候传过来的值。。。所有的列名
+				var col = defaults.colums; 
 				var check = defaults.multiselect; //判断是否需要checkbox
 				var num = defaults.number;  //是否需要序列号
 				var allW = 0;
-				//下面这个if是给allW赋值
 				if(defaults.width){
 					if(defaults.width == 'auto'){
 						allW = $gW;
@@ -1197,12 +1249,9 @@
 					b++;
 				};
 				if(defaults.height == 'auto'){
-//问题：：：他这个计算值的时候还有减去b？？？好像是因为每一个列右侧都有1px的间距，所以要减去，要不就宽了。
-//因为总宽度是固定的，而你的不减去这列多出来的1px，最后就会出现问题
 					adaptive = Math.abs((allW - b - hasWidth) / j);
 				}else{
 					if(scrollWidth()){
-						//这个17是为滚动条留出来的----
 						adaptive = Math.abs((allW - b - hasWidth - 17) / j);
 					}else{
 						adaptive = Math.abs((allW - b - hasWidth) / j);
@@ -1211,9 +1260,6 @@
 				
 			}
 			
-			
-			
-			//这块一定要弄懂了，删除数据之后的重新加载就靠它了！！！！！！！（不能这么说，这么说不对）
 			function reGreadPage() {
 				var $gPage = $('<div class="grid_page"><div class="grid_page_box"></div></div>');
 				var $pBox = $('div.grid_page_box',$gPage);
@@ -1231,18 +1277,17 @@
 				};
 				if(defaults.pages.paging){
 					var $pagings = $('<span><b class="grid_page_fist"></b></span><span><b class="grid_page_prev"></b></span><div class="prick"></div><div class="grid_note"><input name="" type="text" class="page_nub" value="1" />页 共 '+ ps +' 页</div><div class="prick"></div><span><b class="grid_page_next"></b></span><span><b class="grid_page_last"></b></span><div class="prick"></div>');
-					pFirst = $('b.grid_page_fist',$pagings); //跳转到表格的第一页
-					pPrev = $('b.grid_page_prev',$pagings); //跳转到表格的上一页
-					pNub = $('input.page_nub',$pagings);  //页面输入框
-					pNext = $('b.grid_page_next', $pagings); //跳转到表格的下一页
-					pLast = $('b.grid_page_last', $pagings); //跳转到表格的最后一页					
+					pFirst = $('b.grid_page_fist',$pagings); 
+					pPrev = $('b.grid_page_prev',$pagings); 
+					pNub = $('input.page_nub',$pagings);  
+					pNext = $('b.grid_page_next', $pagings); 
+					pLast = $('b.grid_page_last', $pagings); 				
 					$pBox.append($pagings);
 					pNub.val(pB);
 					pFirst.bind("click",{b:'first'},pageFn);
 					pPrev.bind("click",{b:'prev'},pageFn);
 					pNext.bind("click",{b:'next'},pageFn);
-					pLast.bind("click",{b:'last'},pageFn);
-//问题：：：：输入框那个方式好像不能完成页面的跳转，我记得以前是可以的？？？？？？？？？？？？？？					
+					pLast.bind("click",{b:'last'},pageFn);					
 					pNub.bind('keyup',{b:'nub'},jampPage); 
 				};
 				if(defaults.pages.renew){
@@ -1257,42 +1302,33 @@
 				$gBox.append($gPage);
 			};
 			
-			
-			
-			
-			//一个是刷新数据，一个是删除数据
 			jQuery.extend({
 				grid : {
-					delGridData : function(delUrl, theThis) {
-						//删除数据之前先调用beforeDelData，然后再删除
-						defaults.callback.beforeDelData(theThis);
-						//得到该节点的id
+					delGridData : function(delUrl, dataType, theThis) {
+						defaults.callback.beforeDelData();
 						var trId = $(theThis).parents("tr").attr("id");
 						var idArray = trId.split("row_");
 						$.ajax({
 							url: delUrl,
-							dataType: "text",
+							dataType: dataType,
 							type: "GET",
 							data:"dataId=" + idArray[1],
 							beforeSend : function(){
 							},
 							error: function (XMLHttpRequest, errorThrown) {
-								alert("数据加载出错！" + errorThrown);
+								alert("删除失败！");
 							},
 							success: function(myData){
 								if(myData == "success") {
-									alert("删除成功！");
-									//调用afterDelData函数
 									if(!defaults.callback.afterDelData()){
-										//做一次查询，把接删除后的数据结果返回
-										//首先判断当前页是否还有数据，如果没有，则传的是上一页的页码，如果有的话，则传的是这页的页码
-										if($(".grid_view").find("tr").length > 6) {
-											//说明还在当前页
+										$(theThis).parents('tr').remove();
+										alert("删除成功！");
+										if($(".grid_view").find("tr").length > 0) {
 											$.ajax({
 												type: "GET",
 												url: defaults.url,
 												dataType: "json",
-												data:"test=" + pB + "&rowNum=" + defaults.rowNum,
+												data:"pageNo=" + pB + "&rowNum=" + defaults.rowNum,
 												success: function(loadData) {
 													$('table',$gView).remove();
 													var dataEnd = (pB-1)*defaults.rowNum + loadData.rows.length;
@@ -1308,7 +1344,7 @@
 												type: "GET",
 												url: defaults.url,
 												dataType: "json",
-												data:"test=" + pB + 2 + "&rowNum=" + defaults.rowNum,
+												data:"pageNo=" + pB + 2 + "&rowNum=" + defaults.rowNum,
 												success: function(loadData) {
 													var on = "unclick";
 													if(pB != 1) {
@@ -1354,13 +1390,125 @@
 											
 										}
 										
-									} else {
-										alert("删除失败！");
 									}
 								}
 							}
 						});
+					},
+					clickId : function(){
+						return trId;
+					},
+					selectTrs : function(obj){	
+						var objs = obj.split(",");		
+						for(var i=0;i < objs.length;i++){
+							var id = objs[i];
+							var trId = $('tr#'+id,g);
+							if(trId.hasClass("select")){
+								return;
+							}else{
+								trId.trigger('click');
+							};							
+						}
+					},
+					delMulGridData : function(gridId, delUrl){
+						//首先得到所有checkbox的id，拼装成一个id的字符串
+						//然后往后台传值，他给我返回新的数据
+						var allId = "";
+						var temGrid = $("#"+gridId);
+						$(temGrid).find("table").eq(0).find("input[type='checkbox']").each(function(){
+							if($(this).attr("checked")) {
+								allId = allId + $(this).parents("tr").attr("id") + ",";	 	
+							}	
+						});
+						$.ajax({
+							url: delUrl,
+							dataType: "text",
+							type: "GET",
+							data:"allId=" + allId,
+							beforeSend : function(){
+							},
+							error: function (XMLHttpRequest, errorThrown) {
+								alert("删除失败！");
+							},
+							success: function(myData){
+								if(myData == "success") {
+									if(!defaults.callback.afterDelData()){
+										//$(theThis).parents('tr').remove();
+										alert("删除成功！");
+										if($(".grid_view").find("tr").length > 0) {
+										$.ajax({
+												type: "GET",
+												url: defaults.url,
+												dataType: "json",
+												data:"pageNo=" + pB + "&rowNum=" + defaults.rowNum,
+												success: function(loadData) {
+													$('table',$gView).remove();
+													var dataEnd = (pB-1)*defaults.rowNum + loadData.rows.length;
+													initGrid(loadData, 0, dataEnd, colAttributes);
+												},
+												error:function(XMLHttpRequest, errorThrown) {
+													alert("数据加载出错！" + errorThrown);
+												}
+											});
+										} else {
+											//传入的页码是上一页
+										$.ajax({
+												type: "GET",
+												url: defaults.url,
+												dataType: "json",
+												data:"pageNo=" + pB + 2 + "&rowNum=" + defaults.rowNum,
+												success: function(loadData) {
+													var on = "unclick";
+													if(pB != 1) {
+														pB = pB - 1;
+													}
+													str = (pB - 1) * defaults.rowNum;
+													ps = Math.ceil(loadData.total/defaults.rowNum);
+													total = loadData.total;
+													$(".grid_page").remove();
+													reGreadPage();
+													if((ps == pB && ps == 1) || ps == 0) {
+														pNext.removeClass(on);
+														pLast.removeClass(on);
+														pFirst.removeClass(on);
+														pPrev.removeClass(on);
+														pNext.addClass(on);
+														pLast.addClass(on);
+														pFirst.addClass(on);
+														pPrev.addClass(on);
+													} else if(ps == pB) {
+														pNext.removeClass(on);
+														pLast.removeClass(on);
+														pFirst.removeClass(on);
+														pPrev.removeClass(on);
+														pNext.addClass(on);
+														pLast.addClass(on);
+													} else if(pB == 1) {
+														pNext.removeClass(on);
+														pLast.removeClass(on);
+														pFirst.removeClass(on);
+														pPrev.removeClass(on);
+														pFirst.addClass(on);
+														pPrev.addClass(on);		
+													}
+													$('table',$gView).remove();
+													var dataEnd = (pB-2)*defaults.rowNum + loadData.rows.length;
+													initGrid(loadData, 0, dataEnd, colAttributes);
+												},
+												error:function(XMLHttpRequest, errorThrown) {
+													alert("数据加载出错！" + errorThrown);
+												}
+											});
+											
+										}
+										
+									}
+								}
+							}
+						});
+					
 					}
+					
 				}
 			});
 			

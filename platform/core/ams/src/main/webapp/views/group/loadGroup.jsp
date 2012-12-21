@@ -21,9 +21,12 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
+	loadGroup();
+});
+function loadGroup(){
 	$("#grid").Grid({
 		type:"post",
-		url : "${ctx}/group/groupAll",
+		url : "${ctx}/group/grouplist",
 		dataType: "json",
 		height: 240,
 		colums:[
@@ -41,16 +44,15 @@ $(function(){
 	});	
 	//$("#grid > table .dis").tips({type:"toolTip",tipPostion:"left"});
 	var windowBox;
-});
+}
 
 function search(){
 	$("#grid").text("");
-	var name = $(".seach_text").attr("value");
-	if(name ==null || name =='')
-		name='null';
+	var name = "";
+		name=	$(".seach_text").attr("value");
 	$("#grid").Grid({
 		type:"post",
-		url : "${ctx}/group/search/"+name,
+		url : "${ctx}/group/grouplist/"+name,
 		dataType: "json",
 		height: 240,
 		colums:[
@@ -67,12 +69,12 @@ function search(){
 		multiselect: false
 	});	
 }
-function openWindow(obj){
-	var id = $(obj).parents('tr').attr('id');
-	var groupId = id.substr(4);
+function openUpdateWindow(obj){
+	var id=$(obj).parent().parent().attr("id").split("_")[1];
+	alert(id);
 	$("body").window({
 		"id":"window1", 
-		"url":"${ctx}/user_group/group/find/"+groupId,
+		"url":"${ctx}/group/findGroupById/"+id,
 		"title":"用户组管理", 
 		"content":"",
 		"hasIFrame":true,
@@ -80,7 +82,45 @@ function openWindow(obj){
 		"height":450, 
 		"resizing":false,
 		"diyButton":[{
-			"id": "btOne",
+		 				"id": "btOne",
+		 				"btClass": "def_btn",
+		 				"value": "保存",
+		 				"btFun": function() {
+		 					$obj = $(document.getElementById('window1_iframe').contentWindow.document);
+		 					var groupid=$obj.find("table").eq(1).find("#updataGroupId").val();
+		 					var name=$obj.find("table").eq(1).find("#updataGroupName").val();
+		 					var des=$obj.find("table").eq(1).find("#updataGroupDes").val();
+		 					var groupType=$obj.find("table").eq(1).find("#updateGroupType").val();
+		 					var roleid="";
+		 					$obj.find("#updataGrid").find("[name='g_check']:checked").each(function(){
+		 						roleid=roleid+$(this).parents("tr").attr("id").split("_")[1]+",";
+		 					});
+		 					$.ajax({
+		 						url : "${ctx}/group/update/"+groupid+"/"+name+"/"+groupType+"/"+roleid+"/"+des,
+		 						type : "post",
+		 						success : function(data){
+		 							msgSuccess("", "保存成功！");
+		 							$("#window1").remove();
+		 							$(".all_shadow").remove();
+		 							loadGroup();
+		 						},
+		 						error : function(){
+		 							alert("新增失败！！");
+		 						}
+		 					});
+		 					$("#window1").remove();
+		 					$(".all_shadow").remove();
+		 					}	
+		 				},{
+			"id": "btTwo",
+			"btClass": "def_btn",
+			"value": "取 消",
+			"btFun": function() {
+				$("#window1").remove();
+				$(".all_shadow").remove();
+				}
+			},{
+			"id": "btTre",
 			"btClass": "def_btn",
 			"value": "管理组成员",
 			"btFun": function() {
@@ -99,7 +139,7 @@ function openWindow(obj){
 		]
 	});
 };
-function addGroup(){
+function openAddWindow(){
 	$("body").window({
 		"id":"window1", 
 		"url":"addGroup.jsp",
@@ -114,23 +154,22 @@ function addGroup(){
 			"btClass": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				var roleIdStr= "";
 				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
-				$obj.find("table").eq(2).find("input[type='checkbox']").each(function(){
-					if($(this).attr("checked")) {
-						var id = $(this).parent().parent().attr("id");
-						roleIdStr =roleIdStr + id.substr(4) +",";
-					}
+				var name=$obj.find("table").eq(1).find("#addGroupName").val();
+				var des=$obj.find("table").eq(1).find("#addGroupDes").val();
+				var groupType=$obj.find("table").eq(1).find("#addGroupType").val();
+				var roleid="";
+				$obj.find("#addGroupGrid").find("[name='g_check']:checked").each(function(){
+					roleid=roleid+$(this).parents("tr").attr("id").split("_")[1]+",";
 				});
-				var name = $obj.find("table").eq(1).find("#name").val();
-				var des = $obj.find("table").eq(1).find("textarea[name]").val();
 				$.ajax({
-					url : "${ctx}/group/insert/"+name+"/"+des+"/"+roleIdStr,
+					url : "${ctx}/group/add/"+name+"/"+groupType+"/"+roleid+"/"+des,
 					type : "post",
 					success : function(data){
 						msgSuccess("", "保存成功！");
 						$("#window1").remove();
 						$(".all_shadow").remove();
+						loadGroup();
 					},
 					error : function(){
 						alert("新增失败！！");
@@ -198,7 +237,7 @@ function addGroup(){
     <td width="180"><input type="text" value="" class="seach_text" id="name"/></td>
     <td width="120"><input type="button" value=" " class="seach_btn" onclick="search();"/></td>
     <td>
-    	<input type="button" class="new_btn" value="增 加" onclick="addGroup();" />
+    	<input type="button" class="new_btn" value="增 加" onclick="openAddWindow();" />
     </td>
   </tr>
   <tr>

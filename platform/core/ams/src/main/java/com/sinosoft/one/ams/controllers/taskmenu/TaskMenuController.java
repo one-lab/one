@@ -42,7 +42,7 @@ public class TaskMenuController {
 				topList.add(task);
 			}
 		}
-		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,filter);
+		Treeable<NodeEntity> treeable = taskService.creatTaskTreeAble(topList,filter);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
 		System.out.println(render.getResultForTest());
@@ -69,34 +69,7 @@ public class TaskMenuController {
 		return Replys.simple().success("success");
 	}
 
-	//-----------------------------------------------------------//
-	/**
-	 * 构建功能树 topTasks父节点 filter所有节点
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public  Treeable<NodeEntity> creatTaskTreeAble(List<Task> topTasks,Map<String,Task> filter){
-		List<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
-		nodeEntitys=creatSubNode(topTasks, filter);
-		Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").classField("classField").urlField("urlField").builder();
-		return treeable;
-	}
 	
-	List<NodeEntity> creatSubNode(List<Task> topTasks,Map<String,Task> filter){
-		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
-		for (Task geRmsTask : topTasks) {
-			if(!filter.containsKey(geRmsTask.getTaskID()))
-                continue;
-				NodeEntity nodeEntity = new NodeEntity();
-				nodeEntity.setId(geRmsTask.getTaskID());
-				nodeEntity.setTitle(geRmsTask.getName());
-				if(!geRmsTask.getChildren().isEmpty()){
-					nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter));
-					
-				}
-				nodeEntitys.add(nodeEntity);
-			}
-		return nodeEntitys;
-	}
 	
 	
 }

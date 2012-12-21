@@ -70,11 +70,11 @@ function openWindow(){
 	});
 }
 function openQX(obj) {
-	var name = $(obj).parents("tr").find(":first-child").find("span").text();
-	var userCode = $(obj).parents("tr").find("td").eq(1).find("span").text();
+	var name = $(obj).parents("tr").find("td").eq(0).text();
+	var userCode = $(obj).parents("tr").find("td").eq(1).text();
 	$("body").window({
 		"id":"window1",
-		"url":"${ctx}/staffing/userpower/power/"+name+"/"+userCode,
+		"url":"${ctx}/staffing/power/"+name+"/"+userCode,
 		"title":"权限设置", 
 		"hasIFrame":true,
 		"content":"",

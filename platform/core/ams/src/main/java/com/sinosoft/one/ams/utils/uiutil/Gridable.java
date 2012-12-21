@@ -16,28 +16,32 @@ public class Gridable<T> implements UIable {
     private String cellStringField;
     private String[] cellStringArrayField;
     private List<String> cellListStringField;
-
+    private String checked;
+    
     private Page page;
 
     public Gridable(Page page) {
         this.page = page;
     }
 
-    public Gridable(Page page, String idField, List<String> cellListStringField) {
+    public Gridable(Page page, String idField, List<String> cellListStringField,String checked) {
         this.page = page;
         this.idField = idField;
         this.cellListStringField = cellListStringField;
+        this.checked=checked;
     }
 
-    public Gridable(Page page, String idField, String[] cellStringArrayField) {
+    public Gridable(Page page, String idField, String[] cellStringArrayField ,String checked) {
         this.page = page;
         this.idField = idField;
         this.cellStringArrayField = cellStringArrayField;
+        this.checked=checked;
     }
 
-    public Gridable(Page page, String idField, String cellStringField) {
+    public Gridable(Page page, String idField, String cellStringField ,String checked) {
         this.page = page;
         this.idField = idField;
+        this.cellStringField = cellStringField;
         this.cellStringField = cellStringField;
     }
 
@@ -84,4 +88,13 @@ public class Gridable<T> implements UIable {
     public void setPage(Page page) {
         this.page = page;
     }
+
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
+	}
+    
 }

@@ -16,24 +16,10 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript">
 $(function(){
- 	$("#treeTow").jstree({ 
-			"themes" : {
-				"theme" : "default",
-				"dots" : false,
-			},
-			"json_data" : {
-				"ajax" : {
-						"url" : "${ctx}/views/common/tree.json"
-				}
-			},
-			"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
-		});
-	fitHeight();
 	
-	
-	$("#grid").Grid({
-		type : "post",
-		url : "${ctx}/role/roleAll",
+	$("#addGroupGrid").Grid({
+		type : "get",
+		url : "${ctx}/group/findRole",
 		dataType: "json",
 		height: 220,
 		colums:[
@@ -63,22 +49,22 @@ function fitHeight(){
     <td width="568" colspan="3" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="info_form add_user">
       <tr>
         <td align="right">用户组名称：</td>
-        <td><input type="text" style="width:160px;" id="name"/></td>
+        <td><input type="text" style="width:160px;" id="addGroupName"/></td>
         <td>类型：</td>
-        <td><select name="select2">
+        <td><select name="select2" id="addGroupType">
           <option>默认类型</option>
           <option>所有可见类型</option>
           </select></td>
       </tr>
       <tr>
         <td align="right">用户组描述：</td>
-        <td colspan="3"><textarea name="textarea" cols="30" rows="1" style="width:90%;"></textarea></td>
+        <td colspan="3"><textarea name="textarea" cols="30" rows="1" style="width:90%;" id="addGroupDes"></textarea></td>
       </tr>
     </table></td>
   </tr>
   <tr>
     <td colspan="3" valign="top">
-    	<div id="grid"></div>
+    	<div id="addGroupGrid"></div>
     </td>
   </tr>
 </table>

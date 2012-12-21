@@ -26,7 +26,8 @@ $(function(){
 		},
 		"json_data" : {
 		"ajax" : {
-				"url" : "${ctx}/views/common/tree.json",
+				"type":"post",
+				"url" : "${ctx}/role/findDesigNateComTree",
 				"data" : function (n) { 
 					return { id : n.attr ? n.attr("id") : 0 }; 
 				}
@@ -34,9 +35,11 @@ $(function(){
 		},
 		"plugins" : [ "themes", "json_data", "ui" ]
 	}).bind("select_node.jstree", function (event, data) {
+		var comCode=data.rslt.obj.attr("id");
+		alert(comCode);
 		$("#grid").children().remove();
 		$("#grid").Grid({
-			url : "${ctx}/views/common/grid3.json",
+			url : "${ctx}/role/rolelist",
 			dataType: "json",
 			height: 'auto',
 			colums:[

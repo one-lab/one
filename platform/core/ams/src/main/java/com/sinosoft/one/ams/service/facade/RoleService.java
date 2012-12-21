@@ -26,10 +26,14 @@ public interface RoleService {
 	public List<Task> findTaskByComCode(String comCode);
 	
 	//查询机构下所有可见的角色
-	public Gridable<Role> getGridable(Gridable<Role> gridable,String comCode,String name,Pageable pageable);
+	public Page<Role> findRole(String comCode,String name,Pageable pageable);
 	
+	
+	public List<Role> findRoleByGroupId(String groupId,String comCode);
 	//更新角色
 	public void updateRole(String roleid,String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
 	
 	public void addRole(String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
+	
+	public void deleteRole(String roleId, String comCode);
 }
