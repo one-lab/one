@@ -1,31 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
 	default-autowire="byName" default-lazy-init="false">
 
-	<!-- 消息Queue管理器 -->
-	<bean id="queuesHolder" class="com.sinosoft.one.util.queue.QueuesHolder">
-		<property name="queueSize" value="100" />
-	</bean>
-
-	<!-- 读出Queue中日志消息写入数据库的任务 -->
-	<bean id="jdbcLogWriter" class="com.sinosoft.one.log.JdbcLogWriter">
-		<property name="queueName" value="dblog" />
-		<property name="appName" value="${log.appname}" />
-		<property name="batchSize" value="${log.batchSize}" />
-		<property name="sql">
-			<value>
-				insert into
-				GE_MONITOR_APPLOG(SERIALNO,APPNAME,USERCODE,COMCODE,TRACEID,METHODNAME,CLASSNAME,INPUTPARAM,OUTPARAM,BEGINTIME,ENDTIME,CONSUMETIME,LOGDESC,LOGGRADE,LOGTIME,LOGTYPE)
-				values(:serialNo,:appName,:userCode,:comCode,:traceId,:methodName,:className,:inputParam,:outParam,:beginTime,:endTime,:consumeTime,:logDesc,:logGrade,:logTime,:logType)
-			</value>
-		</property>
-	</bean>
-
 	<!-- 区别其它 DataSource -->
-	<bean id="monitorDataSource"
+	<bean id="logMonitorDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<!-- Connection Info -->
 		<property name="driverClassName" value="${log.jdbc.driverClassName}" />
@@ -34,9 +21,98 @@
 		<property name="password" value="${log.jdbc.password}" />
 	</bean>
 	<!-- 事务管理器配置, DataSource单数据源事务 -->
-	<bean id="monitorTransactionManager"
+	<bean id="logMonitorTransactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="monitorDataSource" />
+		<property name="dataSource" ref="logMonitorDataSource" />
 	</bean>
 
+    <bean id="logHandler" abstract="true">
+        <property name="logMonitorDataSource" ref="logMonitorDataSource" />
+        <property name="logMonitorTransactionManager" ref="logMonitorTransactionManager" />
+    </bean>
+
+    <bean id="userBehaviorLogQueueHandler" class="com.sinosoft.one.log.handler.ASynchronizedLogHandler" parent="logHandler">
+        <property name="batchSize" value="${log.userBehavior.batchSize}" />
+        <property name="sql">
+            <value>
+                INSERT INTO
+                GE_USER_BEHAVIOR_LOG(ID, URL, VISITTIME, PARAMINFOES, SESSIONID, USERID, USERIP, APPNAME)
+                VALUES (:id, :url, :visitTime, :paramInfoes, :sessionId, :userId, :userIp, :appName)
+            </value>
+        </property>
+    </bean>
+
+    <bean id="userBehaviorLogSynchronizedHandler" class="com.sinosoft.one.log.handler.SynchronizedLogHandler" parent="logHandler">
+        <property name="sql">
+            <value>
+                INSERT INTO
+                GE_USER_BEHAVIOR_LOG(ID, URL, VISITTIME, PARAMINFOES, SESSIONID, USERID, USERIP, APPNAME)
+                VALUES (:id, :url, :visitTime, :paramInfoes, :sessionId, :userId, :userIp, :appName)
+            </value>
+        </property>
+    </bean>
+
+    <bean id="urlTraceLogHandler" class="com.sinosoft.one.log.handler.ASynchronizedLogHandler" parent="logHandler">
+        <property name="batchSize" value="${log.urlTrace.batchSize}" />
+        <property name="sql">
+            <value>
+                INSERT INTO
+                GE_URL_TRACE_LOG(ID, URL, BEGINTIME, ENDTIME, CONSUMETIME, SESSIONID, USERID, USERIP, APPNAME, REQUESTINFO)
+                VALUES (:id, :url, :beginTime, :endTime, :consumeTime, :sessionId, :userId, :userIp, :appName, :requestInfo)
+            </value>
+        </property>
+    </bean>
+
+    <bean id="methodTraceLogHandler" class="com.sinosoft.one.log.handler.ASynchronizedLogHandler" parent="logHandler">
+        <property name="batchSize" value="${log.methodTrace.batchSize}" />
+        <property name="sql">
+            <value>
+                INSERT INTO
+                GE_METHOD_TRACE_LOG(ID, URLTRACEID, METHODNAME, CLASSNAME, INPARAM, OUTPARAM, BEGINTIME, ENDTIME, CONSUMETIME, LOGLEVEL, LOGDESCRIPTION, LOGTIME, APPNAME, USERID, ENVIRONMENT)
+                VALUES (:id, :urlTraceId, :methodName, :className, :inParam, :outParam, :beginTime, :endTime, :consumeTime, :logLevel, :logDescription, :logTime, :appName, :userId, :environment)
+            </value>
+        </property>
+    </bean>
+
+    <bean id="loggables" class="com.sinosoft.one.log.Loggables">
+        <property name="userBehaviorLogQueueHandler" ref="userBehaviorLogQueueHandler" />
+        <property name="userBehaviorLogSynchronizedHandler" ref="userBehaviorLogSynchronizedHandler" />
+        <property name="urlTraceLogHandler" ref="urlTraceLogHandler" />
+        <property name="methodTraceLogHandler" ref="methodTraceLogHandler" />
+        <property name="loggableQueueAppender" ref="loggableQueueAppender" />
+        <property name="appName" value="${log.appname}" />
+        <property name="user" ref="logUser" />
+        <property name="notificationService" ref="notificationService" />
+    </bean>
+
+    <bean id="jdbcLogBlockingConsumer" class="com.sinosoft.one.log.queue.JdbcLogBlockingConsumer">
+        <property name="queueName" value="dblog" />
+        <property name="persistence" value="false" />
+    </bean>
+
+    <bean id="loggableQueueAppender" class="com.sinosoft.one.log.queue.LoggableQueueAppender">
+        <property name="queueName" value="dblog" />
+        <property name="queueSize" value="${log.queue.size}" />
+    </bean>
+
+    <bean id="logConfigs" class="com.sinosoft.one.log.config.LogConfigs" init-method="init">
+        <property name="environment" value="${log.environment}" />
+    </bean>
+    <bean id="log4jManager" class="com.sinosoft.one.log.config.Log4jManager" />
+
+    <bean id="logTraceAspect" class="com.sinosoft.one.log.LogTraceAspect">
+        <property name="inspectMode">
+            <value type="com.sinosoft.one.log.methodtrace.MethodTraceLogInspectMode">${log.method.inspectMode}</value>
+        </property>
+    </bean>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="logAop" ref="logTraceAspect">
+            <aop:pointcut  id="traceAspectCut" expression="${log.method.aspect.expression}"/>
+            <aop:around  pointcut-ref="traceAspectCut" method="logAgroundClassAndInterface"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!-- 配置MBean自动注册 -->
+    <context:mbean-export default-domain="log" registration="replaceExisting" />
 </beans>

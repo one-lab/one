@@ -1,6 +1,7 @@
 package com.sinosoft.one.log.handler;
 
 import com.sinosoft.one.log.Loggable;
+import org.apache.log4j.Appender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -26,20 +27,14 @@ import java.util.Map;
  * Time: 下午8:30
  * To change this template use File | Settings | File Templates.
  */
-public class LogHandlerSupport implements LogHandler {
+public class ASynchronizedLogHandler implements LogHandler {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private List<Loggable> loggableList = new ArrayList<Loggable>();
     private int batchSize = 10;
     private String sql = "";
-    private String appName;
 
     private NamedParameterJdbcTemplate jdbcTemplate;
     private TransactionTemplate transactionTemplate;
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
 
     /**
      * 带Named Parameter的insert sql.
@@ -60,16 +55,16 @@ public class LogHandlerSupport implements LogHandler {
     /**
      * 根据注入的monitordataSource创建jdbcTemplate.
      */
-    public void setMonitorDataSource(DataSource monitordataSource) {
-        jdbcTemplate = new NamedParameterJdbcTemplate(monitordataSource);
+    public void setLogMonitorDataSource(DataSource logMonitordataSource) {
+        jdbcTemplate = new NamedParameterJdbcTemplate(logMonitordataSource);
     }
 
     /**
      * 根据注入的monitorTransactionManager创建transactionTemplate.
      */
-    public void setMonitorTransactionManager(
-            PlatformTransactionManager monitorTransactionManager) {
-        transactionTemplate = new TransactionTemplate(monitorTransactionManager);
+    public void setLogMonitorTransactionManager(
+            PlatformTransactionManager logMonitorTransactionManager) {
+        transactionTemplate = new TransactionTemplate(logMonitorTransactionManager);
     }
 
     public void doHandler(Loggable loggable) {
@@ -97,12 +92,14 @@ public class LogHandlerSupport implements LogHandler {
                         TransactionStatus status) {
                 try {
                     jdbcTemplate.batchUpdate(sql, batchParams);
+
                     if (logger.isDebugEnabled()) {
                         for (Loggable loggable : loggableList) {
                             logger.debug("saved log: {}",
-                                    loggable.convertToString());
+                                    loggable.toString());
                         }
                     }
+
                 } catch (DataAccessException e) {
                     status.setRollbackOnly();
                     handleDataAccessException(e, loggableList);
@@ -127,7 +124,7 @@ public class LogHandlerSupport implements LogHandler {
 
         for (Loggable loggable : loggableList) {
             logger.error("event insert to database error, ignore it: "
-                    + loggable.convertToString(), e);
+                    + loggable.toString(), e);
         }
     }
 
