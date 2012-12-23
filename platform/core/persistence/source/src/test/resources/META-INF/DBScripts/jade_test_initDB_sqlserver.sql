@@ -43,6 +43,15 @@ CREATE TABLE t_user (
 ) ;
 
 -- ----------------------------
+--  Table structure for 'T_PROCEDURE_INSERT_MODEL'
+-- ----------------------------
+CREATE TABLE T_PROCEDURE_INSERT_MODEL (
+  ID varchar(32) NOT NULL,
+  NAME varchar(200) default NULL,
+  CRATETIME datetime default NULL,
+  PRIMARY KEY  (ID)
+) ;
+-- ----------------------------
 --  Records 
 -- ----------------------------
 INSERT INTO t_code_gender VALUES ("0","女"),('1','男'),('3', 'g3'),('4', 'g4'),
@@ -83,5 +92,15 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT @PARA2 = name FROM T_CODE_GROUP WHERE id = @PARA1;
+END;
+
+CREATE PROCEDURE [dbo].[TESTINSERT]
+	@ID varchar(20),
+	@NAME varchar(200),
+	@CREATETIME datetime
+AS
+BEGIN
+	SET NOCOUNT ON;
+  INSERT INTO T_PROCEDURE_INSERT_MODEL values (ID,NAME, CREATETIME);
 END;
 

@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -171,4 +172,10 @@ public class UserRepositoryFinderTests {
 		assertThat(ascending.getContent().get(1).getFirstname(), is(equalTo(descending.getContent().get(0).getFirstname())));
 	}
 
+    @Test
+    public void testfindAllPaged() {
+        Page<User> users = userRepository.findAllPaged("Dave", new PageRequest(0, 1, new Sort(Direction.ASC,
+                "id")));
+        Assert.assertEquals(dave.getFirstname(), users.getContent().get(0).getFirstname());
+    }
 }
