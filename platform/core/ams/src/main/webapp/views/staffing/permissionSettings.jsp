@@ -45,6 +45,9 @@ $(function(){
 		}
 	}).bind("select_node.jstree", function(e, data){
 		comCode = data.rslt.obj.attr("id");
+		comCName = data.rslt.obj.find("a").text();
+		$(".set_info").attr("id" , comCode);
+		$(".set_info").find("span").text(comCName);
 		var temVal = "";
 		$.ajax({
 			url : "${ctx}/staffing/checkCom/"+comCode+"/${userCode}",
@@ -201,7 +204,7 @@ function addSelect(obj,event) {
 				}
 			});
 		}else{
-			
+
 			$(".setup_box").eq(2).find("ul").children().each(function(){
 				if(!($(this).find("span").hasClass("select"))){
 					$(this).find("span").addClass("select");
@@ -343,18 +346,18 @@ function ajaxMethodThree(thisLi) {
 		
 		$fLeft = $("<div class='f_left'></div>");
 		$fLeft.append("<label class='set_name'><input name='' type='checkbox' value='' />" + tipName + "</label>")
-			.append("<div id='"+ thisId+groupId+"_f_left'></div>");
+			.append("<div id='"+thisId+groupId+"_f_left'></div>");
 
 		if($("."+groupId).length == 0){
 			$groupBox = $("<div class='f_left "+groupId+"' style='width:756px'></div>");
-			$groupBox.append("<label class='set_name'><input name='' type='checkbox' value='' />" + groupName + "</label>")
+			$groupBox.append("<label class='set_name'>" + groupName + "</label>")
 			$(".set_info").find(".set_box").append($groupBox);
 			$groupBox.append($fLeft);
 		}else{
 			$("."+groupId).append($fLeft);
 		}
 		
-		$("#" + thisId+groupId + "_f_left").jstree({ 
+		$("#" +thisId+groupId+ "_f_left").jstree({ 
 			"themes" : {
 				"dots" : false,
 				"icons" : false
@@ -366,15 +369,6 @@ function ajaxMethodThree(thisLi) {
 			},
 			"plugins":["themes","json_data","checkbox","ui"]
 		});
-		if($(thisLi).parent("ul").length == 1){
-			var htmlVal = $(thisLi).parent().html();
-			$div = $("<div id='"+groupId+"Task"+"'></div>");
-			$div.html(htmlVal);
-			$ziObj = $("#hidden").find("div[id='"+groupId+"Task']");
-			if($ziObj.length == 1)
-				$ziObj.remove();
-			$("#hidden").append($div);
-		}
 		
 	} else {
 		var thisId = $(thisLi).attr("id");
@@ -387,6 +381,14 @@ function ajaxMethodThree(thisLi) {
 		}
 		
 	}
+	
+	var htmlVal = $(thisLi).parent().html();
+	$div = $("<div id='"+groupId+"Task"+"'></div>");
+	$div.html(htmlVal);
+	$ziObj = $("#hidden").find("div[id='"+groupId+"Task']");
+	if($ziObj.length == 1)
+		$ziObj.remove();
+	$("#hidden").append($div);
 }
 function ajaxMethodFour(obj){
 
@@ -397,7 +399,8 @@ function ajaxMethodFour(obj){
 		$obj.addClass("select");
 	}
 
-	groupId = $(".setup_box").eq(0).children("ul").find("li[class='select']").attr("id");
+	groupId = $(".setup_box").eq(0).find("li[class='select']").attr("id");
+	groupName = $(".setup_box").eq(0).find("li[class='select']").find("a").text();
 	ajaxMethodThree(obj);
 }
 </script>
@@ -439,8 +442,8 @@ function ajaxMethodFour(obj){
             </ul>
         </div>
         <div class="clear setw"><div class="tolge_show up"></div></div>
-        <div class="set_info setw">
-        	<div class="title2"><b>该员工在<span>河北</span>分公司权限设置预览</b></div>
+        <div class="set_info setw" id = ''>
+        	<div class="title2"><b>该员工在<span></span>分公司权限设置预览</b></div>
             <div class="set_box" >
             </div>
         </div>
