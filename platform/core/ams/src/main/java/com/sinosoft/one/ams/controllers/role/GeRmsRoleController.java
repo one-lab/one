@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.RoleDesignateInfo;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.ams.service.facade.CompanyService;
@@ -183,6 +184,42 @@ public class GeRmsRoleController {
 		render.render(inv.getResponse());
 		return null;
 	}
+	
+	@Post("findDesignateRole/{comCode}")
+	public Reply findDesignateRole(@Param("comCode") String comCode, @Param("pageNo") int pageNo,
+			@Param("rowNum") int rowNum,Invocation inv) throws Exception{
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		Company company=companyService.findCompanyByComCode(comCode);
+		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
+		Gridable<Role> ga = new Gridable<Role>(null);
+		//查询机构下所有可见的角色
+		List<String> roleAttribute = new ArrayList<String>();
+		Page<RoleDesignateInfo> superComRolePage = roleService.findRoleDesignate(company.getUpperComCode(), comCode, pageable);
+//		Page<Role> subComRolePage = roleService.findRole(comCode, null, pageable);
+//		List<Role> supersRoles = superComRolePage.getContent();
+//		List<Role> subsRoles = subComRolePage.getContent();
+//		for (Role supersRole : supersRoles) {
+//			for (Role subsRole : subsRoles) {
+//				if(supersRole.getRoleID().toString().equals(subsRole.getRoleID().toString())){
+//					supersRole.setChecked("true");
+//					supersRole.setFlag(subsRole.getr)
+//					break;
+//				}
+//			}
+//		}
+		ga.setPage(superComRolePage);
+		ga.setIdField("roleId");
+		roleAttribute.add("roleName");
+		roleAttribute.add("operateTime");
+		roleAttribute.add("operateUser");
+		roleAttribute.add("type");
+		ga.setCellListStringField(roleAttribute);
+		inv.getResponse().setContentType("text/html;charset=UTF-8");
+		Render render = (GridRender) UIUtil.with(ga).as(UIType.Json);
+		render.render(inv.getResponse());
+		return null;
+	}
+	
 	
 	//-----------------------------------------------------------//
 	/**

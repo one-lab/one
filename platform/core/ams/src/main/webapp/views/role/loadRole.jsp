@@ -67,8 +67,7 @@ function search(){
 
 
 function openUpdateWindow(th){
-	var id=$(th).parent().parent().parent().attr("id").split("_")[1];
-	alert(id);
+	var id=$(th).parent().parent().attr("id").split("_")[1];
 	
 	$("body").window({
 		"id":"window1", 
