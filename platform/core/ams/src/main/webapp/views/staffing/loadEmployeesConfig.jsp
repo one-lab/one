@@ -38,7 +38,7 @@ $(function(){
 		number:false,
 		multiselect: false
 	});	
-	//$("#grid > table .dis").tips({type:"toolTip",tipPostion:"left"});
+
 });
 function openWindow(){
 	$("body").window({
@@ -86,12 +86,38 @@ function openQX(obj) {
 			"value": "保 存",
 			"btFun": function() {
 				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
-				comCode = $obj.find(".set_info").attr("id");
+				$company = $obj.find(".set_info");
+				comCode = $company.attr("id");
+				var groupIdStr = "";
+				$company.find(".set_box").children().each(function(){
+					var id = $(this).attr("id");
+					groupIdStr = groupIdStr + id.substr(5) + ",";
+					
+				});
+				var taskIdStr = "";
+				$company.find(".jstree-unchecked").each(function(){
+					var id = $(this).attr("id");
+					taskIdStr = taskIdStr + id +",";
+				});
+				
+				if(taskIdStr == ""){
+					taskIdStr = "null";
+				}
 
-			//	msgSuccess("", "保存成功！");
-			//	$("#window1").remove();
-			//	$(".all_shadow").remove();
-				} 
+				$.ajax({
+					url : "${ctx}/staffing/savePower/"+comCode +"/"+userCode+"/"+groupIdStr+"/"+taskIdStr,
+					success : function(data){
+						msgSuccess("", "保存成功！");
+						$("#window1").remove();
+						$(".all_shadow").remove();	
+					},
+					error : function(){
+						alert("操作失败！");
+					}
+				});
+				
+			
+			} 
 			}, {
 			"id": "btTwo",
 			"btClass": "def_btn",

@@ -167,6 +167,13 @@ public class StaffingController {
 		return null;
 	}
 	
+	//保存用户的权限除外表和用户权限表
+	@Get("savePower/{comCode}/{userCode}/{groupIdStr}/{taskIdStr}")
+	public Reply savePower(@Param("comCode")String comCode,@Param("userCode")String userCode,@Param("groupIdStr")String groupIdStr,@Param("taskIdStr")String taskIdStr,Invocation inv){
+		stuffingService.savePower(comCode, userCode, groupIdStr,taskIdStr);
+		return Replys.with("success");
+	}
+	
 	
 	
 //	//用户的数据权限设置

@@ -55,6 +55,9 @@ public interface StuffingService {
 	//根据机构Id，查询机构的用户组
 	public List<Group> findGroupByComCode(String comCode);
 	
+	//保存用户的权限除外表和用户权限表
+	public void savePower(String comCode,String userCode,String groupIdStr,String taskIdStr);
+	
 	
 	
 }

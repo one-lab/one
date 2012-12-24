@@ -13,14 +13,17 @@ import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
 import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.model.ExcPower;
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.GroupRole;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
+import com.sinosoft.one.ams.model.UserGroup;
 import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.repositories.GeRmsBusPowerRepository;
 import com.sinosoft.one.ams.repositories.GeRmsCompanyRepository;
 import com.sinosoft.one.ams.repositories.GeRmsDataRuleRepository;
+import com.sinosoft.one.ams.repositories.GeRmsExcPowerRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
 import com.sinosoft.one.ams.repositories.GeRmsRoleDesignateRepository;
@@ -28,6 +31,7 @@ import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
 import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
+import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.ams.service.AccountManager;
@@ -64,6 +68,10 @@ public class StuffingServiceImpl implements StuffingService{
 	@Autowired
 	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
 	@Autowired
+	private GeRmsExcPowerRepository geRmsExcPowerRepository;
+	@Autowired
+	private GeRmsUserGroupRepository geRmsUserGroupRepository;
+	@Autowired
 	private UserDao userDao;
 	
 	//检查用户权限的id是否存在，存在返回yes，否则返回no
@@ -82,6 +90,44 @@ public class StuffingServiceImpl implements StuffingService{
 		public List<Group> findGroupByComCode(String comCode) {
 			List<Group> groupList = geRmsGroupRepository.findGroupByComCode(comCode);
 			return groupList;
+		}
+		
+		//保存用户的权限除外表和用户权限表
+		public void savePower(String comCode, String userCode, String groupIdStr, String taskIdStr) {
+			
+			UserPower up = new UserPower();
+			up.setComCode(comCode);
+			up.setUserCode(userCode);
+			up.setIsValidate("1");
+			geRmsUserPowerRepository.save(up);
+			
+			String[]groupIds = groupIdStr.split(",");
+			if(groupIds.length > 0){
+				for(String id : groupIds){
+					UserGroup ug = new UserGroup();
+					ug.setGroup(geRmsGroupRepository.findOne(id));
+					ug.setUserCode(userCode);
+					ug.setUserPower(up);
+					ug.setIsValidate("1");
+					geRmsUserGroupRepository.save(ug);
+					
+				}
+			}
+			
+			if(!taskIdStr.toString().equals("null")){
+				String[] taskId = taskIdStr.split(",");
+				if(taskId.length > 0){
+					for(String id : taskId){
+						ExcPower ep = new ExcPower();
+						ep.setTask(geRmsTaskRepository.findOne(id));
+						ep.setUserPower(up);
+						ep.setIsValidate("1");
+						geRmsExcPowerRepository.save(ep);
+					}
+				}
+			}
+			
+
 		}
 	
 	
@@ -374,5 +420,6 @@ public class StuffingServiceImpl implements StuffingService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }
