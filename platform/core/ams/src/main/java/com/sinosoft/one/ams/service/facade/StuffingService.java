@@ -55,9 +55,6 @@ public interface StuffingService {
 	//根据机构Id，查询机构的用户组
 	public List<Group> findGroupByComCode(String comCode);
 	
-	//根据角色ID和机构ID查询相应的权限
-	public List<Task> findTaskByRoleIdComCode(String roleIdStr,String comCode);
 	
-	//查询当前用户组，当前角色，当前根权限的后代权限
-	public Treeable<NodeEntity> getTreeable(String roleId, String comCode,String taskId);
+	
 }

@@ -17,7 +17,9 @@ var temTreeId = "";
 var temFlag = true;//该变量用来最下边的初始化的。
 var comCode = "";
 var groupId = "";
+var groupName = "";
 var roleId = "";
+var roleIdStr = ",";
 $(function(){
 	$(".setup_box").hide();
 	$(".clear").hide(); 
@@ -53,7 +55,7 @@ $(function(){
 						type : "get",
 						success : function(data){
 							for(var i=0;i<data.length;i++){
-								temVal = temVal + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this);'></span>"+data[i].name+"</a></li>";
+								temVal = temVal + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this,event);'></span>"+data[i].name+"</a></li>";
 							};
 					        $(".setup_box").eq(0).children("ul").html(temVal);
 							$(".setup_box").eq(0).show();
@@ -112,57 +114,36 @@ function fitHeight(){
 	var pageHeight = $(document).height() - 62;
 	$("#treeOne").height(pageHeight);
 };
-function addSelect(thisLi) {
-	if($(thisLi).hasClass("select") || $(thisLi).find("span").hasClass("select")) {
-		$(thisLi).removeClass("select");
-		$(thisLi).find("span").removeClass("select");
-		$(".set_info").find(".set_box").children().remove();
-	} else {	
-		$(thisLi).addClass("select");
-		$(thisLi).find("span").addClass("select");
-		$(".set_info").find(".set_box").children().remove();
-		$(thisLi).siblings().each(function(){
-			if($(this).hasClass("select")) {
-				$(this).removeClass("select");
+function addSelect(obj,event) {
+
+	if($(obj).hasClass("select")) {
+		
+		$(obj).removeClass("select");
+		$(obj).find("span").removeClass("select");
+		$(".setup_box").eq(2).find("ul").children().each(function(){
+			if($(this).find("span").hasClass("select")){
+				$(this).find("span").removeClass("select");
 			}
 		});
-	}
-	if(!$(thisLi).hasClass("select") && !$(thisLi).find("span").hasClass("select")) {
-		if($(thisLi).parent().siblings().hasClass("set2")) {
-			$(".setup_box").eq(2).children("ul").children().each(function(){
-				$(this).find("span").removeClass("select");	
-			});
-			var booFlag = true;
-			$(thisLi).siblings().each(function(){
-				if($(this).find("span").hasClass("select")) {
-					booFlag = false;
-				}
-			});
-			if(booFlag == true) {
-				$(".setup_box").eq(2).children("ul").children().remove();
-				$(".setup_box").eq(2).hide();
-				$(".clear").hide(); 
-				$(".set_info").find(".set_box").children().remove();
-				$(".set_info").hide();
+		var id = $(obj).parents("li").attr("id");
+		$(".set_info").find("."+id).remove();
+		
+		event.stopPropagation();
+	} else {
+		$(obj).addClass("select");
+		
+		groupId = $(obj).parents("li").attr("id");
+		alert(groupId);
+		$(".setup_box").eq(2).find("ul").children().each(function(){
+			if(!($(this).find("span").hasClass("select"))){
+				$(this).find("span").addClass("select");
+				ajaxMethodThree(this);
 			}
-		} else {
-			var booFlag = true;
-			$(thisLi).siblings().each(function(){
-				if($(this).find("span").hasClass("select")) {
-					booFlag = false;
-				}
-			});
-			if(booFlag == true) {
-				$(".setup_box").eq(1).children("ul").children().remove();
-				$(".setup_box").eq(1).hide();
-				$(".setup_box").eq(2).children("ul").children().remove();
-				$(".setup_box").eq(2).hide();
-				$(".clear").hide(); 
-				$(".set_info").find(".set_box").children().remove();
-				$(".set_info").hide();
-			}
-		}
+		});
+		
+		event.stopPropagation();
 	}
+
 	
 }
 function addThreeSelect(thisLi) {
@@ -174,6 +155,7 @@ function addThreeSelect(thisLi) {
 }
 function ajaxMethodOne(thisLi) {
 	groupId = thisLi.id;
+	groupName = $(thisLi).find("a").text();
 	$(thisLi).addClass("select");
 	$(thisLi).siblings().each(function(){
 		if($(this).hasClass("select")) {
@@ -185,7 +167,7 @@ function ajaxMethodOne(thisLi) {
 			url : "${ctx}/staffing/roleList/"+thisLi.id+"/"+comCode,
 			type : "get",
 			success : function(data){
-				var roleIdStr = ",";
+
 				var temVal = "";
 				if(data != null)
 					for(var i=0;i<data.length;i++){
@@ -266,28 +248,43 @@ function ajaxMethodTwo(thisLi) {
 }
 
 function ajaxMethodThree(thisLi) {
+//	alert($(thisLi).find("span").html());
 	if($(thisLi).find("span").hasClass("select")) {
 		var thisId = $(thisLi).attr("id");
 		var tipName = $(thisLi).find("a").text();
+		
 		$fLeft = $("<div class='f_left'></div>");
 		$fLeft.append("<label class='set_name'><input name='' type='checkbox' value='' />" + tipName + "</label>")
-			.append("<div id='"+ thisId +"_f_left'></div>");
-		$(".set_info").find(".set_box").append($fLeft);
-			$("#" + thisId + "_f_left").jstree({ 
-				"themes" : {
-					"dots" : false,
-					"icons" : false
-				},
-				"json_data":{
-					"ajax":{
-						"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleId+"/"+thisId
-					}
-				},
-				"plugins":["themes","json_data","checkbox","ui"]
-			});
+			.append("<div id='"+ thisId+groupId+"_f_left'></div>");
+
+		if($("."+groupId).length == 0){
+			$groupBox = $("<div class='f_left "+groupId+"' style='width:756px'></div>");
+			$groupBox.append("<label class='set_name'><input name='' type='checkbox' value='' />" + groupName + "</label>")
+			$(".set_info").find(".set_box").append($groupBox);
+			$groupBox.append($fLeft);
+		}else{
+			$("."+groupId).append($fLeft);
+		}
+		
+		$("#" + thisId+groupId + "_f_left").jstree({ 
+			"themes" : {
+				"dots" : false,
+				"icons" : false
+			},
+			"json_data":{
+				"ajax":{
+					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId
+				}
+			},
+			"plugins":["themes","json_data","checkbox","ui"]
+		});
+
 	} else {
 		var thisId = $(thisLi).attr("id");
-		$("#"+thisId +"_f_left").parent().remove();
+		$("#"+thisId+groupId +"_f_left").parent().remove();
+		if($("."+groupId).children().length == 1){
+			$("."+groupId).remove();
+		}
 	}
 }
 </script>

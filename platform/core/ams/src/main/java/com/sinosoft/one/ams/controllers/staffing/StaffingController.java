@@ -21,6 +21,7 @@ import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
 import com.sinosoft.one.ams.service.facade.RoleService;
 import com.sinosoft.one.ams.service.facade.StuffingService;
+import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
@@ -49,6 +50,8 @@ public class StaffingController {
 	private CompanyService companyService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private TaskService taskService;
 	
 	private List<String> userAttribute = new ArrayList<String>();
 	
@@ -124,6 +127,7 @@ public class StaffingController {
 		String result = stuffingService.checkIdByUserCodeComCode(userCode, comCode);
 		return Replys.with(result);
 	}
+	
 	//查询机构的用户组，并返回页面
 	@Get("group/{comCode}")
 	public Reply groupList(@Param("comCode")String comCode,Invocation inv){
@@ -137,18 +141,25 @@ public class StaffingController {
 		return Replys.with(groupRoleList).as(Json.class);
 	}
 	
-	//查询当前机构，当前当前用户组，当前角色的根权限
+	//查询当前机构，当前用户组，当前角色的根权限
 	@Get("taskList/{comCode}/{roleIdStr}")
 	public Reply taskList(@Param("comCode")String comCode, @Param("roleIdStr")String roleIdStr,Invocation  inv){
-		List<Task> taskList = stuffingService.findTaskByRoleIdComCode(roleIdStr,comCode);
+		String[] roleIds = roleIdStr.split(",");
+		List<String> roleIDs = new ArrayList<String>();
+		for(String roleId : roleIds){
+			roleIDs.add(roleId);
+		}
+		
+		List<Task> taskList = taskService.findTaskByRoleIds(roleIDs, comCode);
+		
 		return Replys.with(taskList).as(Json.class);
 	}
 	
-	//查询当前机构，当前当前用户组，当前角色的根权限的后代权限
-	@Get("taskChildren/{comCode}/{roleId}/{taskId}")
-	public Reply taskChildren(@Param("comCode")String comCode,@Param("roleId")String roleId,@Param("taskId")String taskId,Invocation  inv) throws Exception{
+	//查询当前机构，当前用户组，当前角色的根权限的后代权限
+	@Get("taskChildren/{comCode}/{roleIdStr}/{taskId}")
+	public Reply taskChildren(@Param("comCode")String comCode,@Param("roleIdStr")String roleIdStr,@Param("taskId")String taskId,Invocation  inv) throws Exception{
 		
-		Treeable<NodeEntity> treeable = stuffingService.getTreeable(roleId, comCode, taskId);
+		Treeable<NodeEntity> treeable = taskService.getTreeable(roleIdStr, comCode, taskId);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);

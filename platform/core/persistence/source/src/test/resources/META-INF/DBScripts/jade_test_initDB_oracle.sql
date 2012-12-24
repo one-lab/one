@@ -39,6 +39,15 @@ create table T_USER
   GROUPIDS VARCHAR2(300) CONSTRAINT fk_group_id  REFERENCES  t_code_group(id)
 );
 
+-- Create table T_PROCEDURE_INSERT_MODEL
+create table T_PROCEDURE_INSERT_MODEL
+(
+  ID       VARCHAR2(32) primary key,
+  NAME     VARCHAR2(200),
+  CREATETIME DATE
+);
+
+
 -- ----------------------------
 --  Procedure
 -- ----------------------------
@@ -71,3 +80,8 @@ begin
     open cur_arg3 for select * from t_code_group ;
     open cur_arg4 for select name from t_code_group ;
 end test_03;
+
+CREATE OR REPLACE PROCEDURE testinsert(ID IN VARCHAR2(32), NAME IN VARCHAR2(200), CREATETIME IN DATE)  IS
+  BEGIN
+    INSERT INTO T_PROCEDURE_INSERT_MODEL values (ID,NAME, CREATETIME);
+  END testinsert;
