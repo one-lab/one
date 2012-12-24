@@ -8,9 +8,9 @@ import java.util.Date;
  * @author Administrator
  */
 public class RoleDesignateInfo {
-	/** 属性角色*/
-	private Role role;
+	private String roleName;
 
+	private String roleId;
 	/** 属性指派机构*/
 	private String comCode;
 	
@@ -43,13 +43,13 @@ public class RoleDesignateInfo {
 		this.comCode = comCode;
 	}
 
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
+//	public Role getRole() {
+//		return role;
+//	}
+//
+//	public void setRole(Role role) {
+//		this.role = role;
+//	}
 
 	public Date getCreateTime() {
 		return createTime;
@@ -97,6 +97,22 @@ public class RoleDesignateInfo {
 
 	public void setComCName(String comCName) {
 		this.comCName = comCName;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
 	}
 	
 }

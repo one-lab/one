@@ -85,10 +85,13 @@ function openQX(obj) {
 			"btClass": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				msgSuccess("", "保存成功！");
-				$("#window1").remove();
-				$(".all_shadow").remove();
-				}	
+				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
+				comCode = $obj.find(".set_info").attr("id");
+
+			//	msgSuccess("", "保存成功！");
+			//	$("#window1").remove();
+			//	$(".all_shadow").remove();
+				} 
 			}, {
 			"id": "btTwo",
 			"btClass": "def_btn",

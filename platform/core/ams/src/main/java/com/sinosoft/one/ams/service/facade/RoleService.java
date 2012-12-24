@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 
 import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.RoleDesignate;
+import com.sinosoft.one.ams.model.RoleDesignateInfo;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 
@@ -27,7 +29,8 @@ public interface RoleService {
 	
 	//查询机构下所有可见的角色
 	public Page<Role> findRole(String comCode,String name,Pageable pageable);
-	
+
+	public Page<RoleDesignateInfo> findRoleDesignate(String superComCode ,String comCode,Pageable pageable);
 	
 	public List<Role> findRoleByGroupId(String groupId,String comCode);
 	//更新角色
@@ -36,4 +39,7 @@ public interface RoleService {
 	public void addRole(String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);
 	
 	public void deleteRole(String roleId, String comCode);
+	
+	public void designateRole(String roleId, String comCode);
+	
 }
