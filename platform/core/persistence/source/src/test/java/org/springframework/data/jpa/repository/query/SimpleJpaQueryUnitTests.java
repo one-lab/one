@@ -94,11 +94,11 @@ public class SimpleJpaQueryUnitTests {
 
 		when(em.createQuery(Mockito.anyString())).thenReturn(query);
 
-		Method method = UserRepository.class.getMethod("findAllPaged", Pageable.class);
+		Method method = UserRepository.class.getMethod("findAllPaged", String.class, Pageable.class);
 		JpaQueryMethod queryMethod = new JpaQueryMethod(method, metadata, extractor);
 
-		AbstractJpaQuery jpaQuery = new SimpleJpaQuery(queryMethod, em, "select u from User u");
-		jpaQuery.createCountQuery(new Object[] { new PageRequest(1, 10) });
+		AbstractJpaQuery jpaQuery = new SimpleJpaQuery(queryMethod, em, "select u from User u where u.firstname=?1");
+		jpaQuery.createCountQuery(new Object[] {"Dave", new PageRequest(1, 10) });
 
 		verify(query, times(0)).setFirstResult(anyInt());
 		verify(query, times(0)).setMaxResults(anyInt());

@@ -32,6 +32,7 @@ public class TreeConverter<T> implements Converter<Treeable> {
     private static final String CLASS_DEFAULT_VALUE = "";
     private static final String HREF_DEFAULT_VALUE = "javascript:void(0);";
     private static final String TYPE_ELEMENT = "type";
+    private static final String REL_ELEMENT = "rel";
     private JSONArray jsonArray;
 
     public String toJson(Treeable treeable) throws TreeConverterException {
@@ -64,6 +65,10 @@ public class TreeConverter<T> implements Converter<Treeable> {
                     /*12.18：根据需求，在<li>标签的attr属性中，增加type属性*/
                     if(treeable.getTypeField()!=null && !StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getTypeField()))){
                         jsonAttrObject.put(TYPE_ELEMENT, BeanUtils.getProperty(obj, treeable.getTypeField()));
+                    }
+                    /*12.21：根据需求，在<li>标签的attr属性中，增加rel属性*/
+                    if(treeable.getRelField()!=null && !StringUtils.isBlank(BeanUtils.getProperty(obj, treeable.getRelField()))){
+                        jsonAttrObject.put(REL_ELEMENT, BeanUtils.getProperty(obj, treeable.getRelField()));
                     }
                     jsonObject.put(ATTR_ELEMENT, jsonAttrObject);
                     dataItemObject.put(TITLE_ELEMENT, BeanUtils.getProperty(obj, treeable.getTitleField()));

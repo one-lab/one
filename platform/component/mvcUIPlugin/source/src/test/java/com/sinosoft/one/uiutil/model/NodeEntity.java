@@ -10,6 +10,7 @@ public class NodeEntity {
     private String classField;
     private String urlField;
     private String typeField;
+    private String relField;
 
     public NodeEntity() {
 
@@ -96,5 +97,13 @@ public class NodeEntity {
 
     public void setTypeField(String typeField) {
         this.typeField = typeField;
+    }
+
+    public String getRelField() {
+        return relField;
+    }
+
+    public void setRelField(String relField) {
+        this.relField = relField;
     }
 }

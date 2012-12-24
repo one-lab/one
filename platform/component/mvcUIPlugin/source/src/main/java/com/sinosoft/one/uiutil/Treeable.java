@@ -17,6 +17,7 @@ public class Treeable<T> implements UIable {
     private String childrenField;
     private String stateField;
     private String typeField;
+    private String relField;
     private List<T> content;
 
     public static class Builder<T> {
@@ -28,6 +29,7 @@ public class Treeable<T> implements UIable {
         private String classField;
         private String urlField;
         private String typeField;
+        private String relField;
 
         public Builder(List<T> content, String idField, String titleField, String childrenField, String stateField) {
             this.content = content;
@@ -52,6 +54,11 @@ public class Treeable<T> implements UIable {
             return this;
         }
 
+        public Builder relField(String val) {
+            relField = val;
+            return this;
+        }
+
         public Treeable builder() {
             return new Treeable(this);
         }
@@ -66,6 +73,7 @@ public class Treeable<T> implements UIable {
         classField = builder.classField;
         urlField = builder.urlField;
         typeField = builder.typeField;
+        relField = builder.relField;
     }
 
     public String getIdField() {
@@ -130,6 +138,14 @@ public class Treeable<T> implements UIable {
 
     public void setTypeField(String typeField) {
         this.typeField = typeField;
+    }
+
+    public String getRelField() {
+        return relField;
+    }
+
+    public void setRelField(String relField) {
+        this.relField = relField;
     }
 
     public Render getRender() {
