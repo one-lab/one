@@ -22,4 +22,5 @@ public interface CompanyService {
 	
 	public List<Company> findAllNextComBySupper(String uppercomcode);
 
+	public Company findCompanyByComCode(String comCode);
 }
