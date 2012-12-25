@@ -20,7 +20,7 @@ import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
 import com.sinosoft.one.ams.service.facade.RoleService;
-import com.sinosoft.one.ams.service.facade.StuffingService;
+import com.sinosoft.one.ams.service.facade.StaffingService;
 import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
@@ -43,7 +43,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 public class StaffingController {
 	
 	@Autowired
-	private StuffingService stuffingService;
+	private StaffingService staffingService;
 	@Autowired
 	private EmployeeService employeeService;
 	@Autowired
@@ -124,14 +124,14 @@ public class StaffingController {
 	//检查机构是否被引入
 	@Get("checkCom/{comCode}/{userCode}")
 	public Reply checkCom(@Param("comCode")String comCode,@Param("userCode")String userCode, Invocation inv){
-		String result = stuffingService.checkIdByUserCodeComCode(userCode, comCode);
+		String result = staffingService.checkIdByUserCodeComCode(userCode, comCode);
 		return Replys.with(result);
 	}
 	
 	//查询机构的用户组，并返回页面
 	@Get("group/{comCode}")
 	public Reply groupList(@Param("comCode")String comCode,Invocation inv){
-		List<Group> groupList = stuffingService.findGroupByComCode(comCode);
+		List<Group> groupList = staffingService.findGroupByComCode(comCode);
 		return Replys.with(groupList).as(Json.class);
 	}
 	//查询当前用户组的角色，并返回页面
@@ -167,10 +167,10 @@ public class StaffingController {
 		return null;
 	}
 	
-	//保存用户的权限除外表和用户权限表
+	//保存用户的权限除外表、用户权限表和用户与组关系表
 	@Get("savePower/{comCode}/{userCode}/{groupIdStr}/{taskIdStr}")
 	public Reply savePower(@Param("comCode")String comCode,@Param("userCode")String userCode,@Param("groupIdStr")String groupIdStr,@Param("taskIdStr")String taskIdStr,Invocation inv){
-		stuffingService.savePower(comCode, userCode, groupIdStr,taskIdStr);
+		staffingService.savePower(comCode, userCode, groupIdStr,taskIdStr);
 		return Replys.with("success");
 	}
 	

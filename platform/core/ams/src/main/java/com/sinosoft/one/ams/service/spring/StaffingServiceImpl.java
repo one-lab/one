@@ -35,13 +35,13 @@ import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.ams.service.AccountManager;
-import com.sinosoft.one.ams.service.facade.StuffingService;
+import com.sinosoft.one.ams.service.facade.StaffingService;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
 
 @Component
-public class StuffingServiceImpl implements StuffingService{
+public class StaffingServiceImpl implements StaffingService{
 	
 	@Autowired
 	private AccountManager accountManager;
@@ -92,7 +92,7 @@ public class StuffingServiceImpl implements StuffingService{
 			return groupList;
 		}
 		
-		//保存用户的权限除外表和用户权限表
+		//保存用户的权限除外表、用户权限表和用户与组关系表
 		public void savePower(String comCode, String userCode, String groupIdStr, String taskIdStr) {
 			
 			UserPower up = new UserPower();

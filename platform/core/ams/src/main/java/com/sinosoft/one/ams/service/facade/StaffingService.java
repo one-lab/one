@@ -18,7 +18,7 @@ import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
 
 @Service
-public interface StuffingService {
+public interface StaffingService {
 	
 	//保存数据设置
 	public String saveBusPower(BusPower busPower,String[]ruleIdArr,String[]paramArr,String userPowerId,String taskId);
@@ -55,7 +55,7 @@ public interface StuffingService {
 	//根据机构Id，查询机构的用户组
 	public List<Group> findGroupByComCode(String comCode);
 	
-	//保存用户的权限除外表和用户权限表
+	//保存用户的权限除外表、用户权限表和用户与组关系表
 	public void savePower(String comCode,String userCode,String groupIdStr,String taskIdStr);
 	
 	
