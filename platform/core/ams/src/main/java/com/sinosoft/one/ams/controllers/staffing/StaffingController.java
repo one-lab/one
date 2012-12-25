@@ -19,6 +19,7 @@ import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
+import com.sinosoft.one.ams.service.facade.GroupService;
 import com.sinosoft.one.ams.service.facade.RoleService;
 import com.sinosoft.one.ams.service.facade.StaffingService;
 import com.sinosoft.one.ams.service.facade.TaskService;
@@ -52,6 +53,8 @@ public class StaffingController {
 	private RoleService roleService;
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private GroupService groupService;
 	
 	private List<String> userAttribute = new ArrayList<String>();
 	
@@ -128,12 +131,13 @@ public class StaffingController {
 		return Replys.with(result);
 	}
 	
-	//查询机构的用户组，并返回页面
+	//查询当前机构的用户组，并返回页面
 	@Get("group/{comCode}")
 	public Reply groupList(@Param("comCode")String comCode,Invocation inv){
-		List<Group> groupList = staffingService.findGroupByComCode(comCode);
+		List<Group> groupList = groupService.findGroupByComCode(comCode);
 		return Replys.with(groupList).as(Json.class);
 	}
+	
 	//查询当前用户组的角色，并返回页面
 	@Get("roleList/{groupId}/{comCode}")
 	public Reply role(@Param("groupId")String groupId,@Param("comCode")String comCode,Invocation  inv){
@@ -173,6 +177,51 @@ public class StaffingController {
 		staffingService.savePower(comCode, userCode, groupIdStr,taskIdStr);
 		return Replys.with("success");
 	}
+	
+	//将用户名和用户ID传到updatePower.jsp页面
+	@Get("updatePower/{userName}/{userCode}")
+	public String updatePower(@Param("userName")String userName,@Param("userCode")String userCode, Invocation inv){
+		
+		inv.addModel("userName", userName);
+		inv.addModel("userCode", userCode);
+		return "updatePower";
+		
+	}
+	
+	//查询用户已引入机构
+	@Get("companise/{userCode}")
+	public Reply companies(Invocation inv,@Param("userCode")String userCode) throws Exception{
+		
+		Treeable<NodeEntity> treeable =companyService.findCompanyByUserCode(userCode);
+		
+		inv.getResponse().setContentType("text/html;charset=UTF-8");
+		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+		render.render(inv.getResponse());
+		return null;
+	}
+	
+	//查询当前机构的用户组，并返回页面
+	@Get("groupList/{comCode}/{userCode}")
+	public Reply group(@Param("comCode")String comCode,@Param("userCode")String userCode,Invocation inv){
+		List<Group> groupList = groupService.findGroupByComCode(comCode,userCode);
+		return Replys.with(groupList).as(Json.class);
+	}
+	
+	//查询当前机构，当前用户组的根权限，并标记权限是否了赋给用户
+	@Get("taskShow/{comCode}/{roleIdStr}/{userCode}")
+	public Reply taskShow(@Param("comCode")String comCode, @Param("roleIdStr")String roleIdStr, @Param("userCode")String userCode,Invocation  inv){
+		String[] roleIds = roleIdStr.split(",");
+		List<String> roleIDs = new ArrayList<String>();
+		for(String roleId : roleIds){
+			roleIDs.add(roleId);
+		}
+		
+		List<Task> taskList = taskService.findTaskByRoleIds(roleIDs, comCode,userCode);
+		
+		return Replys.with(taskList).as(Json.class);
+	}
+	
+	
 	
 	
 	

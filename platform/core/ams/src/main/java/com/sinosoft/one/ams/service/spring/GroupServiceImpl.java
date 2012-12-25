@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.GroupRole;
 import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.UserGroup;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
 import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
@@ -30,7 +31,16 @@ public class GroupServiceImpl implements GroupService{
 	private GeRmsRoleRepository geRmsRoleRepository;
 	@Autowired
 	private GeRmsGroupRoleRepositoriy geRmsGroupRoleRepositoriy;
+	@Autowired
+	private GeRmsUserGroupRepository geRmsUserGroupRepository;
 	
+	
+	
+	//根据机构ID查询本机构的用户组
+	public List<Group> findGroupByComCode(String comCode) {
+		List<Group> groupList = geRmsGroupRepository.findGroupByComCode(comCode);
+		return groupList;
+	}
 	
 	public Gridable<Group> getGroupGridable(Gridable<Group> gridable,
 			String comCode, String name, Pageable pageable) {
@@ -153,6 +163,29 @@ public class GroupServiceImpl implements GroupService{
 		}
 		group.setGroupRoles(groupRoles);
 		geRmsGroupRepository.save(group);
+	}
+
+	//根据机构Id，查询机构的用户组,并对已引入用户的组进行标记
+	public List<Group> findGroupByComCode(String comCode, String userCode) {
+		
+		List<Group> groups = geRmsGroupRepository.findGroupByComCode(comCode);
+		List<String> userGroupIds = geRmsUserGroupRepository.findUserGroupIdByUserCode(userCode);
+		if(!userGroupIds.isEmpty()){
+			List<UserGroup> userGroups = (List<UserGroup>) geRmsUserGroupRepository.findAll(userGroupIds);
+			List<String> checkGroupIds = new ArrayList<String>();
+			for(UserGroup userGroup : userGroups){
+				checkGroupIds.add(userGroup.getGroup().getGroupID());
+			}
+
+			for(Group group : groups){
+				if(checkGroupIds.contains(group.getGroupID().toString())){
+					group.setFlag("1");
+				}else{
+					group.setFlag("0");
+				}
+			}
+		}
+		return groups;
 	}
 	
 	

@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.model.ExcPower;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
+import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
+import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
@@ -27,6 +30,8 @@ public class TaskServiceImpl implements TaskService{
 	private GeRmsTaskRepository geRmsTaskRepository;
 	@Autowired
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
+	@Autowired
+	private GeRmsUserPowerRepository geRmsUserPowerRepository;
 	@Autowired
 	private Invocation inv;
 	
@@ -109,7 +114,8 @@ public class TaskServiceImpl implements TaskService{
 	public List<Task> findAllTasks() {
 		return (List<Task>)geRmsTaskRepository.findAll();
 	}
-
+	
+	//查询当前机构，当前用户组的根权限
 	public List<Task> findTaskByRoleIds(List<String> roleids,String comCode) {
 		List<Task> resultTask = new ArrayList<Task>();
 		
@@ -204,5 +210,37 @@ public class TaskServiceImpl implements TaskService{
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topTasks, filter);
 		return treeable;
 	}
+
+	//查询当前机构，当前用户组的根权限，并标记权限是否赋了给用户
+	public List<Task> findTaskByRoleIds(List<String> roleids, String comCode,
+			String userCode) {
+		List<String> taskIds = new ArrayList<String>();
+		List<Task> tasks = findTaskByRoleIds(roleids, comCode);
+		for(Task task : tasks){
+			taskIds.add(task.getTaskID());
+		}
+		
+		String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+		
+		UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
+		
+		List<String> CheckTaskIds = new ArrayList<String>();
+		List<ExcPower> excPowers = userPower.getExcPowers();
+		for(ExcPower excPower : excPowers){
+			CheckTaskIds.add(excPower.getTask().getTaskID());
+		}
+		
+		for(Task task : tasks){
+			if(CheckTaskIds.contains(task.getTaskID())){
+				task.setFlag("1");
+			}else{
+				task.setFlag("0");
+			}
+			
+		}
+		return tasks;
+	}
+	
+	
 
 }

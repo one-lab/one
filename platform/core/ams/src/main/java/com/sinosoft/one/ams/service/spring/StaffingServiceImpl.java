@@ -85,12 +85,6 @@ public class StaffingServiceImpl implements StaffingService{
 			}
 			return result;
 		}
-
-		//根据机构ID查询本机构的用户组
-		public List<Group> findGroupByComCode(String comCode) {
-			List<Group> groupList = geRmsGroupRepository.findGroupByComCode(comCode);
-			return groupList;
-		}
 		
 		//保存用户的权限除外表、用户权限表和用户与组关系表
 		public void savePower(String comCode, String userCode, String groupIdStr, String taskIdStr) {

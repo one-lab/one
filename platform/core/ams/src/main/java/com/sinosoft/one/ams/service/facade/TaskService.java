@@ -23,8 +23,11 @@ public interface TaskService {
 	
 	public List<Task> findAllTasks();
 	
-	
+	//查询当前机构，当前用户组的根权限
 	public List<Task> findTaskByRoleIds(List<String> roleids,String comCode);
+	
+	//查询当前机构，当前用户组的根权限，并标记权限是否赋了给用户
+	public List<Task> findTaskByRoleIds(List<String> roleids,String comCode ,String userCode);
 	
 	//构建功能树 topTasks父节点 filter所有节点
 	public  Treeable<NodeEntity> creatTaskTreeAble(List<Task> topTasks,Map<String,Task> filter);

@@ -36,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Page<Employe> page = userDao.findAll(pageable);
 		List<Employe> userList = page.getContent();
 		String button = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' class='set' onclick='openSJ(this);'>数据设置</a>";
-		String button2 = "<a href='#' class='agency' onclick='openWindow()'></a>";
+		String button2 = "<a href='#' class='agency' onclick='openWindow(this)'></a>";
 		for(Employe user: userList){
 			user.setNewUserCode(button);
 			user.setArticleCode(button2);
@@ -85,7 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 			List<Employe> userList = page.getContent();
 			String button = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' class='set' onclick='openSJ(this);'>数据设置</a>";
-			String button2 = "<a href='#' class='agency' onclick='openWindow()'></a>";
+			String button2 = "<a href='#' class='agency' onclick='openWindow(this)'></a>";
 			for(Employe user: userList){
 				user.setNewUserCode(button);
 				user.setArticleCode(button2);

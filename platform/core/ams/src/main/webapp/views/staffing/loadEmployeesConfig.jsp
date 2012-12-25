@@ -40,13 +40,17 @@ $(function(){
 	});	
 
 });
-function openWindow(){
+function openWindow(obj){
+	var userCode = $(obj).parents("tr").children().eq(0).text();
+	var userName = $(obj).parents("tr").children().eq(1).text();
+	//<h4>已引入机构</h4><ul class='jigou'><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li></ul>
 	$("body").window({
 		"id":"window1", 
-		"title":"姓名：张山  编号：10009999000", 
-		"content":"<h4>已引入机构</h4><ul class='jigou'><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li></ul>",
-		"width":225,
-		"height":380, 
+		"url":"${ctx}/staffing/updatePower/"+userName+"/"+userCode,
+		"title":"姓名："+ userCode+"  编号："+userName, 
+		"content":"",
+		"width":1080,
+		"height":450, 
 		"resizing":false,
 		"diyButton":[{
 			"id": "btOne",
@@ -70,8 +74,8 @@ function openWindow(){
 	});
 }
 function openQX(obj) {
-	var name = $(obj).parents("tr").find("td").eq(0).text();
-	var userCode = $(obj).parents("tr").find("td").eq(1).text();
+	var name = $(obj).parents("tr").children().eq(0).text();
+	var userCode = $(obj).parents("tr").children().eq(1).text();
 	$("body").window({
 		"id":"window1",
 		"url":"${ctx}/staffing/power/"+name+"/"+userCode,

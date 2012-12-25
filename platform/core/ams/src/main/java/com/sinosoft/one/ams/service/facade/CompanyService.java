@@ -23,4 +23,7 @@ public interface CompanyService {
 	public List<Company> findAllNextComBySupper(String uppercomcode);
 
 	public Company findCompanyByComCode(String comCode);
+	
+	//根据userCode查询出用户已被引入的机构
+	public Treeable<NodeEntity> findCompanyByUserCode(String userCode);
 }

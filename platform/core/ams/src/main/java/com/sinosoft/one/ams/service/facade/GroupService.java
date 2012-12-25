@@ -22,4 +22,10 @@ public interface GroupService {
 	public void updateGroup(String groupId,String name,String groupType,List<String> roleIds,String des,String comCode,String userCode);
 	
 	public void addGroup(String name,String groupType,List<String> roleIds,String des,String comCode,String userCode);
+	
+	//根据机构Id，查询机构的用户组
+	public List<Group> findGroupByComCode(String comCode);
+	
+	//根据机构Id，查询机构的用户组,并对已引入用户的组进行标记
+	public List<Group> findGroupByComCode(String comCode,String userCode);
 }
