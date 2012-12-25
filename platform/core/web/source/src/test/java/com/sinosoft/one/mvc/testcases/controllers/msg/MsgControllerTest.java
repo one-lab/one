@@ -1,6 +1,8 @@
 package com.sinosoft.one.mvc.testcases.controllers.msg;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.servlet.ServletException;
 
@@ -15,7 +17,11 @@ import com.sinosoft.one.mvc.testcases.AbstractControllerTest;
 public class MsgControllerTest extends AbstractControllerTest {
 
     public void testDefaultHello() throws ServletException, IOException {
-        assertEquals("你好", invoke("/msg/hello"));
+
+        String temp = new String("你好");
+      //  temp = new String(temp.getBytes(),Charset.forName("UTF-8"));
+        String t2 =    invoke("/msg/hello").toString();
+        assertEquals(temp, t2);
     }
 
     public void testHello() throws ServletException, IOException {

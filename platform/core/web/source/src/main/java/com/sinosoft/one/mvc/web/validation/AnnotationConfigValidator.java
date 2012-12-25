@@ -1,19 +1,12 @@
 package com.sinosoft.one.mvc.web.validation;
 
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.ElementType;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.*;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Configuration;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.DecimalMax;
@@ -34,6 +27,7 @@ import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.ParamValidator;
 import com.sinosoft.one.mvc.web.paramresolver.ParamMetaData;
 import com.sinosoft.one.mvc.web.validation.enumation.ErrorMessageType;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,6 +35,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.ConstraintMapping;
+import org.hibernate.validator.cfg.context.PropertyConstraintMappingContext;
 import org.hibernate.validator.cfg.context.TypeConstraintMappingContext;
 import org.hibernate.validator.cfg.defs.AssertFalseDef;
 import org.hibernate.validator.cfg.defs.AssertTrueDef;
@@ -59,11 +54,13 @@ import org.hibernate.validator.cfg.defs.PatternDef;
 import org.hibernate.validator.cfg.defs.SizeDef;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.internal.engine.PathImpl;
 import org.hibernate.validator.method.MethodConstraintViolation;
 import org.hibernate.validator.method.MethodValidator;
 import org.hibernate.validator.method.metadata.MethodDescriptor;
 import org.hibernate.validator.method.metadata.ParameterDescriptor;
 import org.hibernate.validator.method.metadata.TypeDescriptor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.Errors;
@@ -88,20 +85,13 @@ import com.sinosoft.one.mvc.web.validation.annotation.SizeEx;
 import com.sinosoft.one.mvc.web.validation.annotation.Validation;
 
 /**
- * 提供Annotation方式配置的validation实现。
- * 2012-7-5
+ * 提供针对Method参数的Annotation方式配置validation实现
+ * 使用Hibernate Validation Program式风格实现
  *
  * @author Morgan
  *
  */
 public class AnnotationConfigValidator implements ParamValidator{
-
-    enum Constraint{
-        NotNull,NotEmpty,NotBlank,Min,
-        Max,Null,Past,Pattern,
-        Size,Future,Digits,DecimalMax,
-        DecimalMin,AssertFalse,AssertTrue;
-    }
 
     private static Log logger = LogFactory.getLog(AnnotationConfigValidator.class);
 
@@ -124,103 +114,172 @@ public class AnnotationConfigValidator implements ParamValidator{
     private Validator getValidator(ParamMetaData metaData, Validation configValidation ) {
 
         if( ! ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())) {
-            OneTraversableResolver traversableResolver = new OneTraversableResolver();
-            Configuration<?> config =
-                    javax.validation.Validation.byProvider(HibernateValidator.class).configure();
-            config.traversableResolver(traversableResolver);
-            if(config instanceof  HibernateValidatorConfiguration) {
-                ((HibernateValidatorConfiguration)config).addMapping(getMapping(configValidation,metaData));
-            }
-
-            return  config.buildValidatorFactory().getValidator();
+            HibernateValidatorConfiguration config =javax.validation.Validation.byProvider(HibernateValidator.class).configure();
+            config.addMapping(
+                    createConstraintMapping(configValidation, metaData, config.createConstraintMapping())
+            );
+            return config.buildValidatorFactory().getValidator();
         }
         return defaultValidator;
     }
 
 
-    private ConstraintMapping getMapping(Validation configValidation ,ParamMetaData metaData) {
-        @SuppressWarnings("deprecation")
-        ConstraintMapping mapping = new ConstraintMapping();
-        //针对非基本类型和包装类
-        addConstraction(configValidation,mapping.type(metaData.getParamType()));
+    private ConstraintMapping createConstraintMapping(Validation configValidation ,ParamMetaData metaData,ConstraintMapping constraintMapping) {
 
-        return mapping;
+        Collection<ValidationWrapper> validationWrappers = this.createConstraintMap(configValidation);
+
+        Collection<ValidationTypeContext> validationTypeContextCollection = this.createValidationTypeContextMap(metaData,validationWrappers);
+
+        dealHibernateValidation(validationTypeContextCollection, constraintMapping);
+        return constraintMapping;
     }
 
 
-    private void addConstraction(Validation configValidation,TypeConstraintMappingContext<?> mappingContext) {
-        Map<Constraint,ValidationWrapper> constrantMap =this.createConstrantMap(configValidation);
-        for (Constraint con : constrantMap.keySet()) {
-            this.innerConstractionMapping(mappingContext,constrantMap.get(con));
+    /**
+     * 将约束Map转换为需要校验环境
+     * @param metaData
+     * @param validationWrappers
+     * @return   Map<String,ValidationTypeContext>
+     */
+    private Collection<ValidationTypeContext> createValidationTypeContextMap(ParamMetaData metaData,Collection<ValidationWrapper> validationWrappers){
+        //创建TypeValidationMap保存当前的TypeValidation
+        Map<String,ValidationTypeContext> validationTypeContextMap = new LinkedHashMap<String, ValidationTypeContext>();
+        //创建此参数的根校验对象
+        ValidationTypeContext rootContext = new ValidationTypeContext(metaData.getParamName(),metaData.getParamType());
+        //将当前根参数放置到环境中
+        validationTypeContextMap.put(metaData.getParamName(),rootContext);
+
+        //遍历所有的约束，构建 validationTypeContextMap
+        for (ValidationWrapper validationWrapper : validationWrappers){
+
+            //获取当前约束中的所有配置的属性
+            for(String propertyPath :validationWrapper.getProperties()){
+
+                //每次将临时typeContext重设为RootContext
+                ValidationTypeContext temp = rootContext;
+                //构建属性Path
+                Path path = PathImpl.createPathFromString(propertyPath);
+                //记录当前的class
+                for(Iterator<Path.Node> iterator = path.iterator();iterator.hasNext();){
+                    Path.Node node =  iterator.next();
+                    //该节点也是property的一种，需要加入进去
+                    ValidationPropertyContext validationPropertyContext = temp.getValidationProperty(node.getName());
+                    if(validationPropertyContext == null){
+                        validationPropertyContext = new ValidationPropertyContext(node.getName());
+                        temp.putValidationProperty(node.getName(),validationPropertyContext);
+                    }
+                    //如果有下级，代表是class
+                    if(iterator.hasNext()){
+                        //如果没有TypeValidationContext，新创建一个
+                        if(validationTypeContextMap.get(node.getName())==null){
+                            validationTypeContextMap.put(node.getName(),
+                                    new ValidationTypeContext(node.getName(),getPropertyRealClass(temp.getCurrentClass(),node.getName())));
+                        }
+                        //将临时变量设置为当前的typeContext
+                        temp = validationTypeContextMap.get(node.getName());
+                    }
+                    //已经是末级节点,将获取的约束增加到属性中
+                    else{
+                        validationPropertyContext.addConstraint(validationWrapper.getConstraintDef());
+                    }
+                }
+            }
         }
+        return validationTypeContextMap.values();
     }
 
-    private void innerConstractionMapping( TypeConstraintMappingContext<?> mappingContext,
-                                           ValidationWrapper validationWrapper) {
-        for(String propertyPath:validationWrapper.getProperties()) {
-            mappingContext.property( propertyPath, ElementType.FIELD )
-                    .constraint(validationWrapper.getConstraintDef())
-                    .valid();
+
+    /**
+     * 获取@param currentClass中@param propertyName的类型，如果类型为Collection类型，可以获取到定义的泛型信息
+     * @param currentClass
+     * @param propertyName
+     * @return
+     */
+    private Class<?> getPropertyRealClass(Class<?> currentClass,String propertyName){
+        //获取到当前级别的class,为适应泛型的情况，需要通过read method方法获取返回类型，然后再获取里面的参数
+        PropertyDescriptor propertyDescriptor =  BeanUtils.getPropertyDescriptor(currentClass, propertyName);
+        Class<?>[] returnClass = this.getActualClass(propertyDescriptor.getReadMethod().getGenericReturnType());
+        if(returnClass.length==0){
+            currentClass = propertyDescriptor.getPropertyType();
+        }else{
+            currentClass = returnClass[0];
         }
+        return currentClass;
     }
 
     /**
-     * 构建Bean验证用的mapping数据
+     * 根据建立好的validationTypeContextCollections，去处理hibernateValidation
+     * @param validationTypeContextCollections
+     * @param constraintMapping
+     */
+    private void dealHibernateValidation(Collection<ValidationTypeContext> validationTypeContextCollections,ConstraintMapping constraintMapping){
+        PropertyConstraintMappingContext propertyConstraintMappingContext = null;
+        //创建ConstraintMapping
+        for(ValidationTypeContext validationTypeContext:validationTypeContextCollections){
+            if(propertyConstraintMappingContext == null){
+                propertyConstraintMappingContext = validationTypeContext.validate(constraintMapping);
+            }
+            else{
+                propertyConstraintMappingContext =  validationTypeContext.validate(propertyConstraintMappingContext);
+            }
+        }
+    }
+
+
+
+    /**
+     * 根据 @Validation 获取所有配置的Constraint以及对应Validation，并转成对应的Map<Constraint, ValidationWrapper>返回
      * @param configValidation
      * @return
      */
-    private Map<Constraint, ValidationWrapper> createConstrantMap(
-            Validation configValidation) {
-        Map<Constraint,ValidationWrapper> constrantMap= new HashMap<AnnotationConfigValidator.Constraint,
-                ValidationWrapper>();
+    private Collection<ValidationWrapper> createConstraintMap(Validation configValidation) {
+        Collection<ValidationWrapper> validationConstraints = new ArrayList<ValidationWrapper>(10);
         if(configValidation.notNull().props().length > 0) {
-            constrantMap.put(Constraint.NotNull, ValidationWrapper.createNotNullDef(configValidation.notNull()));
+            validationConstraints.add(ValidationWrapper.createNotNullDef(configValidation.notNull()));
         }
         if(configValidation.notBlank().props().length>0) {
-            constrantMap.put(Constraint.NotBlank, ValidationWrapper.createNotBlankDef(configValidation.notBlank()));
+            validationConstraints.add(ValidationWrapper.createNotBlankDef(configValidation.notBlank()));
         }
         if(configValidation.notEmpty().props().length>0) {
-            constrantMap.put(Constraint.NotEmpty, ValidationWrapper.createNotEmptyDef(configValidation.notEmpty()));
+            validationConstraints.add(ValidationWrapper.createNotEmptyDef(configValidation.notEmpty()));
         }
         if(configValidation.max().props().length>0) {
-            constrantMap.put(Constraint.Max, ValidationWrapper.createMaxDef(configValidation.max()));
+            validationConstraints.add(ValidationWrapper.createMaxDef(configValidation.max()));
         }
         if(configValidation.min().props().length>0) {
-            constrantMap.put(Constraint.Min, ValidationWrapper.createMinDef(configValidation.min()));
+            validationConstraints.add(ValidationWrapper.createMinDef(configValidation.min()));
         }
         if(configValidation.pattern().props().length>0) {
-            constrantMap.put(Constraint.Pattern, ValidationWrapper.createPatternDef(configValidation.pattern()));
+            validationConstraints.add(ValidationWrapper.createPatternDef(configValidation.pattern()));
         }
         if(configValidation.size().props().length>0) {
-            constrantMap.put(Constraint.Size, ValidationWrapper.createSizeDef(configValidation.size()));
+            validationConstraints.add(ValidationWrapper.createSizeDef(configValidation.size()));
         }
         if(configValidation.assertFalse().props().length>0) {
-            constrantMap.put(Constraint.AssertFalse, ValidationWrapper.createAssertFalseDef(configValidation.assertFalse()));
+            validationConstraints.add(ValidationWrapper.createAssertFalseDef(configValidation.assertFalse()));
         }
         if(configValidation.assertTrue().props().length>0) {
-            constrantMap.put(Constraint.AssertTrue, ValidationWrapper.createAssertTrueDef(configValidation.assertTrue()));
+            validationConstraints.add(ValidationWrapper.createAssertTrueDef(configValidation.assertTrue()));
         }
         if(configValidation.decimalMax().props().length>0) {
-            constrantMap.put(Constraint.DecimalMax, ValidationWrapper.createDecimalMaxDef(configValidation.decimalMax()));
+            validationConstraints.add(ValidationWrapper.createDecimalMaxDef(configValidation.decimalMax()));
         }
         if(configValidation.decimalMin().props().length>0) {
-            constrantMap.put(Constraint.DecimalMin, ValidationWrapper.createDecimalMinDef(configValidation.decimalMin()));
+            validationConstraints.add(ValidationWrapper.createDecimalMinDef(configValidation.decimalMin()));
         }
         if(configValidation.digits().props().length>0) {
-            constrantMap.put(Constraint.Digits, ValidationWrapper.createDigistDef(configValidation.digits()));
+            validationConstraints.add(ValidationWrapper.createDigistDef(configValidation.digits()));
         }
         if(configValidation.future().props().length>0) {
-            constrantMap.put(Constraint.Future, ValidationWrapper.createFutureDef(configValidation.future()));
+            validationConstraints.add(ValidationWrapper.createFutureDef(configValidation.future()));
         }
         if(configValidation.past().props().length>0) {
-            constrantMap.put(Constraint.Past, ValidationWrapper.createPastDef(configValidation.past()));
+            validationConstraints.add(ValidationWrapper.createPastDef(configValidation.past()));
         }
         if(configValidation.nulls().props().length>0) {
-            constrantMap.put(Constraint.Null, ValidationWrapper.createNullDef(configValidation.nulls()));
+            validationConstraints.add(ValidationWrapper.createNullDef(configValidation.nulls()));
         }
-
-        //--
-        return constrantMap;
+        return validationConstraints;
     }
 
     public boolean supports(ParamMetaData metaData) {
@@ -235,21 +294,18 @@ public class AnnotationConfigValidator implements ParamValidator{
         }
 
         Validation configValidation = metaData.getAnnotation(Validation.class);
+
+
         String errorPath = configValidation.errorPath();
+
         String[] params = StringUtils.substringsBetween(errorPath, "{", "}");
-        for(String param : params) {
-            String paramValue = inv.getParameter(param);
-            errorPath = errorPath.replace("{" + param + "}", paramValue);
+        if(params != null && params.length > 0) {
+            for(String param : params) {
+                String paramValue = inv.getParameter(param);
+                errorPath = errorPath.replace("{" + param + "}", paramValue);
+            }
         }
 
-		//@todo 验证可能完全是bean级别的。2012年11月13日17:42:02 只需要判断是不是基础类型即可
-//        if(isContainsRules(configValidation)){
-//            Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
-//            if(!result.isEmpty()) {
-//                return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
-//            }
-//
-//        } else
 		if(ClassUtils.isPrimitiveOrWrapper(metaData.getParamType())){
 
             MethodValidator methodValidator = javax.validation.Validation.byProvider(HibernateValidator.class).configure()
@@ -262,7 +318,8 @@ public class AnnotationConfigValidator implements ParamValidator{
                 return this.isAjaxRequest(inv) ? methodErrorAjaxResponse(result, inv.getMethodParameterNames()) :
                         methodErrorCommonResponse(inv, result, errorPath, inv.getMethodParameterNames());
             }
-        } else {
+        }
+        else {
 			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);
 			if(!result.isEmpty()) {
 				return this.isAjaxRequest(inv) ? errorAjaxResponse(result) : errorCommonResponse(inv,result,errorPath);
@@ -329,30 +386,6 @@ public class AnnotationConfigValidator implements ParamValidator{
     }
 
     /**
-     * 判断Validation是否包含验证规则的定义。
-     * @param configValidation
-     * @return
-     */
-    private boolean isContainsRules(Validation configValidation) {
-        if(configValidation.notNull().props().length > 0) {return true;}
-        if(configValidation.notBlank().props().length > 0) {return true;}
-        if(configValidation.notEmpty().props().length > 0) {return true;}
-        if(configValidation.max().props().length > 0) {return true;}
-        if(configValidation.min().props().length > 0) {return true;}
-        if(configValidation.pattern().props().length > 0) {return true;}
-        if(configValidation.size().props().length > 0) {return true;}
-        if(configValidation.assertFalse().props().length > 0) {return true;}
-        if(configValidation.assertTrue().props().length > 0) {return true;}
-        if(configValidation.decimalMax().props().length > 0) {return true;}
-        if(configValidation.decimalMin().props().length > 0) {return true;}
-        if(configValidation.digits().props().length > 0) {return true;}
-        if(configValidation.future().props().length > 0) {return true;}
-        if(configValidation.past().props().length > 0) {return true;}
-        if(configValidation.nulls().props().length > 0) {return true;}
-        return false;
-    }
-
-    /**
      * isAjaxRequest:判断请求是否为Ajax请求. <br/>
      */
     private boolean isAjaxRequest(Invocation inv){
@@ -374,6 +407,8 @@ public class AnnotationConfigValidator implements ParamValidator{
         @SuppressWarnings("rawtypes")
         private final ConstraintDef constraintDef;
 
+        private Class<?> currentClass;
+
         @SuppressWarnings("rawtypes")
         private ValidationWrapper(final String[] properties,final ConstraintDef constraintDef){
             this.properties = properties;
@@ -387,6 +422,7 @@ public class AnnotationConfigValidator implements ParamValidator{
             this.constraintDef = constraintDef;
             this.properties = null;
         }
+
 
         public String getParamName() {
             return paramName;
@@ -486,7 +522,39 @@ public class AnnotationConfigValidator implements ParamValidator{
             return new ValidationWrapper(ex.props(),def);
         }
 
+    }
 
+
+    private static final Class<?>[] EMPTY_CLASSES = new Class<?>[0];
+
+    /**
+     * 从参数, 返回值, 基类的: Generic 类型信息获取传入的实际类信息。
+     *
+     * @param genericType - Generic 类型信息
+     *
+     * @return 实际类信息
+     */
+    private Class<?>[] getActualClass(Type genericType) {
+
+        if (genericType instanceof ParameterizedType) {
+
+            Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
+            Class<?>[] actualClasses = new Class<?>[actualTypes.length];
+
+            for (int i = 0; i < actualTypes.length; i++) {
+                Type actualType = actualTypes[i];
+                if (actualType instanceof Class<?>) {
+                    actualClasses[i] = (Class<?>) actualType;
+                } else if (actualType instanceof GenericArrayType) {
+                    Type componentType = ((GenericArrayType) actualType).getGenericComponentType();
+                    actualClasses[i] = Array.newInstance((Class<?>) componentType, 0).getClass();
+                }
+            }
+
+            return actualClasses;
+        }
+
+        return EMPTY_CLASSES;
     }
 
 }

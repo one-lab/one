@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * @author Morgan
  *
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Documented
 public @interface MaxEx {
