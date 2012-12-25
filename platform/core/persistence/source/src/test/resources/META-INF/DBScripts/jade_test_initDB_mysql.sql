@@ -57,6 +57,16 @@ CREATE TABLE `t_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `t_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `T_PROCEDURE_INSERT_MODEL`;
+CREATE TABLE `T_PROCEDURE_INSERT_MODEL` (
+  `ID` varchar(32) NOT NULL,
+  `NAME` varchar(200) default NULL,
+  `CREATETIME` date default NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ----------------------------
 --  Records 
 -- ----------------------------
 INSERT INTO `t_code_gender` VALUES ('0','女'),('1','男'),('3', 'g3'),('4', 'g4'),
@@ -89,4 +99,9 @@ END;
 CREATE PROCEDURE `teststring`(IN `para1` varchar(10),OUT `para2` varchar(10))
 BEGIN
 	SELECT name into para2 FROM T_CODE_GROUP WHERE id = para1;
+END;
+
+CREATE OR REPLACE PROCEDURE `testinsert`(IN `ID` varchar(32), IN `NAME` varchar(200),  IN `CREATETIME` DATETIME)
+BEGIN
+  INSERT INTO T_PROCEDURE_INSERT_MODEL values (ID,NAME, CREATETIME);
 END;

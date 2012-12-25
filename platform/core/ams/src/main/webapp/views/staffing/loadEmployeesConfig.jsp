@@ -38,15 +38,19 @@ $(function(){
 		number:false,
 		multiselect: false
 	});	
-	//$("#grid > table .dis").tips({type:"toolTip",tipPostion:"left"});
+
 });
-function openWindow(){
+function openWindow(obj){
+	var userCode = $(obj).parents("tr").children().eq(0).text();
+	var userName = $(obj).parents("tr").children().eq(1).text();
+	//<h4>已引入机构</h4><ul class='jigou'><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li></ul>
 	$("body").window({
 		"id":"window1", 
-		"title":"姓名：张山  编号：10009999000", 
-		"content":"<h4>已引入机构</h4><ul class='jigou'><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li></ul>",
-		"width":225,
-		"height":380, 
+		"url":"${ctx}/staffing/updatePower/"+userName+"/"+userCode,
+		"title":"姓名："+ userCode+"  编号："+userName, 
+		"content":"",
+		"width":1080,
+		"height":450, 
 		"resizing":false,
 		"diyButton":[{
 			"id": "btOne",
@@ -70,11 +74,11 @@ function openWindow(){
 	});
 }
 function openQX(obj) {
-	var name = $(obj).parents("tr").find(":first-child").find("span").text();
-	var userCode = $(obj).parents("tr").find("td").eq(1).find("span").text();
+	var name = $(obj).parents("tr").children().eq(0).text();
+	var userCode = $(obj).parents("tr").children().eq(1).text();
 	$("body").window({
 		"id":"window1",
-		"url":"${ctx}/staffing/userpower/power/"+name+"/"+userCode,
+		"url":"${ctx}/staffing/power/"+name+"/"+userCode,
 		"title":"权限设置", 
 		"hasIFrame":true,
 		"content":"",
@@ -85,10 +89,39 @@ function openQX(obj) {
 			"btClass": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				msgSuccess("", "保存成功！");
-				$("#window1").remove();
-				$(".all_shadow").remove();
-				}	
+				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
+				$company = $obj.find(".set_info");
+				comCode = $company.attr("id");
+				var groupIdStr = "";
+				$company.find(".set_box").children().each(function(){
+					var id = $(this).attr("id");
+					groupIdStr = groupIdStr + id.substr(5) + ",";
+					
+				});
+				var taskIdStr = "";
+				$company.find(".jstree-unchecked").each(function(){
+					var id = $(this).attr("id");
+					taskIdStr = taskIdStr + id +",";
+				});
+				
+				if(taskIdStr == ""){
+					taskIdStr = "null";
+				}
+
+				$.ajax({
+					url : "${ctx}/staffing/savePower/"+comCode +"/"+userCode+"/"+groupIdStr+"/"+taskIdStr,
+					success : function(data){
+						msgSuccess("", "保存成功！");
+						$("#window1").remove();
+						$(".all_shadow").remove();	
+					},
+					error : function(){
+						alert("操作失败！");
+					}
+				});
+				
+			
+			} 
 			}, {
 			"id": "btTwo",
 			"btClass": "def_btn",

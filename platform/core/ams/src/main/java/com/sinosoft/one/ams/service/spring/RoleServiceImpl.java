@@ -3,11 +3,13 @@ package com.sinosoft.one.ams.service.spring;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Group;
@@ -15,6 +17,7 @@ import com.sinosoft.one.ams.model.GroupRole;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.RoleDesignate;
 import com.sinosoft.one.ams.model.RoleDesignateId;
+import com.sinosoft.one.ams.model.RoleDesignateInfo;
 import com.sinosoft.one.ams.model.RoleTask;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
@@ -22,12 +25,9 @@ import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsGroupRoleRepositoriy;
 import com.sinosoft.one.ams.repositories.GeRmsRoleDesignateRepository;
 import com.sinosoft.one.ams.repositories.GeRmsRoleRepository;
-import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.service.facade.RoleService;
-import com.sinosoft.one.ams.utils.uiutil.Gridable;
-import com.sinosoft.one.mvc.web.Invocation;
 
 @Component
 public class RoleServiceImpl implements RoleService{
@@ -44,18 +44,9 @@ public class RoleServiceImpl implements RoleService{
 	@Autowired
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
 	@Autowired
-	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
-	@Autowired
 	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
-	@Autowired
-	private Invocation inv;
 	
-	private List<String> roleAttribute = new ArrayList<String>();
 	
-	public Page<Role> roleList(String groupId,Pageable pageable){
-		Page<Role> roleList = geRmsGroupRoleRepository.findByGroupId(groupId,pageable);
-		return roleList;
-	}
 	
 	//查询角色信息
 	public Role findRoleById(String roleId){
@@ -86,7 +77,9 @@ public class RoleServiceImpl implements RoleService{
 	//根据角色ID查询角色关联的功能
 	public List<Task> findTaskByRole(String roleId){
 		//先查询角色关联的授权
-		List<String> taskIds=geRmsTaskAuthRepository.findTaskAuthByRole(roleId);
+		List<String> roleids=new ArrayList<String>() ;
+		roleids.add(roleId);
+		List<String> taskIds=geRmsTaskAuthRepository.findTaskAuthByRole(roleids);
 		//根据授权获得的功能ID获取功能集合
 //		List<Task> geRmsTasks =geRmsTaskRepository.findTaskByTaskIds(taskIds);
 		List<Task> geRmsTasks=(List<Task>) geRmsTaskRepository.findAll(taskIds);
@@ -95,34 +88,11 @@ public class RoleServiceImpl implements RoleService{
 	
 	//根据机构查询所有可用的功能
 	public List<Task> findTaskByComCode(String comCode){
-		List<String> taskIds=geRmsTaskAuthRepository.findTaskIdByComCode(comCode);
+		List<String> taskIds=geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
 		List<Task> geRmsTasks=(List<Task>) geRmsTaskRepository.findAll(taskIds);
 		return geRmsTasks;
 	}
 
-
-	public Gridable<Role> getGridable(Gridable<Role> gridable,
-			String comCode,String name, Pageable pageable) {
-		
-		Page<Role> page = null;
-		//查询机构下所有可见的角色
-		page = findRole(comCode,name,pageable);
-		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
-		List<Role> geRmsRoles = page.getContent();
-		for (Role geRmsRole : geRmsRoles) {
-			geRmsRole.setFlag(button);
-		} 
-		gridable.setPage(page);
-		gridable.setIdField("roleID");
-		roleAttribute.add("name");
-		roleAttribute.add("des");
-		roleAttribute.add("createTime");
-		roleAttribute.add("operateTime");
-		roleAttribute.add("flag");
-		gridable.setCellListStringField(roleAttribute);
-		
-		return gridable;
-	}
 
 	public void updateRole(String roleId,String  comCode, String userCode,String name, String des,
 			String roleTpe, List<String> taskids) {
@@ -205,6 +175,13 @@ public class RoleServiceImpl implements RoleService{
 			editDefaultGroup(comCode, userCode, role);
 	}
 	
+	public void deleteRole(String roleId, String comCode){
+		RoleDesignateId roleDesignateId=new RoleDesignateId();
+		roleDesignateId.setComCode(comCode);
+		roleDesignateId.setRoleID(roleId);
+//		 geRmsRoleDesignateRepository.delete(roleDesignateId);
+	}
+	
 	//操作默认用户组
 	void editDefaultGroup(String comCode,String userCode,Role role){
 		String groupid=  geRmsGroupRepository.findGroupIdbyName("默认用户组", comCode);
@@ -257,5 +234,129 @@ public class RoleServiceImpl implements RoleService{
 			}
 		}
 	}
+
+	public List<Role> findRoleByGroupId(String groupId, String comCode) {
+		List<String> roleIds = new ArrayList<String>();
+		Group group =geRmsGroupRepository.findOne(groupId);
+		List<GroupRole>groupRoles =group.getGroupRoles();
+	
+		for (GroupRole groupRole : groupRoles) {
+			roleIds.add(groupRole.getRole().getRoleID());
+		}
+		List<String>results=new ArrayList<String>();
+		List<String> roleDegNatIds =geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
+		for (String roleDegNatId : roleDegNatIds) {
+			for (String roleId : roleIds) {
+				if(roleDegNatId.toString().equals(roleId)){
+					results.add(roleId);
+				}
+			}
+		}
+		List<Role> roles = null;
+		if(!results.isEmpty()){
+			roles =(List<Role>) geRmsRoleRepository.findAll(results);
+		}
+		return roles;
+	}
+
+
+	public Page<RoleDesignateInfo> findRoleDesignate(String superComCode ,String comCode,
+			Pageable pageable) {
+		List<RoleDesignate> supers= geRmsRoleDesignateRepository.findRoleDesignateByComCodeQuery(superComCode);
+		final Page<RoleDesignate> superRoledPage=geRmsRoleDesignateRepository.findRoleDesignateByComCode(superComCode,pageable);
+//		List<RoleDesignate> subs=geRmsRoleDesignateRepository.findRoleDesignateByComCodeQuery(comCode);
+		
+		for (RoleDesignate roleDesignate : supers) {
+			System.out.println(roleDesignate.getId().getComCode());
+			System.out.println(roleDesignate.getId().getRoleID());
+		}
+		List<RoleDesignateInfo> roleDesignateInfos=new ArrayList<RoleDesignateInfo>();
+		for (RoleDesignate supDesignate : supers) {
+			RoleDesignateInfo roleDesignateInfo=new RoleDesignateInfo();
+			roleDesignateInfo.setCreateTime(supDesignate.getCreateTime());
+			roleDesignateInfo.setCreateUser(supDesignate.getCreateUser());
+			roleDesignateInfo.setRoleId(supDesignate.getRole().getRoleID());
+			roleDesignateInfo.setRoleName(supDesignate.getRole().getName());
+			roleDesignateInfo.setOperateTime(supDesignate.getOperateTime());
+			roleDesignateInfo.setOperateUser(supDesignate.getOperateUser());
+			roleDesignateInfo.setComCode(supDesignate.getId().getComCode());
+//			for (RoleDesignate subDesignate : subs) {
+//				if(supDesignate.getId().getRoleID().toString().equals(subDesignate.getId().getRoleID().toString())){
+//					roleDesignateInfo.setType("true");
+//					break;
+//				}
+//				
+//			}
+			roleDesignateInfos.add(roleDesignateInfo);
+		}
+		
+		final Iterator<RoleDesignateInfo> iterator= roleDesignateInfos.iterator();
+		final List<RoleDesignateInfo> result=roleDesignateInfos;
+		
+		Page<RoleDesignateInfo> page=new Page<RoleDesignateInfo>() {
+			public Iterator<RoleDesignateInfo> iterator() {
+				return iterator;
+			}
+			
+			public boolean isLastPage() {
+				return superRoledPage.isLastPage();
+			}
+			
+			public boolean isFirstPage() {
+				return superRoledPage.isFirstPage();
+			}
+			
+			public boolean hasPreviousPage() {
+				return superRoledPage.hasPreviousPage();
+			}
+			
+			public boolean hasNextPage() {
+				return superRoledPage.hasNextPage();
+			}
+			
+			public boolean hasContent() {
+				return superRoledPage.hasContent();
+			}
+			
+			public int getTotalPages() {
+				return superRoledPage.getTotalPages();
+			}
+			
+			public long getTotalElements() {
+				return superRoledPage.getTotalElements();
+			}
+			
+			public Sort getSort() {
+				return superRoledPage.getSort();
+			}
+			
+			public int getSize() {
+				return superRoledPage.getSize();
+			}
+			
+			public int getNumberOfElements() {
+				return superRoledPage.getNumberOfElements();
+			}
+			
+			public int getNumber() {
+				return superRoledPage.getNumber();
+			}
+			
+			public List<RoleDesignateInfo> getContent() {
+				return result;
+			}
+		};
+		return page;
+	}
+
+	public void designateRole(List<String> roleIds, String comCode) {
+		
+	}
+
+	public void designateRole(String roleId, String comCode) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

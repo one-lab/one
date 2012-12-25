@@ -54,11 +54,7 @@ public class AccountManager {
 //		return company;
 //	}
 //
-	public Employe findByUsername(String userName) {
-		Employe user = userDao.findByUsername(userName);
-		return user;
-	}
-//
+	
 //	public Page<Employe> findAllUser(Pageable pageable) {
 //		Page<Employe> page = userDao.findAll(pageable);
 //		return page;

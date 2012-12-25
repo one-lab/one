@@ -9,6 +9,8 @@ public class NodeEntity {
     private String state;
     private String classField;
     private String urlField;
+    private String typeField;
+    private String relField;
 
     public NodeEntity() {
 
@@ -87,5 +89,21 @@ public class NodeEntity {
 
     public void setUrlField(String urlField) {
         this.urlField = urlField;
+    }
+
+    public String getTypeField() {
+        return typeField;
+    }
+
+    public void setTypeField(String typeField) {
+        this.typeField = typeField;
+    }
+
+    public String getRelField() {
+        return relField;
+    }
+
+    public void setRelField(String relField) {
+        this.relField = relField;
     }
 }

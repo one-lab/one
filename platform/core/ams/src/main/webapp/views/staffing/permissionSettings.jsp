@@ -15,6 +15,11 @@
 <script type="text/javascript">
 var temTreeId = "";
 var temFlag = true;//该变量用来最下边的初始化的。
+var comCode = "";
+var groupId = "";
+var groupName = "";
+var roleId = "";
+var roleIdStr = ",";
 $(function(){
 	$(".setup_box").hide();
 	$(".clear").hide(); 
@@ -26,7 +31,7 @@ $(function(){
 		},
 		"json_data":{
 			"ajax":{
-				"url":"${ctx}/staffing/companyList/"+"${userCode}"
+				"url":"${ctx}/staffing/companyTree"
 			}
 		},
 		"plugins":["themes","json_data","ui"]
@@ -39,35 +44,45 @@ $(function(){
 			$(".set_info").hide();
 		}
 	}).bind("select_node.jstree", function(e, data){
-		comCode=data.rslt.obj.attr("id");
+		comCode = data.rslt.obj.attr("id");
+		comCName = data.rslt.obj.find("a").text();
+		$(".set_info").attr("id" , comCode);
+		$(".set_info").find("span").text(comCName);
 		var temVal = "";
-		
 		$.ajax({
-			url : "${ctx}/staffing/group/"+comCode,
-			type : "get",
-			success : function(data){
-				for(var i=0;i<data.length;i++){
-					temVal = temVal + "<li onclick='addSelect(this); ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
-				};
-		        $(".setup_box").eq(0).children("ul").html(temVal);
-				$(".setup_box").eq(0).show();
-				$(".setup_box").eq(1).children("ul").children().remove();
-				$(".setup_box").eq(1).hide();
-				$(".setup_box").eq(2).children("ul").children().remove();
-				$(".setup_box").eq(2).hide();
-				$(".clear").hide(); 
-				$(".set_info").hide();
-			},
-			error : function(){
-				alert("失败！！");
-			}
+			url : "${ctx}/staffing/checkCom/"+comCode+"/${userCode}",
+			success: function(data){
+				if(data == "no"){
+					$.ajax({
+						url : "${ctx}/staffing/group/"+comCode,
+						type : "get",
+						success : function(data){
+							for(var i=0;i<data.length;i++){
+								temVal = temVal + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this,event);'></span>"+data[i].name+"</a></li>";
+							};
+					        $(".setup_box").eq(0).children("ul").html(temVal);
+							$(".setup_box").eq(0).show();
+							$(".setup_box").eq(1).children("ul").children().remove();
+							$(".setup_box").eq(1).hide();
+							$(".setup_box").eq(2).children("ul").children().remove();
+							$(".setup_box").eq(2).hide();
+							$(".clear").hide(); 
+							$(".set_info").hide();
+						},
+						error : function(){
+							alert("操作失败！");
+						}
 
+					});
+				}else{
+					alert("此机构已被引入！！");
+					$(".setup_box").hide();
+				}
+			},
+			error: function(){
+				alert("操作失败！！");
+			}
 		});
-		
-//		var temValOne = "<li onclick='addSelect(this); ajaxMethodOne(this);'><a href='javascript:;'><span></span>权限管理</a></li>"	
-//		var temValTwo = "<li onclick='addSelect(this); ajaxMethodOne(this);'><a href='javascript:;'><span></span>客服专员组</a></li>"
-//      var temValThree = "<li onclick='addSelect(this); ajaxMethodOne(this);'><a href='javascript:;'><span></span>保单配送</a></li>"
-//		$(".setup_box").eq(0).children("ul").html(temValOne + temValTwo + temValThree);
 	});
 	
 	fitHeight();
@@ -99,58 +114,108 @@ function fitHeight(){
 	var pageHeight = $(document).height() - 62;
 	$("#treeOne").height(pageHeight);
 };
-function addSelect(thisLi) {
-	if($(thisLi).hasClass("select") || $(thisLi).find("span").hasClass("select")) {
-		$(thisLi).removeClass("select");
-		$(thisLi).find("span").removeClass("select");
-		$(".set_info").find(".set_box").children().remove();
-	} else {	
-		$(thisLi).addClass("select");
-		$(thisLi).find("span").addClass("select");
-		$(".set_info").find(".set_box").children().remove();
-		$(thisLi).siblings().each(function(){
-			if($(this).hasClass("select")) {
-				$(this).removeClass("select");
-			}
-		});
-	}
-	if(!$(thisLi).hasClass("select") && !$(thisLi).find("span").hasClass("select")) {
-		if($(thisLi).parent().siblings().hasClass("set2")) {
-			$(".setup_box").eq(2).children("ul").children().each(function(){
-				$(this).find("span").removeClass("select");	
-			});
-			var booFlag = true;
-			$(thisLi).siblings().each(function(){
-				if($(this).find("span").hasClass("select")) {
-					booFlag = false;
+function addSelect(obj,event) {
+
+	if($(obj).hasClass("select")) {
+		$(obj).removeClass("select");
+		if($(obj).parents("li").hasClass("select")){	
+			$(".setup_box").eq(2).find("ul").children().each(function(){
+				if($(this).find("span").hasClass("select")){
+					$(this).find("span").removeClass("select");
 				}
 			});
-			if(booFlag == true) {
-				$(".setup_box").eq(2).children("ul").children().remove();
-				$(".setup_box").eq(2).hide();
-				$(".clear").hide(); 
-				$(".set_info").find(".set_box").children().remove();
-				$(".set_info").hide();
-			}
-		} else {
-			var booFlag = true;
-			$(thisLi).siblings().each(function(){
-				if($(this).find("span").hasClass("select")) {
-					booFlag = false;
-				}
-			});
-			if(booFlag == true) {
-				$(".setup_box").eq(1).children("ul").children().remove();
-				$(".setup_box").eq(1).hide();
-				$(".setup_box").eq(2).children("ul").children().remove();
-				$(".setup_box").eq(2).hide();
-				$(".clear").hide(); 
-				$(".set_info").find(".set_box").children().remove();
-				$(".set_info").hide();
-			}
 		}
+		if($(obj).parents("ul").children().find(".select").length == 0){
+			$(".setup_box").eq(1).hide();
+			$(".setup_box").eq(2).hide();
+		}
+		var id = $(obj).parents("li").attr("id");
+		$(".set_info").find("#gbox_"+id).remove();
+		$(".setup_box").eq(0).find("ul").find("#"+id).removeClass("select");
+		$("#"+id+"Task").remove();
+		$("#"+id+"Role").remove();
+		event.stopPropagation();
+	} else {
+		event.stopPropagation();
+		
+		$(obj).addClass("select");
+		
+		groupId = $(obj).parents("li").attr("id");
+		//机构没有蓝条，直接选中，不显示角色和权限，但在下面的class='set_info'标签中显示全部权限
+		if(!($(obj).parents("li").hasClass("select"))){
+			groupName = $(obj).parents("li").find("a").text();
+			var liId = $(obj).parents("li").attr("id");
+			
+			$.ajax({
+				url : "${ctx}/staffing/roleList/"+liId+"/"+comCode,
+				type : "get",
+				success : function(data){
+					
+					var temVal = "";
+					if(data != null)
+						for(var i=0;i<data.length;i++){
+							roleIdStr = roleIdStr + data[i].roleID + ",";
+							temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'>"+data[i].name+"</a></li>";
+						};
+					$div = $("<div id='"+liId+"Role"+"'></div>");
+					$div.html(temVal);
+					$childObj = $("#hidden").find("div[id='"+liId+"Role']");
+					if($childObj.length == 1)
+						$childObj.remove();
+					$("#hidden").append($div);
+					
+					$.ajax({
+						url : "${ctx}/staffing/taskList/"+comCode+"/"+roleIdStr,
+						type : "get",
+						success : function(data){
+							var temVal = "";
+							for(var i=0;i<data.length;i++){
+								temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span class='select'></span>"+data[i].name+"</a></li>";
+							};
+
+							$div1 = $("<div id='"+liId+"Task"+"'></div>");
+							$div1.html(temVal);
+							
+							$childObj = $("#hidden").find("div[id='"+liId+"Task']");
+							if($childObj.length == 1){
+								
+								$childObj.find("span[class != 'select']").each(function(){
+									var liObj = $(this).parents("li");
+									$(this).addClass("select");
+									ajaxMethodThree(liObj);
+								});
+								$childObj.remove();
+							}else{
+								$(temVal).each(function(){
+									ajaxMethodThree(this);
+								});	
+							}
+							$("#hidden").append($div1);
+							$(".clear").show(); 
+							$(".set_info").show();	
+						},
+						error : function(){
+							alert("操作失败！！");
+						}
+
+					});	
+				},
+				error : function(){
+					alert("操作失败！！");
+				}
+			});
+		}else{
+
+			$(".setup_box").eq(2).find("ul").children().each(function(){
+				if(!($(this).find("span").hasClass("select"))){
+					$(this).find("span").addClass("select");
+					 ajaxMethodFour(this);
+				}
+			});
+		}
+		
 	}
-	
+
 }
 function addThreeSelect(thisLi) {
 	if($(thisLi).find("span").hasClass("select")) {
@@ -160,30 +225,72 @@ function addThreeSelect(thisLi) {
 	}
 }
 function ajaxMethodOne(thisLi) {
-//	alert(thisLi.id);
+	groupId = thisLi.id;
+	groupName = $(thisLi).find("a").text();
+	$(thisLi).addClass("select");
+	$(thisLi).siblings().each(function(){
+		if($(this).hasClass("select")) {
+			$(this).removeClass("select");
+		}
+	});
 	if($(thisLi).hasClass("select")) {
-		
 		$.ajax({
-			url : "${ctx}/staffing/roleList/"+thisLi.id,
+			url : "${ctx}/staffing/roleList/"+thisLi.id+"/"+comCode,
 			type : "get",
 			success : function(data){
-				alert(data.length);
+				
 				var temVal = "";
-				for(var i=0;i<data.length;i++){
-					temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
-				};
-				$(".setup_box").eq(1).children("ul").html(temVal);
+				if(data != null)
+					for(var i=0;i<data.length;i++){
+						roleIdStr = roleIdStr + data[i].roleID + ",";
+						temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'>"+data[i].name+"</a></li>";
+					};
+					
+				if($("#hidden").find("#"+groupId+"Role").length == 1){
+					$(".setup_box").eq(1).children("ul").html($("#"+groupId+"Role").html());
+				}else{
+					$div = $("<div id='"+groupId+"Role"+"'></div>");
+					$div.html(temVal);
+					$childObj = $("#hidden").find("div[id='"+groupId+"Role']");
+					if($childObj.length == 1)
+						$childObj.remove();
+					$("#hidden").append($div);
+					$(".setup_box").eq(1).children("ul").html(temVal);
+				}
 				$(".setup_box").eq(1).show();
+				if($(".setup_box").eq(2).children("ul").html() != ""){
+					$(".setup_box").eq(2).children("ul").html("");
+				}
+				$.ajax({
+					url : "${ctx}/staffing/taskList/"+comCode+"/"+roleIdStr,
+					type : "get",
+					success : function(data){
+						var temVal = "";
+						for(var i=0;i<data.length;i++){
+							temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+						};
+						
+						if($("#hidden").find("#"+groupId+"Task").length == 1){
+							$(".setup_box").eq(2).children("ul").html($("#hidden").find("#"+groupId+"Task").html());
+						}else{
+							$(".setup_box").eq(2).children("ul").html(temVal);
+						}
+
+						$(".setup_box").eq(2).show();
+						$(".clear").show(); 
+						$(".set_info").show();	
+					},
+					error : function(){
+						alert("操作失败！！");
+					}
+
+				});	
 			},
 			error : function(){
-				alert("失败！！");
+				alert("操作失败！！");
 			}
 
 		});
-//		var temValOne = "<li onclick='addSelect(this); ajaxMethodTwo(this);'><a href='javascript:;'><span></span>权限管理</a></li>"
-//		var temValTwo = "<li onclick='addSelect(this); ajaxMethodTwo(this);'><a href='javascript:;'><span></span>客服专员组</a></li>"
-//        var temValThree = "<li onclick='addSelect(this); ajaxMethodTwo(this);'><a href='javascript:;'><span></span>保单配送</a></li>"
-		
 	} else {
 		var tem = 0;
 		$(thisLi).siblings().each(function(){
@@ -197,59 +304,81 @@ function ajaxMethodOne(thisLi) {
 		
 	}
 }
-function ajaxMethodTwo(thisLi) {
-	if($(thisLi).hasClass("select")) {
-		var temValOne = "<li id='id_11' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>保单配送</a></li>";
-        var temValTwo = "<li id='id_22' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>人员授权</a></li>";
-        var temValThree = "<li id='id_33' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>用户组管理</a></li>";
-        var temValFour = "<li id='id_44' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>角色管理</a></li>";
-        var temValFive = "<li id='id_55' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员配置</a></li>";
-        var temValSix = "<li id='id_66' onclick='addThreeSelect(this); ajaxMethodThree(this);'><a href='javascript:;'><span></span>客服专员发布</a></li>";
-		$(".setup_box").eq(2).children("ul").html(temValOne + temValTwo + temValThree + temValFour + temValFive + temValSix);
-		$(".setup_box").eq(2).show();
-		$(".clear").show(); 
-		$(".set_info").show();	
-	} else {
-		var tem = true;
-		$(thisLi).siblings().each(function(){
-			if($(this).hasClass("select")) {
-				
-			} else {
-				
-			}
-		});
-	}
-}
 
 function ajaxMethodThree(thisLi) {
+	
 	if($(thisLi).find("span").hasClass("select")) {
+
 		var thisId = $(thisLi).attr("id");
 		var tipName = $(thisLi).find("a").text();
+		
 		$fLeft = $("<div class='f_left'></div>");
-		$fLeft.append("<label class='set_name'><input name='' type='checkbox' value='' />" + tipName + "</label>")
-			.append("<div id='"+ thisId +"_f_left'></div>");
-		$(".set_info").find(".set_box").append($fLeft);
-			$("#" + thisId + "_f_left").jstree({ 
-				"themes" : {
-					"dots" : false,
-					"icons" : false
-				},
-				"json_data":{
-					"ajax":{
-						"url":"tree.json"
-					}
-				},
-				"plugins":["themes","json_data","checkbox","ui"]
-			});
+		//$fLeft.append("<label class='set_name'><input name='' type='checkbox' value='' />" + tipName + "</label>").append("<div id='"+thisId+groupId+"_f_left'></div>");
+		$fLeft.append("<label class='set_name'>" + tipName + "</label>").append("<div id='"+thisId+groupId+"_f_left'></div>");
+
+		if($("#gbox_"+groupId).length == 0){
+			$groupBox = $("<div class='f_left' id = 'gbox_"+groupId+"' style='width:756px'></div>");
+			$groupBox.append("<label class='set_name'>" + groupName + "</label>");
+			$(".set_info").find(".set_box").append($groupBox);
+			$groupBox.append($fLeft);
+		}else{
+			$("#gbox_"+groupId).append($fLeft);
+		}
+		
+		$("#" +thisId+groupId+ "_f_left").jstree({ 
+			"themes" : {
+				"dots" : false,
+				"icons" : false
+			},
+			"json_data":{
+				"ajax":{
+					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId
+				}
+			},
+			"plugins":["themes","json_data","checkbox","ui"]
+		});
+		//没有蓝条，直接选中时，起作用
+		if($(thisLi).parent("ul").length == 1){
+			var htmlVal = $(thisLi).parent("ul").html();
+			$div = $("<div id='"+groupId+"Task"+"'></div>");
+			$div.html(htmlVal);
+			$childObj = $("#hidden").find("div[id='"+groupId+"Task']");
+			if($childObj.length == 1)
+				$childObj.remove();
+			$("#hidden").append($div);
+		}
+		
 	} else {
 		var thisId = $(thisLi).attr("id");
-		$("#"+thisId +"_f_left").parent().remove();
+		$("#"+thisId+groupId +"_f_left").parent().remove();
+		if($("#gbox_"+groupId).children().length == 1){
+			$("#gbox_"+groupId).remove();
+			$(".setup_box").eq(0).find("ul").find("#"+id).removeClass("select");
+			$("#"+groupId+"Task").remove();
+			$("#"+groupId+"Role").remove();
+		}
+		
 	}
+	
+}
+function ajaxMethodFour(obj){
+
+	var n1 = $(obj).parent().find(".select").length;
+	var n2 = $(obj).parent().children().length;
+	$obj = $(".setup_box").eq(0).children("ul").find("li[class='select']").find("span");
+	if(n1 == n2){
+		$obj.addClass("select");
+	}
+
+	groupId = $(".setup_box").eq(0).find("li[class='select']").attr("id");
+	groupName = $(".setup_box").eq(0).find("li[class='select']").find("a").text();
+	ajaxMethodThree(obj);
 }
 </script>
 </head>
 
 <body>
+<input type="hidden" id="hidden"></input>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="279" valign="top">
@@ -280,17 +409,12 @@ function ajaxMethodThree(thisLi) {
             	设置权限
             </div>
             <ul>
-            	<li onclick="addSelect(this);"><a href="javascript:;"><span></span>保单配送</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>人员授权</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>用户组管理</a></li>
-                <li class="select" onclick="addSelect(this);"><a href="javascript:;"><span></span>角色管理</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>客服专员配置</a></li>
-                <li onclick="addSelect(this);"><a href="javascript:;"><span></span>客服专员发布</a></li>
+            	
             </ul>
         </div>
         <div class="clear setw"><div class="tolge_show up"></div></div>
-        <div class="set_info setw">
-        	<div class="title2"><b>该员工在<span>河北</span>分公司权限设置预览</b></div>
+        <div class="set_info setw" id = ''>
+        	<div class="title2"><b>该员工在<span></span>分公司权限设置预览</b></div>
             <div class="set_box" >
             </div>
         </div>

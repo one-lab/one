@@ -69,8 +69,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 	 */
 	User findByEmailAddress(String emailAddress);
 
-	@Query("select u from User u ")
-	Page<User> findAllPaged(Pageable pageable);
+	@Query("select u from User u where u.firstname=?1 ")
+	Page<User> findAllPaged(String firstname, Pageable pageable);
 
 	/**
 	 * Retrieves users by the given email and lastname. Acts as a dummy method declaration to test finder query creation.

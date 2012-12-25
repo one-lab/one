@@ -30,6 +30,14 @@ public interface DataRuleService {
 			String dataRuleParam );
 	
 	/**
+	 * 增加数据权限记录 （新添接口 业务数据表名参数 业务数据列参数 ）
+	 * @param powerID
+	 * @param taskIDs
+	 * @param dataRuleParam
+	 */
+	public void addBusPowerExcDataRule( String userCode,String comCode, List<String> taskIDs,String dataRuleParam ,String dataRuleParamName);
+	
+	/**
 	 * 查询所有数据规则（非权限记录）
 	 * @return
 	 */

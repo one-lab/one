@@ -318,6 +318,7 @@ public class AnnotationConfigValidator implements ParamValidator{
                 return this.isAjaxRequest(inv) ? methodErrorAjaxResponse(result, inv.getMethodParameterNames()) :
                         methodErrorCommonResponse(inv, result, errorPath, inv.getMethodParameterNames());
             }
+
         }
         else {
 			Set<ConstraintViolation<Object>> result = getValidator(metaData,configValidation).validate(target);

@@ -108,4 +108,115 @@ public class TreeJsonTest {
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
         assertEquals(treeJson, abstractRender.getResultForTest());
     }
+
+    @Test
+    public void testConvertToJsonWithEmptyTypeAttribute() throws ConverterException {
+        NodeEntity childNodeEntity1 = new NodeEntity("31", "A3_1", "close","classA3_1","www.test31.com");
+        //节点有type属性，生成的json数据就有type属性
+        childNodeEntity1.setTypeField("");
+        //节点没有type属性，生成的json数据就没有type属性
+        NodeEntity childNodeEntity2 = new NodeEntity("32", "A3_2", "close","classA3_2","www.test32.com");
+        List<NodeEntity> childNodeEntityList = new ArrayList<NodeEntity>();
+        childNodeEntityList.add(childNodeEntity1);
+        childNodeEntityList.add(childNodeEntity2);
+        NodeEntity nodeEntity = new NodeEntity("2", "A2", childNodeEntityList, "close","classA2","www.test2.com");
+        nodeEntity.setTypeField("");
+        List<NodeEntity> nodeEntityList = new ArrayList<NodeEntity>();
+        nodeEntityList.add(nodeEntity);
+        String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
+        Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
+        AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+        System.out.println(abstractRender.getResultForTest().toString());
+        assertEquals(treeJson, abstractRender.getResultForTest());
+    }
+
+    @Test
+    public void testConvertToJsonWithNullTypeAttribute() throws ConverterException {
+        NodeEntity childNodeEntity1 = new NodeEntity("31", "A3_1", "close","classA3_1","www.test31.com");
+        //节点有type属性，生成的json数据就有type属性
+        childNodeEntity1.setTypeField(null);
+        //节点没有type属性，生成的json数据就没有type属性
+        NodeEntity childNodeEntity2 = new NodeEntity("32", "A3_2", "close","classA3_2","www.test32.com");
+        List<NodeEntity> childNodeEntityList = new ArrayList<NodeEntity>();
+        childNodeEntityList.add(childNodeEntity1);
+        childNodeEntityList.add(childNodeEntity2);
+        NodeEntity nodeEntity = new NodeEntity("2", "A2", childNodeEntityList, "close","classA2","www.test2.com");
+        nodeEntity.setTypeField(null);
+        List<NodeEntity> nodeEntityList = new ArrayList<NodeEntity>();
+        nodeEntityList.add(nodeEntity);
+        String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
+        Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
+        AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+        System.out.println(abstractRender.getResultForTest().toString());
+        assertEquals(treeJson, abstractRender.getResultForTest());
+    }
+
+    @Test
+    public void testConvertToJsonWithTypeAttribute() throws ConverterException {
+        NodeEntity childNodeEntity1 = new NodeEntity("31", "A3_1", "close","classA3_1","www.test31.com");
+        //节点有type属性，生成的json数据就有type属性
+        childNodeEntity1.setTypeField("民用飞机");
+        //节点没有type属性，生成的json数据就没有type属性
+        NodeEntity childNodeEntity2 = new NodeEntity("32", "A3_2", "close","classA3_2","www.test32.com");
+        List<NodeEntity> childNodeEntityList = new ArrayList<NodeEntity>();
+        childNodeEntityList.add(childNodeEntity1);
+        childNodeEntityList.add(childNodeEntity2);
+        NodeEntity nodeEntity = new NodeEntity("2", "A2", childNodeEntityList, "close","classA2","www.test2.com");
+        nodeEntity.setTypeField("飞机类型");
+        List<NodeEntity> nodeEntityList = new ArrayList<NodeEntity>();
+        nodeEntityList.add(nodeEntity);
+        String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\",\"type\":\"飞机类型\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\",\"type\":\"民用飞机\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
+        Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
+        AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+        System.out.println(abstractRender.getResultForTest().toString());
+        assertEquals(treeJson, abstractRender.getResultForTest());
+    }
+
+    @Test
+    public void testConvertToJsonWithNullAndEmptyTypeAttribute() throws ConverterException {
+        NodeEntity childNodeEntity1 = new NodeEntity("31", "A3_1", "close","classA3_1","www.test31.com");
+        //节点有type属性，生成的json数据就有type属性
+        childNodeEntity1.setTypeField(null);
+        //节点没有type属性，生成的json数据就没有type属性
+        NodeEntity childNodeEntity2 = new NodeEntity("32", "A3_2", "close","classA3_2","www.test32.com");
+        childNodeEntity2.setTypeField("");
+        List<NodeEntity> childNodeEntityList = new ArrayList<NodeEntity>();
+        childNodeEntityList.add(childNodeEntity1);
+        childNodeEntityList.add(childNodeEntity2);
+        NodeEntity nodeEntity = new NodeEntity("2", "A2", childNodeEntityList, "close","classA2","www.test2.com");
+        nodeEntity.setTypeField("飞机类型");
+        List<NodeEntity> nodeEntityList = new ArrayList<NodeEntity>();
+        nodeEntityList.add(nodeEntity);
+        String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\",\"type\":\"飞机类型\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
+        Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
+        AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+        System.out.println(abstractRender.getResultForTest().toString());
+        assertEquals(treeJson, abstractRender.getResultForTest());
+    }
+
+    @Test
+    public void testConvertToJsonWithRelAttribute() throws ConverterException {
+        NodeEntity childNodeEntity1 = new NodeEntity("31", "A3_1", "close","classA3_1","www.test31.com");
+        //节点有type属性，生成的json数据就有type属性
+        childNodeEntity1.setTypeField("民用飞机");
+        //节点有rel属性，生成的json数据就有rel属性
+        childNodeEntity1.setRelField("图片3-1");
+        //节点没有type属性，生成的json数据就没有type属性
+        //节点没有rel属性，生成的json数据就没有rel属性
+        NodeEntity childNodeEntity2 = new NodeEntity("32", "A3_2", "close","classA3_2","www.test32.com");
+        List<NodeEntity> childNodeEntityList = new ArrayList<NodeEntity>();
+        childNodeEntityList.add(childNodeEntity1);
+        childNodeEntityList.add(childNodeEntity2);
+        NodeEntity nodeEntity = new NodeEntity("2", "A2", childNodeEntityList, "close","classA2","www.test2.com");
+        nodeEntity.setTypeField("飞机类型");
+        //节点有rel属性，生成的json数据就有rel属性
+        nodeEntity.setRelField("图片2");
+        List<NodeEntity> nodeEntityList = new ArrayList<NodeEntity>();
+        nodeEntityList.add(nodeEntity);
+        String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\",\"rel\":\"图片2\",\"type\":\"飞机类型\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\",\"rel\":\"图片3-1\",\"type\":\"民用飞机\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
+        Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").relField("relField").builder();
+        AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+        System.out.println(abstractRender.getResultForTest().toString());
+        assertEquals(treeJson, abstractRender.getResultForTest());
+    }
 }

@@ -15,10 +15,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * POJO类role
@@ -67,7 +70,8 @@ public class Role implements java.io.Serializable {
 	/** 属性机构代码 */
 	private String comCode;
 	
-	
+	/** 属性机构代码 */
+	private String checked;
 	
 	/**
 	 * 类role的默认构造方法
@@ -228,6 +232,7 @@ public class Role implements java.io.Serializable {
 	 * 属性groupRoles的getter方法
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
+	@JSONField(serialize=false)
 	public List<GroupRole> getGroupRoles() {
 		return this.groupRoles;
 	}
@@ -285,5 +290,15 @@ public class Role implements java.io.Serializable {
 	public void setComCode(String comCode) {
 		this.comCode = comCode;
 	}
+	@Transient
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
+	}
+	
+	
 	
 }

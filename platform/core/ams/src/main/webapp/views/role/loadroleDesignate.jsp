@@ -26,7 +26,8 @@ $(function(){
 		},
 		"json_data" : {
 		"ajax" : {
-				"url" : "${ctx}/views/common/tree.json",
+				"type":"post",
+				"url" : "${ctx}/role/findDesigNateComTree",
 				"data" : function (n) { 
 					return { id : n.attr ? n.attr("id") : 0 }; 
 				}
@@ -34,9 +35,12 @@ $(function(){
 		},
 		"plugins" : [ "themes", "json_data", "ui" ]
 	}).bind("select_node.jstree", function (event, data) {
-		$("#grid").children().remove();
-		$("#grid").Grid({
-			url : "${ctx}/views/common/grid3.json",
+		var comCode=data.rslt.obj.attr("id");
+		$("#selectComCode").val(comCode);
+		$("#designateRoleGrid").children().remove();
+		$("#designateRoleGrid").Grid({
+			type:"post",
+			url : "${ctx}/role/findDesignateRole/"+comCode,
 			dataType: "json",
 			height: 'auto',
 			colums:[
@@ -44,7 +48,7 @@ $(function(){
 				{id:'2',text:'指派日期',name:"Status",width:'90',index:'1',align:'',color:''},
 				{id:'3',text:'指派人',name:"Version",index:'1',align:'',color:''}
 			],
-			rowNum:10,
+			rowNum:500,
 			sorts:false,
 			pager : false,
 			number:false,
@@ -52,21 +56,7 @@ $(function(){
 		});	
 	});
 	fitHeight();
-	$("#grid").Grid({
-		url : "${ctx}/views/common/grid3.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'角色名称',name:"appellation",width:'120',index:'1',align:'',color:''},
-			{id:'2',text:'指派日期',name:"Status",width:'90',index:'1',align:'',color:''},
-			{id:'3',text:'指派人',name:"Version",index:'1',align:'',color:''}
-		],
-		rowNum:0,
-		sorts:false,
-		pager : false,
-		number:false,
-		multiselect: true
-	});	
+	
 });
 function fitHeight(){
 	var pageHeight = $(document).height() - 95;
@@ -74,6 +64,14 @@ function fitHeight(){
 	$("#treeTow").height(pageHeight);
 };
 function save(){
+	$obj = $(document.getElementById('designateRoleGrid'));
+	var roleid="";
+		$obj.find("[name='g_check']:checked").each(function(){
+			roleid=roleid+$(this).parents("tr").attr("id").split("_")[1]+",";
+		});
+	var comCode= $("#selectComCode").val();
+	alert(comCode);
+	alert(roleid);
 	msgSuccess("", "保存成功！");
 }
 </script>
@@ -85,12 +83,13 @@ function save(){
     <td width="269" valign="top">
       <div class="title2"><b>机构列表</b></div>
       <div id="treeOne" class="tree_view"></div>
+      <input id="selectComCode" value=""/>
     </td>
     <td width="30" valign="top">&nbsp;</td>
     <td width="350" valign="top">
     <div class="title2"><b>角色列表</b></div>
     <div id="treeTow" class="tree_view">        
-        <div id="grid"></div>
+        <div id="designateRoleGrid"></div>
     </div>
     </td>
   </tr>

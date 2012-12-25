@@ -36,21 +36,18 @@ public class TaskAuthController {
 	
 	@Post("companyAll")
 	public Reply list(Invocation inv) throws Exception {
-		
+
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		//如果参数为空则查询全部机构
-		List<Company> showCompany=companyService.findCompanyByUpperComCode(null);
-		Company userCompany = user.getCompany();
-		
+		String supercomCode=user.getCompany().getComCode();
+		List<Company> showCompany=companyService.findAllNextComBySupper(supercomCode);
 		Map<String, Company> filter = new HashMap<String, Company>();
 		List<Company> topList = new ArrayList<Company>();
-		
-		topList.add(userCompany);
 		for (Company company : showCompany) {
+			if(company.getUpperComCode().toString().equals(supercomCode))
+				topList.add(company);
 			filter.put(company.getComCode(), company);
 		}
-		
-		Treeable<NodeEntity> treeable = creatCompanyTreeAble(userCompany, filter);
+		Treeable<NodeEntity> treeable=companyService.creatCompanyTreeAble(topList, filter);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
 		render.render(inv.getResponse());
@@ -79,36 +76,6 @@ public class TaskAuthController {
 	}
 	
 	
-	//-----------------------------------------------------------//
-	/**
-	 * 构建功能树 topCompany父节点 filter所有节点
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public  Treeable<NodeEntity> creatCompanyTreeAble(Company company,Map<String,Company> filter){
-		List<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
-		List<Company> childCompany = companyService.findCompanyByUpperComCode(company.getComCode());
-		nodeEntitys=creatSubNode(childCompany, filter);
-		Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").classField("classField").urlField("urlField").builder();
-		return treeable;
-	}
-	
-	List<NodeEntity> creatSubNode(List<Company> topCompany,Map<String,Company> filter){
-		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
-		for (Company company : topCompany) {
-			if(!filter.containsKey(company.getComCode()))
-                continue;
-			NodeEntity nodeEntity = new NodeEntity();
-			nodeEntity.setId(company.getComCode());
-			nodeEntity.setTitle(company.getComCName());
-			List<Company> childCompany = companyService.findCompanyByUpperComCode(company.getComCode());
-			if(!childCompany.isEmpty()){
-				nodeEntity.setChildren(creatSubNode(childCompany,filter));
-				
-			}
-				nodeEntitys.add(nodeEntity);
-			}
-		return nodeEntitys;
-	}
 
 	
 

@@ -16,6 +16,8 @@ public class Treeable<T> implements UIable {
     private String urlField;
     private String childrenField;
     private String stateField;
+    private String typeField;
+    private String relField;
     private List<T> content;
 
     public static class Builder<T> {
@@ -26,6 +28,8 @@ public class Treeable<T> implements UIable {
         private String stateField;
         private String classField;
         private String urlField;
+        private String typeField;
+        private String relField;
 
         public Builder(List<T> content, String idField, String titleField, String childrenField, String stateField) {
             this.content = content;
@@ -45,6 +49,16 @@ public class Treeable<T> implements UIable {
             return this;
         }
 
+        public Builder typeField(String val) {
+            typeField = val;
+            return this;
+        }
+
+        public Builder relField(String val) {
+            relField = val;
+            return this;
+        }
+
         public Treeable builder() {
             return new Treeable(this);
         }
@@ -58,6 +72,8 @@ public class Treeable<T> implements UIable {
         stateField = builder.stateField;
         classField = builder.classField;
         urlField = builder.urlField;
+        typeField = builder.typeField;
+        relField = builder.relField;
     }
 
     public String getIdField() {
@@ -116,7 +132,23 @@ public class Treeable<T> implements UIable {
         this.titleField = titleField;
     }
 
+    public String getTypeField() {
+        return typeField;
+    }
+
+    public void setTypeField(String typeField) {
+        this.typeField = typeField;
+    }
+
+    public String getRelField() {
+        return relField;
+    }
+
+    public void setRelField(String relField) {
+        this.relField = relField;
+    }
+
     public Render getRender() {
-        return new TreeRender(new TreeConverter(), this);  //To change body of implemented methods use File | Settings | File Templates.
+        return new TreeRender(new TreeConverter(), this);
     }
 }

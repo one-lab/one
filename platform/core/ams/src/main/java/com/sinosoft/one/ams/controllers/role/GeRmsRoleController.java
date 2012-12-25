@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.RoleDesignateInfo;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.service.AccountManager;
+import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.RoleService;
 import com.sinosoft.one.ams.utils.uiutil.GridRender;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
@@ -34,13 +38,10 @@ import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 public class GeRmsRoleController {
 
 	@Autowired
-	private AccountManager accountManager;
-	@Autowired
 	private RoleService roleService;
 	
-	private List<String> roleAttribute = new ArrayList<String>();
-	
-
+	@Autowired
+	private CompanyService companyService;
 	// 角色列表
 	@Post({ "rolelist/{name}", "rolelist" })
 	public Reply list(@Param("name") String name, @Param("pageNo") int pageNo,
@@ -48,13 +49,26 @@ public class GeRmsRoleController {
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
 		String comCode = user.getCompany().getComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
-
 		Gridable<Role> ga = new Gridable<Role>(null);
-		Gridable<Role> gridable = roleService.getGridable(ga,comCode, name,
-				pageable);
-
+		Page<Role> page = null;
+		//查询机构下所有可见的角色
+		List<String> roleAttribute = new ArrayList<String>();
+		page = roleService.findRole(comCode,name,pageable);
+		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
+		List<Role> geRmsRoles = page.getContent();
+		for (Role geRmsRole : geRmsRoles) {
+			geRmsRole.setFlag(button);
+		} 
+		ga.setPage(page);
+		ga.setIdField("roleID");
+		roleAttribute.add("name");
+		roleAttribute.add("des");
+		roleAttribute.add("createTime");
+		roleAttribute.add("operateTime");
+		roleAttribute.add("flag");
+		ga.setCellListStringField(roleAttribute);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
-		Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
+		Render render = (GridRender) UIUtil.with(ga).as(UIType.Json);
 		render.render(inv.getResponse());
 		return null;
 	}
@@ -70,6 +84,7 @@ public class GeRmsRoleController {
 		// 根据机构代码查询可见功能
 		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
+		roleService.deleteRole(roleId, comCode);
 		Map<String, Task> filter = new HashMap<String, Task>();
 		List<Task> topList = new ArrayList<Task>();
 		for (Task task : comsTasks) {
@@ -125,6 +140,7 @@ public class GeRmsRoleController {
 		inv.addModel("flag", role.getFlag());
 		return "loadRoleInfo";
 	}
+	
 	//准备增加角色 打开增加页面
 	@Get("prepareAddRole")
 	public String prepareAddRole(){
@@ -150,6 +166,61 @@ public class GeRmsRoleController {
 		return null;
 	}
 
+	@Post("findDesigNateComTree")
+	public Reply findComTree(Invocation inv) throws Exception{
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		String supercomCode=user.getCompany().getComCode();
+		List<Company> showCompany=companyService.findAllNextComBySupper(supercomCode);
+		Map<String, Company> filter = new HashMap<String, Company>();
+		List<Company> topList = new ArrayList<Company>();
+		for (Company company : showCompany) {
+			if(company.getUpperComCode().toString().equals(supercomCode))
+				topList.add(company);
+			filter.put(company.getComCode(), company);
+		}
+		Treeable<NodeEntity> treeable=companyService.creatCompanyTreeAble(topList, filter);
+		inv.getResponse().setContentType("text/html;charset=UTF-8");
+		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
+		render.render(inv.getResponse());
+		return null;
+	}
+	
+	@Post("findDesignateRole/{comCode}")
+	public Reply findDesignateRole(@Param("comCode") String comCode, @Param("pageNo") int pageNo,
+			@Param("rowNum") int rowNum,Invocation inv) throws Exception{
+		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		Company company=companyService.findCompanyByComCode(comCode);
+		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
+		Gridable<Role> ga = new Gridable<Role>(null);
+		//查询机构下所有可见的角色
+		List<String> roleAttribute = new ArrayList<String>();
+		Page<RoleDesignateInfo> superComRolePage = roleService.findRoleDesignate(company.getUpperComCode(), comCode, pageable);
+//		Page<Role> subComRolePage = roleService.findRole(comCode, null, pageable);
+//		List<Role> supersRoles = superComRolePage.getContent();
+//		List<Role> subsRoles = subComRolePage.getContent();
+//		for (Role supersRole : supersRoles) {
+//			for (Role subsRole : subsRoles) {
+//				if(supersRole.getRoleID().toString().equals(subsRole.getRoleID().toString())){
+//					supersRole.setChecked("true");
+//					supersRole.setFlag(subsRole.getr)
+//					break;
+//				}
+//			}
+//		}
+		ga.setPage(superComRolePage);
+		ga.setIdField("roleId");
+		roleAttribute.add("roleName");
+		roleAttribute.add("operateTime");
+		roleAttribute.add("operateUser");
+		roleAttribute.add("type");
+		ga.setCellListStringField(roleAttribute);
+		inv.getResponse().setContentType("text/html;charset=UTF-8");
+		Render render = (GridRender) UIUtil.with(ga).as(UIType.Json);
+		render.render(inv.getResponse());
+		return null;
+	}
+	
+	
 	//-----------------------------------------------------------//
 	/**
 	 * 构建功能树 topTasks父节点 filter所有节点
