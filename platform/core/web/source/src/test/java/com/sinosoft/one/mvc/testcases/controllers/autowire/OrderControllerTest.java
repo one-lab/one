@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext;
 
 public class OrderControllerTest extends AbstractControllerTest {
 
-    public void testOk() throws ServletException, IOException {
+    public void testOk() throws ServletException, IOException  {
         Object obj = invoke("/autowire/order/ok");
         assertEquals("ok", obj);
     }

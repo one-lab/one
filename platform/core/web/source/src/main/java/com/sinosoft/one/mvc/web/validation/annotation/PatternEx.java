@@ -34,7 +34,7 @@ import javax.validation.Constraint;
  *
  * @author Emmanuel Bernard
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = {})
