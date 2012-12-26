@@ -9,13 +9,9 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface GeRmsUserPowerRepository extends PagingAndSortingRepository<UserPower, String>{
 	
+	//根据用户ID查询机构ID
 	@SQL("select comCode from GE_RMS_USERPOWER where userCode = ?1")
 	List<String> findComCodeByUserCode(String userCode);
-	
-	
-	
-	@SQL("select * from GE_RMS_USERPOWER where userCode = ?1 and comCode = ?2")
-	UserPower findUserPowerByUserCodeComCode(String userCode ,String comCode);
 	
 	//根据用户ID和机构ID查询用户权限ID
 	@SQL("select userpowerId from GE_RMS_USERPOWER where userCode = ?1 and comCode = ?2 and isValidate = '1'")

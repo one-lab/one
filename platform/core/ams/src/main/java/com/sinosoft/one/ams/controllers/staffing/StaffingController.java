@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
-import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
 import com.sinosoft.one.ams.service.facade.GroupService;
@@ -64,8 +62,8 @@ public class StaffingController {
 	public Reply list(@Param("pageNo") int pageNo, @Param("rowNum")int rowNum,Invocation inv) throws Exception{
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		
-		Gridable<Employe> ga = new Gridable<Employe>(null);
-		Gridable<Employe> gridable = employeeService.getGridable(ga,pageable,userAttribute);
+		Gridable<Employe> gridable = new Gridable<Employe>(null);
+		gridable = employeeService.getGridable(gridable,pageable,userAttribute);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 	    Render render = (GridRender) UIUtil.with(gridable).as(UIType.Json);
@@ -160,10 +158,18 @@ public class StaffingController {
 	}
 	
 	//查询当前机构，当前用户组，当前角色的根权限的后代权限
-	@Get("taskChildren/{comCode}/{roleIdStr}/{taskId}")
-	public Reply taskChildren(@Param("comCode")String comCode,@Param("roleIdStr")String roleIdStr,@Param("taskId")String taskId,Invocation  inv) throws Exception{
+	@Get("taskChildren/{comCode}/{roleIdStr}/{taskId}/{userCode}")
+	public Reply taskChildren(@Param("comCode")String comCode,@Param("roleIdStr")String roleIdStr,@Param("taskId")String taskId,@Param("userCode")String userCode,Invocation  inv) throws Exception{
 		
-		Treeable<NodeEntity> treeable = taskService.getTreeable(roleIdStr, comCode, taskId);
+		Treeable<NodeEntity> treeable = null;
+		if(userCode.toString().equals("null")){
+			
+			treeable = taskService.getTreeable(roleIdStr, comCode, taskId);
+		}else{
+			
+			//检查子权限在权限除外表中是否存在
+			treeable = taskService.getTreeable(roleIdStr, comCode, userCode, taskId);
+		}
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
@@ -221,36 +227,23 @@ public class StaffingController {
 		return Replys.with(taskList).as(Json.class);
 	}
 	
+	//将用户名和用户ID传到dataSet.jsp页面
+	@Get("userinfo/{name}/{number}")
+	public String chuandi(@Param("name")String name,@Param("number")String number,Invocation inv){
+		inv.addModel("name", name);
+		inv.addModel("userCode", number);
+		return "dataSet";
+	}
 	
-	
-	
-	
-//	//用户的数据权限设置
-//	@SuppressWarnings("unchecked")
-//	@Get("user/{userCode}")
-//	public Reply list(@Param("userCode")String userCode,Invocation inv) throws Exception{
-//		
-//		List<Company> companyList = new ArrayList<Company>();
-//		List<UserPower> userPowerList = new ArrayList<UserPower>();
-//		
-//		NodeEntity nodeEntity = new NodeEntity("comCode", "comCName", "close");
-//		nodeEntity = stuffingService.getNodeEntity(nodeEntity,userCode,companyList,userPowerList);
-//		
-//		Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntity.getChildren(), "id", "title", "children", "state").builder();
-//		inv.getResponse().setContentType("text/html;charset=UTF-8");
-//		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-//		render.render(inv.getResponse());
-//		return null;
-//	}
-//	
-//	@Get("ruleAll/{taskId}/{userPowerId}")
-//	public Reply ruleAll(@Param("taskId")String taskId,@Param("userPowerId")String userPowerId,Invocation inv) throws Exception {
-//		
-//		List<DataRule> ruleAll = stuffingService.getRuleAll(userPowerId, taskId);
-//		
-//		return Replys.with(ruleAll).as(Json.class);
-//	}
-//	
+	//查询全部数据权限
+	@Get("ruleAll/{taskId}/{userPowerId}")
+	public Reply ruleAll(@Param("taskId")String taskId,@Param("userPowerId")String userPowerId,Invocation inv) throws Exception {
+		
+		List<DataRule> ruleAll = staffingService.getRuleAll(userPowerId, taskId);
+		
+		return Replys.with(ruleAll).as(Json.class);
+	}
+
 //	//保存数据设置
 //	@Post("save/{ruleIdStr}/{userPowerId}/{taskId}/{paramStr}")
 //	public Reply save(@Param("ruleIdStr")String ruleIdStr,@Param("userPowerId")String userPowerId,@Param("taskId")String taskId,@Param("paramStr")String paramStr,Invocation inv){

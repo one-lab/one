@@ -34,4 +34,7 @@ public interface TaskService {
 	
 	//查询当前机构的角色的当前根权限的后代权限
 	public Treeable<NodeEntity> getTreeable(String roleIdStr, String comCode,String taskId);
+	
+	//查询当前机构的角色的当前根权限的后代权限，并检查权限在权限除外表中是否存在
+	public Treeable<NodeEntity> getTreeable(String roleIdStr, String comCode,String userCode ,String taskId);
 }

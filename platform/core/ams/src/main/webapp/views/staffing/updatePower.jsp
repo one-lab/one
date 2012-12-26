@@ -48,11 +48,11 @@ $(function(){
 		}
 	}).bind("select_node.jstree", function(e, data){
 		var n = 0;
+		var temVal = "";
 		comCode = data.rslt.obj.attr("id");
 		comCName = data.rslt.obj.find("a").text();
 		$(".set_info").attr("id" , comCode);
 		$(".set_info").find("span").text(comCName);
-		var temVal_1 = "";
 		$.ajax({
 			url : "${ctx}/staffing/groupList/"+comCode+"/${userCode}",
 			type : "get",
@@ -60,26 +60,25 @@ $(function(){
 				for(var i=0;i<data.length;i++){
 					if(data[i].flag == "1"){
 						if(n == 0){
-							temVal_1 = temVal_1 + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"' class = 'select'><a href='javascript:;'><span onclick='addSelect(this,event);' class = 'select'></span>"+data[i].name+"</a></li>";
+							temVal = temVal + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"' class = 'select'><a href='javascript:;'><span onclick='addSelect(this,event);' class = 'select'></span>"+data[i].name+"</a></li>";
 							n++;
 						}else{
 							groupIdStr = groupIdStr + data[i].groupID +",";
 							groupNameStr = groupNameStr + data[i].name +",";
-							temVal_1 = temVal_1 + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this,event);' class = 'select'></span>"+data[i].name+"</a></li>";
+							temVal = temVal + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this,event);' class = 'select'></span>"+data[i].name+"</a></li>";
 						}
 					}else{
-						temVal_1 = temVal_1 + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this,event);'></span>"+data[i].name+"</a></li>";
+						temVal = temVal + "<li onclick='ajaxMethodOne(this);' id='"+data[i].groupID+"'><a href='javascript:;'><span onclick='addSelect(this,event);'></span>"+data[i].name+"</a></li>";
 					}
 				};
 				
-				$First = $(temVal_1).find(".select").eq(0).parents("li");
+				$First = $(temVal).find(".select").eq(0).parents("li");
 				groupId = $First.attr("id");
 				groupName = $First.text();
-		        $(".setup_box").eq(0).children("ul").html(temVal_1);
+		        $(".setup_box").eq(0).children("ul").html(temVal);
 				$(".setup_box").eq(0).show();
 				
-				showRoles(groupId,comCode);
-				
+				showRoles(groupId,comCode);	
 				
 			},
 			error : function(){
@@ -112,23 +111,23 @@ function showRoles(id,comCode){
 		type : "get",
 		success : function(data){
 			
-			var temVal_2 = "";
+			var temVal = "";
 			if(data != null)
 				for(var i=0;i<data.length;i++){
 					roleIdStr = roleIdStr + data[i].roleID + ",";
-					temVal_2 = temVal_2 + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'>"+data[i].name+"</a></li>";
+					temVal = temVal + "<li onclick='addSelect(this); ajaxMethodTwo(this);' id='"+data[i].roleID+"'><a href='javascript:;'>"+data[i].name+"</a></li>";
 				};
 				
 			if($("#hidden").find("#"+groupId+"Role").length == 1){
 				$(".setup_box").eq(1).children("ul").html($("#"+groupId+"Role").html());
 			}else{
 				$div = $("<div id='"+groupId+"Role"+"'></div>");
-				$div.html(temVal_2);
+				$div.html(temVal);
 				$childObj = $("#hidden").find("div[id='"+groupId+"Role']");
 				if($childObj.length == 1)
 					$childObj.remove();
 				$("#hidden").append($div);
-				$(".setup_box").eq(1).children("ul").html(temVal_2);
+				$(".setup_box").eq(1).children("ul").html(temVal);
 			}
 			$(".setup_box").eq(1).show();
 			if($(".setup_box").eq(2).children("ul").html() != ""){
@@ -151,12 +150,12 @@ function showGroupBox(comCode,roleIdStr){
 		url : "${ctx}/staffing/taskShow/"+comCode+"/"+roleIdStr+"/${userCode}",
 		type : "get",
 		success : function(data){
-			var temVal_3 = "";
+			var temVal = "";
 			for(var i=0;i<data.length;i++){
 				if(data[i].flag == "1"){
-					temVal_3 = temVal_3 + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+					temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
 				}else{
-					temVal_3 = temVal_3 + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span class = 'select'></span>"+data[i].name+"</a></li>";
+					temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span class = 'select'></span>"+data[i].name+"</a></li>";
 				}
 				
 			};
@@ -164,15 +163,22 @@ function showGroupBox(comCode,roleIdStr){
 			if($("#hidden").find("#"+groupId+"Task").length == 1){
 				$(".setup_box").eq(2).children("ul").html($("#hidden").find("#"+groupId+"Task").html());
 			}else{
-				$(".setup_box").eq(2).children("ul").html(temVal_3);
+				$div = $("<div id='"+groupId+"Task"+"'></div>");
+				$div.html(temVal);
+				$childObj = $("#hidden").find("div[id='"+groupId+"Task']");
+				if($childObj.length == 1)
+					$childObj.remove();
+				$("#hidden").append($div);
+				
+				$(".setup_box").eq(2).children("ul").html(temVal);
 			}
 			
 			if($("#gbox_"+groupId).length != 0){
 				$("#gbox_"+groupId).remove();
 			}
 			
-			$(temVal_3).find(".select").parents("li").each(function(){
-				ajaxMethodThree(this);
+			$(temVal).find(".select").parents("li").each(function(){
+				ajaxMethodThree_2(this);
 			});	
 			
 			var groupIds = groupIdStr.split(",");
@@ -215,12 +221,12 @@ function otherGroupBox(groupId,comCode){
 				type : "get",
 				success : function(data){
 					
-					var temVal_3 = "";
+					var temVal = "";
 					for(var i=0;i<data.length;i++){
 						if(data[i].flag == "1"){
-							temVal_3 = temVal_3 + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
+							temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span></span>"+data[i].name+"</a></li>";
 						}else{
-							temVal_3 = temVal_3 + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span class = 'select'></span>"+data[i].name+"</a></li>";
+							temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span class = 'select'></span>"+data[i].name+"</a></li>";
 						}
 						
 					};
@@ -228,15 +234,23 @@ function otherGroupBox(groupId,comCode){
 					if($("#hidden").find("#"+groupId+"Task").length == 1){
 						$(".setup_box").eq(2).children("ul").html($("#hidden").find("#"+groupId+"Task").html());
 					}else{
-						$(".setup_box").eq(2).children("ul").html(temVal_3);
+						
+						$div = $("<div id='"+groupId+"Task"+"'></div>");
+						$div.html(temVal);
+						$childObj = $("#hidden").find("div[id='"+groupId+"Task']");
+						if($childObj.length == 1)
+							$childObj.remove();
+						$("#hidden").append($div);
+						
+						$(".setup_box").eq(2).children("ul").html(temVal);
 					}
 					
 					if($("#gbox_"+groupId).length != 0){
 						$("#gbox_"+groupId).remove();
 					}
 					
-					$(temVal_3).find(".select").parents("li").each(function(){
-						ajaxMethodThree(this);
+					$(temVal).find(".select").parents("li").each(function(){
+						ajaxMethodThree_2(this);
 					});
 				},
 				error : function(){
@@ -330,7 +344,41 @@ function roleList(liId,comCode){
 				$childObj.remove();
 			$("#hidden").append($div);
 			
-			taskList_1(comCode,roleIdStr);
+			$.ajax({
+				url : "${ctx}/staffing/taskList/"+comCode+"/"+roleIdStr,
+				type : "get",
+				success : function(data){			
+					var temVal = "";
+					for(var i=0;i<data.length;i++){
+						temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span class='select'></span>"+data[i].name+"</a></li>";
+					};
+
+					$div = $("<div id='"+liId+"Task"+"'></div>");
+					$div.html(temVal);
+					
+					$childObj = $("#hidden").find("div[id='"+liId+"Task']");
+					if($childObj.length == 1){
+						$childObj.find("span[class != 'select']").each(function(){
+							var liObj = $(this).parents("li");
+							$(this).addClass("select");
+							ajaxMethodThree(liObj);
+						});
+						$childObj.remove();
+					}else{
+						$(temVal).each(function(){
+							ajaxMethodThree(this);
+						});	
+					}
+
+					$("#hidden").append($div);
+					$(".clear").show(); 
+					$(".set_info").show();	
+				},
+				error : function(){
+					alert("操作失败！！");
+				}
+
+			});	
 		},
 		error : function(){
 			alert("操作失败！！");
@@ -338,31 +386,6 @@ function roleList(liId,comCode){
 	});
 }
 
-function taskList_1(comCode,roleIdStr){
-	
-	$.ajax({
-		url : "${ctx}/staffing/taskList/"+comCode+"/"+roleIdStr,
-		type : "get",
-		success : function(data){			
-			var temVal = "";
-			for(var i=0;i<data.length;i++){
-				temVal = temVal + "<li id='"+data[i].taskID+"' onclick='addThreeSelect(this); ajaxMethodFour(this);'><a href='javascript:;'><span class='select'></span>"+data[i].name+"</a></li>";
-			};
-			
-			$(temVal).each(function(){
-				ajaxMethodThree(this);
-			});	
-
-			$("#hidden").append($div1);
-			$(".clear").show(); 
-			$(".set_info").show();	
-		},
-		error : function(){
-			alert("操作失败！！");
-		}
-
-	});	
-}
 function addThreeSelect(thisLi) {
 	if($(thisLi).find("span").hasClass("select")) {
 		$(thisLi).find("span").removeClass("select");
@@ -464,6 +487,62 @@ function ajaxMethodThree(thisLi) {
 		var tipName = $(thisLi).find("a").text();
 		
 		$fLeft = $("<div class='f_left'></div>");
+		$fLeft.append("<label class='set_name'>" + tipName + "</label>").append("<div id='"+thisId+groupId+"_f_left'></div>");
+
+		if($("#gbox_"+groupId).length == 0){
+			$groupBox = $("<div class='f_left' id = 'gbox_"+groupId+"' style='width:756px'></div>");
+			$groupBox.append("<label class='set_name'>" + groupName + "</label>");
+			$(".set_info").find(".set_box").append($groupBox);
+			$groupBox.append($fLeft);
+		}else{
+			$("#gbox_"+groupId).append($fLeft);
+		}
+		
+		$("#" +thisId+groupId+ "_f_left").jstree({ 
+			"themes" : {
+				"dots" : false,
+				"icons" : false
+			},
+			"json_data":{
+				"ajax":{
+					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId+"/null"
+				}
+			},
+			"plugins":["themes","json_data","checkbox","ui"]
+		});
+	
+	} else {
+		var thisId = $(thisLi).attr("id");
+		$("#"+thisId+groupId +"_f_left").parent().remove();
+		if($("#gbox_"+groupId).children().length == 1){
+			$("#gbox_"+groupId).remove();
+			$(".setup_box").eq(0).find("ul").find("#"+id).removeClass("select");
+			$("#"+groupId+"Task").remove();
+			$("#"+groupId+"Role").remove();
+		}
+		
+	}
+	
+	if($(thisLi).parent("ul").length == 1){
+		var htmlVal = $(thisLi).parent("ul").html();
+		$div = $("<div id='"+groupId+"Task"+"'></div>");
+		$div.html(htmlVal);
+		$childObj = $("#hidden").find("div[id='"+groupId+"Task']");
+		if($childObj.length == 1)
+			$childObj.remove();
+		$("#hidden").append($div);
+	}
+	
+}
+
+function ajaxMethodThree_2(thisLi){
+	
+	if($(thisLi).find("span").hasClass("select")) {
+
+		var thisId = $(thisLi).attr("id");
+		var tipName = $(thisLi).find("a").text();
+		
+		$fLeft = $("<div class='f_left'></div>");
 		//$fLeft.append("<label class='set_name'><input name='' type='checkbox' value='' />" + tipName + "</label>").append("<div id='"+thisId+groupId+"_f_left'></div>");
 		$fLeft.append("<label class='set_name'>" + tipName + "</label>").append("<div id='"+thisId+groupId+"_f_left'></div>");
 
@@ -483,35 +562,15 @@ function ajaxMethodThree(thisLi) {
 			},
 			"json_data":{
 				"ajax":{
-					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId
+					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId+"/${userCode}"
 				}
 			},
 			"plugins":["themes","json_data","checkbox","ui"]
 		});
-		//没有蓝条，直接选中时，起作用
-		if($(thisLi).parent("ul").length == 1){
-			var htmlVal = $(thisLi).parent("ul").html();
-			$div = $("<div id='"+groupId+"Task"+"'></div>");
-			$div.html(htmlVal);
-			$childObj = $("#hidden").find("div[id='"+groupId+"Task']");
-			if($childObj.length == 1)
-				$childObj.remove();
-			$("#hidden").append($div);
-		}
-		
-	} else {
-		var thisId = $(thisLi).attr("id");
-		$("#"+thisId+groupId +"_f_left").parent().remove();
-		if($("#gbox_"+groupId).children().length == 1){
-			$("#gbox_"+groupId).remove();
-			$(".setup_box").eq(0).find("ul").find("#"+id).removeClass("select");
-			$("#"+groupId+"Task").remove();
-			$("#"+groupId+"Role").remove();
-		}
 		
 	}
-	
 }
+
 function ajaxMethodFour(obj){
 
 	var n1 = $(obj).parent().find(".select").length;
