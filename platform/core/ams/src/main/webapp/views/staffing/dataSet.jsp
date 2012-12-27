@@ -15,40 +15,108 @@
 <script type="text/javascript">
 $(function(){
 	$("#sel_2").children().remove();
-	
-	if($("#sel_2").html() != "" || $("#sel_1").html() != ""){
-		$("#sel_1").html("");
-		$("#sel_2").html("");
-		$(".code_box").html("");
-	}
-	
-	$.ajax({
-		url : "${ctx}/staffing/ruleAll/"+taskId+"/"+userPowerId,
-		type : "get",
-		success : function(data){
-			var optionSel_2 = "";
-			var optionSel_1 = "";
-			for(var i=0;i<data.length;i++){
-				if(true){
-					optionSel_2 = optionSel_2 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
-				}else{
-					optionSel_1 = optionSel_1 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
-					var temValP = $("<p id='p_"+data[i].dataRuleID+"'>"+data[i].rule+"cc/read.php?tid=53766773424&_fp=4,文字数据.com/categroy/ux3724&_fp=4,文字数据.com/categroy/ux</p>");
-					var temValText = $("<input id='te_"+data[i].dataRuleID+"' type='text' class='code_text' value='"+data[i].dataRuleParam+"' />");
-					$(".code_box").append(temValP).append(temValText);
-				}
-			};
-			$("#sel_2").append($(optionSel_2));
-			$("#sel_1").append($(optionSel_1));
+	$li = $("#treeOne").find("li");
+	$("#treeOne").jstree({
+		"themes" : {
+			"dots" : false,
+			"icons" : false
 		},
-		error : function(){
-			alert("失败！！");
-		}
-	});	
+		"json_data":{
+			"ajax":{
+				"url":"${ctx}/staffing/companise/${userCode}"
+			}
+		},
+		"plugins":["themes","json_data","ui"]
+	}).bind("open_node.jstree",function(e,data){
+		var theId = $(this).find(".jstree-open");
+		var thisId = data.rslt.obj.attr("id");
+		theId.each(function(){
+			var okId = $(this).attr("id");
+			if(okId != thisId){
+				$("#treeOne").jstree("close_node","#" + okId);
+			};
+		});
+	}).bind("select_node.jstree",function(e,data){
+		$com=data.rslt.obj;
+		var comCode = $com.attr("id");
+		$("#comCode").val($com.attr("id"));
+		$("#comCName").text($com.find("a").text());
+		$com.addClass("select");
+		if($("#sel_2").html() != "" || $("#sel_1").html() != ""){
+			$("#sel_1").html("");
+			$("#sel_2").html("");
+			$(".code_box").html("");
+		}	
+
+		//查询出没有赋参数的数据规则
+		$.ajax({
+			url : "${ctx}/staffing/rules/"+comCode+"/${userCode}",
+			type : "get",
+			success : function(data){
+
+				var optionSel_2 = "";
+				for(var i=0;i<data.length;i++){
+					optionSel_2 = optionSel_2 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
+
+				};
+				$("#sel_2").append($(optionSel_2));
+				
+				//查询出有参数的数据规则
+				dataRuleParam(comCode);
+			},
+			error : function(){
+				alert("操作失败！！");
+			}
+		});
+		
+		
+
+	});
 	$("#sel_2").find("option").live("dblclick", toLeftMove);
 	$("#sel_1").find("option").live("dblclick", toRightMove);
 	
 });
+
+function dataRuleParam(comCode){
+	$.ajax({
+		url : "${ctx}/staffing/ruleParam/"+comCode+"/${userCode}",
+		type : "get",
+		success : function(data){
+			var optionSel_1 = "";
+			var dataRuleIdStr = "";
+			if(data != null)
+				for(var i=0;i<data.length;i++){
+					dataRuleIdStr = dataRuleIdStr + data[i].dataRuleID + ",";
+					optionSel_1 = optionSel_1 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
+				};
+			$("#sel_1").append($(optionSel_1));
+			
+			//显示参数
+			params(comCode,dataRuleIdStr);
+		},
+		error : function(){
+			alert("操作失败！！");
+		}
+	});
+}
+
+function params(comCode,dataRuleIdStr){
+	$.ajax({
+		url : "${ctx}/staffing/params/"+comCode+"/${userCode}/"+dataRuleIdStr,
+		type : "get",
+		success : function(data){
+			if(data != null)
+				for(var i=0;i<data.length;i++){
+					var temValP = $("<p id='p_"+data[i].dataRule.dataRuleID+"'>"+data[i].dataRule.rule+"cc/read.php?tid=53766773424&_fp=4,文字数据.com/categroy/ux3724&_fp=4,文字数据.com/categroy/ux</p>");
+					var temValText = $("<input id='te_"+data[i].dataRule.dataRuleID+"' type='text' class='code_text' value='"+data[i].dataRuleParam+"' />");
+					$(".code_box").append(temValP).append(temValText);
+				};
+		},
+		error : function(){
+			alert("操作失败！！");
+		}
+	});
+}
 function toLeftMove() {
 	var ops = $("#sel_2").children();
 	ops.each(function(){
@@ -79,10 +147,10 @@ function toRightMove() {
 </head>
 
 <body>
-<input type="hidden" id="taskId" />
-<input type="hidden" id="userPowerId" />
+<input type="hidden" id="comCode" />
 <div class="data_list">
     <div class="title2"><b><span>姓名：${name} 编号：${userCode}</span>数据设置</b></div>
+    <div id="treeOne" class="tree_view f_left" style="height:439px"></div>
     <div class="data_right f_left">
     	<table width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>

@@ -46,7 +46,7 @@ function openWindow(obj){
 	$("body").window({
 		"id":"window1", 
 		"url":"${ctx}/staffing/updatePower/"+userName+"/"+userCode,
-		"title":"姓名："+ userCode+"  编号："+userName, 
+		"title":"姓名："+ userName+"  编号："+userCode, 
 		"content":"",
 		"width":1080,
 		"height":450, 
@@ -57,8 +57,6 @@ function openWindow(obj){
 			"value": "保 存",
 			"btFun": function() {
 				$obj = $("#window1").find(".set_info");
-//				$(document.getElementById('window1_iframe').contentWindow.document);
-//				$company = $obj.find(".set_info");
 				comCode = $obj.attr("id");
 				var groupIdStr = "";
 				$obj.find(".set_box").children().each(function(){
@@ -165,15 +163,15 @@ function openQX(obj) {
 
 function openSJ(obj) {
 	var name = $(obj).parents("tr").find("td").eq(0).text();
-	var number = $(obj).parents("tr").find("td").eq(1).text();
+	var userCode = $(obj).parents("tr").find("td").eq(1).text();
 	
 	$("body").window({
 		"id":"window3",
-		"url":"${ctx}/staffing/userinfo/"+name+"/"+number,
+		"url":"${ctx}/staffing/userinfo/"+name+"/"+userCode,
 		"title":"数据设置",
 		"hasIFrame":true,
 		"content":"",
-		"width":560,
+		"width":840,
 		"height":450,
 		"diyButton":[{
 			"id": "btOne",
@@ -181,8 +179,7 @@ function openSJ(obj) {
 			"value": "保 存",
 			"btFun": function() {
 				$obj = $(document.getElementById('window3_iframe').contentWindow.document);
-				var taskId = $obj.find("#taskId").val();
-				var userPowerId = $obj.find("#userPowerId").val();
+				var comCode = $obj.find("#comCode").val();
 				var ruleIdStr = ",";
 				var paramStr = ",";
 				$busPower = $obj.find(".code_box").find("input");
@@ -192,9 +189,10 @@ function openSJ(obj) {
 					var param = $(this).val();
 					paramStr = param + "," + paramStr;
 				});
-				if(taskId.length != 0 && userPowerId.length != 0){
+
+				if(ruleIdStr.length > 1 && paramStr.length > 1){
 					$.ajax({
-						url : "${ctx}/staffing/save/"+ruleIdStr+"/"+userPowerId+"/"+taskId+"/"+paramStr,
+						url : "${ctx}/staffing/saveBusPower/"+comCode+"/"+userCode+"/"+ruleIdStr+"/"+paramStr,
 						type : "post",
 						dataType : "html",
 						success : function(data){
@@ -210,6 +208,8 @@ function openSJ(obj) {
 							alert("保存失败！！");
 						}
 					});
+				}else{
+					alert("请选择数据规则！");
 				}
 			}
 			}, {

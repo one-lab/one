@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
 import com.sinosoft.one.ams.model.Employe;
@@ -228,64 +229,48 @@ public class StaffingController {
 	}
 	
 	//将用户名和用户ID传到dataSet.jsp页面
-	@Get("userinfo/{name}/{number}")
-	public String chuandi(@Param("name")String name,@Param("number")String number,Invocation inv){
+	@Get("userinfo/{name}/{usreCode}")
+	public String chuandi(@Param("name")String name,@Param("usreCode")String usreCode,Invocation inv){
 		inv.addModel("name", name);
-		inv.addModel("userCode", number);
+		inv.addModel("userCode", usreCode);
 		return "dataSet";
 	}
 	
-	//查询全部数据权限
-	@Get("ruleAll/{taskId}/{userPowerId}")
-	public Reply ruleAll(@Param("taskId")String taskId,@Param("userPowerId")String userPowerId,Invocation inv) throws Exception {
+	//查询出没有赋参数的数据规则
+	@Get("rules/{comCode}/{userCode}")
+	public Reply rules(@Param("comCode")String comCode,@Param("userCode")String userCode,Invocation inv) throws Exception {
 		
-		List<DataRule> ruleAll = staffingService.getRuleAll(userPowerId, taskId);
+		List<DataRule> rules = staffingService.getRules(comCode, userCode);
 		
-		return Replys.with(ruleAll).as(Json.class);
+		return Replys.with(rules).as(Json.class);
+	}
+	
+	//查询出有参数的数据规则
+	@Get("ruleParam/{comCode}/{userCode}")
+	public Reply ruleParam(@Param("comCode")String comCode,@Param("userCode")String userCode,Invocation inv) throws Exception {
+		
+		List<DataRule> rules = staffingService.getRuleParam(comCode, userCode);
+		
+		return Replys.with(rules).as(Json.class);
+	}
+	
+	//查询数据规则的参数
+	@Get("params/{comCode}/{userCode}/{dataRuleIdStr}")
+	public Reply params(@Param("comCode")String comCode,@Param("userCode")String userCode,@Param("dataRuleIdStr")String dataRuleIdStr,Invocation inv) throws Exception {
+		
+		List<BusPower> busPowers = staffingService.getParams(comCode, userCode,dataRuleIdStr);
+		
+		return Replys.with(busPowers).as(Json.class);
 	}
 
-//	//保存数据设置
-//	@Post("save/{ruleIdStr}/{userPowerId}/{taskId}/{paramStr}")
-//	public Reply save(@Param("ruleIdStr")String ruleIdStr,@Param("userPowerId")String userPowerId,@Param("taskId")String taskId,@Param("paramStr")String paramStr,Invocation inv){
-//		
-//		String[]ruleIdArr = ruleIdStr.split(",");
-//		String[]paramArr = paramStr.split(",");
-//		BusPower busPower = new BusPower();
-//		
-//		String result = stuffingService.saveBusPower(busPower, ruleIdArr, paramArr, userPowerId, taskId);
-//		
-//		System.out.println(result);
-//		return Replys.with("success");
-//	}
-//	
-//	@Get("companyList/{userCode}")
-//	public Reply companyList(@Param("userCode")String userCode, Invocation inv) throws Exception{
-//		
-//		NodeEntity nodeEntity = new NodeEntity("comCode", "comCName", "close");
-//		stuffingService.recursionCompany(nodeEntity, null, userCode);
-//		
-//		@SuppressWarnings("unchecked")
-//		Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntity.getChildren(), "id", "title", "children", "state").builder();
-//		inv.getResponse().setContentType("text/html;charset=UTF-8");
-//		Render render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-//		render.render(inv.getResponse());
-//		return null;
-//	}
-//	
-//	//查询机构的用户组，并返回页面
-//	@Get("group/{comCode}")
-//	public Reply groupList(@Param("comCode")String comCode,Invocation inv){
-//		List<Group> groupList = stuffingService.findGroupByComCode(comCode);
-//		return Replys.with(groupList).as(Json.class);
-//	}
-//	
-//	//查询用户组的角色，并返回页面
-//	@Get("roleList/{groupId}")
-//	public Reply role(@Param("groupId")String groupId,Invocation  inv){
-//		List<Role> groupRoleList = stuffingService.findRoleByGroupId(groupId);
-//		System.out.println(groupId);
-//		System.out.println(groupRoleList.size()+"+++++++++++++++++++++++++++++++++");
-//		return Replys.with(groupRoleList).as(Json.class);
-//	}
+	//保存数据设置
+	@Post("saveBusPower/{comCode}/{userCode}/{ruleIdStr}/{paramStr}")
+	public Reply save(@Param("comCode")String comCode,@Param("userCode")String userCode,@Param("ruleIdStr")String ruleIdStr,@Param("paramStr")String paramStr,Invocation inv){
+		
+		String result = staffingService.saveBusPower(comCode, userCode, ruleIdStr, paramStr);
+		
+		System.out.println(result);
+		return Replys.with("success");
+	}
 
 }

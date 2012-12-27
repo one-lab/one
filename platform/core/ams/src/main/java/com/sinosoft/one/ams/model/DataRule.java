@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * POJO类dataRule
  */
@@ -112,6 +114,7 @@ public class DataRule implements java.io.Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dataRule")
 	@XmlTransient
+	@JSONField(serialize=false)
 	public List<BusPower> getBusPowers() {
 		return this.busPowers;
 	}

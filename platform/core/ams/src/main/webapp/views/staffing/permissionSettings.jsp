@@ -77,6 +77,8 @@ $(function(){
 				}else{
 					alert("此机构已被引入！！");
 					$(".setup_box").hide();
+					$(".clear").hide(); 
+					$(".set_info").hide();
 				}
 			},
 			error: function(){
@@ -323,7 +325,6 @@ function ajaxMethodThree(thisLi) {
 		var tipName = $(thisLi).find("a").text();
 		
 		$fLeft = $("<div class='f_left'></div>");
-		//$fLeft.append("<label class='set_name'><input name='' type='checkbox' value='' />" + tipName + "</label>").append("<div id='"+thisId+groupId+"_f_left'></div>");
 		$fLeft.append("<label class='set_name'>" + tipName + "</label>").append("<div id='"+thisId+groupId+"_f_left'></div>");
 
 		if($("#gbox_"+groupId).length == 0){

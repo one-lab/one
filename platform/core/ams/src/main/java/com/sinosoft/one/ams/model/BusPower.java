@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * POJO类busPower
  */
@@ -86,6 +88,7 @@ public class BusPower implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USERPOWERID")
 	@XmlTransient
+	@JSONField(serialize=false)
 	public UserPower getUserPower() {
 		return this.userPower;
 	}
