@@ -9,7 +9,8 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface GeRmsExcPowerRepository extends PagingAndSortingRepository<ExcPower, String>{
 	
+	//根据用户权限ID，查询功能ID
 	@SQL("select taskId from GE_RMS_EXCPOWER where powerId = ?1")
-	List<String> findByPowerId(String powerId);
+	List<String> findTaskIdByPowerId(String powerId);
 
 }

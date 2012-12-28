@@ -14,7 +14,7 @@ import javax.validation.Constraint;
  *
  * @author Morgan
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = {})

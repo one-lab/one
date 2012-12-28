@@ -15,8 +15,6 @@
 <script type="text/javascript">
 $(function(){
 	$("#sel_2").children().remove();
-//	var url ="${ctx}/staffing/userpower/user/"+"${number}";
-//	$obj = $(document.getElementById('window1_iframe').contentWindow.document);
 	$li = $("#treeOne").find("li");
 	$("#treeOne").jstree({
 		"themes" : {
@@ -25,7 +23,7 @@ $(function(){
 		},
 		"json_data":{
 			"ajax":{
-				"url":"${ctx}/staffing/user/"+"${number}"
+				"url":"${ctx}/staffing/companise/${userCode}"
 			}
 		},
 		"plugins":["themes","json_data","ui"]
@@ -39,56 +37,86 @@ $(function(){
 			};
 		});
 	}).bind("select_node.jstree",function(e,data){
-		$TASK=data.rslt.obj;
-
+		$com=data.rslt.obj;
+		var comCode = $com.attr("id");
+		$("#comCode").val($com.attr("id"));
+		$("#comCName").text($com.find("a").text());
+		$com.addClass("select");
 		if($("#sel_2").html() != "" || $("#sel_1").html() != ""){
 			$("#sel_1").html("");
 			$("#sel_2").html("");
 			$(".code_box").html("");
-		}
-//		var $temValOne = $("<option id='op_1'>财产保险公司北京分公司</option>");
-//		var $temValTwo = $("<option id='op_2'>财产保险公司山东分公司</option>");
-//		var $temValThree = $("<option id='op_3'>财产保险公司上海分公司</option>");
-//		var $temValFour = $("<option id='op_4'>财产保险公司深圳分公司</option>");
-		if($TASK.parents("li").length != 0){
-			var taskId = $TASK.attr("id");
-				$("#taskId").val($TASK.attr("id"));
-			var userPowerId = $TASK.parents("li").attr("id");
-				$("#userPowerId").val($TASK.parents("li").attr("id"));
-			
-			$.ajax({
-				url : "${ctx}/staffing/ruleAll/"+taskId+"/"+userPowerId,
-				type : "get",
-				success : function(data){
-					var optionSel_2 = "";
-					var optionSel_1 = "";
-					for(var i=0;i<data.length;i++){
-//						alert(data[i].dataRuleParam.length);
-						if(data[i].dataRuleParam.length == 0){
-							optionSel_2 = optionSel_2 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
-						}else{
-							optionSel_1 = optionSel_1 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
-							var temValP = $("<p id='p_"+data[i].dataRuleID+"'>"+data[i].rule+"cc/read.php?tid=53766773424&_fp=4,文字数据.com/categroy/ux3724&_fp=4,文字数据.com/categroy/ux</p>");
-							var temValText = $("<input id='te_"+data[i].dataRuleID+"' type='text' class='code_text' value='"+data[i].dataRuleParam+"' />");
-							$(".code_box").append(temValP).append(temValText);
-						}
-					};
-					$("#sel_2").append($(optionSel_2));
-					$("#sel_1").append($(optionSel_1));
-				},
-				error : function(){
-					alert("失败！！");
-				}
-			});
-		}
-//		var $temVal = $(option);
-//		$("#sel_2").append($temValOne).append($temValTwo).append($temValThree).append($temValFour);
+		}	
+
+		//查询出没有赋参数的数据规则
+		$.ajax({
+			url : "${ctx}/staffing/rules/"+comCode+"/${userCode}",
+			type : "get",
+			success : function(data){
+
+				var optionSel_2 = "";
+				for(var i=0;i<data.length;i++){
+					optionSel_2 = optionSel_2 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
+
+				};
+				$("#sel_2").append($(optionSel_2));
+				
+				//查询出有参数的数据规则
+				dataRuleParam(comCode);
+			},
+			error : function(){
+				alert("操作失败！！");
+			}
+		});
 		
+		
+
 	});
 	$("#sel_2").find("option").live("dblclick", toLeftMove);
 	$("#sel_1").find("option").live("dblclick", toRightMove);
 	
 });
+
+function dataRuleParam(comCode){
+	$.ajax({
+		url : "${ctx}/staffing/ruleParam/"+comCode+"/${userCode}",
+		type : "get",
+		success : function(data){
+			var optionSel_1 = "";
+			var dataRuleIdStr = "";
+			if(data != null)
+				for(var i=0;i<data.length;i++){
+					dataRuleIdStr = dataRuleIdStr + data[i].dataRuleID + ",";
+					optionSel_1 = optionSel_1 +"<option id='"+data[i].dataRuleID+"'>"+data[i].rule+"</option>";
+				};
+			$("#sel_1").append($(optionSel_1));
+			
+			//显示参数
+			params(comCode,dataRuleIdStr);
+		},
+		error : function(){
+			alert("操作失败！！");
+		}
+	});
+}
+
+function params(comCode,dataRuleIdStr){
+	$.ajax({
+		url : "${ctx}/staffing/params/"+comCode+"/${userCode}/"+dataRuleIdStr,
+		type : "get",
+		success : function(data){
+			if(data != null)
+				for(var i=0;i<data.length;i++){
+					var temValP = $("<p id='p_"+data[i].dataRule.dataRuleID+"'>"+data[i].dataRule.rule+"cc/read.php?tid=53766773424&_fp=4,文字数据.com/categroy/ux3724&_fp=4,文字数据.com/categroy/ux</p>");
+					var temValText = $("<input id='te_"+data[i].dataRule.dataRuleID+"' type='text' class='code_text' value='"+data[i].dataRuleParam+"' />");
+					$(".code_box").append(temValP).append(temValText);
+				};
+		},
+		error : function(){
+			alert("操作失败！！");
+		}
+	});
+}
 function toLeftMove() {
 	var ops = $("#sel_2").children();
 	ops.each(function(){
@@ -119,10 +147,9 @@ function toRightMove() {
 </head>
 
 <body>
-<input type="hidden" id="taskId" />
-<input type="hidden" id="userPowerId" />
+<input type="hidden" id="comCode" />
 <div class="data_list">
-    <div class="title2"><b><span>姓名：${name} 编号：${number}</span>数据设置</b></div>
+    <div class="title2"><b><span>姓名：${name} 编号：${userCode}</span>数据设置</b></div>
     <div id="treeOne" class="tree_view f_left" style="height:439px"></div>
     <div class="data_right f_left">
     	<table width="100%" border="0" cellspacing="0" cellpadding="0">

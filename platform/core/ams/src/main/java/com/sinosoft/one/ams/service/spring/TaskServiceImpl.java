@@ -2,18 +2,19 @@ package com.sinosoft.one.ams.service.spring;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.model.ExcPower;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
+import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
+import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
@@ -27,6 +28,8 @@ public class TaskServiceImpl implements TaskService{
 	private GeRmsTaskRepository geRmsTaskRepository;
 	@Autowired
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
+	@Autowired
+	private GeRmsUserPowerRepository geRmsUserPowerRepository;
 	@Autowired
 	private Invocation inv;
 	
@@ -109,7 +112,8 @@ public class TaskServiceImpl implements TaskService{
 	public List<Task> findAllTasks() {
 		return (List<Task>)geRmsTaskRepository.findAll();
 	}
-
+	
+	//查询当前机构，当前用户组的根权限
 	public List<Task> findTaskByRoleIds(List<String> roleids,String comCode) {
 		List<Task> resultTask = new ArrayList<Task>();
 		
@@ -155,15 +159,16 @@ public class TaskServiceImpl implements TaskService{
 		for (Task geRmsTask : topTasks) {
 			if(!filter.containsKey(geRmsTask.getTaskID()))
                 continue;
-				NodeEntity nodeEntity = new NodeEntity();
-				nodeEntity.setId(geRmsTask.getTaskID());
-				nodeEntity.setTitle(geRmsTask.getName());
+			NodeEntity nodeEntity = new NodeEntity();
+			nodeEntity.setId(geRmsTask.getTaskID());
+			nodeEntity.setTitle(geRmsTask.getName());
+			if(!filter.get(geRmsTask.getTaskID()).getFlag().toString().equals("1"))
 				nodeEntity.setClassField("jstree-checked");
-				if(!geRmsTask.getChildren().isEmpty()){
-					nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter));
-					
-				}
-				nodeEntitys.add(nodeEntity);
+			if(!geRmsTask.getChildren().isEmpty()){
+				nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter));
+				
+			}
+			nodeEntitys.add(nodeEntity);
 			}
 		return nodeEntitys;
 	}
@@ -171,13 +176,32 @@ public class TaskServiceImpl implements TaskService{
 	//查询当前机构的角色的当前根权限的后代权限
 	public Treeable<NodeEntity> getTreeable(String roleIdStr, String comCode,
 			String taskId) {
+		
+		//查询当前机构的角色的当前根权限的后代权限(集合)
+		List<Task> tasks = taskChildren(roleIdStr, comCode, taskId);
+		
+		List<Task> topTasks = new ArrayList<Task>();
+		Map<String,Task> filter = new HashMap<String, Task>();
+		Task topTask = geRmsTaskRepository.findOne(taskId);
+		topTask.setFlag("0");
+		topTasks.add(topTask);
+		
+		for(Task task : tasks){
+			task.setFlag("0");
+			filter.put(task.getTaskID(), task);
+		}
+		Treeable<NodeEntity> treeable = creatTaskTreeAble(topTasks, filter);
+		return treeable;
+	}
+	
+	//查询当前机构的角色的当前根权限的后代权限(集合)
+	public List<Task> taskChildren(String roleIdStr, String comCode,
+			String taskId){
 		String[] roleIds = roleIdStr.split(",");
 		List<String> roleids = new ArrayList<String>();
 		for(String id : roleIds){
 			roleids.add(id);
 		}
-		List<Task> topTasks = new ArrayList<Task>();
-		Map<String,Task> filter = new HashMap<String, Task>();
 		
 		List<String>roletaskids = geRmsTaskAuthRepository.findTaskAuthByRole(roleids);
 		List<String>comtaskids = geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
@@ -193,8 +217,38 @@ public class TaskServiceImpl implements TaskService{
 			}
 		}
 		List<Task> tasks = (List<Task>) geRmsTaskRepository.findAll(resultid);
+		return tasks;
+	}
+
+	//查询当前机构，当前用户组的根权限，并标记权限是否赋了给用户
+	public List<Task> findTaskByRoleIds(List<String> roleids, String comCode,
+			String userCode) {
+		List<String> taskIds = new ArrayList<String>();
 		
+		//获取根权限
+		List<Task> tasks = findTaskByRoleIds(roleids, comCode);
+		for(Task task : tasks){
+			taskIds.add(task.getTaskID());
+		}
 		
+		//检查权限在权限出外表中是否存在
+		checkTask (userCode,comCode,tasks);
+		
+		return tasks;
+	}
+	
+	//查询当前机构的角色的当前根权限的后代权限，并检查权限在权限除外表中是否存在
+	public Treeable<NodeEntity> getTreeable(String roleIdStr, String comCode,
+			String userCode, String taskId) {
+		
+		//查询当前机构的角色的当前根权限的后代权限(集合)
+		List<Task> tasks = taskChildren(roleIdStr, comCode, taskId);
+		
+		//检查权限在权限除外表中是否存在
+		checkTask (userCode,comCode,tasks);
+		
+		List<Task> topTasks = new ArrayList<Task>();
+		Map<String,Task> filter = new HashMap<String, Task>();
 		Task topTask = geRmsTaskRepository.findOne(taskId);
 		topTasks.add(topTask);
 		
@@ -204,5 +258,29 @@ public class TaskServiceImpl implements TaskService{
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topTasks, filter);
 		return treeable;
 	}
+	
+	//检查权限在权限出外表中是否存在
+	public void checkTask (String userCode,String comCode,List<Task> tasks){
+		String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+		
+		UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
+		
+		List<String> CheckTaskIds = new ArrayList<String>();
+		List<ExcPower> excPowers = userPower.getExcPowers();
+		for(ExcPower excPower : excPowers){
+			CheckTaskIds.add(excPower.getTask().getTaskID());
+		}
+		
+		for(Task task : tasks){
+			if(CheckTaskIds.contains(task.getTaskID())){
+				task.setFlag("1");
+			}else{
+				task.setFlag("0");
+			}
+			
+		}
+	}
+	
+	
 
 }

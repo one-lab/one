@@ -9,9 +9,6 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface UserDao extends PagingAndSortingRepository<Employe, String>{
 	
-	//根据用户名和用户ID进行模糊查询
-	//-------------hening
-	
 	//根据userCode查询User，模糊查询
 	@SQL("select * from GE_RMS_EMPLOYE where userCode like ?1")
 	Page<Employe> findUserByUserCode(String userCode,Pageable pageable);

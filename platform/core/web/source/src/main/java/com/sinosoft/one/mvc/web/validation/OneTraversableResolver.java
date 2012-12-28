@@ -2,7 +2,7 @@ package com.sinosoft.one.mvc.web.validation;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.engine.resolver.DefaultTraversableResolver;
+import org.hibernate.validator.internal.engine.resolver.DefaultTraversableResolver;
 
 import javax.validation.Path;
 import java.lang.annotation.ElementType;

@@ -1,0 +1,270 @@
+package com.sinosoft.one.ams.service.spring;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.sinosoft.one.ams.model.BusPower;
+import com.sinosoft.one.ams.model.DataRule;
+import com.sinosoft.one.ams.model.ExcPower;
+import com.sinosoft.one.ams.model.Task;
+import com.sinosoft.one.ams.model.UserGroup;
+import com.sinosoft.one.ams.model.UserPower;
+import com.sinosoft.one.ams.repositories.GeRmsBusPowerRepository;
+import com.sinosoft.one.ams.repositories.GeRmsDataRuleRepository;
+import com.sinosoft.one.ams.repositories.GeRmsExcPowerRepository;
+import com.sinosoft.one.ams.repositories.GeRmsGroupRepository;
+import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
+import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
+import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
+import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
+import com.sinosoft.one.ams.service.facade.StaffingService;
+
+@Component
+public class StaffingServiceImpl implements StaffingService{
+
+	@Autowired
+	private GeRmsGroupRepository geRmsGroupRepository;
+	@Autowired
+	private GeRmsUserPowerRepository geRmsUserPowerRepository;
+	@Autowired
+	private GeRmsTaskRepository geRmsTaskRepository;
+	@Autowired
+	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
+	@Autowired
+	private GeRmsDataRuleRepository geRmsDataRuleRepository;
+	@Autowired
+	private GeRmsExcPowerRepository geRmsExcPowerRepository;
+	@Autowired
+	private GeRmsUserGroupRepository geRmsUserGroupRepository;
+	@Autowired
+	private GeRmsBusPowerRepository geRmsBusPowerRepository;
+	
+	//检查用户权限的id是否存在，存在返回yes，否则返回no
+		public String checkIdByUserCodeComCode(String userCode, String comCode) {
+			System.out.println(userCode);
+			System.out.println(comCode);
+			String id = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+			String result = "no";
+			if(id != null){
+				result = "yes";
+			}
+			return result;
+		}
+		
+		//保存用户的权限除外表、用户权限表和用户与组关系表
+		public void savePower(String comCode, String userCode, String groupIdStr, String taskIdStr) {
+			
+			String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+			if(userPowerId == null){
+				UserPower up = new UserPower();
+				up.setComCode(comCode);
+				up.setUserCode(userCode);
+				up.setIsValidate("1");
+				geRmsUserPowerRepository.save(up);
+				
+				String[]groupIds = groupIdStr.split(",");
+				if(groupIds.length > 0){
+					for(String id : groupIds){
+						UserGroup ug = new UserGroup();
+						ug.setGroup(geRmsGroupRepository.findOne(id));
+						ug.setUserCode(userCode);
+						ug.setUserPower(up);
+						ug.setIsValidate("1");
+						geRmsUserGroupRepository.save(ug);
+						
+					}
+				}
+				
+				if(!taskIdStr.toString().equals("null")){
+					String[] taskId = taskIdStr.split(",");
+					if(taskId.length > 0){
+						for(String id : taskId){
+							ExcPower ep = new ExcPower();
+							ep.setTask(geRmsTaskRepository.findOne(id));
+							ep.setUserPower(up);
+							ep.setIsValidate("1");
+							geRmsExcPowerRepository.save(ep);
+						}
+					}
+				}
+			}else{
+				UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
+				
+				List<UserGroup>userGroups = userPower.getUserGroups();
+				//删除关联用户组记录
+				geRmsUserGroupRepository.delete(userGroups);
+				List<ExcPower> excPowers = userPower.getExcPowers();
+				//删除关联权限除外表记录
+				geRmsExcPowerRepository.delete(excPowers);
+				
+				String[]groupIds = groupIdStr.split(",");
+				if(groupIds.length > 0){
+					for(String id : groupIds){
+						UserGroup ug = new UserGroup();
+						ug.setGroup(geRmsGroupRepository.findOne(id));
+						ug.setUserCode(userCode);
+						ug.setUserPower(userPower);
+						ug.setIsValidate("1");
+						geRmsUserGroupRepository.save(ug);
+						
+					}
+				}
+				
+				if(!taskIdStr.toString().equals("null")){
+					String[] taskId = taskIdStr.split(",");
+					if(taskId.length > 0){
+						for(String id : taskId){
+							ExcPower ep = new ExcPower();
+							ep.setTask(geRmsTaskRepository.findOne(id));
+							ep.setUserPower(userPower);
+							ep.setIsValidate("1");
+							geRmsExcPowerRepository.save(ep);
+						}
+					}
+				}
+			}
+
+		}
+		
+		//查询出没有赋参数的数据规则
+		public List<DataRule> getRules(String comCode, String userCode) {
+			
+			List<DataRule> delList = new ArrayList<DataRule>();
+			List<DataRule> dataRules = (List<DataRule>) geRmsDataRuleRepository.findAll();
+			
+			for(DataRule dataRule : dataRules){
+				dataRule.setBusPowers(null);
+			}
+			List<String> dataRuleIds = getDataRuleIds(comCode, userCode);
+			for(DataRule dataRule : dataRules){
+				if(dataRuleIds.isEmpty())
+					break;
+				if(dataRuleIds.contains(dataRule.getDataRuleID().toString())){
+					delList.add(dataRule);
+				}
+			}
+			dataRules.removeAll(delList);
+			return dataRules;
+		}
+
+		//查询出有参数的数据规则
+		public List<DataRule> getRuleParam(String comCode, String userCode) {
+			List<DataRule> delList = new ArrayList<DataRule>();
+			List<DataRule> dataRuleParam = (List<DataRule>) geRmsDataRuleRepository.findAll();
+			for(DataRule dataRule : dataRuleParam){
+				dataRule.setBusPowers(null);
+			}
+			
+			List<String> dataRuleIds = getDataRuleIds(comCode, userCode);
+
+			for(DataRule dataRule : dataRuleParam){
+				if(dataRuleIds.isEmpty()){
+					dataRuleParam.clear();
+					break;
+				}
+				if(!dataRuleIds.contains(dataRule.getDataRuleID().toString())){
+					delList.add(dataRule);
+				}
+			}
+			dataRuleParam.removeAll(delList);
+			return dataRuleParam;
+		}	
+		
+		//取得全部数据规则和在人员数据权限表中相应的数据规则Id
+		public List<String> getDataRuleIds(String comCode, String userCode){
+			List<String> dataRuleIds = new ArrayList<String>();
+			String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+			
+			//查询出用户权限
+			UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
+			
+			//根据用户权限查询出人员数据权限
+			List<BusPower> busPowers = userPower.getBusPowers();
+
+			for(BusPower busPower : busPowers){
+				if(!dataRuleIds.contains(busPower.getDataRule().getDataRuleID().toString())){
+					dataRuleIds.add(busPower.getDataRule().getDataRuleID().toString());
+				}
+			}
+			
+			return dataRuleIds;
+
+		}
+		
+		//查询数据规则的参数
+		public List<BusPower> getParams(String comCode, String userCode,
+				String dataRuleIdStr) {
+			String[] dataRuleIds = dataRuleIdStr.split(",");
+			String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+			List<String> busPowerIds = geRmsBusPowerRepository.findBusPowerIdByUserPowerIdTaskId(userPowerId, dataRuleIds);
+			System.out.println(busPowerIds.size());
+			
+			List<String> resultIds =new ArrayList<String>();
+			List<BusPower> resultBusPowers = new ArrayList<BusPower>();
+
+			List<BusPower> busPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
+			for(BusPower busPower : busPowers){
+				if(!resultIds.contains(busPower.getDataRule().getDataRuleID().toString())){
+					resultIds.add(busPower.getDataRule().getDataRuleID().toString());
+
+					resultBusPowers.add(busPower);
+				}
+			}
+			
+			
+			return resultBusPowers;
+		}
+
+		//保存数据设置
+		public String saveBusPower(String comCode, String userCode,String ruleIdStr, String paramStr) {
+			String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+			UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
+			String[]dataRuleIds = ruleIdStr.split(",");
+			String[] params = paramStr.split(",");
+			
+			List<String> resultDataRuleIds = new ArrayList<String>();
+			for(String id : dataRuleIds){
+				resultDataRuleIds.add(id);
+			}
+			
+			//删除原先的人员数据权限记录
+			List<String> busPowerIds = geRmsBusPowerRepository.findBusPowerIdByUserPowerId(userPowerId);
+			List<BusPower> BusPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
+			geRmsBusPowerRepository.delete(BusPowers);
+			
+			//查询需要添加的功能
+			//查询功能授权表中的功能ID
+			List<String> taskIds1 = geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
+			//查询人员权限除外表中的功能ID
+			List<String> taskIds2 = geRmsExcPowerRepository.findTaskIdByPowerId(userPowerId);
+			
+			List<String> resultIds = new ArrayList<String>();
+			for(String id : taskIds1){
+				if(!taskIds2.contains(id.toString())){
+					resultIds.add(id);
+				}
+			}
+			
+			List<Task> resultTasks = (List<Task>) geRmsTaskRepository.findAll(resultIds);
+			List<DataRule> dataRules = (List<DataRule>) geRmsDataRuleRepository.findAll(resultDataRuleIds);
+			
+			for(int i = 0;i<resultTasks.size();i++){
+				for(int j = 0;j<dataRules.size();j++){
+					BusPower busPower = new BusPower();
+					
+					busPower.setDataRule(dataRules.get(j));
+					busPower.setDataRuleParam(params[j]);
+					busPower.setTask(resultTasks.get(i));
+					busPower.setUserPower(userPower);
+					busPower.setIsValidate("1");
+					
+					geRmsBusPowerRepository.save(busPower);
+				}
+			}
+			return "success";
+		}
+		
+}

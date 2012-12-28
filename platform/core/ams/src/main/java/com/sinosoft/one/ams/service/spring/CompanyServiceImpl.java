@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Company;
+import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.repositories.CompanyDao;
+import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
@@ -18,6 +20,8 @@ public class CompanyServiceImpl implements CompanyService{
 	
 	@Autowired
 	private CompanyDao companyDao;
+	@Autowired
+	private GeRmsUserPowerRepository geRmsUserPowerRepository;
 
 	//根据Uppercomcode查询出comCode集合
 	public List<Company> findCompanyByUpperComCode(String uppercomcode) {
@@ -91,6 +95,30 @@ public class CompanyServiceImpl implements CompanyService{
 			}
 		}
 		
+	}
+
+	//根据userCode查询出用户已被引入的机构
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Treeable<NodeEntity> findCompanyByUserCode(String userCode) {
+		List<String> userPowerIds = geRmsUserPowerRepository.findUserPowerIdByUserCode(userCode);
+		List<UserPower> userPowers = (List<UserPower>) geRmsUserPowerRepository.findAll(userPowerIds);
+		
+		List<String> comCodes = new ArrayList<String>();
+		for(UserPower userPower : userPowers){
+			comCodes.add(userPower.getComCode());
+		}
+		List<Company> companies = (List<Company>) companyDao.findAll(comCodes);
+		
+		List<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
+		Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").builder();
+		for(Company company : companies){
+			NodeEntity nodeEntity = new NodeEntity();
+			nodeEntity.setId(company.getComCode());
+			nodeEntity.setTitle(company.getComCName());
+			nodeEntitys.add(nodeEntity);
+		}
+		
+ 		return treeable;
 	}
 
 	

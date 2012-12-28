@@ -38,30 +38,60 @@ $(function(){
 		number:false,
 		multiselect: false
 	});	
-	//$("#grid > table .dis").tips({type:"toolTip",tipPostion:"left"});
+
 });
-function openWindow(){
+function openWindow(obj){
+	var userCode = $(obj).parents("tr").children().eq(0).text();
+	var userName = $(obj).parents("tr").children().eq(1).text();
 	$("body").window({
 		"id":"window1", 
-		"title":"姓名：张山  编号：10009999000", 
-		"content":"<h4>已引入机构</h4><ul class='jigou'><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li><li>财产保险公司天津分公司</li></ul>",
-		"width":225,
-		"height":380, 
+		"url":"${ctx}/staffing/updatePower/"+userName+"/"+userCode,
+		"title":"姓名："+ userName+"  编号："+userCode, 
+		"content":"",
+		"width":1080,
+		"height":450, 
 		"resizing":false,
 		"diyButton":[{
 			"id": "btOne",
 			"btClass": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				msgSuccess("", "保存成功！");
-				$("#window1").remove();
-				$(".all_shadow").remove();
-				}	
+				$obj = $("#window1").find(".set_info");
+				comCode = $obj.attr("id");
+				var groupIdStr = "";
+				$obj.find(".set_box").children().each(function(){
+					var id = $(this).attr("id");
+					groupIdStr = groupIdStr + id.substr(5) + ",";
+					
+				});
+				var taskIdStr = "";
+				$obj.find(".jstree-unchecked").each(function(){
+					var id = $(this).attr("id");
+					taskIdStr = taskIdStr + id +",";
+				});
+				if(taskIdStr == ""){
+					taskIdStr = "null";
+				}
+			
+				$.ajax({
+					url : "${ctx}/staffing/savePower/"+comCode +"/"+userCode+"/"+groupIdStr+"/"+taskIdStr,
+					success : function(data){
+						alert("保存成功！");
+						$("#window1").remove();
+						$(".all_shadow").remove();	
+					},
+					error : function(){
+						alert("操作失败！");
+					}
+				});
+
+			} 
 			}, {
 			"id": "btTwo",
 			"btClass": "def_btn",
 			"value": "取 消",
 			"btFun": function() {
+				
 				$("#window1").remove();
 				$(".all_shadow").remove();
 				}
@@ -70,10 +100,10 @@ function openWindow(){
 	});
 }
 function openQX(obj) {
-	var name = $(obj).parents("tr").find("td").eq(0).text();
-	var userCode = $(obj).parents("tr").find("td").eq(1).text();
+	var name = $(obj).parents("tr").children().eq(0).text();
+	var userCode = $(obj).parents("tr").children().eq(1).text();
 	$("body").window({
-		"id":"window1",
+		"id":"window2",
 		"url":"${ctx}/staffing/power/"+name+"/"+userCode,
 		"title":"权限设置", 
 		"hasIFrame":true,
@@ -85,19 +115,45 @@ function openQX(obj) {
 			"btClass": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
-				comCode = $obj.find(".set_info").attr("id");
+				$obj = $(document.getElementById('window2_iframe').contentWindow.document);
+				$company = $obj.find(".set_info");
+				comCode = $company.attr("id");
+				var groupIdStr = "";
+				$company.find(".set_box").children().each(function(){
+					var id = $(this).attr("id");
+					groupIdStr = groupIdStr + id.substr(5) + ",";
+					
+				});
+				var taskIdStr = "";
+				$company.find(".jstree-unchecked").each(function(){
+					var id = $(this).attr("id");
+					taskIdStr = taskIdStr + id +",";
+				});
+				
+				if(taskIdStr == ""){
+					taskIdStr = "null";
+				}
 
-			//	msgSuccess("", "保存成功！");
-			//	$("#window1").remove();
-			//	$(".all_shadow").remove();
-				} 
+				$.ajax({
+					url : "${ctx}/staffing/savePower/"+comCode +"/"+userCode+"/"+groupIdStr+"/"+taskIdStr,
+					success : function(data){
+						msgSuccess("", "保存成功！");
+						$("#window2").remove();
+						$(".all_shadow").remove();	
+					},
+					error : function(){
+						alert("操作失败！");
+					}
+				});
+				
+			} 
 			}, {
 			"id": "btTwo",
 			"btClass": "def_btn",
 			"value": "取 消",
 			"btFun": function() {
-				$("#window1").remove();
+				
+				$("#window2").remove();
 				$(".all_shadow").remove();
 				}
 			}
@@ -106,25 +162,24 @@ function openQX(obj) {
 }
 
 function openSJ(obj) {
-	var name = $(obj).parents("tr").find(":first-child").find("span").text();
-	var number = $(obj).parents("tr").find("td").eq(1).find("span").text();
+	var name = $(obj).parents("tr").find("td").eq(0).text();
+	var userCode = $(obj).parents("tr").find("td").eq(1).text();
 	
 	$("body").window({
-		"id":"window1",
-		"url":"${ctx}/staffing/user/userinfo/"+name+"/"+number,
-		"title":"数据设置", 
+		"id":"window3",
+		"url":"${ctx}/staffing/userinfo/"+name+"/"+userCode,
+		"title":"数据设置",
 		"hasIFrame":true,
 		"content":"",
-		"width":820,
+		"width":840,
 		"height":450,
 		"diyButton":[{
 			"id": "btOne",
 			"btClass": "def_btn",
 			"value": "保 存",
 			"btFun": function() {
-				$obj = $(document.getElementById('window1_iframe').contentWindow.document);
-				var taskId = $obj.find("#taskId").val();
-				var userPowerId = $obj.find("#userPowerId").val();
+				$obj = $(document.getElementById('window3_iframe').contentWindow.document);
+				var comCode = $obj.find("#comCode").val();
 				var ruleIdStr = ",";
 				var paramStr = ",";
 				$busPower = $obj.find(".code_box").find("input");
@@ -134,17 +189,16 @@ function openSJ(obj) {
 					var param = $(this).val();
 					paramStr = param + "," + paramStr;
 				});
-				if(taskId.length != 0 && userPowerId.length != 0){
-//					alert(taskId);
-//					alert(userPowerId);
+
+				if(ruleIdStr.length > 1 && paramStr.length > 1){
 					$.ajax({
-						url : "${ctx}/staffing/save/"+ruleIdStr+"/"+userPowerId+"/"+taskId+"/"+paramStr,
+						url : "${ctx}/staffing/saveBusPower/"+comCode+"/"+userCode+"/"+ruleIdStr+"/"+paramStr,
 						type : "post",
 						dataType : "html",
 						success : function(data){
 							if(data == "success"){
 								msgSuccess("", "保存成功！");	
-								$("#window1").remove();
+								$("#window3").remove();
 								$(".all_shadow").remove();
 							}else{
 								alert("保存失败！");
@@ -154,6 +208,8 @@ function openSJ(obj) {
 							alert("保存失败！！");
 						}
 					});
+				}else{
+					alert("请选择数据规则！");
 				}
 			}
 			}, {
@@ -161,7 +217,8 @@ function openSJ(obj) {
 			"btClass": "def_btn",
 			"value": "取 消",
 			"btFun": function() {
-				$("#window1").remove();
+				
+				$("#window3").remove();
 				$(".all_shadow").remove();
 				}	
 			}, {
@@ -169,7 +226,8 @@ function openSJ(obj) {
 			"btClass": "def_btn",
 			"value": "关 闭",
 			"btFun": function() {
-				$("#window1").remove();
+				
+				$("#window3").remove();
 				$(".all_shadow").remove();
 				}	
 			}

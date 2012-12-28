@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
  * @author Morgan
  *
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Documented
 @ReportAsSingleViolation

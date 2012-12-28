@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.repositories.CompanyDao;
+import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
@@ -18,7 +19,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Autowired
 	private UserDao userDao;
-	
+	@Autowired
+	private GeRmsUserPowerRepository geRmsUserPowerRepository;
 	@Autowired
 	private CompanyDao companyDao;
 	
@@ -35,23 +37,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 			Pageable pageable, List<String> userAttribute) {
 		Page<Employe> page = userDao.findAll(pageable);
 		List<Employe> userList = page.getContent();
-		String button = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' class='set' onclick='openSJ(this);'>数据设置</a>";
-		String button2 = "<a href='#' class='agency' onclick='openWindow()'></a>";
-		for(Employe user: userList){
-			user.setNewUserCode(button);
-			user.setArticleCode(button2);
-			String comCodeUser = userDao.findComCodeByUserCode(user.getUserCode());
-			Company com = companyDao.findOne(comCodeUser);
-			user.setFlag(com.getComCName());
-		}
-		gridable.setPage(page);
-		gridable.setIdField("userCode");
-		userAttribute.add("userCode");
-		userAttribute.add("userName");
-		userAttribute.add("flag");
-		userAttribute.add("articleCode");
-		userAttribute.add("newUserCode");
-		gridable.setCellListStringField(userAttribute);
+		
+		gridable = getGridable(userList, gridable, userAttribute, page);
 		
 		return gridable;
 	}
@@ -82,28 +69,39 @@ public class EmployeeServiceImpl implements EmployeeService{
 				page = userDao.findUserByComCodeUserCode("%"+comCode+"%", "%"+userCode+"%",pageable);
 
 			}
-
 			List<Employe> userList = page.getContent();
-			String button = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' class='set' onclick='openSJ(this);'>数据设置</a>";
-			String button2 = "<a href='#' class='agency' onclick='openWindow()'></a>";
-			for(Employe user: userList){
-				user.setNewUserCode(button);
-				user.setArticleCode(button2);
-				String comCodeUser = userDao.findComCodeByUserCode(user.getUserCode());
-				Company com = companyDao.findOne(comCodeUser);
-				user.setFlag(com.getComCName());
-			}
-			gridable.setPage(page);
-			gridable.setIdField("userCode");
-			userAttribute.add("userCode");
-			userAttribute.add("userName");
-			userAttribute.add("flag");
-			userAttribute.add("articleCode");
-			userAttribute.add("newUserCode");
-			gridable.setCellListStringField(userAttribute);
 			
+			gridable = getGridable(userList, gridable, userAttribute, page);
 			return gridable;
-
+	}
+	
+	public Gridable<Employe> getGridable(List<Employe> userList,Gridable<Employe> gridable ,List<String> userAttribute,Page<Employe> page ){
+		String button = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' class='set' onclick='openSJ(this);'>数据设置</a>";
+		String button_ = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' title='该人员未配置权限，无法操作' class='set dis'>数据设置</a>";
+		String button2 = "<a href='#' class='agency' onclick='openWindow(this)'></a>";
+		for(Employe user: userList){
+			List<String> userPowerId = geRmsUserPowerRepository.findUserPowerIdByUserCode(user.getUserCode());
+			System.out.println(userPowerId);
+			if(!userPowerId.isEmpty()){
+				user.setNewUserCode(button);
+			}else{
+				user.setNewUserCode(button_);
+			}
+			user.setArticleCode(button2);
+			String comCodeUser = userDao.findComCodeByUserCode(user.getUserCode());
+			Company com = companyDao.findOne(comCodeUser);
+			user.setFlag(com.getComCName());
+		}
+		
+		gridable.setPage(page);
+		gridable.setIdField("userCode");
+		userAttribute.add("userCode");
+		userAttribute.add("userName");
+		userAttribute.add("flag");
+		userAttribute.add("articleCode");
+		userAttribute.add("newUserCode");
+		gridable.setCellListStringField(userAttribute);
+		return gridable;
 	}
 
 }
