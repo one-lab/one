@@ -1,7 +1,7 @@
 package com.sinosoft.one.exception.moduleexception.dataverify;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
-import com.sinosoft.one.ebusiness.sys.exception.userException.DataVerifyException;
+import com.sinosoft.one.exception.ExceptionLevel;
+import com.sinosoft.one.exception.userexception.DataVerifyException;
 /**
  * Mis模块异常
  * 
@@ -9,11 +9,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.DataVerifyExceptio
  * 
  */
 public class MisException extends DataVerifyException {
-	private static final String subUserExceptionCode = "010101";
+	private static final String subuserexceptionCode = "010101";
 
 	private MisException(String concreteExceptionCode, String msg,
-			Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static MisException newInstanceCode(String concreteExceptionCode) {
@@ -34,12 +34,12 @@ public class MisException extends DataVerifyException {
 	}
 
 	public static MisException newInstanceMsg(String msg, Throwable cause,
-			ExceptionGrade grade) {
-		return new MisException(null, msg, cause, grade);
+			ExceptionLevel level) {
+		return new MisException(null, msg, cause, level);
 	}
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 
 	private static final long serialVersionUID = 1L;

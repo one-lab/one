@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ExceptionConfig {
     private static HashMap<String, Object> userExceptionMap = new HashMap<String, Object>();
-    private static HashMap<String, Object> grades = new HashMap<String, Object>();
+    private static HashMap<String, Object> levels = new HashMap<String, Object>();
 
     /**
      * 获取用户异常map
@@ -63,23 +63,23 @@ public class ExceptionConfig {
     /**
      * 存放异常级别
      */
-    public static void putGradeMap(String key, Object obj) {
+    public static void putLevelMap(String key, Object obj) {
         if (!ExceptionConfigInit.isFinishInit()
-                && !ExceptionConfig.grades.containsKey(key)) {
-            ExceptionConfig.grades.put(key, obj);
+                && !ExceptionConfig.levels.containsKey(key)) {
+            ExceptionConfig.levels.put(key, obj);
         }
     }
 
     /**
      * 获取异常级别
      */
-    public static ExceptionGradeHandle getGradeHandle(String key) {
-        ExceptionGradeHandle gradeHandle = null;
-        if (ExceptionConfig.grades.containsKey(key)) {
-            gradeHandle = (ExceptionGradeHandle) ExceptionConfig.grades
+    public static ExceptionLevelHandle getLevelHandle(String key) {
+        ExceptionLevelHandle levelHandle = null;
+        if (ExceptionConfig.levels.containsKey(key)) {
+            levelHandle = (ExceptionLevelHandle) ExceptionConfig.levels
                     .get(key);
         }
-        return gradeHandle;
+        return levelHandle;
     }
 
 }

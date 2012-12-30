@@ -13,7 +13,7 @@ import com.sinosoft.one.service.facade.ComboService;
 import com.sinosoft.one.util.test.SpringContextTestCase;
 
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/spring/applicationContext-bpm.xml","/applicationContext-test.xml" })
 public class AspectTest extends SpringContextTestCase {
 	@Autowired
 	ComboService comboService;

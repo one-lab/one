@@ -18,6 +18,7 @@ import org.drools.agent.KnowledgeAgent;
 import org.drools.definition.process.Node;
 import org.drools.definition.process.NodeContainer;
 import org.drools.definition.process.WorkflowProcess;
+import org.drools.event.process.ProcessEventListener;
 import org.drools.impl.EnvironmentFactory;
 import org.drools.persistence.jpa.JPAKnowledgeService;
 import org.drools.runtime.Environment;
@@ -54,6 +55,7 @@ public class BpmServiceSupport {
 	private ProcessInstanceBOCache cache;
 	private EntityManagerFactory bpmEmf;
 	private JpaTransactionManager bpmTxManager;
+	private ProcessEventListener bpmProcessEventListener;
 
 
 	public void init() {
@@ -142,6 +144,7 @@ public class BpmServiceSupport {
 					conf, env);
 			dbLogger = new JPAWorkingMemoryDbLogger(result);
 			ksession = result;
+			ksession.addEventListener(bpmProcessEventListener);
 		} catch (Exception e) {
 			logger.warn("can not load session id =1");
 		}
@@ -187,6 +190,7 @@ public class BpmServiceSupport {
 			ksession = createKnowledgeSession(propertiesFilePath,
 					bpmEmf);
 		}
+		ksession.addEventListener(bpmProcessEventListener);
 		return ksession;
 	}
 
@@ -435,4 +439,8 @@ public class BpmServiceSupport {
 		this.bpmTxManager = bpmTxManager;
 	}
 
+	public void setBpmProcessEventListener(
+			ProcessEventListener bpmProcessEventListener) {
+		this.bpmProcessEventListener = bpmProcessEventListener;
+	}
 }

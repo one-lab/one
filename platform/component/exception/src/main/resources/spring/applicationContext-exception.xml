@@ -1,35 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
 	default-autowire="byName" default-lazy-init="false">
-
-
-<!-- 必须在调用exception的模块中打开component-scan
-<context:component-scan base-package="cn.com.chinalife.ebusiness" />
--->
 
 	<bean id="exceptionConfigInit" scope="singleton"
 		class="com.sinosoft.one.exception.ExceptionConfigInit" init-method="init">
-		<property name="exceptionConfigPath" value="config/ExceptionConfig.xml"/>
-	</bean>
-	
-	
-	
-	<bean id="queuesHolder" class="com.sinosoft.chinaelife.ebusiness.sys.util.queue.QueuesHolder">
-		<property name="queueSize" value="1000" />
+		<property name="exceptionConfigPath" value="${exception.config.path}"/>
 	</bean>
 
 	<!-- 读出Queue中日志消息写入数据库的任务	 -->
 	<bean id="jdbcExceptionWriter" class="com.sinosoft.one.exception.aspect.JdbcExceptionWriter" >
 		<property name="queueName" value="exception" />
-		<property name="appName" value="online" />
-		<property name="batchSize" value="1" />
+		<property name="appName" value="${exception.appName}" />
+		<property name="batchSize" value="${exception.batch.size}" />
 		<property name="sql">
 			<value>
-				insert into GE_Monitor_AppException(SERIALNO,APPNAME,ExceptionKind,UserExceptionCode,SubUserExceptionCode,ConcreteExceptionCode,ExceptionDesc,ExceptionReason,ExceptionTime,ExceptionGrade)
-				values(:serialNo,:appName,:exceptionKind,:userExceptionCode,:subUserExceptionCode,:concreteExceptionCode,:exceptionDesc,:exceptionReason,:exceptionTime,:exceptionGrade)
+				insert into GE_EXCEPTION_INFO(ID, APPNAME, EXCEPTIONKIND, USEREXCEPTIONCODE, SUBUSEREXCEPTIONCODE, CONCRETEEXCEPTIONCODE, EXCEPTIONDESC, EXCEPTIONSTACKTRACE, EXCEPTIONTIME, EXCEPTIONLEVEL)
+				values(:id, :appName, :exceptionKind, :userExceptionCode, :subUserExceptionCode, :concreteExceptionCode, :exceptionDesc, :exceptionStackTrace, :exceptionTime, :exceptionLevel)
 			</value>
 		</property>
 	</bean>
@@ -38,27 +30,39 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	<aop:aspectj-autoproxy/> 
 	 -->
 	<!-- 配置执行TraceUtils的Aspect -->
-	<bean class="com.sinosoft.one.exception.aspect.UserExceptionAspect" />
+	<bean id="exceptionAspect" class="com.sinosoft.one.exception.aspect.UserExceptionAspect" />
 	
 	<!-- ExceptionQueueAppender 的单例 -->
 	<bean id="exceptionQueueAppender" scope="singleton"
 	class="com.sinosoft.one.exception.aspect.ExceptionQueueAppender">
 		<property name="queueName" value="exception"/>
+        <property name="queueSize" value="${exception.queue.size}" />
 	</bean>
-	
 	
 	<!-- 区别其它 DataSource-->
-	<bean id="monitorDataSource"
+	<bean id="exceptionMonitorDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<!-- Connection Info -->
-		<property name="driverClassName" value="${jdbc.driverClassName}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
+		<property name="driverClassName" value="${exception.jdbc.driverClassName}" />
+		<property name="url" value="${exception.jdbc.url}" />
+		<property name="username" value="${exception.jdbc.username}" />
+		<property name="password" value="${exception.jdbc.password}" />
 	</bean>
 	<!-- 事务管理器配置, DataSource单数据源事务 -->
-	<bean id="monitorTransactionManager"
+	<bean id="exceptionMonitorTransactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="monitorDataSource" />
+		<property name="dataSource" ref="exceptionMonitorDataSource" />
 	</bean>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="exceptionAop" ref="exceptionAspect">
+            <aop:pointcut  id="traceAspectCut" expression="${exception.aspect.expression}"/>
+            <aop:after-throwing pointcut-ref="traceAspectCut" method="exceptionCatch" arg-names="ue" throwing="ue" />
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="exceptions" class="com.sinosoft.one.exception.Exceptions">
+        <property name="exceptionQueueAppender" ref="exceptionQueueAppender" />
+        <property name="notificationService" ref="notificationService" />
+    </bean>
 </beans>

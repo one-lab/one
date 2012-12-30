@@ -4,12 +4,12 @@ package com.sinosoft.one.exception.aspect;
  * Copyright (c) 2005-2012 sinosoft.com.cn
  *
  */
-
-import java.util.Date;
-import java.util.UUID;
-
-import com.sinosoft.one.exception.ExceptionGrade;
+import com.google.common.collect.Maps;
+import com.sinosoft.one.exception.ExceptionLevel;
 import com.sinosoft.one.exception.UserException;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * ExceptionEvent的包装类
@@ -20,6 +20,11 @@ public class ExceptionEventWrapper {
     private final ExceptionEvent event;
     private final Throwable throwable;
     private final UserException userException;
+    private String appName;
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
 
     public ExceptionEventWrapper(ExceptionEvent event) {
         this.event = event;
@@ -35,7 +40,7 @@ public class ExceptionEventWrapper {
         }
     }
 
-    public String getSerialNo() {
+    public String getId() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
@@ -84,7 +89,7 @@ public class ExceptionEventWrapper {
      *
      * @return
      */
-    public String getExceptionReason() {
+    public String getExceptionStackTrace() {
         StringBuffer sb = new StringBuffer();
         if (this.throwable != null) {
             try {
@@ -133,11 +138,11 @@ public class ExceptionEventWrapper {
         return new Date();
     }
 
-    public String getExceptionGrade() {
+    public String getExceptionLevel() {
         if (userException != null) {
-            return userException.getGrade().toString();
+            return userException.getLevel().toString();
         }
-        return ExceptionGrade.SERIOUS.toString();
+        return ExceptionLevel.SERIOUS.toString();
     }
 
     public String convertToString() {
@@ -146,6 +151,26 @@ public class ExceptionEventWrapper {
                     + this.getExceptionDesc() + ")";
         }
         return "throwable is null";
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> parameterMap = Maps.newHashMap();
+        ExceptionEventWrapper eventWrapper = new ExceptionEventWrapper(event);
+
+        parameterMap.put("id", eventWrapper.getId());
+        parameterMap.put("appName", this.appName);
+        parameterMap.put("exceptionKind", eventWrapper.getExceptionKind());
+        parameterMap.put("userExceptionCode",
+                eventWrapper.getUserExceptionCode());
+        parameterMap.put("subUserExceptionCode",
+                eventWrapper.getSubUserExceptionCode());
+        parameterMap.put("concreteExceptionCode",
+                eventWrapper.getConcreteExceptionCode());
+        parameterMap.put("exceptionDesc", eventWrapper.getExceptionDesc());
+        parameterMap.put("exceptionStackTrace", eventWrapper.getExceptionStackTrace().getBytes());
+        parameterMap.put("exceptionTime", eventWrapper.getExceptionTime());
+        parameterMap.put("exceptionLevel", eventWrapper.getExceptionLevel());
+        return parameterMap;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.sinosoft.one.exception.moduleexception.businessexception;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
-import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
+import com.sinosoft.one.exception.ExceptionLevel;
+import com.sinosoft.one.exception.userexception.BusinessException;
 /**
  * manage-car模块异常
  * 
@@ -9,11 +9,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
  * 
  */
 public class CarManageException extends BusinessException {
-	private static final String subUserExceptionCode = "010008";
+	private static final String subuserexceptionCode = "010008";
 
 	private CarManageException(String concreteExceptionCode,
-			String msg, Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			String msg, Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static CarManageException newInstanceCode(
@@ -38,12 +38,12 @@ public class CarManageException extends BusinessException {
 	}
 
 	public static CarManageException newInstanceMsg(String msg,
-			Throwable cause, ExceptionGrade grade) {
-		return new CarManageException(null, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		return new CarManageException(null, msg, cause, level);
 	}
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 
 	private static final long serialVersionUID = 1L;

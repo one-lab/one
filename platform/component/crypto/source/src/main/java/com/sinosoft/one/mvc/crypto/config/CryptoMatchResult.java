@@ -6,5 +6,5 @@ package com.sinosoft.one.mvc.crypto.config;
  * Time: 下午3:00
  */
 public enum CryptoMatchResult {
-	CRYPTO_MATCH_RESULT,UNCRYPTO_MATCH_RESULT,NONE;
+	UNCRYPTO_MATCH_RESULT,NONE;
 }

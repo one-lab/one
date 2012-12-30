@@ -23,13 +23,8 @@ public abstract class AbstractLoggable implements Loggable {
     protected void setUserId(String userId) {
         this.userId = userId;
     }
-    public String convertToString() {
-        return this.toString();
-    }
 
     public void doHandler() {
         logHandler.doHandler(this);
     }
-
-
 }

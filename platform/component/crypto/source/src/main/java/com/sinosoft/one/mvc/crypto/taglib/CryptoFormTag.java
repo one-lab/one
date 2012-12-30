@@ -16,7 +16,7 @@ import java.io.IOException;
  * Time: 上午11:57
  */
 public class CryptoFormTag extends TagSupport {
-	private static Log logger = LogFactory.getLog(UnCryptoInput.class);
+	private static Log logger = LogFactory.getLog(CryptoFormTag.class);
 	private String includes;
 	private String excludes;
 	private String formId;

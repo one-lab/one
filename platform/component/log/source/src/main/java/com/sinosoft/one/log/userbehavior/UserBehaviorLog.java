@@ -5,6 +5,8 @@ import com.sinosoft.one.log.queue.LoggableQueueAppender;
 import com.sinosoft.one.util.encode.JsonBinder;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -122,5 +124,19 @@ public class UserBehaviorLog extends AbstractLoggable implements Loggable {
 
     public void appendToQueue() {
         loggableQueueAppender.append(this);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("id", id)
+            .append("url", url)
+            .append("visitTime", visitTime)
+            .append("paramInfoes", paramInfoes)
+            .append("sessionId", sessionId)
+            .append("userId", userId)
+            .append("userIp", userIp)
+            .append("appName", appName)
+            .build();
     }
 }

@@ -37,6 +37,7 @@ public class BpmServiceSpringImpl implements BpmService {
 		StatefulKnowledgeSession ksession = bpmServiceSupport
 				.getSession("drools.properties");
 		ProcessInstance pi = ksession.startProcess(processId, params);
+		
 		ksession.fireAllRules();
 		cache.putAndSave(processId, params.get("businessId").toString(), pi.getId());
 		return pi.getId();

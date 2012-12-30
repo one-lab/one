@@ -1,7 +1,7 @@
 package com.sinosoft.one.exception.moduleexception.dataverify;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
-import com.sinosoft.one.ebusiness.sys.exception.userException.DataVerifyException;
+import com.sinosoft.one.exception.ExceptionLevel;
+import com.sinosoft.one.exception.userexception.DataVerifyException;
 /**
  * Online模块异常
  * 
@@ -9,11 +9,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.DataVerifyExceptio
  * 
  */
 public class OnlineException extends DataVerifyException {
-	private static final String subUserExceptionCode = "010100";
+	private static final String subuserexceptionCode = "010100";
 
 	private OnlineException(String concreteExceptionCode, String msg,
-			Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static OnlineException newInstanceCode(String concreteExceptionCode) {
@@ -34,12 +34,12 @@ public class OnlineException extends DataVerifyException {
 	}
 
 	public static OnlineException newInstanceMsg(String msg, Throwable cause,
-			ExceptionGrade grade) {
-		return new OnlineException(null, msg, cause, grade);
+			ExceptionLevel level) {
+		return new OnlineException(null, msg, cause, level);
 	}
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 
 	private static final long serialVersionUID = 1L;

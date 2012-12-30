@@ -26,9 +26,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test-new.xml",
-		"/spring/applicationContext-log-new.xml" })
-@TransactionConfiguration(transactionManager = "monitorTransactionManager",defaultRollback=true)
+@ContextConfiguration(locations = { "/applicationContext-test.xml",
+        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
+@TransactionConfiguration(transactionManager = "logMonitorTransactionManager",defaultRollback=true)
 @Transactional(isolation=Isolation.READ_COMMITTED)
 public class ProposalServiceImplTest extends SpringTxTestCase {
 
@@ -43,11 +43,11 @@ public class ProposalServiceImplTest extends SpringTxTestCase {
 
     @Before
     public void setUp() {
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testParam", 300, Environment.TEST, "此处演示如何进行参数,第一个参数${[0]},第二个参数${[1]}");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testProductTraced", 300, Environment.PRODUCT, "");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testDevelopTraced", 300, Environment.DEVELOP, "");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testTestTraced", 300, Environment.TEST, "");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testInterfaceTraced", 300, Environment.TEST, "测试Trace");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testParam", 300, 5, Environment.TEST, "此处演示如何进行参数,第一个参数${[0]},第二个参数${[1]}");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testProductTraced", 300, 5, Environment.PRODUCT, "");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testDevelopTraced", 300, 5,Environment.DEVELOP, "");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testTestTraced", 300, 5,Environment.TEST, "");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testInterfaceTraced", 300,5, Environment.TEST, "测试Trace");
     }
 
 	@Test

@@ -1,15 +1,17 @@
 package com.sinosoft.one.util.reflection;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.beans.ExceptionListener;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.lang.reflect.*;
+import java.util.*;
 
+import com.sun.beans.ObjectHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+
 
 /**
  * 反射工具类.
@@ -209,4 +211,256 @@ public class ReflectionUtils {
 		}
 		return new RuntimeException("Unexpected Checked Exception.", e);
 	}
+
+    // from jdk's ReflectionUtils
+    private static Reference methodCacheRef;
+
+    public static Class typeToClass(Class type) {
+        return type.isPrimitive() ? ObjectHandler.typeNameToClass(type.getName()) : type;
+    }
+
+    public static boolean isPrimitive(Class type) {
+        return primitiveTypeFor(type) != null;
+    }
+
+    public static Class primitiveTypeFor(Class wrapper) {
+        if (wrapper == Boolean.class) return Boolean.TYPE;
+        if (wrapper == Byte.class) return Byte.TYPE;
+        if (wrapper == Character.class) return Character.TYPE;
+        if (wrapper == Short.class) return Short.TYPE;
+        if (wrapper == Integer.class) return Integer.TYPE;
+        if (wrapper == Long.class) return Long.TYPE;
+        if (wrapper == Float.class) return Float.TYPE;
+        if (wrapper == Double.class) return Double.TYPE;
+        if (wrapper == Void.class) return Void.TYPE;
+        return null;
+    }
+
+    /**
+     * Tests each element on the class arrays for assignability.
+     *
+     * @param argClasses arguments to be tested
+     * @param argTypes arguments from Method
+     * @return true if each class in argTypes is assignable from the
+     *         corresponding class in argClasses.
+     */
+    private static boolean matchArguments(Class[] argClasses, Class[] argTypes) {
+        return matchArguments(argClasses, argTypes, false);
+    }
+
+    /**
+     * Tests each element on the class arrays for equality.
+     *
+     * @param argClasses arguments to be tested
+     * @param argTypes arguments from Method
+     * @return true if each class in argTypes is equal to the
+     *         corresponding class in argClasses.
+     */
+    private static boolean matchExplicitArguments(Class[] argClasses, Class[] argTypes) {
+        return matchArguments(argClasses, argTypes, true);
+    }
+
+    private static boolean matchArguments(Class[] argClasses,
+                                          Class[] argTypes, boolean explicit) {
+
+        boolean match = (argClasses.length == argTypes.length);
+        for(int j = 0; j < argClasses.length && match; j++) {
+            Class argType = argTypes[j];
+            if (argType.isPrimitive()) {
+                argType = typeToClass(argType);
+            }
+            if (explicit) {
+                // Test each element for equality
+                if (argClasses[j] != argType) {
+                    match = false;
+                }
+            } else {
+                // Consider null an instance of all classes.
+                if (argClasses[j] != null &&
+                        !(argType.isAssignableFrom(argClasses[j]))) {
+                    match = false;
+                }
+            }
+        }
+        return match;
+    }
+
+
+
+
+
+    /**
+     * Return the most specific method from the list of methods which
+     * matches the args. The most specific method will have the most
+     * number of equal parameters or will be closest in the inheritance
+     * heirarchy to the runtime execution arguments.
+     * <p>
+     * See the JLS section 15.12
+     * http://java.sun.com/docs/books/jls/second_edition/html/expressions.doc.html#20448
+     *
+     * @param methods List of methods which already have the same param length
+     *                and arg types are assignable to param types
+     * @param args an array of param types to match
+     * @return method or null if a specific method cannot be determined
+     */
+    private static Method getMostSpecificMethod(List methods, Class[] args) {
+        Method method = null;
+
+        int matches = 0;
+        int lastMatch = matches;
+
+        ListIterator iterator = methods.listIterator();
+        while (iterator.hasNext()) {
+            Method m = (Method)iterator.next();
+            Class[] mArgs = m.getParameterTypes();
+            matches = 0;
+            for (int i = 0; i < args.length; i++) {
+                Class mArg = mArgs[i];
+                if (mArg.isPrimitive()) {
+                    mArg = typeToClass(mArg);
+                }
+                if (args[i] == mArg) {
+                    matches++;
+                }
+            }
+            if (matches == 0 && lastMatch == 0) {
+                if (method == null) {
+                    method = m;
+                } else {
+                    // Test existing method. We already know that the args can
+                    // be assigned to all the method params. However, if the
+                    // current method parameters is higher in the inheritance
+                    // hierarchy then replace it.
+                    if (!matchArguments(method.getParameterTypes(),
+                            m.getParameterTypes())) {
+                        method = m;
+                    }
+                }
+            } else if (matches > lastMatch) {
+                lastMatch = matches;
+                method = m;
+            } else if (matches == lastMatch) {
+                // ambiguous method selection.
+                method = null;
+            }
+        }
+        return method;
+    }
+
+
+    /**
+     * A class that represents the unique elements of a method that will be a
+     * key in the method cache.
+     */
+    private static class Signature {
+        private Class targetClass;
+        private String methodName;
+        private Class[] argClasses;
+
+        private volatile int hashCode = 0;
+
+        public Signature(Class targetClass, String methodName, Class[] argClasses) {
+            this.targetClass = targetClass;
+            this.methodName = methodName;
+            this.argClasses = argClasses;
+        }
+
+        public boolean equals(Object o2) {
+            if (this == o2) {
+                return true;
+            }
+            Signature that = (Signature)o2;
+            if (!(targetClass == that.targetClass)) {
+                return false;
+            }
+            if (!(methodName.equals(that.methodName))) {
+                return false;
+            }
+            if (argClasses.length != that.argClasses.length) {
+                return false;
+            }
+            for (int i = 0; i < argClasses.length; i++) {
+                if (!(argClasses[i] == that.argClasses[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * Hash code computed using algorithm suggested in
+         * Effective Java, Item 8.
+         */
+        public int hashCode() {
+            if (hashCode == 0) {
+                int result = 17;
+                result = 37 * result + targetClass.hashCode();
+                result = 37 * result + methodName.hashCode();
+                if (argClasses != null) {
+                    for (int i = 0; i < argClasses.length; i++) {
+                        result = 37 * result + ((argClasses[i] == null) ? 0 :
+                                argClasses[i].hashCode());
+                    }
+                }
+                hashCode = result;
+            }
+            return hashCode;
+        }
+    }
+
+
+    /**
+     * Return a constructor on the class with the arguments.
+     *
+     * @throws exception if the method is ambiguios.
+     */
+        public static Constructor getConstructor(Class cls, Class[] args) {
+        Constructor constructor = null;
+
+        // PENDING: Implement the resolutuion of ambiguities properly.
+        Constructor[] ctors = cls.getDeclaredConstructors();
+        for(int i = 0; i < ctors.length; i++) {
+            if (matchArguments(args, ctors[i].getParameterTypes())) {
+                constructor = ctors[i];
+            }
+        }
+        return constructor;
+    }
+
+    public static Constructor getPrivateConstructor(Class cls, Class[] args) {
+        Constructor constructor = getConstructor(cls, args);
+        if(!constructor.isAccessible()) {
+            constructor.setAccessible(true);
+        }
+        return constructor;
+    }
+
+
+    public static Object getPrivateField(Object instance, Class cls, String name) {
+        return getPrivateField(instance, cls, name);
+    }
+
+    /**
+     * Returns the value of a private field.
+     *
+     * @param instance object instance
+     * @param cls class
+     * @param name name of the field
+     * @param el an exception listener to handle exceptions; or null
+     * @return value of the field; null if not found or an error is encountered
+     */
+    public static Object getPrivateField(Object instance, Class cls,
+                                         String name, ExceptionListener el) {
+        try {
+            Field f = cls.getDeclaredField(name);
+            f.setAccessible(true);
+            return f.get(instance);
+        }
+        catch (Exception e) {
+            if (el != null) {
+                el.exceptionThrown(e);
+            }
+        }
+        return null;
+    }
 }

@@ -5,6 +5,9 @@ import java.util.concurrent.BlockingQueue;
 
 import com.sinosoft.one.log.Loggable;
 import com.sinosoft.one.log.Loggables;
+import org.apache.log4j.Level;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.Priority;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -23,7 +26,14 @@ public class QueueAppender extends org.apache.log4j.WriterAppender {
 
 	protected String queueName;
 
+    protected int queueSize = Integer.MAX_VALUE;
+
 	protected BlockingQueue<Loggable> queue;
+
+    public QueueAppender() {
+        this.threshold = Level.INFO;
+        this.layout = new PatternLayout("%d [%t] @@[%l] @@[%C] %-5p %-40.40c -%m%n");
+    }
 
 	/**
 	 * AppenderSkeleton回调函数, 事件到达时将时间放入Queue.
@@ -31,15 +41,15 @@ public class QueueAppender extends org.apache.log4j.WriterAppender {
 	@Override
 	public void append(LoggingEvent event) {
 		if (queue == null) {
-			queue = QueuesHolder.getQueue(queueName);
+			queue = QueuesHolder.getQueue(queueName, queueSize);
 		}
         Loggable loggable = Loggables.parseLoggingEvent(event);
 		boolean sucess = queue.offer(loggable);
 
 		if (sucess) {
-			LogLog.debug("put event to queue success:" + loggable.convertToString());
+			LogLog.debug("put event to queue success:" + loggable.toString());
 		} else {
-			LogLog.error("Put event to queue fail:" + loggable.convertToString());
+			LogLog.error("Put event to queue fail:" + loggable.toString());
 		}
 	}
 
@@ -69,4 +79,8 @@ public class QueueAppender extends org.apache.log4j.WriterAppender {
 	public void setQueueName(String queueName) {
 		this.queueName = queueName;
 	}
+
+    public void setQueueSize(int queueSize) {
+        this.queueSize = queueSize;
+    }
 }

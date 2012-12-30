@@ -33,19 +33,27 @@ public class QueuesHolder {
 	 * 如消息队列还不存在, 会自动进行创建.
 	 */
 	public static <T> BlockingQueue<T> getQueue(String queueName) {
-		BlockingQueue<T> queue = queueMap.get(queueName);
-
-		if (queue == null) {
-			BlockingQueue<T> newQueue = new LinkedBlockingQueue<T>(queueSize);
-
-			//如果之前消息队列还不存在,放入新队列并返回Null.否则返回之前的值.
-			queue = queueMap.putIfAbsent(queueName, newQueue);
-			if (queue == null) {
-				queue = newQueue;
-			}
-		}
-		return queue;
+		return getQueue(queueName, queueSize);
 	}
+
+    /**
+     * 根据queueName获得消息队列的静态函数.
+     * 如消息队列还不存在, 会自动进行创建.
+     */
+    public static <T> BlockingQueue<T> getQueue(String queueName, int targetQueueSize) {
+        BlockingQueue<T> queue = queueMap.get(queueName);
+
+        if (queue == null) {
+            BlockingQueue<T> newQueue = new LinkedBlockingQueue<T>(targetQueueSize <= 0 ? queueSize : targetQueueSize);
+
+            //如果之前消息队列还不存在,放入新队列并返回Null.否则返回之前的值.
+            queue = queueMap.putIfAbsent(queueName, newQueue);
+            if (queue == null) {
+                queue = newQueue;
+            }
+        }
+        return queue;
+    }
 
 	/**
 	 * 根据queueName获得消息队列中未处理消息的数量,支持基于JMX查询.
@@ -59,7 +67,7 @@ public class QueuesHolder {
 	/**
 	 * 设置每个队列的最大长度, 默认为Integer最大值, 设置时不改变已创建队列的最大长度.
 	 */
-	public void setQueueSize(int queueSize) {
-		QueuesHolder.queueSize = queueSize; //NOSONAR
-	}
+//	public void setQueueSize(int queueSize) {
+//		QueuesHolder.queueSize = queueSize; //NOSONAR
+//	}
 }

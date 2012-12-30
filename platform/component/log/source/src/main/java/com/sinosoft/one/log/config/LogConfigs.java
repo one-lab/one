@@ -51,10 +51,11 @@ public class LogConfigs {
     @ManagedOperationParameters({
         @ManagedOperationParameter(name = "url", description = "Request url of log url."),
         @ManagedOperationParameter(name = "environment", description = "Environment of log url."),
-        @ManagedOperationParameter(name = "maxExecuteTime", description = "Max execute time of log url.")
+        @ManagedOperationParameter(name = "maxExecuteTime", description = "Max execute time of log url."),
+        @ManagedOperationParameter(name = "interval", description = "Interval time of log url.")
     })
-    public void addLogUrl(String url, String environment, int maxExecuteTime) {
-        urls.add(new LogUrl(url, environment, maxExecuteTime));
+    public void addLogUrl(String url, String environment, int maxExecuteTime, int interval) {
+        urls.add(new LogUrl(url, environment, maxExecuteTime, interval));
     }
 
     @ManagedOperation(description = "Remove a url.")
@@ -79,12 +80,13 @@ public class LogConfigs {
         @ManagedOperationParameter(name = "className", description = "Class name of log method."),
         @ManagedOperationParameter(name = "methodName", description = "Method name of log method."),
         @ManagedOperationParameter(name = "maxExecuteTime", description = "Max execute time of log method."),
+        @ManagedOperationParameter(name = "interval", description = "Interval time of log method."),
         @ManagedOperationParameter(name = "environment", description = "Environment of log method."),
         @ManagedOperationParameter(name = "description", description = "Description of log method.")
     })
-    public void addLogMethod(String className, String methodName, int maxExecuteTime, String environment, String description) {
+    public void addLogMethod(String className, String methodName, int maxExecuteTime, int interval, String environment, String description) {
         methods.add(new LogMethod.Builder(className, methodName)
-                .maxExecuteTime(maxExecuteTime).environment(environment).description(description).build());
+                .maxExecuteTime(maxExecuteTime).interval(interval).environment(environment).description(description).build());
     }
 
 //    @ManagedOperation(description = "Add a new log method.")

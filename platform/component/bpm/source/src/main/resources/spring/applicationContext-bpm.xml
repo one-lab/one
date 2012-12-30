@@ -79,6 +79,10 @@
 	<bean id="processInstanceBOCache" class="com.sinosoft.one.bpm.util.ProcessInstanceBOCache">
 		<property name="processInstanceBOService" ref="processInstanceBOService" />
 	</bean>
+	
+	<bean id="bpmProcessEventListener" class="com.sinosoft.one.bpm.util.BpmProcessEventListener">
+		<property name="cache" ref="processInstanceBOCache" />
+	</bean>
 
 	<bean id="bpmServiceSupport" scope="singleton"
 		class="com.sinosoft.one.bpm.util.BpmServiceSupport" init-method="init"
@@ -86,6 +90,7 @@
 		<property name="bpmEmf" ref="bpmEmf" />
 		<property name="bpmTxManager" ref="bpmTxManager" />
 		<property name="cache" ref="processInstanceBOCache" />
+		<property name="bpmProcessEventListener" ref="bpmProcessEventListener" />
 	</bean>
 
 	<bean id="bpmService"

@@ -1,19 +1,19 @@
 package com.sinosoft.one.exception;
 
 public class XmlConcreteException {
-	private ExceptionGrade grade = ExceptionGrade.UNSERIOUS;
+	private ExceptionLevel level = ExceptionLevel.UNSERIOUS;
 	private String exceptionCode = "";
 	private String exceptionDesc = "";
 
-	public XmlConcreteException(ExceptionGrade grade, String exceptionCode,
+	public XmlConcreteException(ExceptionLevel level, String exceptionCode,
 			String exceptionDesc) {
-		this.grade = grade;
+		this.level = level;
 		this.exceptionCode = exceptionCode;
 		this.exceptionDesc = exceptionDesc;
 	}
 
-	public ExceptionGrade getGrade() {
-		return grade;
+	public ExceptionLevel getLevel() {
+		return level;
 	}
 
 	public String getExceptionCode() {

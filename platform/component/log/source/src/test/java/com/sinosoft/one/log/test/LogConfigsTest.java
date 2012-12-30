@@ -13,6 +13,9 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +28,10 @@ import java.util.List;
  *
  */
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test-new.xml",
-        "/spring/applicationContext-log-new.xml" })
+@ContextConfiguration(locations = { "/applicationContext-test.xml",
+        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
+@TransactionConfiguration(transactionManager = "logMonitorTransactionManager",defaultRollback=true)
+@Transactional(isolation= Isolation.READ_COMMITTED)
 public class LogConfigsTest extends AbstractFilterTest {
     AgentServlet servlet = null;
 
@@ -106,12 +111,13 @@ public class LogConfigsTest extends AbstractFilterTest {
 
     @Test
     public void testGetLogUrls() throws Exception{
-        getOperate("exec", "addLogUrl/!/test1/DEVELOP/15");
+        getOperate("exec", "addLogUrl/!/test1/DEVELOP/15/5");
         postOperate("exec", "addLogUrl", new ArrayList<String>() {
             {
                 add("/test2");
                 add("TEST");
                 add("20");
+                add("5");
             }
         });
 
@@ -126,6 +132,7 @@ public class LogConfigsTest extends AbstractFilterTest {
                 add("/test3/test4");
                 add("PRODUCT");
                 add("15");
+                add("5");
             }
         });
         JSONObject resultObject = query("exec", "getLogUrl/!/test3!/test4");
@@ -137,14 +144,14 @@ public class LogConfigsTest extends AbstractFilterTest {
 
     @Test
     public void testAddLogURLAndRemoveLogURLForGetRequest() throws Exception{
-        getOperate("exec", "addLogUrl/!/test4!/test5/DEVELOP/10");
+        getOperate("exec", "addLogUrl/!/test4!/test5/DEVELOP/10/5");
 
         JSONObject jsonObjectForRead = query("exec", "getLogUrl/!/test4!/test5");
         JSONObject urlObject = jsonObjectForRead.getJSONObject("value");
         Assert.assertEquals("/test4/test5", urlObject.get("url"));
         Assert.assertEquals("DEVELOP", urlObject.get("environment"));
         Assert.assertEquals(10, urlObject.get("maxExecuteTime"));
-
+        Assert.assertEquals(5, urlObject.get("interval"));
         // 删除URL请求
         getOperate("exec", "removeLogUrl/!/test4!/test5");
 
@@ -169,6 +176,7 @@ public class LogConfigsTest extends AbstractFilterTest {
                 add("com.sinosoft.one.log.test");
                 add("testMethod");
                 add("15");
+                add("1");
                 add("DEVELOP");
                 add("");
             }
@@ -179,6 +187,7 @@ public class LogConfigsTest extends AbstractFilterTest {
                 add("com.sinosoft.one.log.test1");
                 add("testMethod1");
                 add("15");
+                add("5");
                 add("TEST");
                 add("");
             }
@@ -190,7 +199,7 @@ public class LogConfigsTest extends AbstractFilterTest {
 
     @Test
     public void testGetLogMethod() throws Exception{
-        getOperate("exec", "addLogMethod/com.sinosoft.one.log.test/testMethod2/20/DEVELOP/testDescription");
+        getOperate("exec", "addLogMethod/com.sinosoft.one.log.test/testMethod2/20/5/DEVELOP/testDescription");
         JSONObject resultObject = query("exec", "getLogMethod/com.sinosoft.one.log.test/testMethod2");
         JSONObject valueObject = resultObject.getJSONObject("value");
         Assert.assertEquals("com.sinosoft.one.log.test", valueObject.getString("className"));
@@ -202,7 +211,7 @@ public class LogConfigsTest extends AbstractFilterTest {
 
     @Test
     public void testRemoveLogMethod() throws Exception{
-        getOperate("exec", "addLogMethod/com.sinosoft.one.log.test/testMethod3/30/TEST/testDescription");
+        getOperate("exec", "addLogMethod/com.sinosoft.one.log.test/testMethod3/30/5/TEST/testDescription");
         JSONObject resultObject = query("exec", "getLogMethod/com.sinosoft.one.log.test/testMethod3");
         JSONObject valueObject = resultObject.getJSONObject("value");
         Assert.assertEquals("com.sinosoft.one.log.test", valueObject.getString("className"));

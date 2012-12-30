@@ -1,7 +1,7 @@
 package com.sinosoft.one.exception.moduleexception.businessexception;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
-import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
+import com.sinosoft.one.exception.ExceptionLevel;
+import com.sinosoft.one.exception.userexception.BusinessException;
 /**
  * common-party模块异常
  * 
@@ -9,11 +9,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
  * 
  */
 public class PartyCommonException extends BusinessException {
-	private static final String subUserExceptionCode = "010014";
+	private static final String subuserexceptionCode = "010014";
 
 	private PartyCommonException(String concreteExceptionCode,
-			String msg, Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			String msg, Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static PartyCommonException newInstanceCode(
@@ -38,12 +38,12 @@ public class PartyCommonException extends BusinessException {
 	}
 
 	public static PartyCommonException newInstanceMsg(String msg,
-			Throwable cause, ExceptionGrade grade) {
-		return new PartyCommonException(null, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		return new PartyCommonException(null, msg, cause, level);
 	}
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 
 	private static final long serialVersionUID = 1L;

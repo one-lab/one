@@ -57,7 +57,7 @@ public final class ExceptionConfigInit {
                 Element root = document.getRootElement();
                 Element userExceptions = root.element("UserExceptions");
 //				Element handleException = root.element("HandleException");
-                Element exceptionGrades = root.element("ExceptionGrades");
+                Element exceptionLevels = root.element("ExceptionLevels");
 
                 for (Iterator it_userException = userExceptions
                         .elementIterator(); it_userException.hasNext();) {
@@ -73,28 +73,19 @@ public final class ExceptionConfigInit {
                                 .hasNext();) {
                             Element concreteException = (Element) it_concreteException
                                     .next();
-                            ExceptionGrade exceptiongrade = ExceptionGrade.UNSERIOUS;
-                            if (concreteException.attribute("Grade") != null) {
-                                String grade = concreteException
-                                        .attributeValue("Grade");
-                                if (ExceptionGrade.SERIOUS.toString().equals(
-                                        grade))
-                                    exceptiongrade = ExceptionGrade.SERIOUS;
-                                if (ExceptionGrade.MORESERIOUS.toString()
-                                        .equals(grade))
-                                    exceptiongrade = ExceptionGrade.MORESERIOUS;
-                                if (ExceptionGrade.MOSTSERIOUS.toString()
-                                        .equals(grade))
-                                    exceptiongrade = ExceptionGrade.MOSTSERIOUS;
+                            ExceptionLevel exceptionLevel = ExceptionLevel.UNSERIOUS;
+                            if (concreteException.attribute("Level") != null) {
+                                String level = concreteException
+                                        .attributeValue("Level");
+                                exceptionLevel = ExceptionLevel.instanceOf(level);
                             }
                             String code = concreteException
                                     .elementText("ExceptionCode");
                             String desc = concreteException
                                     .elementText("ExceptionDesc");
                             XmlConcreteException xmlConcreteException = new XmlConcreteException(
-                                    exceptiongrade, code, desc);
-                            concreteExceptionMap
-                                    .put(code, xmlConcreteException);
+                                    exceptionLevel, code, desc);
+                            concreteExceptionMap.put(code, xmlConcreteException);
                         }
                         subUserExceptionMap.put(
                                 subUserException.attributeValue("Code"),
@@ -123,19 +114,19 @@ public final class ExceptionConfigInit {
                 /**
                  * 初始化异常处理级别
                  */
-                for (Iterator it_exceptionGrades = exceptionGrades
-                        .elementIterator(); it_exceptionGrades.hasNext();) {
-                    Element exceptionGrade = (Element) it_exceptionGrades
+                for (Iterator it_exceptionLevels = exceptionLevels
+                        .elementIterator(); it_exceptionLevels.hasNext();) {
+                    Element exceptionLevel = (Element) it_exceptionLevels
                             .next();
-                    String grade = exceptionGrade.getText();
-                    String isSendSms = exceptionGrade
-                            .attributeValue("IsSendSms");
-                    String isSendEmail = exceptionGrade
-                            .attributeValue("IsSendEmail");
-                    String desc = exceptionGrade.attributeValue("Description");
-                    ExceptionGradeHandle gradeHandle = new ExceptionGradeHandle(
-                            grade, isSendSms, isSendEmail, desc);
-                    ExceptionConfig.putGradeMap(grade, gradeHandle);
+                    String Level = exceptionLevel.getText();
+                    String isSave = exceptionLevel
+                            .attributeValue("IsSave");
+                    String isWarning = exceptionLevel
+                            .attributeValue("IsWarning");
+                    String desc = exceptionLevel.attributeValue("Description");
+                    ExceptionLevelHandle LevelHandle = new ExceptionLevelHandle(
+                            Level, desc, isSave, isWarning);
+                    ExceptionConfig.putLevelMap(Level, LevelHandle);
                 }
             } catch (UnsupportedEncodingException e) {
                 Logger dbLogger = LoggerFactory.getLogger("DBLog");

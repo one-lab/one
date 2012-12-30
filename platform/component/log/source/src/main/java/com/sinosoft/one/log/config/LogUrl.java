@@ -15,10 +15,11 @@ public class LogUrl {
     private String url = "";
     private String environment = "";
     private int maxExecuteTime;
+    private int interval;
 
     public LogUrl() {}
 
-    public LogUrl(String url, String environment, int maxExecuteTime) {
+    public LogUrl(String url, String environment, int maxExecuteTime, int interval) {
         if(StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("Log url's url must not be blank.");
         }
@@ -28,9 +29,13 @@ public class LogUrl {
         if(maxExecuteTime <= 0) {
             throw new IllegalArgumentException("Log url's maxExecuteTime must be > 0.");
         }
+        if(interval < 0) {
+            throw new IllegalArgumentException("Log url's interval must be >= 0.");
+        }
         this.url = url;
         this.environment = environment;
         this.maxExecuteTime = maxExecuteTime;
+        this.interval = interval;
     }
 
     public String getUrl() {
@@ -55,6 +60,14 @@ public class LogUrl {
 
     public void setMaxExecuteTime(int maxExecuteTime) {
         this.maxExecuteTime = maxExecuteTime;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
     }
 
     @Override

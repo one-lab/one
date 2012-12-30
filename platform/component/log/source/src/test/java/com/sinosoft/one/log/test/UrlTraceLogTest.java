@@ -7,10 +7,7 @@ import com.sinosoft.one.log.webfilter.TraceFilter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockFilterChain;
-import org.springframework.mock.web.MockFilterConfig;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -27,9 +24,9 @@ import java.util.Locale;
  * To change this template use File | Settings | File Templates.
  */
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test-new.xml",
-        "/spring/applicationContext-log-new.xml" })
-@TransactionConfiguration(transactionManager = "monitorTransactionManager",defaultRollback=true)
+@ContextConfiguration(locations = { "/applicationContext-test.xml",
+        "/spring/applicationContext-log.xml", "classpath:/spring/applicationContext-notification.xml" })
+@TransactionConfiguration(transactionManager = "logMonitorTransactionManager",defaultRollback=true)
 @Transactional(isolation= Isolation.READ_COMMITTED)
 public class UrlTraceLogTest extends AbstractFilterTest{
     private static final String URL_LOG_TABLE_NAME = "GE_URL_TRACE_LOG";
@@ -37,7 +34,7 @@ public class UrlTraceLogTest extends AbstractFilterTest{
     private LogConfigs logConfigs;
     public void setUp() throws Exception{
         super.setUp();
-        logConfigs.addLogUrl("/test", "DEVELOP", 10);
+        logConfigs.addLogUrl("/test", "DEVELOP", 300, 1);
     }
 
     @Test
@@ -57,7 +54,12 @@ public class UrlTraceLogTest extends AbstractFilterTest{
         request.setMethod("POST");
         request.setSession(session);
         request.setRequestURI("/test");
-        filter.doFilter(request, response, new MockFilterChain());
+
+        LogTestFilter logTestFilter = new LogTestFilter();
+        logTestFilter.init(mockFilterConfig);
+
+        filter.doFilter(request, response, new PassThroughFilterChain(logTestFilter, new MockFilterChain()));
+
         Thread.sleep(3000);
 
         int newUrlLogsCount = this.countRowsInTable(URL_LOG_TABLE_NAME);

@@ -1,6 +1,7 @@
 package com.sinosoft.one.mvc.crypto.wapper;
 
 import com.sinosoft.one.mvc.crypto.CryptoCodec;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -18,6 +19,7 @@ public class CryptoRequestWapper extends HttpServletRequestWrapper {
 	private Map<String, String[]> params;
 	private String key;
 	private String unCryptoParams;
+    private String[] unCryptoParamArray;
 
 	public CryptoRequestWapper(HttpServletRequest request,
 								   Map<String, String[]> newParams,String key,String unCryptoParams) {
@@ -25,15 +27,20 @@ public class CryptoRequestWapper extends HttpServletRequestWrapper {
 		this.key = key;
 		this.params = newParams;
 		this.unCryptoParams = unCryptoParams;
+        this.unCryptoParamArray = this.unCryptoParams.split(",");
 	}
 
 	public CryptoRequestWapper(HttpServletRequest request) {
 		super(request);
 	}
-	private boolean isContains(String arrayString, String simpleString) {
-		for(String s : arrayString.split(","))
-			if(simpleString.equals(s))
-				return true;
+	private boolean isContains(String simpleString) {
+        if(simpleString.indexOf("[") != -1 && simpleString.indexOf("]") != -1) {
+            simpleString = simpleString.replaceAll("\\[\\d\\]", "\\.").replaceAll("[\\[\\]]", "");
+        }
+        if(this.unCryptoParamArray != null && ArrayUtils.contains(this.unCryptoParamArray, simpleString)) {
+            return true;
+        }
+
 		return false;
 	}
 
@@ -41,7 +48,7 @@ public class CryptoRequestWapper extends HttpServletRequestWrapper {
 		String result = "";
 		boolean isCrypto = false;
 		Object v = params.get(name);
-		if(unCryptoParams == null || unCryptoParams.equals("") || isContains(unCryptoParams,name))
+		if(unCryptoParams == null || unCryptoParams.equals("") || isContains(name))
 			isCrypto = true;
 		if (v == null) {
 			result = null;
@@ -78,7 +85,7 @@ public class CryptoRequestWapper extends HttpServletRequestWrapper {
 	public String[] getParameterValues(String name) {
 		String[] result = null;
 		boolean isCrypto = false;
-		if(unCryptoParams == null || unCryptoParams.equals("") || isContains(unCryptoParams,name))
+		if(unCryptoParams == null || unCryptoParams.equals("") || isContains(name))
 			isCrypto = true;
 		Object v = params.get(name);
 		if (v == null) {

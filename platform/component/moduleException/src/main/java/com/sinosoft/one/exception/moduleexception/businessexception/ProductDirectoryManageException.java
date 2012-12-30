@@ -1,8 +1,8 @@
 package com.sinosoft.one.exception.moduleexception.businessexception;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
+import com.sinosoft.one.exception.ExceptionLevel;
 
-import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
+import com.sinosoft.one.exception.userexception.BusinessException;
 /**
  * manage-productDirectory模块异常
  * 
@@ -10,11 +10,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
  * 
  */
 public class ProductDirectoryManageException extends BusinessException {
-	private static final String subUserExceptionCode = "010007";
+	private static final String subuserexceptionCode = "010007";
 
 	private ProductDirectoryManageException(String concreteExceptionCode, String msg,
-			Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static ProductDirectoryManageException newInstanceCode(
@@ -39,12 +39,12 @@ public class ProductDirectoryManageException extends BusinessException {
 	}
 
 	public static ProductDirectoryManageException newInstanceMsg(String msg,
-			Throwable cause, ExceptionGrade grade) {
-		return new ProductDirectoryManageException(null, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		return new ProductDirectoryManageException(null, msg, cause, level);
 	}
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 
 	private static final long serialVersionUID = 1L;

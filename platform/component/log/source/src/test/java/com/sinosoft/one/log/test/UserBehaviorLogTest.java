@@ -27,12 +27,12 @@ import java.util.concurrent.CountDownLatch;
  * To change this template use File | Settings | File Templates.
  */
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test-new.xml",
-        "/spring/applicationContext-log-new.xml" })
-@TransactionConfiguration(transactionManager = "monitorTransactionManager",defaultRollback=true)
+@ContextConfiguration(locations = { "/applicationContext-test.xml",
+        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
+@TransactionConfiguration(transactionManager = "logMonitorTransactionManager",defaultRollback=true)
 @Transactional(isolation= Isolation.READ_COMMITTED)
 public class UserBehaviorLogTest extends AbstractFilterTest{
-    private int    threadCount     = 1;
+    private int    threadCount     = 10;
     final int      LOOP_COUNT      = 10;
 
     private static final String BEHAVIOR_LOG_TABLE = "ge_user_behavior_log";
@@ -45,7 +45,7 @@ public class UserBehaviorLogTest extends AbstractFilterTest{
         filter.init(mockFilterConfig);
         p0("synchronized", filter);
         int newCount = countRowsInTable(BEHAVIOR_LOG_TABLE);
-        Assert.assertEquals(oldCount + 10, newCount);
+        Assert.assertEquals(oldCount + 100, newCount);
     }
 
     @Test
@@ -56,8 +56,10 @@ public class UserBehaviorLogTest extends AbstractFilterTest{
         TraceFilter filter = new TraceFilter();
         filter.init(mockFilterConfig);
         p0("Asynchronized", filter);
+        Thread.sleep(1000 * 10);
         int newCount = countRowsInTable(BEHAVIOR_LOG_TABLE);
-        Assert.assertEquals(oldCount + 10, newCount);
+        Assert.assertEquals(oldCount + 100, newCount);
+
     }
 
 
@@ -107,7 +109,7 @@ public class UserBehaviorLogTest extends AbstractFilterTest{
         System.out.println("thread " + threadCount + " " + name + " millis : "
                 + NumberFormat.getInstance().format(millis) + ", YGC " + ygc + " FGC " + fullGC);
 
-        Thread.sleep(1000 * 5);
+
     }
 
 }

@@ -1,8 +1,11 @@
 package com.sinosoft.one.log;
 
+import com.sinosoft.one.log.config.Log4jManager;
 import com.sinosoft.one.log.handler.LogHandler;
 import com.sinosoft.one.log.methodtrace.MethodTraceLog;
 import com.sinosoft.one.log.queue.LoggableQueueAppender;
+import com.sinosoft.one.monitoragent.notification.NotificationEvent;
+import com.sinosoft.one.monitoragent.notification.service.facade.NotificationService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.spi.LoggingEvent;
@@ -11,7 +14,7 @@ import org.slf4j.helpers.MessageFormatter;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created with IntelliJ IDEA.
+ * Loggable 工具类.
  * User: carvin
  * Date: 12-11-29
  * Time: 下午12:28
@@ -27,6 +30,8 @@ public class Loggables {
 
     private static User user;
     private static String appName;
+
+    private static NotificationService notificationService;
 
 
 
@@ -76,6 +81,10 @@ public class Loggables {
 
     public void setAppName(String appName) {
         Loggables.appName = appName;
+    }
+
+    public void setNotificationService(NotificationService notificationService) {
+        Loggables.notificationService = notificationService;
     }
 
     public static void clean() {
@@ -135,6 +144,17 @@ public class Loggables {
         else{
             return description;
         }
+    }
 
+    public static boolean hasFileAppender() {
+        return Log4jManager.hasFileAppender();
+    }
+
+    public static boolean hasQueueAppender() {
+        return Log4jManager.hasQueueAppender();
+    }
+
+    public static void notification(NotificationEvent notificationEvent) {
+        notificationService.notification(notificationEvent);
     }
 }

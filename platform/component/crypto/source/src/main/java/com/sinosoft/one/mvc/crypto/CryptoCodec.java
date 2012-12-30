@@ -6,6 +6,8 @@ import com.sinosoft.one.mvc.crypto.core.HEX;
 import com.sinosoft.one.mvc.crypto.core.XXTEA;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.IntBuffer;
@@ -19,21 +21,7 @@ import java.util.Random;
  */
 public final class CryptoCodec {
 
-	private static Log log = LogFactory.getLog(CryptoCodec.class);
-
-//	public static String encode(String sid,String uid,String data ) {
-//
-//		return encode(sid+uid,data,false);
-//
-//	}
-
-//	public static String encode(String stringKey, String data, boolean isMd5) {
-//		if(isMd5) {
-//			return encode(stringKey,data);
-//		}
-//		return encode(toMD5(stringKey),data);
-//
-//	}
+	private static Logger log = LoggerFactory.getLogger(CryptoCodec.class);
 
 	public static String encode(String key,String data) {
 		//base64一次
@@ -45,12 +33,9 @@ public final class CryptoCodec {
 		XXTEA.encryptInPlace(java_buffer, intKey);
 		//将加密后的intbuffer base64一次
 		String crpydata = com.sinosoft.one.mvc.crypto.core.Base64.encodeBase64String(java_buffer);
-		if(log.isDebugEnabled()) {
-			log.debug("key:"+key);
-			log.debug("first base64:"+data);
-			log.debug("second base64"+crpydata);
-		}
-
+        log.debug("key:{}", key);
+        log.debug("first base64:{}", data);
+        log.debug("second base64:{}", crpydata);
 
 		return crpydata;
 	}
@@ -70,27 +55,17 @@ public final class CryptoCodec {
 	}
 
 	public static String decode(String md5Key, String cryptoData){
-
 		IntBuffer intKey = HEX.decodeHexAsInts(md5Key);
 		IntBuffer java_buffer = com.sinosoft.one.mvc.crypto.core.Base64.decodeBase64(cryptoData).asIntBuffer();
 		XXTEA.decryptInPlace(java_buffer, intKey);
 
 		String java_clear = ASCII.fromIntBuffer(java_buffer);
-
 		String clearData = null;
-		try {
-			clearData = new String(org.apache.commons.codec.binary.Base64.decodeBase64(java_clear),"utf-8");
-		} catch (UnsupportedEncodingException e) {
-			log.error("UnsupportedEncodingException",e);
-
-		}
-		if(log.isDebugEnabled()) {
-			log.debug("key:"+md5Key);
-			log.debug("cryptoData:"+cryptoData);
-			log.debug("clearData"+java_clear);
-		}
+		clearData = new String(org.apache.commons.codec.binary.Base64.decodeBase64(java_clear));
+        log.debug("key:{}", md5Key);
+        log.debug("cryptoData:{}", cryptoData);
+        log.debug("clearData:{}", java_clear);
 		return clearData;
-
 	}
 
 	private static String toMD5(String id) {

@@ -32,7 +32,6 @@ public class CryptoCodecTest {
     public void testCryptoWithAllChineseData(){
         String dataForCrypto="测试后端加密的数据";
         String cipherText=CryptoCodec.encode(key,dataForCrypto);
-        System.out.println(cipherText);
         String dataForUnCrypto=CryptoCodec.decode(key,cipherText);
         assertEquals("测试后端加密的数据", dataForUnCrypto);
     }

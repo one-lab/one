@@ -1,6 +1,6 @@
 package com.sinosoft.one.exception.userexception;
 
-import com.sinosoft.one.exception.ExceptionGrade;
+import com.sinosoft.one.exception.ExceptionLevel;
 import com.sinosoft.one.exception.UserException;
 
 /**
@@ -14,7 +14,7 @@ public abstract class DataVerifyException extends UserException {
 
     public DataVerifyException(String subUserExceptionCode,
                                String concreteExceptionCode, String msg, Throwable cause,
-                               ExceptionGrade grade) {
+                               ExceptionLevel grade) {
         super(userExceptionCode, subUserExceptionCode, concreteExceptionCode,
                 msg, cause, grade);
     }

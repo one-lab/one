@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<CryptoConfig xmlns="http://com.sinosoft.one/schema/mvc/cryptoconfig"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://com.sinosoft.one/schema/mvc/cryptoconfig ">
+    <uncrypto url="/demo/crypto_uncrypto/cryptoUncrypto/backgroundUncrypto"/>
+    <uncrypto url="/demo/crypto_uncrypto/cryptoUncrypto/frontendAjaxCrypto"/>
+    <uncrypto url="/demo/send"/>  
+    <uncrypto url="/demo/uncrypto"/>  
+    <uncrypto url="/demo/ajaxParam"/>  
+    <uncrypto url="/demo/cryp/uncrpy1"/>
+    <uncrypto url="/demo/testAddedUncrypto"/>
+</CryptoConfig>

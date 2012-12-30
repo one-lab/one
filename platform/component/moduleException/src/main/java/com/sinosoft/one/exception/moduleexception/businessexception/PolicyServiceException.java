@@ -1,8 +1,8 @@
 package com.sinosoft.one.exception.moduleexception.businessexception;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
+import com.sinosoft.one.exception.ExceptionLevel;
 
-import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
+import com.sinosoft.one.exception.userexception.BusinessException;
 /**
  * service-Policy模块异常
  * 
@@ -10,11 +10,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
  * 
  */
 public class PolicyServiceException extends BusinessException {
-	private static final String subUserExceptionCode = "010006";
+	private static final String subuserexceptionCode = "010006";
 
 	private PolicyServiceException(String concreteExceptionCode, String msg,
-			Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static PolicyServiceException newInstanceCode(
@@ -39,12 +39,12 @@ public class PolicyServiceException extends BusinessException {
 	}
 
 	public static PolicyServiceException newInstanceMsg(String msg,
-			Throwable cause, ExceptionGrade grade) {
-		return new PolicyServiceException(null, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		return new PolicyServiceException(null, msg, cause, level);
 	}
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 
 	private static final long serialVersionUID = 1L;

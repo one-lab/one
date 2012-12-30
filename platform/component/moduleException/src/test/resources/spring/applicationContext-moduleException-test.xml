@@ -12,7 +12,7 @@
 
 	<!-- 异常配置文件加载 -->
 	<bean id="exceptionConfigInit" scope="prototype"
-		class="com.sinosoft.one.ebusiness.sys.exception.ExceptionConfigInit" init-method="init">
+		class="com.sinosoft.one.exception.ExceptionConfigInit" init-method="init">
 		<property name="exceptionConfigPath" value="config/ExceptionConfig-test.xml"/>
 	</bean>
 </beans>

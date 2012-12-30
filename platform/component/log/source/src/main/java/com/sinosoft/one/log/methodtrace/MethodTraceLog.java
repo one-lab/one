@@ -3,6 +3,7 @@ package com.sinosoft.one.log.methodtrace;
 import com.alibaba.fastjson.JSON;
 import com.sinosoft.one.log.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.spi.LoggingEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -209,5 +210,26 @@ public class MethodTraceLog extends AbstractLoggable implements Loggable {
         methodTraceLog.setLogLevel(loggingEvent.getLevel().toString());
         methodTraceLog.setLogTime(new Timestamp(System.currentTimeMillis()));
         return  methodTraceLog;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("id", id)
+            .append("urlTraceId", urlTraceId)
+            .append("methodName", methodName)
+            .append("className", className)
+            .append("inParam", inParam)
+            .append("outParam", outParam)
+            .append("beginTime", beginTime)
+            .append("endTime", endTime)
+            .append("consumeTime", consumeTime)
+            .append("logLevel", logLevel)
+            .append("logDescription", logDescription)
+            .append("logTime", logTime)
+            .append("appName", appName)
+            .append("userId", userId)
+            .append("environment", environment.toString())
+            .build();
     }
 }

@@ -12,6 +12,8 @@ import com.sinosoft.one.log.config.LogConfigs;
 import com.sinosoft.one.log.config.LogMethod;
 import com.sinosoft.one.log.methodtrace.MethodTraceLog;
 import com.sinosoft.one.log.methodtrace.MethodTraceLogInspectMode;
+import com.sinosoft.one.monitoragent.notification.NotificationEvent;
+import com.sinosoft.one.monitoragent.notification.NotificationModule;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -91,7 +93,7 @@ public class LogTraceAspect {
                     isDeal = true;
                 }
             }
-            if(inspectMode ==  MethodTraceLogInspectMode.ALL || inspectMode == MethodTraceLogInspectMode.REMOTE) {
+            if(!isDeal && (inspectMode ==  MethodTraceLogInspectMode.ALL || inspectMode == MethodTraceLogInspectMode.REMOTE)) {
                 LogMethod logMethod = logConfigs.getLogMethod(sourceClass.getName(), specificMethod.getName());
                 if(logMethod != null) {
                     description =  Loggables.formatDescription(logMethod.getDescription(),pjp.getArgs());
@@ -99,7 +101,13 @@ public class LogTraceAspect {
                     isDeal = true;
 
                     if (time > logMethod.getMaxExecuteTime()) {
-                        // TODO 向监控系统发送预警
+                        String methodName =  logMethod.getClassName() + "." + logMethod.getMethodName();
+                        String title = "方法 [" + methodName + "] 追踪日志预警";
+                        String content = "方法 [" + methodName + "] 响应超时，最大响应时间为["
+                                + logMethod.getMaxExecuteTime() + "]ms，实际响应时间为[" + time + "]ms.";
+                        NotificationEvent notificationEvent = new NotificationEvent(title, content, "",
+                                NotificationModule.RESPONSE, "");
+                        Loggables.notification(notificationEvent);
                     }
                 }
             }
@@ -131,10 +139,6 @@ public class LogTraceAspect {
             }
 		}
 	}
-
-
-
-
 
     /**
      * 获取接口中存在的注解

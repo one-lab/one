@@ -2,8 +2,8 @@ package com.sinosoft.one.mvc.crypto.listener;
 
 import com.sinosoft.one.mvc.crypto.CryptoCodec;
 import com.sinosoft.one.mvc.crypto.config.CryptoConfig;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
@@ -14,14 +14,12 @@ import javax.servlet.http.HttpSessionListener;
  * Time: 上午9:56
  */
 public class CryptoSessionListener implements HttpSessionListener {
-	private static Log logger = LogFactory.getLog(CryptoSessionListener.class);
+	private static Logger logger = LoggerFactory.getLogger(CryptoSessionListener.class);
 	public void sessionCreated(HttpSessionEvent se) {
 		se.getSession().setAttribute(CryptoConfig.CRYPTO_KEY_ATTR_NAME,
 				CryptoCodec.getCryptoKey(se.getSession().getId()));
 
-		if(logger.isDebugEnabled()) {
-			logger.debug("CryotpSessionListener session created");
-		}
+		logger.info("CryotpSessionListener session created");
 	}
 
 	public void sessionDestroyed(HttpSessionEvent se) {

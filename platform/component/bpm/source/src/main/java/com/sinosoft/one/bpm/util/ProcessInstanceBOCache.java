@@ -3,6 +3,7 @@ package com.sinosoft.one.bpm.util;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class ProcessInstanceBOCache {
 					ProcessInstanceBOInfo info = processInstanceBOService.getProcessInstanceBOInfo(processId, businessId);
 					value = info != null ? info.getProcessInstanceId() : null;
 					if(value != null) {
-						processInstanceIdCache.put(processId + "_" + businessId, value);
+						put(processId, businessId, value);
 					}
 				}
 			}
@@ -54,6 +55,14 @@ public class ProcessInstanceBOCache {
 	public void setProcessInstanceBOService(
 			ProcessInstanceBOService processInstanceBOService) {
 		this.processInstanceBOService = processInstanceBOService;
+	}
+	
+	public void removeFromCache(String processId, String processInstanceId) {
+		String businessId = businessIdCache.get(processInstanceId);
+		if(StringUtils.isNotBlank(businessId)) {
+			processInstanceIdCache.remove(processId + "_" + businessId);
+			businessIdCache.remove(processInstanceId);
+		}
 	}
 	
 }

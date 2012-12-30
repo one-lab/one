@@ -42,7 +42,7 @@ public class SynchronizedLogHandler implements LogHandler {
                         jdbcTemplate.update(sql, paramMap);
                         if (logger.isDebugEnabled()) {
                             logger.debug("saved log info : {}",
-                                    loggable.convertToString());
+                                    loggable.toString());
                         }
                     } catch (DataAccessException e) {
                         status.setRollbackOnly();
@@ -73,15 +73,15 @@ public class SynchronizedLogHandler implements LogHandler {
     /**
      * 根据注入的monitordataSource创建jdbcTemplate.
      */
-    public void setMonitorDataSource(DataSource monitordataSource) {
-        jdbcTemplate = new NamedParameterJdbcTemplate(monitordataSource);
+    public void setLogMonitorDataSource(DataSource logMonitordataSource) {
+        jdbcTemplate = new NamedParameterJdbcTemplate(logMonitordataSource);
     }
 
     /**
      * 根据注入的monitorTransactionManager创建transactionTemplate.
      */
-    public void setMonitorTransactionManager(
-            PlatformTransactionManager monitorTransactionManager) {
-        transactionTemplate = new TransactionTemplate(monitorTransactionManager);
+    public void setLogMonitorTransactionManager(
+            PlatformTransactionManager logMonitorTransactionManager) {
+        transactionTemplate = new TransactionTemplate(logMonitorTransactionManager);
     }
 }

@@ -6,11 +6,11 @@
 		<!-- 1、业务类异常 -->
 		<UserException Code="0100" Description="业务类异常">
 			<SubUserException Code="010001" Description="投保类异常">
-				<ConcreteException Grade="2">
+				<ConcreteException Level="2">
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>无满足条件的记录</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>没有设置参数</ExceptionDesc>
 				</ConcreteException>
@@ -20,7 +20,7 @@
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>无法核保</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>核保失败</ExceptionDesc>
 				</ConcreteException>
@@ -50,11 +50,11 @@
 		<!-- 3、权限异常 -->
 		<UserException Code="0102" Description="权限异常">
 			<SubUserException Code="010200" Description="xx权限异常">
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>权限异常1</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>权限异常2</ExceptionDesc>
 				</ConcreteException>
@@ -76,14 +76,14 @@
 	</HandleException>
  -->
 	<!-- 异常处理级别的配置 -->
-	<ExceptionGrades>
-		<ExceptionGrade IsSendSms="0" IsSendEmail="0"
-			Description="异常不严重">0</ExceptionGrade>
-		<ExceptionGrade IsSendSms="0" IsSendEmail="1"
-			Description="异常严重">1</ExceptionGrade>
-		<ExceptionGrade IsSendSms="1" IsSendEmail="0"
-			Description="异常很严重">2</ExceptionGrade>
-		<ExceptionGrade IsSendSms="1" IsSendEmail="1"
-			Description="异常最严重">3</ExceptionGrade>
-	</ExceptionGrades>
+	<ExceptionLevels>
+		<ExceptionLevel IsSave="0" IsWarning="0"
+			Description="异常不严重">0</ExceptionLevel>
+		<ExceptionLevel IsSave="0" IsWarning="1"
+			Description="异常严重">1</ExceptionLevel>
+		<ExceptionLevel IsSave="1" IsWarning="1"
+			Description="异常很严重">2</ExceptionLevel>
+		<ExceptionLevel IsSave="1" IsWarning="1"
+			Description="异常最严重">3</ExceptionLevel>
+	</ExceptionLevels>
 </ExceptionConfig>

@@ -1,7 +1,7 @@
 package com.sinosoft.one.exception.moduleexception.businessexception;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
-import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
+import com.sinosoft.one.exception.ExceptionLevel;
+import com.sinosoft.one.exception.userexception.BusinessException;
 /**
  * Common Payment模块异常
  * 
@@ -9,11 +9,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
  * 
  */
 public class PaymentCommonException extends BusinessException {
-	private static final String subUserExceptionCode = "010016";
+	private static final String subuserexceptionCode = "010016";
 
 	private PaymentCommonException(String concreteExceptionCode,
-			String msg, Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			String msg, Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static PaymentCommonException newInstanceCode(
@@ -38,12 +38,12 @@ public class PaymentCommonException extends BusinessException {
 	}
 
 	public static PaymentCommonException newInstanceMsg(String msg,
-			Throwable cause, ExceptionGrade grade) {
-		return new PaymentCommonException(null, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		return new PaymentCommonException(null, msg, cause, level);
 	}
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 
 	private static final long serialVersionUID = 1L;

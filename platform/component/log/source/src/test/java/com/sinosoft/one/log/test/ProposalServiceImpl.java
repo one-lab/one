@@ -19,11 +19,21 @@ public class ProposalServiceImpl  implements ProposalService {
 	@LogTraced(description = "此处演示如何进行参数,第一个参数${[0]},第二个参数${[1]}")
 	public void testParam(int a, char b) {
 		System.out.println("testParam ......test @LogTraced");
-	}
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@LogTraced(env= Environment.PRODUCT)
 	public void testProductTraced() {
 		System.out.println("@ImplTraced(enableId=true,configEnv=Environment.PRODUCT)");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 	}
 
 	@LogTraced(env=Environment.DEVELOP)

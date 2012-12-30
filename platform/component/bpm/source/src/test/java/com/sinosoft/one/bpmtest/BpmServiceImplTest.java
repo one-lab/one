@@ -18,7 +18,7 @@ import com.sinosoft.one.test.domain.Kind;
 import com.sinosoft.one.util.test.SpringContextTestCase;
 
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/spring/applicationContext-bpm.xml", "/applicationContext-test.xml" })
 public class BpmServiceImplTest extends SpringContextTestCase {
 
 	@Autowired

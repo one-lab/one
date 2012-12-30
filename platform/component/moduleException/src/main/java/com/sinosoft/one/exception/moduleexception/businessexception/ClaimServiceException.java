@@ -1,8 +1,8 @@
 package com.sinosoft.one.exception.moduleexception.businessexception;
 
-import com.sinosoft.one.ebusiness.sys.exception.ExceptionGrade;
+import com.sinosoft.one.exception.ExceptionLevel;
 
-import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
+import com.sinosoft.one.exception.userexception.BusinessException;
 
 /**
  * service-claim模块异常
@@ -11,11 +11,11 @@ import com.sinosoft.one.ebusiness.sys.exception.userException.BusinessException;
  * 
  */
 public class ClaimServiceException extends BusinessException {
-	private static final String subUserExceptionCode = "010005";
+	private static final String subuserexceptionCode = "010005";
 
 	private ClaimServiceException(String concreteExceptionCode, String msg,
-			Throwable cause, ExceptionGrade grade) {
-		super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
 	}
 
 	public static ClaimServiceException newInstanceCode(
@@ -40,14 +40,14 @@ public class ClaimServiceException extends BusinessException {
 	}
 
 	public static ClaimServiceException newInstanceMsg(String msg,
-			Throwable cause, ExceptionGrade grade) {
-		return new ClaimServiceException(null, msg, cause, grade);
+			Throwable cause, ExceptionLevel level) {
+		return new ClaimServiceException(null, msg, cause, level);
 	}
 
 	private static final long serialVersionUID = ClaimServiceException.class
 			.hashCode();
 
-	public String getSubUserExceptionCode() {
-		return subUserExceptionCode;
+	public String getSubuserexceptionCode() {
+		return subuserexceptionCode;
 	}
 }

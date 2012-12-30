@@ -5,6 +5,7 @@ import com.sinosoft.one.log.*;
 import com.sinosoft.one.log.queue.LoggableQueueAppender;
 import com.sinosoft.one.util.encode.JsonBinder;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -142,5 +143,20 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
         targetURLTraceLog.setUserIp(request.getRemoteAddr());
         targetURLTraceLog.setRequestInfo(JSON.toJSONBytes(request));
         targetURLTraceLog.getLoggableQueueAppender().append(targetURLTraceLog);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("id", id)
+            .append("url", url)
+            .append("beginTime", beginTime)
+            .append("endTime", endTime)
+            .append("consumeTime", consumeTime)
+            .append("sessionId", sessionId)
+            .append("userId", userId)
+            .append("userIp", userIp)
+            .append("appName", appName)
+            .build();
     }
 }

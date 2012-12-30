@@ -8,23 +8,23 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sinosoft.chinaelife.ebusiness.sys.util.queue.QueuesHolder;
-import com.sinosoft.chinaelife.ebusiness.sys.util.test.SpringTxTestCase;
-import com.sinosoft.chinaelife.ebusiness.sys.util.thread.ThreadUtils;
+import com.sinosoft.one.util.queue.QueuesHolder;
+import com.sinosoft.one.util.test.SpringTxTestCase;
+import com.sinosoft.one.util.thread.ThreadUtils;
 import com.sinosoft.one.exception.service.facade.ExceptionAspectService;
 
 /**
  * 异常拦截测试
  */
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml",
-        "/spring/applicationContext-exception-test.xml" })
-@TransactionConfiguration(transactionManager = "monitorTransactionManager")
+@ContextConfiguration(locations = { "/spring/applicationContext-exception.xml",
+        "/spring/applicationContext-notification.xml", "/spring/applicationContext-exception-test.xml" })
+@TransactionConfiguration(transactionManager = "exceptionMonitorTransactionManager")
 public class ExceptionAspectTest extends SpringTxTestCase {
     @Autowired
     private ExceptionAspectService exceptionAspectService;
     // Logger dbLogger = LoggerFactory.getLogger("DBExceptionLog");
-    private static final String LOG_TABLE_NAME = "GE_Monitor_AppException";
+    private static final String LOG_TABLE_NAME = "GE_EXCEPTION_INFO";
 
     @Test
     public void testExceptionAspect() {

@@ -3,6 +3,8 @@ package com.sinosoft.one.service.spring;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.sinosoft.one.bpm.aspect.GetTask;
 import com.sinosoft.one.bpm.aspect.ProcessTask;
 import com.sinosoft.one.bpm.aspect.StartProcess;
@@ -10,6 +12,7 @@ import com.sinosoft.one.service.facade.ComboService;
 import com.sinosoft.one.test.domain.Combo;
 import com.sinosoft.one.test.domain.Kind;
 
+@Service
 public class ComboServiceSpringImpl implements ComboService {
 
 	public void init() {

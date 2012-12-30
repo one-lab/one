@@ -6,11 +6,11 @@
 		<!-- 1、业务类异常 -->
 		<UserException Code="0100" Description="业务类异常">
 			<SubUserException Code="010000" Description="service-user模块异常">
-				<ConcreteException Grade="2">
+				<ConcreteException Level="2">
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>user模块具体异常描述000</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>user模块具体异常描述001</ExceptionDesc>
 				</ConcreteException>
@@ -20,7 +20,7 @@
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>service-maintain模块异常描述000</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>service-maintain模块异常描述001</ExceptionDesc>
 				</ConcreteException>
@@ -110,15 +110,15 @@
 				</ConcreteException>
 			</SubUserException>
 			<SubUserException Code="010016" Description="Payment-Common模块异常">
-				<ConcreteException Grade="3">
+				<ConcreteException Level="3">
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>从支付的配置文件中没有读到其中的基本数据数据</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="3">
+				<ConcreteException Level="3">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>分公司的商户没有取到</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="3">
+				<ConcreteException Level="3">
 					<ExceptionCode>002</ExceptionCode>
 					<ExceptionDesc>订单号码或者订单金额或者机构代码为NULL</ExceptionDesc>
 				</ConcreteException>
@@ -142,11 +142,11 @@
 				</ConcreteException>
 			</SubUserException>
 			<SubUserException Code="010020" Description="sys-interfacePortal模块异常">
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>interfacePortal</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>interfacePortal</ExceptionDesc>
 				</ConcreteException>
@@ -171,11 +171,11 @@
 		<!-- 3、权限异常 -->
 		<UserException Code="0102" Description="权限异常">
 			<SubUserException Code="010200" Description="sys-permission模块异常">
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>000</ExceptionCode>
 					<ExceptionDesc>权限异常1</ExceptionDesc>
 				</ConcreteException>
-				<ConcreteException Grade="1">
+				<ConcreteException Level="1">
 					<ExceptionCode>001</ExceptionCode>
 					<ExceptionDesc>权限异常2</ExceptionDesc>
 				</ConcreteException>
@@ -200,14 +200,14 @@
 	</HandleException>
 	 -->
 	<!-- 异常处理级别的配置 -->
-	<ExceptionGrades>
-		<ExceptionGrade IsSendSms="0" IsSendEmail="0"
-			Description="异常不严重">0</ExceptionGrade>
-		<ExceptionGrade IsSendSms="0" IsSendEmail="1"
-			Description="异常严重">1</ExceptionGrade>
-		<ExceptionGrade IsSendSms="1" IsSendEmail="0"
-			Description="异常很严重">2</ExceptionGrade>
-		<ExceptionGrade IsSendSms="1" IsSendEmail="1"
-			Description="异常最严重">3</ExceptionGrade>
-	</ExceptionGrades>
+	<ExceptionLevels>
+		<ExceptionLevel IsSave="0" IsWarning="0"
+			Description="异常不严重">0</ExceptionLevel>
+		<ExceptionLevel IsSave="0" IsWarning="1"
+			Description="异常严重">1</ExceptionLevel>
+		<ExceptionLevel IsSave="1" IsWarning="0"
+			Description="异常很严重">2</ExceptionLevel>
+		<ExceptionLevel IsSave="1" IsWarning="1"
+			Description="异常最严重">3</ExceptionLevel>
+	</ExceptionLevels>
 </ExceptionConfig>

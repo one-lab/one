@@ -10,11 +10,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.sinosoft.one.log.Loggables;
 import com.sinosoft.one.log.config.LogConfigs;
 import com.sinosoft.one.log.TraceUtils;
 import com.sinosoft.one.log.config.LogUrl;
 import com.sinosoft.one.log.urltrace.URLTraceLog;
 import com.sinosoft.one.log.userbehavior.UserBehaviorLog;
+import com.sinosoft.one.monitoragent.notification.NotificationEvent;
+import com.sinosoft.one.monitoragent.notification.NotificationModule;
+import com.sinosoft.one.monitoragent.notification.service.facade.NotificationService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,15 +78,25 @@ public class TraceFilter implements Filter {
         if(urlTraceLog != null) {
             URLTraceLog.endTrace(request, urlTraceLog);
             if(urlTraceLog.getConsumeTime() > logUrl.getMaxExecuteTime()) {
-                // TODO 向监控系统发送预警信息
+                String title = "URL [" + urlTraceLog.getUrl() + "] 追踪日志预警";
+                String content = "URL [" + urlTraceLog.getUrl() + "] 响应超时，最大响应时间为["
+                        + logUrl.getMaxExecuteTime() + "]ms，实际响应时间为[" + urlTraceLog.getConsumeTime() + "]ms.";
+                NotificationEvent notificationEvent = new NotificationEvent(title, content, "",
+                        NotificationModule.RESPONSE, "");
+                Loggables.notification(notificationEvent);
             }
             TraceUtils.endTrace();
         }
     }
 
     private void setLogConfigsFromRequest(HttpServletRequest request) {
-        WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
+        WebApplicationContext webApplicationContext = getWebApplicationContext(request);
         logConfigs = webApplicationContext != null ? webApplicationContext.getBean(LogConfigs.class) : null;
+    }
+
+
+    private WebApplicationContext getWebApplicationContext(HttpServletRequest request) {
+        return WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
     }
 
     public void setLogConfigs(LogConfigs logConfigs) {

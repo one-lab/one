@@ -13,6 +13,8 @@ import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -21,7 +23,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.sinosoft.chinaelife.ebusiness.sys.util.queue.BlockingConsumer;
+import com.sinosoft.one.util.queue.BlockingConsumer;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -42,7 +44,7 @@ public class JdbcExceptionWriter extends BlockingConsumer {
     protected int batchSize = 10;
 
     protected List<ExceptionEvent> eventsBuffer = Lists.newArrayList();
-    protected SimpleJdbcTemplate jdbcTemplate;
+    protected NamedParameterJdbcTemplate jdbcTemplate;
     protected TransactionTemplate transactionTemplate;
 
     /**
@@ -65,17 +67,17 @@ public class JdbcExceptionWriter extends BlockingConsumer {
      * 根据注入的MonitorDataSource创建jdbcTemplate.
      */
     @Resource
-    public void setMonitorDataSource(DataSource monitorDataSource) {
-        jdbcTemplate = new SimpleJdbcTemplate(monitorDataSource);
+    public void setExceptionMonitorDataSource(DataSource exceptionMonitorDataSource) {
+        jdbcTemplate = new NamedParameterJdbcTemplate(exceptionMonitorDataSource);
     }
 
     /**
      * 根据注入的MonitorTransactionManager创建transactionTemplate.
      */
     @Resource
-    public void setMonitorTransactionManager(
-            PlatformTransactionManager monitorTransactionManager) {
-        transactionTemplate = new TransactionTemplate(monitorTransactionManager);
+    public void setExceptionMonitorTransactionManager(
+            PlatformTransactionManager exceptionMonitorTransactionManager) {
+        transactionTemplate = new TransactionTemplate(exceptionMonitorTransactionManager);
     }
 
     /**
@@ -154,23 +156,9 @@ public class JdbcExceptionWriter extends BlockingConsumer {
      * 分析Event, 建立Parameter Map, 用于绑定sql中的Named Parameter.
      */
     protected Map<String, Object> parseEvent(ExceptionEvent event) {
-        Map<String, Object> parameterMap = Maps.newHashMap();
         ExceptionEventWrapper eventWrapper = new ExceptionEventWrapper(event);
-
-        parameterMap.put("serialNo", eventWrapper.getSerialNo());
-        parameterMap.put("appName", this.getAppName());
-        parameterMap.put("exceptionKind", eventWrapper.getExceptionKind());
-        parameterMap.put("userExceptionCode",
-                eventWrapper.getUserExceptionCode());
-        parameterMap.put("subUserExceptionCode",
-                eventWrapper.getSubUserExceptionCode());
-        parameterMap.put("concreteExceptionCode",
-                eventWrapper.getConcreteExceptionCode());
-        parameterMap.put("exceptionDesc", eventWrapper.getExceptionDesc());
-        parameterMap.put("exceptionReason", eventWrapper.getExceptionReason());
-        parameterMap.put("exceptionTime", eventWrapper.getExceptionTime());
-        parameterMap.put("exceptionGrade", eventWrapper.getExceptionGrade());
-        return parameterMap;
+        eventWrapper.setAppName(appName);
+        return eventWrapper.toMap();
     }
 
     /**

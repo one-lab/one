@@ -16,14 +16,16 @@ public class LogMethod {
     private String environment;
     private String description;
     private int maxExecuteTime;
+    private int interval;
 
     private LogMethod() {}
-    private LogMethod(String className, String methodName, String description, String environment, int maxExecuteTime) {
+    private LogMethod(String className, String methodName, String description, String environment, int maxExecuteTime, int interval) {
         this.className = className;
         this.methodName = methodName;
         this.description = description;
         this.environment = environment;
         this.maxExecuteTime = maxExecuteTime;
+        this.interval = interval;
     }
 
     public void setMethodName(String methodName) {
@@ -70,12 +72,21 @@ public class LogMethod {
         this.maxExecuteTime = maxExecuteTime;
     }
 
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
     static class Builder {
         private String className;
         private String methodName;
         private String environment = Environment.DEVELOP;
         private String description = "";
         private int maxExecuteTime;
+        private int interval;
 
         public Builder(String className, String methodName) {
             if(StringUtils.isBlank(className) || StringUtils.isBlank(methodName)) {
@@ -103,8 +114,16 @@ public class LogMethod {
             return this;
         }
 
+        public Builder interval(int interval) {
+            if(interval < 0) {
+                throw new IllegalArgumentException("Log method's interval must >= 0");
+            }
+            this.interval = interval;
+            return this;
+        }
+
         public LogMethod build() {
-            return new LogMethod(className, methodName, description, environment, maxExecuteTime);
+            return new LogMethod(className, methodName, description, environment, maxExecuteTime, interval);
         }
     }
 

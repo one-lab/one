@@ -26,10 +26,10 @@ import java.lang.reflect.InvocationTargetException;
  * To change this template use File | Settings | File Templates.
  */
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test-new.xml",
-        "/spring/applicationContext-log-new.xml" })
+@ContextConfiguration(locations = { "/applicationContext-test.xml",
+        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
 // @ContextConfiguration(locations = { "/spring/applicationContext-log.xml" })
-@TransactionConfiguration(transactionManager = "monitorTransactionManager")
+@TransactionConfiguration(transactionManager = "logMonitorTransactionManager")
 @Transactional(isolation= Isolation.READ_COMMITTED)
 public class TraceAspectTest extends SpringTxTestCase {
     @Autowired

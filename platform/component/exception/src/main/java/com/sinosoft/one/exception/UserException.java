@@ -1,3 +1,4 @@
+package com.sinosoft.one.exception;
 /**
  *
  * 用户异常基类
@@ -12,16 +13,16 @@ public abstract class UserException extends RuntimeException {
     private String subUserExceptionCode = "";
     private String concreteExceptionCode = "";
     private String msg = "";
-    private ExceptionGrade grade = ExceptionGrade.UNSERIOUS;
+    private ExceptionLevel level = ExceptionLevel.UNSERIOUS;
 
     public UserException(String userExceptionCode, String subUserExceptionCode,
                          String concreteExceptionCode, String msg, Throwable cause,
-                         ExceptionGrade grade) {
+                         ExceptionLevel level) {
         if (msg != null) {
             this.msg = msg;
         }
-        if (grade != null) {
-            this.grade = grade;
+        if (level != null) {
+            this.level = level;
         }
         if (userExceptionCode != null) {
             this.userExceptionCode = userExceptionCode;
@@ -41,12 +42,14 @@ public abstract class UserException extends RuntimeException {
                             subUserExceptionCode, concreteExceptionCode);
             if (xmlConcreteException != null) {
                 this.msg = xmlConcreteException.getExceptionDesc();
-                this.grade = xmlConcreteException.getGrade();
+                this.level = xmlConcreteException.getLevel();
             }
         }
 
         this.cause = cause;
     }
+
+
 
     public Throwable getCause() {
         return cause;
@@ -88,12 +91,12 @@ public abstract class UserException extends RuntimeException {
         this.msg = msg;
     }
 
-    public ExceptionGrade getGrade() {
-        return grade;
+    public ExceptionLevel getLevel() {
+        return level;
     }
 
-    public void setGrade(ExceptionGrade grade) {
-        this.grade = grade;
+    public void setLevel(ExceptionLevel level) {
+        this.level = level;
     }
 
     public String getExceptionKind() {

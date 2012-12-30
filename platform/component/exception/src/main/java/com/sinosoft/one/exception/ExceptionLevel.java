@@ -36,6 +36,13 @@ public enum ExceptionLevel {
         return this.value;
     }
 
+    public String getNotificationValue() {
+        if(this.value.length() == 1) {
+            return "0" + this.value;
+        }
+        return this.value;
+    }
+
     public static ExceptionLevel instanceOf(String value) {
         if(UNSERIOUS.value.equalsIgnoreCase(value)) {
             return UNSERIOUS;

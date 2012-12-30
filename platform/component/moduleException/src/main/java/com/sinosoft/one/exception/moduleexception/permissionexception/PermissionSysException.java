@@ -1,6 +1,9 @@
 package com.sinosoft.one.exception.moduleexception.permissionexception;
 
 
+import com.sinosoft.one.exception.ExceptionLevel;
+import com.sinosoft.one.exception.userexception.PermissionException;
+
 /**
  * 权限模块异常
  *
@@ -8,11 +11,11 @@ package com.sinosoft.one.exception.moduleexception.permissionexception;
  *
  */
 public class PermissionSysException extends PermissionException {
-    private static final String subUserExceptionCode = "010200";
+    private static final String subuserexceptionCode = "010200";
 
     private PermissionSysException(String concreteExceptionCode,
-                                   String msg, Throwable cause, ExceptionGrade grade) {
-        super(subUserExceptionCode, concreteExceptionCode, msg, cause, grade);
+                                   String msg, Throwable cause, ExceptionLevel level) {
+        super(subuserexceptionCode, concreteExceptionCode, msg, cause, level);
     }
 
     public static PermissionSysException newInstanceCode(
@@ -37,12 +40,12 @@ public class PermissionSysException extends PermissionException {
     }
 
     public static PermissionSysException newInstanceMsg(String msg,
-                                                        Throwable cause, ExceptionGrade grade) {
-        return new PermissionSysException(null, msg, cause, grade);
+                                                        Throwable cause, ExceptionLevel level) {
+        return new PermissionSysException(null, msg, cause, level);
     }
 
-    public String getSubUserExceptionCode() {
-        return subUserExceptionCode;
+    public String getSubuserexceptionCode() {
+        return subuserexceptionCode;
     }
 
     private static final long serialVersionUID = 1L;

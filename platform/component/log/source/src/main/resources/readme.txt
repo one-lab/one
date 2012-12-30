@@ -1,5 +1,9 @@
 ----------------------------------------------------------------------------------------------------------------------
-1、需要在application.properties中设置log配置相关信息如下示例：该properties文件一定要被spring加载
+1、需要在web.xml中配置traceFilter，用于用户行为追踪和用户URL追踪
+----------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------
+2、需要在application.properties中设置log配置相关信息如下示例：该properties文件一定要被spring加载
 ----------------------------------------------------------------------------------------------------------------------
 #log setting
 #environment  PRODUCT>TEST>DEVLEOP
@@ -11,22 +15,24 @@ log.jdbc.driverClassName=com.mysql.jdbc.Driver
 log.jdbc.url=jdbc:mysql://localhost:3306/test?characterEncoding=utf8
 log.jdbc.username=root
 log.jdbc.password=root
-#log批量保存阀值大小设置，做测试的时候请注意该参数的作用是共计条数至多少后才保存，所以累计到10条后才会保存
-log.batchSize=10
-----------------------------------------------------------------------------------------------------------------------
-2、需要在spring配置文件中配置如下相关信息，注意根据应用来调整切面的表达式
-----------------------------------------------------------------------------------------------------------------------
-    <!-- log切面-->
-	<bean id="logTraceAspect" class="com.sinosoft.ebusiness.log.LogTraceAspect">
-        <property name="environment" value="${log.environment}" />
-    </bean>
+#log URL和方法检查生效的模式
+# NATIVE -- 以方法上面的LogTrace注解为主
+# REMOTE -- 以监控系统配置的为主
+# ALL -- 先检查方法上面的LogTrace，然后再检查系统配置
+log.method.inspectMode=REMOTE
+# log 方法切面的表达式
+log.method.aspect.expression=execution(* com.sinosoft.one.log.test.*.*(..))
+# 保存阀值设置
+# 做测试的时候请注意该参数的作用是共计条数至多少后才保存，所以累计到10条后才会保存
+# 方法追踪日志保存阀值大小设置
+log.methodTrace.batchSize=1
+# URL追踪日志保存阀值大小设置
+log.urlTrace.batchSize=1
+# 用户行为日志保存阀值大小设置
+log.userBehavior.batchSize=10
+# 异步日志队列大小设置
+log.queue.size=1000
 
-    <aop:config>
-        <aop:aspect id="logAop" ref="logTraceAspect">
-            <aop:pointcut  id="traceAspectCut" expression="execution( * com.sinosoft.ebusiness..*.*(..))"/>
-            <aop:around pointcut-ref="traceAspectCut" method="logAgroundClassAndInterface"/>
-        </aop:aspect>
-    </aop:config>
 ----------------------------------------------------------------------------------------------------------------------
 3、在需要进行日志追踪的地方加上注解
 ----------------------------------------------------------------------------------------------------------------------
@@ -38,13 +44,9 @@ javaBean的规范也就是必须有getName方法，如果是Collection，那请�
 ，以上介绍的所有用法与Apache BeanUtils的方式保持一致，请参考，
 举例："测试一下${[0]}，再继续测试下${[1]}"
      测试一下${[0]:name}，再继续测试下${[0]:b.sex}
+
 ----------------------------------------------------------------------------------------------------------------------
 4、在需要记录日志的时候请配置相关获取用户信息的接口
 ----------------------------------------------------------------------------------------------------------------------
 实现com.sinosoft.ebusiness.log.User该接口的实现类用于获取用户信息且在spring配置文件配置相关bean
     <bean id="logUser" class="com.sinosoft.ebusiness.log.UserImpl" />
-并将logTraceAspect调整为如下信息：
-    <bean id="logTraceAspect" class="com.sinosoft.ebusiness.log.LogTraceAspect">
-        <property name="environment" value="${log.environment}" />
-        <property name="user" ref="logUser"/>
-    </bean>
