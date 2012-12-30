@@ -2,9 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib uri="http://mvc.one.sinosoft.com/crypto/inputs" prefix="x" %>
 <%@ taglib uri="http://mvc.one.sinosoft.com/crypto/form" prefix="f" %>
-<%@ taglib uri="http://mvc.one.sinosoft.com/crypto/commons" prefix="co" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -21,20 +19,20 @@
     </script>
     <script type="text/javascript">
         function sendMessage() {
-            var name = $("input:[name='ajaxName']").val();
-            var age = $(".input_one").eq(0).val();
-            var selectGender = $("select").val();
-            if ($("input:[type='checkbox']").attr("checked") == undefined) {
-                var checkbox = "no";
-            } else {
-                var checkbox = $("input:[type='checkbox']").val();
+            var name = $("#ajaxName").val();
+            var age = $("#ajaxAge").val();
+            var selectGender = $("#selectGender").val();
+            var checkbox = "无";
+            if ($("input:[type='checkbox']").attr("checked")) {
+                checkbox = $("input:[type='checkbox']").val();
             }
-            var textarea = $("#area").val();
+            var textarea = $("#ajaxArea").val();
             $.packageAjax({
                 type:"POST", //请求的方法
                 url:"${ctx}/crypto_uncrypto/cryptoUncrypto/frontendAjaxCrypto", //要传递参数使用Ajax进行处理的类名称
                 dataType:"json", //返回的数据类型
                 data:{
+                    crypto_attributies_names : "name,children.id",
                     name:name,
                     age:age,
                     selectGender:selectGender,
@@ -42,20 +40,25 @@
                     textarea:textarea,
                     children:[
                         {
-                            id1:"123",
-                            name1:"name111"
+                            id:123.2,
+                            name:"姓名1"
                         },
                         {
-                            id2:"321",
-                            name2:"name222"
+                            id:321.3,
+                            name:"姓名2"
                         }
                     ]
                 },
                 isEncryption:true,
                 success:function (data) {
                     if (data != null) {
-                        // alert($("input[name='abc']").val());
-                        alert("success,解密后的数据（其中children为测试数据）:\n" + data.name);
+                        $("#ciphertext3Crypto").html(data.key);
+                        $("#name3Crypto").html(data.name);
+                        $("#age3Crypto").html(data.age);
+                        $("#gender3Crypto").html(data.gender);
+                        $("#hobbies3Crypto").html(data.hobbies);
+                        $("#address3Crypto").html(data.address);
+                        $("#children").html(data.children1Id + ":" + data.children1Name + ", " + data.children2Id + ":" + data.children2Name);
                     }
                 },
                 error:function () {
@@ -72,12 +75,15 @@
 
 <div class="container">
     <%@ include file="/WEB-INF/layouts/header.jsp" %>
+    <div style="color: #808080"><b>测试1：用户名加密，用户邮箱不加密, 后端没有配置解密URL，所以加密的数据不会解密</b></div>
     <div id="view1" class="span12">
         <form id="frontend1" action="frontendCrypto" method="post"
               onsubmit="<f:cryptoForm formId="frontend1" includes="name"/>">
-            用户名：<input name="name" id="name1" type="text"/>
-            用户邮箱：<input name="email" id="email1" type="text"/>
+            用户名：<input name="name" id="name1" type="text" />
+            用户邮箱：<input name="email" id="email1" type="text" />
+
             <input type="submit" onClick="viewUser1();" value="前端加密"/>
+
         </form>
     </div>
     <div id="view1" class="span12">
@@ -100,6 +106,10 @@
             </tbody>
         </table>
     </div>
+
+    <br/>
+    <div style="color: #808080"><b>测试2：用户名加密，用户邮箱不加密, 后端配置解密URL，所以加密的数据会解密</b></div>
+
     <div id="view2" class="span12">
         <form id="background2" action="backgroundUncrypto" method="post"
               onsubmit="<f:cryptoForm formId="background2" includes="name"/>">
@@ -129,18 +139,52 @@
         </table>
     </div>
 
+    <div style="color: #808080"><b>测试3：Ajax前端加密, 后端配置解密URL，所以加密的数据会解密</b></div>
     <div id="view3" class="span12">
         <form id="ajaxForm">
-            姓名：<input type="text" name="ajaxName"/>
-            年龄：<input class="input_one" type="text" name="ajaxAge"/>
-            <select name="selectGender">
-                <option value="0">男</option>
-                <option value="1">女</option>
-            </select>
-            <input type="checkbox" name="ajaxCheckbox"/>
-            <textarea id="area" name="ajaxArea"></textarea>
+            <div>姓名：<input type="text" name="ajaxName" id="ajaxName"/></div>
+            <div>年龄：<input class="input_one" type="text" name="ajaxAge" id="ajaxAge"/></div>
+            <div>性别：
+                <select name="selectGender" id="selectGender">
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </div>
+            <div>兴趣爱好：<input type="checkbox" name="ajaxCheckbox" value="足球"/>足球
+                      <input type="checkbox" name="ajaxCheckbox" value="游泳"/>游泳
+            </div>
+            <div>家庭住址：<textarea id="ajaxArea" name="ajaxArea"></textarea></div>
             <input type="button" value="ajax前端加密" onclick="sendMessage();"/>
         </form>
+    </div>
+
+    <div id="view4" class="span12">
+        <table id="contentTable3"
+               class="table table-striped table-bordered table-condensed">
+            <thead>
+            <h>前端加密，后端解密，查看是否解密（crypto_config.xml中配置后端解密的URL）</h>
+            <tr>
+                <th>前端加密密钥</th>
+                <th>后端姓名</th>
+                <th>后端年龄</th>
+                <th>后端性别</th>
+                <th>兴趣爱好</th>
+                <th>家庭住址</th>
+                <th>children</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="ciphertext3Crypto"></td>
+                <td id="name3Crypto"></td>
+                <td id="age3Crypto"></td>
+                <td id="gender3Crypto"></td>
+                <td id="hobbies3Crypto"></td>
+                <td id="address3Crypto"></td>
+                <td id="children"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <%@ include file="/WEB-INF/layouts/footer.jsp" %>
 </div>

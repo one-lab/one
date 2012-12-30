@@ -1,10 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib uri="http://mvc.one.sinosoft.com/crypto/inputs" prefix="x" %>
-<%@ taglib uri="http://mvc.one.sinosoft.com/crypto/form" prefix="f" %>
-<%@ taglib uri="http://mvc.one.sinosoft.com/crypto/commons" prefix="co" %>
+<%@ taglib prefix="one" uri="http://mvc.one.sinosoft.com/uncrypto" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,57 +20,79 @@
 
 <div class="container">
     <%@ include file="/WEB-INF/layouts/header.jsp" %>
-    <div>
-        <p><span
-                style="color: red;">为了演示方便，在crypto_codec.js和enAndDe.js文件中加入了“alert()”语句，所以页面初始化的弹窗属正常现象（加密数据写在java文件中）</span>
+    <div class="span12">
+        <p>
+            <div style="color: red;">为了演示方便，加密数据展示：</div>
+            <div id="encryptoDataShow"></div>
         </p>
     </div>
-    <div id="view1" class="span12">
+
+    <div class="span12">
+        <div style="color: #808080"><b>测试1：
+        基本数据类型初始化数据：[
+        用户名：abc123,
+        用户邮箱：email1@demo.com]</b></div>
+        <b style="color:red">如果需要解密的是input输入框，输入框必须要有id属性</b>
         <form id="frontendUncrypto1">
-            form1：<br>
-            解密后的用户名：<input name="nameForm1" value="${nameForm1}"/>
+            解密后的用户名：<input name="name" id="name" value=""><one:uncrypto value='${name}' id="name" />
+            解密后的用户邮箱：<input name="email" id="email" value=""/><one:uncrypto value='${email}' id="email" />
         </form>
     </div>
-    <div id="view2" class="span12">
-        <form id="frontendUncrypto2" action="frontendUncrypto" method="get">
-            form2：<br>
-            解密后的用户名1：<input name="name1" value="${name1}"/>
-            解密后的用户名2：<input name="name2" value="${name2}"/><br>
-            解密后的邮箱1：<textarea class="email1" name="email1">${email1}</textarea>
-            解密后的邮箱2：<textarea class="email2" name="email2">${email2}</textarea><br>
-            解密后的邮箱3：<textarea id="email3">${user.email}</textarea>
-            <table id="contentTable"
-                   class="table table-striped table-bordered table-condensed">
-                <thead>
+    <div class="span12">
+        <div style="color: #808080"><b>测试2：
+        实体数据类型初始化数据：用户[
+        登录名：ZhangSan,
+        密码：abc123d,
+        邮箱：email3@demo.com]</b></div>
+        <table id="contentTable"
+               class="table table-striped table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>解密后的登录名</th>
+                <th>解密后的密码</th>
+                <th>解密后的邮箱</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="loginName"><one:uncrypto value='${user.loginName}' /></td>
+                <td class="password"><one:uncrypto value='${user.password}' /></td>
+                <td class="email"><one:uncrypto value='${user.email}' /></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span12">
+        <div style="color: #808080"><b>测试3：
+        集合类型初始化数据：<br/>
+        用户1：[
+        登录名：登录名1！@,
+        密码：123.456,
+        邮箱：email23@123demo.com]<br />
+        用户2：[
+        登录名：登录名2!@#$%^&*()[]-=,
+        密码：!1q@2w#3e$4r%5t^6y&7u*8i,
+        邮箱：email32@demo.com]</b></div>
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>解密后的登录名</th>
+                <th>解密后的密码</th>
+                <th>解密后的邮箱</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${users}" var="aUser">
                 <tr>
-                    <th>解密后的登录名</th>
-                    <th>解密后的密码</th>
+                    <td class="loginName"><one:uncrypto value='${aUser.loginName}' /></td>
+                    <td class="password"><one:uncrypto value='${aUser.password}' /></td>
+                    <td class="email"><one:uncrypto value='${aUser.email}' /></td>
                 </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="loginName">${user.loginName}</td>
-                    <td class="password">${user.password}</td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
+            </c:forEach>
+            </tbody>
+        </table>
     </div>
     <%@ include file="/WEB-INF/layouts/footer.jsp" %>
 </div>
-
-<script type="text/javascript">
-    var viewUser1 = function () {
-        $("#view1").show();
-    }
-</script>
-<script type="text/javascript">
-    var viewUser2 = function () {
-        $("#view2").show();
-    }
-</script>
-
-<x:inputs formIds="frontendUncrypto1,frontendUncrypto2"/>
-<co:unCmn eIds="email3" eClasses="email1,email2,loginName,password"/>
 </body>
 </html>

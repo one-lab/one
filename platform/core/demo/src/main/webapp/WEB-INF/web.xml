@@ -69,7 +69,7 @@
         <filter-class>com.sinosoft.one.mvc.crypto.filter.CryptoFilter</filter-class>
         <init-param>
             <param-name>cryptoConfigLocation</param-name>
-            <param-value>/WEB-INF/crypto/crypto_config.xml</param-value>
+            <param-value>classpath:crypto/crypto_config.xml</param-value>
         </init-param>
     </filter>
     <filter-mapping>

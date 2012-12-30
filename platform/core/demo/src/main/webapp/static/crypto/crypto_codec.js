@@ -1,6 +1,7 @@
 function decode(key,data) {
-    alert("密钥："+key);
-    alert("后端加密后的数据："+data);
+    $("#encryptoDataShow").append("后端加密后的数据:" + data + ", ");
+//    alert("密钥："+key);
+//    alert("后端加密后的数据："+data);
 	var buffer = "";
     var hexkey = mvc.crypto.hex.decode(key);
     try {     
@@ -8,7 +9,8 @@ function decode(key,data) {
 	    mvc.crypto.xxtea.decryptInPlace(buffer, hexkey);
 	    var clear64 = mvc.crypto.ascii.fromInts(buffer);
 	    var clear = Base64.decode(clear64);
-        alert("前端解密后的数据："+clear);
+//        alert("前端解密后的数据："+clear);
+        $("#encryptoDataShow").append("前端解密后的数据："+clear).append("<br/>");
 	    return clear;
     } catch(exception) {
     	return data;
@@ -20,7 +22,7 @@ function encode(key,data) {
     var hexkey = mvc.crypto.hex.decode(key);
     var data64 = Base64.encode(data);
     var buffer = mvc.crypto.ascii.toInts(data64);
-    enText = mvc.crypto.xxtea.encryptInPlace(buffer, hexkey);
+    mvc.crypto.xxtea.encryptInPlace(buffer, hexkey);
     var b64 = mvc.crypto.base64Ints.encode(buffer);
     return b64;
 }

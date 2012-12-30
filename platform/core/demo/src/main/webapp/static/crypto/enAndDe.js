@@ -6,7 +6,7 @@
 				type: "",
 				url: "",
 				dataType:"text",
-				data: "",
+				data: {},
 				async:true,
 				beforeSend:temFun,
 				cache:true,
@@ -32,39 +32,11 @@
 			};
 			defaults = $.extend(defaults,opts);
 			var strKey = $("#key").val();
-alert("密钥：\n"+strKey);
 	        key = mvc.crypto.hex.decode(strKey);
 			//进行加密
-			if(defaults.isEncryption) {			
-	            var jsonString = JSON.stringify(defaults.data);
-				var temArray = jsonString.split(",");
-				var tem = "";
-				for(var i = 0; i < temArray.length; i++){
-					tem = temArray[i].split(":");
-					var start = 0;
-					var stop = 0;
-					var content = "";
-					if(tem.length > 2) {
-						start = tem[2].indexOf('"');
-						stop = tem[2].lastIndexOf('"');
-						content = tem[2].substring(start+1,stop);
-					} else {
-						start = tem[1].indexOf('"');
-						stop = tem[1].lastIndexOf('"');
-						content = tem[1].substring(start+1,stop);
-					}
-					//获得需要加密的内容
-					var data64 = Base64.encode(content);
-	                var buffer = mvc.crypto.ascii.toInts(data64);
-	                enText = mvc.crypto.xxtea.encryptInPlace(buffer, key);
-	                var b64 = mvc.crypto.base64Ints.encode(buffer);
-	                var reg=new RegExp(content,"g");
-	                jsonString = jsonString.replace(reg, b64);
-alert("数据正在加密:\n"+jsonString);
-				}
-				//defaults.data = jsonString;
-				defaults.data = eval("(" + jsonString + ")");
-				//alert(defaults.data);
+			if(defaults.isEncryption) {
+                var encryptoAttrNames = (defaults.data.crypto_attributies_names && defaults.data.crypto_attributies_names != "") ? defaults.data.crypto_attributies_names.split(",") : "";
+                this.encryptoObject(defaults.data, encryptoAttrNames);
 			}
 			
 			$.ajax({
@@ -113,6 +85,80 @@ alert("数据正在加密:\n"+jsonString);
 				//xhr:"",
 			});
 			
-		}
-	});
+		},
+        escapeCharacter : function(content) {
+            var result = "";
+            var specialCharacters = "^$.*+?=!:|/()[]{}\\";
+            for(var i= 0, len=content.length; i<len; i++) {
+                var aChar = content.charAt(i);
+                if(specialCharacters.indexOf(aChar) != -1) {
+                    result = result.concat("\\");
+                }
+                result = result.concat(aChar);
+            }
+            return result;
+        },
+        encryptoObject : function(obj, attrArray) {
+            if(attrArray && attrArray.length > 0) {
+                for(var i = 0, len = attrArray.length; i<len; i++) {
+                    var attr = attrArray[i];
+                    if(attr.indexOf(".") == -1) {
+                        var attrValue = obj[attr];
+                        obj[attr] = this.encrypto(attrValue);
+                    } else {
+                        var attrs = attr.split(".");
+                        var firstAttrValue = obj[attrs[0]];
+                        if(typeof firstAttrValue == "object" && !(firstAttrValue instanceof Array)) {
+                            var tempAttrArray = [];
+                            tempAttrArray.push(attr.substring(attr.indexOf(".") + 1));
+                            this.encryptoObject(firstAttrValue, tempAttrArray)
+                        } else if(typeof firstAttrValue == "object" && (firstAttrValue instanceof Array)) {
+                            this.encryptoObjectArray(firstAttrValue,  attr.substring(attr.indexOf(".") + 1));
+                        } else {
+                            obj[attrs[0]] = this.encrypto(firstAttrValue);
+                        }
+                    }
+                }
+            } else {
+                for(var key in obj) {
+                    var value = obj[key];
+                    if(typeof value == "object" && (value instanceof Array) ) {
+                        this.encryptoObjectArray(value);
+                    } else if(typeof value == "object" && !(value instanceof Array)) {
+                        this.encryptoObject(value);
+                    } else {
+                        obj[key] = this.encrypto(value);
+                    }
+                }
+            }
+        },
+        encryptoObjectArray : function(objArray, attr) {
+            if(objArray && objArray.length > 0) {
+                var len = objArray.length;
+                for(var i=0; i<len; i++) {
+                    var obj = objArray[i];
+                    if(typeof obj == "object" && !(obj instanceof Array)) {
+                        if(attr && attr != "") {
+                            var tempAttrArray = [];
+                            tempAttrArray.push(attr);
+                            this.encryptoObject(obj, tempAttrArray);
+                        } else {
+                            this.encryptoObject(obj);
+                        }
+                    } else if(typeof obj == "object" && (obj instanceof Array)) {
+                        this.encryptoObjectArray(obj, attr);
+                    } else {
+                        objArray[i] = this.encrypto(obj);
+                    }
+                }
+            }
+        },
+        encrypto : function(value) {
+            var tempValue = value + "";
+            var data64 = Base64.encode(tempValue );
+            var buffer = mvc.crypto.ascii.toInts(data64);
+            mvc.crypto.xxtea.encryptInPlace(buffer, key);
+            return  mvc.crypto.base64Ints.encode(buffer);
+        }
+    });
 })(jQuery);
