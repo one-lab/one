@@ -38,6 +38,19 @@ $(function(){
 		});
 	}).bind("select_node.jstree",function(e,data){
 		$com=data.rslt.obj;
+		$a = $com.find("a");
+//		$com.addClass("select");
+		$a.addClass("select");
+//		$a.parent("li").siblings().each(function(){
+//			if($(this).hasClass("select")) {
+//				$(this).removeClass("select");
+//			}
+//		});
+		$a.parent("li").siblings().find("a").each(function(){
+			if($(this).hasClass("select")) {
+				$(this).removeClass("select");
+			}
+		});
 		var comCode = $com.attr("id");
 		$("#comCode").val($com.attr("id"));
 		$("#comCName").text($com.find("a").text());
@@ -68,9 +81,6 @@ $(function(){
 				alert("操作失败！！");
 			}
 		});
-		
-		
-
 	});
 	$("#sel_2").find("option").live("dblclick", toLeftMove);
 	$("#sel_1").find("option").live("dblclick", toRightMove);

@@ -93,11 +93,12 @@ public class StaffingServiceImpl implements StaffingService{
 			}else{
 				UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
 				
-				List<UserGroup>userGroups = userPower.getUserGroups();
 				//删除关联用户组记录
+				List<UserGroup>userGroups = userPower.getUserGroups();
 				geRmsUserGroupRepository.delete(userGroups);
-				List<ExcPower> excPowers = userPower.getExcPowers();
+				
 				//删除关联权限除外表记录
+				List<ExcPower> excPowers = userPower.getExcPowers();
 				geRmsExcPowerRepository.delete(excPowers);
 				
 				String[]groupIds = groupIdStr.split(",");
@@ -135,9 +136,6 @@ public class StaffingServiceImpl implements StaffingService{
 			List<DataRule> delList = new ArrayList<DataRule>();
 			List<DataRule> dataRules = (List<DataRule>) geRmsDataRuleRepository.findAll();
 			
-			for(DataRule dataRule : dataRules){
-				dataRule.setBusPowers(null);
-			}
 			List<String> dataRuleIds = getDataRuleIds(comCode, userCode);
 			for(DataRule dataRule : dataRules){
 				if(dataRuleIds.isEmpty())
@@ -154,9 +152,6 @@ public class StaffingServiceImpl implements StaffingService{
 		public List<DataRule> getRuleParam(String comCode, String userCode) {
 			List<DataRule> delList = new ArrayList<DataRule>();
 			List<DataRule> dataRuleParam = (List<DataRule>) geRmsDataRuleRepository.findAll();
-			for(DataRule dataRule : dataRuleParam){
-				dataRule.setBusPowers(null);
-			}
 			
 			List<String> dataRuleIds = getDataRuleIds(comCode, userCode);
 
@@ -214,7 +209,6 @@ public class StaffingServiceImpl implements StaffingService{
 				}
 			}
 			
-			
 			return resultBusPowers;
 		}
 
@@ -232,8 +226,12 @@ public class StaffingServiceImpl implements StaffingService{
 			
 			//删除原先的人员数据权限记录
 			List<String> busPowerIds = geRmsBusPowerRepository.findBusPowerIdByUserPowerId(userPowerId);
-			List<BusPower> BusPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
-			geRmsBusPowerRepository.delete(BusPowers);
+			List<BusPower> busPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
+			
+			System.out.println("ID数："+busPowerIds.size());
+			System.out.println("记录数："+busPowers.size());
+			
+			geRmsBusPowerRepository.delete(busPowers);
 			
 			//查询需要添加的功能
 			//查询功能授权表中的功能ID
