@@ -11,7 +11,6 @@ import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.repositories.CompanyDao;
-import com.sinosoft.one.ams.repositories.GeRmsCompanyRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.service.facade.TaskAuthService;
@@ -23,8 +22,6 @@ import com.sinosoft.one.mvc.web.Invocation;
 public class TaskAuthServiceImpl implements TaskAuthService{
 
 	@Autowired
-	private GeRmsCompanyRepository geRmsCompanyRepository;
-	@Autowired
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
 	@Autowired
 	private GeRmsTaskRepository geRmsTaskRepository;
@@ -35,7 +32,7 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 
 	//把满足条件的task存入Treeable对象，并返回
 	public Treeable<NodeEntity> treeAble(String comCode) {
-		Company company = geRmsCompanyRepository.findOne(comCode);
+		Company company = companyDao.findOne(comCode);
 		
 		String parentComCode = company.getUpperComCode();
 
