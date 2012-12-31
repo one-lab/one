@@ -89,6 +89,32 @@ public class LogConfigsTest extends AbstractFilterTest {
         mockHttpServletRequest.setContent(jsonObject.toJSONString().getBytes());
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
         servlet.service(mockHttpServletRequest, mockHttpServletResponse);
+        System.out.println(mockHttpServletResponse.getContentAsString() + "=============");
+    }
+
+    /**
+     * POST 操作
+     * @param type
+     * @param operation
+     * @param arguments
+     * @throws Exception
+     */
+    private void postWrite(String type, String attribute, String value) throws Exception {
+        MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
+        mockHttpServletRequest.setCharacterEncoding("UTF-8");
+        mockHttpServletRequest.setSession(session);
+        mockHttpServletRequest.setMethod("POST");
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mbean", "log:name=LogConfigs");
+        jsonObject.put("attribute", attribute);
+        jsonObject.put("value", value);
+        jsonObject.put("type", type);
+
+        mockHttpServletRequest.setContent(jsonObject.toJSONString().getBytes());
+        MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
+        servlet.service(mockHttpServletRequest, mockHttpServletResponse);
+        System.out.println(mockHttpServletResponse.getContentAsString() + "=============");
     }
 
     /**
@@ -137,6 +163,7 @@ public class LogConfigsTest extends AbstractFilterTest {
         });
         JSONObject resultObject = query("exec", "getLogUrl/!/test3!/test4");
         JSONObject urlObject = resultObject.getJSONObject("value");
+        System.out.println(resultObject.toJSONString() + "+++++++++++++");
         Assert.assertEquals("/test3/test4", urlObject.get("url"));
         Assert.assertEquals("PRODUCT", urlObject.get("environment"));
         Assert.assertEquals(15, urlObject.get("maxExecuteTime"));
@@ -153,7 +180,12 @@ public class LogConfigsTest extends AbstractFilterTest {
         Assert.assertEquals(10, urlObject.get("maxExecuteTime"));
         Assert.assertEquals(5, urlObject.get("interval"));
         // 删除URL请求
-        getOperate("exec", "removeLogUrl/!/test4!/test5");
+        postOperate("exec", "removeLogUrl", new ArrayList<String>() {
+            {
+                add("/test4/test5");
+            }
+        });
+//        getOperate("exec", "removeLogUrl/!/test4!/test5");
 
         jsonObjectForRead = query("exec", "getLogUrl/!/test4!/test5");
         Assert.assertEquals(null, jsonObjectForRead.get("value"));
@@ -162,15 +194,16 @@ public class LogConfigsTest extends AbstractFilterTest {
     //============================= environment config test ===================================
     @Test
     public void testPutAndGetEnvironment() throws Exception{
-        getOperate("write", "Environment/TEST");
+        postWrite("write", "Environment","TEST");
 
         JSONObject jsonObjectForRead = query("read", "Environment");
+        System.out.println(jsonObjectForRead.toJSONString() + "=============");
         Assert.assertEquals("TEST", jsonObjectForRead.getString("value"));
     }
 
     //============================= log method config test ===================================
-
-    private void testGetLogMethods() throws Exception {
+    @Test
+    public void testGetLogMethods() throws Exception {
         postOperate("exec", "addLogMethod", new ArrayList<String>() {
             {
                 add("com.sinosoft.one.log.test");
@@ -220,7 +253,12 @@ public class LogConfigsTest extends AbstractFilterTest {
         Assert.assertEquals("TEST", valueObject.getString("environment"));
         Assert.assertEquals("testDescription", valueObject.getString("description"));
 
-        getOperate("exec", "removeLogMethod/com.sinosoft.one.log.test/testMethod3");
+        postOperate("exec", "removeLogMethod", new ArrayList<String>() {
+            {
+                add("com.sinosoft.one.log.test");
+                add("testMethod3");
+            }
+        });
 
         resultObject = query("exec", "getLogMethod/com.sinosoft.one.log.test/testMethod3");
         Assert.assertEquals(null, resultObject.get("value"));

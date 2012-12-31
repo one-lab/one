@@ -1,6 +1,10 @@
 package com.sinosoft.one.log.config;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sinosoft.one.log.Environment;
+import com.sinosoft.one.monitoragent.notification.NotificationConfigureDealer;
+import com.sinosoft.one.monitoragent.notification.utils.CommonUtils;
 import org.springframework.jmx.export.annotation.*;
 
 import java.util.*;
@@ -13,8 +17,20 @@ public class LogConfigs {
     private String environment;
 
     public void init() {
-        // TODO 从监控系统取得初始化数据
+        //initMethods();
+        //initUrls();
+    }
 
+    private void initMethods() {
+        NotificationConfigureDealer notificationConfigureDealer = CommonUtils.getConfMethodInstance();
+        String methodInfo = notificationConfigureDealer.getConfigureInfo();
+        JSONObject jsonObject = JSON.parseObject(methodInfo);
+    }
+
+    private void initUrls() {
+        NotificationConfigureDealer notificationConfigureDealer = CommonUtils.getConfUrlInstance();
+        String urlInfo = notificationConfigureDealer.getConfigureInfo();
+        JSONObject jsonObject = JSON.parseObject(urlInfo);
     }
 
     @ManagedOperation(description = "Get a url.")
