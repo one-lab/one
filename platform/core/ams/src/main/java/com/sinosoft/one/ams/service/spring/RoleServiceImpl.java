@@ -235,6 +235,7 @@ public class RoleServiceImpl implements RoleService{
 		}
 	}
 
+	//根据用户组ID查询相应的角色
 	public List<Role> findRoleByGroupId(String groupId, String comCode) {
 		List<String> roleIds = new ArrayList<String>();
 		Group group =geRmsGroupRepository.findOne(groupId);

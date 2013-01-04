@@ -162,11 +162,27 @@ public class TaskServiceImpl implements TaskService{
 			NodeEntity nodeEntity = new NodeEntity();
 			nodeEntity.setId(geRmsTask.getTaskID());
 			nodeEntity.setTitle(geRmsTask.getName());
-			if(!filter.get(geRmsTask.getTaskID()).getFlag().toString().equals("1"))
+			if(!filter.get(geRmsTask.getTaskID()).getFlag().toString().equals("1")){
 				nodeEntity.setClassField("jstree-checked");
+			}else{
+				nodeEntity.setClassField("jstree-unchecked");
+			}
 			if(!geRmsTask.getChildren().isEmpty()){
 				nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter));
-				
+				int n1 = nodeEntity.getChildren().size();
+				int n2 = 0;
+				for(NodeEntity no : nodeEntity.getChildren()){
+					if(no.getClassField().equals("jstree-checked")){
+						n2 ++;
+					}
+				}
+				if(n2 > 0 && n2 < n1){
+					nodeEntity.setClassField("jstree-undetermined");
+				}else if(n2 == 0){
+					nodeEntity.setClassField("jstree-unchecked");
+				}else{
+					nodeEntity.setClassField("jstree-checked");
+				}
 			}
 			nodeEntitys.add(nodeEntity);
 			}

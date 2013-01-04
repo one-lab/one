@@ -6,7 +6,6 @@ package com.sinosoft.one.ams.controllers.login;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.ams.model.Employe;
-import com.sinosoft.one.ams.service.AccountManager;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;

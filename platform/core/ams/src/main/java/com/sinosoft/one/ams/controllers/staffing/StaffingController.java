@@ -158,7 +158,7 @@ public class StaffingController {
 		return Replys.with(taskList).as(Json.class);
 	}
 	
-	//查询当前机构，当前用户组，当前角色的根权限的后代权限
+	//查询当前机构，当前用户组,根权限的后代权限
 	@Get("taskChildren/{comCode}/{roleIdStr}/{taskId}/{userCode}")
 	public Reply taskChildren(@Param("comCode")String comCode,@Param("roleIdStr")String roleIdStr,@Param("taskId")String taskId,@Param("userCode")String userCode,Invocation  inv) throws Exception{
 		

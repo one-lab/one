@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 
 /**
  * POJO类employe
@@ -78,6 +80,7 @@ public class Employe {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COMCODE")
+	@JSONField(serialize = false)
 	public Company getCompany() {
 		return this.company;
 	}

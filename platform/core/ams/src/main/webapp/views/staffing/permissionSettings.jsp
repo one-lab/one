@@ -136,6 +136,10 @@ function addSelect(obj,event) {
 		$(".setup_box").eq(0).find("ul").find("#"+id).removeClass("select");
 		$("#"+id+"Task").remove();
 		$("#"+id+"Role").remove();
+		
+		if($(".setup_box").eq(0).find(".select").length == 0){
+			$(".set_info").hide();
+		}
 		event.stopPropagation();
 	} else {
 		event.stopPropagation();
@@ -181,6 +185,7 @@ function addSelect(obj,event) {
 				}
 			});
 		}
+		
 		
 	}
 
@@ -343,7 +348,7 @@ function ajaxMethodThree(thisLi) {
 			},
 			"json_data":{
 				"ajax":{
-					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId
+					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId+"/null"
 				}
 			},
 			"plugins":["themes","json_data","checkbox","ui"]

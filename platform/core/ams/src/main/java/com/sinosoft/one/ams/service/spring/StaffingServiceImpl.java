@@ -23,7 +23,6 @@ import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.StaffingService;
 
-@Transactional
 @Component
 public class StaffingServiceImpl implements StaffingService{
 
@@ -94,14 +93,16 @@ public class StaffingServiceImpl implements StaffingService{
 			}
 		}else{
 			UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
-			
+//			geRmsUserPowerRepository.delete(userPower);
 			//删除关联用户组记录
-			List<UserGroup>userGroups = userPower.getUserGroups();
+			List<UserGroup> userGroups = userPower.getUserGroups();
+			System.out.println(userGroups.size());
 			geRmsUserGroupRepository.delete(userGroups);
-			
+
 			//删除关联权限除外表记录
 			List<ExcPower> excPowers = userPower.getExcPowers();
-			geRmsExcPowerRepository.delete(excPowers);
+			System.out.println(excPowers.size());
+			geRmsExcPowerRepository.delete(excPowers.get(0));
 			
 			String[]groupIds = groupIdStr.split(",");
 			if(groupIds.length > 0){
