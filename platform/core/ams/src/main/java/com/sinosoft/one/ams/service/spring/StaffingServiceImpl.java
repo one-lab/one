@@ -23,6 +23,7 @@ import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.StaffingService;
 
+@Transactional
 @Component
 public class StaffingServiceImpl implements StaffingService{
 
@@ -94,15 +95,23 @@ public class StaffingServiceImpl implements StaffingService{
 		}else{
 			UserPower userPower = geRmsUserPowerRepository.findOne(userPowerId);
 //			geRmsUserPowerRepository.delete(userPower);
-			//删除关联用户组记录
+//			删除关联用户组记录
 			List<UserGroup> userGroups = userPower.getUserGroups();
 			System.out.println(userGroups.size());
-			geRmsUserGroupRepository.delete(userGroups);
+			List<String> userGroupIds = new ArrayList<String>();
+			for(UserGroup ug : userGroups){
+				userGroupIds.add(ug.getUserGropuID());
+			}
+			geRmsUserGroupRepository.deleteUserPower(userGroupIds);
 
 			//删除关联权限除外表记录
 			List<ExcPower> excPowers = userPower.getExcPowers();
 			System.out.println(excPowers.size());
-			geRmsExcPowerRepository.delete(excPowers.get(0));
+			List<String> excPowerIds = new ArrayList<String>();
+			for(ExcPower ep : excPowers){
+				excPowerIds.add(ep.getExcPowerID());
+			}
+			geRmsExcPowerRepository.deleteExcPower(excPowerIds);
 			
 			String[]groupIds = groupIdStr.split(",");
 			if(groupIds.length > 0){
@@ -229,12 +238,14 @@ public class StaffingServiceImpl implements StaffingService{
 		
 		//删除原先的人员数据权限记录
 		List<String> busPowerIds = geRmsBusPowerRepository.findBusPowerIdByUserPowerId(userPowerId);
-		List<BusPower> busPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
-		
-		System.out.println("ID数："+busPowerIds.size());
-		System.out.println("记录数："+busPowers.size());
-		
-		geRmsBusPowerRepository.delete(busPowers);
+		if(!busPowerIds.isEmpty()){
+			
+//			List<BusPower> busPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
+			System.out.println("ID数："+busPowerIds.size());
+//			System.out.println("记录数："+busPowers.size());
+			
+			geRmsBusPowerRepository.deleteBusPower(busPowerIds);
+		}
 		
 		//查询需要添加的功能
 		//查询功能授权表中的功能ID

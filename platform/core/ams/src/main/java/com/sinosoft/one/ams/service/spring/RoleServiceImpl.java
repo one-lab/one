@@ -240,11 +240,11 @@ public class RoleServiceImpl implements RoleService{
 		List<String> roleIds = new ArrayList<String>();
 		Group group =geRmsGroupRepository.findOne(groupId);
 		List<GroupRole>groupRoles =group.getGroupRoles();
-	
+		
 		for (GroupRole groupRole : groupRoles) {
 			roleIds.add(groupRole.getRole().getRoleID());
 		}
-		List<String>results=new ArrayList<String>();
+		List<String> results = new ArrayList<String>();
 		List<String> roleDegNatIds =geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
 		for (String roleDegNatId : roleDegNatIds) {
 			for (String roleId : roleIds) {

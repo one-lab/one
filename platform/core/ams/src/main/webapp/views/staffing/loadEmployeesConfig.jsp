@@ -139,7 +139,26 @@ function openQX(obj) {
 					success : function(data){
 						msgSuccess("", "保存成功！");
 						$("#window2").remove();
-						$(".all_shadow").remove();	
+						$(".all_shadow").remove();
+						$("#grid").html("");
+						//刷新全部用户
+						$("#grid").Grid({
+							url : "${ctx}/staffing/userAll",
+							dataType: "json",
+							height: 'auto',
+							colums:[
+								{id:'1',text:'员工编号',name:"appellation",width:'120',index:'1',align:'',color:''},
+								{id:'2',text:'员工姓名',name:"Status",width:'90',index:'1',align:'',color:'green'},
+								{id:'3',text:'归属机构',name:"Version",index:'1',align:'',color:''},
+								{id:'4',text:'已引入机构',name:"degrees",index:'1',align:'',color:''},
+								{id:'5',text:'操作',name:"degrees",index:'1',align:'',color:''}
+							],
+							rowNum:10,
+							sorts:false,
+							pager : true,
+							number:false,
+							multiselect: false
+						});
 					},
 					error : function(){
 						alert("操作失败！");

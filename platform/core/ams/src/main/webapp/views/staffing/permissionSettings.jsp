@@ -45,7 +45,7 @@ $(function(){
 		}
 	}).bind("select_node.jstree", function(e, data){
 		comCode = data.rslt.obj.attr("id");
-		comCName = data.rslt.obj.find("a").text();
+		comCName = data.rslt.obj.find("a").eq(0).text();
 		$(".set_info").attr("id" , comCode);
 		$(".set_info").find("span").text(comCName);
 		var temVal = "";

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.ExcPower;
@@ -21,6 +22,7 @@ import com.sinosoft.one.ams.utils.uiutil.Treeable;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.mvc.web.Invocation;
 
+@Transactional
 @Component
 public class TaskServiceImpl implements TaskService{
 	
@@ -176,12 +178,15 @@ public class TaskServiceImpl implements TaskService{
 						n2 ++;
 					}
 				}
-				if(n2 > 0 && n2 < n1){
-					nodeEntity.setClassField("jstree-undetermined");
-				}else if(n2 == 0){
-					nodeEntity.setClassField("jstree-unchecked");
-				}else{
-					nodeEntity.setClassField("jstree-checked");
+				if(!filter.get(geRmsTask.getTaskID()).getFlag().toString().equals("0")){
+					
+					if(n2 > 0 && n2 < n1){
+						nodeEntity.setClassField("jstree-undetermined");
+					}else if(n2 == 0){
+						nodeEntity.setClassField("jstree-unchecked");
+					}else{
+						nodeEntity.setClassField("jstree-checked");
+					}
 				}
 			}
 			nodeEntitys.add(nodeEntity);
@@ -291,7 +296,7 @@ public class TaskServiceImpl implements TaskService{
 			if(CheckTaskIds.contains(task.getTaskID())){
 				task.setFlag("1");
 			}else{
-				task.setFlag("0");
+				task.setFlag("");
 			}
 			
 		}

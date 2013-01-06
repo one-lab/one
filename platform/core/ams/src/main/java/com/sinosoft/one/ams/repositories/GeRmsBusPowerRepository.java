@@ -17,6 +17,10 @@ public interface GeRmsBusPowerRepository extends PagingAndSortingRepository<BusP
 	@SQL("select busPowerId from GE_RMS_BUSPOWER where userPowerId = ?1 and isValidate = '1'")
 	List<String> findBusPowerIdByUserPowerId(String userPowerId);
 	
+	//删除相应的记录，根据ID
+	@SQL("delete from GE_RMS_BUSPOWER where busPowerId in (?1)")
+	void deleteBusPower(List<String> userPowerIds);
+	
 	
 	
 }
