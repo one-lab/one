@@ -37,6 +37,7 @@ public class TaskMenuController {
 		Map<String, Task> filter = new HashMap<String, Task>();
 		List<Task> topList = new ArrayList<Task>();
 		for (Task task : showTasks) {
+			task.setFlag("");
 			filter.put(task.getTaskID(), task);
 			if (task.getParent() == null) {
 				topList.add(task);

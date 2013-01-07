@@ -103,24 +103,28 @@ public class CompanyServiceImpl implements CompanyService{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Treeable<NodeEntity> findCompanyByUserCode(String userCode) {
 		List<String> userPowerIds = geRmsUserPowerRepository.findUserPowerIdByUserCode(userCode);
-		List<UserPower> userPowers = (List<UserPower>) geRmsUserPowerRepository.findAll(userPowerIds);
-		
-		List<String> comCodes = new ArrayList<String>();
-		for(UserPower userPower : userPowers){
-			comCodes.add(userPower.getComCode());
-		}
-		List<Company> companies = (List<Company>) companyDao.findAll(comCodes);
-		
 		List<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
 		Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").builder();
-		for(Company company : companies){
-			NodeEntity nodeEntity = new NodeEntity();
-			nodeEntity.setId(company.getComCode());
-			nodeEntity.setTitle(company.getComCName());
-			nodeEntitys.add(nodeEntity);
-		}
 		
- 		return treeable;
+		if(!userPowerIds.isEmpty()){
+			List<UserPower> userPowers = (List<UserPower>) geRmsUserPowerRepository.findAll(userPowerIds);
+			
+			List<String> comCodes = new ArrayList<String>();
+			for(UserPower userPower : userPowers){
+				comCodes.add(userPower.getComCode());
+			}
+			List<Company> companies = (List<Company>) companyDao.findAll(comCodes);
+			
+			for(Company company : companies){
+				NodeEntity nodeEntity = new NodeEntity();
+				nodeEntity.setId(company.getComCode());
+				nodeEntity.setTitle(company.getComCName());
+				nodeEntitys.add(nodeEntity);
+			}
+			
+			
+		}
+		return treeable;
 	}
 
 	
