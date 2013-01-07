@@ -19,7 +19,6 @@ import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
 import com.sinosoft.one.mvc.web.Invocation;
 
-@Transactional
 @Component
 public class TaskAuthServiceImpl implements TaskAuthService{
 

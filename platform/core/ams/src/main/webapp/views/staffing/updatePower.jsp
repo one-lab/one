@@ -77,8 +77,11 @@ $(function(){
 				groupName = $First.text();
 		        $(".setup_box").eq(0).children("ul").html(temVal);
 				$(".setup_box").eq(0).show();
-				
-				showRoles(groupId,comCode);	
+				if(groupId != null){
+					showRoles(groupId,comCode);	
+				}else{
+					alert("无已被引入用户组！");
+				}
 				
 			},
 			error : function(){
@@ -138,7 +141,7 @@ function showRoles(id,comCode){
 
 		},
 		error : function(){
-			alert("操作失败！！");
+			alert("操作失败或用户组无角色！！");
 		}
 
 	});
@@ -407,7 +410,7 @@ function ajaxMethodOne(thisLi) {
 			url : "${ctx}/staffing/roleList/"+thisLi.id+"/"+comCode,
 			type : "get",
 			success : function(data){
-				
+				roleIdStr = "";
 				var temVal = "";
 				if(data != null)
 					for(var i=0;i<data.length;i++){
@@ -430,8 +433,11 @@ function ajaxMethodOne(thisLi) {
 				if($(".setup_box").eq(2).children("ul").html() != ""){
 					$(".setup_box").eq(2).children("ul").html("");
 				}
-				
-				taskList_2(comCode,roleIdStr);
+				if(roleIdStr != ""){
+					taskList_2(comCode,roleIdStr);
+				}else{
+					alert("无角色！");
+				}
 			},
 			error : function(){
 				alert("操作失败！！");
@@ -453,6 +459,7 @@ function ajaxMethodOne(thisLi) {
 }
 
 function taskList_2(comCode,roleIdStr){
+
 	$.ajax({
 		url : "${ctx}/staffing/taskList/"+comCode+"/"+roleIdStr,
 		type : "get",

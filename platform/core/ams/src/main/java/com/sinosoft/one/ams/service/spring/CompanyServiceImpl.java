@@ -16,7 +16,6 @@ import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.ams.utils.uiutil.Treeable;
 
-@Transactional
 @Component
 public class CompanyServiceImpl implements CompanyService{
 	

@@ -97,21 +97,30 @@ public class StaffingServiceImpl implements StaffingService{
 //			geRmsUserPowerRepository.delete(userPower);
 //			删除关联用户组记录
 			List<UserGroup> userGroups = userPower.getUserGroups();
-			System.out.println(userGroups.size());
-			List<String> userGroupIds = new ArrayList<String>();
-			for(UserGroup ug : userGroups){
-				userGroupIds.add(ug.getUserGropuID());
+			if(!userGroups.isEmpty()){
+				
+				System.out.println(userGroups.size());
+				List<String> userGroupIds = new ArrayList<String>();
+				for(UserGroup ug : userGroups){
+					userGroupIds.add(ug.getUserGropuID());
+				}
+				geRmsUserGroupRepository.deleteUserPower(userGroupIds);
+//			geRmsUserGroupRepository.delete(userGroups);
 			}
-			geRmsUserGroupRepository.deleteUserPower(userGroupIds);
 
 			//删除关联权限除外表记录
 			List<ExcPower> excPowers = userPower.getExcPowers();
 			System.out.println(excPowers.size());
-			List<String> excPowerIds = new ArrayList<String>();
-			for(ExcPower ep : excPowers){
-				excPowerIds.add(ep.getExcPowerID());
+			if(!excPowers.isEmpty()){
+				
+				List<String> excPowerIds = new ArrayList<String>();
+				for(ExcPower ep : excPowers){
+					excPowerIds.add(ep.getExcPowerID());
+				}
+				
+				geRmsExcPowerRepository.deleteExcPower(excPowerIds);
+//				geRmsExcPowerRepository.delete(excPowers);
 			}
-			geRmsExcPowerRepository.deleteExcPower(excPowerIds);
 			
 			String[]groupIds = groupIdStr.split(",");
 			if(groupIds.length > 0){

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.ExcPower;
@@ -22,7 +21,6 @@ import com.sinosoft.one.ams.utils.uiutil.Treeable;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.mvc.web.Invocation;
 
-@Transactional
 @Component
 public class TaskServiceImpl implements TaskService{
 	
@@ -40,6 +38,23 @@ public class TaskServiceImpl implements TaskService{
 		Task task = geRmsTaskRepository.findOne(taskId);
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
 		String taskAuthId = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getCompany().getComCode(), task.getTaskID());
+		
+		if(task.getName() == null){
+			task.setName("");
+		}
+		if(task.getMenuName() == null){
+			task.setMenuName("");
+		}
+		if(task.getMenuURL() == null){
+			task.setMenuURL("");
+		}
+
+		if(task.getDes() == null){
+			task.setDes("");
+		}
+		if(task.getIsAsMenu() == null){
+			task.setIsAsMenu("");
+		}
 		
 		//判断此功能的功能授权是默认类型，还是所有可见类型
 		if(taskAuthId != null){
