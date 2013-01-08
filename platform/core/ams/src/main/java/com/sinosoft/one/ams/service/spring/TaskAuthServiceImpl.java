@@ -165,17 +165,17 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 								count++;
 							}
 						}
-					//子节点全部被选中，父节点为选中
-					if(count == nodeEntity.getChildren().size()){
-						nodeEntity.setClassField("jstree-checked jstree-open");
-						
-						//子节点部分被选中，父节点的checkbox的状态为jstree-undetermined
-					}else if(count>0){
-						nodeEntity.setClassField("jstree-undetermined jstree-open");
-					}else{
-						//子节点全没选中，父节点的checkbox的状态为jstree-unchecked
-						nodeEntity.setClassField("jstree-unchecked");
-					}
+						//子节点全部被选中，父节点为选中
+						if(count == nodeEntity.getChildren().size()){
+							nodeEntity.setClassField("jstree-checked jstree-open");
+							
+							//子节点部分被选中，父节点的checkbox的状态为jstree-undetermined
+						}else if(count>0){
+							nodeEntity.setClassField("jstree-undetermined jstree-open");
+						}else{
+							//子节点全没选中，父节点的checkbox的状态为jstree-unchecked
+							nodeEntity.setClassField("jstree-unchecked");
+						}
 					}
 				}
 				
