@@ -1,4 +1,4 @@
-package com.sinosoft.one.ams.controllers.role;
+package com.sinosoft.one.amsview.controllers.role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,20 +18,20 @@ import com.sinosoft.one.ams.model.RoleDesignateInfo;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.RoleService;
-import com.sinosoft.one.ams.utils.uiutil.GridRender;
-import com.sinosoft.one.ams.utils.uiutil.Gridable;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.Render;
-import com.sinosoft.one.ams.utils.uiutil.TreeRender;
-import com.sinosoft.one.ams.utils.uiutil.Treeable;
-import com.sinosoft.one.ams.utils.uiutil.UIType;
-import com.sinosoft.one.ams.utils.uiutil.UIUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.uiutil.GridRender;
+import com.sinosoft.one.uiutil.Gridable;
+import com.sinosoft.one.uiutil.Render;
+import com.sinosoft.one.uiutil.TreeRender;
+import com.sinosoft.one.uiutil.Treeable;
+import com.sinosoft.one.uiutil.UIType;
+import com.sinosoft.one.uiutil.UIUtil;
 
 @Path
 public class RoleController {

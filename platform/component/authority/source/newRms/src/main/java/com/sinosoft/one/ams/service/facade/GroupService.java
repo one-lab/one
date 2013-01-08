@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.Role;
-import com.sinosoft.one.ams.utils.uiutil.Gridable;
+import com.sinosoft.one.uiutil.Gridable;
 
 @Service
 public interface GroupService {

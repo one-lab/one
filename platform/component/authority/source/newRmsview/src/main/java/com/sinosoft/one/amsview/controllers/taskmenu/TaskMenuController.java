@@ -1,4 +1,4 @@
-package com.sinosoft.one.ams.controllers.taskmenu;
+package com.sinosoft.one.amsview.controllers.taskmenu;
 
 
 import java.util.ArrayList;
@@ -12,10 +12,6 @@ import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.TreeRender;
-import com.sinosoft.one.ams.utils.uiutil.Treeable;
-import com.sinosoft.one.ams.utils.uiutil.UIType;
-import com.sinosoft.one.ams.utils.uiutil.UIUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -23,6 +19,10 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+import com.sinosoft.one.uiutil.TreeRender;
+import com.sinosoft.one.uiutil.Treeable;
+import com.sinosoft.one.uiutil.UIType;
+import com.sinosoft.one.uiutil.UIUtil;
 
 @Path
 public class TaskMenuController {

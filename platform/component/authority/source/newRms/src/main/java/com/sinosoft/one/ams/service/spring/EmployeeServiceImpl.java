@@ -13,7 +13,7 @@ import com.sinosoft.one.ams.repositories.CompanyDao;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
-import com.sinosoft.one.ams.utils.uiutil.Gridable;
+import com.sinosoft.one.uiutil.Gridable;
 
 @Component
 public class EmployeeServiceImpl implements EmployeeService{

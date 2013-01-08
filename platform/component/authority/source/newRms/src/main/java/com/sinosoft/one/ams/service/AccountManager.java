@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.Treeable;
+import com.sinosoft.one.uiutil.Treeable;
 
 /**
  * 公共使用业务接口 人员/机构

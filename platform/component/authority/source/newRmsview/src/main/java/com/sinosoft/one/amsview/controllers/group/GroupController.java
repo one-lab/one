@@ -1,4 +1,4 @@
-package com.sinosoft.one.ams.controllers.group;
+package com.sinosoft.one.amsview.controllers.group;
 
 
 import java.util.ArrayList;
@@ -15,18 +15,17 @@ import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.service.facade.GroupService;
 import com.sinosoft.one.ams.service.facade.RoleService;
-import com.sinosoft.one.ams.utils.uiutil.GridRender;
-import com.sinosoft.one.ams.utils.uiutil.Gridable;
-import com.sinosoft.one.ams.utils.uiutil.Render;
-import com.sinosoft.one.ams.utils.uiutil.UIType;
-import com.sinosoft.one.ams.utils.uiutil.UIUtil;
-import com.sinosoft.one.ams.utils.uiutil.exception.ConverterException;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.uiutil.GridRender;
+import com.sinosoft.one.uiutil.Gridable;
+import com.sinosoft.one.uiutil.Render;
+import com.sinosoft.one.uiutil.UIType;
+import com.sinosoft.one.uiutil.UIUtil;
 
 @Path
 public class GroupController {

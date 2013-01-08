@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.model.Employe;
-import com.sinosoft.one.ams.utils.uiutil.Gridable;
+import com.sinosoft.one.uiutil.Gridable;
 @Service
 public interface EmployeeService {
 	public Employe findEmployeByUserCode(String userCode);

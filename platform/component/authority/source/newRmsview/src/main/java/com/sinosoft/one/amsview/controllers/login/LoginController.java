@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sinosoft.one.ams.controllers.login;
+package com.sinosoft.one.amsview.controllers.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

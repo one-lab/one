@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
@@ -16,8 +15,8 @@ import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.service.facade.TaskAuthService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.Treeable;
 import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.uiutil.Treeable;
 
 @Component
 public class TaskAuthServiceImpl implements TaskAuthService{

@@ -13,13 +13,13 @@ import com.sinosoft.one.ams.model.ExcPower;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.model.UserPower;
+import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.TaskService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.Treeable;
-import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.uiutil.Treeable;
 
 @Component
 public class TaskServiceImpl implements TaskService{

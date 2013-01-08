@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.Treeable;
+import com.sinosoft.one.uiutil.Treeable;
 
 @Service
 public interface CompanyService {

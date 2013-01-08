@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.UserPower;
@@ -14,7 +13,7 @@ import com.sinosoft.one.ams.repositories.CompanyDao;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
-import com.sinosoft.one.ams.utils.uiutil.Treeable;
+import com.sinosoft.one.uiutil.Treeable;
 
 @Component
 public class CompanyServiceImpl implements CompanyService{
