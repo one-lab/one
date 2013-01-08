@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="busDataColumn" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="busDataInfoID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="busDataTable" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="dataRule" type="{http://facade.rms.one.sinosoft.com/}dataRule" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -32,15 +31,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "busDataInfo", propOrder = {
     "busDataColumn",
     "busDataInfoID",
-    "busDataTable",
-    "dataRule"
+    "busDataTable"
 })
 public class BusDataInfo {
 
     protected String busDataColumn;
     protected String busDataInfoID;
     protected String busDataTable;
-    protected DataRule dataRule;
 
     /**
      * Gets the value of the busDataColumn property.
@@ -112,30 +109,6 @@ public class BusDataInfo {
      */
     public void setBusDataTable(String value) {
         this.busDataTable = value;
-    }
-
-    /**
-     * Gets the value of the dataRule property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataRule }
-     *     
-     */
-    public DataRule getDataRule() {
-        return dataRule;
-    }
-
-    /**
-     * Sets the value of the dataRule property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataRule }
-     *     
-     */
-    public void setDataRule(DataRule value) {
-        this.dataRule = value;
     }
 
 }

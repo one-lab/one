@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 public class WebServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Autowired
-	private AccountManager wsAccountManager;
+	private AccountManager accountManager;
 	@Test
 	public void testWebServiceLogin(){
 //		wsAccountManager.findUserByLoginNameWs("admin", "00", "RMS");

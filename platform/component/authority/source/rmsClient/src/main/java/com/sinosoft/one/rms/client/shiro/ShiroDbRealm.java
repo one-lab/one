@@ -32,20 +32,46 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 	}
 		
 	protected AuthenticationInfo doGetAuthenticationInfo(
-			AuthenticationToken authcToken) throws AuthenticationException {
-		LoginToken token = (LoginToken) authcToken;
-		User user = accountManager.findUserByLoginName(token.getUserCode(),token.getComCode(),token.getSysFlag());
-		user.setPlaintextPassWord(token.getPassWord());
-		if (user != null) {
-			if(user.getPassWord()!=null&&!"".equals(user.getPassWord().toString())){
-				return new SimpleAuthenticationInfo(user,user.getPassWord(),getName());
-			}else {
-				return new SimpleAuthenticationInfo(user,EncryptUtils.md5(token.getPassWord()),getName());
+			AuthenticationToken authcToken)  {
+		try {
 			
-			}
-		} else {
-			return null;
+		
+		LoginToken token = (LoginToken) authcToken;
+		if(accountManager.getClass().getSimpleName().equals("AccountManagerLocalImpl")){
+			User user = accountManager.findUserByLoginName(token.getUserCode(),
+					token.getComCode(), token.getSysFlag());
+			user.setPlaintextPassWord(token.getPassWord());
+			if (user != null) {
+				if (user.getPassWord() != null
+						&& !"".equals(user.getPassWord().toString())) {
+					return new SimpleAuthenticationInfo(user,
+							user.getPassWord(), getName());
+				} else {
+					return new SimpleAuthenticationInfo(user,
+							EncryptUtils.md5(token.getPassWord()), getName());
+
+				}
+			} 
+		}else if (accountManager.getClass().getSimpleName().equals("AccountManagerWsImpl")) {
+			com.sinosoft.one.rms.client.webservice.User user = accountManager.findUserByLoginNameWs(token.getUserCode(),
+					token.getComCode(), token.getSysFlag());
+			user.setPlaintextPassWord(token.getPassWord());
+			if (user != null) {
+				if (user.getPassWord() != null
+						&& !"".equals(user.getPassWord().toString())) {
+					return new SimpleAuthenticationInfo(user,
+							user.getPassWord(), getName());
+				} else {
+					return new SimpleAuthenticationInfo(user,
+							EncryptUtils.md5(token.getPassWord()), getName());
+
+				}
+			} 
 		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	protected AuthorizationInfo doGetAuthorizationInfo(

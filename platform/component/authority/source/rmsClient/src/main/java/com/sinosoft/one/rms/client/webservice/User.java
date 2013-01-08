@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="loginComName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="menuList" type="{http://facade.rms.one.sinosoft.com/}menu" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="passWord" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="plaintextPassWord" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="roleIdList" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="taskIdList" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="userCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -43,6 +44,7 @@ import javax.xml.bind.annotation.XmlType;
     "loginComName",
     "menuList",
     "passWord",
+    "plaintextPassWord",
     "roleIdList",
     "taskIdList",
     "userCode",
@@ -57,6 +59,7 @@ public class User {
     @XmlElement(nillable = true)
     protected List<Menu> menuList;
     protected String passWord;
+    protected String plaintextPassWord;
     @XmlElement(nillable = true)
     protected List<String> roleIdList;
     @XmlElement(nillable = true)
@@ -192,6 +195,30 @@ public class User {
      */
     public void setPassWord(String value) {
         this.passWord = value;
+    }
+
+    /**
+     * Gets the value of the plaintextPassWord property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPlaintextPassWord() {
+        return plaintextPassWord;
+    }
+
+    /**
+     * Sets the value of the plaintextPassWord property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPlaintextPassWord(String value) {
+        this.plaintextPassWord = value;
     }
 
     /**
