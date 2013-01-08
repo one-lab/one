@@ -9,7 +9,7 @@
   <artifactId>ams</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <properties>
+  <properties>   
         <!-- oracle driver configuration -->
         <jdbc.driver.groupId>oracle</jdbc.driver.groupId>
         <jdbc.driver.artifactId>ojdbc</jdbc.driver.artifactId>
