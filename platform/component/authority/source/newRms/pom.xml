@@ -7,17 +7,8 @@
   </parent>
   <artifactId>newRms</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <properties>   
-        <!-- oracle driver configuration -->
-        <jdbc.driver.groupId>oracle</jdbc.driver.groupId>
-        <jdbc.driver.artifactId>ojdbc</jdbc.driver.artifactId>
-        <jdbc.driver.version>5</jdbc.driver.version>
-        <!-- mysql driver configuration -->
-        <!--<jdbc.driver.groupId>mysql</jdbc.driver.groupId>
-        <jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
-        <jdbc.driver.version>5.1.20</jdbc.driver.version>-->
-    </properties>
+  <packaging>jar</packaging>
+
   <dependencies>
 	<dependency>  
 		<groupId>com.sinosoft.one</groupId>  
@@ -28,11 +19,6 @@
 	    <groupId>com.sinosoft.one</groupId>
 	    <artifactId>util</artifactId>
 	    <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-	<dependency>
-        <groupId>com.sinosoft.one</groupId>
-        <artifactId>data</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
     </dependency>
 	<dependency>
 		<groupId>javax.servlet</groupId>
