@@ -250,7 +250,7 @@ function ajaxMethodOne(thisLi) {
 			url : "${ctx}/staffing/roleList/"+thisLi.id+"/"+comCode,
 			type : "get",
 			success : function(data){
-				
+				roleIdStr = "";
 				var temVal = "";
 				if(data != null)
 					for(var i=0;i<data.length;i++){
@@ -273,8 +273,11 @@ function ajaxMethodOne(thisLi) {
 				if($(".setup_box").eq(2).children("ul").html() != ""){
 					$(".setup_box").eq(2).children("ul").html("");
 				}
-				
-				showTask_2(comCode,roleIdStr);
+				if(roleIdStr != ""){
+					showTask_2(comCode,roleIdStr);
+				}else{
+					alert("此用户组无角色！");
+				}
 			},
 			error : function(){
 				alert("操作失败！！");
