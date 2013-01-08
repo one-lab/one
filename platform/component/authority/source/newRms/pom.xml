@@ -5,8 +5,7 @@
         <artifactId>parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>ams</groupId>
-  <artifactId>ams</artifactId>
+  <artifactId>newRms</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>   
