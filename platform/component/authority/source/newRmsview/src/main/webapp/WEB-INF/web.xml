@@ -26,7 +26,7 @@
   </filter-mapping>
   
   <welcome-file-list>
-  	<welcome-file>/views/login/login,jsp</welcome-file>
+  	<welcome-file>/views/login/login.jsp</welcome-file>
   
   </welcome-file-list>
 </web-app>
