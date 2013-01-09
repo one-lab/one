@@ -240,11 +240,12 @@ public class RoleController {
 				NodeEntity nodeEntity = new NodeEntity();
 				nodeEntity.setId(geRmsTask.getTaskID());
 				nodeEntity.setTitle(geRmsTask.getName());
-				for (Task checkTask : checkedTask) {
-					if(geRmsTask.getTaskID().toString().equals(checkTask.getTaskID().toString())){
-						nodeEntity.setClassField("jstree-checked");
+				if(checkedTask != null)
+					for (Task checkTask : checkedTask) {
+						if(geRmsTask.getTaskID().toString().equals(checkTask.getTaskID().toString())){
+							nodeEntity.setClassField("jstree-checked");
+						}
 					}
-				}
 				if(!geRmsTask.getChildren().isEmpty()){
 					nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter,checkedTask));
 				}
