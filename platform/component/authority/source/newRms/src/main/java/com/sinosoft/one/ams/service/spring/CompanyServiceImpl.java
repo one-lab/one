@@ -12,7 +12,7 @@ import com.sinosoft.one.ams.model.UserPower;
 import com.sinosoft.one.ams.repositories.CompanyDao;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.CompanyService;
-import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
+import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Treeable;
 
 @Component

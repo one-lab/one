@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sinosoft.one.ams.utils;
+package com.sinosoft.one.amsview.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

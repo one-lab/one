@@ -37,6 +37,7 @@
 			alert("密码不能为空！！");
 			return ;
 		}
+		alert("${ctx}");
 		document.forms[0].submit();	
 	}
 

@@ -3,7 +3,7 @@ package com.sinosoft.one.ams.service.facade;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.model.TaskAuth;
-import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
+import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Treeable;
 
 @Service
