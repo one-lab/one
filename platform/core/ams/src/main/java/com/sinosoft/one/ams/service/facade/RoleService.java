@@ -32,6 +32,7 @@ public interface RoleService {
 
 	public Page<RoleDesignateInfo> findRoleDesignate(String superComCode ,String comCode,Pageable pageable);
 	
+	//根据用户组ID查询相应的角色
 	public List<Role> findRoleByGroupId(String groupId,String comCode);
 	//更新角色
 	public void updateRole(String roleid,String comCode,String userCode,String name,String des,String roleTpe,List<String> taskids);

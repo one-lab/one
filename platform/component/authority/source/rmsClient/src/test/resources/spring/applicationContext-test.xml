@@ -18,25 +18,6 @@
     default-autowire="byName" default-lazy-init="true">
 
     <description>Spring测试环境配置文件</description>
-	
-    <context:annotation-config />
-    <!-- 使用annotation定义Aspect -->
-	<aop:aspectj-autoproxy /> 
-
-	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
-    <context:component-scan base-package="com.sinosoft.one" />
-    
-    
-    <bean id="testService" class="com.sinosoft.test.AnnotationTestService"></bean>
-   	   
-   	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor"></bean>
-   
-   	<bean id= "rmsSQLParser" class="com.sinosoft.one.rms.client.sqlparser.RmsSQLParserSupport" ></bean>
-   	
-     <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceImpl"></bean>
-    
-    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceImpl"></bean>
-    
    
     <!-- 定义受环境影响易变的变量 -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -55,6 +36,26 @@
             </list>
         </property>
     </bean>
+    
+     <context:annotation-config />
+    <!-- 使用annotation定义Aspect -->
+	<aop:aspectj-autoproxy /> 
+
+	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
+    <context:component-scan base-package="com.sinosoft.one" />
+    <bean id="accountManager" class="${loginServiceImplClass}">
+	</bean>
+	
+    <bean id="testService" class="com.sinosoft.test.AnnotationTestService"></bean>
+   	   
+   	<bean id="dataRuleFactory" class="com.sinosoft.one.rms.client.DataRuleFactoryPostProcessor"></bean>
+   
+   	<bean id= "rmsSQLParser" class="com.sinosoft.one.rms.client.sqlparser.RmsSQLParserSupport" ></bean>
+   	
+     <bean id="employeServiceInterface" class="com.sinosoft.one.rms.service.spring.EmployeServiceImpl"></bean>
+    
+    <bean id="companyServiceInterface" class="com.sinosoft.one.rms.service.spring.CompanyServiceImpl"></bean>
+    
 	<!-- 大对象处理器 -->
 	<bean id="lobHandler" lazy-init="true"
 		class="org.springframework.jdbc.support.lob.DefaultLobHandler" />

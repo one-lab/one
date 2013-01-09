@@ -45,7 +45,7 @@ $(function(){
 		}
 	}).bind("select_node.jstree", function(e, data){
 		comCode = data.rslt.obj.attr("id");
-		comCName = data.rslt.obj.find("a").text();
+		comCName = data.rslt.obj.find("a").eq(0).text();
 		$(".set_info").attr("id" , comCode);
 		$(".set_info").find("span").text(comCName);
 		var temVal = "";
@@ -136,6 +136,10 @@ function addSelect(obj,event) {
 		$(".setup_box").eq(0).find("ul").find("#"+id).removeClass("select");
 		$("#"+id+"Task").remove();
 		$("#"+id+"Role").remove();
+		
+		if($(".setup_box").eq(0).find(".select").length == 0){
+			$(".set_info").hide();
+		}
 		event.stopPropagation();
 	} else {
 		event.stopPropagation();
@@ -181,6 +185,7 @@ function addSelect(obj,event) {
 				}
 			});
 		}
+		
 		
 	}
 
@@ -245,7 +250,7 @@ function ajaxMethodOne(thisLi) {
 			url : "${ctx}/staffing/roleList/"+thisLi.id+"/"+comCode,
 			type : "get",
 			success : function(data){
-				
+				roleIdStr = "";
 				var temVal = "";
 				if(data != null)
 					for(var i=0;i<data.length;i++){
@@ -268,8 +273,11 @@ function ajaxMethodOne(thisLi) {
 				if($(".setup_box").eq(2).children("ul").html() != ""){
 					$(".setup_box").eq(2).children("ul").html("");
 				}
-				
-				showTask_2(comCode,roleIdStr);
+				if(roleIdStr != ""){
+					showTask_2(comCode,roleIdStr);
+				}else{
+					alert("此用户组无角色！");
+				}
 			},
 			error : function(){
 				alert("操作失败！！");
@@ -343,7 +351,7 @@ function ajaxMethodThree(thisLi) {
 			},
 			"json_data":{
 				"ajax":{
-					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId
+					"url":"${ctx}/staffing/taskChildren/"+comCode+"/"+roleIdStr+"/"+thisId+"/null"
 				}
 			},
 			"plugins":["themes","json_data","checkbox","ui"]

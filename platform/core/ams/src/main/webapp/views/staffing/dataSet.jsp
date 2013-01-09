@@ -102,7 +102,9 @@ function dataRuleParam(comCode){
 			$("#sel_1").append($(optionSel_1));
 			
 			//显示参数
-			params(comCode,dataRuleIdStr);
+			if(dataRuleIdStr != ""){
+				params(comCode,dataRuleIdStr);
+			}
 		},
 		error : function(){
 			alert("操作失败！！");

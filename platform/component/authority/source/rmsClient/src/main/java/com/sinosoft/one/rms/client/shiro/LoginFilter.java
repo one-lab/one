@@ -59,17 +59,21 @@ public class LoginFilter extends AuthenticatingFilter {
 
 	//必须重写的方法 对所拦截链接的处理
 	public boolean onAccessDenied(ServletRequest request,
-			ServletResponse response) throws Exception {
-		if (isLoginRequest(request, response)) {//是否登录的请求
-			if (isLoginSubmission(request, response)) {//是否登陆请求的提交
-				return executeLogin(request, response);//拦截的是登陆链接则返回executeLogin
-			} else {
+			ServletResponse response) throws Exception  {
+		
+			if (isLoginRequest(request, response)) {//是否登录的请求
+				System.out.println("请求");
+				if (isLoginSubmission(request, response)) {//是否登陆请求的提交
+					System.out.println("提交");
+					return executeLogin(request, response);//拦截的是登陆链接则返回executeLogin
+				} else {
 				return true;
+				}
+			} else {
+				saveRequestAndRedirectToLogin(request, response);
+				return false;
 			}
-		} else {
-			saveRequestAndRedirectToLogin(request, response);
-			return false;
-		}
+		
 	}
 	
 	public boolean isLoginSubmission(ServletRequest request,

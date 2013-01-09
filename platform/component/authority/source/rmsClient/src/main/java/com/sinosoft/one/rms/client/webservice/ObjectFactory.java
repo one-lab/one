@@ -43,11 +43,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DataRule }
+     * Create an instance of {@link BusDataInfo }
      * 
      */
-    public DataRule createDataRule() {
-        return new DataRule();
+    public BusDataInfo createBusDataInfo() {
+        return new BusDataInfo();
     }
 
     /**
@@ -72,14 +72,6 @@ public class ObjectFactory {
      */
     public DataPower createDataPower() {
         return new DataPower();
-    }
-
-    /**
-     * Create an instance of {@link BusDataInfo }
-     * 
-     */
-    public BusDataInfo createBusDataInfo() {
-        return new BusDataInfo();
     }
 
     /**

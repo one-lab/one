@@ -87,15 +87,15 @@ function openWindow(obj){
 
 			} 
 			}, {
-			"id": "btTwo",
-			"btClass": "def_btn",
-			"value": "取 消",
-			"btFun": function() {
-				
-				$("#window1").remove();
-				$(".all_shadow").remove();
+				"id": "btTwo",
+				"btClass": "def_btn",
+				"value": "取 消",
+				"btFun": function() {
+					
+					$("#window1").remove();
+					$(".all_shadow").remove();
+					}
 				}
-			}
 		]
 	});
 }
@@ -137,9 +137,10 @@ function openQX(obj) {
 				$.ajax({
 					url : "${ctx}/staffing/savePower/"+comCode +"/"+userCode+"/"+groupIdStr+"/"+taskIdStr,
 					success : function(data){
-						msgSuccess("", "保存成功！");
-						$("#window2").remove();
-						$(".all_shadow").remove();	
+						msgSuccess("", "保存成功！",function(){
+							window.parent.frames[0].location.reload();
+						});
+						
 					},
 					error : function(){
 						alert("操作失败！");

@@ -17,25 +17,17 @@ import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 
 
-//import com.sinosoft.exception.SystemException;
-
-
-
 public class CastorConvert {
-	
-	
 
 	/**
-	 * custor编码格式
+	 * castor编码格式
 	 */
-	private String code = "GBK";
+	private String code = "UTF-8";
 	
 	public void setEncode(String code){
 		this.code = code;
 	}
-	
-	
-	
+
 	/**
 	 * 缓存的文件Map数据
 	 */
@@ -43,7 +35,7 @@ public class CastorConvert {
 	
 	/**
 	 * 对象转换为报文
-	 * @param cardMapping
+	 * @param xmlMapping
 	 * @param fileName
 	 * @return
 	 * @throws Exception
@@ -69,10 +61,9 @@ public class CastorConvert {
 	
 	/**
 	 * 对象转换为报文
-	 * @param cardMapping
-	 * @param fileName
+	 * @param xmlMapping
+	 * @param url
 	 * @return
-	 * @throws Exception
 	 */
 	public String boToXml(Object xmlMapping,URL url){
 		try {
@@ -86,7 +77,7 @@ public class CastorConvert {
 			marshaller.marshal(xmlMapping);
 			return byteArrayOutputStream.toString(code);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("",e);
 		}
 	}
 	
@@ -94,7 +85,6 @@ public class CastorConvert {
 	 * 将返回报文转换为业务对象
 	 * @param responseXml
 	 * @param fileName
-	 * @throws Exception
 	 */
 	public  Object xmlToBO(String responseXml,String fileName){
 		try {
@@ -114,8 +104,7 @@ public class CastorConvert {
 	/**
 	 * 将返回报文转换为业务对象
 	 * @param responseXml
-	 * @param fileName
-	 * @throws Exception
+	 * @param url
 	 */
 	public Object xmlToBO(String responseXml,URL url){
 		try {

@@ -39,6 +39,23 @@ public class TaskServiceImpl implements TaskService{
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
 		String taskAuthId = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getCompany().getComCode(), task.getTaskID());
 		
+		if(task.getName() == null){
+			task.setName("");
+		}
+		if(task.getMenuName() == null){
+			task.setMenuName("");
+		}
+		if(task.getMenuURL() == null){
+			task.setMenuURL("");
+		}
+
+		if(task.getDes() == null){
+			task.setDes("");
+		}
+		if(task.getIsAsMenu() == null){
+			task.setIsAsMenu("");
+		}
+		
 		//判断此功能的功能授权是默认类型，还是所有可见类型
 		if(taskAuthId != null){
 			task.setFlag("");
@@ -162,11 +179,30 @@ public class TaskServiceImpl implements TaskService{
 			NodeEntity nodeEntity = new NodeEntity();
 			nodeEntity.setId(geRmsTask.getTaskID());
 			nodeEntity.setTitle(geRmsTask.getName());
-			if(!filter.get(geRmsTask.getTaskID()).getFlag().toString().equals("1"))
+			if(!filter.get(geRmsTask.getTaskID()).getFlag().toString().equals("1")){
 				nodeEntity.setClassField("jstree-checked");
+			}else{
+				nodeEntity.setClassField("jstree-unchecked");
+			}
 			if(!geRmsTask.getChildren().isEmpty()){
 				nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter));
-				
+				int n1 = nodeEntity.getChildren().size();
+				int n2 = 0;
+				for(NodeEntity no : nodeEntity.getChildren()){
+					if(no.getClassField().equals("jstree-checked")){
+						n2 ++;
+					}
+				}
+				if(!filter.get(geRmsTask.getTaskID()).getFlag().toString().equals("0")){
+					
+					if(n2 > 0 && n2 < n1){
+						nodeEntity.setClassField("jstree-undetermined");
+					}else if(n2 == 0){
+						nodeEntity.setClassField("jstree-unchecked");
+					}else{
+						nodeEntity.setClassField("jstree-checked");
+					}
+				}
 			}
 			nodeEntitys.add(nodeEntity);
 			}
@@ -275,7 +311,7 @@ public class TaskServiceImpl implements TaskService{
 			if(CheckTaskIds.contains(task.getTaskID())){
 				task.setFlag("1");
 			}else{
-				task.setFlag("0");
+				task.setFlag("");
 			}
 			
 		}

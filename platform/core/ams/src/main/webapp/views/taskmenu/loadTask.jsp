@@ -16,7 +16,7 @@
 <script type="text/javascript" src="${ctx}/js/sinosoft.message.js"></script>
 <script type="text/javascript" src="${ctx}/js/sinosoft.mouseoutclick.js"></script>
 <script type="text/javascript">
-$(function(){
+$(function taskTree(){
 	$("#treeOne").jstree({
 		"themes" : {
 			"dots" : false,
@@ -42,13 +42,19 @@ $(function(){
 				$(".taskID").val(data.taskID);
 				$(".name").val(data.name);
 				$(".menuName").val(data.menuName);
-				$(".parentID").val(data.parent.taskID);
-				$(".parentName").val(data.parent.name);
 				$(".menuURL").val(data.menuURL);
 				$(".des").val(data.des);
 				$(".isValidate").val(data.isValidate);
 				$(".isAsMenu").val(data.isAsMenu);
 				$(".flag").val(data.flag);
+				if(data.parent != null){
+					$(".parentID").val(data.parent.taskID);
+					$(".parentName").val(data.parent.name);
+				}else{
+					$(".parentID").val("");
+					$(".parentName").val("");
+				}
+				
 			},
 			error:function(){
 				alert("失败！");
@@ -78,6 +84,7 @@ $(function(){
 		$(".parentID").val(taskId);
 		$("#rightBox").hide();
 	});
+
 /*	.bind("is_select", function(){
 		alert($(this).attr("id"))
 		$(this).find('.select').removeClass("select");
@@ -116,7 +123,6 @@ function evevtCheck(){
 	}else{
 		var parentId = $(".parentID").val();
 		
-		alert(parentId);
 		$.ajax({
 			type:"post",
 			url:"${ctx}/taskmenu/saveTask/"+parentId,
@@ -132,7 +138,11 @@ function evevtCheck(){
 			},
 			dataType:"json",
 			success:function(d1,d2){
-				msgSuccess("", "保存成功！");
+				msgSuccess("", "保存成功！",function(){
+					
+					window.parent.frames[0].location.reload();
+					
+				});
 			},
 			error:function(){
 				alert("添加失败！");

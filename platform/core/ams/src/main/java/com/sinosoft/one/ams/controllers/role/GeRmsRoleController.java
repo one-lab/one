@@ -241,6 +241,7 @@ public class GeRmsRoleController {
 				NodeEntity nodeEntity = new NodeEntity();
 				nodeEntity.setId(geRmsTask.getTaskID());
 				nodeEntity.setTitle(geRmsTask.getName());
+				if(checkedTask != null)
 				for (Task checkTask : checkedTask) {
 					if(geRmsTask.getTaskID().toString().equals(checkTask.getTaskID().toString())){
 						nodeEntity.setClassField("jstree-checked");

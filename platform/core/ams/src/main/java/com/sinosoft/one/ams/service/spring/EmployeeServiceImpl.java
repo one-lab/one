@@ -14,6 +14,7 @@ import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
 import com.sinosoft.one.ams.utils.uiutil.Gridable;
+
 @Component
 public class EmployeeServiceImpl implements EmployeeService{
 
@@ -25,10 +26,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 	private CompanyDao companyDao;
 	
 	public Employe findEmployeByUserCode(String userCode) {
-		Employe employe =new Employe();
-		employe=userDao.findOne(userCode);
-		Company company=companyDao.findOne(employe.getCompany().getComCode());
-		employe.setCompany(company);
+		System.out.println(userCode);
+		Employe employe = userDao.findOne(userCode);
+		System.out.println(employe.getUserName());
+		
 		return employe;
 	}
 

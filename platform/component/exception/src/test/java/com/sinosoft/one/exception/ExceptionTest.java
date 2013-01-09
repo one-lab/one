@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
  */
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-exception.xml",
-        "/spring/applicationContext-notification.xml", "/spring/applicationContext-exception-test.xml" })
+        "/spring/applicationContext-monitorAgent.xml", "/spring/applicationContext-exception-test.xml" })
 public class ExceptionTest extends AbstractJUnit4SpringContextTests {
 
     @Autowired
