@@ -20,7 +20,10 @@ import org.slf4j.LoggerFactory;
 public final class ExceptionConfigInit {
 
     private static boolean isFinishInit = false;
+
     private String exceptionConfigPath;
+
+    private static final String XML_DEFAULT_ENCODE = "UTF-8";
 
     /**
      * 初始化
@@ -51,6 +54,7 @@ public final class ExceptionConfigInit {
                 String filePath = getFilePath(exceptionConfigPath);
                 File file = new File(filePath);
                 Document document = new SAXReader().read(file);
+                document.setXMLEncoding(XML_DEFAULT_ENCODE);
                 /**
                  * 解析配置文件，初始化userExceptionMap
                  */
