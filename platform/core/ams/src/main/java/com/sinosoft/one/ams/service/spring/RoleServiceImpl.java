@@ -82,7 +82,11 @@ public class RoleServiceImpl implements RoleService{
 		List<String> taskIds=geRmsTaskAuthRepository.findTaskAuthByRole(roleids);
 		//根据授权获得的功能ID获取功能集合
 //		List<Task> geRmsTasks =geRmsTaskRepository.findTaskByTaskIds(taskIds);
-		List<Task> geRmsTasks=(List<Task>) geRmsTaskRepository.findAll(taskIds);
+		List<Task> geRmsTasks = null;
+		if(!taskIds.isEmpty()){
+			
+			geRmsTasks = (List<Task>) geRmsTaskRepository.findAll(taskIds);
+		}
 		return geRmsTasks;
 	}
 	

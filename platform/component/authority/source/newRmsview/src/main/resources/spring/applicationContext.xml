@@ -19,6 +19,7 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
+	
 	<!-- Jpa Entity Manager 配置 -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
 		<property name="dataSource" ref="dataSource"/> 
@@ -33,6 +34,7 @@
 		</property>
 	</bean>
 	
+
 	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="databasePlatform">
             <bean factory-method="getDialect" class="com.sinosoft.one.amsview.utils.Hibernates">
@@ -40,10 +42,11 @@
             </bean>
         </property>
     </bean>
-	
+    
 	<!-- Spring Data Jpa配置 -->
  	<onejpa:repositories base-package="com.sinosoft.one.ams"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
 	
+		
 	<!-- Jpa 事务配置 -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
