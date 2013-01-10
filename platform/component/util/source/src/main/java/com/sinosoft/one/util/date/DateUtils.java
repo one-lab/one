@@ -100,7 +100,7 @@ public class DateUtils {
 	/**
 	 * 增加日，返回一个new date
 	 * @param date
-	 * @param month
+	 * @param day
 	 * @return
 	 */
 	public final static Date addDay(Date date,int day){

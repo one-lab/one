@@ -18,7 +18,6 @@ import com.sinosoft.one.log.urltrace.URLTraceLog;
 import com.sinosoft.one.log.userbehavior.UserBehaviorLog;
 import com.sinosoft.one.monitoragent.notification.NotificationEvent;
 import com.sinosoft.one.monitoragent.notification.NotificationModule;
-import com.sinosoft.one.monitoragent.notification.service.facade.NotificationService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

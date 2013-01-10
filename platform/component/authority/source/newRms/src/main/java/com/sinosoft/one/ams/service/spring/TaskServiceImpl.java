@@ -17,8 +17,8 @@ import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.TaskService;
-import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Treeable;
 
 @Component

@@ -301,7 +301,9 @@ public class AnnotationConfigValidator implements ParamValidator{
         String[] params = StringUtils.substringsBetween(errorPath, "{", "}");
         if(params != null && params.length > 0) {
             for(String param : params) {
-                String paramValue = inv.getParameter(param);
+                String paramValue = StringUtils.substringBefore(param,":").trim();
+                paramValue = StringUtils.stripToEmpty(inv.getParameter(
+                        StringUtils.substringBefore(param,":").trim()));
                 errorPath = errorPath.replace("{" + param + "}", paramValue);
             }
         }

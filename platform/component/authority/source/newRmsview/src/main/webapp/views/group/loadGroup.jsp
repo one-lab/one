@@ -99,10 +99,11 @@ function openUpdateWindow(obj){
 		 						url : "${ctx}/group/update/"+groupid+"/"+name+"/"+groupType+"/"+roleid+"/"+des,
 		 						type : "post",
 		 						success : function(data){
-		 							msgSuccess("", "保存成功！");
+		 							msgSuccess("", "保存成功！",function(){
+		 								window.parent.frames[0].location.reload();
+		 							});
 		 							$("#window1").remove();
 		 							$(".all_shadow").remove();
-		 							loadGroup();
 		 						},
 		 						error : function(){
 		 							alert("新增失败！！");

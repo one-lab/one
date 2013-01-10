@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Task;
-import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
+import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Treeable;
 
 /**

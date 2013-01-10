@@ -18,7 +18,6 @@ import com.sinosoft.one.ams.model.RoleDesignateInfo;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.RoleService;
-import com.sinosoft.one.ams.utils.uiutil.NodeEntity;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -27,6 +26,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
+import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Render;
 import com.sinosoft.one.uiutil.TreeRender;
 import com.sinosoft.one.uiutil.Treeable;
@@ -240,11 +240,12 @@ public class RoleController {
 				NodeEntity nodeEntity = new NodeEntity();
 				nodeEntity.setId(geRmsTask.getTaskID());
 				nodeEntity.setTitle(geRmsTask.getName());
-				for (Task checkTask : checkedTask) {
-					if(geRmsTask.getTaskID().toString().equals(checkTask.getTaskID().toString())){
-						nodeEntity.setClassField("jstree-checked");
+				if(checkedTask != null)
+					for (Task checkTask : checkedTask) {
+						if(geRmsTask.getTaskID().toString().equals(checkTask.getTaskID().toString())){
+							nodeEntity.setClassField("jstree-checked");
+						}
 					}
-				}
 				if(!geRmsTask.getChildren().isEmpty()){
 					nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),filter,checkedTask));
 				}
