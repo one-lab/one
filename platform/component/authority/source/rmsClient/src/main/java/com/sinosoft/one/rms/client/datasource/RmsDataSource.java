@@ -51,9 +51,6 @@ public class RmsDataSource implements DataSource {
 		return realDataSource.getLoginTimeout();
 	}
 	
-	
-	
-
 	public void setRmsSQLParser(RmsSQLParser rmsSQLParser) {
 		this.rmsSQLParser = rmsSQLParser;
 	}
@@ -62,18 +59,5 @@ public class RmsDataSource implements DataSource {
 			DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor) {
 		this.dataRuleFactoryPostProcessor = dataRuleFactoryPostProcessor;
 	}
-
-	public <T> T unwrap(Class<T> iface) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
-	
 	
 }
