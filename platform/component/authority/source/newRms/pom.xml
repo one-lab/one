@@ -27,6 +27,11 @@
 		</exclusions>
 	</dependency>
 	<dependency>
+  <groupId>com.sinosoft</groupId>
+  <artifactId>ins-arch4</artifactId>
+  <version>4.2.7</version>
+</dependency>
+	<dependency>
 			<groupId>com.sinosoft.one</groupId>
 			<artifactId>util</artifactId> 
 			<version>1.0.1-SNAPSHOT</version>

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +20,9 @@ import com.sinosoft.one.uiutil.Treeable;
 @Component
 public class CompanyServiceImpl implements CompanyService{
 	
-	@Autowired
+	@Resource(name="companyDao")
 	private CompanyDao companyDao;
-	@Autowired
+	@Resource(name="geRmsUserPowerRepository")
 	private GeRmsUserPowerRepository geRmsUserPowerRepository;
 
 	//根据Uppercomcode查询出comCode集合

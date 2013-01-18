@@ -2,11 +2,14 @@ package com.sinosoft.one.ams.service.spring;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import com.mysema.query.jpa.impl.JPAQuery;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.repositories.CompanyDao;
@@ -18,18 +21,15 @@ import com.sinosoft.one.uiutil.Gridable;
 @Component
 public class EmployeeServiceImpl implements EmployeeService{
 
-	@Autowired
+	@Resource(name="userDao")
 	private UserDao userDao;
-	@Autowired
+	@Resource(name="geRmsUserPowerRepository")
 	private GeRmsUserPowerRepository geRmsUserPowerRepository;
-	@Autowired
+	@Resource(name="companyDao")
 	private CompanyDao companyDao;
 	
-	public Employe findEmployeByUserCode(String userCode) {
-		System.out.println(userCode);
-		Employe employe = userDao.findOne(userCode);
-		System.out.println(employe.getUserName());
-		
+	public Employe findEmployeByUserCode(String userCode) {	
+		Employe employe = userDao.findUserById(userCode);		
 		return employe;
 	}
 
@@ -103,6 +103,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 		userAttribute.add("newUserCode");
 		gridable.setCellListStringField(userAttribute);
 		return gridable;
+	}
+
+	public Company findComByUserCode(String userCode) {
+		String comCode = userDao.findComCodeByUserCode(userCode);
+		Company com = new Company();
+		if(comCode != null){
+			com = companyDao.findOne(comCode);
+		}else{
+			com.setComCode("");
+		}
+		return com;
 	}
 
 }

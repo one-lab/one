@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.model.Role;
+import com.sinosoft.one.ams.model.RoleDesignate;
 import com.sinosoft.one.ams.model.RoleDesignateInfo;
 import com.sinosoft.one.ams.model.Task;
 
@@ -43,5 +44,8 @@ public interface RoleService {
 	public void deleteRole(String roleId, String comCode);
 	
 	public void designateRole(String roleId, String comCode);
+	
+	//根据机构Id查询角色ID
+	public List<String> findRoleIdByComCode(String comCode);
 	
 }

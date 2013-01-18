@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +25,13 @@ import com.sinosoft.one.uiutil.Gridable;
 @Component
 public class GroupServiceImpl implements GroupService{
 	
-	@Autowired
+	@Resource(name="geRmsGroupRepository")
 	private GeRmsGroupRepository geRmsGroupRepository;
-	@Autowired
+	@Resource(name="geRmsRoleRepository")
 	private GeRmsRoleRepository geRmsRoleRepository;
-	@Autowired
+	@Resource(name="geRmsGroupRoleRepositoriy")
 	private GeRmsGroupRoleRepositoriy geRmsGroupRoleRepositoriy;
-	@Autowired
+	@Resource(name="geRmsUserGroupRepository")
 	private GeRmsUserGroupRepository geRmsUserGroupRepository;
 	
 	
@@ -42,8 +44,8 @@ public class GroupServiceImpl implements GroupService{
 	
 	public Gridable<Group> getGroupGridable(Gridable<Group> gridable,
 			String comCode, String name, Pageable pageable) {
-		Page<Group> page = null;
 		//查询机构下所有可见的角色
+		Page<Group> page = null;
 		page = findGroup(comCode,name,pageable);
 		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
 		List<Group> groups = page.getContent();
@@ -77,8 +79,7 @@ public class GroupServiceImpl implements GroupService{
 
 	public Gridable<Role> getRoleGridableByGroupId(Gridable<Role> gridable,
 			String groupId,String comCode, Pageable pageable) {
-		Page<Role> page =null;
-		page=geRmsRoleRepository.findRole(comCode, pageable);
+		Page<Role> page = geRmsRoleRepository.findRole(comCode, pageable);
 	
 		Group group =geRmsGroupRepository.findOne(groupId);
 		List<String> roleids=new ArrayList<String>();
@@ -182,6 +183,16 @@ public class GroupServiceImpl implements GroupService{
 					group.setFlag("0");
 				}
 			}
+		}
+		return groups;
+	}
+
+	public List<Group> findGroupById(List<String> groupIds) {
+		System.out.println(groupIds);
+		List<Group> groups = new ArrayList<Group>();
+		if(!groupIds.isEmpty()){
+			
+			groups = (List<Group>) geRmsGroupRepository.findAll(groupIds);
 		}
 		return groups;
 	}
