@@ -44,6 +44,7 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 			if (user != null) {
 				if (user.getPassWord() != null
 						&& !"".equals(user.getPassWord().toString())) {
+					System.out.println("check--1");
 					return new SimpleAuthenticationInfo(user,
 							user.getPassWord(), getName());
 				} else {

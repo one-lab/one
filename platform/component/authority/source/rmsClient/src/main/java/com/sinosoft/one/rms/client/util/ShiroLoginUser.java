@@ -14,6 +14,7 @@ public class ShiroLoginUser {
 	public static User getLoginUser(){
 		Subject currentUser = SecurityUtils.getSubject();
 		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
+		System.out.println("check--2");
 		return user;
 	}
 	
