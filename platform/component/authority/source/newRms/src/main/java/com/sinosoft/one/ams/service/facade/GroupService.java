@@ -28,4 +28,7 @@ public interface GroupService {
 	
 	//根据机构Id，查询机构的用户组,并对已引入用户的组进行标记
 	public List<Group> findGroupByComCode(String comCode,String userCode);
+	
+	//根据用户组ID查询用户组
+	public List<Group> findGroupById(List<String> groupIds);
 }

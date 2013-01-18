@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.DataRule;
+import com.sinosoft.one.ams.model.UserPower;
 
-@Service
 public interface StaffingService {
 
 	//查询出没有赋参数的数据规则
@@ -28,5 +28,10 @@ public interface StaffingService {
 	//保存数据设置
 	public String saveBusPower(String comCode,String  userCode,String  ruleIdStr,String  paramStr);
 	
+	//查询用户权限
+	public List<UserPower> findUserPowerByUserCode(String userCode);
+	
+	//查询用户权限
+	public UserPower findUserPowerByUserCode(String userCode,String comCode);
 	
 }

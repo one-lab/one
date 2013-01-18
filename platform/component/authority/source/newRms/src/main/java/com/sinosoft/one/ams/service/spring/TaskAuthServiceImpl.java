@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Task;
@@ -54,7 +55,7 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 	
 	//保存修改后的功能授权
 	public void save(String strId, String comCode, TaskAuth taskAuth) {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
 		String name = user.getUserName();
 		
 		//查询当前机构已有的功能
@@ -75,10 +76,7 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 				List<String> grand = new ArrayList<String>();
 				//取得此功能的上辈功能
 				grandId = grandTaskId(grand,taskId[i]);
-				
-				for(String id : grandId){
-					System.out.println(id+"+++++++++++++++++++++++++++++++++++++");
-				}
+
 				//如果没有上辈功能，先保存子功能的上辈功能
 				if(!grandId.isEmpty())
 					for(String id : grandId){

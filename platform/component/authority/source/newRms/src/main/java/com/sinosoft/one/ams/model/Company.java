@@ -418,6 +418,7 @@ public class Company  {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
 	@XmlTransient
+	@JSONField(serialize = false)
 	public List<Employe> getEmployes() {
 		return this.employes;
 	}

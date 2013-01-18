@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,17 +35,19 @@ import com.sinosoft.one.ams.service.facade.RoleService;
 public class RoleServiceImpl implements RoleService{
 	
 	
-	@Autowired
+	@Resource(name="geRmsRoleRepository")
 	private GeRmsRoleRepository geRmsRoleRepository;
-	@Autowired
+	
+	@Resource(name="geRmsGroupRepository")
 	private GeRmsGroupRepository geRmsGroupRepository; 
-	@Autowired
+	
+	@Resource
 	private GeRmsGroupRoleRepositoriy geRmsGroupRoleRepository;
-	@Autowired
+	@Resource(name="geRmsTaskRepository")
 	private GeRmsTaskRepository geRmsTaskRepository;
-	@Autowired
+	@Resource(name="geRmsTaskAuthRepository")
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
-	@Autowired
+	@Resource(name="geRmsRoleDesignateRepository")
 	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
 	
 	
@@ -361,6 +365,12 @@ public class RoleServiceImpl implements RoleService{
 	public void designateRole(String roleId, String comCode) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	//根据机构Id查询角色ID
+	public List<String> findRoleIdByComCode(String comCode) {
+		List<String> roleId = geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
+		return roleId;
 	}
 
 	
