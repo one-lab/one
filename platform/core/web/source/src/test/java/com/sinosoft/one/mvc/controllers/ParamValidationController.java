@@ -24,7 +24,7 @@ public class ParamValidationController {
 
 
     @Get("validationCar")
-    public String validateCar(@Validation(errorPath = "validate",
+    public String validateCar(@Validation(errorPath = "validate/{id:[a-zA-Z0-9]+}",
                         size = @SizeEx(min=2,max=14,props = {"licensePlate","manufacturer",
                                 "rentalCar.rentalStation"}),
                          min=@MinEx(value = 10,props = {"seatCount"}),

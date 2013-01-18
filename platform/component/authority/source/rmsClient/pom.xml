@@ -92,16 +92,6 @@
 			<version>1.2.0</version>
 		</dependency>
 
-		<!-- CXF begin 
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http</artifactId>
-		</dependency>
-		-->
 		<!-- CXF begin --> 
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>

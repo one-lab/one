@@ -19,11 +19,14 @@ import com.sinosoft.one.rms.client.AccountManager;
 
 public class ShiroDbRealm  extends AuthorizingRealm{
 
-	@Autowired
 	private AccountManager accountManager;
 
 	public void setAccountManager(AccountManager accountManager) {
 		this.accountManager = accountManager;
+	}
+
+	public AccountManager getAccountManager() {
+		return accountManager;
 	}
 
 	public ShiroDbRealm(){

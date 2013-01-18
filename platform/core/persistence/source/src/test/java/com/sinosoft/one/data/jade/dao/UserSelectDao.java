@@ -121,6 +121,9 @@ public interface UserSelectDao  extends UserDao {
     @SQL("select * from t_user where id like ?1")
     List<User> selectUsersWithAnooForSort(String a,Sort sort);
 
+    @SQL("select seq_TS_Inter_InsurInfo_##(:table).nextval from dual")
+    String  getInterNo_Sequence(@Param("table")int year);
+
     @SQL("{call TESTSTRING(?1,?2)}")
     void testPrcOutSingle(String in,ProcedureResult... procedureResults);
 
@@ -138,4 +141,7 @@ public interface UserSelectDao  extends UserDao {
 
     @SQL("{call test_04(?1,?2,?3)}")
     void testPrcComplexResult(String id,ProcedureResult... procedureResults2);
+
+    @SQL("SELECT * FROM t_user where ##(:condition)")
+    List<User>  selectUserByCondition(@Param("condition") String condition);
 }

@@ -45,7 +45,7 @@ public class DefControllerTest extends AbstractControllerTest {
         request.addParameter("manufacturer", "0");
         request.addParameter("rentalCar.rentalStation", "0");
         request.addParameter("rentalCarList[0].rentalStation", "");
-        assertEquals("validate", invoke("/param/validationCar"));
+        assertEquals("validate/", invoke("/param/validationCar"));
     }
 
     public void testCascade(){

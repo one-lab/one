@@ -2,6 +2,7 @@ package com.sinosoft.one.data.jade.testProdureInsert;
 
 import com.sinosoft.one.data.jade.dao.ProcedureInsertDao;
 import com.sinosoft.one.data.jade.model.TestProcedureInsertModel;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class ProcedureInsertTest {
 
     @Test
     public void testProcedureInsert() {
-        TestProcedureInsertModel model = new TestProcedureInsertModel("3", "carvin3", new Timestamp(System.currentTimeMillis()));
+        TestProcedureInsertModel model = new TestProcedureInsertModel(RandomStringUtils.randomAlphabetic(8), "carvin3", new Timestamp(System.currentTimeMillis()));
         procedureInsertDao.insertProcedure(model);
     }
 }

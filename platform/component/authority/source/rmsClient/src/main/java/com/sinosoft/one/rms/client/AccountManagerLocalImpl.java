@@ -23,11 +23,14 @@ public class AccountManagerLocalImpl implements AccountManager{
     	return user;
     }
 
-
-	@Autowired
 	public void setRmsClientService(RmsClientService rmsClientService) {
 		this.rmsClientService = rmsClientService;
 	}
+
+	public RmsClientService getRmsClientService() {
+		return rmsClientService;
+	}
+
 
 
 	public com.sinosoft.one.rms.client.webservice.User findUserByLoginNameWs(

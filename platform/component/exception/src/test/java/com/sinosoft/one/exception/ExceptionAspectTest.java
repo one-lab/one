@@ -18,7 +18,7 @@ import com.sinosoft.one.exception.service.facade.ExceptionAspectService;
  */
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-exception.xml",
-        "/spring/applicationContext-notification.xml", "/spring/applicationContext-exception-test.xml" })
+        "/spring/applicationContext-monitorAgent.xml", "/spring/applicationContext-exception-test.xml" })
 @TransactionConfiguration(transactionManager = "exceptionMonitorTransactionManager")
 public class ExceptionAspectTest extends SpringTxTestCase {
     @Autowired
@@ -31,11 +31,9 @@ public class ExceptionAspectTest extends SpringTxTestCase {
         int oldLogsCount = this.countRowsInTable(LOG_TABLE_NAME);
         try {
             int queueSize = QueuesHolder.getQueueLength("exception");
-            System.out.print("exception queue length size =" + queueSize);
             // dbLogger.error("testing", new Throwable());
             // dbLogger.info("testing");
             exceptionAspectService.ExceptionThrow();
-            System.out.print("xxxxxx2");
         } catch (Exception e) {
             // TODO Auto-generated catch block
 //			 e.printStackTrace();

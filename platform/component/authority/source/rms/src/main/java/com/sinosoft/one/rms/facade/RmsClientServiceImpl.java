@@ -16,21 +16,19 @@ public class RmsClientServiceImpl implements RmsClientService{
 	/**
 	 * 创建登陆用户具体实现的接口GetUserService
 	 */
-	@Autowired
 	private GetUserService getUserService;
 
 	public User login(String userCode, String comCode,String sysFlag) {
 		return getUserService.getUserByUserCodeComCode(userCode, comCode, sysFlag);
 	}
 
-	public GetUserService getClientService() {
+	public GetUserService getGetUserService() {
 		return getUserService;
 	}
 
-	public void setClientService(GetUserService clientService) {
-		this.getUserService = clientService;
+	public void setGetUserService(GetUserService getUserService) {
+		this.getUserService = getUserService;
 	}
 
-	
 
 }

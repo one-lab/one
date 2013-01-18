@@ -5,10 +5,11 @@ import com.sinosoft.one.exception.aspect.ExceptionQueueAppender;
 import com.sinosoft.one.monitoragent.notification.Grade;
 import com.sinosoft.one.monitoragent.notification.NotificationEvent;
 import com.sinosoft.one.monitoragent.notification.NotificationModule;
-import com.sinosoft.one.monitoragent.notification.service.facade.NotificationService;
+import com.sinosoft.one.monitoragent.notification.NotificationService;
 import com.sinosoft.one.util.date.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -19,6 +20,7 @@ import java.util.Date;
  * Time: 上午9:32
  *
  */
+@Component
 public final class Exceptions {
     private static ExceptionQueueAppender exceptionQueueAppender;
     private static NotificationService notificationService;

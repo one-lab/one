@@ -11,6 +11,8 @@
 
 	<description>Shiro Configuration</description>
 	<!-- 項目自定义的Realm -->
+	<bean id="accountManager" class="com.sinosoft.one.rms.client.AccountManagerLocalImpl">
+	</bean>
 	
 	<!-- Shiro's main business-tier object for web-enabled applications -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">

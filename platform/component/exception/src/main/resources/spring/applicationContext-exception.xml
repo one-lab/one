@@ -33,11 +33,11 @@
 	<bean id="exceptionAspect" class="com.sinosoft.one.exception.aspect.UserExceptionAspect" />
 	
 	<!-- ExceptionQueueAppender 的单例 -->
-	<bean id="exceptionQueueAppender" scope="singleton"
-	class="com.sinosoft.one.exception.aspect.ExceptionQueueAppender">
-		<property name="queueName" value="exception"/>
-        <property name="queueSize" value="${exception.queue.size}" />
-	</bean>
+    <bean id="exceptionQueueAppender" scope="singleton"
+          class="com.sinosoft.one.exception.aspect.ExceptionQueueAppender">
+        <property name="queueName" value="exception"/>
+        <property name="queueSize" value="${exception.queue.size}"/>
+    </bean>
 	
 	<!-- 区别其它 DataSource-->
 	<bean id="exceptionMonitorDataSource"

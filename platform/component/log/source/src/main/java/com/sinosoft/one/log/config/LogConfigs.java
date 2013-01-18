@@ -1,36 +1,49 @@
 package com.sinosoft.one.log.config;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.sinosoft.one.log.Environment;
+import com.sinosoft.one.monitoragent.notification.MethodInitConfigure;
 import com.sinosoft.one.monitoragent.notification.NotificationConfigureDealer;
-import com.sinosoft.one.monitoragent.notification.utils.CommonUtils;
+import com.sinosoft.one.monitoragent.notification.NotificationService;
+import com.sinosoft.one.util.mapper.BeanMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.*;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.*;
 
 @ManagedResource(objectName = LogConfigs.MBEAN_NAME, description = "Log Config Management Bean")
 public class LogConfigs {
     public static final String MBEAN_NAME = "log:name=LogConfigs";
-    private Set<LogUrl> urls = new HashSet<LogUrl>();
-    private Set<LogMethod> methods = new HashSet<LogMethod>();
+
+    private List<MethodInitConfigure> methodInitConfigures;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    private List<LogUrl> urls = new ArrayList<LogUrl>();
+    private List<LogMethod> methods = new ArrayList<LogMethod>();
     private String environment;
 
+    @PostConstruct
     public void init() {
-        //initMethods();
-        //initUrls();
+        initMethods();
+        initUrls();
     }
 
     private void initMethods() {
-        NotificationConfigureDealer notificationConfigureDealer = CommonUtils.getConfMethodInstance();
-        String methodInfo = notificationConfigureDealer.getConfigureInfo();
-        JSONObject jsonObject = JSON.parseObject(methodInfo);
+        methods = BeanMapper.mapList(notificationService.getMethodInitConfigure(),
+                LogMethod.class);
     }
 
     private void initUrls() {
-        NotificationConfigureDealer notificationConfigureDealer = CommonUtils.getConfUrlInstance();
-        String urlInfo = notificationConfigureDealer.getConfigureInfo();
-        JSONObject jsonObject = JSON.parseObject(urlInfo);
+        urls = BeanMapper.mapList(notificationService.getUrlInitConfigure(),
+                LogUrl.class);
     }
 
     @ManagedOperation(description = "Get a url.")
@@ -59,7 +72,7 @@ public class LogConfigs {
     }
 
     @ManagedAttribute(description = "Log urls")
-    public Set<LogUrl> getLogUrls() {
+    public List<LogUrl> getLogUrls() {
         return urls;
     }
 
@@ -87,7 +100,7 @@ public class LogConfigs {
     }
 
     @ManagedAttribute(description = "Log methods")
-    public Set<LogMethod> getLogMethods() {
+    public List<LogMethod> getLogMethods() {
         return methods;
     }
 
@@ -153,4 +166,5 @@ public class LogConfigs {
         }
         return false;
     }
+
 }
