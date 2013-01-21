@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Role;
@@ -24,6 +25,7 @@ import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.newRms.client.ShiroLoginUser;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.NodeEntity;
@@ -45,8 +47,8 @@ public class RoleController {
 	@Post({ "rolelist/{name}", "rolelist" })
 	public Reply list(@Param("name") String name, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum, Invocation inv) throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 		Gridable<Role> ga = new Gridable<Role>(null);
 		Page<Role> page = null;
@@ -76,8 +78,8 @@ public class RoleController {
 	@Post("findTaskByRole/{roleId}")
 	public Reply findTaskByRole(@Param("roleId") String roleId, Invocation inv)
 			throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		// 根据角色ID查询角色关联功能
 		List<Task> rolesTasks = roleService.findTaskByRole(roleId);
 		// 根据机构代码查询可见功能
@@ -104,8 +106,8 @@ public class RoleController {
 	@Post("findTask")
 	public Reply findTask(Invocation inv)
 			throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		// 根据角色ID查询角色关联功能
 		List<Task> rolesTasks =new ArrayList<Task>();
 		// 根据机构代码查询可见功能
@@ -167,8 +169,8 @@ public class RoleController {
 
 	@Post("findDesigNateComTree")
 	public Reply findComTree(Invocation inv) throws Exception{
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String supercomCode=user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String supercomCode=user.getLoginComCode();
 		List<Company> showCompany=companyService.findAllNextComBySupper(supercomCode);
 		Map<String, Company> filter = new HashMap<String, Company>();
 		List<Company> topList = new ArrayList<Company>();
@@ -187,7 +189,7 @@ public class RoleController {
 	@Post("findDesignateRole/{comCode}")
 	public Reply findDesignateRole(@Param("comCode") String comCode, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum,Invocation inv) throws Exception{
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+//		User user=ShiroLoginUser.getLoginUser();
 		Company company=companyService.findCompanyByComCode(comCode);
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 		Gridable<Role> ga = new Gridable<Role>(null);

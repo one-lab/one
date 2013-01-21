@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.service.facade.GroupService;
@@ -39,8 +39,8 @@ public class GroupController {
 	@Post({ "grouplist/{name}", "grouplist" })
 	public Reply list(@Param("name") String name, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum, Invocation inv) throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 
 		Gridable<Group> ga = new Gridable<Group>(null);
@@ -73,8 +73,8 @@ public class GroupController {
 	@Post("findRoleByGroupId/{groupId}")
 	public Reply findGroupByGroupId(@Param("groupId") String groupId,@Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum, Invocation inv) throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 		Gridable<Role> ga = new Gridable<Role>(null);
 		Gridable<Role> gridable = groupService.getRoleGridableByGroupId(ga, groupId,comCode, pageable);
@@ -91,8 +91,8 @@ public class GroupController {
 	
 	@Get("findRole")
 	public Reply findRole( @Param("pageNo") int pageNo,@Param("rowNum") int rowNum,Invocation inv)throws Exception{
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 		Gridable<Role> ga = new Gridable<Role>(null);
 		Page<Role> page = null;
@@ -119,16 +119,16 @@ public class GroupController {
 	
 	@Post({"update/{groupId}/{name}/{groupType}/{roleId}/{des}","update/{groupId}/{name}/{groupType}/{roleId}"}) 
 	public Reply updataRole(@Param("groupId") String groupid,@Param("name")String name,@Param("des") String des,@Param("groupType") String groupType,@Param("roleId") String roleId, Invocation inv){
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		groupService.updateGroup(groupid, name, groupType, Arrays.asList(roleId.substring(0,roleId.length()-1).split(",")), des, comCode, user.getUserCode());
 		return null;
 	}
 	
 	@Post({"add/{name}/{groupType}/{roleId}/{des}","add/{name}/{groupType}/{roleId}"}) 
 	public Reply addRole(@Param("name")String name,@Param("des") String des,@Param("groupType") String groupType,@Param("roleId") String roleId, Invocation inv){
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		groupService.addGroup(name, groupType, Arrays.asList(roleId.substring(0,roleId.length()-1).split(",")), des, comCode, user.getUserCode());
 		return null;
 	}

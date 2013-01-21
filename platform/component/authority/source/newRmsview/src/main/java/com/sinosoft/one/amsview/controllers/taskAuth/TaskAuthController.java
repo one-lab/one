@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.TaskAuth;
@@ -37,8 +38,8 @@ public class TaskAuthController {
 	@Post("companyAll")
 	public Reply list(Invocation inv) throws Exception {
 
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String supercomCode=user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String supercomCode=user.getLoginComCode();
 		List<Company> showCompany=companyService.findAllNextComBySupper(supercomCode);
 		Map<String, Company> filter = new HashMap<String, Company>();
 		List<Company> topList = new ArrayList<Company>();

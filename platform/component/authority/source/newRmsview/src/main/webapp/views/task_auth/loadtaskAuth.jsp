@@ -65,6 +65,10 @@ function saveFunction(){
 	$("#treeTow").find(".jstree-checked").each(function(){
 		strId = strId + this.id +",";
 	});
+	
+	$("#treeTow").find(".jstree-undetermined").each(function(){
+		strId = strId + this.id +",";
+	});
 
 	$.ajax({  
         type:"post",  

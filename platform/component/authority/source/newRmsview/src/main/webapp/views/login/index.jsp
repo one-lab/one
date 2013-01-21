@@ -84,6 +84,13 @@ function changePass(e){
 	$("#pageContent").attr("src",url);
 	return false;
 };
+function quit(){
+	alert("quit");
+	$.ajax({
+		url : "${ctx}/login/logout",
+		type : "get"
+	});
+}
 </script>
 </head>
 
@@ -95,7 +102,7 @@ function changePass(e){
         <p class="user_bar">
         	用户：系统管理员
             <a href="changePass.jsp" class="pass" onclick="return  changePass(this)">修改密码</a>
-            <a href="${ctx}/views/login/login.jsp" class="quit">重新登录</a>
+            <a href="" onclick="quit();" class="quit">重新登录</a>
         </p>
     </div>
 </div>

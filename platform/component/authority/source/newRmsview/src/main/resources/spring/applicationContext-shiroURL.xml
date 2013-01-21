@@ -15,17 +15,16 @@
     http://www.springframework.org/schema/util
     http://www.springframework.org/schema/util/spring-util-3.0.xsd"
 	default-autowire="byName" default-lazy-init="true">
-	<description>Shiro Configuration</description>
-	<!-- 項目自定义的Realm -->
+	<description>ShiroFilter Configuration</description>
 	
 	<!-- myfilter -->
 	<bean id="loginFilter" class="com.sinosoft.one.newRms.client.shiro.LoginFilter"></bean>
 	
 	<!-- Shiro Filter -->
-	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/views/login/login.jsp" />
-		<property name="successUrl" value="/login" />
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">  
+    	<property name="securityManager" ref="securityManager"/>
+		<property name="loginUrl" value="/login.jsp"/>
+		<property name="successUrl" value="/login"/>
 		<property name="filters">
 			<map>
             	<entry key="loginfilter" value-ref="loginFilter"/>
@@ -33,12 +32,13 @@
 		</property>
 		<property name="filterChainDefinitions">
 			<value>
-				/=anon
-				/login/selectCom/** = anon
+				/ =anon
+				/login/company/** =anon
+				/login/checkUser** = anon
+				/login/logout = anon
 				/js/** = anon
 				/css/** = anon
-				/common/** = anon
-				/images/** = anon				
+				/images/** = anon
 				 
 				/** = loginfilter
 		 	</value>
