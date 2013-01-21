@@ -84,7 +84,7 @@
     
     <dependency>
     	<groupId>com.sinosoft.one</groupId>
-	  	<artifactId>newRms</artifactId>
+	  	<artifactId>newRmsClient</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
     </dependency>
     

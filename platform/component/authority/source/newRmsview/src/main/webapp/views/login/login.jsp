@@ -25,10 +25,29 @@
 		var marginTop = $("#layout_center").height()/2 - 180;
 		$("#login").css('margin-top',marginTop);
 	};
+	
+	function selectCom(){
+		
+		var userCode = document.forms[0].userCode.value;
+		$.ajax({
+			url : "${ctx}/login/selectCom/"+userCode,
+			type : "post",
+			success : function (com){
+				alert(com.comCode);
+				var opt = "<option value=''>--请选择机构--</option>";
+				opt = opt + "<option value='"+com.comCode+"'>"+com.comCName+"</option>";
+				$(".inp_selec").html(opt);
+			}
+		});
+		
+	}
+	
+	
+	
 	function login(){
 		//alert("check");
-		var name=document.forms[0].name.value;
-		var password=document.forms[0].password.value;
+		var name=document.forms[0].userCode.value;
+		var password=document.forms[0].passWord.value;
 		if(name==""){
 			alert("用户名不能为空！！");
 			return ;
@@ -37,8 +56,8 @@
 			alert("密码不能为空！！");
 			return ;
 		}
-		alert("${ctx}");
-		document.forms[0].submit();	
+		
+		$("#userLogin").attr("action","${ctx}/views/login/login.jsp").submit();
 	}
 
 </script>
@@ -56,32 +75,31 @@
 <div id="layout_center" class="login_cont">
 	<div class="login_line"></div>
 	<div class="login" id="login">
-		<form action="${ctx}/login" method="post">
+		<form id="userLogin" method="post">
 	    	<ul class="list" >
 		    	<table>
 		        	<tr>
 		        		<td>
-			        		<li>用户名 <input type="text" class="inp_text" name="userName"/></li>
+			        		<li>用户名 <input type="text" class="inp_text" name="userCode"/></li>
 		        		</td>
 		        	</tr>
 		        	<tr>
 		        		<td>
-		            		<li>密　码 <input type="password" class="inp_text" name="password"/></li>
+		            		<li>密　码 <input type="password" class="inp_text" name="passWord"  onblur="selectCom();"/></li>
 		            	</td>
 		        	</tr>
 		        	<tr>
 		        		<td>
 				            <li>机　构 
-				            <select name="dept"  class="inp_selec">
-				            	<option value="renshibu">人事部</option>
-				            	<option value="guanlibu">管理部</option>
-				            	<option value="caiwubu">财务部</option>
+				            <select name="comCode"  class="inp_selec">
+				            	<option value="">--请选择机构--</option>
 				            </select>
 				            </li>
 				    	</td>
 		        	</tr>
 		    	</table>
 	        </ul>
+	        <input name="sysFlag" type="hidden"   value="RMS" />
         	<input type="button" class="login_btn"  onclick="login();"/>
 		</form>
         <p class="prompt">请输入正确的信息进行登录，如果您还没有账号，请联系管理员。</p>

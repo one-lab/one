@@ -63,6 +63,7 @@ public class LoginFilter extends AuthenticatingFilter {
 			
 			if (isLoginRequest(request, response)) {//是否登录的请求
 				System.out.println("请求");
+				System.out.println(WebUtils.toHttp(request).getMethod());
 				if (isLoginSubmission(request, response)) {//是否登陆请求的提交
 					System.out.println("提交");
 					return executeLogin(request, response);//拦截的是登陆链接则返回executeLogin
