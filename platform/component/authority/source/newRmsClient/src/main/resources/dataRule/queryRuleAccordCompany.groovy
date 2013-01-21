@@ -1,9 +1,6 @@
-import com.sinosoft.one.rms.DataPower;
-import com.sinosoft.one.rms.model.BusDataInfo;
 import com.alibaba.fastjson.JSON;
 import ins.framework.utils.StringUtils;
-import com.sinosoft.one.rms.client.DataRuleScript;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sinosoft.one.newRms.client.DataRuleScript;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -18,6 +18,7 @@ import org.springframework.integration.scripting.RefreshableResourceScriptSource
 import org.springframework.scripting.ScriptCompilationException;
 import org.springframework.scripting.ScriptSource;
 import org.springframework.scripting.groovy.GroovyScriptFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -41,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 4:56 PM
  *
  */
+@Component
 public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
 
 	private Logger logger = LoggerFactory.getLogger(DataRuleFactoryPostProcessor.class);

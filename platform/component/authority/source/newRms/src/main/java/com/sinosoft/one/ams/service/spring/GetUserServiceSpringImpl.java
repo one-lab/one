@@ -93,7 +93,8 @@ public class GetUserServiceSpringImpl implements GetUserService {
 			
 			for (Task task : tasklist) {
 				if (StringUtils.isNotBlank(task.getIsAsMenu())&& task.getIsAsMenu().toString().equals("1")) {
-					if (task.getParent() == null) {
+					String parentId = taskServer.findParentIdBytaskId(task.getTaskID());
+					if (parentId.equals("RMS001")) {
 						topList.add(task);
 					}
 				}
@@ -220,8 +221,8 @@ public class GetUserServiceSpringImpl implements GetUserService {
 					roleids.add(groupRole.getRole().getRoleID().toString());
 				}
 			}
-			
-			List<Task> resultTasks = taskServer.getTasks(roleids, comCode);
+			List<String> roleTakdIds = taskServer.findTaskIdByRoleIds(roleIds);
+			List<Task> resultTasks = taskServer.getTasks(roleTakdIds, comCode);
 			List<String> resultTaskIDs = new ArrayList<String>();
 			for(Task task : resultTasks){
 				resultTaskIDs.add(task.getTaskID());

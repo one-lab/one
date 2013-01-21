@@ -30,10 +30,9 @@
 		
 		var userCode = document.forms[0].userCode.value;
 		$.ajax({
-			url : "${ctx}/login/selectCom/"+userCode,
+			url : "${ctx}/login/company/"+userCode,
 			type : "post",
 			success : function (com){
-				alert(com.comCode);
 				var opt = "<option value=''>--请选择机构--</option>";
 				opt = opt + "<option value='"+com.comCode+"'>"+com.comCName+"</option>";
 				$(".inp_selec").html(opt);

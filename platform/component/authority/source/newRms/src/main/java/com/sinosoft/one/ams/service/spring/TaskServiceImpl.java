@@ -14,6 +14,7 @@ import com.sinosoft.one.ams.model.ExcPower;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.model.UserPower;
+import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
@@ -31,6 +32,8 @@ public class TaskServiceImpl implements TaskService{
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
 	@Resource(name="geRmsUserPowerRepository")
 	private GeRmsUserPowerRepository geRmsUserPowerRepository;
+	@Resource(name="geRmsRoleTaskRepository")
+	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
 	@Resource
 	private Invocation inv;
 	
@@ -337,7 +340,35 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	public List<Task> findTaskByTaskId(List<String> taskIds,String sysFlag) {
-		return geRmsTaskRepository.findTaskByTaskIds(taskIds, sysFlag);
+		List<String> taskids = geRmsTaskRepository.findTaskByTaskIds(taskIds, sysFlag);
+		List<Task> tasks = (List<Task>) geRmsTaskRepository.findAll(taskids);
+		return tasks;
+	}
+
+	//根据角色ID查询功能taskId
+	public List<String> findTaskIdByRoleIds(List<String> roleids) {
+		List<String> taskAuthIds = new ArrayList<String>();
+		for(String roleId : roleids){
+			taskAuthIds.addAll(geRmsRoleTaskRepository.findTaskAuthIdByRoleId(roleId));
+		}
+		List<TaskAuth> TaskAuths = (List<TaskAuth>) geRmsTaskAuthRepository.findAll(taskAuthIds);
+		List<Task> tasks = new ArrayList<Task>();
+		for(TaskAuth taskAuth : TaskAuths){
+			tasks.add(taskAuth.getTask());
+		}
+		
+		List<String> taskIds = new ArrayList<String>();
+		for(Task task : tasks){
+			if(!taskIds.contains(task.getTaskID().toString())){
+				taskIds.add(task.getTaskID().toString());
+			}
+		}
+		return taskIds;
+	}
+
+	public String findParentIdBytaskId(String taskId) {
+		
+		return geRmsTaskRepository.findParentIdByTaskId(taskId);
 	}
 	
 	

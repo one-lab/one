@@ -30,4 +30,6 @@
     	<property name="securityManager" ref="securityManager"/>
 	</bean>
 	
+	<bean id="dataRuleFactoryPostProcessor" class="com.sinosoft.one.newRms.client.DataRuleFactoryPostProcessor"></bean>
+	
 </beans>
