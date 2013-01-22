@@ -119,7 +119,7 @@ function params(comCode,dataRuleIdStr){
 		success : function(data){
 			if(data != null)
 				for(var i=0;i<data.length;i++){
-					var temValP = $("<p id='p_"+data[i].dataRule.dataRuleID+"'>"+data[i].dataRule.rule+"cc/read.php?tid=53766773424&_fp=4,文字数据.com/categroy/ux3724&_fp=4,文字数据.com/categroy/ux</p>");
+					var temValP = $("<p id='p_"+data[i].dataRule.dataRuleID+"'>"+data[i].dataRule.rule+"的数据规则参数</p>");
 					var temValText = $("<input id='te_"+data[i].dataRule.dataRuleID+"' type='text' class='code_text' value='"+data[i].dataRuleParam+"' />");
 					$(".code_box").append(temValP).append(temValText);
 				};
@@ -136,7 +136,7 @@ function toLeftMove() {
 			var thisId = $(this).attr("id");
 			var rootText = $(this).text();
 			$("#sel_1").append($(this));
-			var temValP = $("<p id='p_"+thisId+"'>"+rootText+"cc/read.php?tid=53766773424&_fp=4,文字数据.com/categroy/ux3724&_fp=4,文字数据.com/categroy/ux</p>");
+			var temValP = $("<p id='p_"+thisId+"'>"+rootText+"的数据规则参数</p>");
 			var temValText = $("<input id='te_"+thisId+"' type='text' class='code_text' value='请输入参数' />");
 			$(".code_box").append(temValP).append(temValText);
 		}

@@ -29,7 +29,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	private CompanyDao companyDao;
 	
 	public Employe findEmployeByUserCode(String userCode) {	
-		Employe employe = userDao.findUserById(userCode);		
+		System.out.println(userDao+"+++++++++++++++++");
+		Employe employe = userDao.findUserById(userCode);
+		System.out.println("userCode="+employe.getUserCode());
 		return employe;
 	}
 

@@ -49,7 +49,7 @@ public class LoginController {
 		session.setAttribute("menus", menus);
 		return "index";
 	}
-	@Post("logout")
+	@Get("logout")
 	public String logout(Invocation inv){
 		HttpSession session = inv.getRequest().getSession();
 		session.removeAttribute("user");

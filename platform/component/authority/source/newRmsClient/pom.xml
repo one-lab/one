@@ -72,6 +72,11 @@
 	    <groupId>com.alibaba</groupId>
 	    <artifactId>fastjson</artifactId>
     </dependency>
+    <dependency>
+			<groupId>com.alibaba.druid</groupId>
+			<artifactId>sqlparser</artifactId>
+			<version>0.2.9-SNAPSHOT</version>
+		</dependency>
     
     <!-- security begin -->
 		<dependency>

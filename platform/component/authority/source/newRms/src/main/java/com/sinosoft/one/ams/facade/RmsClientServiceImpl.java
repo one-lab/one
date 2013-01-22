@@ -14,7 +14,7 @@ import com.sinosoft.one.ams.service.facade.GetUserService;
  * @author Administrator
  *
  */
-@Component
+@Component("rmsClientServiceImpl")
 public class RmsClientServiceImpl implements RmsClientService{
 	/**
 	 * 创建登陆用户具体实现的接口GetUserService

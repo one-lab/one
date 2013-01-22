@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.User;
@@ -19,7 +21,6 @@ import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.TaskService;
-import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Treeable;
 
@@ -34,13 +35,13 @@ public class TaskServiceImpl implements TaskService{
 	private GeRmsUserPowerRepository geRmsUserPowerRepository;
 	@Resource(name="geRmsRoleTaskRepository")
 	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
-	@Resource
-	private Invocation inv;
+	
 	
 	//根据主键查出Task对象
 	public Task findTaskByTaskId(String taskId) {
 		Task task = geRmsTaskRepository.findOne(taskId);
-		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		Subject currentUser = SecurityUtils.getSubject();
+		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
 		
 		if(task.getName() == null){
 			task.setName("");
@@ -75,7 +76,8 @@ public class TaskServiceImpl implements TaskService{
 	
 	//保存功能和功能授权
 	public void save(Task task,String parentId, TaskAuth taskAuth) {
-		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		Subject currentUser = SecurityUtils.getSubject();
+		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
 		Task taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
 		
 		task.setSysFlag("RMS");

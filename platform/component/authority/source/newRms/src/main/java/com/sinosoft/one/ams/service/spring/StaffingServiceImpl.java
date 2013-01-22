@@ -25,8 +25,7 @@ import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.StaffingService;
 
-@Transactional
-@Component
+@Component("staffingServiceImpl")
 public class StaffingServiceImpl implements StaffingService{
 
 	@Resource(name="geRmsGroupRepository")

@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * DataRuleFactoryPostProcessor
  * 完成rms的数据权限数据规则初始化工作，将会读取默认的数据权限配置资源文件，并将加载到spring容器当中，
- * 默认数据规则路径为classpath*:/rms/*.groovy,将所有的规则文件均加载上作为bean，文件名即为beanId
+ * 默认数据规则路径为classpath*:/dataRule/*.groovy,将所有的规则文件均加载上作为bean，文件名即为beanId
  * 如有是maven项目需要在resources下面建立rms目录，把所有的data-rule文件放置在目录下
  * 所有脚本文件支持热加载，可以设置扫描间隔，如果不设置默认为30s扫描一次
  * User: ChengQi
@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 4:56 PM
  *
  */
-@Component
+@Component("dataRuleFactoryPostProcessor")
 public class DataRuleFactoryPostProcessor implements BeanFactoryPostProcessor {
 
 	private Logger logger = LoggerFactory.getLogger(DataRuleFactoryPostProcessor.class);

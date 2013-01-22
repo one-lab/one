@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -46,7 +48,7 @@ public class GetUserServiceSpringImpl implements GetUserService {
 	private GroupService groupService;
 	@Autowired
 	private RoleService roleService;
-	@Autowired
+	@Resource
 	private TaskService taskServer;
 
 	/**
