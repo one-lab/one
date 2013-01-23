@@ -13,6 +13,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.newRms.client.EnvContext;
 
@@ -23,12 +24,13 @@ import com.sinosoft.one.newRms.client.EnvContext;
  * Time: 11:08 AM
  */
 @Aspect 
+@Component
 public class RmsAnnotationAspect {
 
 	private static CacheService arch4MethodNameCacheManager = CacheManager.getInstance("arch4Method");
 	
 //  @Around("execution(* ins..*service..*Service*Impl.*(..))") 
-	@Around("execution(* com.sinosoft.test..*.*(..))") 
+	@Around("execution(* com.sinosoft.one.newRms.client.annotationtest..*.*(..))") 
     public Object register(ProceedingJoinPoint pjp) throws Throwable {
     	if(pjp.getThis() == null || pjp.getTarget() == null) {
     		return pjp.proceed();
@@ -61,6 +63,7 @@ public class RmsAnnotationAspect {
         Object object=null;
         String tempDataAuthorityTaskId=null;
         if(dataAuthority != null){
+        	System.out.println("RmsAnnotationAspect");
         	EnvContext.setClassName(pjp.getTarget().getClass().getName());
         	EnvContext.setDataAuthorityTaskId(dataAuthority.value());
         	object=pjp.proceed();

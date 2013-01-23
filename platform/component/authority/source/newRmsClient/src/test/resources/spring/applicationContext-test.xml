@@ -34,9 +34,10 @@
     	<property name="dataRuleFactoryPostProcessor" ref="dataRuleFactoryPostProcessor"></property>
 		<constructor-arg ref="dataSource" />
     </bean>
+    
+    <!-- 使用@SQL查询方式时，需要以下配置 -->
+    <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />  
 	
-	
-
 	<!-- Jpa Entity Manager 配置 -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
 		<property name="dataSource" ref="realDataSource"/>

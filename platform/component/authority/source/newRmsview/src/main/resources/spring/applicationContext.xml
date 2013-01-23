@@ -17,6 +17,8 @@
      
      <context:annotation-config />
      
+     
+     
 	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
 	<context:component-scan base-package="com.sinosoft.one">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -47,12 +49,21 @@
 	<!-- Spring Data Jpa配置 -->
  	<onejpa:repositories base-package="com.sinosoft.one.ams"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
 	
+	<!-- 数据权限数据源配置 用于数据权限SQL注入的代理源 
+	<bean id="realDataSource" class="com.sinosoft.one.newRms.client.datasource.RmsDataSource">
+    	<property name="rmsSQLParser" ref="rmsSQLParser"></property>
+    	<property name="dataRuleFactoryPostProcessor" ref="dataRuleFactoryPostProcessor"></property>
+		<constructor-arg ref="dataSource" />
+    </bean>
+	-->
 		
 	<!-- Jpa 事务配置 -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
 	
+	<bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" /> 
+	 
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	

@@ -1,6 +1,8 @@
 package com.sinosoft.one.newRms.client.annotationtest;
 
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,28 +13,30 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.facade.RmsClientService;
+import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.newRms.client.EnvContext;
 
 
-
-@ContextConfiguration(locations = { "/spring/applicationContext-test.xml"})
+@DirtiesContext
+@ContextConfiguration("/spring/applicationContext-test.xml")
 public class TestDataRuleStringCreat extends AbstractJUnit4SpringContextTests{
 
 	@Autowired
 	private TestService testService;
 	@Autowired
 	private RmsClientService rmsClientService;
+	@Autowired
+	private UserDao userDao;
 	@Test
 	public void testFindAll(){
-		User user;
-		try {
-			user = rmsClientService.login("admin", "00","RMS");
-			EnvContext.setLogin(user);
-			testService.testFindAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		User user = rmsClientService.login("admin", "00","RMS");
+		EnvContext.setLogin(user);
+//		List<Employe> users = (List<Employe>) userDao.findAll();
+//		Employe user = userDao.findUserById("admin");
+		System.out.println(user.getUserCode());
+		System.out.println(user.getTaskIdList().size());
+		testService.testFindAll();
 		
 	}
 	

@@ -30,12 +30,15 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
     	String rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("", "a", "admin", "00", "{comCode:11}", "comCode");
     	System.out.println(dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").getClass());
     	Assert.assertEquals("a.comCode=(select comCode from ge_rms_company where comCode='11')",rule);
-    	System.out.println(rule);
+    	System.out.println("1,"+rule);
     	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL(rule, "a", "admin", "00", "{comCode:11}", "comCode");
     	Assert.assertEquals("a.comCode=(select comCode from ge_rms_company where comCode='11')"+" and a.comCode=(select comCode from ge_rms_company where comCode='11')",rule);
-//    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordComAndNextCom").creatSQL("", "a", "admin", "00", "{comCode:11}", "comCode");
-//    	Assert.assertEquals("a.comCode in  (select comCode from ge_rms_company start with comCode in ('11') connect by prior comCode=upperComCode)", rule);
-//    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordInsurance").creatSQL("", "a", "admin", "00", "{comCode:'11'}", "test");
+    	System.out.println("2,"+rule);
+    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordComAndNextCom").creatSQL("", "a", "admin", "00", "{comCode:11}", "comCode");
+    	Assert.assertEquals("a.comCode in  (select comCode from ge_rms_company start with comCode in ('11') connect by prior comCode=upperComCode)", rule);
+    	System.out.println("3,"+rule);
+    	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordInsurance").creatSQL("", "a", "admin", "00", "{comCode:'11'}", "test");
+    	System.out.println("4,"+rule);
     }
     
 }

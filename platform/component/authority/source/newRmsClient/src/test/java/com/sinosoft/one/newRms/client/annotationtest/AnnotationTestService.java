@@ -26,17 +26,10 @@ public class AnnotationTestService implements TestService  {
 	
 	@Autowired
 	private UserDao userDao;
-
-	
-	@DataAuthority("RMS001")
-	public Page<Employe> testFindByHql() {
-		Pageable pageable = new PageRequest(0, 10);
-		Page<Employe> page =  userDao.findUserByComCode("00", pageable);
-		return page;
-	}
 	
 	@DataAuthority("RMS001")
 	public List<Employe> testFindAll() {
+		System.out.println("AnnotationTestService="+userDao);
 		List<Employe> users = (List<Employe>) userDao.findAll();
 		return users;
 	}

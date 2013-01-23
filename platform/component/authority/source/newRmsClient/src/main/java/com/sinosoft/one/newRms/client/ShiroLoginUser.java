@@ -4,7 +4,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import com.sinosoft.one.ams.User;
-import com.sinosoft.one.ams.model.Employe;
 
 public class ShiroLoginUser {
 
