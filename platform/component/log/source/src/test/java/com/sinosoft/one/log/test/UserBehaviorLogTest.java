@@ -28,7 +28,7 @@ import java.util.concurrent.CountDownLatch;
  */
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext-test.xml",
-        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
+        "/spring/applicationContext-monitorAgent.xml","/spring/applicationContext-log.xml" })
 @TransactionConfiguration(transactionManager = "logMonitorTransactionManager",defaultRollback=true)
 @Transactional(isolation= Isolation.READ_COMMITTED)
 public class UserBehaviorLogTest extends AbstractFilterTest{

@@ -132,4 +132,33 @@ comment on column GE_URL_TRACE_LOG.requestinfo
 alter table GE_URL_TRACE_LOG
   add constraint PK_GE_URL_TRACE_LOG primary key (ID);
 
-  
+ -- Create table
+drop table GE_LOG_STATISTICS;
+create table GE_LOG_STATISTICS
+(
+  id          VARCHAR2(32) not null,
+  type        VARCHAR2(10),
+  value       VARCHAR2(200),
+  executetime NUMBER(10),
+  interval    NUMBER(3),
+  begintime   DATE,
+  endtime     DATE
+)
+-- Add comments to the columns
+comment on column GE_LOG_STATISTICS.id
+  is '主键ID';
+comment on column GE_LOG_STATISTICS.type
+  is '统计类型：METHOD、URL';
+comment on column GE_LOG_STATISTICS.value
+  is '统计类型的值';
+comment on column GE_LOG_STATISTICS.executetime
+  is '平均执行时间';
+comment on column GE_LOG_STATISTICS.interval
+  is '统计时间间隔';
+comment on column GE_LOG_STATISTICS.begintime
+  is '统计开始时间';
+comment on column GE_LOG_STATISTICS.endtime
+  is '统计结束时间';
+-- Create/Recreate primary, unique and foreign key constraints
+alter table GE_LOG_STATISTICS
+  add constraint PK_GE_LOG_STATISTICS primary key (ID);

@@ -7,7 +7,7 @@
 	default-autowire="byName" default-lazy-init="false">
 
 	<bean id="droolsRuleService"
-		class="com.sinosoft.ebusiness.rule.service.spring.DroolsRuleServiceSpringImpl"
+		class="com.sinosoft.one.rule.service.spring.DroolsRuleServiceSpringImpl"
 		scope="singleton">
 	</bean>
 

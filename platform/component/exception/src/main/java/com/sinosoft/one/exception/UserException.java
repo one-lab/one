@@ -49,8 +49,6 @@ public abstract class UserException extends RuntimeException {
         this.cause = cause;
     }
 
-
-
     public Throwable getCause() {
         return cause;
     }

@@ -7,21 +7,21 @@
 	default-autowire="byName" default-lazy-init="false">
 
 	<bean id="comboRuleService"
-		class="com.sinosoft.ebusiness.test.rule.service.spring.ComboRuleServiceSpringImpl">
+		class="com.sinosoft.one.test.rule.service.spring.ComboRuleServiceSpringImpl">
 	</bean>
 	<bean id="otherRuleService"
-		class="com.sinosoft.ebusiness.test.rule.service.spring.OtherRuleServiceSpringImpl">
+		class="com.sinosoft.one.test.rule.service.spring.OtherRuleServiceSpringImpl">
 	</bean>
 	<bean id="guvnorRuleService"
-		class="com.sinosoft.ebusiness.test.rule.service.spring.GuvnorRuleServiceSpringImpl">
+		class="com.sinosoft.one.test.rule.service.spring.GuvnorRuleServiceSpringImpl">
 	</bean>
 	<bean id="quickPriceRuleService"
-		class="com.sinosoft.ebusiness.test.rule.service.spring.QuickPriceRuleServiceSpringImpl">
+		class="com.sinosoft.one.test.rule.service.spring.QuickPriceRuleServiceSpringImpl">
 	</bean>
 	<bean id="specialClausRuleService"
-		class="com.sinosoft.ebusiness.test.rule.service.spring.SpecialClausRuleServiceSpringImpl">
+		class="com.sinosoft.one.test.rule.service.spring.SpecialClausRuleServiceSpringImpl">
 	</bean>
 	<bean id="proposalRuleService"
-		class="com.sinosoft.ebusiness.test.rule.service.spring.ProposalRuleServiceSpringImpl">
+		class="com.sinosoft.one.test.rule.service.spring.ProposalRuleServiceSpringImpl">
 	</bean>
 </beans>

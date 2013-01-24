@@ -83,7 +83,7 @@ public class LogTraceAspect {
 		} finally {
 			// @Interfacetrace检查
             String description = "";
-            String environment = Environment.DEVELOP;
+            Environment environment = Environment.DEVELOP;
             boolean isDeal = false;
             if(inspectMode == MethodTraceLogInspectMode.ALL || inspectMode == MethodTraceLogInspectMode.NATIVE) {
                 LogTraced interfaceTraced = getLogTracedAnnotation(userClass, method, specificMethod);
@@ -97,7 +97,7 @@ public class LogTraceAspect {
                 LogMethod logMethod = logConfigs.getLogMethod(sourceClass.getName(), specificMethod.getName());
                 if(logMethod != null) {
                     description =  Loggables.formatDescription(logMethod.getDescription(),pjp.getArgs());
-                    environment = logMethod.getEnvironment();
+                    environment = Environment.valueOf(logMethod.getEnvironment());
                     isDeal = true;
 
                     if (time > logMethod.getMaxExecuteTime()) {
@@ -135,6 +135,7 @@ public class LogTraceAspect {
                     methodTraceLog.setEnvironment(environment);
 
                     dbLogger.info(MethodTraceLog.FORMAT_STRING, methodTraceLog.toObjectArray());
+                    Loggables.doLogStatistics(methodTraceLog.getFullMethodName(), methodTraceLog.getConsumeTime());
                 }
             }
 		}

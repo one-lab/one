@@ -19,8 +19,8 @@ exception.batch.size=1
 # exception 方法切面的表达式
 exception.aspect.expression=execution (* com.sinosoft..service..spring.*SpringImpl.*(..)))
 
-# notification 监控应用名称
-notification.appName=epicc
-# notification 监控服务端的URL
-notification.url=http://localhost:8080/monitor/notification/notification/note
 
+# 监控的客户端的配置
+monitor.ip=127.0.0.1
+monitor.port=8080
+monitor.appName=epicc

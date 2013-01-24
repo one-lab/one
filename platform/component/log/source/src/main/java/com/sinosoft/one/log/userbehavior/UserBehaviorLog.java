@@ -1,16 +1,11 @@
 package com.sinosoft.one.log.userbehavior;
 
 import com.sinosoft.one.log.*;
-import com.sinosoft.one.log.queue.LoggableQueueAppender;
+import com.sinosoft.one.log.event.LogEventSupport;
 import com.sinosoft.one.util.encode.JsonBinder;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,14 +27,14 @@ public class UserBehaviorLog extends AbstractLoggable implements Loggable {
     private String sessionId;
     private String userIp;
 
-    private LoggableQueueAppender loggableQueueAppender;
+    private LogEventSupport logEventSupport;
 
     public UserBehaviorLog(boolean isSynchronized) {
         if(isSynchronized) {
             logHandler = Loggables.getUserBehaviorLogSynchronizedHandlerHandler();
         } else {
             logHandler = Loggables.getUserBehaviorLogQueueHandler();
-            this.loggableQueueAppender = Loggables.getLoggableQueueAppender();
+            this.logEventSupport = Loggables.getLogEventSupport();
         }
     }
     public UserBehaviorLog() {
@@ -94,10 +89,6 @@ public class UserBehaviorLog extends AbstractLoggable implements Loggable {
         this.userIp = userIp;
     }
 
-    public LogType getType() {
-        return LogType.userBehaviorLog;
-    }
-
     public static UserBehaviorLog valueOf(HttpServletRequest request, boolean isSynchronized) {
         UserBehaviorLog userBehaviorLog = new UserBehaviorLog(isSynchronized);
         userBehaviorLog.setId(UUID.randomUUID().toString().replace("-", ""));
@@ -123,7 +114,7 @@ public class UserBehaviorLog extends AbstractLoggable implements Loggable {
     }
 
     public void appendToQueue() {
-        loggableQueueAppender.append(this);
+        logEventSupport.publish(this);
     }
 
     @Override

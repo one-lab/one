@@ -31,9 +31,7 @@ public final class Exceptions {
         UserException userException = new UserException(null, null, null, "", throwable, ExceptionLevel.MOSTSERIOUS) {};
     }
     public static void handleUserException(UserException userException) {
-        if(logger.isDebugEnabled()) {
-            logger.debug("--------catch---- begin------");
-        }
+        logger.debug("--------catch---- begin------");
 
         ExceptionLevelHandle exceptionLevelHandle = ExceptionConfig
                 .getLevelHandle(userException.getLevel().toString());
@@ -46,10 +44,8 @@ public final class Exceptions {
             // 放入异常通知队列notification
             exceptionNotification(ee, userException, exceptionLevelHandle);
         }
-
-        if(logger.isDebugEnabled()) {
-            logger.debug("--------catch-----end-----");
-        }
+        logger.error(userException.getMsg(), userException);
+        logger.debug("--------catch-----end-----");
     }
 
     /**

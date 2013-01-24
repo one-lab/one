@@ -16,7 +16,7 @@ public class ProposalServiceImpl  implements ProposalService {
 		return "0912932130213";
 	}
 
-	@LogTraced(description = "此处演示如何进行参数,第一个参数${[0]},第二个参数${[1]}")
+//	@LogTraced(description = "此处演示如何进行参数,第一个参数${[0]},第二个参数${[1]}")
 	public void testParam(int a, char b) {
 		System.out.println("testParam ......test @LogTraced");
         try {
@@ -26,7 +26,7 @@ public class ProposalServiceImpl  implements ProposalService {
         }
     }
 
-	@LogTraced(env= Environment.PRODUCT)
+//	@LogTraced(env= Environment.PRODUCT)
 	public void testProductTraced() {
 		System.out.println("@ImplTraced(enableId=true,configEnv=Environment.PRODUCT)");
         try {
@@ -36,15 +36,25 @@ public class ProposalServiceImpl  implements ProposalService {
         }
 	}
 
-	@LogTraced(env=Environment.DEVELOP)
+//	@LogTraced(env=Environment.DEVELOP)
 	public void testDevelopTraced() {
 		System.out
 				.println("@ImplTraced(enableId=true,configEnv=Environment.DEVLEOP)");
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 	}
 
-	@LogTraced(env = Environment.TEST)
+//	@LogTraced(env = Environment.TEST)
 	public void testTestTraced() {
 		System.out.println("@ImplTraced(enableId=true,configEnv=Environment.TEST)");
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 	}
 
 
@@ -56,6 +66,11 @@ public class ProposalServiceImpl  implements ProposalService {
 
 	public void testInterfaceTraced() {
 		System.out.println("testInterfaceTraced");
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 	}
 
     //不记录任何日志

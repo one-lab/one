@@ -1,11 +1,12 @@
 package com.sinosoft.one.log;
 
 import com.sinosoft.one.log.config.Log4jManager;
+import com.sinosoft.one.log.event.LogEventSupport;
 import com.sinosoft.one.log.handler.LogHandler;
 import com.sinosoft.one.log.methodtrace.MethodTraceLog;
-import com.sinosoft.one.log.queue.LoggableQueueAppender;
+import com.sinosoft.one.log.statistics.LogStatisticsHandler;
 import com.sinosoft.one.monitoragent.notification.NotificationEvent;
-import com.sinosoft.one.monitoragent.notification.service.facade.NotificationService;
+import com.sinosoft.one.monitoragent.notification.NotificationService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.spi.LoggingEvent;
@@ -25,8 +26,9 @@ public class Loggables {
     private static LogHandler userBehaviorLogSynchronizedHandler;
     private static LogHandler urlTraceLogHandler;
     private static LogHandler methodTraceLogHandler;
+    private static LogStatisticsHandler logStatisticsHandler;
 
-    private static LoggableQueueAppender loggableQueueAppender;
+    private static LogEventSupport logEventSupport;
 
     private static User user;
     private static String appName;
@@ -51,10 +53,6 @@ public class Loggables {
         return methodTraceLogHandler;
     }
 
-    public static LoggableQueueAppender getLoggableQueueAppender() {
-        return loggableQueueAppender;
-    }
-
     public void setUserBehaviorLogQueueHandler(LogHandler userBehaviorLogQueueHandler) {
         Loggables.userBehaviorLogQueueHandler = userBehaviorLogQueueHandler;
     }
@@ -71,8 +69,16 @@ public class Loggables {
         Loggables.methodTraceLogHandler = methodTraceLogHandler;
     }
 
-    public void setLoggableQueueAppender(LoggableQueueAppender loggableQueueAppender) {
-        Loggables.loggableQueueAppender = loggableQueueAppender;
+    public void setLogStatisticsHandler(LogStatisticsHandler logStatisticsHandler) {
+        Loggables.logStatisticsHandler = logStatisticsHandler;
+    }
+
+    public static LogEventSupport getLogEventSupport() {
+        return logEventSupport;
+    }
+
+    public void setLogEventSupport(LogEventSupport logEventSupport) {
+        Loggables.logEventSupport = logEventSupport;
     }
 
     public void setUser(User user) {
@@ -99,6 +105,9 @@ public class Loggables {
         }
     }
 
+    public static void doLogStatistics(String value, long executeTime) {
+        logStatisticsHandler.doHandler(value, executeTime);
+    }
     public static Loggable parseLoggingEvent(LoggingEvent loggingEvent) {
         String message = (String) loggingEvent.getMessage();
         Loggable loggable = null;

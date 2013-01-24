@@ -27,7 +27,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class TraceFilter implements Filter {
 
     private URLTraceLog urlTraceLog;
-    private Logger dbLogger = LoggerFactory.getLogger("DBLog");
     private boolean userBehaviorLogSynchronized = true;
     private LogUrl logUrl;
 
@@ -85,6 +84,7 @@ public class TraceFilter implements Filter {
                 Loggables.notification(notificationEvent);
             }
             TraceUtils.endTrace();
+            Loggables.doLogStatistics(urlTraceLog.getUrl(), urlTraceLog.getConsumeTime());
         }
     }
 

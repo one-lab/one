@@ -51,7 +51,7 @@ public class SynchronizedLogHandler implements LogHandler {
                 }
             });
         } catch (Exception e) {
-            logger.error("保存" + loggable.getType().toString() + "时发生错误.", e);
+            logger.error("保存日志时发生错误.", e);
         }
     }
 

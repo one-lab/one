@@ -74,26 +74,50 @@
         </property>
     </bean>
 
+    <bean id="logStatisticsHandler" class="com.sinosoft.one.log.statistics.LogStatisticsHandler"
+          init-method="init" parent="logHandler">
+        <property name="insertSQL">
+            <value>
+                INSERT INTO
+                GE_LOG_STATISTICS(ID, TYPE, VALUE, EXECUTETIME, INTERVAL, BEGINTIME, ENDTIME)
+                VALUES (:id, :type, :value, :executeTime, :interval, :beginTime, :endTime)
+            </value>
+        </property>
+        <property name="selectSQL">
+            <value>
+                SELECT e.executetime FROM (SELECT t.executetime, rownum rm
+                FROM ge_log_statistics t
+                WHERE t.type = :type
+                AND t.value = :value
+                AND trunc(t.endtime) = trunc(sysdate)
+                ORDER BY t.endtime desc) e WHERE e.rm=1
+            </value>
+        </property>
+        <property name="logConfigs" ref="logConfigs" />
+        <property name="logStatisticsScanner" ref="logStatisticsScanner" />
+    </bean>
+
+    <bean id="logStatisticsScanner" class="com.sinosoft.one.log.statistics.LogStatisticsScanner"
+          destroy-method="stop">
+        <property name="logStatisticsHandler" ref="logStatisticsHandler" />
+    </bean>
+
+    <bean id="logEventSupport" class="com.sinosoft.one.log.event.LogEventSupport">
+        <property name="ringSize" value="${log.queue.size}" />
+    </bean>
+
     <bean id="loggables" class="com.sinosoft.one.log.Loggables">
         <property name="userBehaviorLogQueueHandler" ref="userBehaviorLogQueueHandler" />
         <property name="userBehaviorLogSynchronizedHandler" ref="userBehaviorLogSynchronizedHandler" />
         <property name="urlTraceLogHandler" ref="urlTraceLogHandler" />
         <property name="methodTraceLogHandler" ref="methodTraceLogHandler" />
-        <property name="loggableQueueAppender" ref="loggableQueueAppender" />
+        <property name="logStatisticsHandler" ref="logStatisticsHandler" />
+        <property name="logEventSupport" ref="logEventSupport" />
         <property name="appName" value="${log.appname}" />
         <property name="user" ref="logUser" />
         <property name="notificationService" ref="notificationService" />
     </bean>
 
-    <bean id="jdbcLogBlockingConsumer" class="com.sinosoft.one.log.queue.JdbcLogBlockingConsumer">
-        <property name="queueName" value="dblog" />
-        <property name="persistence" value="false" />
-    </bean>
-
-    <bean id="loggableQueueAppender" class="com.sinosoft.one.log.queue.LoggableQueueAppender">
-        <property name="queueName" value="dblog" />
-        <property name="queueSize" value="${log.queue.size}" />
-    </bean>
 
     <bean id="logConfigs" class="com.sinosoft.one.log.config.LogConfigs" init-method="init">
         <property name="environment" value="${log.environment}" />
