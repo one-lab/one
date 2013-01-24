@@ -68,25 +68,31 @@ public class GetUserServiceSpringImpl implements GetUserService {
 			Company company = findCompanyByComCode(comCode);
 			Assert.notNull(company);
 			
-			//获取用户已引入的机构
+			//获取用户已引入机构的用户组
 			List<Group> grouplist = findGroupByUser(userCode);
 			List<String> groupIdList = new ArrayList<String>();
 			for (Group group : grouplist) {
-				groupIdList.add(group.getGroupID());
+				if(groupIdList.contains(group.getGroupID().toString())){
+					groupIdList.add(group.getGroupID());
+				}
 			}
 			
 			//获取用户已取得的角色
 			Set<Role> roles = findRoleByGroup(groupIdList, comCode);
 			List<String> roleIdList = new ArrayList<String>();
 			for (Role role : roles) {
-				roleIdList.add(role.getRoleID());
+				if(roleIdList.contains(role.getRoleID().toString())){
+					roleIdList.add(role.getRoleID());
+				}
 			}
 			
 			//获取用户已取得的功能
 			List<Task> tasklist = findTaskByUserCode(userCode, comCode, sysFlag);
 			List<String> taskIdList = new ArrayList<String>();
 			for (Task task : tasklist) {
-				taskIdList.add(task.getTaskID());
+				if(taskIdList.contains(task.getTaskID().toString())){
+					taskIdList.add(task.getTaskID());
+				}
 			}
 			
 			List<Menu> menulist = new ArrayList<Menu>();
@@ -101,7 +107,7 @@ public class GetUserServiceSpringImpl implements GetUserService {
 					}
 				}
 			}
-			//创建功能树
+			//创建功能菜单树
 			createList(topList, menulist, tasklist);
 			
 			//保存用户的数据规则

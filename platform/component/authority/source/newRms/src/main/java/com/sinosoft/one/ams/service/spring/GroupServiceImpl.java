@@ -54,13 +54,13 @@ public class GroupServiceImpl implements GroupService{
 		} 
 		gridable.setPage(page);
 		gridable.setIdField("groupID");
-		List<String> roleAttribute = new ArrayList<String>();
-		roleAttribute.add("name");
-		roleAttribute.add("des");
-		roleAttribute.add("createTime");
-		roleAttribute.add("operateTime");
-		roleAttribute.add("flag");
-		gridable.setCellListStringField(roleAttribute);
+		List<String> groupAttribute = new ArrayList<String>();
+		groupAttribute.add("name");
+		groupAttribute.add("des");
+		groupAttribute.add("createTime");
+		groupAttribute.add("operateTime");
+		groupAttribute.add("flag");
+		gridable.setCellListStringField(groupAttribute);
 		return gridable;
 	}
 	

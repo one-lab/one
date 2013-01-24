@@ -90,6 +90,7 @@ public class GroupController {
 	}
 	
 	@Get("findRole")
+	@Post("findRole")
 	public Reply findRole( @Param("pageNo") int pageNo,@Param("rowNum") int rowNum,Invocation inv)throws Exception{
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
 		String comCode = user.getLoginComCode();

@@ -306,5 +306,10 @@ public class StaffingServiceImpl implements StaffingService{
 		}
 		return userPower;
 	}
+
+	public DataRule findDataRuleByDataRuleId(String DataRuleId) {
+		
+		return geRmsDataRuleRepository.findOne(DataRuleId);
+	}
 		
 }

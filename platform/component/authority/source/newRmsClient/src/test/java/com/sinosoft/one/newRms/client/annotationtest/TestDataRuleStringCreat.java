@@ -34,9 +34,12 @@ public class TestDataRuleStringCreat extends AbstractJUnit4SpringContextTests{
 		EnvContext.setLogin(user);
 //		List<Employe> users = (List<Employe>) userDao.findAll();
 //		Employe user = userDao.findUserById("admin");
-		System.out.println(user.getUserCode());
-		System.out.println(user.getTaskIdList().size());
-		testService.testFindAll();
+//		System.out.println(user.getUserCode());
+		System.out.println(user.getDataPowers().get(0).getRuleId());
+		List<Employe> users = testService.testFindAll();
+		System.out.println(user.getDataPowers().size());
+		System.out.println(user.getDataPowers().get(0).getComCode());
+		System.out.println("users.size()==============================="+users.size());
 		
 	}
 	

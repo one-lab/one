@@ -24,13 +24,13 @@ import com.sinosoft.one.newRms.client.EnvContext;
  * Time: 11:08 AM
  */
 @Aspect 
-@Component
+@Component("rmsAnnotationAspect")
 public class RmsAnnotationAspect {
 
 	private static CacheService arch4MethodNameCacheManager = CacheManager.getInstance("arch4Method");
 	
 //  @Around("execution(* ins..*service..*Service*Impl.*(..))") 
-	@Around("execution(* com.sinosoft.one.newRms.client.annotationtest..*.*(..))") 
+	@Around("execution(* com.sinosoft.one.ams.service..*.*(..))") 
     public Object register(ProceedingJoinPoint pjp) throws Throwable {
     	if(pjp.getThis() == null || pjp.getTarget() == null) {
     		return pjp.proceed();

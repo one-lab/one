@@ -23,6 +23,7 @@ import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.BusDataInfo;
 import com.sinosoft.one.newRms.client.DataRuleFactoryPostProcessor;
 import com.sinosoft.one.newRms.client.EnvContext;
+import com.sinosoft.one.newRms.client.ShiroLoginUser;
 
 /**
  * Created with IntelliJ IDEA.
@@ -73,17 +74,23 @@ public class RmsSQLASTVisitorSupport {
 		Map<String, String> tableAlias = getTableAlias(x);
 		String rule="";
 //      displayTableAlias(tableAlias);
-//      User user= ShiroLoginUser.getLoginUser();
-		User user= EnvContext.getLogin();
+		User user= ShiroLoginUser.getLoginUser();
+//		User user= EnvContext.getLogin();
 		for (DataPower dataPower : user.getDataPowers()) {
 			if (dataPower.getTaskId().toString().equals(EnvContext.getDataAuthorityTaskId().toString())) {
 				for (BusDataInfo busDataInfo : dataPower.getBusDataInfos()) {
 					for(String key : tableAlias.keySet()) {
 						if (tableAlias.get(key).equals(busDataInfo.getBusDataTable().toString().toLowerCase())){
-							if(!key.toString().equals(tableAlias.get(key).toString()))
+							if(!key.toString().equals(tableAlias.get(key).toString())){
+								System.out.println("1111111111111-----------"+dataPower.getComCode());
 								rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, key, dataPower.getUserCode(), dataPower.getComCode(), dataPower.getParam(),busDataInfo.getBusDataColumn());
-							else 
+								System.out.println(rule);
+							}
+							else {
+								System.out.println("2222222222222-----------"+dataPower.getComCode());
 								rule = dataRuleFactoryPostProcessor.getScript(dataPower.getRuleId()).creatSQL(rule, null, dataPower.getUserCode(), dataPower.getComCode(), dataPower.getParam(),busDataInfo.getBusDataColumn());
+								System.out.println(rule);
+							}
 						}
 					}
 				}

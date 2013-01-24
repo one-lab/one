@@ -9,6 +9,8 @@ package com.sinosoft.one.newRms.client;
  */
 
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -17,14 +19,33 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.sinosoft.one.ams.model.BusDataInfo;
+import com.sinosoft.one.ams.model.Company;
+import com.sinosoft.one.ams.model.DataRule;
+import com.sinosoft.one.ams.repositories.CompanyDao;
+import com.sinosoft.one.ams.repositories.GeRmsDataRuleRepository;
+import com.sinosoft.one.ams.service.facade.CompanyService;
+import com.sinosoft.one.ams.service.facade.EmployeeService;
+import com.sinosoft.one.ams.service.facade.StaffingService;
+import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.newRms.client.DataRuleFactoryPostProcessor;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-test.xml"})
+@Path
 public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContextTests {
 
     @Autowired
     private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
+    @Autowired
+    private StaffingService staffingService;
+    @Autowired
+    private EmployeeService employeeService;
     @Test
     public void getDataRule(){
     	String rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordCompany").creatSQL("", "a", "admin", "00", "{comCode:11}", "comCode");
@@ -40,5 +61,7 @@ public class DataRuleFactoryPostProcessorTest extends AbstractJUnit4SpringContex
     	rule=dataRuleFactoryPostProcessor.getScript("queryRuleAccordInsurance").creatSQL("", "a", "admin", "00", "{comCode:'11'}", "test");
     	System.out.println("4,"+rule);
     }
+    
+    
     
 }

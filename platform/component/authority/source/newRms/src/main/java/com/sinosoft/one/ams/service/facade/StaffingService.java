@@ -34,4 +34,6 @@ public interface StaffingService {
 	//查询用户权限
 	public UserPower findUserPowerByUserCode(String userCode,String comCode);
 	
+	public DataRule findDataRuleByDataRuleId(String DataRuleId);
+	
 }

@@ -16,6 +16,7 @@ import com.sinosoft.one.ams.repositories.CompanyDao;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
+import com.sinosoft.one.newRms.client.annotation.DataAuthority;
 import com.sinosoft.one.uiutil.Gridable;
 
 @Component
@@ -29,13 +30,14 @@ public class EmployeeServiceImpl implements EmployeeService{
 	private CompanyDao companyDao;
 	
 	public Employe findEmployeByUserCode(String userCode) {	
-		System.out.println(userDao+"+++++++++++++++++");
+		
 		Employe employe = userDao.findUserById(userCode);
-		System.out.println("userCode="+employe.getUserCode());
+		
 		return employe;
 	}
 
 	//将数据库中的用户记录查出，并保存在Gridable对象中返回
+	@DataAuthority("RMS001")
 	public Gridable<Employe> getGridable(Gridable<Employe> gridable,
 			Pageable pageable, List<String> userAttribute) {
 		Page<Employe> page = userDao.findAll(pageable);

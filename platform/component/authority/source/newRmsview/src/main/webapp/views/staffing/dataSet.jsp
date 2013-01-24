@@ -119,8 +119,9 @@ function params(comCode,dataRuleIdStr){
 		success : function(data){
 			if(data != null)
 				for(var i=0;i<data.length;i++){
-					var temValP = $("<p id='p_"+data[i].dataRule.dataRuleID+"'>"+data[i].dataRule.rule+"的数据规则参数</p>");
-					var temValText = $("<input id='te_"+data[i].dataRule.dataRuleID+"' type='text' class='code_text' value='"+data[i].dataRuleParam+"' />");
+					alert(data[i].dataRuleParam);
+					var temValP = $("<p id='p_"+data[i].dataRule.dataRuleID+"'>"+data[i].dataRule.rule+"的数据规则参数<a href='javascript:;' class='set' onclick='checkDataRule(this);'>测试</a></p>");
+					var temValText = $("<input id='te_"+data[i].dataRule.dataRuleID+"' value='"+data[i].dataRuleParam+"' type='text' class='code_text'  />");
 					$(".code_box").append(temValP).append(temValText);
 				};
 		},
@@ -129,6 +130,23 @@ function params(comCode,dataRuleIdStr){
 		}
 	});
 }
+function checkDataRule(obj){
+	var dataRuleId = $(obj).parent("p").attr("id").substr(2);
+	var param = $("#te_"+dataRuleId).val();
+	//var param = null;
+	
+	$.ajax({
+		url : "${ctx}/staffing/getDataRule/"+dataRuleId+"/"+param+"/${userCode}",
+		type : "get",
+		success : function(sql){
+			alert(sql);
+		},
+		error : function (){
+			alert("操作失败！");
+		}
+	});
+	
+}
 function toLeftMove() {
 	var ops = $("#sel_2").children();
 	ops.each(function(){
@@ -136,7 +154,7 @@ function toLeftMove() {
 			var thisId = $(this).attr("id");
 			var rootText = $(this).text();
 			$("#sel_1").append($(this));
-			var temValP = $("<p id='p_"+thisId+"'>"+rootText+"的数据规则参数</p>");
+			var temValP = $("<p id='p_"+thisId+"'>"+rootText+"的数据规则参数<a href='javascript:;' class='set' onclick='checkDataRule(this);'>测试</a></p>");
 			var temValText = $("<input id='te_"+thisId+"' type='text' class='code_text' value='请输入参数' />");
 			$(".code_box").append(temValP).append(temValText);
 		}

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.sinosoft.one.ams.model.BusDataInfo;
 import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
@@ -30,6 +31,8 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+import com.sinosoft.one.newRms.client.DataRuleFactoryPostProcessor;
+import com.sinosoft.one.newRms.client.annotation.DataAuthority;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.NodeEntity;
@@ -54,6 +57,8 @@ public class StaffingController {
 	private TaskService taskService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+    private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
 	
 	private List<String> userAttribute = new ArrayList<String>();
 	
@@ -272,5 +277,20 @@ public class StaffingController {
 		System.out.println(result);
 		return Replys.with("success");
 	}
+	
+	//测试生成的SQL语句
+	@Get("getDataRule/{ruleId}/{param}/{userCode}")
+    public Reply getDataRule(@Param("ruleId")String ruleId,@Param("param")String param,@Param("userCode")String userCode,Invocation inv){
+    	
+    	String rule= "";
+    	DataRule dataRule = staffingService.findDataRuleByDataRuleId(ruleId);
+    	List<BusDataInfo> busDataInfos = dataRule.getBusDataInfos();
+    	
+    	Company com = employeeService.findComByUserCode(userCode);
+    	for(BusDataInfo busDataInfo : busDataInfos){
+    		rule = dataRuleFactoryPostProcessor.getScript(ruleId).creatSQL(rule, "a", userCode, com.getComCode(), param, busDataInfo.getBusDataColumn());
+    	}
+    	return Replys.with(rule);
+    }
 
 }
