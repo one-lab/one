@@ -36,8 +36,14 @@ public class LoginController {
 	@Autowired
 	private EmployeeService employeeService;
 	
-	
+	/**
+	 * 登录
+	 * 
+	 * @param inv
+	 * @return
+	 */
 	@Get
+	@Post
 	public String login(Invocation inv){
 		//获得shiro已验证的登陆对象 可将其放入SESSION
 		User user=ShiroLoginUser.getLoginUser();
@@ -49,6 +55,13 @@ public class LoginController {
 		session.setAttribute("menus", menus);
 		return "index";
 	}
+	
+	/**
+	 * 登出操作
+	 * 
+	 * @param inv
+	 * @return
+	 */
 	@Get("logout")
 	public String logout(Invocation inv){
 		HttpSession session = inv.getRequest().getSession();
@@ -61,24 +74,47 @@ public class LoginController {
 		return "login"; 
 	}
 	
-	@Post("checkUserCode/{userCode}")
-	public Reply checkUserCode(@Param("userCode")String userCode, Invocation inv) throws Exception {
+	/**
+	 * 校验用户名和密码
+	 * 
+	 * @param userCode
+	 * @param password
+	 * @param inv
+	 * @return
+	 * @throws Exception
+	 */
+	@Post("checkUser/{userCode}/{password}")
+	public Reply checkUserCode(@Param("userCode")String userCode,@Param("password")String password, Invocation inv) throws Exception {
 
-		Employe user = employeeService.findEmployeByUserCode(userCode);
-		String result = "yes";
-		if(user == null){
-			result = "no";
+		String result = "";
+		if(true){
+			Employe user = employeeService.findEmployeByUserCodePassword(userCode,null);
+			if(user == null){
+				result = "userCodeError";
+				return Replys.with(result);
+			}
 		}
-		System.out.println(result);
-		return Replys.with(result);
+		Employe user = employeeService.findEmployeByUserCodePassword(userCode,password);
+		if(user == null){
+			result = "passwordError";
+			return Replys.with(result);
+		}
+		return Replys.with("yes");
 	}
 	
+	/**
+	 * 查询用户已引入机构
+	 * 
+	 * @param userCode
+	 * @param inv
+	 * @return
+	 * @throws Exception
+	 */
 	@Post("company/{userCode}")
 	public Reply company(@Param("userCode")String userCode, Invocation inv) throws Exception {
 
-		Company com = employeeService.findComByUserCode(userCode);
-		System.out.println(com.getComCode());
-		return Replys.with(com).as(Json.class);
+		List<Company> coms = companyService.findComsByUserCode(userCode);
+		return Replys.with(coms).as(Json.class);
 	}
 
 

@@ -26,34 +26,61 @@
 		$("#login").css('margin-top',marginTop);
 	};
 	
-	function selectCom(){
-		
+	function checkUser(){
 		var userCode = document.forms[0].userCode.value;
-		$.ajax({
-			url : "${ctx}/login/company/"+userCode,
-			type : "post",
-			success : function (com){
-				var opt = "<option value=''>--请选择机构--</option>";
-				opt = opt + "<option value='"+com.comCode+"'>"+com.comCName+"</option>";
-				$(".inp_selec").html(opt);
-			}
-		});
-		
-	}
-	
-	
-	
-	function login(){
-		//alert("check");
-		var name=document.forms[0].userCode.value;
 		var password=document.forms[0].passWord.value;
-		if(name==""){
+		if(userCode==""){
 			alert("用户名不能为空！！");
 			return ;
 		}
 		if(password==""){
 			alert("密码不能为空！！");
 			return ;
+		}
+		$.ajax({
+			url : "${ctx}/login/checkUser/"+userCode+"/"+password,
+			type : "post",
+			success : function(result){
+				if(result == "userCodeError"){
+					alert("用户名有误！");
+				}else if(result == "passwordError"){
+					alert("密码有误！");
+				}else{
+					 selectCom();
+				}
+			},
+			error : function(){
+				alert("操作失败！");
+			}
+		});
+	}
+	
+	function selectCom(){
+		
+		var userCode = document.forms[0].userCode.value;
+
+		$.ajax({
+			url : "${ctx}/login/company/"+userCode,
+			type : "post",
+			success : function (coms){
+				var opt = "<option value=''>--请选择机构--</option>";
+				
+				if(coms.length > 0){
+					for(var i=0;i<coms.length;i++){
+						opt = opt + "<option value='"+coms[i].comCode+"'>"+coms[i].comCName+"</option>";
+					}
+				}
+				$(".inp_selec").html(opt);
+			}
+		});
+		
+	}
+	
+	function login(){
+		var comCode = $(".inp_selec").val();
+		if(comCode == null || comCode == ""){
+			alert("请选择机构！");
+			return;
 		}
 		
 		$("#userLogin").attr("action","${ctx}/views/login/login.jsp").submit();
@@ -84,7 +111,7 @@
 		        	</tr>
 		        	<tr>
 		        		<td>
-		            		<li>密　码 <input type="password" class="inp_text" name="passWord"  onblur="selectCom();"/></li>
+		            		<li>密　码 <input type="password" class="inp_text" name="passWord"  onblur="checkUser();"/></li>
 		            	</td>
 		        	</tr>
 		        	<tr>

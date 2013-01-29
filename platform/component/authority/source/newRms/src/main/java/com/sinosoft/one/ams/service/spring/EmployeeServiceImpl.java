@@ -4,19 +4,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import com.mysema.query.jpa.impl.JPAQuery;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.repositories.CompanyDao;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.repositories.UserDao;
 import com.sinosoft.one.ams.service.facade.EmployeeService;
-import com.sinosoft.one.newRms.client.annotation.DataAuthority;
 import com.sinosoft.one.uiutil.Gridable;
 
 @Component
@@ -29,15 +26,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Resource(name="companyDao")
 	private CompanyDao companyDao;
 	
-	public Employe findEmployeByUserCode(String userCode) {	
-		
-		Employe employe = userDao.findUserById(userCode);
-		
-		return employe;
-	}
+	
 
 	//将数据库中的用户记录查出，并保存在Gridable对象中返回
-	@DataAuthority("RMS001")
 	public Gridable<Employe> getGridable(Gridable<Employe> gridable,
 			Pageable pageable, List<String> userAttribute) {
 		Page<Employe> page = userDao.findAll(pageable);
@@ -109,15 +100,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return gridable;
 	}
 
-	public Company findComByUserCode(String userCode) {
-		String comCode = userDao.findComCodeByUserCode(userCode);
-		Company com = new Company();
-		if(comCode != null){
-			com = companyDao.findOne(comCode);
+	public Employe findEmployeByUserCodePassword(String userCode,
+			String password) {
+		Employe user = null;
+		if(password == null){
+			user = userDao.findUserById(userCode);
 		}else{
-			com.setComCode("");
+			user = userDao.findUserByIdPassowrd(userCode, password);
 		}
-		return com;
+		return user;
 	}
 
 }

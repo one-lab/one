@@ -130,7 +130,7 @@ public class GetUserServiceSpringImpl implements GetUserService {
 
 	Employe findUserByCode(String userCode) {
 		Assert.hasText(userCode);
-		return employeService.findEmployeByUserCode(userCode);
+		return employeService.findEmployeByUserCodePassword(userCode, null);
 	}
 
 	/**

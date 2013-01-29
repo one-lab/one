@@ -87,11 +87,7 @@
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-ehcache</artifactId>
 		</dependency>
-		<dependency>
-    	<groupId>com.sinosoft.one</groupId>
-	  	<artifactId>newRmsClient</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-    </dependency>
+		
   </dependencies>
  <build>
         <plugins>

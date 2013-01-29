@@ -13,6 +13,10 @@ public interface UserDao extends PagingAndSortingRepository<Employe, String>{
 	@SQL("select * from GE_RMS_EMPLOYE where userCode = ?1")
 	Employe findUserById(String userCode);
 	
+	//根据userCode和password查询用户
+	@SQL("select * from GE_RMS_EMPLOYE where userCode = ?1 and password = ?2")
+	Employe findUserByIdPassowrd(String userCode,String password);
+	
 	//根据userCode查询User，模糊查询
 	@SQL("select * from GE_RMS_EMPLOYE where userCode like ?1")
 	Page<Employe> findUserByUserCode(String userCode,Pageable pageable);

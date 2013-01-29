@@ -34,7 +34,7 @@
 			<value>
 				/ =anon
 				/login/company/** =anon
-				/login/checkUser** = anon
+				/login/checkUser/** = anon
 				/login/logout** = anon
 				/js/** = anon
 				/css/** = anon

@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sinosoft.one.amsview.utils;
+package com.sinosoft.one.rms.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +17,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sinosoft.one.ams.utils.Reflections;
+
 
 /**
  * 反射工具类.

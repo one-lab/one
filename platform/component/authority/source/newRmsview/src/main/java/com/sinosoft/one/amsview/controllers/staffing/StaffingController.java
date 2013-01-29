@@ -32,7 +32,6 @@ import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.newRms.client.DataRuleFactoryPostProcessor;
-import com.sinosoft.one.newRms.client.annotation.DataAuthority;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.NodeEntity;
@@ -286,9 +285,9 @@ public class StaffingController {
     	DataRule dataRule = staffingService.findDataRuleByDataRuleId(ruleId);
     	List<BusDataInfo> busDataInfos = dataRule.getBusDataInfos();
     	
-    	Company com = employeeService.findComByUserCode(userCode);
+    	List<Company> coms = companyService.findComsByUserCode(userCode);
     	for(BusDataInfo busDataInfo : busDataInfos){
-    		rule = dataRuleFactoryPostProcessor.getScript(ruleId).creatSQL(rule, "a", userCode, com.getComCode(), param, busDataInfo.getBusDataColumn());
+    		rule = dataRuleFactoryPostProcessor.getScript(ruleId).creatSQL(rule, "a", userCode, coms.get(0).getComCode(), param, busDataInfo.getBusDataColumn());
     	}
     	return Replys.with(rule);
     }
