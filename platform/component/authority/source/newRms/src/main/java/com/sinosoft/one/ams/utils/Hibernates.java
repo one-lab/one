@@ -1,4 +1,4 @@
-package com.sinosoft.one.amsview.utils;
+package com.sinosoft.one.ams.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;

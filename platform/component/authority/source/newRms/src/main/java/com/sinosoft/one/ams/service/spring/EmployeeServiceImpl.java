@@ -77,7 +77,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 		String button2 = "<a href='#' class='agency' onclick='openWindow(this)'></a>";
 		for(Employe user: userList){
 			List<String> userPowerId = geRmsUserPowerRepository.findUserPowerIdByUserCode(user.getUserCode());
-			System.out.println(userPowerId);
 			if(!userPowerId.isEmpty()){
 				user.setNewUserCode(button);
 			}else{

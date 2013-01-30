@@ -54,7 +54,7 @@
 
 	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="databasePlatform">
-            <bean factory-method="getDialect" class="com.sinosoft.one.amsview.utils.Hibernates">
+            <bean factory-method="getDialect" class="com.sinosoft.one.ams.utils.Hibernates">
                 <constructor-arg ref="realDataSource"/>
             </bean>
         </property>
@@ -93,12 +93,4 @@
 			<property name="minEvictableIdleTimeMillis" value="3600000" />
 		</bean>
 
-
-		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
-		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
-
-         <!-- 调整sql的时候请加上-->
-         <!--<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
-             <constructor-arg ref="dataSourceSpied"/>
-         </bean>-->
 </beans>

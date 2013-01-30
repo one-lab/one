@@ -5,9 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.DataRule;
@@ -47,8 +45,6 @@ public class StaffingServiceImpl implements StaffingService{
 	
 	//检查用户权限的id是否存在，存在返回yes，否则返回no
 	public String checkIdByUserCodeComCode(String userCode, String comCode) {
-		System.out.println(userCode);
-		System.out.println(comCode);
 		String id = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
 		String result = "no";
 		if(id != null){

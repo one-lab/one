@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sinosoft.one.amsview.utils;
+package com.sinosoft.one.ams.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,6 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.sinosoft.one.ams.utils.Reflections;
 
 /**
  * Collections工具集.

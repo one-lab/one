@@ -2,8 +2,6 @@ package com.sinosoft.one.ams.service.facade;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.DataRule;
 import com.sinosoft.one.ams.model.UserPower;

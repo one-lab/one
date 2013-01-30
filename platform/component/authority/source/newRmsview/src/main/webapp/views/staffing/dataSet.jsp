@@ -119,9 +119,10 @@ function params(comCode,dataRuleIdStr){
 		success : function(data){
 			if(data != null)
 				for(var i=0;i<data.length;i++){
-					alert(data[i].dataRuleParam);
+					//alert(data[i].dataRuleParam);
 					var temValP = $("<p id='p_"+data[i].dataRule.dataRuleID+"'>"+data[i].dataRule.rule+"的数据规则参数<a href='javascript:;' class='set' onclick='checkDataRule(this);'>测试</a></p>");
-					var temValText = $("<input id='te_"+data[i].dataRule.dataRuleID+"' value='"+data[i].dataRuleParam+"' type='text' class='code_text'  />");
+					var temValText = $("<input id='te_"+data[i].dataRule.dataRuleID+"' type='text' class='code_text'  />");
+					temValText.val(data[i].dataRuleParam);
 					$(".code_box").append(temValP).append(temValText);
 				};
 		},
@@ -133,7 +134,6 @@ function params(comCode,dataRuleIdStr){
 function checkDataRule(obj){
 	var dataRuleId = $(obj).parent("p").attr("id").substr(2);
 	var param = $("#te_"+dataRuleId).val();
-	//var param = null;
 	
 	$.ajax({
 		url : "${ctx}/staffing/getDataRule/"+dataRuleId+"/"+param+"/${userCode}",

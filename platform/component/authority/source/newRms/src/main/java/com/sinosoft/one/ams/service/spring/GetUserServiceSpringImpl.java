@@ -97,7 +97,6 @@ public class GetUserServiceSpringImpl implements GetUserService {
 			
 			List<Menu> menulist = new ArrayList<Menu>();
 			List<Task> topList = new ArrayList<Task>();
-//			Map<String, Task> filter = new HashMap<String, Task>();
 			
 			for (Task task : tasklist) {
 				if (StringUtils.isNotBlank(task.getIsAsMenu())&& task.getIsAsMenu().toString().equals("1")) {
@@ -113,11 +112,6 @@ public class GetUserServiceSpringImpl implements GetUserService {
 			//保存用户的数据规则
 			List<DataPower> dataPowers = new ArrayList<DataPower>();
 			creatDataPowerList(dataPowers,userPower.getBusPowers(),userCode,comCode);
-//			String passWord="";
-//			if(employe.getPassword()!=null&&!employe.getPassword().equals("")){
-//				passWord=employe.getPassword();
-//			}
-//			System.out.println("用户的密码："+employe.getPassword()+"        用户代码："+employe.getUserCode());
 			return new User(employe.getUserCode(),employe.getPassword(),
 					employe.getUserName(), company.getComCode(),
 					company.getComCName(), roleIdList, taskIdList,menulist,dataPowers);
@@ -236,20 +230,17 @@ public class GetUserServiceSpringImpl implements GetUserService {
 				resultTaskIDs.add(task.getTaskID());
 			}
 			// 获得功能对象
-//			Set<Task> tasks = new HashSet<Task>();
 			List<Task> tasks = new ArrayList<Task>();
 			if (resultTaskIDs.size() > 0) {
 				tasks.addAll(taskServer.findTaskByTaskId(resultTaskIDs, sysFlag));
 			}
 			// 获得除外权限
-//			Set<Task> excTasks = new HashSet<Task>();
 			List<Task> excTasks = new ArrayList<Task>();
 			if (userPower != null) {
 				for (ExcPower excpower : userPower.getExcPowers()) {
 					excTasks.add(excpower.getTask());
 				}
 			}
-//			Set<Task> result = new HashSet<Task>();
 			List<Task> result = new ArrayList<Task>();
 			// 除外权限和获得的权限过滤
 			for (Task task : tasks) {
@@ -263,75 +254,12 @@ public class GetUserServiceSpringImpl implements GetUserService {
 					result.add(task);
 				}
 			}
-//			Set<Task> ts = new HashSet<Task>();
-//			iterateTask(ts, result);
-//			userTasksResult = taskArrange(ts);
 			userTasksResult = result;
 			return userTasksResult;
 		} else {
 			return userTasksResult;
 		}
 	}
-
-	/**
-	 * 循环获得父节点功能
-	 */
-//	void iterateTask(Set<Task> tsks, Set<Task> tasks) {
-//		for (Task task : tasks) {
-//			this.getSuppTask(tsks, task);
-//		}
-//	}
-//
-//	void getSuppTask(Set<Task> result, Task task) {
-//		if (task.getIsValidate().toString().equals("1")) {
-//			result.add(task);
-//		}
-//		if (task.getParent() != null) {
-//			getSuppTask(result, task.getParent());
-//		}
-//	}
-
-//	// 对功能集合排序
-//	List<Task> taskArrange(Set<Task> ts) {
-//		List<String> ids = new ArrayList<String>();
-//		for (Task task : ts) {
-//			ids.add(task.getTaskID());
-//		}
-//		List<Task> tasks = new ArrayList<Task>();
-//		if (ids.size() > 0) {
-//			QueryRule queryRule = QueryRule.getInstance();
-//			queryRule.addIn("taskID", ids);
-//			queryRule.addAscOrder("taskID");
-//			tasks = super.find(Task.class, queryRule);
-//		}
-//		return tasks;
-//	}
-
-	/**
-	 * 根据用户代码 获取机构列表(引入机构,登陆时已引入机构)
-	 */
-//	List<Company> findComByUserCode(String userCode) {
-//		QueryRule queryRule = QueryRule.getInstance();
-//		queryRule.addEqual("userCode", userCode);
-//		List<UserPower> userPower = super.find(UserPower.class, queryRule);
-//		if (userPower == null || userPower.isEmpty()) {
-//			// 异常
-//		}
-//		List<String> comCodes = new ArrayList<String>();
-//		for (Iterator<UserPower> iter = userPower.iterator(); iter.hasNext();) {
-//			comCodes.add(iter.next().getComCode());
-//		}
-//		List<Company> companies = new ArrayList<Company>();
-//		if (comCodes.size() > 0) {
-//			QueryRule queryRuleComcode = QueryRule.getInstance();
-//			queryRuleComcode.addIn("comCode", comCodes);
-//			companies = super.find(Company.class, queryRuleComcode);
-//		}
-//		// QueryRule queryComCode = QueryRule.getInstance();
-//		// queryComCode.addIn("comCode", comCodes);
-//		return companies;
-//	}
-
 	
 	/**
 	 * 组织树状数据
@@ -374,8 +302,5 @@ public class GetUserServiceSpringImpl implements GetUserService {
 			}
 		}
 	}
-
-
-
 
 }

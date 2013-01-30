@@ -3,7 +3,6 @@ package com.sinosoft.one.ams.repositories;
 import java.util.List;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.stereotype.Repository;
 
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.data.jade.annotation.SQL;

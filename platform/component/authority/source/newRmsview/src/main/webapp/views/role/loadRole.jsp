@@ -92,8 +92,7 @@ function openUpdateWindow(th){
 				$obj.find("#updateTreeTow").find(".jstree-checked").each(function(){
 					taskid=taskid+$(this).attr("id")+",";
 				});
-				alert(name);
-				alert(des);
+
 				$.ajax({
 					url : "${ctx}/role/update/"+roleid+"/"+name+"/"+des+"/"+roleType+"/"+taskid,
 					type : "post",
@@ -163,8 +162,7 @@ function openAddWindow(){
 				$obj.find("#addTreeTow").find(".jstree-checked").each(function(){
 					taskid=taskid+$(this).attr("id")+",";
 				});
-				alert(name);
-				alert(des);
+
 				$.ajax({
 					url : "${ctx}/role/add/"+name+"/"+des+"/"+roleType+"/"+taskid,
 					type : "post",
@@ -213,8 +211,23 @@ function openAddWindow(){
 }
 function delRow(e){
 	var row = $(e).parents('tr');
-	row.remove();
-	msgSuccess("", "删除成功！");
+	var roleId = row.attr("id").substr(4);
+	$.ajax({
+		url : "${ctx}/role/del/"+roleId,
+		type : "post",
+		success : function(result){
+			if(result == "success"){
+				msgSuccess("", "删除成功！",function(){
+					window.parent.frames[0].location.reload();
+				});
+				
+			}
+		},
+		error : function(){
+			alert("操作失败！");
+		}
+	});
+	//row.remove();
 }
 </script>
 </head>

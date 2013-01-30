@@ -60,11 +60,7 @@ public class TaskServiceImpl implements TaskService{
 			task.setIsAsMenu("");
 		}
 		
-		System.out.println(user.getLoginComCode());
-		System.out.println(task.getTaskID());
-		
 		String taskAuthId = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getLoginComCode(), task.getTaskID());
-		System.out.println("taskAuthId="+taskAuthId);
 		//判断此功能的功能授权是默认类型，还是所有可见类型
 		if(taskAuthId != null){
 			task.setFlag("");

@@ -31,6 +31,8 @@ public class RoleDesignateInfo {
 	/** 属性类型(OperateUser) */
 	private String type;
 	
+	private String checked;
+	
 	public RoleDesignateInfo(){
 		
 	}
@@ -113,6 +115,14 @@ public class RoleDesignateInfo {
 
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
+	}
+
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
 	}
 	
 }

@@ -37,7 +37,7 @@ public class TaskAuthController {
 	
 	@Post("companyAll")
 	public Reply list(Invocation inv) throws Exception {
-
+		
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
 		String supercomCode=user.getLoginComCode();
 		List<Company> showCompany=companyService.findAllNextComBySupper(supercomCode);

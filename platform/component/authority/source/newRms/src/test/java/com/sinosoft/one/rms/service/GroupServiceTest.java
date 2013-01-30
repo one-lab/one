@@ -7,12 +7,16 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.sinosoft.one.ams.model.Group;
+import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.service.facade.GroupService;
+import com.sinosoft.one.uiutil.Gridable;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-test.xml"})
@@ -88,6 +92,36 @@ public class GroupServiceTest extends AbstractJUnit4SpringContextTests {
 		roleIds.add("role100001");
 		roleIds.add("role100002");
 		groupService.addGroup("group00000", "all", roleIds, "测试", "00", "admin");
+	}
+	
+	/**
+	 * 查询用户组
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetGroupGridable(){
+		Gridable<Group> gridable = new Gridable<Group>(null);
+		Pageable pageable = new PageRequest(0, 10);
+		gridable = groupService.getGroupGridable(gridable, "00", null, pageable);
+		List<Group> groups = gridable.getPage().getContent();
+		for(Group group : groups){
+			System.out.println(group.getGroupID());
+		}
+	}
+	
+	/**
+	 * 根据用户组ID查询角色
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRoleGridableByGroupId(){
+		Gridable<Role> gridable = new Gridable<Role>(null);
+		Pageable pageable = new PageRequest(0, 10);
+		gridable = groupService.getRoleGridableByGroupId(gridable, "group10010", "00", pageable);
+		List<Role> roles = gridable.getPage().getContent();
+		for(Role role : roles){
+			System.out.println(role.getRoleID());
+		}
 	}
 
 }

@@ -66,13 +66,25 @@ function fitHeight(){
 function save(){
 	$obj = $(document.getElementById('designateRoleGrid'));
 	var roleid="";
-		$obj.find("[name='g_check']:checked").each(function(){
-			roleid=roleid+$(this).parents("tr").attr("id").split("_")[1]+",";
-		});
+	$obj.find("[name='g_check']:checked").each(function(){
+		roleid=roleid+$(this).parents("tr").attr("id").split("_")[1]+",";
+	});
 	var comCode= $("#selectComCode").val();
-	alert(comCode);
-	alert(roleid);
-	msgSuccess("", "保存成功！");
+	$.ajax({
+		url : "${ctx}/role/save/"+comCode+"/"+roleid,
+		type : "post",
+		success : function(result){
+			if(result == "success"){
+				
+				msgSuccess("", "保存成功！",function(){
+					window.location.reload(true);
+				});
+			}
+		},
+		errror : function(){
+			alert("操作失败！");
+		}
+	});
 }
 </script>
 </head>

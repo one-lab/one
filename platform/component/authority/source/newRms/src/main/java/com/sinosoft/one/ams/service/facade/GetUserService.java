@@ -1,12 +1,8 @@
 package com.sinosoft.one.ams.service.facade;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.User;
-
-
-
 
 /**
  * 服务端包装接口

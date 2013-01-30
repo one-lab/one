@@ -8,12 +8,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.GroupRole;
 import com.sinosoft.one.ams.model.Role;
@@ -34,14 +37,11 @@ import com.sinosoft.one.ams.service.facade.RoleService;
 @Component
 public class RoleServiceImpl implements RoleService{
 	
-	
-	@Resource(name="geRmsRoleRepository")
+	@Autowired
 	private GeRmsRoleRepository geRmsRoleRepository;
-	
 	@Resource(name="geRmsGroupRepository")
 	private GeRmsGroupRepository geRmsGroupRepository; 
-	
-	@Resource
+	@Autowired
 	private GeRmsGroupRoleRepositoriy geRmsGroupRoleRepository;
 	@Resource(name="geRmsTaskRepository")
 	private GeRmsTaskRepository geRmsTaskRepository;
@@ -49,8 +49,6 @@ public class RoleServiceImpl implements RoleService{
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
 	@Resource(name="geRmsRoleDesignateRepository")
 	private GeRmsRoleDesignateRepository geRmsRoleDesignateRepository;
-	
-	
 	
 	//查询角色信息
 	public Role findRoleById(String roleId){
@@ -187,7 +185,8 @@ public class RoleServiceImpl implements RoleService{
 		RoleDesignateId roleDesignateId=new RoleDesignateId();
 		roleDesignateId.setComCode(comCode);
 		roleDesignateId.setRoleID(roleId);
-//		 geRmsRoleDesignateRepository.delete(roleDesignateId);
+//		geRmsRoleDesignateRepository.delete(roleDesignateId);
+		geRmsRoleDesignateRepository.delete(comCode, roleId);
 	}
 	
 	//操作默认用户组
@@ -269,16 +268,16 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 
-	public Page<RoleDesignateInfo> findRoleDesignate(String superComCode ,String comCode,
+	public Page<RoleDesignateInfo> findRoleDesignate(String superComCode ,
 			Pageable pageable) {
 		List<RoleDesignate> supers= geRmsRoleDesignateRepository.findRoleDesignateByComCodeQuery(superComCode);
 		final Page<RoleDesignate> superRoledPage=geRmsRoleDesignateRepository.findRoleDesignateByComCode(superComCode,pageable);
 //		List<RoleDesignate> subs=geRmsRoleDesignateRepository.findRoleDesignateByComCodeQuery(comCode);
 		
-		for (RoleDesignate roleDesignate : supers) {
-			System.out.println(roleDesignate.getId().getComCode());
-			System.out.println(roleDesignate.getId().getRoleID());
-		}
+//		for (RoleDesignate roleDesignate : supers) {
+//			System.out.println(roleDesignate.getId().getComCode());
+//			System.out.println(roleDesignate.getId().getRoleID());
+//		}
 		List<RoleDesignateInfo> roleDesignateInfos=new ArrayList<RoleDesignateInfo>();
 		for (RoleDesignate supDesignate : supers) {
 			RoleDesignateInfo roleDesignateInfo=new RoleDesignateInfo();
@@ -358,19 +357,35 @@ public class RoleServiceImpl implements RoleService{
 		return page;
 	}
 
-	public void designateRole(List<String> roleIds, String comCode) {
-		
-	}
-
-	public void designateRole(String roleId, String comCode) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	//根据机构Id查询角色ID
 	public List<String> findRoleIdByComCode(String comCode) {
 		List<String> roleId = geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
 		return roleId;
+	}
+
+	public void saveRoleDesignate(String comCode, String roleIdStr) {
+		Subject currentUser = SecurityUtils.getSubject();
+		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
+		String[] roleIds = roleIdStr.split(",");
+		List<RoleDesignate> rds = new ArrayList<RoleDesignate>();
+		if(roleIds != null){
+			for(String rileId : roleIds){
+				RoleDesignate rd = new RoleDesignate();
+				RoleDesignateId id = new RoleDesignateId();
+				id.setComCode(comCode);
+				id.setRoleID(rileId);
+				rd.setId(id);
+				rd.setCreateUser(user.getUserName());
+				rd.setCreateTime(new Date());
+				rd.setOperateTime(new Date());
+				rd.setOperateUser(user.getUserName());
+				rd.setRole(geRmsRoleRepository.findOne(rileId));
+				rds.add(rd);
+			}
+		}
+		
+		geRmsRoleDesignateRepository.save(rds);
+		
 	}
 
 	

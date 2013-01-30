@@ -14,6 +14,7 @@ import com.sinosoft.one.uiutil.Gridable;
 public interface GroupService {
 	
 	/**
+	 * 查询用户组
 	 * 
 	 * @param gridable
 	 * @param comCode
@@ -30,6 +31,14 @@ public interface GroupService {
 	 */
 	public Group findGroupById(String groupId);
 	
+	/**
+	 * 根据用户组ID查询角色
+	 * @param gridable
+	 * @param groupId
+	 * @param comCode
+	 * @param pageable
+	 * @return
+	 */
 	public Gridable<Role> getRoleGridableByGroupId(Gridable<Role> gridable,String groupId,String comCode,Pageable pageable);
 	
 	public void updateGroup(String groupId,String name,String groupType,List<String> roleIds,String des,String comCode,String userCode);

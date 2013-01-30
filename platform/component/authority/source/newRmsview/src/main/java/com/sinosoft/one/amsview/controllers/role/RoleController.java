@@ -25,7 +25,7 @@ import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
-import com.sinosoft.one.newRms.client.ShiroLoginUser;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.NodeEntity;
@@ -85,7 +85,7 @@ public class RoleController {
 		// 根据机构代码查询可见功能
 		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
-		roleService.deleteRole(roleId, comCode);
+//		roleService.deleteRole(roleId, comCode);
 		Map<String, Task> filter = new HashMap<String, Task>();
 		List<Task> topList = new ArrayList<Task>();
 		for (Task task : comsTasks) {
@@ -97,7 +97,6 @@ public class RoleController {
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,filter,rolesTasks);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-		System.out.println(render.getResultForTest());
 		render.render(inv.getResponse());
 		return null;
 	}
@@ -125,7 +124,7 @@ public class RoleController {
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,filter,rolesTasks);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-		System.out.println(render.getResultForTest());
+//		System.out.println(render.getResultForTest());
 		render.render(inv.getResponse());
 		return null;
 	}
@@ -147,7 +146,6 @@ public class RoleController {
 	public String prepareAddRole(){
 		return "addRole";
 	}
-	
 	
 	@Post("add/{name}/{des}/{roleType}/{taskId}")
 	public Reply addRole(@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
@@ -195,16 +193,17 @@ public class RoleController {
 		Gridable<Role> ga = new Gridable<Role>(null);
 		//查询机构下所有可见的角色
 		List<String> roleAttribute = new ArrayList<String>();
-		Page<RoleDesignateInfo> superComRolePage = roleService.findRoleDesignate(company.getUpperComCode(), comCode, pageable);
+		Page<RoleDesignateInfo> superComRolePage = roleService.findRoleDesignate(company.getUpperComCode(), pageable);
 //		Page<Role> subComRolePage = roleService.findRole(comCode, null, pageable);
-//		List<Role> supersRoles = superComRolePage.getContent();
+//		List<RoleDesignateInfo> supersRoles = superComRolePage.getContent();
 //		List<Role> subsRoles = subComRolePage.getContent();
-//		for (Role supersRole : supersRoles) {
+//		for (RoleDesignateInfo supersRole : supersRoles) {
 //			for (Role subsRole : subsRoles) {
-//				if(supersRole.getRoleID().toString().equals(subsRole.getRoleID().toString())){
+//				if(supersRole.getRoleId().toString().equals(subsRole.getRoleID().toString())){
+//					System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 //					supersRole.setChecked("true");
-//					supersRole.setFlag(subsRole.getr)
 //					break;
+////					supersRole.setFlag(subsRole.getr)
 //				}
 //			}
 //		}
@@ -214,6 +213,7 @@ public class RoleController {
 		roleAttribute.add("operateTime");
 		roleAttribute.add("operateUser");
 		roleAttribute.add("type");
+//		roleAttribute.add("checked");
 		ga.setCellListStringField(roleAttribute);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		Render render = (GridRender) UIUtil.with(ga).as(UIType.Json);
@@ -254,5 +254,19 @@ public class RoleController {
 				nodeEntitys.add(nodeEntity);
 			}
 		return nodeEntitys;
+	}
+	
+	@Post("del/{roleId}")
+	public Reply deleteRole(@Param("roleId")String roleId,Invocation inv){
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
+		roleService.deleteRole(roleId, comCode);
+		return Replys.with("success");
+	}
+	
+	@Post("save/{comCode}/{roleIdStr}")
+	public Reply saveRoleDesignate(@Param("comCode")String comCode,@Param("roleIdStr")String roleIdStr){
+		roleService.saveRoleDesignate(comCode, roleIdStr);
+		return Replys.with("success");
 	}
 }

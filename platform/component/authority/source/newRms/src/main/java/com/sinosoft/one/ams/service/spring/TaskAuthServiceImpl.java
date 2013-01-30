@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Company;
-import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.repositories.CompanyDao;
