@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Company;
-import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.service.facade.CompanyService;
 import com.sinosoft.one.ams.service.facade.TaskAuthService;
@@ -75,9 +74,6 @@ public class TaskAuthController {
 		inv.addModel("comCode", comCode);
 		return Replys.with("success");
 	}
-	
-	
-
 	
 
 }

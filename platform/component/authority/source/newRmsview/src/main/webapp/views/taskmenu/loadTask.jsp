@@ -122,6 +122,16 @@ function evevtCheck(){
 		$("#centerInfo").find("input:not(#saveBtn),select,textarea").removeAttr("disabled");
 	}else{
 		var parentId = $(".parentID").val();
+		var taskID = $(".taskID").val();
+		var name = $(".name").val();
+		if(taskID == "" || taskID == null){
+			alert("功能ID不能为空！");
+			return;
+		};
+		if(name == "" || name == null){
+			alert("功能名不能为空！");
+			return;
+		}
 		
 		$.ajax({
 			type:"post",

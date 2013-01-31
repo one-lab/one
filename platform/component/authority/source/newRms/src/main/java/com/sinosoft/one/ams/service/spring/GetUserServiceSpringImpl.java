@@ -101,7 +101,7 @@ public class GetUserServiceSpringImpl implements GetUserService {
 			for (Task task : tasklist) {
 				if (StringUtils.isNotBlank(task.getIsAsMenu())&& task.getIsAsMenu().toString().equals("1")) {
 					String parentId = taskServer.findParentIdBytaskId(task.getTaskID());
-					if (parentId.equals("RMS001")) {
+					if (StringUtils.isNotEmpty(parentId) && parentId.equals("RMS001")) {
 						topList.add(task);
 					}
 				}

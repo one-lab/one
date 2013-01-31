@@ -1,5 +1,6 @@
 package com.sinosoft.one.rms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -77,6 +78,69 @@ public class RoleServiceTest extends AbstractJUnit4SpringContextTests {
 		for(RoleDesignateInfo rdi : RoleDesignateInfos){
 			System.out.println(rdi.getRoleId());
 		}
+	}
+	
+	/**
+	 * 根据用户组ID查询相应的角色
+	 */
+	@Test
+	public void testFindRoleByGroupId(){
+		List<Role> roles = roleService.findRoleByGroupId("group10010", "00");
+		if(!roles.isEmpty()){
+			for(Role role : roles){
+				System.out.println(role.getRoleID());
+			}
+		}
+	}
+	
+	/**
+	 * 更新角色
+	 */
+	@Test
+	public void testUpdateRole(){
+		List<String> taskIds = new ArrayList<String>();
+		taskIds.add("RMS001");
+		roleService.updateRole("role100001", "07", "admin", "role00000", "测试000", "all", taskIds);
+	}
+	
+	/**
+	 * 新增角色
+	 */
+	@Test
+	public void testAddRole(){
+		List<String> taskIds = new ArrayList<String>();
+		taskIds.add("RMS001");
+		roleService.addRole("00", "admin", "测试01", "测试", "all", taskIds);
+	}
+	
+	/**
+	 * 删除角色指派
+	 */
+	@Test
+	public void testDeleteRole(){
+		roleService.deleteRole("402892173c8e58b5013c8e58baee0000", "00");
+		
+	}
+	
+	/**
+	 * 根据机构Id查询角色ID
+	 */
+	@Test
+	public void testFindRoleIdByComCode(){
+		List<String> roleIds = roleService.findRoleIdByComCode("00");
+		if(!roleIds.isEmpty()){
+			for(String id : roleIds){
+				System.out.println(id);
+			}
+		}
+	}
+	
+	/**
+	 * 保存机构的角色
+	 */
+	@Test
+	public void testSaveRoleDesignate(){
+		roleService.saveRoleDesignate("02", "role100012");
 	}
 
 }

@@ -92,6 +92,16 @@ function openUpdateWindow(th){
 				$obj.find("#updateTreeTow").find(".jstree-checked").each(function(){
 					taskid=taskid+$(this).attr("id")+",";
 				});
+				
+				if(roleid == "" || roleid == null){
+					alert("角色ID不能为空！");
+					return;
+				}
+				
+				if(name == "" || name == null){
+					alert("角色名不能为空！");
+					return;
+				}
 
 				$.ajax({
 					url : "${ctx}/role/update/"+roleid+"/"+name+"/"+des+"/"+roleType+"/"+taskid,
@@ -162,7 +172,11 @@ function openAddWindow(){
 				$obj.find("#addTreeTow").find(".jstree-checked").each(function(){
 					taskid=taskid+$(this).attr("id")+",";
 				});
-
+								
+				if(name == "" || name == null){
+					alert("角色名不能为空！");
+					return;
+				}
 				$.ajax({
 					url : "${ctx}/role/add/"+name+"/"+des+"/"+roleType+"/"+taskid,
 					type : "post",
