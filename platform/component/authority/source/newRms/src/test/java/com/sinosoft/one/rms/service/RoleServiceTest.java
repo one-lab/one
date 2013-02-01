@@ -110,7 +110,7 @@ public class RoleServiceTest extends AbstractJUnit4SpringContextTests {
 	public void testAddRole(){
 		List<String> taskIds = new ArrayList<String>();
 		taskIds.add("RMS001");
-		roleService.addRole("00", "admin", "测试01", "测试", "all", taskIds);
+		roleService.addRole("00", "admin", "Transactional2", "Transactional2", "all", taskIds);
 	}
 	
 	/**

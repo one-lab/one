@@ -83,5 +83,48 @@ public class TaskServiceTest extends AbstractJUnit4SpringContextTests {
 		roleids.add("role");
 		taskService.findTaskByRoleIds(roleids, "00", "admin");
 	}
+	
+	/**
+	 * 根据子功能ID查询父功能ID
+	 */
+	@Test
+	public void testFindParentIdBytaskId(){
+		String parentId = taskService.findParentIdBytaskId("RMS002");
+		Assert.assertEquals("RMS001", parentId);
+	}
+	
+	/**
+	 * 根据角色的功能ID和机构ID查询出角色在此机构中的功能
+	 */
+	@Test
+	public void testGetTasks(){
+		List<String> roleTaskIds = new ArrayList<String>();
+		roleTaskIds.add("eTest");
+		roleTaskIds.add("RMS0091");
+		List<Task> tasks = taskService.getTasks(roleTaskIds, "08");
+		List<String> results = new ArrayList<String>();
+		for(Task task : tasks){
+			results.add(task.getTaskID());
+		}
+		Assert.assertFalse(results.contains("RMS0091"));
+		Assert.assertTrue(results.contains("eTest"));
+		
+	}
+	
+	/**
+	 * 查询当前机构的角色的当前根权限的后代权限，并检查权限在权限除外表中是否存在
+	 */
+	@Test
+	public void testGetTreeable(){
+		taskService.getTreeable("role100012", "00", "admin" , "RMS001");
+	}
+	
+	/**
+	 * 查询当前机构的角色的根权限的后代权限
+	 */
+	@Test
+	public void testGetTreeable2(){
+		taskService.getTreeable("role100012", "00", "RMS001");
+	}
 
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Group;
@@ -99,7 +100,7 @@ public class RoleServiceImpl implements RoleService{
 		return geRmsTasks;
 	}
 
-
+	@Transactional
 	public void updateRole(String roleId,String  comCode, String userCode,String name, String des,
 			String roleTpe, List<String> taskids) {
 		Role role=geRmsRoleRepository.findOne(roleId);
@@ -135,6 +136,7 @@ public class RoleServiceImpl implements RoleService{
 		}
 	}
 	
+	@Transactional
 	public void addRole(String comCode, String userCode, String name,
 			String des, String roleTpe, List<String> taskids) {
 		Role role = new Role();
@@ -177,8 +179,11 @@ public class RoleServiceImpl implements RoleService{
 		roleDesignate.setOperateTime(date);
 		geRmsRoleDesignateRepository.save(roleDesignate);
 		//操作默认用户组 默认类型的才操作
-		if(roleTpe.toString().equals("default".toString()))
+		if(roleTpe.toString().equals("default".toString())){
+			
 			editDefaultGroup(comCode, userCode, role);
+		}
+	
 	}
 	
 	public void deleteRole(String roleId, String comCode){

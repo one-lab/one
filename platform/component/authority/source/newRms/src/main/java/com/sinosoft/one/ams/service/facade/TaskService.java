@@ -104,6 +104,7 @@ public interface TaskService {
 	public Treeable<NodeEntity> getTreeable(String roleIdStr, String comCode,String userCode ,String taskId);
 	
 	/**
+	 * 根据角色的功能ID和机构ID查询出角色在此机构中的功能
 	 * 
 	 * @param roletaskids
 	 * @param comCode
@@ -112,6 +113,7 @@ public interface TaskService {
 	public List<Task> getTasks(List<String> roletaskids,String comCode);
 	
 	/**
+	 * 根据子功能ID查询父功能ID
 	 * 
 	 * @param taskId
 	 * @return
