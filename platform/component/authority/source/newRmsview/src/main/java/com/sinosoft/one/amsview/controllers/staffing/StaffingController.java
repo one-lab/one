@@ -13,7 +13,7 @@ import com.sinosoft.one.ams.model.BusDataInfo;
 import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
-import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.model.EmployeInfo;
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
@@ -67,7 +67,7 @@ public class StaffingController {
 	public Reply list(@Param("pageNo") int pageNo, @Param("rowNum")int rowNum,Invocation inv) throws Exception{
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		
-		Gridable<Employe> gridable = new Gridable<Employe>(null);
+		Gridable<EmployeInfo> gridable = new Gridable<EmployeInfo>(null);
 		gridable = employeeService.getGridable(gridable,pageable,userAttribute);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
@@ -82,7 +82,7 @@ public class StaffingController {
 	public Reply search(@Param("pageNo") int pageNo, @Param("rowNum")int rowNum,@Param("userCode")String userCode,@Param("comCode")String comCode,Invocation inv) throws Exception{
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		
-		Gridable<Employe> gridable = new Gridable<Employe>(null);
+		Gridable<EmployeInfo> gridable = new Gridable<EmployeInfo>(null);
 		gridable = employeeService.getGridable(gridable,userCode,comCode, pageable, userAttribute);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");

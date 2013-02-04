@@ -37,7 +37,7 @@ public class TaskAuthServiceTest extends AbstractJUnit4SpringContextTests {
 	 */
 	@Test
 	public void testSave(){
-		TaskAuth taskAuth = new TaskAuth();
-		taskAuthService.save("RMS001", "00", taskAuth);
+//		TaskAuth taskAuth = new TaskAuth();
+//		taskAuthService.save("RMS001", "00", taskAuth);
 	}
 }

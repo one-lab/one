@@ -39,17 +39,17 @@ public class TaskServiceTest extends AbstractJUnit4SpringContextTests {
 	 */
 	@Test
 	public void testSave(){
-		TaskAuth taskAuth = new TaskAuth();
-		Task task = new Task();
-		task.setTaskID("RMS0089");
-		task.setName("test89");
-		task.setMenuName("");
-		task.setMenuURL("");
-		task.setDes("");
-		task.setIsValidate("1");
-		task.setIsAsMenu("");
-		task.setFlag("*");
-		taskService.save(task, "RMS004", taskAuth);
+//		TaskAuth taskAuth = new TaskAuth();
+//		Task task = new Task();
+//		task.setTaskID("RMS0089");
+//		task.setName("test89");
+//		task.setMenuName("");
+//		task.setMenuURL("");
+//		task.setDes("");
+//		task.setIsValidate("1");
+//		task.setIsAsMenu("");
+//		task.setFlag("*");
+//		taskService.save(task, "RMS004", taskAuth);
 	}
 	
 	/**
