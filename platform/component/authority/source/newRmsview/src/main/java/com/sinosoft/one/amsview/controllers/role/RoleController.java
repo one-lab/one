@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Role;
@@ -24,6 +25,7 @@ import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.NodeEntity;
@@ -45,8 +47,8 @@ public class RoleController {
 	@Post({ "rolelist/{name}", "rolelist" })
 	public Reply list(@Param("name") String name, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum, Invocation inv) throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 		Gridable<Role> ga = new Gridable<Role>(null);
 		Page<Role> page = null;
@@ -76,14 +78,14 @@ public class RoleController {
 	@Post("findTaskByRole/{roleId}")
 	public Reply findTaskByRole(@Param("roleId") String roleId, Invocation inv)
 			throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		// 根据角色ID查询角色关联功能
 		List<Task> rolesTasks = roleService.findTaskByRole(roleId);
 		// 根据机构代码查询可见功能
 		List<Task> comsTasks = roleService.findTaskByComCode(comCode);
 		// 构建树对象
-		roleService.deleteRole(roleId, comCode);
+//		roleService.deleteRole(roleId, comCode);
 		Map<String, Task> filter = new HashMap<String, Task>();
 		List<Task> topList = new ArrayList<Task>();
 		for (Task task : comsTasks) {
@@ -95,7 +97,6 @@ public class RoleController {
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,filter,rolesTasks);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-		System.out.println(render.getResultForTest());
 		render.render(inv.getResponse());
 		return null;
 	}
@@ -104,8 +105,8 @@ public class RoleController {
 	@Post("findTask")
 	public Reply findTask(Invocation inv)
 			throws Exception {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		// 根据角色ID查询角色关联功能
 		List<Task> rolesTasks =new ArrayList<Task>();
 		// 根据机构代码查询可见功能
@@ -123,7 +124,7 @@ public class RoleController {
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,filter,rolesTasks);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-		System.out.println(render.getResultForTest());
+//		System.out.println(render.getResultForTest());
 		render.render(inv.getResponse());
 		return null;
 	}
@@ -146,7 +147,6 @@ public class RoleController {
 		return "addRole";
 	}
 	
-	
 	@Post("add/{name}/{des}/{roleType}/{taskId}")
 	public Reply addRole(@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
@@ -158,8 +158,8 @@ public class RoleController {
 	
 	@Post("update/{roleId}/{name}/{des}/{roleType}/{taskId}")
 	public Reply updateRole(@Param("roleId") String roleId,@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String comCode = user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
 		taskid=taskid.substring(0, taskid.length()-1);
 		roleService.updateRole(roleId, comCode,user.getUserCode(), name, des, roleType, Arrays.asList(taskid.split(",")));
 		return null;
@@ -167,8 +167,8 @@ public class RoleController {
 
 	@Post("findDesigNateComTree")
 	public Reply findComTree(Invocation inv) throws Exception{
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String supercomCode=user.getCompany().getComCode();
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String supercomCode=user.getLoginComCode();
 		List<Company> showCompany=companyService.findAllNextComBySupper(supercomCode);
 		Map<String, Company> filter = new HashMap<String, Company>();
 		List<Company> topList = new ArrayList<Company>();
@@ -187,22 +187,23 @@ public class RoleController {
 	@Post("findDesignateRole/{comCode}")
 	public Reply findDesignateRole(@Param("comCode") String comCode, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum,Invocation inv) throws Exception{
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+//		User user=ShiroLoginUser.getLoginUser();
 		Company company=companyService.findCompanyByComCode(comCode);
 		Pageable pageable = new PageRequest(pageNo - 1, rowNum);
 		Gridable<Role> ga = new Gridable<Role>(null);
 		//查询机构下所有可见的角色
 		List<String> roleAttribute = new ArrayList<String>();
-		Page<RoleDesignateInfo> superComRolePage = roleService.findRoleDesignate(company.getUpperComCode(), comCode, pageable);
+		Page<RoleDesignateInfo> superComRolePage = roleService.findRoleDesignate(company.getUpperComCode(), pageable);
 //		Page<Role> subComRolePage = roleService.findRole(comCode, null, pageable);
-//		List<Role> supersRoles = superComRolePage.getContent();
+//		List<RoleDesignateInfo> supersRoles = superComRolePage.getContent();
 //		List<Role> subsRoles = subComRolePage.getContent();
-//		for (Role supersRole : supersRoles) {
+//		for (RoleDesignateInfo supersRole : supersRoles) {
 //			for (Role subsRole : subsRoles) {
-//				if(supersRole.getRoleID().toString().equals(subsRole.getRoleID().toString())){
+//				if(supersRole.getRoleId().toString().equals(subsRole.getRoleID().toString())){
+//					System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 //					supersRole.setChecked("true");
-//					supersRole.setFlag(subsRole.getr)
 //					break;
+////					supersRole.setFlag(subsRole.getr)
 //				}
 //			}
 //		}
@@ -212,6 +213,7 @@ public class RoleController {
 		roleAttribute.add("operateTime");
 		roleAttribute.add("operateUser");
 		roleAttribute.add("type");
+//		roleAttribute.add("checked");
 		ga.setCellListStringField(roleAttribute);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		Render render = (GridRender) UIUtil.with(ga).as(UIType.Json);
@@ -252,5 +254,19 @@ public class RoleController {
 				nodeEntitys.add(nodeEntity);
 			}
 		return nodeEntitys;
+	}
+	
+	@Post("del/{roleId}")
+	public Reply deleteRole(@Param("roleId")String roleId,Invocation inv){
+		User user = (User) inv.getRequest().getSession().getAttribute("user");
+		String comCode = user.getLoginComCode();
+		roleService.deleteRole(roleId, comCode);
+		return Replys.with("success");
+	}
+	
+	@Post("save/{comCode}/{roleIdStr}")
+	public Reply saveRoleDesignate(@Param("comCode")String comCode,@Param("roleIdStr")String roleIdStr){
+		roleService.saveRoleDesignate(comCode, roleIdStr);
+		return Replys.with("success");
 	}
 }

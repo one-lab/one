@@ -3,9 +3,9 @@ package com.sinosoft.one.ams.service.spring;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.DataRule;
@@ -23,31 +23,28 @@ import com.sinosoft.one.ams.repositories.GeRmsUserGroupRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.StaffingService;
 
-@Transactional
-@Component
+@Component("staffingServiceImpl")
 public class StaffingServiceImpl implements StaffingService{
 
-	@Autowired
+	@Resource(name="geRmsGroupRepository")
 	private GeRmsGroupRepository geRmsGroupRepository;
-	@Autowired
+	@Resource(name="geRmsUserPowerRepository")
 	private GeRmsUserPowerRepository geRmsUserPowerRepository;
-	@Autowired
+	@Resource(name="geRmsTaskRepository")
 	private GeRmsTaskRepository geRmsTaskRepository;
-	@Autowired
+	@Resource(name="geRmsTaskAuthRepository")
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
-	@Autowired
+	@Resource(name="geRmsDataRuleRepository")
 	private GeRmsDataRuleRepository geRmsDataRuleRepository;
-	@Autowired
+	@Resource(name="geRmsExcPowerRepository")
 	private GeRmsExcPowerRepository geRmsExcPowerRepository;
-	@Autowired
+	@Resource(name="geRmsUserGroupRepository")
 	private GeRmsUserGroupRepository geRmsUserGroupRepository;
-	@Autowired
+	@Resource(name="geRmsBusPowerRepository")
 	private GeRmsBusPowerRepository geRmsBusPowerRepository;
 	
 	//检查用户权限的id是否存在，存在返回yes，否则返回no
 	public String checkIdByUserCodeComCode(String userCode, String comCode) {
-		System.out.println(userCode);
-		System.out.println(comCode);
 		String id = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
 		String result = "no";
 		if(id != null){
@@ -286,6 +283,29 @@ public class StaffingServiceImpl implements StaffingService{
 			}
 		}
 		return "success";
+	}
+
+	public List<UserPower> findUserPowerByUserCode(String userCode) {
+		
+		List<String> userPowerIds = geRmsUserPowerRepository.findUserPowerIdByUserCode(userCode);
+		List<UserPower> userPowers = (List<UserPower>) geRmsUserPowerRepository.findAll(userPowerIds);
+		
+		return userPowers;
+	}
+
+	public UserPower findUserPowerByUserCode(String userCode, String comCode) {
+		String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+		UserPower userPower = null;
+		if(userPowerId != null){
+			
+			userPower = geRmsUserPowerRepository.findOne(userPowerId);
+		}
+		return userPower;
+	}
+
+	public DataRule findDataRuleByDataRuleId(String DataRuleId) {
+		
+		return geRmsDataRuleRepository.findOne(DataRuleId);
 	}
 		
 }

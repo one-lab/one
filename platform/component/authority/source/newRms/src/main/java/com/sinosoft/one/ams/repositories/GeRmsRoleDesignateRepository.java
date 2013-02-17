@@ -13,7 +13,7 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface GeRmsRoleDesignateRepository  extends PagingAndSortingRepository<RoleDesignate, RoleDesignateId>{
 
-	@SQL("select roleid from GE_RMS_ROLE_DESIGNATE where comCode= ?1")
+	@SQL("select roleid from GE_RMS_ROLE_DESIGNATE where comCode in (?1,'*')")
 	List<String> findRoleIdByComCode(String comCode);
 	
 	@SQL("select * from GE_RMS_ROLE_DESIGNATE where comCode= ?1")
@@ -21,4 +21,7 @@ public interface GeRmsRoleDesignateRepository  extends PagingAndSortingRepositor
 	
 	@Query("from RoleDesignate where id.comCode= ?1")
 	List<RoleDesignate> findRoleDesignateByComCodeQuery(String comCode);
+	
+	@SQL("delete from GE_RMS_ROLE_DESIGNATE where comCode = ?1 and roleId = ?2")
+	void delete(String comCode,String roleId);
 }

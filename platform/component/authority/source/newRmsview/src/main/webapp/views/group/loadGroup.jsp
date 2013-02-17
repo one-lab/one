@@ -71,7 +71,7 @@ function search(){
 }
 function openUpdateWindow(obj){
 	var id=$(obj).parent().parent().attr("id").split("_")[1];
-	alert(id);
+	//alert(id);
 	$("body").window({
 		"id":"window1", 
 		"url":"${ctx}/group/findGroupById/"+id,
@@ -95,6 +95,12 @@ function openUpdateWindow(obj){
 		 					$obj.find("#updataGrid").find("[name='g_check']:checked").each(function(){
 		 						roleid=roleid+$(this).parents("tr").attr("id").split("_")[1]+",";
 		 					});
+		 					
+		 					if(groupid == "" || groupid == null){
+		 						alert("用户组ID不能为空！");
+		 						return;
+		 					}
+		 					
 		 					$.ajax({
 		 						url : "${ctx}/group/update/"+groupid+"/"+name+"/"+groupType+"/"+roleid+"/"+des,
 		 						type : "post",
@@ -163,6 +169,12 @@ function openAddWindow(){
 				$obj.find("#addGroupGrid").find("[name='g_check']:checked").each(function(){
 					roleid=roleid+$(this).parents("tr").attr("id").split("_")[1]+",";
 				});
+				
+				if(name == "" || name == null){
+					alert("用户组名不能为空！");
+					return;
+				}
+				
 				$.ajax({
 					url : "${ctx}/group/add/"+name+"/"+groupType+"/"+roleid+"/"+des,
 					type : "post",

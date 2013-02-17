@@ -84,6 +84,7 @@ function changePass(e){
 	$("#pageContent").attr("src",url);
 	return false;
 };
+
 </script>
 </head>
 
@@ -95,7 +96,7 @@ function changePass(e){
         <p class="user_bar">
         	用户：系统管理员
             <a href="changePass.jsp" class="pass" onclick="return  changePass(this)">修改密码</a>
-            <a href="${ctx}/views/login/login.jsp" class="quit">重新登录</a>
+            <a href="${ctx}/login/logout" class="quit">重新登录</a>
         </p>
     </div>
 </div>
@@ -110,17 +111,17 @@ function changePass(e){
         <div id="leftMenu">
         	<h3><b class="ac_name">权限管理</b></h3>
             <div>
-            	<ul class="nav" id="nav">
-                	<li><a href="${ctx}/views/taskmenu/loadTask.jsp"><span>功能菜单管理</span></a></li>
-                    <li><a href="${ctx}/views/task_auth/loadtaskAuth.jsp"><span>功能授权</span></a></li>
-                    <li><a href="${ctx}/views/role/loadRole.jsp"><span>角色管理</span></a>
-                    	<ul>
-                        	<li><a href="${ctx}/views/role/loadroleDesignate.jsp"><span>角色指派</span></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="${ctx}/views/group/loadGroup.jsp"><span>用户组管理</span></a></li>
-                    <li><a href="${ctx}/views/staffing/loadEmployeesConfig.jsp"><span>人员配置</span></a></li>
-                </ul>
+               <ul class="nav" id="nav">
+					<c:forEach items="${menus}" var="menu" varStatus="status">
+						<li><a href="<c:out value='${menu.url}'/>"><span><c:out value="${menu.name}" /></span></a>
+							<ul>
+								<c:forEach items="${menu.children}" var="children" varStatus="s">
+									<li><a href="<c:out value='${children.url}'/>"><span><c:out value="${children.name}" /></span></a></li>
+								</c:forEach>
+							</ul>
+						</li>
+					</c:forEach>
+              </ul>
             </div>        	
         </div>
 	</div>

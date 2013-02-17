@@ -5,39 +5,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 
-import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.ExcPower;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.model.UserPower;
+import com.sinosoft.one.ams.repositories.GeRmsRoleTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.repositories.GeRmsUserPowerRepository;
 import com.sinosoft.one.ams.service.facade.TaskService;
-import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Treeable;
 
 @Component
 public class TaskServiceImpl implements TaskService{
 	
-	@Autowired
+	@Resource(name="geRmsTaskRepository")
 	private GeRmsTaskRepository geRmsTaskRepository;
-	@Autowired
+	@Resource(name="geRmsTaskAuthRepository")
 	private GeRmsTaskAuthRepository geRmsTaskAuthRepository;
-	@Autowired
+	@Resource(name="geRmsUserPowerRepository")
 	private GeRmsUserPowerRepository geRmsUserPowerRepository;
-	@Autowired
-	private Invocation inv;
+	@Resource(name="geRmsRoleTaskRepository")
+	private GeRmsRoleTaskRepository geRmsRoleTaskRepository;
+	
 	
 	//根据主键查出Task对象
 	public Task findTaskByTaskId(String taskId) {
 		Task task = geRmsTaskRepository.findOne(taskId);
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
-		String taskAuthId = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getCompany().getComCode(), task.getTaskID());
+		Subject currentUser = SecurityUtils.getSubject();
+		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
 		
 		if(task.getName() == null){
 			task.setName("");
@@ -56,6 +60,7 @@ public class TaskServiceImpl implements TaskService{
 			task.setIsAsMenu("");
 		}
 		
+		String taskAuthId = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getLoginComCode(), task.getTaskID());
 		//判断此功能的功能授权是默认类型，还是所有可见类型
 		if(taskAuthId != null){
 			task.setFlag("");
@@ -67,7 +72,8 @@ public class TaskServiceImpl implements TaskService{
 	
 	//保存功能和功能授权
 	public void save(Task task,String parentId, TaskAuth taskAuth) {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		Subject currentUser = SecurityUtils.getSubject();
+		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
 		Task taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
 		
 		task.setSysFlag("RMS");
@@ -84,18 +90,18 @@ public class TaskServiceImpl implements TaskService{
 			if (task.getFlag().equals("*")) {
 				taskAuth.setComCode("*");
 			} else {
-				taskAuth.setComCode(user.getCompany().getComCode());
+				taskAuth.setComCode(user.getLoginComCode());
 			}
 			//新增，并保存TaskAuth对象
 			geRmsTaskAuthRepository.save(taskAuth);
 		}else{
 			
 			if(task.getFlag() == ""){
-				task.setFlag(user.getCompany().getComCode());
+				task.setFlag(user.getLoginComCode());
 			}
 			
 			//查询功能授权是否为默认类型，如果是，taskAuthId1不为空
-			String taskAuthId1 = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getCompany().getComCode(), task.getTaskID());
+			String taskAuthId1 = geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(user.getLoginComCode(), task.getTaskID());
 			if(taskAuthId1 != null){
 				TaskAuth ta1 = geRmsTaskAuthRepository.findOne(taskAuthId1);
 				
@@ -114,7 +120,7 @@ public class TaskServiceImpl implements TaskService{
 				
 				//判断功能授权是否需要修改
 				if(!task.getFlag().equals(ta2.getComCode()) && !task.getFlag().equals("*")){
-					ta2.setComCode(user.getCompany().getComCode());
+					ta2.setComCode(user.getLoginComCode());
 					List<String> TaskAuthIdList = geRmsTaskAuthRepository.findTaskAuthIDByTaskId(ta2.getTask().getTaskID());
 					List<TaskAuth> taskAuthList = (List<TaskAuth>) geRmsTaskAuthRepository.findAll(TaskAuthIdList);
 					geRmsTaskAuthRepository.delete(taskAuthList);
@@ -240,6 +246,13 @@ public class TaskServiceImpl implements TaskService{
 		}
 		
 		List<String>roletaskids = geRmsTaskAuthRepository.findTaskAuthByRole(roleids);
+		
+		List<Task> tasks = getTasks(roletaskids,comCode);
+		return tasks;
+	}
+	
+	
+	public List<Task> getTasks(List<String> roletaskids,String comCode){
 		List<String>comtaskids = geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
 		
 		List<String> resultid = new ArrayList<String>();
@@ -252,9 +265,16 @@ public class TaskServiceImpl implements TaskService{
 				}
 			}
 		}
-		List<Task> tasks = (List<Task>) geRmsTaskRepository.findAll(resultid);
+		List<Task> tasks = new ArrayList<Task>();
+		if(resultid.size() > 0){
+			
+			tasks = (List<Task>) geRmsTaskRepository.findAll(resultid);
+		}
+		
 		return tasks;
+		
 	}
+	
 
 	//查询当前机构，当前用户组的根权限，并标记权限是否赋了给用户
 	public List<Task> findTaskByRoleIds(List<String> roleids, String comCode,
@@ -315,6 +335,38 @@ public class TaskServiceImpl implements TaskService{
 			}
 			
 		}
+	}
+
+	public List<Task> findTaskByTaskId(List<String> taskIds,String sysFlag) {
+		List<String> taskids = geRmsTaskRepository.findTaskByTaskIds(taskIds, sysFlag);
+		List<Task> tasks = (List<Task>) geRmsTaskRepository.findAll(taskids);
+		return tasks;
+	}
+
+	//根据角色ID查询功能taskId
+	public List<String> findTaskIdByRoleIds(List<String> roleids) {
+		List<String> taskAuthIds = new ArrayList<String>();
+		for(String roleId : roleids){
+			taskAuthIds.addAll(geRmsRoleTaskRepository.findTaskAuthIdByRoleId(roleId));
+		}
+		List<TaskAuth> TaskAuths = (List<TaskAuth>) geRmsTaskAuthRepository.findAll(taskAuthIds);
+		List<Task> tasks = new ArrayList<Task>();
+		for(TaskAuth taskAuth : TaskAuths){
+			tasks.add(taskAuth.getTask());
+		}
+		
+		List<String> taskIds = new ArrayList<String>();
+		for(Task task : tasks){
+			if(!taskIds.contains(task.getTaskID().toString())){
+				taskIds.add(task.getTaskID().toString());
+			}
+		}
+		return taskIds;
+	}
+
+	public String findParentIdBytaskId(String taskId) {
+		
+		return geRmsTaskRepository.findParentIdByTaskId(taskId);
 	}
 	
 	

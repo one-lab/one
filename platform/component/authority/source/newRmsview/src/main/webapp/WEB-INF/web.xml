@@ -11,22 +11,34 @@
   </context-param>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath*:/spring/applicationContext*.xml</param-value>
+    <param-value>classpath*:/spring/application*.xml</param-value>
   </context-param>
-  <filter>
-    <filter-name>MvcFilter</filter-name>
-    <filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>MvcFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>FORWARD</dispatcher>
-    <dispatcher>INCLUDE</dispatcher>
-  </filter-mapping>
+  
+  	<!-- Shiro filter-->  
+	<filter>  
+	    <filter-name>shiroFilter</filter-name>  
+	    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>  
+	</filter>  
+	<filter-mapping>  
+	    <filter-name>shiroFilter</filter-name>  
+	    <url-pattern>/*</url-pattern>  
+	</filter-mapping>
+  
+  
+  
+	<filter>
+	  <filter-name>MvcFilter</filter-name>
+	  <filter-class>com.sinosoft.one.mvc.MvcFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>MvcFilter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
   
   <welcome-file-list>
   	<welcome-file>/views/login/login.jsp</welcome-file>
-  
   </welcome-file-list>
+  
+	
+
 </web-app>

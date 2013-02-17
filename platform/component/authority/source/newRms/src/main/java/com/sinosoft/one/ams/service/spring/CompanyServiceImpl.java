@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.Company;
@@ -18,9 +19,9 @@ import com.sinosoft.one.uiutil.Treeable;
 @Component
 public class CompanyServiceImpl implements CompanyService{
 	
-	@Autowired
+	@Resource(name="companyDao")
 	private CompanyDao companyDao;
-	@Autowired
+	@Resource(name="geRmsUserPowerRepository")
 	private GeRmsUserPowerRepository geRmsUserPowerRepository;
 
 	//根据Uppercomcode查询出comCode集合
@@ -125,6 +126,15 @@ public class CompanyServiceImpl implements CompanyService{
 		return treeable;
 	}
 
-	
+	//根据userCode查询用户已引入机构
+	public List<Company> findComsByUserCode(String userCode) {
+		List<String> comCodes = geRmsUserPowerRepository.findComCodeByUserCode(userCode);
+		List<Company> coms = new ArrayList<Company>();
+		if(!comCodes.isEmpty()){
+			coms = (List<Company>) companyDao.findAll(comCodes);
+		}
+		
+		return coms;
+	}
 
 }

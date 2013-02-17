@@ -3,18 +3,19 @@ package com.sinosoft.one.ams.service.spring;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Company;
-import com.sinosoft.one.ams.model.Employe;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.repositories.CompanyDao;
 import com.sinosoft.one.ams.repositories.GeRmsTaskAuthRepository;
 import com.sinosoft.one.ams.repositories.GeRmsTaskRepository;
 import com.sinosoft.one.ams.service.facade.TaskAuthService;
-import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.uiutil.NodeEntity;
 import com.sinosoft.one.uiutil.Treeable;
 
@@ -27,8 +28,7 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 	private GeRmsTaskRepository geRmsTaskRepository;
 	@Autowired
 	private CompanyDao companyDao;
-	@Autowired
-	private Invocation inv;
+	
 
 	//把满足条件的task存入Treeable对象，并返回
 	public Treeable<NodeEntity> treeAble(String comCode) {
@@ -45,7 +45,10 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 		} 
 		
 		List<String> taskIdList = geRmsTaskAuthRepository.findAllTaskIdByComCode(comCode);
-		List<String> parentTaskIdList = geRmsTaskAuthRepository.findAllTaskIdByComCode(parentComCode);
+		List<String> parentTaskIdList = new ArrayList<String>();
+		if(parentComCode != null){
+			parentTaskIdList = geRmsTaskAuthRepository.findAllTaskIdByComCode(parentComCode);
+		}
 		
 		Treeable<NodeEntity> treeable = creatTaskTreeAble(topList,taskIdList,parentTaskIdList);
 		return treeable;
@@ -54,7 +57,8 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 	
 	//保存修改后的功能授权
 	public void save(String strId, String comCode, TaskAuth taskAuth) {
-		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
+		Subject currentUser = SecurityUtils.getSubject();
+		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
 		String name = user.getUserName();
 		
 		//查询当前机构已有的功能
@@ -75,10 +79,7 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 				List<String> grand = new ArrayList<String>();
 				//取得此功能的上辈功能
 				grandId = grandTaskId(grand,taskId[i]);
-				
-				for(String id : grandId){
-					System.out.println(id+"+++++++++++++++++++++++++++++++++++++");
-				}
+
 				//如果没有上辈功能，先保存子功能的上辈功能
 				if(!grandId.isEmpty())
 					for(String id : grandId){
@@ -142,41 +143,43 @@ public class TaskAuthServiceImpl implements TaskAuthService{
 	List<NodeEntity> creatSubNode(List<Task> topTasks,List<String> taskIdList,List<String> parentTaskIdList){
 		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
 		for (Task geRmsTask : topTasks) {
-			if(!parentTaskIdList.contains(geRmsTask.getTaskID()))
-                continue;
-				NodeEntity nodeEntity = new NodeEntity();
-				nodeEntity.setId(geRmsTask.getTaskID());
-				nodeEntity.setTitle(geRmsTask.getName());
-				if(taskIdList.contains(geRmsTask.getTaskID())){
-					nodeEntity.setClassField("jstree-checked");
-				}else{
-					nodeEntity.setClassField("");
-				}
+			if(!parentTaskIdList.isEmpty()){
+				if(!parentTaskIdList.contains(geRmsTask.getTaskID()))
+	                continue;
+			}
+			NodeEntity nodeEntity = new NodeEntity();
+			nodeEntity.setId(geRmsTask.getTaskID());
+			nodeEntity.setTitle(geRmsTask.getName());
+			if(taskIdList.contains(geRmsTask.getTaskID())){
+				nodeEntity.setClassField("jstree-checked");
+			}else{
+				nodeEntity.setClassField("");
+			}
 
-				if(!geRmsTask.getChildren().isEmpty()){
-					nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),taskIdList,parentTaskIdList));
-					int count = 0;
-					
-					//判断父节点的checkbox的状态
-					if(!nodeEntity.getChildren().isEmpty()){
-						for(NodeEntity ne : nodeEntity.getChildren()){
-							if(ne.getClassField().equals("jstree-checked")){
-								count++;
-							}
+			if(!geRmsTask.getChildren().isEmpty()){
+				nodeEntity.setChildren(creatSubNode(geRmsTask.getChildren(),taskIdList,parentTaskIdList));
+				int count = 0;
+				
+				//判断父节点的checkbox的状态
+				if(!nodeEntity.getChildren().isEmpty()){
+					for(NodeEntity ne : nodeEntity.getChildren()){
+						if(ne.getClassField().equals("jstree-checked")){
+							count++;
 						}
-					//子节点全部被选中，父节点为选中
-					if(count == nodeEntity.getChildren().size()){
-						nodeEntity.setClassField("jstree-checked jstree-open");
-						
-						//子节点部分被选中，父节点的checkbox的状态为jstree-undetermined
-					}else if(count>0){
-						nodeEntity.setClassField("jstree-undetermined jstree-open");
-					}else{
-						//子节点全没选中，父节点的checkbox的状态为jstree-unchecked
-						nodeEntity.setClassField("jstree-unchecked");
 					}
-					}
+				//子节点全部被选中，父节点为选中
+				if(count == nodeEntity.getChildren().size()){
+					nodeEntity.setClassField("jstree-checked jstree-open");
+					
+					//子节点部分被选中，父节点的checkbox的状态为jstree-undetermined
+				}else if(count>0){
+					nodeEntity.setClassField("jstree-undetermined jstree-open");
+				}else{
+					//子节点全没选中，父节点的checkbox的状态为jstree-unchecked
+					nodeEntity.setClassField("jstree-unchecked");
 				}
+				}
+			}
 				
 				nodeEntitys.add(nodeEntity);
 			}

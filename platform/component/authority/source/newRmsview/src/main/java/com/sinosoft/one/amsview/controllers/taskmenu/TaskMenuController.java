@@ -32,7 +32,6 @@ public class TaskMenuController {
 	
 	@Post({"taskTree","parentTask"})
 	public Reply taskAll(Invocation inv) throws Exception {
-		System.out.println("++++++++++++++++++++++++");
 		List<Task>showTasks=taskService.findAllTasks();
 		Map<String, Task> filter = new HashMap<String, Task>();
 		List<Task> topList = new ArrayList<Task>();
@@ -46,7 +45,6 @@ public class TaskMenuController {
 		Treeable<NodeEntity> treeable = taskService.creatTaskTreeAble(topList,filter);
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
 		TreeRender render = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-		System.out.println(render.getResultForTest());
 		render.render(inv.getResponse());
 		return null;
 	}
@@ -69,8 +67,5 @@ public class TaskMenuController {
 		
 		return Replys.simple().success("success");
 	}
-
-	
-	
 	
 }

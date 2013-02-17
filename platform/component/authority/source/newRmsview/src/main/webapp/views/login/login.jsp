@@ -25,11 +25,11 @@
 		var marginTop = $("#layout_center").height()/2 - 180;
 		$("#login").css('margin-top',marginTop);
 	};
-	function login(){
-		//alert("check");
-		var name=document.forms[0].name.value;
-		var password=document.forms[0].password.value;
-		if(name==""){
+	
+	function checkUser(){
+		var userCode = document.forms[0].userCode.value;
+		var password=document.forms[0].passWord.value;
+		if(userCode==""){
 			alert("用户名不能为空！！");
 			return ;
 		}
@@ -37,8 +37,53 @@
 			alert("密码不能为空！！");
 			return ;
 		}
-		alert("${ctx}");
-		document.forms[0].submit();	
+		$.ajax({
+			url : "${ctx}/login/checkUser/"+userCode+"/"+password,
+			type : "post",
+			success : function(result){
+				if(result == "userCodeError"){
+					alert("用户名有误！");
+				}else if(result == "passwordError"){
+					alert("密码有误！");
+				}else{
+					 selectCom();
+				}
+			},
+			error : function(){
+				alert("操作失败！");
+			}
+		});
+	}
+	
+	function selectCom(){
+		
+		var userCode = document.forms[0].userCode.value;
+
+		$.ajax({
+			url : "${ctx}/login/company/"+userCode,
+			type : "post",
+			success : function (coms){
+				var opt = "<option value=''>--请选择机构--</option>";
+				
+				if(coms.length > 0){
+					for(var i=0;i<coms.length;i++){
+						opt = opt + "<option value='"+coms[i].comCode+"'>"+coms[i].comCName+"</option>";
+					}
+				}
+				$(".inp_selec").html(opt);
+			}
+		});
+		
+	}
+	
+	function login(){
+		var comCode = $(".inp_selec").val();
+		if(comCode == null || comCode == ""){
+			alert("请选择机构！");
+			return;
+		}
+		
+		$("#userLogin").attr("action","${ctx}/views/login/login.jsp").submit();
 	}
 
 </script>
@@ -56,32 +101,31 @@
 <div id="layout_center" class="login_cont">
 	<div class="login_line"></div>
 	<div class="login" id="login">
-		<form action="${ctx}/login" method="post">
+		<form id="userLogin" method="post">
 	    	<ul class="list" >
 		    	<table>
 		        	<tr>
 		        		<td>
-			        		<li>用户名 <input type="text" class="inp_text" name="userName"/></li>
+			        		<li>用户名 <input type="text" class="inp_text" name="userCode"/></li>
 		        		</td>
 		        	</tr>
 		        	<tr>
 		        		<td>
-		            		<li>密　码 <input type="password" class="inp_text" name="password"/></li>
+		            		<li>密　码 <input type="password" class="inp_text" name="passWord"  onblur="checkUser();"/></li>
 		            	</td>
 		        	</tr>
 		        	<tr>
 		        		<td>
 				            <li>机　构 
-				            <select name="dept"  class="inp_selec">
-				            	<option value="renshibu">人事部</option>
-				            	<option value="guanlibu">管理部</option>
-				            	<option value="caiwubu">财务部</option>
+				            <select name="comCode"  class="inp_selec">
+				            	<option value="">--请选择机构--</option>
 				            </select>
 				            </li>
 				    	</td>
 		        	</tr>
 		    	</table>
 	        </ul>
+	        <input name="sysFlag" type="hidden"   value="RMS" />
         	<input type="button" class="login_btn"  onclick="login();"/>
 		</form>
         <p class="prompt">请输入正确的信息进行登录，如果您还没有账号，请联系管理员。</p>

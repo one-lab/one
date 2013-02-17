@@ -206,31 +206,7 @@
                         <version>${org.aspectj.version}</version>
                     </dependency>
                 </dependencies>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <configuration>
-                            <source>1.5</source>
-                            <target>1.5</target>
-                            <verbose>false</verbose>
-                            <outxml>true</outxml>
-                        </configuration>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <configuration>
-                            <source>1.5</source>
-                            <target>1.5</target>
-                            <verbose>false</verbose>
-                        </configuration>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                
             </plugin>
         </plugins>
     </build>

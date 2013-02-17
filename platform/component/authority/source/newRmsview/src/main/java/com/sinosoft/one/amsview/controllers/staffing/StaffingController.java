@@ -9,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.sinosoft.one.ams.model.BusDataInfo;
 import com.sinosoft.one.ams.model.BusPower;
 import com.sinosoft.one.ams.model.Company;
 import com.sinosoft.one.ams.model.DataRule;
-import com.sinosoft.one.ams.model.Employe;
+import com.sinosoft.one.ams.model.EmployeInfo;
 import com.sinosoft.one.ams.model.Group;
 import com.sinosoft.one.ams.model.Role;
 import com.sinosoft.one.ams.model.Task;
@@ -30,6 +31,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+import com.sinosoft.one.newRms.client.DataRuleFactoryPostProcessor;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.NodeEntity;
@@ -54,6 +56,8 @@ public class StaffingController {
 	private TaskService taskService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+    private DataRuleFactoryPostProcessor dataRuleFactoryPostProcessor;
 	
 	private List<String> userAttribute = new ArrayList<String>();
 	
@@ -63,7 +67,7 @@ public class StaffingController {
 	public Reply list(@Param("pageNo") int pageNo, @Param("rowNum")int rowNum,Invocation inv) throws Exception{
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		
-		Gridable<Employe> gridable = new Gridable<Employe>(null);
+		Gridable<EmployeInfo> gridable = new Gridable<EmployeInfo>(null);
 		gridable = employeeService.getGridable(gridable,pageable,userAttribute);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
@@ -78,7 +82,7 @@ public class StaffingController {
 	public Reply search(@Param("pageNo") int pageNo, @Param("rowNum")int rowNum,@Param("userCode")String userCode,@Param("comCode")String comCode,Invocation inv) throws Exception{
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		
-		Gridable<Employe> gridable = new Gridable<Employe>(null);
+		Gridable<EmployeInfo> gridable = new Gridable<EmployeInfo>(null);
 		gridable = employeeService.getGridable(gridable,userCode,comCode, pageable, userAttribute);
 		
 		inv.getResponse().setContentType("text/html;charset=UTF-8");
@@ -272,5 +276,20 @@ public class StaffingController {
 		System.out.println(result);
 		return Replys.with("success");
 	}
+	
+	//测试生成的SQL语句
+	@Get("getDataRule/{ruleId}/{param}/{userCode}")
+    public Reply getDataRule(@Param("ruleId")String ruleId,@Param("param")String param,@Param("userCode")String userCode,Invocation inv){
+    	
+    	String rule= "";
+    	DataRule dataRule = staffingService.findDataRuleByDataRuleId(ruleId);
+    	List<BusDataInfo> busDataInfos = dataRule.getBusDataInfos();
+    	
+    	List<Company> coms = companyService.findComsByUserCode(userCode);
+    	for(BusDataInfo busDataInfo : busDataInfos){
+    		rule = dataRuleFactoryPostProcessor.getScript(ruleId).creatSQL(rule, "a", userCode, coms.get(0).getComCode(), param, busDataInfo.getBusDataColumn());
+    	}
+    	return Replys.with(rule);
+    }
 
 }
