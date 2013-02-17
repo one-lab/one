@@ -140,7 +140,7 @@ public class RoleServiceTest extends AbstractJUnit4SpringContextTests {
 	 */
 	@Test
 	public void testSaveRoleDesignate(){
-		roleService.saveRoleDesignate("02", "role100012");
+//		roleService.saveRoleDesignate("02", "role100012");
 	}
 
 }

@@ -71,7 +71,7 @@ function search(){
 }
 function openUpdateWindow(obj){
 	var id=$(obj).parent().parent().attr("id").split("_")[1];
-	alert(id);
+	//alert(id);
 	$("body").window({
 		"id":"window1", 
 		"url":"${ctx}/group/findGroupById/"+id,

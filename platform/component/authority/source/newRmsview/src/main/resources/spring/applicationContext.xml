@@ -5,15 +5,20 @@
     xmlns:onejpa="http://com.sinosoft.one/schema/data/jpa"
     xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/aop
 		http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
-		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
-		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-		http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
+		http://www.springframework.org/schema/jdbc 
+		http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/jee 
+		http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://com.sinosoft.one/schema/data/jpa 
+		http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
 	default-lazy-init="true">
 
 	<description>Spring公共配置 </description>
@@ -22,8 +27,21 @@
      
      <!-- 使用annotation定义Aspect -->
 	<aop:aspectj-autoproxy /> 
-     
-    
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+	  <!-- the transactional semantics... -->
+	  <tx:attributes>
+	    <!-- all methods starting with 'get' are read-only 
+	    <tx:method name="get*" read-only="true"/>
+	   	-->
+	    <tx:method name="*"/>
+	  </tx:attributes>
+  	</tx:advice>
+  
+	  <aop:config>
+	  	<aop:pointcut id="serviceOperation" expression="execution(* com.sinosoft.one.ams.service..*.*(..))"/>
+	 	<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
+	  </aop:config>
      
 	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
 	<context:component-scan base-package="com.sinosoft.one">
@@ -93,10 +111,6 @@
 			<property name="timeBetweenEvictionRunsMillis" value="3600000" />
 			<property name="minEvictableIdleTimeMillis" value="3600000" />
 		</bean>
-
-
-		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
-		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
 
          <!-- 调整sql的时候请加上-->
          <!--<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">

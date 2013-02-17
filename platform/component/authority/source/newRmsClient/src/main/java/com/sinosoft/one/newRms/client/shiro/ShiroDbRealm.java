@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.User;
 import com.sinosoft.one.newRms.client.AccountManager;
-import com.sinosoft.one.rms.client.shiro.LoginToken;
 
 @Component
 public class ShiroDbRealm  extends AuthorizingRealm{
