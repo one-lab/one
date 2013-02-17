@@ -10,6 +10,7 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface UserDao extends PagingAndSortingRepository<Employe, String>{
 	
+	//根据用户ID查询用户
 	@SQL("select * from GE_RMS_EMPLOYE where userCode = ?1")
 	Employe findUserById(String userCode);
 	

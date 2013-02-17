@@ -30,6 +30,7 @@ public class TaskMenuController {
 	@Autowired
 	private TaskService taskService;
 	
+	//生成树
 	@Post({"taskTree","parentTask"})
 	public Reply taskAll(Invocation inv) throws Exception {
 		List<Task>showTasks=taskService.findAllTasks();

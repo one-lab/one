@@ -11,28 +11,35 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface GeRmsRoleRepository extends PagingAndSortingRepository<Role, String> {
 
+	//根据name分页查询角色
 	@SQL("select * from GE_RMS_ROLE where name like ?1")
 	Page<Role> findRoleByName(String name, Pageable pageable);
 
+	//根据机构ID分页查询角色
 	@SQL("select * from GE_RMS_ROLE where roleId in (select roleid from GE_RMS_ROLE_DESIGNATE where comCode= ?1 or comCode='*')")
 	Page<Role> findRole(String comCode,Pageable pageable);
 	
-	
+	//根据机构ID和name分页查询角色
 	@SQL("select * from GE_RMS_ROLE where roleId in (select roleid from GE_RMS_ROLE_DESIGNATE where comCode= ?1 or comCode='*') and name like ?2")
 	Page<Role> findRoleByName(String comCode,String name,Pageable pageable);
 	
+	//根据角色ID查询机构ID集合
 	@SQL("select comCode from GE_RMS_ROLE_DESIGNATE where roleId = ?1")
 	List<String> findRoleTypById(String roleId);
 	
+	//根据机构ID和角色ID删除记录
 	@SQL("delete GE_RMS_ROLETASK t where t.roleID=?1 and t.taskAuthid in (select taskauthid from ge_rms_task_auth a where a.comCode='*' or a.comcode=?2)")
 	void deleteRoleTask(String roleId,String comCode);
 	
+	//修改角色指派
 	@SQL("update ge_rms_role_designate t set  t.comcode=?1 where  t.comcode='*'  and t.roleid =?2")
 	void updateRoleToDefault(String comCode,String roleId);
 	
+	//将角色指派修改为‘*’
 	@SQL("update ge_rms_role_designate t set t.comcode='*' where (t.comcode=?1 or t.comcode='*' ) and t.roleid =?2")
 	void updateRoleToAll(String comCode,String roleId);
 	
+	//根据机构ID和角色ID删除记录
 	@SQL("delete ge_rms_role_designate t where t.comcode!=?1 and t.roleid =?2")
 	void deleteRoleDesignate(String comCode,String roleId);
 }

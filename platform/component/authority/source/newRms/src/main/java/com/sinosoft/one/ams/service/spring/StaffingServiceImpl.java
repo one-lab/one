@@ -285,6 +285,7 @@ public class StaffingServiceImpl implements StaffingService{
 		return "success";
 	}
 
+	//根据用户ID查询用户权限
 	public List<UserPower> findUserPowerByUserCode(String userCode) {
 		
 		List<String> userPowerIds = geRmsUserPowerRepository.findUserPowerIdByUserCode(userCode);
@@ -293,6 +294,7 @@ public class StaffingServiceImpl implements StaffingService{
 		return userPowers;
 	}
 
+	//根绝用户ID和机构ID查询用户权限
 	public UserPower findUserPowerByUserCode(String userCode, String comCode) {
 		String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
 		UserPower userPower = null;
@@ -303,6 +305,7 @@ public class StaffingServiceImpl implements StaffingService{
 		return userPower;
 	}
 
+	//根绝数据规则ID查询数据规则
 	public DataRule findDataRuleByDataRuleId(String DataRuleId) {
 		
 		return geRmsDataRuleRepository.findOne(DataRuleId);

@@ -364,6 +364,7 @@ public class TaskServiceImpl implements TaskService{
 		return taskIds;
 	}
 
+	//根据功能ID查询父功能ID
 	public String findParentIdBytaskId(String taskId) {
 		
 		return geRmsTaskRepository.findParentIdByTaskId(taskId);

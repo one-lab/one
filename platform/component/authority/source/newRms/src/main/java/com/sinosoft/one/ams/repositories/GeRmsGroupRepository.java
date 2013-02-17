@@ -11,11 +11,11 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface GeRmsGroupRepository extends PagingAndSortingRepository<Group, String>{
 	
-	
-	//----------------------------------------//
+	//根据机构ID，分页查询用户组
 	@SQL("select * from GE_RMS_GROUP where comCode in(?1,'*')")
 	Page<Group> findGroup(String comCode ,Pageable pageable);
 	
+	//根据机构ID和name，分页查询用户组
 	@SQL("select * from GE_RMS_GROUP where comCode = ?1 and name like ?2")
 	Page<Group> findGroupByName(String comCode ,String name,Pageable pageable);
 	

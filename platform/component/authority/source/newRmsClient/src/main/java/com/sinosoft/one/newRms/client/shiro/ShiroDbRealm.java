@@ -35,6 +35,7 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 		super.setAuthenticationTokenClass(LoginToken.class);
 	}
 	
+	//获取认证信息
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken authcToken)  {
 		
@@ -56,12 +57,13 @@ public class ShiroDbRealm  extends AuthorizingRealm{
 		return null;
 	}
 	
+	//获取授权信息
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
 		User user = (User) principals.fromRealm(getName()).iterator().next();
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-			System.out.println("授权："+user.getUserName());
+			
 			info.addRoles(user.getRoleIdList());
 			info.addStringPermissions(user.getTaskIdList());
 			return info;

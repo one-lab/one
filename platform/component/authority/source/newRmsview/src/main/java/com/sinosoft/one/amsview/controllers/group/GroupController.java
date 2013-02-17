@@ -36,6 +36,7 @@ public class GroupController {
 	@Autowired
 	private RoleService roleService;
 	
+	//取得用户组集合
 	@Post({ "grouplist/{name}", "grouplist" })
 	public Reply list(@Param("name") String name, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum, Invocation inv) throws Exception {
@@ -89,6 +90,7 @@ public class GroupController {
 		return "addGroup";
 	}
 	
+	//分页查询角色
 	@Get("findRole")
 	@Post("findRole")
 	public Reply findRole( @Param("pageNo") int pageNo,@Param("rowNum") int rowNum,Invocation inv)throws Exception{
@@ -118,6 +120,7 @@ public class GroupController {
 		return null;
 	}
 	
+	//修改角色
 	@Post({"update/{groupId}/{name}/{groupType}/{roleId}/{des}","update/{groupId}/{name}/{groupType}/{roleId}"}) 
 	public Reply updataRole(@Param("groupId") String groupid,@Param("name")String name,@Param("des") String des,@Param("groupType") String groupType,@Param("roleId") String roleId, Invocation inv){
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
@@ -126,6 +129,7 @@ public class GroupController {
 		return null;
 	}
 	
+	//新增角色
 	@Post({"add/{name}/{groupType}/{roleId}/{des}","add/{name}/{groupType}/{roleId}"}) 
 	public Reply addRole(@Param("name")String name,@Param("des") String des,@Param("groupType") String groupType,@Param("roleId") String roleId, Invocation inv){
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
