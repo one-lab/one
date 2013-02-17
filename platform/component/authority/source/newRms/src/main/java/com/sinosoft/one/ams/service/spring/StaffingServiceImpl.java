@@ -57,6 +57,8 @@ public class StaffingServiceImpl implements StaffingService{
 	public void savePower(String comCode, String userCode, String groupIdStr, String taskIdStr) {
 		
 		String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
+		
+		//判断用户是否有此权限
 		if(userPowerId == null){
 			UserPower up = new UserPower();
 			up.setComCode(comCode);
@@ -155,6 +157,7 @@ public class StaffingServiceImpl implements StaffingService{
 		List<DataRule> dataRules = (List<DataRule>) geRmsDataRuleRepository.findAll();
 		
 		List<String> dataRuleIds = getDataRuleIds(comCode, userCode);
+		//筛选出要删除的数据规则
 		for(DataRule dataRule : dataRules){
 			if(dataRuleIds.isEmpty())
 				break;
@@ -173,6 +176,7 @@ public class StaffingServiceImpl implements StaffingService{
 		
 		List<String> dataRuleIds = getDataRuleIds(comCode, userCode);
 
+		//筛选出要删除的数据规则
 		for(DataRule dataRule : dataRuleParam){
 			if(dataRuleIds.isEmpty()){
 				dataRuleParam.clear();
@@ -213,12 +217,12 @@ public class StaffingServiceImpl implements StaffingService{
 		String[] dataRuleIds = dataRuleIdStr.split(",");
 		String userPowerId = geRmsUserPowerRepository.findIdByUserCodeComCode(userCode, comCode);
 		List<String> busPowerIds = geRmsBusPowerRepository.findBusPowerIdByUserPowerIdTaskId(userPowerId, dataRuleIds);
-		System.out.println(busPowerIds.size());
 		
 		List<String> resultIds =new ArrayList<String>();
 		List<BusPower> resultBusPowers = new ArrayList<BusPower>();
 
 		List<BusPower> busPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
+		//筛选
 		for(BusPower busPower : busPowers){
 			if(!resultIds.contains(busPower.getDataRule().getDataRuleID().toString())){
 				resultIds.add(busPower.getDataRule().getDataRuleID().toString());

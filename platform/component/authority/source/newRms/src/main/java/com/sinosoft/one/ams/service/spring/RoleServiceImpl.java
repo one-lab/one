@@ -101,6 +101,7 @@ public class RoleServiceImpl implements RoleService{
 		return geRmsTasks;
 	}
 
+	//修改角色
 	public void updateRole(String roleId,String  comCode, String userCode,String name, String des,
 			String roleTpe, List<String> taskids) {
 		Role role=geRmsRoleRepository.findOne(roleId);
@@ -136,6 +137,7 @@ public class RoleServiceImpl implements RoleService{
 		}
 	}
 	
+	//新增角色
 	public void addRole(String comCode, String userCode, String name,
 			String des, String roleTpe, List<String> taskids) {
 		Role role = new Role();
@@ -163,6 +165,8 @@ public class RoleServiceImpl implements RoleService{
 		if(roleTpe.toString().equals("all".toString()))
 			role.setFlag("*");
 		geRmsRoleRepository.save(role);
+		
+		//角色指派
 		RoleDesignate roleDesignate = new RoleDesignate();
 		RoleDesignateId roleDesignateId = new RoleDesignateId();
 		roleDesignateId.setRoleID(role.getRoleID());
@@ -258,6 +262,8 @@ public class RoleServiceImpl implements RoleService{
 		}
 		List<String> results = new ArrayList<String>();
 		List<String> roleDegNatIds =geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
+		
+		//筛选角色ID
 		for (String roleDegNatId : roleDegNatIds) {
 			for (String roleId : roleIds) {
 				if(roleDegNatId.toString().equals(roleId)){

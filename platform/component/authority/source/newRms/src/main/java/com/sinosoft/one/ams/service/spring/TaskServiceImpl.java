@@ -145,6 +145,7 @@ public class TaskServiceImpl implements TaskService{
 		
 		List<String> resultid = new ArrayList<String>();
 		
+		//筛选功能ID
 		for (String comtaskid : comtaskids) {
 			for (String roletaskid : roletaskids) {
 				if (comtaskid.toString().equals(roletaskid.toString())) {
@@ -177,6 +178,7 @@ public class TaskServiceImpl implements TaskService{
 		return treeable;
 	}
 	
+	//创建功能树
 	List<NodeEntity> creatSubNode(List<Task> topTasks,Map<String,Task> filter){
 		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
 		for (Task geRmsTask : topTasks) {

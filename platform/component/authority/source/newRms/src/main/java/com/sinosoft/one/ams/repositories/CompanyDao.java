@@ -9,7 +9,7 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 
 public interface CompanyDao extends PagingAndSortingRepository<Company, String>{
 	
-	//根据Uppercomcode查询出comCode集合
+	//根据Uppercomcode查询出子机构ID集合
 	@SQL("select comCode from GE_RMS_COMPANY where Uppercomcode = ?1")
 	List<String> findComCodeByUppercomcode(String Uppercomcode);
 	

@@ -35,6 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Page<Employe> page = userDao.findAll(pageable);
 		List<Employe> userList = page.getContent();
 		
+		//生成EmployeInfo的Gridable
 		gridable = getGridable(userList, gridable, userAttribute, pageable);
 		
 		return gridable;
@@ -79,6 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		List<EmployeInfo> employeInfos = new ArrayList<EmployeInfo>();
 		
+		//将userList中的user保存到employeInfos中
 		for(Employe user: userList){
 			List<String> userPowerId = geRmsUserPowerRepository.findUserPowerIdByUserCode(user.getUserCode());
 			String comCodeUser = userDao.findComCodeByUserCode(user.getUserCode());

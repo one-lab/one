@@ -67,6 +67,8 @@ public class GroupServiceImpl implements GroupService{
 	//分页查询用户组
 	Page<Group> findGroup(String comCode,String name,Pageable pageable){
 		Page<Group> page =null;
+		
+		//判断name是否为空
 		if(name!=null&&!"".equals(name))
 			page = geRmsGroupRepository.findGroupByName(comCode, "%"+name+"%", pageable);
 		else
@@ -89,6 +91,8 @@ public class GroupServiceImpl implements GroupService{
 		for (GroupRole groupRole : 	group.getGroupRoles()) {
 			roleids.add(groupRole.getRole().getRoleID());
 		}
+		
+		//标记角色是否在本机构中
 		for (Role role: page.getContent()) {
 			for (String string : roleids) {
 			
@@ -121,9 +125,13 @@ public class GroupServiceImpl implements GroupService{
 			if (des!=null) {
 				group.setDes(des);
 			}
+			
 			if(groupType.equals("all")){
+				
+				//将用户组类型修改为所有类型
 				group.setComCode("*");
 			}else {
+				//将用户组类型修改为私有类型
 				group.setComCode(comCode);
 			}
 			List<Role>roles=(List<Role>) geRmsRoleRepository.findAll(roleIds);
@@ -165,6 +173,7 @@ public class GroupServiceImpl implements GroupService{
 			groupRole.setRole(geRmsRoleRepository.findOne(string));
 			groupRoles.add(groupRole);
 		}
+		//将用户组的角色加入到用户组的对象中
 		group.setGroupRoles(groupRoles);
 		geRmsGroupRepository.save(group);
 	}
@@ -180,7 +189,8 @@ public class GroupServiceImpl implements GroupService{
 			for(UserGroup userGroup : userGroups){
 				checkGroupIds.add(userGroup.getGroup().getGroupID());
 			}
-
+			
+			//标记用户是否已被引入用户组，是为1，否为0
 			for(Group group : groups){
 				if(checkGroupIds.contains(group.getGroupID().toString())){
 					group.setFlag("1");
