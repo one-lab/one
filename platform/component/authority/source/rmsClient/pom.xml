@@ -93,6 +93,7 @@
 		</dependency>
 
 		<!-- CXF begin --> 
+		<!-- 1.5JDK补充1.6-->
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-rt</artifactId>
