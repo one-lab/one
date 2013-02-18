@@ -6,12 +6,9 @@ import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.NClob;
 import java.sql.PreparedStatement;
-import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
-import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
@@ -236,32 +233,12 @@ public class RmsConnection implements Connection {
 		return null;
 	}
 
-	public NClob createNClob() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public SQLXML createSQLXML() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public boolean isValid(int timeout) throws SQLException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public void setClientInfo(String name, String value)
-			throws SQLClientInfoException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setClientInfo(Properties properties)
-			throws SQLClientInfoException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public String getClientInfo(String name) throws SQLException {
 		// TODO Auto-generated method stub
