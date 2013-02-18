@@ -1,0 +1,61 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
+	default-lazy-init="true">
+
+<!-- 必须在调用nitification的模块打开component-scan
+<context:component-scan base-package="cn.com.chinalife.ebusiness" />
+ -->
+ <!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+	<context:component-scan base-package="com.sinosoft.one.monitoragent.notification">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	<context:property-placeholder
+		ignore-unresolvable="true" location="classpath*:/application.properties" />
+	<bean id="configureDealerMethod"
+		class="com.sinosoft.one.monitoragent.notification.NotificationConfigureDealer">
+		<property name="appName" value="${monitor.appName}" />
+		<property name="ip" value="${monitor.ip}"/>
+		<property name="port" value="${monitor.port}"/>
+		<!-- 参数名称定义  -->
+		<property name="type" value="method" />
+	</bean>
+	
+	<bean id="configureDealerUrl"
+		class="com.sinosoft.one.monitoragent.notification.NotificationConfigureDealer">
+		<property name="appName" value="${monitor.appName}" />
+		<property name="ip" value="${monitor.ip}"/>
+		<property name="port" value="${monitor.port}"/>
+		<!-- 参数名称定义  -->
+		<property name="type" value="url" />
+	</bean>
+	
+	<!-- 读出Queue中消息发送到monitor -->
+	<bean id="notificationDealer"
+		class="com.sinosoft.one.monitoragent.notification.NotificationDealer">
+		<property name="queueName" value="notification" />
+		<property name="appName" value="${monitor.appName}" />
+		<property name="ip" value="${monitor.ip}"/>
+		<property name="port" value="${monitor.port}"/>
+		<!-- 参数名称定义  -->
+		<property name="param_remark" value="remark" />
+		<property name="param_title" value="title" />
+		<property name="param_content" value="content" />
+		<property name="param_module" value="module" />
+		<property name="param_grade" value="grade" />
+	</bean>
+
+
+	<!-- NotificationQueueAppender 的单例 -->
+	<bean id="notificationQueueAppender" scope="singleton" class="com.sinosoft.one.monitoragent.notification.NotificationQueueAppender">
+		<property name="queueName" value="notification" />
+	</bean>
+</beans>

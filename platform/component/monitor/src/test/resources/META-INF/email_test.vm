@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<title>6-1-未支付提醒-车险</title>
+<style type="text/css">
+/** 全局定义 **/
+*{ margin:0; padding:0;}
+img{ border:0;}
+body{ font:9pt "宋体";background:#fff; color:#666;}
+btn{ cursor:pointer; border:0;}
+a { color:#0100fe;}
+a:hover{ color:#0000ff;}
+/** 全局定义 **/
+
+/** 头部 **/
+.top {height:29px;background-color:#eaeaea;line-height:29px;padding:0 10px;}
+.logo {background-image: url(${URL}images/mailImages_new/pic_txt.jpg);background-repeat: no-repeat;background-position: right bottom;height:49px;border-bottom:2px solid #e7340b;position:relative;width:100%;}
+.logo img {position:absolute;left:10px;top:16px;}
+.logo span a {font-weight:bold;color:#666;position:absolute;left:260px;top:25px; text-decoration:none;}
+/** 头部 **/
+
+/** 尾部 **/
+.foot_txt {width:700px;border:0px solid #d8d8d8;margin: 0 auto;padding-bottom:8px; margin-top:49px;}
+.h18 {color:#777;}
+.h29 {height:29px;line-height:29px;padding-left:10px;}
+/** 尾部 **/ 
+
+/** 内容 **/
+.zuce_1 {padding:30px 0 0 20px;}
+.zuce_1 a { color:#666; text-decoration:none;}
+.zuce_1 a:hover { color:#0000ff; text-decoration:underline;}
+.zuce_2 {padding:28px 0 0 30px; font-weight:bold; font-size:14px;}
+.zuce_3 {padding:10px 0 0 30px; line-height:20px;}
+.txt_tb {margin:0 auto;border:1px solid #d8d8d8;border-right:none;border-bottom:none;line-height:23px; margin-top:5px;}
+.txt_tb td { border-bottom:1px solid #d8d8d8; border-right:1px solid #d8d8d8;}
+.r_18 { padding-left:18px;}
+.r_10 { padding-left:10px;}
+.title{ font-size:14px; font-weight:bold; color:#666; margin-top:10px; line-height:20px;}
+.r_txt { padding-left:10px; border-right:1px solid #d8d8d8;}
+.r_10 { padding-left:10px;}
+.r_22 { padding-left:22px;}
+.j_z { text-align:center;}
+.r_39 { padding-right:39px;}
+.r_51 { padding-right:51px;}
+.txt_tb .r_22 span {float:right; padding-right:14px;}
+.txt_tb .r_22 strong { float:left;}
+.zf { margin: 0 auto; margin-top:42px;}
+.anniu { margin:0 5px;}
+.t20 { padding-top:20px; border-bottom:1px solid #acacac;}
+.t7 { padding:7px 0 0 22px;}
+.sh { margin: 0 auto; margin-top:30px;}
+.h20 { line-height:20px; padding-left:22px;}
+.yyt { margin: 0 auto; text-align:center; line-height:23px; border:1px solid #d8d8d8; border-bottom:none;border-right:none; margin-top:4px;}
+.yyt td { border-bottom:1px solid #d8d8d8; border-right:1px solid #d8d8d8;}
+.c7 { padding-top:50px;}
+.tb_xinxi { margin: 0 auto; line-height:23px; border-bottom:1px solid #d8d8d8;}
+.r_11 { padding-left:10px; border-right:1px solid #d8d8d8; border-top:1px solid #d8d8d8;}
+.b_w a { color:#e7340b; text-decoration:underline;}
+.txt_tb .r_10 span{float:right; padding-right:14px;}
+.txt_tb .r_10 strong { float:left;}
+/** 内容 **/
+</style>
+</head>
+
+<body>
+    <table width="700" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+        <tr>
+        <td>
+        <div class="hear">
+        <div class="top">请将<a href="mailto:epicc@picc.com.cn">我</a>添加到通讯录吧~不会遗漏邮件！还会有更多惊喜优惠哦~~。</div>
+        <div class="logo">
+        <a href="http://www.epicc.com.cn" target="_blank"><img src="${URL}images/mailImages_new/logo.gif" width="240" height="28" alt="PICC-中国人保财险"/></a>
+        <span><a href="http://www.epicc.com.cn" target="_blank">[进入首页]</a></span>
+        </div>
+        </div>
+        </td>
+      </tr>
+    </table>
+    <table width="700" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+        <tr>
+        <td class="zuce_1">尊敬的用户，您的订单即将过期!。</td>
+      </tr>
+        <tr>
+        <td class="zuce_3">请您在<font color="#e7340b">${year}年${month}月${day}日</font>前完成保费支付，您可以<a href="http://www.epicc.com.cn/piccallweb/enterDefray.do?proposalNo=${businessNO}" target="_blank">点击这里</a>进行在线支付，会有更多优惠活动等您参与！<br />
+          （如果您的订单已逾期，请<a href="http://www.epicc.com.cn/individual/cxdx/index.html" target="_blank">重新投保</a>。）
+          </br>感谢您对人保财险官网的信任和支持，我们一直致力于为您提供专业服务和全方位保障。欢迎关注我们的新浪微博<a href="http://e.weibo.com/epiccweibo"  target="_blank">@人保财险官网直销</a>，如您有任何意见或建议，请随时拨打电话400-1234567转2号键或<a href="http://im.e-picc.com.cn/web/icc/chat/chat?c=1&s=3"  target="_blank">在线交流</a>，当然，还可以通过微博互动起来！人保财险官网，活动缤纷，精彩不断！</td>
+      </tr>
+</table>
+	<table width="642" border="0" cellspacing="0" cellpadding="0" style="margin:0 auto; margin-top:20px; padding-bottom:3px;">
+  <tr>
+    <td><strong>您的投保信息：</strong> </td>
+    <td class="b_w" align="right">订单编号：<a href="http://www.epicc.com.cn/piccallweb/enterDefray.do?proposalNo=${businessNO}" target="_blank">${orderID}</a></td>
+  </tr>
+</table>
+	<table width="642" border="0" cellspacing="0" cellpadding="0" class="tb_xinxi">
+      <tr>
+        <td width="106" bgcolor="#f0f0f0" class="r_11" style="border-left:1px solid #d8d8d8;"><strong>车辆号码</strong></td>
+        <td width="106" class="r_11">${lisenceNo}</td>
+        <td width="106" bgcolor="#f0f0f0" class="r_11"><strong>投保人</strong></td>
+        <td width="106" class="r_11">${appliName}</td>
+        <td width="105" bgcolor="#f0f0f0" class="r_11"><strong>被保险人</strong></td>
+        <td width="106" class="r_11">${insuredName}</td>
+      </tr>
+    </table> 
+	<table width="642" border="0" cellspacing="0" cellpadding="0" class="txt_tb">
+	<tr>
+    <td width="361" bgcolor="#f0f0f0" class="r_10" style="border-right:none;"><strong>商业车辆保险</strong></td>
+    <td colspan="2" align="right" bgcolor="#f0f0f0"; style="padding-right:10px;"><strong>${sumPremium}元</strong></td>
+    </tr>
+  <tr>
+    <td width="361" align="center">保险项目</td>
+    <td width="142" class="j_z">保额（元）</td>
+    <td width="138" class="j_z">保费(元)</td>
+  </tr>
+  #foreach ( $s in $v )
+  <tr>
+    <td class="r_22">${s.kindName}</td>
+    <td class="r_39" align="right">${s.amountStr}</td>
+    <td class="r_51" align="right">${s.premiumStr}</td>
+  </tr>
+  #end
+   <tr>
+    <td colspan="3" bgcolor="#f0f0f0" class="r_10"><strong>交强险</strong><span><strong>${BZPremium}元</strong></span></td>
+    </tr>
+  <tr>
+    <td colspan="3" bgcolor="#f0f0f0" class="r_10"><strong>车船税</strong><span><strong>${tax}元</strong></span></td>
+    </tr>
+  <tr>
+    <td colspan="3" bgcolor="#f0f0f0" align="right"><strong>合计：<font color="e7340b" style="padding-right:14px; font-size:16px;">${sumPay}元</font></strong></td>
+    </tr>
+</table>
+	<table width="642" border="0" cellspacing="0" cellpadding="0" class="zf">
+  <tr>
+    <td><strong>您可以通过以下三种方式进行付款</strong></td>
+  </tr>
+  <tr>
+    <td class="t20" style="padding-bottom:2px;"><font color="e7340b"><strong>&gt;&gt;</strong></font><strong> 在线支付</strong></td>
+    </tr>
+  <tr>
+    <td class="t7">点击进行<a href="http://www.epicc.com.cn/piccallweb/enterDefray.do?proposalNo=${businessNO}" target="_blank"><img src="${URL}images/mailImages_new/icon_zf.gif" width="60" height="20" alt="在线支付" align="absmiddle" class="anniu" /></a>，如果您无法跳转至支付页面，请将下面的链接粘贴到网络浏览器的地址栏中进行支付。</td>
+  </tr>
+  <tr>
+    <td  class="t7"><a href="http://www.epicc.com.cn/piccallweb/enterDefray.do?proposalNo=${businessNO}" target="_blank">http://www.epicc.com.cn/piccallweb/enterDefray.do?proposalNo=${businessNO}</a></td>
+  </tr>
+</table>
+    <table width="642" border="0" cellspacing="0" cellpadding="0" class="sh">
+  <tr>
+    <td style="border-bottom:1px solid #acacac; padding-bottom:2px;"><font color="e7340b"><strong>&gt;&gt;</strong></font><strong> 上门收费</strong></td>
+    </tr>
+  <tr>
+    <td class="h20" style="margin-top:3px;">配送地址：${appliAddress}</td>
+    </tr>
+  <tr>
+    <td class="h20">收件人：${appliName}</td>
+    </tr>
+  <tr>
+    <td class="h20">联系电话：${appliPhone}</td>
+    </tr>
+  <tr>
+    <td class="h20">请保持电话畅通，我公司会有专人与您联系办理支付业务,您也可随时致电400 1234567转2咨询。</td>
+    </tr>
+</table>
+<table width="642" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto; margin-top:31px; border-bottom:1px solid #acacac">
+  <tr>
+    <td colspan="3" align="left" style="padding-bottom:2px;"><font color="#e7340b"><strong>&gt;&gt;</strong></font><strong> 营业厅支付</strong></td>
+  </tr>
+</table>
+
+    <table width="642" border="0" cellspacing="0" cellpadding="0" class="yyt">
+  		<tr>
+    		<td bgcolor="#f0f0f0">营业厅名称</td>
+    		<td bgcolor="#f0f0f0">地址</td>
+    		<td bgcolor="#f0f0f0">联系电话</td>
+  		</tr>
+  		#foreach ($address in $addrList)
+  		<tr>
+    		<td>-</td>
+    		<td>${address}</td>
+    		<td>-</td>
+  		</tr>
+  		#end
+	</table>
+    <table width="700" border="0" cellspacing="0" cellpadding="0" class="foot_txt">
+        <div width="700" class="foot_txt">
+	<a href="http://www.epicc.com.cn/favourable/fuwu12315/index.html" target="_blank">
+    				<img src="${URL}images/mailImages_new/foot_img.jpg" alt="网点最多 理赔最好 服务最及时" />
+    </a>
+	</div>  
+    </table>
+    <table width="700" border="0" cellspacing="0" cellpadding="0" style="margin: 0  auto; margin-top:6px;">
+      <tr>
+        <td colspan="3"><img src="${URL}images/mailImages_new/foot_img2.jpg" width="700" height="99" border="0" usemap="#Map" / alt="http://www.epicc.com.cn/" target="_blank"></td>
+      </tr>
+      <tr align="center" style="line-height:63px;">
+        <td width="499" align="right">中国人民财产保险股份有限公司 版权所有 京ICP证020322 京ICP备100011380号-2</td>
+        <td width="35"><img src="${URL}images/mailImages_new/icon_gh.gif" width="20" height="23" /></td>
+        <td width="166" align="left"><img src="${URL}images/mailImages_new/icon_cx.gif" width="64" height="23" /></td>
+      </tr>
+      <tr bgcolor="eaeaea">
+        <td colspan="3" class="h29">本邮件为系统自动发出，请勿直接回复！如有疑问请拨打服务专线或发送邮件咨询。</td>
+      </tr>
+      </table>
+<map name="Map" id="Map"><area shape="rect" coords="521,53,635,70" href="http://www.epicc.com.cn/" alt="www.epicc.com.cn" target="_blank"/></map></body>
+</html>

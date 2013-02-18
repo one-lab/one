@@ -14,7 +14,7 @@ public interface ProposalService {
 
 	void testlog();
 
-	@LogTraced(description = "测试Trace")
+//	@LogTraced(description = "测试Trace")
 	void testInterfaceTraced();
 
 	void testProductTraced();

@@ -1,0 +1,7 @@
+#foreach ( $s in $l)
+  <tr>
+    <td class="r_22">${s.name}</td>
+    <td class="r_39" align="right">${s.password}</td>
+    <td class="r_51" align="right">${s.sex}</td>
+  </tr>
+#end

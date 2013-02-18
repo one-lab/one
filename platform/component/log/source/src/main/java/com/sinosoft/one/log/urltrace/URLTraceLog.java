@@ -2,12 +2,8 @@ package com.sinosoft.one.log.urltrace;
 
 import com.alibaba.fastjson.JSON;
 import com.sinosoft.one.log.*;
-import com.sinosoft.one.log.queue.LoggableQueueAppender;
-import com.sinosoft.one.util.encode.JsonBinder;
-import org.apache.commons.lang3.StringUtils;
+import com.sinosoft.one.log.event.LogEventSupport;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -33,11 +29,11 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
     private String userIp;
     private byte[] requestInfo;
 
-    private LoggableQueueAppender loggableQueueAppender;
+    private LogEventSupport logEventSupport;
 
     public URLTraceLog() {
         logHandler = Loggables.getUrlTraceLogHandler();
-        loggableQueueAppender = Loggables.getLoggableQueueAppender();
+        logEventSupport = Loggables.getLogEventSupport();
     }
 
     public String getUserIp() {
@@ -104,8 +100,8 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
         this.requestInfo = requestInfo;
     }
 
-    public LoggableQueueAppender getLoggableQueueAppender() {
-        return loggableQueueAppender;
+    public LogEventSupport getLogEventSupport() {
+        return logEventSupport;
     }
 
     public Map<String, Object> toMap() throws Exception {
@@ -123,10 +119,6 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
         return paramMap;
     }
 
-    public LogType getType() {
-        return LogType.urlTraceLog;
-    }
-
     public static URLTraceLog beginTrace() {
         URLTraceLog urlTraceLog = new URLTraceLog();
         urlTraceLog.setId(TraceUtils.getTraceId());
@@ -142,7 +134,7 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
         targetURLTraceLog.setSessionId(request.getSession(false).getId());
         targetURLTraceLog.setUserIp(request.getRemoteAddr());
         targetURLTraceLog.setRequestInfo(JSON.toJSONBytes(request));
-        targetURLTraceLog.getLoggableQueueAppender().append(targetURLTraceLog);
+        targetURLTraceLog.getLogEventSupport().publish(targetURLTraceLog);
     }
 
     @Override

@@ -6,8 +6,10 @@ import java.util.Properties;
 import com.sinosoft.one.log.Environment;
 import com.sinosoft.one.log.LogTraceAspect;
 import com.sinosoft.one.log.config.LogConfigs;
+import com.sinosoft.one.log.statistics.LogStatisticsHandler;
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -27,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext-test.xml",
-        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
+        "/spring/applicationContext-monitorAgent.xml","/spring/applicationContext-log.xml" })
 @TransactionConfiguration(transactionManager = "logMonitorTransactionManager",defaultRollback=true)
 @Transactional(isolation=Isolation.READ_COMMITTED)
 public class ProposalServiceImplTest extends SpringTxTestCase {
@@ -37,17 +39,31 @@ public class ProposalServiceImplTest extends SpringTxTestCase {
     @Autowired
     private LogConfigs logConfigs;
 
+    @Autowired
+    private LogStatisticsHandler logStatisticsHandler;
+
 	private static final String LOG_TABLE_NAME = "GE_METHOD_TRACE_LOG";
 
 	Logger dbLogger = LoggerFactory.getLogger("DBLog");
 
     @Before
     public void setUp() {
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testParam", 300, 5, Environment.TEST, "此处演示如何进行参数,第一个参数${[0]},第二个参数${[1]}");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testProductTraced", 300, 5, Environment.PRODUCT, "");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testDevelopTraced", 300, 5,Environment.DEVELOP, "");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testTestTraced", 300, 5,Environment.TEST, "");
-        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testInterfaceTraced", 300,5, Environment.TEST, "测试Trace");
+        if(logConfigs.getLogMethods().size() != 0) {
+            logConfigs.getLogMethods().clear();
+        }
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testParam", 300, 5, Environment.TEST.name(), "此处演示如何进行参数,第一个参数${[0]},第二个参数${[1]}");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testProductTraced", 300, 5, Environment.PRODUCT.name(), "");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testDevelopTraced", 300, 5,Environment.DEVELOP.name(), "");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testTestTraced", 300, 5,Environment.TEST.name(), "");
+        logConfigs.addLogMethod("com.sinosoft.one.log.test.ProposalServiceImpl", "testInterfaceTraced", 300,5, Environment.TEST.name(), "测试Trace");
+        logStatisticsHandler.init();
+    }
+
+    @After
+    public void tearDown() {
+        if(logConfigs.getLogMethods().size() != 0) {
+            logConfigs.getLogMethods().clear();
+        }
     }
 
 	@Test
@@ -59,7 +75,7 @@ public class ProposalServiceImplTest extends SpringTxTestCase {
             Assert.assertTrue(e.getMessage().startsWith("This log"));
         }
 		ThreadUtils.sleep(1000);
-        logConfigs.setEnvironment(Environment.DEVELOP);
+        logConfigs.setEnvironment(Environment.DEVELOP.name());
 		String c = "123";
 		proposalService.testParam(1, '2');
 		// 生产环境拦截一条
@@ -78,7 +94,7 @@ public class ProposalServiceImplTest extends SpringTxTestCase {
     @Test
     public void testEnv() {
         LogTraceAspect implTraceAspect = super.applicationContext.getBean(LogTraceAspect.class);
-        logConfigs.setEnvironment(Environment.TEST);
+        logConfigs.setEnvironment(Environment.TEST.name());
         int oldLogsCount = this.countRowsInTable(LOG_TABLE_NAME);
         // 生产环境拦截一条
         proposalService.testProductTraced();
@@ -99,7 +115,7 @@ public class ProposalServiceImplTest extends SpringTxTestCase {
     @Test
     public void productEnv() {
         LogTraceAspect implTraceAspect = super.applicationContext.getBean(LogTraceAspect.class);
-        logConfigs.setEnvironment(Environment.PRODUCT);
+        logConfigs.setEnvironment(Environment.PRODUCT.name());
         int oldLogsCount = this.countRowsInTable(LOG_TABLE_NAME);
         // 生产环境拦截一条
         proposalService.testProductTraced();

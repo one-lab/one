@@ -35,6 +35,6 @@ public @interface LogTraced {
      * 默认为Environment.TEST
      * @return
      */
-    String env() default Environment.TEST;
+    Environment env() default Environment.TEST;
 
 }

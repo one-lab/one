@@ -6,7 +6,7 @@
 
   <header>
     <imports>
-      <import name="com.sinosoft.ebusiness.quickprice.domain.CarInfoInputBOM" />
+      <import name="com.sinosoft.one.quickprice.domain.CarInfoInputBOM" />
     </imports>
   </header>
 

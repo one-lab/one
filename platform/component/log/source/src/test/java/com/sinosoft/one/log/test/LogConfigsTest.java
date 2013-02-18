@@ -29,7 +29,7 @@ import java.util.List;
  */
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext-test.xml",
-        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
+        "/spring/applicationContext-monitorAgent.xml","/spring/applicationContext-log.xml" })
 @TransactionConfiguration(transactionManager = "logMonitorTransactionManager",defaultRollback=true)
 @Transactional(isolation= Isolation.READ_COMMITTED)
 public class LogConfigsTest extends AbstractFilterTest {
@@ -262,5 +262,12 @@ public class LogConfigsTest extends AbstractFilterTest {
 
         resultObject = query("exec", "getLogMethod/com.sinosoft.one.log.test/testMethod3");
         Assert.assertEquals(null, resultObject.get("value"));
+    }
+
+    //============================= log method config test ===================================
+    @Test
+    public void testLogStatisticsQuery() throws Exception {
+        JSONObject resultObject = query("exec", "queryLogStatisticExecuteTime/URL/!/test");
+        Assert.assertTrue(resultObject.getLong("value") >= 0);
     }
 }

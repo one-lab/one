@@ -1,49 +1,70 @@
 package com.sinosoft.one.log.config;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.sinosoft.one.log.Environment;
+import com.sinosoft.one.log.statistics.LogStatisticsHandler;
 import com.sinosoft.one.monitoragent.notification.MethodInitConfigure;
-import com.sinosoft.one.monitoragent.notification.NotificationConfigureDealer;
 import com.sinosoft.one.monitoragent.notification.NotificationService;
-import com.sinosoft.one.util.mapper.BeanMapper;
+import com.sinosoft.one.monitoragent.notification.UrlInitConfigure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.*;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.*;
 
 @ManagedResource(objectName = LogConfigs.MBEAN_NAME, description = "Log Config Management Bean")
 public class LogConfigs {
     public static final String MBEAN_NAME = "log:name=LogConfigs";
-
-    private List<MethodInitConfigure> methodInitConfigures;
-
+    private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private LogStatisticsHandler logStatisticsHandler;
 
     private List<LogUrl> urls = new ArrayList<LogUrl>();
     private List<LogMethod> methods = new ArrayList<LogMethod>();
-    private String environment;
+    private Environment environment;
 
     @PostConstruct
     public void init() {
-        initMethods();
-        initUrls();
+        try {
+            initMethods();
+            initUrls();
+        } catch (Exception e) {
+            logger.error("init log config exception.", e);
+        }
     }
 
     private void initMethods() {
-        methods = BeanMapper.mapList(notificationService.getMethodInitConfigure(),
-                LogMethod.class);
+        List<MethodInitConfigure> methodInitConfigures = notificationService.getMethodInitConfigure();
+        if(methodInitConfigures != null) {
+            for(MethodInitConfigure methodInitConfigure : methodInitConfigures) {
+                LogMethod logMethod = new LogMethod.Builder(methodInitConfigure.getClassName(), methodInitConfigure.getMethodName())
+                        .environment(methodInitConfigure.getEnvironment())
+                        .maxExecuteTime(Integer.parseInt(methodInitConfigure.getThreshold()))
+                        .interval(Integer.parseInt(methodInitConfigure.getInterval())).build();
+                methods.add(logMethod);
+            }
+        }
+//        methods = BeanMapper.mapList(notificationService.getMethodInitConfigure(),
+//                LogMethod.class);
     }
 
     private void initUrls() {
-        urls = BeanMapper.mapList(notificationService.getUrlInitConfigure(),
-                LogUrl.class);
+        List<UrlInitConfigure> urlInitConfigures = notificationService.getUrlInitConfigure();
+        if(urlInitConfigures != null) {
+            for(UrlInitConfigure urlInitConfigure : urlInitConfigures) {
+                LogUrl logUrl = new LogUrl();
+                logUrl.setUrl(urlInitConfigure.getUrl());
+                logUrl.setMaxExecuteTime(Integer.parseInt(urlInitConfigure.getThreshold()));
+                logUrl.setInterval(Integer.parseInt(urlInitConfigure.getInterval()));
+                logUrl.setEnvironment(urlInitConfigure.getEnvironment());
+                urls.add(logUrl);
+            }
+        }
+//        urls = BeanMapper.mapList(notificationService.getUrlInitConfigure(),
+//                LogUrl.class);
     }
 
     @ManagedOperation(description = "Get a url.")
@@ -148,15 +169,24 @@ public class LogConfigs {
 
     @ManagedAttribute(description = "Environment")
     public String getEnvironment() {
-        return environment;
+        return environment.name();
     }
 
     @ManagedAttribute(description = "Modify environment.")
     public void setEnvironment(String environment) {
-        this.environment = environment;
+        this.environment = Environment.valueOf(environment);
     }
 
-    public boolean checkEnvironment(String methodEnv){
+    @ManagedOperation(description = "Query log statistics.")
+    @ManagedOperationParameters(
+            { @ManagedOperationParameter(name = "type", description = "type to query."),
+              @ManagedOperationParameter(name = "value", description = "value to query.")
+            })
+    public long queryLogStatisticExecuteTime(String type, String value) {
+        return logStatisticsHandler.selectExecuteTime(type, value);
+    }
+
+    public boolean checkEnvironment(Environment methodEnv){
         if(environment.equals(methodEnv))
             return true;
         if(environment.equals(Environment.DEVELOP))

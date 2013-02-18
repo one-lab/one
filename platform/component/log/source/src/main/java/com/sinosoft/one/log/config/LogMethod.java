@@ -14,7 +14,7 @@ public class LogMethod {
     private String className;
     private String methodName;
     private String environment;
-    private String description;
+    private String description = "";
     private int maxExecuteTime;
     private int interval;
 
@@ -80,10 +80,14 @@ public class LogMethod {
         this.interval = interval;
     }
 
+    public String getFullMethodName() {
+        return getClassName() + "." + getMethodName();
+    }
+
     static class Builder {
         private String className;
         private String methodName;
-        private String environment = Environment.DEVELOP;
+        private String environment = Environment.DEVELOP.name();
         private String description = "";
         private int maxExecuteTime;
         private int interval;

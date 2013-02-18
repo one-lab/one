@@ -27,7 +27,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext-test.xml",
-        "/spring/applicationContext-notification.xml","/spring/applicationContext-log.xml" })
+        "/spring/applicationContext-monitorAgent.xml","/spring/applicationContext-log.xml" })
 // @ContextConfiguration(locations = { "/spring/applicationContext-log.xml" })
 @TransactionConfiguration(transactionManager = "logMonitorTransactionManager")
 @Transactional(isolation= Isolation.READ_COMMITTED)
@@ -46,17 +46,17 @@ public class TraceAspectTest extends SpringTxTestCase {
 //        Properties props = PropertiesLoaderUtils.loadProperties(resource);
 //        Assert.assertEquals(props.getProperty("log.environment"), traceAspect.getEnvironment().toString());
         //测试当为生产环境的只有PRODUCT的才输出
-        logConfigs.setEnvironment(Environment.PRODUCT);
+        logConfigs.setEnvironment(Environment.PRODUCT.name());
         Assert.assertEquals(false, logConfigs.checkEnvironment(Environment.DEVELOP));
         Assert.assertEquals(false, logConfigs.checkEnvironment(Environment.TEST));
         Assert.assertEquals(true, logConfigs.checkEnvironment(Environment.PRODUCT));
         //测试当为测试环境的只有TEST与DEVELOP的才输出
-        logConfigs.setEnvironment(Environment.TEST);
+        logConfigs.setEnvironment(Environment.TEST.name());
         Assert.assertEquals(true, logConfigs.checkEnvironment(Environment.DEVELOP));
         Assert.assertEquals(true, logConfigs.checkEnvironment(Environment.TEST));
         Assert.assertEquals(false,logConfigs.checkEnvironment(Environment.PRODUCT));
         //测试当为开发环境的时候，全部输出
-        logConfigs.setEnvironment(Environment.DEVELOP);
+        logConfigs.setEnvironment(Environment.DEVELOP.name());
         Assert.assertEquals(true,logConfigs.checkEnvironment(Environment.DEVELOP));
         Assert.assertEquals(true,logConfigs.checkEnvironment(Environment.TEST));
         Assert.assertEquals(true,logConfigs.checkEnvironment(Environment.PRODUCT));

@@ -14,9 +14,6 @@ public interface Loggable extends Serializable {
 
     Map<String, Object> toMap() throws Exception;
 
-    LogType getType();
-
     void doHandler();
-
 
 }

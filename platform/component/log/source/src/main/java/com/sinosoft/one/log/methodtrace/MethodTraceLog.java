@@ -37,7 +37,7 @@ public class MethodTraceLog extends AbstractLoggable implements Loggable {
     private Timestamp beginTime;
     private Timestamp endTime;
     private long consumeTime;
-    private String environment;
+    private Environment environment;
     private String logLevel;
     private String logDescription;
     private Timestamp logTime;
@@ -117,11 +117,11 @@ public class MethodTraceLog extends AbstractLoggable implements Loggable {
         this.consumeTime = consumeTime;
     }
 
-    public String getEnvironment() {
+    public Environment getEnvironment() {
         return environment;
     }
 
-    public void setEnvironment(String environment) {
+    public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
 
@@ -149,6 +149,10 @@ public class MethodTraceLog extends AbstractLoggable implements Loggable {
         this.logTime = logTime;
     }
 
+    public String getFullMethodName() {
+        return getClassName() + "." + getMethodName();
+    }
+
     public Map<String, Object> toMap() throws Exception {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", id);
@@ -168,10 +172,6 @@ public class MethodTraceLog extends AbstractLoggable implements Loggable {
         paramMap.put("environment", environment.toString());
 
         return paramMap;
-    }
-
-    public LogType getType() {
-        return LogType.methodTraceLog;
     }
 
     public Object[] toObjectArray() {
@@ -206,7 +206,7 @@ public class MethodTraceLog extends AbstractLoggable implements Loggable {
         methodTraceLog.setConsumeTime(Long.parseLong(msg[17]));
         methodTraceLog.setLogDescription(msg[19]);
         methodTraceLog.setUserId(msg[21]);
-        methodTraceLog.setEnvironment(msg[23]);
+        methodTraceLog.setEnvironment(Environment.valueOf(msg[23]));
         methodTraceLog.setLogLevel(loggingEvent.getLevel().toString());
         methodTraceLog.setLogTime(new Timestamp(System.currentTimeMillis()));
         return  methodTraceLog;
