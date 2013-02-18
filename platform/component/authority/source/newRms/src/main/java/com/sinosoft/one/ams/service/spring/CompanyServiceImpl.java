@@ -29,9 +29,11 @@ public class CompanyServiceImpl implements CompanyService{
 		
 		List<Company> company = new ArrayList<Company>();
 		
+		//父机构ID为空，查询全部机构
 		if(uppercomcode == null){
 			company = (List<Company>) companyDao.findAll();
 		}else{
+			//父机构ID不为空，查询辅机构的子机构ID
 			List<String> childComCode = companyDao.findComCodeByUppercomcode(uppercomcode);
 			if(!childComCode.isEmpty()){
 				company = (List<Company>) companyDao.findAll(childComCode);
@@ -41,6 +43,7 @@ public class CompanyServiceImpl implements CompanyService{
 		return company;
 	}
 	
+	//根据机构ID查询机构对象
 	public Company findCompanyByComCode(String comCode) {
 		return companyDao.findOne(comCode);
 	}
@@ -56,6 +59,7 @@ public class CompanyServiceImpl implements CompanyService{
 		return treeable;
 	}
 	
+	//创建机构树
 	List<NodeEntity> creatSubNode(List<Company> topCompany,Map<String,Company> filter){
 		ArrayList<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
 		for (Company company : topCompany) {
@@ -64,6 +68,8 @@ public class CompanyServiceImpl implements CompanyService{
 			NodeEntity nodeEntity = new NodeEntity();
 			nodeEntity.setId(company.getComCode());
 			nodeEntity.setTitle(company.getComCName());
+			
+			//根据机构ID查询子机构
 			List<Company> childCompany = findCompanyByUpperComCode(company.getComCode());
 			if(!childCompany.isEmpty()){
 				nodeEntity.setChildren(creatSubNode(childCompany,filter));
@@ -74,6 +80,7 @@ public class CompanyServiceImpl implements CompanyService{
 		return nodeEntitys;
 	}
 
+	//查询出全部机构
 	public List<Company> findAll() {
 		return (List<Company>) companyDao.findAll();
 	}
@@ -84,9 +91,10 @@ public class CompanyServiceImpl implements CompanyService{
 		return companies;
 	}
 
-	
+	//迭代机构
 	void iteratorComapny(List<Company> campanys,String SupercomCode){
 		
+		//根据父机构ID查询出子机构ID
 		List<String> comCodes=companyDao.findComCodeByUppercomcode(SupercomCode);
 		if(comCodes.size()>0){
 			List<Company> coms=(List<Company>) companyDao.findAll(comCodes);
@@ -105,6 +113,7 @@ public class CompanyServiceImpl implements CompanyService{
 		List<NodeEntity> nodeEntitys=new ArrayList<NodeEntity>();
 		Treeable<NodeEntity> treeable =new Treeable.Builder(nodeEntitys,"id", "title", "children", "state").builder();
 		
+		//如果用户权限ID不为空，则取得用户权限的对象
 		if(!userPowerIds.isEmpty()){
 			List<UserPower> userPowers = (List<UserPower>) geRmsUserPowerRepository.findAll(userPowerIds);
 			

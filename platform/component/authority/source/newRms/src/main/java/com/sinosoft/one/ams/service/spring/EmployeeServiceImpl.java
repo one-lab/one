@@ -35,6 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Page<Employe> page = userDao.findAll(pageable);
 		List<Employe> userList = page.getContent();
 		
+		//生成EmployeInfo的Gridable
 		gridable = getGridable(userList, gridable, userAttribute, pageable);
 		
 		return gridable;
@@ -71,6 +72,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			return gridable;
 	}
 	
+	//生成getGridable对象
 	public Gridable<EmployeInfo> getGridable(List<Employe> userList,Gridable<EmployeInfo> gridable ,List<String> userAttribute ,Pageable pageable){
 		String button = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' class='set' onclick='openSJ(this);'>数据设置</a>";
 		String button_ = "<a href='javascript:;' class='set' onclick='openQX(this);'>权限设置</a><a href='#' title='该人员未配置权限，无法操作' class='set dis'>数据设置</a>";
@@ -78,6 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		List<EmployeInfo> employeInfos = new ArrayList<EmployeInfo>();
 		
+		//将userList中的user保存到employeInfos中
 		for(Employe user: userList){
 			List<String> userPowerId = geRmsUserPowerRepository.findUserPowerIdByUserCode(user.getUserCode());
 			String comCodeUser = userDao.findComCodeByUserCode(user.getUserCode());
@@ -111,6 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return gridable;
 	}
 
+	//根据id和password查询用户
 	public Employe findEmployeByUserCodePassword(String userCode,
 			String password) {
 		Employe user = null;

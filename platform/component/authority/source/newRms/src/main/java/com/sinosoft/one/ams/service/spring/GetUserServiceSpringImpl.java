@@ -291,6 +291,7 @@ public class GetUserServiceSpringImpl implements GetUserService {
 
 	}
 	
+	 //生成数据权限集合
 	 void creatDataPowerList(List<DataPower> dataPowers,List<BusPower>busPowers,String userCode,String comCode){
 		for (BusPower busPower : busPowers) {
 			if(StringUtils.isNotBlank(busPower.getDataRuleParam())&&busPower.getDataRule()!=null){

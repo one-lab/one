@@ -34,6 +34,7 @@ public class TaskAuthController {
 	@Autowired
 	private CompanyService companyService;
 	
+	//取得机构
 	@Post("companyAll")
 	public Reply list(Invocation inv) throws Exception {
 		

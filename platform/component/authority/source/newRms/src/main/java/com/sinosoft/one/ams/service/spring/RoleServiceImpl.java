@@ -68,6 +68,7 @@ public class RoleServiceImpl implements RoleService{
 		return role;
 	}
 	
+	//根据机构ID和name，分页查询角色
 	public Page<Role> findRole(String comCode,String name,Pageable pageable){
 		Page<Role> page =null;
 		if(name!=null&&!"".equals(name))
@@ -100,7 +101,7 @@ public class RoleServiceImpl implements RoleService{
 		return geRmsTasks;
 	}
 
-	@Transactional
+	//修改角色
 	public void updateRole(String roleId,String  comCode, String userCode,String name, String des,
 			String roleTpe, List<String> taskids) {
 		Role role=geRmsRoleRepository.findOne(roleId);
@@ -136,7 +137,7 @@ public class RoleServiceImpl implements RoleService{
 		}
 	}
 	
-	@Transactional
+	//新增角色
 	public void addRole(String comCode, String userCode, String name,
 			String des, String roleTpe, List<String> taskids) {
 		Role role = new Role();
@@ -164,6 +165,8 @@ public class RoleServiceImpl implements RoleService{
 		if(roleTpe.toString().equals("all".toString()))
 			role.setFlag("*");
 		geRmsRoleRepository.save(role);
+		
+		//角色指派
 		RoleDesignate roleDesignate = new RoleDesignate();
 		RoleDesignateId roleDesignateId = new RoleDesignateId();
 		roleDesignateId.setRoleID(role.getRoleID());
@@ -186,6 +189,7 @@ public class RoleServiceImpl implements RoleService{
 	
 	}
 	
+	//删除角色
 	public void deleteRole(String roleId, String comCode){
 		RoleDesignateId roleDesignateId=new RoleDesignateId();
 		roleDesignateId.setComCode(comCode);
@@ -258,6 +262,8 @@ public class RoleServiceImpl implements RoleService{
 		}
 		List<String> results = new ArrayList<String>();
 		List<String> roleDegNatIds =geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
+		
+		//筛选角色ID
 		for (String roleDegNatId : roleDegNatIds) {
 			for (String roleId : roleIds) {
 				if(roleDegNatId.toString().equals(roleId)){
@@ -272,7 +278,7 @@ public class RoleServiceImpl implements RoleService{
 		return roles;
 	}
 
-
+	//分页查询角色指派
 	public Page<RoleDesignateInfo> findRoleDesignate(String superComCode ,
 			Pageable pageable) {
 		List<RoleDesignate> supers= geRmsRoleDesignateRepository.findRoleDesignateByComCodeQuery(superComCode);
@@ -368,6 +374,7 @@ public class RoleServiceImpl implements RoleService{
 		return roleId;
 	}
 
+	//保存角色指派
 	public void saveRoleDesignate(String comCode, String roleIdStr) {
 		Subject currentUser = SecurityUtils.getSubject();
 		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();

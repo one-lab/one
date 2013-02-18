@@ -41,6 +41,7 @@ public class GroupServiceImpl implements GroupService{
 		return groupList;
 	}
 	
+	//生成用户组的Gridable
 	public Gridable<Group> getGroupGridable(Gridable<Group> gridable,
 			String comCode, String name, Pageable pageable) {
 		//查询机构下所有可见的角色
@@ -63,8 +64,11 @@ public class GroupServiceImpl implements GroupService{
 		return gridable;
 	}
 	
+	//分页查询用户组
 	Page<Group> findGroup(String comCode,String name,Pageable pageable){
 		Page<Group> page =null;
+		
+		//判断name是否为空
 		if(name!=null&&!"".equals(name))
 			page = geRmsGroupRepository.findGroupByName(comCode, "%"+name+"%", pageable);
 		else
@@ -72,10 +76,12 @@ public class GroupServiceImpl implements GroupService{
 		return page;
 	}
 
+	//根据用户组ID查询用户组
 	public Group findGroupById(String groupId) {
 		return geRmsGroupRepository.findOne(groupId);	
 	}
 
+	//根据用户组ID查询角色并生成角色的Gridable
 	public Gridable<Role> getRoleGridableByGroupId(Gridable<Role> gridable,
 			String groupId,String comCode, Pageable pageable) {
 		Page<Role> page = geRmsRoleRepository.findRole(comCode, pageable);
@@ -85,6 +91,8 @@ public class GroupServiceImpl implements GroupService{
 		for (GroupRole groupRole : 	group.getGroupRoles()) {
 			roleids.add(groupRole.getRole().getRoleID());
 		}
+		
+		//标记角色是否在本机构中
 		for (Role role: page.getContent()) {
 			for (String string : roleids) {
 			
@@ -106,6 +114,7 @@ public class GroupServiceImpl implements GroupService{
 		return gridable;
 	}
 
+	//修改用户组
 	public void updateGroup(String groupId, String name, String groupType,
 			List<String> roleIds, String des, String comCode, String userCode) {
 		Group group=geRmsGroupRepository.findOne(groupId);
@@ -116,9 +125,13 @@ public class GroupServiceImpl implements GroupService{
 			if (des!=null) {
 				group.setDes(des);
 			}
+			
 			if(groupType.equals("all")){
+				
+				//将用户组类型修改为所有类型
 				group.setComCode("*");
 			}else {
+				//将用户组类型修改为私有类型
 				group.setComCode(comCode);
 			}
 			List<Role>roles=(List<Role>) geRmsRoleRepository.findAll(roleIds);
@@ -136,6 +149,7 @@ public class GroupServiceImpl implements GroupService{
 		
 	}
 
+	//新增用户组
 	public void addGroup(String name, String groupType, List<String> roleIds,
 			String des, String comCode, String userCode) {
 		Group group=new Group();
@@ -159,6 +173,7 @@ public class GroupServiceImpl implements GroupService{
 			groupRole.setRole(geRmsRoleRepository.findOne(string));
 			groupRoles.add(groupRole);
 		}
+		//将用户组的角色加入到用户组的对象中
 		group.setGroupRoles(groupRoles);
 		geRmsGroupRepository.save(group);
 	}
@@ -174,7 +189,8 @@ public class GroupServiceImpl implements GroupService{
 			for(UserGroup userGroup : userGroups){
 				checkGroupIds.add(userGroup.getGroup().getGroupID());
 			}
-
+			
+			//标记用户是否已被引入用户组，是为1，否为0
 			for(Group group : groups){
 				if(checkGroupIds.contains(group.getGroupID().toString())){
 					group.setFlag("1");
@@ -186,6 +202,7 @@ public class GroupServiceImpl implements GroupService{
 		return groups;
 	}
 
+	//根据用户组的集合ID查询用户组集合
 	public List<Group> findGroupById(List<String> groupIds) {
 		System.out.println(groupIds);
 		List<Group> groups = new ArrayList<Group>();

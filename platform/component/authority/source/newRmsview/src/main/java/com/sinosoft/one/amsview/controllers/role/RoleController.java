@@ -147,6 +147,7 @@ public class RoleController {
 		return "addRole";
 	}
 	
+	//新增角色
 	@Post("add/{name}/{des}/{roleType}/{taskId}")
 	public Reply addRole(@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
 		Employe user = (Employe) inv.getRequest().getSession().getAttribute("user");
@@ -156,6 +157,7 @@ public class RoleController {
 		return null;
 	}
 	
+	//修改角色
 	@Post("update/{roleId}/{name}/{des}/{roleType}/{taskId}")
 	public Reply updateRole(@Param("roleId") String roleId,@Param("name")String name,@Param("des") String des,@Param("roleType") String roleType,@Param("taskId") String taskid, Invocation inv){
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
@@ -165,6 +167,7 @@ public class RoleController {
 		return null;
 	}
 
+	//取得机构树
 	@Post("findDesigNateComTree")
 	public Reply findComTree(Invocation inv) throws Exception{
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
@@ -184,6 +187,7 @@ public class RoleController {
 		return null;
 	}
 	
+	//根据机构ID查询角色指派
 	@Post("findDesignateRole/{comCode}")
 	public Reply findDesignateRole(@Param("comCode") String comCode, @Param("pageNo") int pageNo,
 			@Param("rowNum") int rowNum,Invocation inv) throws Exception{
@@ -256,6 +260,7 @@ public class RoleController {
 		return nodeEntitys;
 	}
 	
+	//根据角色ID删除角色
 	@Post("del/{roleId}")
 	public Reply deleteRole(@Param("roleId")String roleId,Invocation inv){
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
@@ -264,6 +269,7 @@ public class RoleController {
 		return Replys.with("success");
 	}
 	
+	//保存机构的角色
 	@Post("save/{comCode}/{roleIdStr}")
 	public Reply saveRoleDesignate(@Param("comCode")String comCode,@Param("roleIdStr")String roleIdStr){
 		roleService.saveRoleDesignate(comCode, roleIdStr);
