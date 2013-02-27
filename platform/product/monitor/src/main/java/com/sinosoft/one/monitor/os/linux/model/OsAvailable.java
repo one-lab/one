@@ -18,7 +18,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @Entity
 @Table(name="GE_MONITOR_OS_AVAILABILE"
 )
-public class OsAvailabile  implements java.io.Serializable {
+public class OsAvailable  implements java.io.Serializable {
 
     /**
         */
@@ -42,11 +42,11 @@ public class OsAvailabile  implements java.io.Serializable {
         */
     private String timeSpan;
 
-    public OsAvailabile() {
+    public OsAvailable() {
     }
 
 	
-    public OsAvailabile(String id, Os os) {
+    public OsAvailable(String id, Os os) {
         this.id = id;
         this.os = os;
     }

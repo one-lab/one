@@ -47,7 +47,7 @@ public class Os  implements java.io.Serializable {
     private List<OsAvailabletemp> osAvailabletemps = new ArrayList<OsAvailabletemp>(0) ;
     /**
         */
-    private List<OsAvailabile> osAvailabiles = new ArrayList<OsAvailabile>(0) ;
+    private List<OsAvailable> osAvailabiles = new ArrayList<OsAvailable>(0) ;
     /**
         */
     private List<OsRam> osRams = new ArrayList<OsRam>(0) ;
@@ -135,11 +135,11 @@ public class Os  implements java.io.Serializable {
     this.osAvailabletemps = osAvailabletemps;
     }
     @OneToMany(fetch=FetchType.LAZY, mappedBy="os")
-    public List<OsAvailabile> getOsAvailabiles() {
+    public List<OsAvailable> getOsAvailabiles() {
     return this.osAvailabiles;
     }
 
-    public void setOsAvailabiles(List<OsAvailabile> osAvailabiles) {
+    public void setOsAvailabiles(List<OsAvailable> osAvailabiles) {
     this.osAvailabiles = osAvailabiles;
     }
     @OneToMany(fetch=FetchType.LAZY, mappedBy="os")

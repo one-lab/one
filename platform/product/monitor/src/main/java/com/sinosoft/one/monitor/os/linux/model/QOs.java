@@ -24,7 +24,7 @@ public class QOs extends EntityPathBase<Os> {
 
     public final StringPath name = createString("name");
 
-    public final ListPath<OsAvailabile, QOsAvailabile> osAvailabiles = this.<OsAvailabile, QOsAvailabile>createList("osAvailabiles", OsAvailabile.class, QOsAvailabile.class);
+    public final ListPath<OsAvailable, QOsAvailabile> osAvailabiles = this.<OsAvailable, QOsAvailabile>createList("osAvailabiles", OsAvailable.class, QOsAvailabile.class);
 
     public final ListPath<OsAvailabletemp, QOsAvailabletemp> osAvailabletemps = this.<OsAvailabletemp, QOsAvailabletemp>createList("osAvailabletemps", OsAvailabletemp.class, QOsAvailabletemp.class);
 

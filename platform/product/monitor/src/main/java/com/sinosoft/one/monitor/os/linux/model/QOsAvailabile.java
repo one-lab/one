@@ -12,7 +12,7 @@ import javax.annotation.Generated;
  * QOsAvailabile is a Querydsl query type for OsAvailabile
  */
 @Generated("com.mysema.query.codegen.EntitySerializer")
-public class QOsAvailabile extends EntityPathBase<OsAvailabile> {
+public class QOsAvailabile extends EntityPathBase<OsAvailable> {
 
     private static final long serialVersionUID = 1537749283;
 
@@ -35,7 +35,7 @@ public class QOsAvailabile extends EntityPathBase<OsAvailabile> {
     public final StringPath timeSpan = createString("timeSpan");
 
     public QOsAvailabile(String variable) {
-        this(OsAvailabile.class, forVariable(variable), INITS);
+        this(OsAvailable.class, forVariable(variable), INITS);
     }
 
     public QOsAvailabile(PathMetadata<?> metadata) {
@@ -43,10 +43,10 @@ public class QOsAvailabile extends EntityPathBase<OsAvailabile> {
     }
 
     public QOsAvailabile(PathMetadata<?> metadata, PathInits inits) {
-        this(OsAvailabile.class, metadata, inits);
+        this(OsAvailable.class, metadata, inits);
     }
 
-    public QOsAvailabile(Class<? extends OsAvailabile> type, PathMetadata<?> metadata, PathInits inits) {
+    public QOsAvailabile(Class<? extends OsAvailable> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
         this.os = inits.isInitialized("os") ? new QOs(forProperty("os")) : null;
     }

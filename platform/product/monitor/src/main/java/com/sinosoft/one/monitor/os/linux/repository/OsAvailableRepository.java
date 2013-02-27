@@ -3,8 +3,8 @@ package com.sinosoft.one.monitor.os.linux.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.sinosoft.one.monitor.os.linux.model.OsAvailabile;
+import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
 
-public interface OsAvailabileRepository extends PagingAndSortingRepository<OsAvailabile, String> {
+public interface OsAvailableRepository extends PagingAndSortingRepository<OsAvailable, String> {
 }
 
