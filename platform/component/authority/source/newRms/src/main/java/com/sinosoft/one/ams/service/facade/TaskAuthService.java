@@ -1,22 +1,21 @@
 package com.sinosoft.one.ams.service.facade;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.ams.model.TaskAuth;
-import com.sinosoft.one.uiutil.NodeEntity;
-import com.sinosoft.one.uiutil.Treeable;
 
 @Service
 public interface TaskAuthService {
 	
+	
 	/**
-	 * 根据机构ID，查询机构的功能，保存在一个Treeable对象，并返回
-	 * 
+	 * 根据机构代码查询所有授权功能ID
 	 * @param comCode
 	 * @return
 	 */
-	public Treeable<NodeEntity> treeAble(String comCode);
-	
+	public List<String>findAllTaskIdByComCode(String comCode);
 	/**
 	 * 保存当前机构的功能
 	 * 

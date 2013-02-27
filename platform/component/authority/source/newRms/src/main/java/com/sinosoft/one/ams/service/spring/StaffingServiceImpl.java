@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import junit.framework.Assert;
+
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.ams.model.BusPower;
@@ -138,8 +140,10 @@ public class StaffingServiceImpl implements StaffingService{
 				String[] taskId = taskIdStr.split(",");
 				if(taskId.length > 0){
 					for(String id : taskId){
+						Task task=geRmsTaskRepository.findOne(id);
+						Assert.assertNotNull(task);
 						ExcPower ep = new ExcPower();
-						ep.setTask(geRmsTaskRepository.findOne(id));
+						ep.setTask(task);
 						ep.setUserPower(userPower);
 						ep.setIsValidate("1");
 						geRmsExcPowerRepository.save(ep);
@@ -220,9 +224,10 @@ public class StaffingServiceImpl implements StaffingService{
 		
 		List<String> resultIds =new ArrayList<String>();
 		List<BusPower> resultBusPowers = new ArrayList<BusPower>();
-
-		List<BusPower> busPowers = (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
-		//筛选
+		List<BusPower> busPowers = new ArrayList<BusPower>();
+		if(busPowerIds.size()>0){
+			busPowers= (List<BusPower>) geRmsBusPowerRepository.findAll(busPowerIds);
+		}//筛选
 		for(BusPower busPower : busPowers){
 			if(!resultIds.contains(busPower.getDataRule().getDataRuleID().toString())){
 				resultIds.add(busPower.getDataRule().getDataRuleID().toString());

@@ -13,4 +13,7 @@ public interface GeRmsRoleTaskRepository extends PagingAndSortingRepository<Role
 	@SQL("select taskAuthId from GE_RMS_ROLETASK where roleId = ?1")
 	List<String> findTaskAuthIdByRoleId(String roleId);
 	
+	@SQL("delete GE_RMS_ROLETASK where taskAuthid in( select taskauthid from GE_RMS_TASK_AUTH where taskid=?1)")
+	List<String> deleteRoleTaskIdByTaskId(String taskid);
+	
 }

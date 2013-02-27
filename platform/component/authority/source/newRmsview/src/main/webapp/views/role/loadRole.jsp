@@ -7,6 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>权限管理-功能菜单管理</title>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %> 
 <link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.base.css" />
 <link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.tree.css" />
 <link type="text/css" rel="stylesheet" href="${ctx}/css/sinosoft.grid.css" />
@@ -226,21 +227,27 @@ function openAddWindow(){
 function delRow(e){
 	var row = $(e).parents('tr');
 	var roleId = row.attr("id").substr(4);
-	$.ajax({
-		url : "${ctx}/role/del/"+roleId,
-		type : "post",
-		success : function(result){
-			if(result == "success"){
-				msgSuccess("", "删除成功！",function(){
-					window.parent.frames[0].location.reload();
-				});
-				
-			}
-		},
-		error : function(){
-			alert("操作失败！");
-		}
-	});
+	var comcode=$(e).next().val();
+	msgConfirm("", "确定删除?",function(){
+			 $.ajax({
+				url : "${ctx}/role/delete/"+roleId,
+				type : "post",
+	   		    dataType:"html",
+	   	     	success:function (data) {
+	     	       if (data == "deleteSucces") {  
+	            		var row = $(e).parents('tr');
+						row.remove();
+	            		msgSuccess("", "删除成功！"); 
+	            	}else{
+	            		alert("删除失败！"); 
+	            	}
+	        	},
+	        	error:function () {  
+	            	alert("删除失败！！！");  
+	        	}  
+	   	 	});
+	 });
+	
 	//row.remove();
 }
 </script>
@@ -253,7 +260,7 @@ function delRow(e){
     <td width="180"><input id="roleName" type="text" value="" class="seach_text" /></td>
     <td width="120"><input type="button" value=" " class="seach_btn" onclick="search();"/></td>
     <td>
-    	<input type="button" class="new_btn" value="增 加" onclick="openAddWindow()" />
+    	<input type="button" class="new_btn"  value="增 加" onclick="openAddWindow()" />
     </td>
   </tr>
   <tr>

@@ -21,6 +21,7 @@ import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.uiutil.GridRender;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.Render;
@@ -68,6 +69,19 @@ public class GroupController {
 		}
 		
 		return "loadGroupInfo";
+	}
+	
+	//查询用户组页面 修改/查看页面
+	@Post("delete/{groupId}")
+	public Reply delteGroupById(@Param("groupId") String groupId, Invocation inv) {
+		String result = "";
+		if(groupService.deleteGroupById(groupId)){
+			result="deleteSucces";
+			return Replys.with(result);
+		} 
+		result="deleteError";
+		return Replys.with(result);
+		
 	}
 	
 	//查询用户组页面 修改/查看页面

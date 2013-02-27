@@ -50,8 +50,10 @@ public class StaffingServiceTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void testGetParams(){
 		List<BusPower> busPower = staffingService.getParams("00", "admin", "queryRuleAccordCompany");
-		Assert.assertEquals("queryRuleAccordCompany", busPower.get(0).getDataRule().getDataRuleID());
-	}
+		if(busPower.size()>0){
+			Assert.assertEquals("queryRuleAccordCompany", busPower.get(0).getDataRule().getDataRuleID());
+		}
+		}
 	
 	/**
 	 * 检查用户权限的id是否存在，存在返回yes，否则返回no
@@ -70,7 +72,7 @@ public class StaffingServiceTest extends AbstractJUnit4SpringContextTests {
 	 */
 	@Test
 	public void testSavePower(){
-		staffingService.savePower("07", "user10", "group10110", "test");
+		staffingService.savePower("07", "user10", "group10110", "RMS001");
 	}
 	
 	/**

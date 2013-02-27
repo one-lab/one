@@ -132,7 +132,7 @@ function evevtCheck(){
 			alert("功能名不能为空！");
 			return;
 		}
-		
+		alert(parentId);
 		$.ajax({
 			type:"post",
 			url:"${ctx}/taskmenu/saveTask/"+parentId,

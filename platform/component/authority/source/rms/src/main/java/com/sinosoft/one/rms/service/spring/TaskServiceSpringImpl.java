@@ -353,7 +353,7 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 	
 
 	public void updateTaskHasSysFlag(String taskId, String name, String menuURL,String isValidate,
-			String menuName, String des,String isAsMenu,String sysFlag,String loginComCode,String isConfigDataRule) {
+			String menuName, String des,String isAsMenu,String sysFlag,String flagComCode,String isConfigDataRule) {
 		Task task=super.get(Task.class, taskId);
 		if (task!=null) {
 			task.setTaskID(taskId);
@@ -365,13 +365,14 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 			task.setSysFlag(sysFlag);
 			task.setIsAsMenu(isAsMenu);
 			task.setIsConfigDataRule(isConfigDataRule);
-			if("*".equals(loginComCode)){
+			if("*".equals(flagComCode)){
 				task.setFlag("*");
 			}else{
 				task.setFlag("");
 			}
 			super.update(task);
-			if(!"*".equals(loginComCode)){
+			//修改成默认的
+			if(!"*".equals(flagComCode)){
 				QueryRule queryRule=QueryRule.getInstance();
 				queryRule.addEqual("task.taskID", taskId);
 				queryRule.addEqual("comCode", "*");
@@ -379,15 +380,16 @@ public class TaskServiceSpringImpl<T, E> extends GenericDaoHibernate<Task, Strin
 				if(taskAuth!=null){
 					QueryRule queryRuleOldAuth=QueryRule.getInstance();
 					queryRuleOldAuth.addEqual("task.taskID", taskId);
-					queryRuleOldAuth.addEqual("comCode", loginComCode);
+					queryRuleOldAuth.addEqual("comCode", flagComCode);
 					TaskAuth oldTaskAuth=super.findUnique(TaskAuth.class, queryRuleOldAuth);
 					if(oldTaskAuth!=null){
-						taskAuth.setComCode(loginComCode);
+						taskAuth.setComCode(flagComCode);
 						super.update(taskAuth);
 					}
 				}
 			}
-			if("*".equals(loginComCode)){
+			//修改成所有可见的
+			if("*".equals(flagComCode)){
 				
 			}
 		}

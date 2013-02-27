@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -58,6 +59,7 @@ public class RoleController {
 		String button = "<a href='#' class='set' onclick='openUpdateWindow(this);'>修 改</a><a href='#' class='set' onclick='delRow(this);'>删 除</a>";
 		List<Role> geRmsRoles = page.getContent();
 		for (Role geRmsRole : geRmsRoles) {
+			//判断类型标记到前台中
 			geRmsRole.setFlag(button);
 		} 
 		ga.setPage(page);
@@ -131,13 +133,19 @@ public class RoleController {
 	
 	
 	//查询角色页面 修改/查看页面
+	
 	@Get("findRoleById/{roleId}")
 	public String findRoleById(@Param("roleId") String roleId, Invocation inv) {
 		Role role = roleService.findRoleById(roleId);
 		inv.addModel("name", role.getName());
 		inv.addModel("des", role.getDes());
 		inv.addModel("roleId", role.getRoleID());
-		inv.addModel("flag", role.getFlag());
+		inv.addModel("comCode", role.getComCode());
+		if(roleService.discriminateRoleType(role.getRoleID())){
+			inv.addModel("flag", "all");
+		}else{
+			inv.addModel("flag", "defult");
+		}
 		return "loadRoleInfo";
 	}
 	
@@ -261,12 +269,17 @@ public class RoleController {
 	}
 	
 	//根据角色ID删除角色
-	@Post("del/{roleId}")
+	@Post("delete/{roleId}")
 	public Reply deleteRole(@Param("roleId")String roleId,Invocation inv){
 		User user = (User) inv.getRequest().getSession().getAttribute("user");
 		String comCode = user.getLoginComCode();
-		roleService.deleteRole(roleId, comCode);
-		return Replys.with("success");
+		String result = "";
+		if(roleService.deleteRole(roleId, comCode)){
+			result="deleteSucces";
+			return Replys.with(result);
+		}
+		result="deleteError";
+		return Replys.with(result);
 	}
 	
 	//保存机构的角色
@@ -275,4 +288,5 @@ public class RoleController {
 		roleService.saveRoleDesignate(comCode, roleIdStr);
 		return Replys.with("success");
 	}
+	
 }

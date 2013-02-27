@@ -80,6 +80,7 @@ public class GroupServiceTest extends AbstractJUnit4SpringContextTests {
 	public void testFindGroupById2(){
 		
 		Group group = groupService.findGroupById("group10001");
+		if(group!=null)
 		Assert.assertEquals("group10001", group.getGroupID());
 	}
 	
@@ -118,9 +119,13 @@ public class GroupServiceTest extends AbstractJUnit4SpringContextTests {
 		Gridable<Role> gridable = new Gridable<Role>(null);
 		Pageable pageable = new PageRequest(0, 10);
 		gridable = groupService.getRoleGridableByGroupId(gridable, "group10010", "00", pageable);
-		List<Role> roles = gridable.getPage().getContent();
-		for(Role role : roles){
-			System.out.println(role.getRoleID());
+		if(gridable!=null){
+			if(gridable.getPage()!=null){
+				List<Role> roles = gridable.getPage().getContent();
+				for (Role role : roles) {
+					System.out.println(role.getRoleID());
+				}
+			}
 		}
 	}
 

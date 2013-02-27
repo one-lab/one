@@ -47,7 +47,8 @@ function fitHeight(){
           <tr>
             <td align="right">角色名称：</td>
             <td><input type="text" style="width:160px;" id="updateRoleName" value="${name}"/>
-            	  <input type="text" style="width:160px;" id="updateRoleId" value="${roleId}"/>
+            	  <input type="hidden" style="width:160px;" id="updateRoleId"  value="${roleId}"/>
+            	   <input type="hidden" style="width:160px;" id="roleComCode" value="${comCode}"/>
             </td>
        	  </tr>
           <tr>

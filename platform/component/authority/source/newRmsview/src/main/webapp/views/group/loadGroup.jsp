@@ -221,24 +221,27 @@ function openAddWindow(){
 	function delRow(obj){
 		var id = $(obj).parents('tr').attr('id');
 		var groupId = id.substr(4);
-		$.ajax({
-	        type:"post",
-	        url:"${ctx}/group/del/"+groupId,
-	        dataType:"html",
-	        success:function (data) {
-	        	alert(data);
-	            if (data == "success") {  
-					var row = $(obj).parents('tr');
-					row.remove();
-	            	msgSuccess("", "删除成功！"); 
-	            }else{
-	            	alert("删除失败！"); 
-	            }
-	        },
-	        error:function () {  
-	            alert("删除失败！！！");  
-	        }  
-	    });
+		 msgConfirm("", "确定删除?",function(){
+			 $.ajax({
+     	        type:"post",
+     	        url:"${ctx}/group/delete/"+groupId,
+     	        dataType:"html",
+     	        success:function (data) {
+     	            if (data == "deleteSucces") {  
+     	            	var row = $(obj).parents('tr');
+     					row.remove();
+     	            	msgSuccess("", "删除成功！"); 
+     	            	
+     	            }else{
+     	            	alert("删除失败！"); 
+     	            }
+     	        },
+     	        error:function () {  
+     	            alert("删除失败！！！");  
+     	        }  
+     	    });
+		 });
+		
 }
 </script>
 </head>

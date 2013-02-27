@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.uiutil.NodeEntity;
@@ -119,4 +120,7 @@ public interface TaskService {
 	 * @return
 	 */
 	public String findParentIdBytaskId(String taskId);
+	
+	
+	public void savesave(Task task,String parentId,User loginUser);
 }

@@ -23,15 +23,15 @@ public class TaskAuthServiceTest extends AbstractJUnit4SpringContextTests {
 	/**
 	 * 根据机构ID，查询机构的功能，保存在一个Treeable对象，并返回
 	 */
-	@Test
-	public void testTreeAble(){
-		Treeable<NodeEntity> treeable = taskAuthService.treeAble("00");
-		List<NodeEntity> nes = treeable.getContent();
-		for(NodeEntity ne : nes){
-			System.out.println(ne.getId());
-		}
-	}
-	
+//	@Test
+//	public void testTreeAble(){
+//		Treeable<NodeEntity> treeable = taskAuthService.treeAble("00");
+//		List<NodeEntity> nes = treeable.getContent();
+//		for(NodeEntity ne : nes){
+//			System.out.println(ne.getId());
+//		}
+//	}
+//	
 	/**
 	 * 保存当前机构的功能
 	 */

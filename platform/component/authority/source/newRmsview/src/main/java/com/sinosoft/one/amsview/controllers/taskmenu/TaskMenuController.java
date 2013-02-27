@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sinosoft.one.ams.User;
 import com.sinosoft.one.ams.model.Task;
 import com.sinosoft.one.ams.model.TaskAuth;
 import com.sinosoft.one.ams.service.facade.TaskService;
@@ -60,12 +63,13 @@ public class TaskMenuController {
 	}
 	
 	//新建或修改功能，并保存
-	@Post("saveTask/{parentID}")
+	@Post({"saveTask/{parentID}","saveTask"})
 	public Reply save(Task task,@Param("parentID")String parentId, Invocation inv) {
-
-		TaskAuth taskAuth = new TaskAuth();
-		taskService.save(task,parentId,taskAuth);
-		
+		Subject currentUser = SecurityUtils.getSubject();
+		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
+//		TaskAuth taskAuth = new TaskAuth();
+//		taskService.save(task,parentId,taskAuth);
+		taskService.savesave(task, parentId, user) ;
 		return Replys.simple().success("success");
 	}
 	

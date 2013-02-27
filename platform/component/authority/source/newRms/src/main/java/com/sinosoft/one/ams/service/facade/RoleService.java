@@ -96,7 +96,7 @@ public interface RoleService {
 	 * @param roleId
 	 * @param comCode
 	 */
-	public void deleteRole(String roleId, String comCode);
+	public boolean deleteRole(String roleId, String comCode);
 	
 	/**
 	 * 根据机构Id查询角色ID
@@ -113,4 +113,11 @@ public interface RoleService {
 	 * @param roleIdStr
 	 */
 	public void saveRoleDesignate(String comCode,String roleIdStr);
+	
+	/**
+	 * 判断类型 大于1为默认类型(false)等于1为全类型(true)
+	 * @param roleId
+	 * @return
+	 */
+	public boolean discriminateRoleType(String roleId);
 }

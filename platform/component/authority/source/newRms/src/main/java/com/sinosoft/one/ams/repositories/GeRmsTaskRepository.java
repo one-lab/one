@@ -26,6 +26,5 @@ public interface GeRmsTaskRepository extends PagingAndSortingRepository<Task, St
 	@SQL("select * from GE_RMS_TASK where taskId not in(select taskId from GE_RMS_EXCPOWER where powerId = ?1) and taskId in(select taskId from GE_RMS_TASK_AUTH where comCode = ?2 or comCode = '*') and isValidate='1'")
 	List<Task> findTaskByPowerIdComCode(String powerId , String comCode);
 	
-	
 		
 }

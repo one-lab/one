@@ -28,4 +28,8 @@ public interface GeRmsRoleDesignateRepository  extends PagingAndSortingRepositor
 	//根绝机构ID和角色Id删除记录
 	@SQL("delete from GE_RMS_ROLE_DESIGNATE where comCode = ?1 and roleId = ?2")
 	void delete(String comCode,String roleId);
+	
+	//根据角色ID查询指派，判断类型
+	@SQL("select count(*) from GE_rms_Role_designate where roleid= ?1 or comCode='*'")
+	int findRoleDesignateByRoleId(String roleId);
 }

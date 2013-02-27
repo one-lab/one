@@ -32,7 +32,7 @@
 		</property>
 		<property name="filterChainDefinitions">
 			<value>
-				/ =anon
+				/=anon
 				/login/company/** =anon
 				/login/checkUser/** = anon
 				/login/logout** = anon

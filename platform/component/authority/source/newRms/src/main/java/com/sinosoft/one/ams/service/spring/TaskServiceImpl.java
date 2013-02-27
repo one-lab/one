@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import junit.framework.Assert;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
@@ -76,7 +78,6 @@ public class TaskServiceImpl implements TaskService{
 		User user=(User) currentUser.getPrincipals().getPrimaryPrincipal();
 		Task taskCheck = geRmsTaskRepository.findOne(task.getTaskID());
 		
-		task.setSysFlag("RMS");
 		Task parentTask = geRmsTaskRepository.findOne(parentId);
 		task.setParent(parentTask);
 		
@@ -372,6 +373,101 @@ public class TaskServiceImpl implements TaskService{
 		return geRmsTaskRepository.findParentIdByTaskId(taskId);
 	}
 	
-	
+	public void savesave(Task task,String parentId,User loginUser){
+		
+		Task oldTaskData = geRmsTaskRepository.findOne(task.getTaskID());
+		
+		//判断功能授权是新增，还是修改
+		if(oldTaskData==null){
+			//新增
+			Task parentTask=null;
+			if(parentId!=null&&!parentId.trim().toString().equals("")){
+				 parentTask = geRmsTaskRepository.findOne(parentId);
+			}
+			task.setParent(parentTask);
+			TaskAuth taskAuth=new TaskAuth();
+			taskAuth.setTask(task);
+			taskAuth.setOperateUser(loginUser.getUserName());
+			if (task.getFlag().equals("*")) {
+				taskAuth.setComCode("*");
+				task.setFlag("*");
+			} else {
+				taskAuth.setComCode(loginUser.getLoginComCode());
+				task.setFlag(loginUser.getLoginComCode());
+			}
+			List<TaskAuth>taskauths=new ArrayList<TaskAuth>();
+			taskauths.add(taskAuth);
+			task.setTaskAuths(taskauths);
+			
+			geRmsTaskRepository.save(task);
+			
+		}else{
+			if (task.getFlag().equals("*")) {
+				//以全类型保存
+				if(oldTaskData.getFlag()!=null&&oldTaskData.getFlag().equals("*")){
+					//由全类型保存为全类型
+					task.setFlag("*");
+					geRmsTaskRepository.save(task);
+				}else{
+					//由默认类型型保存为全类型
+					task.setFlag("*");
+					String taskAuthid=geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId(loginUser.getLoginComCode(), oldTaskData.getTaskID());
+					TaskAuth taskAuth=geRmsTaskAuthRepository.findOne(taskAuthid);
+					taskAuth.setOperateUser(loginUser.getUserName());
+					taskAuth.setComCode("*");
+					List<TaskAuth>taskauths=new ArrayList<TaskAuth>();
+					taskauths.add(taskAuth);
+					oldTaskData.setTaskAuths(taskauths);
+					geRmsTaskAuthRepository.save(taskAuth);
+					geRmsTaskRepository.save(task);
+				}
+				//查询出当前
+//				geRmsRoleTaskRepository.deleteRoleTaskIdByTaskId(oldTaskData.getTaskID());
+//				List<String> taskauthids=geRmsTaskAuthRepository.findTaskAuthIDByTaskId(oldTaskData.getTaskID());
+//				geRmsTaskAuthRepository.deleteTaskAuthByIds(taskauthids);
+//				TaskAuth taskAuth=new TaskAuth();
+//				taskAuth.setTask(task);
+//				taskAuth.setOperateUser(loginUser.getUserName());
+//				taskAuth.setComCode("*");
+//				List<TaskAuth>taskauths=new ArrayList<TaskAuth>();
+//				taskauths.add(taskAuth);
+//				oldTaskData.setTaskAuths(taskauths);
+//				geRmsTaskAuthRepository.save(taskAuth);
+//				geRmsTaskRepository.save(task);
+//				
+			} else {
+				//修改 保存为默认类型
+				if(oldTaskData.getFlag()!=null&&oldTaskData.getFlag().equals("*")){
+					//由全类型保存为默认类型
+					//删除所有已分配的角色功能
+					geRmsRoleTaskRepository.deleteRoleTaskIdByTaskId(oldTaskData.getTaskID());
+					task.setFlag(loginUser.getLoginComCode());
+					geRmsTaskAuthRepository.deleteTaskAuthNotEq("*");
+					String taskAuthid=geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId("*", oldTaskData.getTaskID());
+					TaskAuth taskAuth=geRmsTaskAuthRepository.findOne(taskAuthid);
+					taskAuth.setOperateUser(loginUser.getUserName());
+					taskAuth.setComCode(loginUser.getLoginComCode());
+					List<TaskAuth>taskauths=new ArrayList<TaskAuth>();
+					taskauths.add(taskAuth);
+					oldTaskData.setTaskAuths(taskauths);
+					geRmsTaskAuthRepository.save(taskAuth);
+					geRmsTaskRepository.save(task);
+				}else{
+					//由默认类型型保存为默认型
+					task.setFlag(loginUser.getLoginComCode());
+					geRmsTaskRepository.save(task);
+				}
+//				//数据库中应有的是一条为*的记录 查询出该记录
+//				
+//				String taskAuthid=geRmsTaskAuthRepository.findTaskAuthIdByComCodeTaskId("*", oldTaskData.getTaskID());
+//				TaskAuth taskAuth=geRmsTaskAuthRepository.findOne(taskAuthid);
+//				Assert.assertNotNull(taskAuth);
+//				//修改该记录为为默认类型 即机构设置为当前机构
+//				geRmsTaskAuthRepository.save(taskAuth);
+//				geRmsTaskRepository.save(task);
+			}
+			
+		}
+	}
 
 }

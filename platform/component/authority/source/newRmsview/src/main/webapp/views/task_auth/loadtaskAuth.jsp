@@ -47,6 +47,12 @@ $(function(){
 				},
 				"plugins" : [ "themes", "json_data", "checkbox", "ui" ]
 			}).bind("loaded.jstree",function(){
+				$(".jstree-disable",$(this))
+					.find('a')
+					.bind('click',function(){
+						alert("此项不可修改。");
+						return false
+					});
 				checkRms();
 			});
 	});

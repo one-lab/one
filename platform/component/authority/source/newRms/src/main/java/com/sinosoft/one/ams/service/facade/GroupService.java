@@ -80,4 +80,12 @@ public interface GroupService {
 	 * @return
 	 */
 	public List<Group> findGroupById(List<String> groupIds);
+	
+	/**
+	 * 根据用户组ID删除用户组
+	 * 
+	 * @param groupIds
+	 * @return
+	 */
+	public boolean deleteGroupById(String groupIds);
 }

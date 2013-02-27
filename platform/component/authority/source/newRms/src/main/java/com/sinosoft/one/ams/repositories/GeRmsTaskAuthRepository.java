@@ -33,5 +33,14 @@ public interface GeRmsTaskAuthRepository extends PagingAndSortingRepository<Task
 	@SQL("select taskID from GE_RMS_TASK_AUTH where taskAuthId = ?1 and comCode = ?2")
 	String findTaskIdByTaskAuthId(String taskAuthId ,String comCode);
 	
+	//根据taskAuthId删除多个授权
+	@SQL("delete from GE_RMS_TASK_AUTH where taskAuthId in (?1)")
+	void deleteTaskAuthByIds(List<String> taskAuthids);
 	
+	@SQL("update GE_RMS_TASK_AUTH t set t.comcode='*' where (t.comcode=?1 or t.comcode='*' )")
+	void updataTaskAuth(String loginComCode);
+	
+	//根据删除多个不需要的授权
+	@SQL("delete from GE_RMS_TASK_AUTH where comcode !=")
+	void deleteTaskAuthNotEq(String comCode);
 }

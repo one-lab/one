@@ -87,31 +87,34 @@ public class GroupServiceImpl implements GroupService{
 		Page<Role> page = geRmsRoleRepository.findRole(comCode, pageable);
 	
 		Group group =geRmsGroupRepository.findOne(groupId);
-		List<String> roleids=new ArrayList<String>();
-		for (GroupRole groupRole : 	group.getGroupRoles()) {
-			roleids.add(groupRole.getRole().getRoleID());
-		}
-		
-		//标记角色是否在本机构中
-		for (Role role: page.getContent()) {
-			for (String string : roleids) {
-			
-				if(role.getRoleID().toString().equals(string)){
-					role.setChecked("true");
-					break;
-				} 
+		if (group != null) {
+			List<String> roleids = new ArrayList<String>();
+			for (GroupRole groupRole : group.getGroupRoles()) {
+				roleids.add(groupRole.getRole().getRoleID());
 			}
+
+			// 标记角色是否在本机构中
+			for (Role role : page.getContent()) {
+				for (String string : roleids) {
+
+					if (role.getRoleID().toString().equals(string)) {
+						role.setChecked("true");
+						break;
+					}
+				}
+			}
+			gridable.setPage(page);
+			gridable.setIdField("roleID");
+			List<String> roleAttribute = new ArrayList<String>();
+			roleAttribute.add("name");
+			roleAttribute.add("des");
+			roleAttribute.add("createTime");
+			roleAttribute.add("operateTime");
+			roleAttribute.add("checked");
+			gridable.setCellListStringField(roleAttribute);
 		}
-		gridable.setPage(page);
-		gridable.setIdField("roleID");
-		List<String> roleAttribute = new ArrayList<String>();
-		roleAttribute.add("name");
-		roleAttribute.add("des");
-		roleAttribute.add("createTime");
-		roleAttribute.add("operateTime");
-		roleAttribute.add("checked");
-		gridable.setCellListStringField(roleAttribute);
 		return gridable;
+	
 	}
 
 	//修改用户组
@@ -211,6 +214,18 @@ public class GroupServiceImpl implements GroupService{
 			groups = (List<Group>) geRmsGroupRepository.findAll(groupIds);
 		}
 		return groups;
+	}
+
+	public boolean deleteGroupById(String groupId) {
+		Group group=geRmsGroupRepository.findOne(groupId);
+		if(group==null){
+			return false;
+		}
+		if(group.getName().toString().endsWith("默认用户组")){
+			return false;
+		}
+		geRmsGroupRepository.delete(groupId);
+		return true;
 	}
 	
 }

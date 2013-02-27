@@ -55,16 +55,6 @@ public class RoleServiceImpl implements RoleService{
 	public Role findRoleById(String roleId){
 		//查询角色对象
 		Role role = geRmsRoleRepository.findOne(roleId);
-		//查询角色类型  default/all
-		List<String> rolesComCodes=geRmsRoleRepository.findRoleTypById(roleId);
-		if(rolesComCodes.size()>0&&rolesComCodes!=null){
-			role.setFlag("default");
-			for (String comcode : rolesComCodes) {
-				if(comcode.toString().equals("*"))
-					role.setFlag("all");
-					break;
-			}
-		}
 		return role;
 	}
 	
@@ -76,6 +66,15 @@ public class RoleServiceImpl implements RoleService{
 		else
 			page = geRmsRoleRepository.findRole(comCode, pageable);
 		return page;
+	}
+	
+	//判断类型 大于1为默认类型(false)等于1为全类型(true)
+	public boolean discriminateRoleType(String roleId){
+		int roledesigCount= geRmsRoleDesignateRepository.findRoleDesignateByRoleId(roleId);
+		if(roledesigCount==1){
+			return true;
+		}
+		return false;
 	}
 	
 	//根据角色ID查询角色关联的功能
@@ -105,35 +104,38 @@ public class RoleServiceImpl implements RoleService{
 	public void updateRole(String roleId,String  comCode, String userCode,String name, String des,
 			String roleTpe, List<String> taskids) {
 		Role role=geRmsRoleRepository.findOne(roleId);
-		//删除角色关联的功能
-		geRmsRoleRepository.deleteRoleTask(roleId, comCode);
-		List<TaskAuth> geRmsTaskAuths=geRmsTaskAuthRepository.findTaskAuthByComCode(comCode, taskids);
-		List<RoleTask> roleTasks = new ArrayList<RoleTask>();
-		for (TaskAuth geRmsTaskAuth : geRmsTaskAuths) {
-			RoleTask geRmsRoleTask=new RoleTask();
-			geRmsRoleTask.setRole(role);
-			geRmsRoleTask.setTaskAuth(geRmsTaskAuth);
-			geRmsRoleTask.setIsValidate("1");
-			roleTasks.add(geRmsRoleTask);
-		}
-		role.setRoleTasks(roleTasks);
-		role.setName(name);
-		role.setDes(des);
-		Date date = new Date();
-		role.setOperateTime(date);
-		role.setOperateUser(userCode);
-		geRmsRoleRepository.save(role);
-		if(roleTpe.toString().equals("default")){
-			//修改类型
-			geRmsRoleRepository.updateRoleToDefault(comCode, roleId);
-			// comCodes为选中的机构 不 delete comCodes的机构指派
-			geRmsRoleRepository.deleteRoleDesignate(comCode, roleId);
-			//删除不指派的用户组角色数据
-			geRmsGroupRoleRepository.deleteGroupRoleByComCode(comCode);
-			editDefaultGroup(comCode, userCode, role);
-		}
-		if(roleTpe.toString().equals("all")){
-			geRmsRoleRepository.updateRoleToAll(comCode, roleId);
+		if(role!=null){
+			// 删除角色关联的功能
+			geRmsRoleRepository.deleteRoleTask(roleId, comCode);
+			List<TaskAuth> geRmsTaskAuths = geRmsTaskAuthRepository
+					.findTaskAuthByComCode(comCode, taskids);
+			List<RoleTask> roleTasks = new ArrayList<RoleTask>();
+			for (TaskAuth geRmsTaskAuth : geRmsTaskAuths) {
+				RoleTask geRmsRoleTask = new RoleTask();
+				geRmsRoleTask.setRole(role);
+				geRmsRoleTask.setTaskAuth(geRmsTaskAuth);
+				geRmsRoleTask.setIsValidate("1");
+				roleTasks.add(geRmsRoleTask);
+			}
+			role.setRoleTasks(roleTasks);
+			role.setName(name);
+			role.setDes(des);
+			Date date = new Date();
+			role.setOperateTime(date);
+			role.setOperateUser(userCode);
+			geRmsRoleRepository.save(role);
+			if (roleTpe.toString().equals("default")) {
+				// 修改类型
+				geRmsRoleRepository.updateRoleToDefault(comCode, roleId);
+				// comCodes为选中的机构 不 delete comCodes的机构指派
+				geRmsRoleRepository.deleteRoleDesignate(comCode, roleId);
+				// 删除不指派的用户组角色数据
+				geRmsGroupRoleRepository.deleteGroupRoleByComCode(comCode);
+				editDefaultGroup(comCode, userCode, role);
+			}
+			if (roleTpe.toString().equals("all")) {
+				geRmsRoleRepository.updateRoleToAll(comCode, roleId);
+			}
 		}
 	}
 	
@@ -190,12 +192,24 @@ public class RoleServiceImpl implements RoleService{
 	}
 	
 	//删除角色
-	public void deleteRole(String roleId, String comCode){
+	public boolean deleteRole(String roleId,String loginComCode){
 		RoleDesignateId roleDesignateId=new RoleDesignateId();
-		roleDesignateId.setComCode(comCode);
+		roleDesignateId.setComCode(loginComCode);
 		roleDesignateId.setRoleID(roleId);
-//		geRmsRoleDesignateRepository.delete(roleDesignateId);
-		geRmsRoleDesignateRepository.delete(comCode, roleId);
+		RoleDesignate roleDesignate=geRmsRoleDesignateRepository.findOne(roleDesignateId);
+		Role role=geRmsRoleRepository.findOne(roleId);
+		if(role!=null){
+			if(role.getComCode().toString().equals(loginComCode.toString())){
+				geRmsRoleRepository.delete(roleId);
+				return true;
+			}else if(roleDesignate!=null) {
+				geRmsRoleDesignateRepository.delete(loginComCode,roleId);
+				return true;
+			}
+		}else {
+			return false;
+		}
+		return false;
 	}
 	
 	//操作默认用户组
@@ -255,25 +269,29 @@ public class RoleServiceImpl implements RoleService{
 	public List<Role> findRoleByGroupId(String groupId, String comCode) {
 		List<String> roleIds = new ArrayList<String>();
 		Group group =geRmsGroupRepository.findOne(groupId);
-		List<GroupRole>groupRoles =group.getGroupRoles();
-		
-		for (GroupRole groupRole : groupRoles) {
-			roleIds.add(groupRole.getRole().getRoleID());
-		}
-		List<String> results = new ArrayList<String>();
-		List<String> roleDegNatIds =geRmsRoleDesignateRepository.findRoleIdByComCode(comCode);
-		
-		//筛选角色ID
-		for (String roleDegNatId : roleDegNatIds) {
-			for (String roleId : roleIds) {
-				if(roleDegNatId.toString().equals(roleId)){
-					results.add(roleId);
+		List<Role> roles = null;
+		if (group != null) {
+			List<GroupRole> groupRoles = group.getGroupRoles();
+
+			for (GroupRole groupRole : groupRoles) {
+				roleIds.add(groupRole.getRole().getRoleID());
+			}
+			List<String> results = new ArrayList<String>();
+			List<String> roleDegNatIds = geRmsRoleDesignateRepository
+					.findRoleIdByComCode(comCode);
+
+			// 筛选角色ID
+			for (String roleDegNatId : roleDegNatIds) {
+				for (String roleId : roleIds) {
+					if (roleDegNatId.toString().equals(roleId)) {
+						results.add(roleId);
+					}
 				}
 			}
-		}
-		List<Role> roles = null;
-		if(!results.isEmpty()){
-			roles =(List<Role>) geRmsRoleRepository.findAll(results);
+
+			if (!results.isEmpty()) {
+				roles = (List<Role>) geRmsRoleRepository.findAll(results);
+			}
 		}
 		return roles;
 	}
