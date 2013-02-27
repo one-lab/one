@@ -1,9 +1,9 @@
-package com.sinosoft.one.monitor.account.service;
+package com.sinosoft.one.monitor.account.domain;
 
 
 import java.util.List;
 
-import com.sinosoft.one.monitor.account.dao.AccountDao;
+import com.sinosoft.one.monitor.account.repository.AccountRepository;
 import com.sinosoft.one.monitor.account.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -16,11 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 //Spring Bean的标识.
 @Component
-public class AccountManager {
+public class AccountService {
 
     //private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
 
-    private AccountDao accountDao;
+    private AccountRepository accountDao;
 
     @Transactional(readOnly = false)
     public void saveAccount(Account account) {
@@ -55,7 +55,7 @@ public class AccountManager {
         return accountDao.findByLoginName(loginName);
     }
     @Autowired
-	public void setAccountDao(AccountDao accountDao) {
+	public void setAccountDao(AccountRepository accountDao) {
 		this.accountDao = accountDao;
 	}
     

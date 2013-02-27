@@ -2,7 +2,7 @@ package com.sinosoft.one.monitor.controllers;
 
 
 import com.sinosoft.one.monitor.account.model.Account;
-import com.sinosoft.one.monitor.account.service.AccountManager;
+import com.sinosoft.one.monitor.account.domain.AccountService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 public class LoginController {
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
-    private AccountManager accountManager;
+    private AccountService accountService;
 
     @Get("/login")
     @Post("/login")
