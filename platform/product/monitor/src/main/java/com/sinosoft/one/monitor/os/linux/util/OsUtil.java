@@ -34,5 +34,7 @@ public class OsUtil {
 		return null;
 	}
 	
-
+	public static boolean isInMonitoring(String osId){
+		return false;
+	}
 }

@@ -3,11 +3,16 @@ package com.sinosoft.one.monitor.os.linux.model;
 
 
 import java.sql.Clob;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * OsShell.
@@ -26,7 +31,7 @@ public class OsShell  implements java.io.Serializable {
     private String type;
     /**
         */
-    private Clob template;
+    private String template;
 
     public OsShell() {
     }
@@ -37,8 +42,9 @@ public class OsShell  implements java.io.Serializable {
     }
    
     @Id 
-    
     @Column(name="ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
     public String getId() {
     return this.id;
     }
@@ -57,11 +63,11 @@ public class OsShell  implements java.io.Serializable {
     }
     
     @Column(name="TEMPLATE")
-    public Clob getTemplate() {
+    public String getTemplate() {
     return this.template;
     }
 
-    public void setTemplate(Clob template) {
+    public void setTemplate(String template) {
     this.template = template;
     }
 

@@ -34,6 +34,7 @@ public class OsDiskService {
 	 * @param disk
 	 */
 	public void deleteDiskData(String osid,Date begin,Date end){
+		
 	}
 
 	/**
