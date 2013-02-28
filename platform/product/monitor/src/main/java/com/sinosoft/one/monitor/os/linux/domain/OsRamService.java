@@ -1,0 +1,37 @@
+package com.sinosoft.one.monitor.os.linux.domain;
+
+import java.util.Date;
+
+import com.sinosoft.one.monitor.os.linux.model.OsRam;
+import com.sinosoft.one.monitor.os.linux.model.OsStati;
+/**
+ * 内存部分数据库操作类
+ * @author chenxiongxi
+ * @version 1.0
+ * @created 27-����-2013 14:42:30
+ */
+public interface OsRamService {
+	
+	/**
+	 * 保存内存采集数据
+	 * @param ram
+	 */
+	public void saveRamData(OsRam ram);
+	/**
+	 * 获取内存采集数据
+	 * @param ram
+	 */
+	public OsRam getRamData();
+	
+	/**
+	 * 保存内存统计数据
+	 * @param ram
+	 */
+	public void saveRamStatiData(OsStati ram);
+	
+	/**
+	 * 获取内存统计数据
+	 * @param ram
+	 */
+	public OsStati getRamStatiData(String osid,String type,Date begin ,Date end);
+}
