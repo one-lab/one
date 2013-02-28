@@ -5,30 +5,49 @@ import java.util.Date;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 
-public interface OsAvailableServcie {
+public class OsAvailableServcie {
 
 	/**
-	 * 保存可用性采集数据
+	 * 保存可用性数据
 	 * @param ava
 	 */
-	public void saveAvailable(OsAvailable ava);
-	
+	public void saveAvailable(String osId,String nomorRun,String crashtime,String aveRepair,String aveFault ,String timeSpan){
+		
+		
+	}
 	
 	/**
-	 * 获取可用性采集数据
+	 * 获取可用数据
 	 * @param ava
 	 */
-	public OsAvailable getAvailable();
+	public OsAvailable getAvailable(){
+		return null;
+	}
+	
+	public void deleteAvailable(String osId,String timeSpan){
+		
+	}
 	
 	/**
 	 * 保存可用性临时数据
 	 * @param ava
 	 */
-	public void saveAvailableTemp(OsAvailabletemp osAvailabletemp);
+	public void saveAvailableTemp(String osId,String type,Date time,String Status){
+		
+	}
 	
 	/**
 	 * 获取可用性统计临时数据
 	 * @param ava
 	 */
-	public OsAvailable getAvailableTemp(String osid,String type,Date begin ,Date end);
+	public OsAvailable getAvailableTemp(){
+		return null;
+	}
+	
+	/**
+	 * 获取可用性统计临时数据
+	 * @param ava
+	 */
+	public void deleteAvailableTemp(String osid,Date begin,Date end){
+	}
 }

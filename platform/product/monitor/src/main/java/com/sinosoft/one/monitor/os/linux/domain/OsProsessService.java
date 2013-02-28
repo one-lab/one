@@ -19,7 +19,7 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  int cpuMax(Date bigin,Date end, List<OsCpu> osCpus);
+	public  int cpuMax(Date bigin,Date end);
 	
 	/**
 	 * cpu最小值
@@ -27,7 +27,7 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  int cpuMin(Date bigin,Date end, List<OsCpu> osCpus);
+	public  int cpuMin(Date bigin,Date end);
 	
 	/**
 	 * cpu平均值
@@ -35,7 +35,7 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  float cpuAve(Date bigin,Date end, List<OsCpu> osCpus);
+	public  float cpuAve(Date bigin,Date end);
 	
 	
 	
@@ -45,7 +45,7 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  int ramMax(Date bigin,Date end, List<OsCpu> osCpus);
+	public  int ramMax(Date bigin,Date end);
 	
 	/**
 	 * 内存最小值
@@ -53,7 +53,7 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  int ramMin(Date bigin,Date end, List<OsCpu> osCpus);
+	public  int ramMin(Date bigin,Date end);
 	
 	
 	/**
@@ -62,7 +62,7 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  float ramAve(Date bigin,Date end, List<OsCpu> osCpus);
+	public  float ramAve(Date bigin,Date end);
 	
 	/**
 	 * 磁盘最大值
@@ -70,7 +70,7 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  int diskMax(Date bigin,Date end, List<OsCpu> osCpus);
+	public  int diskMax(Date bigin,Date end);
 	
 	/**
 	 * 磁盘最小值
@@ -78,36 +78,36 @@ public interface OsProsessService {
 	 * @param end
 	 * @param osCpus
 	 */
-	public  int diskMin(Date bigin,Date end, List<OsCpu> osCpus);
+	public  int diskMin(Date bigin,Date end);
 	/**
 	 * 磁盘平均值
 	 * @param bigin
 	 * @param end
 	 * @param osCpus
 	 */
-	public  float diskAve(Date bigin,Date end, List<OsCpu> osCpus);
+	public  float diskAve(Date bigin,Date end);
 	/**
-	 * 磁盘最大值
+	 * 响应时间最大值
 	 * @param bigin
 	 * @param end
 	 * @param osCpus
 	 */
-	public  int respondTimeMax(Date bigin,Date end, List<OsCpu> osCpus);
+	public  int respondTimeMax(Date bigin,Date end);
 	/**
-	 * 磁盘最小值
+	 * 响应时间最小值
 	 * @param bigin
 	 * @param end
 	 * @param osCpus
 	 */
-	public int respondTimeMin(Date bigin,Date end, List<OsCpu> osCpus);
+	public int respondTimeMin(Date bigin,Date end);
 	
 	/**
-	 * 磁盘平均值
+	 * 响应时间平均值
 	 * @param bigin
 	 * @param end
 	 * @param osCpus
 	 */
-	public  float respondTimeAve(Date bigin,Date end, List<OsCpu> osCpus);
+	public  float respondTimeAve(Date bigin,Date end);
 
 	public void sendMsg();
 

@@ -7,10 +7,12 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Os.
@@ -38,7 +40,7 @@ public class Os  implements java.io.Serializable {
     private String subnetMask;
     /**
         */
-    private String intercycleTime;
+    private int intercycleTime;
     /**
         */
     private List<OsCpu> osCpus = new ArrayList<OsCpu>(0) ;
@@ -64,8 +66,9 @@ public class Os  implements java.io.Serializable {
     }
    
     @Id 
-    
     @Column(name="OS_INFO_ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
     public String getOsInfoId() {
     return this.osInfoId;
     }
@@ -111,11 +114,11 @@ public class Os  implements java.io.Serializable {
     }
     
     @Column(name="INTERCYCLE_TIME", length=10)
-    public String getIntercycleTime() {
+    public int getIntercycleTime() {
     return this.intercycleTime;
     }
 
-    public void setIntercycleTime(String intercycleTime) {
+    public void setIntercycleTime(int intercycleTime) {
     this.intercycleTime = intercycleTime;
     }
     @OneToMany(fetch=FetchType.LAZY, mappedBy="os")

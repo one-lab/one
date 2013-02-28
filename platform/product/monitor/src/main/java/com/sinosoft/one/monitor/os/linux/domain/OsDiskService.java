@@ -11,29 +11,51 @@ import com.sinosoft.one.monitor.os.linux.model.OsStati;
  * @version 1.0
  * @created 27-����-2013 14:42:30
  */
-public interface OsDiskService {
+public class OsDiskService {
 	
 	/**
 	 * 保存磁盘采集数据
 	 * @param disk
 	 */
-	public void saveDiskData(OsDisk disk);
+	public void saveDiskData(OsDisk disk){
+		
+	}
 	
 	/**
 	 * 获取磁盘采集数据
 	 * @param disk
 	 */
-	public OsDisk getDiskData();
+	public OsDisk getDiskData(){
+		return null;
+	}
+	
+	/**
+	 * 删除磁盘采集数据
+	 * @param disk
+	 */
+	public void deleteDiskData(String osid,Date begin,Date end){
+	}
 
 	/**
 	 * 保存磁盘统计数据
 	 * @param disk
 	 */
-	public void saveDiskStatiData(OsStati disk);
+	public void saveDiskStati(OsStati disk){
+		
+	}
 	
 	/**
 	 * 获取磁盘统计数据
 	 * @param disk
 	 */
-	public OsStati getDiskStatiData(String osid,String type,Date begin ,Date end);
+	public OsStati getDiskStati(String osid,String type,Date begin ,Date end){
+		return null;
+	}
+	
+	/**
+	 * 删除磁盘统计数据
+	 * @param disk
+	 */
+	public void deleteDiskStati(String osid,String type,Date begin ,Date end){
+	}
 }
