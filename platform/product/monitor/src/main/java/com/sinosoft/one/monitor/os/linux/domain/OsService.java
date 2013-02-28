@@ -4,6 +4,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 /**
@@ -12,8 +15,9 @@ import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
  * @version 1.0
  * @created 27-����-2013 14:42:30
  */
+@Component
 public class OsService {
-	@Resource(name="osRepository")
+	@Autowired
 	private OsRepository osRepository;
 
 	/**
@@ -28,7 +32,7 @@ public class OsService {
 	 * 保存操作系统基本信息
 	 * @return
 	 */
-	public void saveOsBasic(String id,String name,String type,String ipAddr,String subnetMask,int interCycle){
+	public void saveOsBasic(String name,String type,String ipAddr,String subnetMask,int interCycle){
 		Os os =new Os();
 		os.setName(name);
 		os.setType(type);
