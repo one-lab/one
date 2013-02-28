@@ -2,7 +2,7 @@ package com.sinosoft.one.monitor.shiro;
 
 
 import com.sinosoft.one.monitor.account.model.Account;
-import com.sinosoft.one.monitor.account.service.AccountManager;
+import com.sinosoft.one.monitor.account.domain.AccountService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ShiroDbRealm extends AuthorizingRealm {
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountService accountManager;
 
-    public void setAccountManager(AccountManager accountManager) {
+    public void setAccountManager(AccountService accountManager) {
         this.accountManager = accountManager;
     }
 

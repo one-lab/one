@@ -2,7 +2,7 @@ package com.sinosoft.one.monitor.controllers.account;
 
 
 import com.sinosoft.one.monitor.account.model.Account;
-import com.sinosoft.one.monitor.account.service.AccountManager;
+import com.sinosoft.one.monitor.account.domain.AccountService;
 import com.sinosoft.one.monitor.controllers.LoginRequired;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -26,12 +26,12 @@ import java.util.List;
 public class AccountController {
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountService accountService;
 
     @LoginRequired
     @Get("list")
     public String list(Invocation inv) {
-        List<Account> accounts = accountManager.getAllAccount();
+        List<Account> accounts = accountService.getAllAccount();
         inv.addModel("accounts", accounts);
         return "userList";
     }
@@ -47,20 +47,20 @@ public class AccountController {
     public String save(@Validation(errorPath = "a:errorCreate") Account account, Invocation inv) throws IllegalStateException, IOException {
         account.setCreateTime(new Date());
         account.setStatus(String.valueOf(1));
-        accountManager.saveAccount(account);
+        accountService.saveAccount(account);
         return "r:/account/user/list";
     }
 
     @Get("delete/{id}")
     public String delete(@Param("id") String id, Invocation inv) {
-        accountManager.deleteAccount(id);
+        accountService.deleteAccount(id);
         inv.addFlash("message", "删除用户成功");
         return "r:/account/user/list";
     }
 
     @Post("view/{id}")
     public Object view(@Param("id") String id, Invocation inv) {
-        Account account = accountManager.getAccount(id);
+        Account account = accountService.getAccount(id);
         return Replys.with(account).as(Json.class);
     }
 }

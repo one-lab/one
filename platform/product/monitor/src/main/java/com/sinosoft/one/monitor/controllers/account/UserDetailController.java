@@ -2,7 +2,7 @@ package com.sinosoft.one.monitor.controllers.account;
 
 
 import com.sinosoft.one.monitor.account.model.Account;
-import com.sinosoft.one.monitor.account.service.AccountManager;
+import com.sinosoft.one.monitor.account.domain.AccountService;
 import com.sinosoft.one.monitor.controllers.LoginRequired;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -25,19 +25,19 @@ import java.util.Date;
 public class UserDetailController {
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountService accountService;
 
     @Get("update/{id}")
     @Post("update/{id}")
     public String updateForm(@Param("id") String id, Invocation inv) {
-        inv.addModel("account", accountManager.getAccount(id));
+        inv.addModel("account", accountService.getAccount(id));
         return "userForm";
     }
 
     @Post("save/{id}")
     public String save(@Param("id") String id, @Validation(errorPath = "a:update/{id}") Account account, Invocation inv) {
         account.setCreateTime(new Date());
-        accountManager.updateAccount(account);
+        accountService.updateAccount(account);
         inv.addFlash("message", "修改用户" + account.getLoginName() + "成功");
         return "r:/account/user/list";
     }
