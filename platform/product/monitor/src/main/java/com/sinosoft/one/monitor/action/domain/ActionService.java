@@ -1,14 +1,20 @@
 package com.sinosoft.one.monitor.action.domain;
 
+import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
+import com.sinosoft.one.monitor.action.model.MailInfo;
 import com.sinosoft.one.monitor.action.model.SmsAction;
 import com.sinosoft.one.monitor.action.repository.MailActionRepository;
 import com.sinosoft.one.monitor.action.repository.SmsActionRepository;
+import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.attribute.model.AttributeAction;
 import com.sinosoft.one.monitor.attribute.repository.AttributeActionRepository;
+import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +31,10 @@ public class ActionService {
 	private SmsActionRepository smsActionRepository;
 	@Autowired
 	private AttributeActionRepository attributeActionRepository;
+	@Autowired
+	private MailService mailService;
+
+
 
 	/**
 	 * 根据邮件ID列表查询邮件列表
@@ -63,5 +73,51 @@ public class ActionService {
 	 */
 	public List<AttributeAction> queryAttributeActions(String resourceId, String attributeId) {
 		return attributeActionRepository.findByResourceIdAndAttributeId(resourceId, attributeId);
+	}
+
+	/**
+	 * 处理动作
+	 * @param attributeActionList 属性动作列表
+	 * @param resource 资源
+	 * @param attribute 属性
+	 * @param severityLevel 严重级别
+	 * @param message 错误原因消息
+	 */
+	public void doActions(List<AttributeAction> attributeActionList, Resource resource,
+	                       Attribute attribute,
+	                       SeverityLevel severityLevel,
+	                       String message) {
+
+		List<String> mailActionIds = new ArrayList<String>();
+		List<String> smsActionIds = new ArrayList<String>();
+
+		for(AttributeAction attributeAction : attributeActionList) {
+			if(attributeAction.getActionType() == ActionType.MAIL) {
+				mailActionIds.add(attributeAction.getActionId());
+			} else if(attributeAction.getActionType() == ActionType.SMS) {
+				smsActionIds.add(attributeAction.getActionId());
+			}
+		}
+
+		if(mailActionIds.size() > 0) {
+			String cause = resource.getResourceName() + "的健康状态为" + severityLevel.cnName();
+			String title = "来自监控系统的告警 - [ "+ cause + " ]";
+
+			Iterable<MailAction> mailActions = mailActionRepository.findAll(mailActionIds);
+			MailInfo mailInfo = new MailInfo();
+			mailInfo.setCause(cause);
+			mailInfo.setTitle(title);
+			mailInfo.setAttributeName(attribute.getAttributeCn());
+			mailInfo.setMonitorName(resource.getResourceName());
+			mailInfo.setRootCause(message);
+			for(MailAction mailAction : mailActions) {
+				mailInfo.addMailAction(mailAction);
+			}
+			mailService.sendMail(mailInfo);
+		}
+
+		if(smsActionIds.size() > 0) {
+			//TODO 发送短信
+		}
 	}
 }

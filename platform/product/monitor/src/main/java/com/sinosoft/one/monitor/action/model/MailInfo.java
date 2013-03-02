@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.action.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,14 +11,12 @@ import java.util.List;
  */
 public class MailInfo {
 	private String title;
-	private String resourceType;
 	private String monitorName;
 	private String attributeName;
 	private String cause;
 	private String rootCause;
-	private String appendMessage;
 
-	private List<MailAction> mailActionList;
+	private List<MailAction> mailActionList = new ArrayList<MailAction>();
 
 	public String getTitle() {
 		return title;
@@ -25,14 +24,6 @@ public class MailInfo {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getResourceType() {
-		return resourceType;
-	}
-
-	public void setResourceType(String resourceType) {
-		this.resourceType = resourceType;
 	}
 
 	public String getMonitorName() {
@@ -67,19 +58,11 @@ public class MailInfo {
 		this.rootCause = rootCause;
 	}
 
-	public String getAppendMessage() {
-		return appendMessage;
-	}
-
-	public void setAppendMessage(String appendMessage) {
-		this.appendMessage = appendMessage;
-	}
-
 	public List<MailAction> getMailActionList() {
 		return mailActionList;
 	}
 
-	public void setMailActionList(List<MailAction> mailActionList) {
-		this.mailActionList = mailActionList;
+	public void addMailAction(MailAction mailAction) {
+		this.mailActionList.add(mailAction);
 	}
 }

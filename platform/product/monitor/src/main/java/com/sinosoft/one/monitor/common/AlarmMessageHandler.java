@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.common;
 import com.sinosoft.one.monitor.action.domain.ActionService;
 import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
+import com.sinosoft.one.monitor.action.model.MailInfo;
 import com.sinosoft.one.monitor.action.model.SmsAction;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
@@ -46,14 +47,14 @@ public class AlarmMessageHandler {
 	 * @param messageBase
 	 */
 	public void doMessage(MessageBase messageBase) {
-		List<AlarmMessage> alarmMessageList = messageBase.alarmMessages();
-
 		Resource resource = null;
 		List<AttributeAction> healthAttributeActions = null;
 		List<AttributeAction> availabilityAttributeActions = null;
 		boolean isAvailabilityAlarm = false;
 		SeverityLevel resourceSeverityLevel = SeverityLevel.UNKNOW;
 		List<ThresholdAlarmInfo> thresholdAlarmInfoes = new ArrayList<ThresholdAlarmInfo>();
+
+		List<AlarmMessage> alarmMessageList = messageBase.alarmMessages();
 		for(int i=0, len=alarmMessageList.size(); i<len; i++) {
 			AlarmMessage alarmMessage = alarmMessageList.get(i);
 			String resourceId = alarmMessage.getResourceId();
@@ -156,6 +157,7 @@ public class AlarmMessageHandler {
 			allAttributeActions.addAll(healthAttributeActions);
 		}
 
+		// 保存告警信息
 		Alarm alarm = new Alarm();
 		Attribute attribute = attributeCache.getAttributeId(resource.getResourceId() + "#" + AttributeNames.Health);
 		alarm.setAlarmSource(alarmSource);
@@ -165,30 +167,14 @@ public class AlarmMessageHandler {
 		alarm.setSeverity(severityLevel);
 		alarm.setMessage(alarmMessageBuilder.toString());
 		alarm.setCreateTime(new Date());
-
 		alarmService.saveAlarm(alarm);
 
+		// 处理动作
 		if(allAttributeActions != null && allAttributeActions.size() > 0) {
-			doActions(allAttributeActions, resource, attribute, severityLevel, alarmMessageBuilder.toString());
+			actionService.doActions(allAttributeActions, resource, attribute, severityLevel, alarmMessageBuilder.toString());
 		}
 	}
 
-	private void doActions(List<AttributeAction> attributeActionList, Resource resource,
-	                       Attribute attribute,
-	                       SeverityLevel severityLevel,
-	                       String message) {
-
-		List<String> mailActionIds = new ArrayList<String>();
-		List<String> smsActionIds = new ArrayList<String>();
-
-		for(AttributeAction attributeAction : attributeActionList) {
-			if(attributeAction.getActionType() == ActionType.MAIL) {
-				mailActionIds.add(attributeAction.getActionId());
-			} else if(attributeAction.getActionType() == ActionType.SMS) {
-				smsActionIds.add(attributeAction.getActionId());
-			}
-		}
-	}
 
 	private class ThresholdAlarmInfo {
 		private Threshold threshold;
