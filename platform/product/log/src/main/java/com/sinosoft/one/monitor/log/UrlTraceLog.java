@@ -18,15 +18,41 @@ import java.util.*;
  * 用于记录URL追踪信息.
  */
 public class UrlTraceLog implements NotificationModel {
-
+	/**
+	 * 主键ID
+	 */
     private String id;
+	/**
+	 * URL地址
+	 */
     private String url;
+	/**
+	 * 开始时间
+	 */
     private Timestamp beginTime;
+	/**
+	 * 结束时间
+	 */
     private Timestamp endTime;
+	/**
+	 * 花费时间
+	 */
     private long consumeTime;
+	/**
+	 * 会话ID
+	 */
     private String sessionId;
+	/**
+	 * 用户IP
+	 */
     private String userIp;
+	/**
+	 * 请求信息
+	 */
     private byte[] requestInfo;
+	/**
+	 * 用户ID
+	 */
 	private String userId;
 
 	List<MethodTraceLog> methodTraceLogList = new ArrayList<MethodTraceLog>();

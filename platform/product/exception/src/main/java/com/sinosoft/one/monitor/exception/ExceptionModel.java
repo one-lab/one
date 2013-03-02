@@ -12,8 +12,17 @@ import com.sinosoft.one.monitor.notification.NotificationType;
  * To change this template use File | Settings | File Templates.
  */
 public class ExceptionModel implements NotificationModel {
+	/**
+	 * URL追踪ID
+	 */
 	private String urlTraceId;
+	/**
+	 * 记录时间
+	 */
 	private String recordTime;
+	/**
+	 * 异常堆栈
+	 */
 	private String exceptionStackTrace;
 
 	public ExceptionModel(String urlTraceId, String recordTime, String exceptionStackTrace) {

@@ -14,19 +14,49 @@ import java.util.Map;
  * Time: 上午6:12
  */
 public class MethodTraceLog {
-
+	/**
+	 * 主键ID
+	 */
     private String id;
+	/**
+	 * URL追踪ID
+	 */
     private String urlTraceId;
+	/**
+	 * 方法名
+	 */
     private String methodName;
+	/**
+	 * 方法所属类名
+	 */
     private String className;
+	/**
+	 * 方法参数
+	 */
     private String inParam;
+	/**
+	 * 方法返回值
+	 */
     private String outParam;
+	/**
+	 * 开始时间
+	 */
     private Timestamp beginTime;
+	/**
+	 * 结束时间
+	 */
     private Timestamp endTime;
+	/**
+	 * 花费时间
+	 */
     private long consumeTime;
-    private String logLevel;
-    private String logDescription;
+	/**
+	 * 记录时间
+	 */
     private Timestamp logTime;
+	/**
+	 * 用户ID
+	 */
 	private String userId;
 
     public MethodTraceLog() {
@@ -104,23 +134,6 @@ public class MethodTraceLog {
         this.consumeTime = consumeTime;
     }
 
-
-    public String getLogLevel() {
-        return logLevel;
-    }
-
-    public void setLogLevel(String logLevel) {
-        this.logLevel = logLevel;
-    }
-
-    public String getLogDescription() {
-        return logDescription;
-    }
-
-    public void setLogDescription(String logDescription) {
-        this.logDescription = logDescription;
-    }
-
     public Timestamp getLogTime() {
         return logTime;
     }
@@ -132,42 +145,6 @@ public class MethodTraceLog {
     public String getFullMethodName() {
         return getClassName() + "." + getMethodName();
     }
-
-    public Map<String, Object> toMap() throws Exception {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        paramMap.put("urlTraceId", urlTraceId);
-        paramMap.put("methodName", methodName);
-        paramMap.put("className", className);
-        paramMap.put("inParam", inParam);
-        paramMap.put("outParam", outParam);
-        paramMap.put("beginTime", beginTime);
-        paramMap.put("endTime", endTime);
-        paramMap.put("consumeTime", consumeTime);
-        paramMap.put("logLevel", logLevel);
-        paramMap.put("logDescription", logDescription);
-        paramMap.put("logTime", logTime);
-        paramMap.put("userId", userId);
-
-        return paramMap;
-    }
-
-    public Object[] toObjectArray() {
-        return new Object[]{
-                id,
-                urlTraceId,
-                beginTime,
-                className,
-                methodName,
-                inParam,
-                outParam,
-                endTime,
-                consumeTime,
-                logDescription,
-                userId,
-        };
-    }
-
 
     @Override
     public String toString() {
@@ -181,8 +158,6 @@ public class MethodTraceLog {
             .append("beginTime", beginTime)
             .append("endTime", endTime)
             .append("consumeTime", consumeTime)
-            .append("logLevel", logLevel)
-            .append("logDescription", logDescription)
             .append("logTime", logTime)
             .append("userId", userId)
             .build();

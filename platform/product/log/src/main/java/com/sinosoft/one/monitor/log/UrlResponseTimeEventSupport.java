@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * Time: 上午10:21
  */
 
-public class UrlResponseTimeEventSupport {
+final class UrlResponseTimeEventSupport {
 	private static UrlResponseTimeEventSupport urlResponseTimeEventSupport = new UrlResponseTimeEventSupport();
 	private final static int ringSize = 1024;
 	private RingBuffer<UrlResponseTimeEvent> ringBuffer;

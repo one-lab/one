@@ -11,6 +11,10 @@ import org.apache.log4j.MDC;
  *
  */
 public final class Exceptions {
+	/**
+	 * 处理异常信息
+	 * @param throwable 异常对象
+	 */
     public static void handleThrowable(Throwable throwable) {
 	    ExceptionModel exceptionModel = new ExceptionModel((String)MDC.get("urlId"), throwable.getMessage(), getExceptionStackTrace(throwable));
 	    NotificationServiceFactory.buildNotificationService().notification(exceptionModel);
