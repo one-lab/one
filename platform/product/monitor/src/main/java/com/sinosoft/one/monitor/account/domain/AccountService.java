@@ -20,11 +20,11 @@ public class AccountService {
 
     //private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
 	
-    private AccountRepository accountDao;
+    private AccountRepository accountRepository;
 
     @Transactional(readOnly = false)
     public void saveAccount(Account account) {
-        accountDao.save(account);
+        accountRepository.save(account);
     }
 
     /**
@@ -32,7 +32,7 @@ public class AccountService {
      */
     @Transactional(readOnly = false)
     public void deleteAccount(String id) {
-        accountDao.delete(id);
+        accountRepository.delete(id);
     }
 
     /**
@@ -40,23 +40,23 @@ public class AccountService {
      */
     @Transactional(readOnly = false)
     public void updateAccount(Account account) {
-        accountDao.save(account);
+        accountRepository.save(account);
     }
 
     public Account getAccount(String id) {
-        return accountDao.findOne(id);
+        return accountRepository.findOne(id);
     }
 
     public List<Account> getAllAccount() {
-        return (List<Account>) accountDao.findAll(new Sort(Direction.ASC, "id"));
+        return (List<Account>) accountRepository.findAll(new Sort(Direction.ASC, "id"));
     }
 
     public Account findUserByLoginName(String loginName) {
-        return accountDao.findByLoginName(loginName);
+        return accountRepository.findByLoginName(loginName);
     }
     @Autowired
-	public void setAccountDao(AccountRepository accountDao) {
-		this.accountDao = accountDao;
+	public void setAccountRepository(AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
 	}
     
     

@@ -106,7 +106,7 @@
     </bean>
 
     <!-- Shiro's main business-tier object for web-enabled applications -->
-    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="accountDao">
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="accountRepository">
         <property name="realm" ref="shiroDbRealm" />
         <property name="cacheManager" ref="cacheManager" />
     </bean>
