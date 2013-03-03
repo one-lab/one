@@ -5,11 +5,16 @@ package com.sinosoft.one.monitor.os.linux.model;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * OsRespondtime.
@@ -25,7 +30,7 @@ public class OsRespondtime  implements java.io.Serializable {
     private String id;
     /**
         */
-    private String osInfoId;
+    private Os os;
     /**
         */
     private Date sampleDate;
@@ -42,8 +47,9 @@ public class OsRespondtime  implements java.io.Serializable {
     }
    
     @Id 
-    
     @Column(name="ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
     public String getId() {
     return this.id;
     }
@@ -52,16 +58,16 @@ public class OsRespondtime  implements java.io.Serializable {
     this.id = id;
     }
     
-    @Column(name="OS_INFO_ID", length=32)
-    public String getOsInfoId() {
-    return this.osInfoId;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="OS_INFO_ID")
+    public Os getOs() {
+    return this.os;
     }
 
-    public void setOsInfoId(String osInfoId) {
-    this.osInfoId = osInfoId;
+    public void setOs(Os os) {
+    this.os = os;
     }
-    @Temporal(TemporalType.DATE)
-    @Column(name="SAMPLE_DATE", length=7)
+    @Column(name="SAMPLE_DATE")
     public Date getSampleDate() {
     return this.sampleDate;
     }

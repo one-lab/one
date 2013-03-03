@@ -58,8 +58,8 @@
 		<!-- Connection Info -->
 		<property name="driverClassName" value="${jdbc.driver}" />
 		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="testaccount" />
-		<property name="password" value="testpassword" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
 
 		<!-- Connection Pooling Info -->
 		<property name="maxActive" value="${dbcp.maxActive}" />
@@ -70,7 +70,7 @@
 		<property name="minEvictableIdleTimeMillis" value="3600000" />
 	</bean>
 	<bean id="loginFilter" class="com.sinosoft.one.monitor.shiro.LoginFilter"></bean>
-    <!-- Shiro Filter -->
+    <!-- Shiro Filter
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
         <property name="loginUrl" value="/login" />
@@ -81,13 +81,13 @@
             </map>
         </property>
         <property name="filterChainDefinitions">
-            <value>
-                <!--anno：不拦截请求-->
+            <value>-->
+                <!--anno：不拦截请求
                 /=anon
                 /services/**=anon
                 /notification/urlConfigure/url = anon
-                /notification/methodConfigure/method = anon
-                <!--loginfilter：拦截请求-->
+                /notification/methodConfigure/method = anon-->
+                <!--loginfilter：拦截请求-
                 /login** = loginfilter
                 /static/** = anon
                 /WEB-INFO/crypto/** = anon
@@ -97,19 +97,23 @@
             </value>
         </property>
     </bean>
-
-    <!-- Shiro's main business-tier object for web-enabled applications -->
+   
+   -->
+    <!-- Shiro's main business-tier object for web-enabled applications 
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="accountDao">
         <property name="realm" ref="shiroDbRealm" />
         <property name="cacheManager" ref="cacheManager" />
     </bean>
-
+-->
     <!-- 用户授权信息Cache -->
     <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
 
-    <!-- 自定义realm -->
+    <!-- 自定义realm 
     <bean id="shiroDbRealm" class="com.sinosoft.one.monitor.shiro.ShiroDbRealm" />
-
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+-->
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
@@ -118,7 +122,5 @@
         <property name="proxyTargetClass" value="true" />
     </bean>
 
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
+    
 </beans>

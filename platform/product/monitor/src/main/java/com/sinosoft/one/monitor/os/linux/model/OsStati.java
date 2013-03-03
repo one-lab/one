@@ -5,11 +5,13 @@ package com.sinosoft.one.monitor.os.linux.model;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * OsStati.
@@ -31,10 +33,10 @@ public class OsStati  implements java.io.Serializable {
     private String type;
     /**
         */
-    private Date statiTime;
+    private Date recordTime;
     /**
         */
-    private String leastValue;
+    private String minValue;
     /**
         */
     private String maxValue;
@@ -53,6 +55,8 @@ public class OsStati  implements java.io.Serializable {
     @Id 
     
     @Column(name="ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
     public String getId() {
     return this.id;
     }
@@ -78,26 +82,25 @@ public class OsStati  implements java.io.Serializable {
     public void setType(String type) {
     this.type = type;
     }
-    @Temporal(TemporalType.DATE)
-    @Column(name="STATI_TIME", length=7)
-    public Date getStatiTime() {
-    return this.statiTime;
+    @Column(name="RECORD_TIME")
+    public Date getRecordTime() {
+    return this.recordTime;
     }
 
-    public void setStatiTime(Date statiTime) {
-    this.statiTime = statiTime;
+    public void setRecordTime(Date recordTime) {
+    this.recordTime = recordTime;
     }
     
-    @Column(name="LEAST_VALUE", length=10)
-    public String getLeastValue() {
-    return this.leastValue;
+    @Column(name="MIN_VALUE")
+    public String getMinValue() {
+    return this.minValue;
     }
 
-    public void setLeastValue(String leastValue) {
-    this.leastValue = leastValue;
+    public void setMinValue(String minValue) {
+    this.minValue = minValue;
     }
     
-    @Column(name="MAX_VALUE", length=10)
+    @Column(name="MAX_VALUE")
     public String getMaxValue() {
     return this.maxValue;
     }
@@ -106,7 +109,7 @@ public class OsStati  implements java.io.Serializable {
     this.maxValue = maxValue;
     }
     
-    @Column(name="AVERAGE_VALUE", length=10)
+    @Column(name="AVERAGE_VALUE")
     public String getAverageValue() {
     return this.averageValue;
     }

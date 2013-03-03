@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * OsAvailabletemp.
@@ -31,7 +33,7 @@ public class OsAvailabletemp  implements java.io.Serializable {
     private Os os;
     /**
         */
-    private Date recordTime;
+    private Date sampleDate;
     /**
         */
     private String status;
@@ -46,8 +48,9 @@ public class OsAvailabletemp  implements java.io.Serializable {
     }
    
     @Id 
-    
     @Column(name="ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
     public String getId() {
     return this.id;
     }
@@ -55,7 +58,7 @@ public class OsAvailabletemp  implements java.io.Serializable {
     public void setId(String id) {
     this.id = id;
     }
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
         @JoinColumn(name="OS_INFO_ID")
     public Os getOs() {
     return this.os;
@@ -64,14 +67,13 @@ public class OsAvailabletemp  implements java.io.Serializable {
     public void setOs(Os os) {
     this.os = os;
     }
-    @Temporal(TemporalType.DATE)
-    @Column(name="RECORD_TIME", length=7)
-    public Date getRecordTime() {
-    return this.recordTime;
+    @Column(name="SAMPLE_DATE")
+    public Date getSampleDate() {
+    return this.sampleDate;
     }
 
-    public void setRecordTime(Date recordTime) {
-    this.recordTime = recordTime;
+    public void setSampleDate(Date sampleDate) {
+    this.sampleDate = sampleDate;
     }
     
     @Column(name="STATUS", length=2)
