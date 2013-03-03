@@ -16,6 +16,7 @@ import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
+import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
@@ -43,6 +44,9 @@ public class OsDataMathService {
 
 	@Autowired
 	private OsDiskService osDiskService;
+	
+	@Autowired
+	private OsRespondTimeService osRespondTimeService;
 	/**
 	 * 可用性统计算法 进行可用性数据统计计算
 	 * @param osInfoId OSID
@@ -145,8 +149,6 @@ public class OsDataMathService {
 		System.out.println(crashtime);
 		System.out.println(countTime);
 		System.out.println(repairTime);
-		
-		OsTransUtil.LongToHMS(stopSpacCount/stopCount);
 		osAvailableServcie.saveAvailable(osInfoId, normalRun(interCycleTime, countTime, nomorRun), OsTransUtil.LongToHMS(crashtime), aveRepair,  aveFault, timeSpan);
 	}
 	/**
@@ -231,7 +233,30 @@ public class OsDataMathService {
 		return osStati;
 	}
 	
-	
+	/**
+	 * 统计磁盘，当前时间到当前小时整点
+	 * @param osInfoId
+	 */
+	public OsStati statiOneHourRespond(String osInfoId,Date currentTime){
+		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+		Calendar c  = Calendar.getInstance();
+		////获取当前时间的小时数 取整时点
+		c.set(Calendar.HOUR_OF_DAY, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		Date hourPoint=c.getTime();
+		List<OsRespondtime>osRespondtimes=osRespondTimeService.getRespondTimeByTime(osInfoId, hourPoint, currentTime);
+		long respondTime=0;//磁盘利用率总数
+		for (OsRespondtime osRespondtime : osRespondtimes) {
+			respondTime+=Long.parseLong(osRespondtime.getRespondTime());
+		}
+		String respondTimeAverage=OsTransUtil.countAve(respondTime, osRespondtimes.size());
+		System.out.println(respondTimeAverage);
+		String respondTimeMax=osRespondTimeService.getMaxRespondTime(osInfoId, hourPoint, currentTime);
+		String respondTimeMin=osRespondTimeService.getMinRespondTime(osInfoId, hourPoint, currentTime);
+		OsStati osStati= osStatiService.creatStatiOneHour(osInfoId, OsUtil.RSPOND_STATIF_FLAG, hourPoint, respondTimeMax, respondTimeMin, respondTimeAverage);
+		return osStati;
+	}
 	/**
 	 * 计算Long的百分比 为2位小数
 	 * @param interCycleTime

@@ -145,15 +145,18 @@ public class OsTransUtil {
 		System.out.println(countAve(a, b));
 	}
 	
-	public static String countAve(Object dividend, int divisor){
-		DecimalFormat df = new DecimalFormat("##.00");
+	public static String countAve(Object dividend, int divisor) {
 		Object ave = null;
 		if (dividend.getClass().equals(Double.class)) {
 			Double d = (Double) dividend;
-			 ave = d/divisor;
-			 ave = df.format(ave);
-//			 ave= BigDecimal.valueOf( d).divide(BigDecimal.valueOf(divisor),4,BigDecimal.ROUND_HALF_DOWN);
+			ave = new BigDecimal(d).divide(new BigDecimal(divisor)).doubleValue();
+		}
+		if (dividend.getClass().equals(Long.class)) {
+			Long d = (Long) dividend;
+			ave = new BigDecimal(d).divide(new BigDecimal(divisor), 2,
+					BigDecimal.ROUND_HALF_UP).longValue();
 		}
 		return ave.toString();
 	}
+
 }

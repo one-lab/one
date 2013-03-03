@@ -108,4 +108,9 @@ public class OsUtil {
 	 * 磁盘统计1小时标记
 	 */
 	public static String DISK_STATIF_FLAG="DH";
+	
+	/**
+	 * 响应时间统计1小时标记
+	 */
+	public static String RSPOND_STATIF_FLAG="PH";
 }

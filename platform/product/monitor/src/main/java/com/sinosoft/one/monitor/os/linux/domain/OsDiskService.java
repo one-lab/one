@@ -50,37 +50,5 @@ public class OsDiskService {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osDiskRepository.findOsDiskByDate(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
-	
-	/**
-	 * 删除磁盘采集数据
-	 * @param disk
-	 */
-	public void deleteDiskData(String osid,Date begin,Date end){
-		
-	}
 
-	/**
-	 * 保存磁盘统计数据
-	 * @param disk
-	 */
-	public void saveDiskStati(OsStati disk){
-		
-	}
-	
-	/**
-	 * 获取磁盘统计数据
-	 * @param disk
-	 */
-	public OsStati getDiskStati(String osid,String type,Date begin ,Date end){
-		
-		return null;
-	}
-	
-	/**
-	 * 删除磁盘统计数据
-	 * @param disk
-	 */
-	public void deleteDiskStati(String osid,String type,Date begin ,Date end){
-		
-	}
 }

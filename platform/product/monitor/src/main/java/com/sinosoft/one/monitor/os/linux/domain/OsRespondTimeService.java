@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,6 +11,7 @@ import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.repository.OsRespondtimeRepository;
+import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 @Component
 public class OsRespondTimeService {
 	@Autowired
@@ -27,27 +30,30 @@ public class OsRespondTimeService {
 		osRespondtimeRepository.save(osRespondtime);
 	}
 	
-	
 	/**
 	 * 获取响应时间数据
 	 * @param ava
 	 */
-	public OsRespondtime getRespondTime(){
-		return null;
-	}
-	/**
-	 * 保存响应时间统计数据
-	 * @param ava
-	 */
-	public void saveRespondTimeStati(OsStati respondTime){
-		
+	public List<OsRespondtime> getRespondTimeByTime(String osInfoId,Date begin,Date end){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osRespondtimeRepository.findOsRespondTimeByDate(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**
-	 * 获取响应时间统计数据
+	 * 获取响应时间最大值
 	 * @param ava
 	 */
-	public OsStati getRespondTimeStati(String osid,String type,Date begin ,Date end){
-		return null;
+	public String getMaxRespondTime(String osInfoId,Date begin,Date end){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osRespondtimeRepository.findMaxRespondTime(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
+	}
+	
+	/**
+	 * 获取响应时间最小值
+	 * @param ava
+	 */
+	public String getMinRespondTime(String osInfoId,Date begin,Date end){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osRespondtimeRepository.findMinRespondTime(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 }

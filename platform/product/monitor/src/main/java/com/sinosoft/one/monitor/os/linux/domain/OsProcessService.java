@@ -42,13 +42,15 @@ public class OsProcessService {
 		osCpuService.saveCpu(osInfoId,cpuInfo ,sampleTime);//保存CPU采样
 		osDiskService.saveDisk(osInfoId,diskInfo, sampleTime);//保存磁盘采样
 		osRamService.saveRam(osInfoId,ramInfo , sampleTime);//保存内存采样
-		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存CPU采样
+		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存响应时间采样
 		//更新统计记录
 		List<OsStati> OsStatis=osDataMathService.statiOneHourRam(osInfoId, sampleTime);//更新内存统计
 		OsStati cpuOsStati=osDataMathService.statiOneHourCpu(osInfoId, sampleTime);//更新CPU统计
 		OsStati diskOsStati=osDataMathService.statiOneHourDisk(osInfoId, sampleTime);//更行磁盘统计
+		OsStati respondOsStati=osDataMathService.statiOneHourRespond(osInfoId, sampleTime);//更行响应时间统计
 		OsStatis.add(cpuOsStati);
 		OsStatis.add(diskOsStati);
+		OsStatis.add(respondOsStati);
 		osStatiService.saveStatiOneHourList(OsStatis);
 		
 	}

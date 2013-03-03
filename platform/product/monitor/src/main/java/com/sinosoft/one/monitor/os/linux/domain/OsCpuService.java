@@ -72,32 +72,5 @@ public class OsCpuService {
 	}
 	
 	
-	/**
-	 * 删除CPU采集数据
-	 * @param cpu
-	 */
-	public void deleteCpuData(String osid,Date begin,Date end){
-		
-	}
-	/**
-	 * 保存CPU统计数据
-	 * @param cpu
-	 */
-	public void saveCpuStatiData(OsStati cpu){
-	}
 	
-	/**
-	 * 保存CPU采集数据
-	 * @param cpu
-	 */
-	public OsStati  getCpuOsStatiData(String osid,String type,Date begin ,Date end){
-		return null;
-	}
-	
-	/**
-	 * 删除CPU采集数据
-	 * @param cpu
-	 */
-	public void  deleteCpuOsStatiData(String osid,String type,Date begin ,Date end){
-	}
 }

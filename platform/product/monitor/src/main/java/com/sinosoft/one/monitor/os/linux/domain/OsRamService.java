@@ -96,36 +96,4 @@ public class OsRamService {
 		return osRamRepository.findMinSwapUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 	
-	
-	/**
-	 * 删除内存采集数据
-	 * @param ram
-	 */
-	public void deleteRam(String osid,Date begin,Date end){
-		
-	}
-	
-	
-	/**
-	 * 保存内存统计数据
-	 * @param ram
-	 */
-	public void deleteRamStati(OsStati ram){
-		
-	}
-	/**
-	 * 获取内存统计数据
-	 * @param ram
-	 */
-	public OsStati getRamStati(String osid,String type,Date begin ,Date end){
-		return null;
-	}
-	
-	/**
-	 * 获取内存统计数据
-	 * @param ram
-	 */
-	public void deleteRamStati(String osid,String type,Date begin ,Date end){
-
-	}
 }
