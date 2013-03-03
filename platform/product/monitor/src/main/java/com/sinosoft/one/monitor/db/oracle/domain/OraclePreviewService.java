@@ -11,15 +11,16 @@ import com.sinosoft.one.monitor.db.oracle.model.OracleDetailModel;
  */
 public interface OraclePreviewService {
     /**
-     *连接时间概览(横坐标，纵坐标，详细值)
+     * 连接时间概览(横坐标，纵坐标，详细值)
      */
     EventInfoModel[] viewConnectInfo(String monitorId);
     /**
      *用户数概览(横坐标，纵坐标，详细值)
      */
     //EventInfoModel viewActiveInfo(String monitorId);
+
     /**
-     *数据库明细
+     * 数据库明细
      */
     OracleDetailModel viewDbDetail(String monitorId);
 }

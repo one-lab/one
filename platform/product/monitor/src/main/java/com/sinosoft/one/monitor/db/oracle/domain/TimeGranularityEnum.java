@@ -7,5 +7,5 @@ package com.sinosoft.one.monitor.db.oracle.domain;
  * 时间粒度枚举
  */
 public enum TimeGranularityEnum {
-    SECOND,MINUTE,HOUR,DAY,MONTH,YEAR
+    SECOND, MINUTE, HOUR, DAY, MONTH, YEAR
 }

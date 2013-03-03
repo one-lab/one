@@ -26,7 +26,7 @@ public class OracleInfoModel {
     /**
      * Oracle数据库健康状况
      */
-    private String health;
+    private String[] health;
     /**
      * 监控类型
      */
@@ -68,11 +68,11 @@ public class OracleInfoModel {
         this.monitorName = monitorName;
     }
 
-    public String getHealth() {
+    public String[] getHealth() {
         return health;
     }
 
-    public void setHealth(String health) {
+    public void setHealth(String[] health) {
         this.health = health;
     }
 

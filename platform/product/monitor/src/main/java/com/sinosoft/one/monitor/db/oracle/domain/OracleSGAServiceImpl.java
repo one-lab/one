@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Component
 public class OracleSGAServiceImpl implements OracleSGAService {
-     @Autowired
+    @Autowired
     private InfoRepository infoRepository;
     @Autowired
     private LasteventRepository lasteventRepository;
@@ -97,14 +97,14 @@ public class OracleSGAServiceImpl implements OracleSGAService {
             return eventInfoModel;
         } else {
             List<OracleSGAHitRateModel> oracleSGAHitRateModelList = new ArrayList<OracleSGAHitRateModel>();
-            for(Lastevent lastevent:lasteventList){
+            for (Lastevent lastevent : lasteventList) {
                 OracleSGAHitRateModel oracleSGAHitRateModel = new OracleSGAHitRateModel();
-                oracleSGAHitRateModel.setBufferHitRate(lastevent.getBufferHitRate()+"");
-                oracleSGAHitRateModel.setDictHitRate(lastevent.getDickHitRate()+"");
-                oracleSGAHitRateModel.setLibHitRate(lastevent.getBufferLibHitRate()+"");
+                oracleSGAHitRateModel.setBufferHitRate(lastevent.getBufferHitRate() + "");
+                oracleSGAHitRateModel.setDictHitRate(lastevent.getDickHitRate() + "");
+                oracleSGAHitRateModel.setLibHitRate(lastevent.getBufferLibHitRate() + "");
 
-                oracleSGAHitRateModel.setStartTime(start.getTime()+"");
-                oracleSGAHitRateModel.setEndTime(end.getTime()+"");
+                oracleSGAHitRateModel.setStartTime(start.getTime() + "");
+                oracleSGAHitRateModel.setEndTime(end.getTime() + "");
                 String recordTime = sdf.format(lastevent.getRecordTime());
                 oracleSGAHitRateModel.setRecordTime(recordTime);
 

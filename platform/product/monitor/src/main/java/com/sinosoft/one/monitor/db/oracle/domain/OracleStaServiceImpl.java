@@ -13,18 +13,19 @@ import java.util.Date;
 import java.util.List;
 
 /**
-* User: Chunliang.Han
-* Date: 13-3-2
-* Time: 下午2:25
-*/
+ * User: Chunliang.Han
+ * Date: 13-3-2
+ * Time: 下午2:25
+ */
 @Component
 public class OracleStaServiceImpl implements OracleStaService {
     @Autowired
     private InfoRepository infoRepository;
     @Autowired
     private EventStaRepository eventStaRepository;
+
     @Override
-    public OracleStaInfoDetailModel getBaseInfo(String monitorId, int eventType, String title, Date now, StaTimeEnum staTimeEnum,TimeGranularityEnum timeGranularityEnum) {
+    public OracleStaInfoDetailModel getBaseInfo(String monitorId, int eventType, String title, Date now, StaTimeEnum staTimeEnum, TimeGranularityEnum timeGranularityEnum) {
         OracleStaInfoDetailModel staInfoDetailModel = new OracleStaInfoDetailModel();
         staInfoDetailModel.setTitle(title);
         Info info = infoRepository.findOne(monitorId);
@@ -33,7 +34,7 @@ public class OracleStaServiceImpl implements OracleStaService {
         //2013-3-2 2:42
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String end = sdf.format(now);
-        Date time = StaTimeEnum.getTime(staTimeEnum,now) ;
+        Date time = StaTimeEnum.getTime(staTimeEnum, now);
         String begin = sdf.format(time);
         staInfoDetailModel.setBegin(begin);
         staInfoDetailModel.setEnd(end);
@@ -48,7 +49,7 @@ public class OracleStaServiceImpl implements OracleStaService {
 //                staInfoDetailModel.setError();
                 staInfoDetailModel.setEventName("连接时间 ms");
                 //表数据
-                List<EventSta> eventStaList  = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
+                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
                 staInfoDetailModel.setRecordItems(eventStaList);
                 //点列
                 List<Point> points = new ArrayList<Point>();
@@ -56,15 +57,15 @@ public class OracleStaServiceImpl implements OracleStaService {
                 int min = 0;
                 int max = 0;
                 int sum = 0;
-                for(EventSta eventSta : eventStaList){
+                for (EventSta eventSta : eventStaList) {
                     //和
                     sum += eventSta.getAvg();
                     //最小值
-                    if(min>=eventSta.getMin()){
+                    if (min >= eventSta.getMin()) {
                         min = eventSta.getMin();
                     }
                     //最大值
-                    if(max<=eventSta.getMax()){
+                    if (max <= eventSta.getMax()) {
                         max = eventSta.getMax();
                     }
                     //点
@@ -76,7 +77,7 @@ public class OracleStaServiceImpl implements OracleStaService {
                 }
                 staInfoDetailModel.setMaxAvg(max);
                 staInfoDetailModel.setMinAvg(min);
-                staInfoDetailModel.setAvg(sum/eventStaList.size());
+                staInfoDetailModel.setAvg(sum / eventStaList.size());
 
                 //图形点
                 staInfoDetailModel.setxName("时间");
@@ -89,7 +90,7 @@ public class OracleStaServiceImpl implements OracleStaService {
             case 2: {
                 staInfoDetailModel.setEventName("用户数");
                 //表数据
-                List<EventSta> eventStaList  = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
+                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
                 staInfoDetailModel.setRecordItems(eventStaList);
                 //点列
                 List<Point> points = new ArrayList<Point>();
@@ -97,15 +98,15 @@ public class OracleStaServiceImpl implements OracleStaService {
                 int min = 0;
                 int max = 0;
                 int sum = 0;
-                for(EventSta eventSta : eventStaList){
+                for (EventSta eventSta : eventStaList) {
                     //和
                     sum += eventSta.getAvg();
                     //最小值
-                    if(min>=eventSta.getMin()){
+                    if (min >= eventSta.getMin()) {
                         min = eventSta.getMin();
                     }
                     //最大值
-                    if(max<=eventSta.getMax()){
+                    if (max <= eventSta.getMax()) {
                         max = eventSta.getMax();
                     }
                     //点
@@ -117,7 +118,7 @@ public class OracleStaServiceImpl implements OracleStaService {
                 }
                 staInfoDetailModel.setMaxAvg(max);
                 staInfoDetailModel.setMinAvg(min);
-                staInfoDetailModel.setAvg(sum/eventStaList.size());
+                staInfoDetailModel.setAvg(sum / eventStaList.size());
 
                 //图形点
                 staInfoDetailModel.setxName("时间");
@@ -130,7 +131,7 @@ public class OracleStaServiceImpl implements OracleStaService {
             case 3: {
                 staInfoDetailModel.setEventName("缓冲区击中率");
                 //表数据
-                List<EventSta> eventStaList  = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
+                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
                 staInfoDetailModel.setRecordItems(eventStaList);
                 //点列
                 List<Point> points = new ArrayList<Point>();
@@ -138,15 +139,15 @@ public class OracleStaServiceImpl implements OracleStaService {
                 int min = 0;
                 int max = 0;
                 int sum = 0;
-                for(EventSta eventSta : eventStaList){
+                for (EventSta eventSta : eventStaList) {
                     //和
                     sum += eventSta.getAvg();
                     //最小值
-                    if(min>=eventSta.getMin()){
+                    if (min >= eventSta.getMin()) {
                         min = eventSta.getMin();
                     }
                     //最大值
-                    if(max<=eventSta.getMax()){
+                    if (max <= eventSta.getMax()) {
                         max = eventSta.getMax();
                     }
                     //点
@@ -158,7 +159,7 @@ public class OracleStaServiceImpl implements OracleStaService {
                 }
                 staInfoDetailModel.setMaxAvg(max);
                 staInfoDetailModel.setMinAvg(min);
-                staInfoDetailModel.setAvg(sum/eventStaList.size());
+                staInfoDetailModel.setAvg(sum / eventStaList.size());
 
                 //图形点
                 staInfoDetailModel.setxName("时间");

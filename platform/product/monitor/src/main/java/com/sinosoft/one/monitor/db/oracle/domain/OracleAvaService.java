@@ -15,11 +15,13 @@ public interface OracleAvaService {
     /**
      * 获取可用性详细信息
      */
-    AvaSta findAvaSta(String monitorId,StaTimeEnum avaStaTimeEnum);
+    AvaSta findAvaSta(String monitorId, StaTimeEnum avaStaTimeEnum);
+
     /**
      * 获取可用性信息列表（监听时间历史）
      */
     List<AvaSta> listAvaSta(String monitorId);
+
     /**
      * 监视器停机时间明细查询
      */

@@ -21,18 +21,17 @@ public class OracleAvaServiceImpl implements OracleAvaService {
 
     @Override
     public AvaSta findAvaSta(String monitorId, StaTimeEnum avaStaTimeEnum) {
-       AvaSta avaSta = null;
-       switch (avaStaTimeEnum){
-            case TODAY:
-            {
+        AvaSta avaSta = null;
+        switch (avaStaTimeEnum) {
+            case TODAY: {
 
-               avaSta = avaStaRepository.findAvaSta(monitorId);
+                avaSta = avaStaRepository.findAvaSta(monitorId);
 
                 break;
             }
-       }
+        }
 
-       return avaSta;
+        return avaSta;
     }
 
     @Override
@@ -42,6 +41,6 @@ public class OracleAvaServiceImpl implements OracleAvaService {
 
     @Override
     public List<OraclePowerOffTimeModel> listPowerOffTime(String monitorId) {
-      return  null;
+        return null;
     }
 }

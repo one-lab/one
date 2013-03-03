@@ -22,7 +22,7 @@ public class OracleStaBaseInfoModel {
     /**
      * 健康状况
      */
-    private String healthy;
+    private String[] healthy;
 
     public String getMonitorName() {
         return monitorName;
@@ -48,11 +48,11 @@ public class OracleStaBaseInfoModel {
         this.usability = usability;
     }
 
-    public String getHealthy() {
+    public String[] getHealthy() {
         return healthy;
     }
 
-    public void setHealthy(String healthy) {
+    public void setHealthy(String[] healthy) {
         this.healthy = healthy;
     }
 }

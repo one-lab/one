@@ -28,7 +28,7 @@ public class OracleTableSpaceServiceImpl implements OracleTableSpaceService {
     public List<OracleTableSpaceModel> listTableSpaceInfo(String monitorId) {
         DBUtil4Monitor.changeConnection(monitorId);
         String sql = OracleMonitorSql.tableSpaceInfo;
-        List<OracleTableSpaceModel> rsList = DBUtil.queryBeans(SqlObj.newInstance(sql),OracleTableSpaceModel.class);
+        List<OracleTableSpaceModel> rsList = DBUtil.queryBeans(SqlObj.newInstance(sql), OracleTableSpaceModel.class);
         return rsList;
     }
 }

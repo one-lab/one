@@ -23,6 +23,7 @@ public interface OracleSGAService {
      * SGA状态数据获取  (缓冲区击中率,数据字典击中率,缓存库击中率,可用内存)
      */
     SGAStateModel viewSGAStateInfo(String monitorId);
+
     /**
      * 获取命中率一小时统计信息
      */

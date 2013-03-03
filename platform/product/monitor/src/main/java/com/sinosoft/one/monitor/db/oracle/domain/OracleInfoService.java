@@ -14,14 +14,17 @@ public interface OracleInfoService {
      * 添加Oracle监视器
      */
     void saveMonitor(Info info);
+
     /**
      * 修改Oracle监视器
      */
     void editMonitor(Info info);
+
     /**
      * 删除Oracle监视器
      */
     void deleteMonitor(String monitorId);
+
     /**
      * 展现监视器详细信息
      */

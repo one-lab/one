@@ -21,7 +21,8 @@ public enum StaTimeEnum {
     THIS_SEASON,
     THIS_YEAR,
     LAST_1YEAR;
-    public static Date getTime(StaTimeEnum staTimeEnum,Date currTime){
+
+    public static Date getTime(StaTimeEnum staTimeEnum, Date currTime) {
         Date returnTime = currTime;
         switch (staTimeEnum) {
             case TODAY: {
@@ -30,38 +31,38 @@ public enum StaTimeEnum {
                 newCalendar.clear();
                 System.out.println(newCalendar);
                 calendar.setTime(currTime);
-                newCalendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
+                newCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
                 returnTime = newCalendar.getTime();
                 break;
             }
-            case LAST_24HOUR:{
+            case LAST_24HOUR: {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(currTime);
-                calendar.add(Calendar.DATE,-1);
+                calendar.add(Calendar.DATE, -1);
                 returnTime = calendar.getTime();
                 break;
             }
             case YESTERDAY: {
-            	 Calendar calendar = Calendar.getInstance();
-                 Calendar newCalendar = Calendar.getInstance();
-                 newCalendar.clear();
-                 calendar.setTime(currTime);
-                 calendar.add(Calendar.DATE, -1);
-                 newCalendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
-                 returnTime = newCalendar.getTime();
-                 break;
+                Calendar calendar = Calendar.getInstance();
+                Calendar newCalendar = Calendar.getInstance();
+                newCalendar.clear();
+                calendar.setTime(currTime);
+                calendar.add(Calendar.DATE, -1);
+                newCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+                returnTime = newCalendar.getTime();
+                break;
             }
             case THIS_WEEK: {
-            	Calendar calendar = Calendar.getInstance();
+                Calendar calendar = Calendar.getInstance();
                 Calendar newCalendar = Calendar.getInstance();
                 newCalendar.clear();
                 calendar.setTime(currTime);
                 int gone = Calendar.DAY_OF_WEEK;
                 //计算一周的第几天
-                gone = (gone==1)?7:((gone+6)%7);
+                gone = (gone == 1) ? 7 : ((gone + 6) % 7);
                 System.out.println(gone);
-                calendar.add(Calendar.DATE, -gone+1);
-                newCalendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
+                calendar.add(Calendar.DATE, -gone + 1);
+                newCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
                 returnTime = newCalendar.getTime();
                 break;
             }
@@ -77,7 +78,7 @@ public enum StaTimeEnum {
             case LAST_30DAY: {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(currTime);
-                calendar.add(Calendar.DATE,-30);
+                calendar.add(Calendar.DATE, -30);
                 returnTime = calendar.getTime();
                 break;
             }
@@ -96,7 +97,8 @@ public enum StaTimeEnum {
         }
         return returnTime;
     }
-    public static void main(String[] arr){
-        System.out.print( getTime(LAST_24HOUR,new Date()));
+
+    public static void main(String[] arr) {
+        System.out.print(getTime(LAST_24HOUR, new Date()));
     }
 }

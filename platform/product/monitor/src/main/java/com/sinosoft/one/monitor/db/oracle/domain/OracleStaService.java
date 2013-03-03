@@ -16,5 +16,5 @@ public interface OracleStaService {
     /**
      * 统计信息获取
      */
-    OracleStaInfoDetailModel getBaseInfo(String monitorId, int eventType, String title, Date now, StaTimeEnum staTimeEnum,TimeGranularityEnum timeGranularityEnum);
+    OracleStaInfoDetailModel getBaseInfo(String monitorId, int eventType, String title, Date now, StaTimeEnum staTimeEnum, TimeGranularityEnum timeGranularityEnum);
 }

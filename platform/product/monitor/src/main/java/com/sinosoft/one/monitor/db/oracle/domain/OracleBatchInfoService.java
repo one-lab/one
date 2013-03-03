@@ -15,17 +15,17 @@ public interface OracleBatchInfoService {
     /**
      * 可用性列表
      */
-    List<OracleAvaInfoModel> avaInfoList(String totalTime);
+    List<OracleAvaInfoModel> avaInfoList(StaTimeEnum staTimeEnum);
 
     /**
      * 健康状况列表
      */
-    List<OracleHealthInfoModel> healthInfoList(StaTimeEnum totalTime);
+    List<OracleHealthInfoModel> healthInfoList(StaTimeEnum staTimeEnum);
 
     /**
      * 列表视图(名称，可用性，健康状况)
      */
-    List<OracleStaBaseInfoModel> listStaBaseInfo(String monitorType);
+    List<OracleStaBaseInfoModel> listStaBaseInfo();
 
     /**
      * 连接时间统计信息  、用户数统计信息  、命中率统计信息
