@@ -10,6 +10,7 @@ import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.validation.annotation.Validation;
 import org.apache.commons.logging.Log;
@@ -123,7 +124,7 @@ public class ApplicationManagerController {
      * 获得应用id，应用下的所有Url和Method，供agent匹配所监控的应用系统.
      */
     @Post("match")
-    public void initMatchMap(Invocation inv){
+    public Reply initMatchMap(Invocation inv){
         try {
             String appName=inv.getRequest().getParameter("appName");
             String ip=inv.getRequest().getParameter("ip");
@@ -139,12 +140,12 @@ public class ApplicationManagerController {
                     //URL.id,URL.url(address),URL.Method
                     //Method.id,Method.className,Method.methodName
                     String jsonString=applicationService.getJsonDataOfUrlsAndMethods(application.getId(),urls);
-                    Replys.with(jsonString);
+                    return Replys.with(jsonString);
             }
-            Replys.simple().fail("NotExist");
+            return Replys.simple().fail("NotExist");
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
-            Replys.simple().fail("Exception");
+            return Replys.simple().fail("Exception");
         }
     }
 }

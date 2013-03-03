@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
 
 
 public class AgentFilter implements Filter {
@@ -23,7 +24,7 @@ public class AgentFilter implements Filter {
 	private String urlId;
 
 	private static final String DEFAULT_EXCLUDE_EXTENSIONS = "jspx,js,css,gif,png,jpg,jpeg,bmp,html,htm,swf,jsp";
-	private String[] excludeExtensions = null;
+	private String[] excludeExtensions = new String[0];
 
 	public void destroy() {}
 	public void doFilter(ServletRequest request, ServletResponse response,
@@ -42,9 +43,13 @@ public class AgentFilter implements Filter {
 	}
 
 	public void init(FilterConfig config) throws ServletException {
-        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml");
-		logConfigs = (LogConfigs)applicationContext.getBean("logConfigs");
-		excludeExtensions = DEFAULT_EXCLUDE_EXTENSIONS.split(",");
+		ApplicationContext oldRootContext = (ApplicationContext) config.getServletContext().getAttribute(
+				WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
+		if(oldRootContext == null) {
+	        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml");
+			logConfigs = (LogConfigs)applicationContext.getBean("logConfigs");
+			excludeExtensions = DEFAULT_EXCLUDE_EXTENSIONS.split(",");
+		}
     }
 
     private void doUrlTraceLogBegin() {

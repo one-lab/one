@@ -100,19 +100,17 @@ public class ApplicationService {
      * method包括id，className，methodName
      */
     public String getJsonDataOfUrlsAndMethods(String applicationId,List<Url> urls) {
-        JSONArray jsonArray=new JSONArray();
         JSONObject jsonUrlsObject=new JSONObject();
-        JSONObject jsonApplicationIdObject=new JSONObject();
         JSONArray jsonUrlArray=new JSONArray();
         //返回的json数据包含当前应用的id，这个数据会写入代理端的notification.info文件中
-        jsonApplicationIdObject.put("applicationId",applicationId);
-        jsonArray.add(jsonApplicationIdObject);
+	    jsonUrlsObject.put("applicationId",applicationId);
         for(Url url:urls){
             JSONObject jsonUrlObject=new JSONObject();
             //处理当前url
             jsonUrlObject.put("urlId",url.getId());
             jsonUrlObject.put("urlAddress",url.getUrl());
             List<Method> methods=findAllMethodsOfUrl(url.getId());
+	        JSONArray methodArray = new JSONArray();
             //循环处理url中所有的method
             for(Method method:methods){
                 JSONObject jsonMethodObject=new JSONObject();
@@ -120,13 +118,13 @@ public class ApplicationService {
                 jsonMethodObject.put("className",method.getClassName());
                 jsonMethodObject.put("methodName",method.getMethodName());
                 //此method作为当前url的一个节点
-                jsonUrlObject.put("method",jsonMethodObject);
+	            methodArray.add(jsonMethodObject);
             }
+	        jsonUrlObject.put("methods", methodArray);
 
             jsonUrlArray.add(jsonUrlObject);
         }
         jsonUrlsObject.put("urls",jsonUrlArray);
-        jsonArray.add(jsonUrlsObject);
-        return jsonArray.toString();
+        return jsonUrlsObject.toString();
     }
 }

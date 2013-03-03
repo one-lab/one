@@ -42,7 +42,7 @@ public final class NotificationConfiguration {
 
 	private void loadProperties() throws Exception {
 		notificationProperties = new Properties();
-		notificationProperties.load(this.getClass().getResourceAsStream(NOTIFICATION_PROPERTIES_FILENAME));
+		notificationProperties.load(this.getClass().getClassLoader().getResourceAsStream(NOTIFICATION_PROPERTIES_FILENAME));
 		baseUrl = "http://" + notificationProperties.get("monitor.server.ip") + ":" + notificationProperties.get("monitor.server.port") + "/monitor";
 		loadInitData(baseUrl + MONITOR_APPLICATION_INIT_URL);
 	}

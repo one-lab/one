@@ -17,8 +17,8 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
     Application findByApplicationNameAndApplicationIpAndApplicationPort(@Param("applicationName") String applicationName, @Param("applicationIp") String applicationIp, @Param("applicationPort") String applicationPort);
 
     @SQL("select * from GE_MONITOR_URL a where a.id in (select distinct b.URL_ID from GE_MONITOR_BIZ_SCENARIO_URL b " +
-            "right join GE_MONITOR_BIZ_SCENARIO c on b.BIZ_SCENARIO_ID=:bizScenarioIds)")
-    List<Url> selectAllUrlsWithBizScenarioIds(@Param("bizScenarioIds") List<String> bizScenarioIds);
+            "right join GE_MONITOR_BIZ_SCENARIO c on b.BIZ_SCENARIO_ID in (?1))")
+    List<Url> selectAllUrlsWithBizScenarioIds(List<String> bizScenarioIds);
 
     @SQL("select * from GE_MONITOR_METHOD a where a.id in (select b.METHOD_ID from GE_MONITOR_URL_METHOD b " +
             "right join GE_MONITOR_URL c on b.URL_ID=:urlId)")
