@@ -65,4 +65,8 @@ public interface OracleMonitorSql {
      * SGA可用内存：sgaFreeMemory
      */
     public static final String sgaFreeMemory = "select sum(bytes / 1024)/1024　\"free memory\" from (select sum(bytes) sgasize from sys.v_$sgastat) s, sys.v_$sgastat f where f.name = 'free memory'";
+    /**
+     * 用户数查询:avtiveCount
+     */
+    public static final String activeCount = "select count(distinct terminal) \"active\" from v$session";
 }

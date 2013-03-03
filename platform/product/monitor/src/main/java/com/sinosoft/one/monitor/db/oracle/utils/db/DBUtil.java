@@ -33,7 +33,7 @@ public final class DBUtil extends ConnUtil {
         ConnUtil.clearPool();
         DBDriver.start( DRIVER, URL, USER, PASSWORD, 1000);
     }
-	public static Connection getConn() {
+	private static Connection getConn() {
 		
 		return getConnection();
 	}
