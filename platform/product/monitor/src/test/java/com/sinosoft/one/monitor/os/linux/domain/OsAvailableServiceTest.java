@@ -1,4 +1,5 @@
 package com.sinosoft.one.monitor.os.linux.domain;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,14 +22,20 @@ public class OsAvailableServiceTest extends AbstractJUnit4SpringContextTests  {
 	
 	@Test
 	public void getAvailableTemps(){
-		List<OsAvailabletemp>osAvailabletemps=osAvailableServcie.getAvailableTemps("402892163d208194013d208198790000", "2013-03-01 11:00:00","2013-03-01 19:00:00",OsUtil.ORCL_DATEFORMATE);
+		Calendar c  = Calendar.getInstance();
+		c.set(Calendar.DAY_OF_MONTH, 2);
+		c.set(Calendar.HOUR_OF_DAY,20);
+		c.set(Calendar.MINUTE, 30);
+		c.set(Calendar.SECOND, 0);
+		Date date=c.getTime();
+		List<OsAvailabletemp>osAvailabletemps=osAvailableServcie.getAvailableTemps("402892163d208194013d208198790000", new Date(),date);
 		for (OsAvailabletemp osAvailabletemp : osAvailabletemps) {
 			System.out.println(osAvailabletemp.getSampleDate());
 		}
 	}
 	@Test
 	public void getLastAvailable(){
-		System.out.println(osAvailableServcie.getLastAvailable("402892163d208194013d208198790000", "2013-03-01 21:00:00"));
+		System.out.println(osAvailableServcie.getLastAvailable("402892163d208194013d208198790000", new Date()));
 	}
 	
 	
@@ -38,5 +45,16 @@ public class OsAvailableServiceTest extends AbstractJUnit4SpringContextTests  {
 		for (OsAvailabletemp osAvailabletemp : osAvailabletemps) {
 			System.out.println(osAvailabletemp.getStatus());
 		}
+	}
+	
+	@Test
+	public void deleteTempByLessThanTime(){
+		Calendar c  = Calendar.getInstance();
+		c.set(Calendar.DAY_OF_MONTH, 2);
+		c.set(Calendar.HOUR_OF_DAY,20);
+		c.set(Calendar.MINUTE, 30);
+		c.set(Calendar.SECOND, 0);
+		Date date=c.getTime();
+		osAvailableServcie.deleteTempByLessThanTime("402892163d208194013d208198790000", date);
 	}
 }

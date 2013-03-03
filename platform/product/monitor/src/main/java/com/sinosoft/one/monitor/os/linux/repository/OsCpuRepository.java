@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.os.linux.repository;
 // Generated 2013-2-27 21:43:52 by One Data Tools 1.0.0
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -17,11 +18,11 @@ public interface OsCpuRepository extends PagingAndSortingRepository<OsCpu, Strin
 	
 	//CPU利用率最大值
 	@SQL("select MAX(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and OS_INFO_ID= ?1 ")
-	public String findMaxCpuUtilZation(String osInfoId,String begin,String end,String dateFormat);
+	public String findMaxCpuUtilZation(String osInfoId,String beginTime,String endTime,String dateFormat);
 	
 	//CPU利用率最小值
-	@SQL("select MIN(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and OS_INFO_ID= ?1 ")
-	public String findMinCpuUtilZation(String osInfoId,String begin,String end,String dateFormat);
+	@SQL("select MIN(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?2,?4 and to_date(?3,?4) and OS_INFO_ID= ?1 ")
+	public String findMinCpuUtilZation(String osInfoId,String beginTime,String endTime,String dateFormat);
 
 }
 

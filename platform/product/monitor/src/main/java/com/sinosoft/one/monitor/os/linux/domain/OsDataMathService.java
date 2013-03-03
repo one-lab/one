@@ -57,7 +57,7 @@ public class OsDataMathService {
 	 */												//当前时间		//目标时间		
 	public void statiAvailable(String osInfoId,Date currentTime,Date targetTime,int interCycleTime ,Date timeSpan ){
 		SimpleDateFormat Format=new SimpleDateFormat(OsUtil.DATEFORMATE);//开始时间字符
-		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, Format.format(targetTime), Format.format(currentTime), OsUtil.ORCL_DATEFORMATE);
+		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
 		long nomorRun=0;//可用时间记录
 		long crashtime=0;//不可用时间记录
 		long repairTime=0;//总回复时间

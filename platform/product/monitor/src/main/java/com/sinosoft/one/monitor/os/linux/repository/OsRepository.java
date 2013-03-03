@@ -8,7 +8,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.os.linux.model.Os;
-import com.sinosoft.one.monitor.os.linux.model.OsShell;
 
 public interface OsRepository extends PagingAndSortingRepository<Os, String> {
 	

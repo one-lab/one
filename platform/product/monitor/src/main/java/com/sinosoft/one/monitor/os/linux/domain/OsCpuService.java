@@ -44,7 +44,7 @@ public class OsCpuService {
 	 */
 	public List<OsCpu>  getCpuByDate(String osInfoId,Date begin,Date end){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		return osCpuRepository.findOsCpuByDate(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
+		return osCpuRepository.findOsCpuByDate(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end) ,OsUtil.ORCL_DATEFORMATE);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class OsCpuService {
 	 */
 	public String getMaxCpuUtilZation(String osInfoId,Date begin,Date end){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		return osCpuRepository.findMaxCpuUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
+		return osCpuRepository.findMaxCpuUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end) ,OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class OsCpuService {
 	 */
 	public String getMinCpuUtilZation(String osInfoId,Date begin,Date end){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		return osCpuRepository.findMaxCpuUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
+		return osCpuRepository.findMaxCpuUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end) ,OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	

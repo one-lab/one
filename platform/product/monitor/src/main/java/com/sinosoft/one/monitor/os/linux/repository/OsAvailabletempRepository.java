@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.os.linux.repository;
 // Generated 2013-2-27 21:43:52 by One Data Tools 1.0.0
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -28,5 +29,9 @@ public interface OsAvailabletempRepository extends PagingAndSortingRepository<Os
 	@Query("from OsAvailabletemp o where o.sampleDate=(select max(sampleDate) from OsAvailabletemp where sampleDate<to_date(?2,?3)) and o.os.osInfoId = ?1")
 	public OsAvailabletemp findLastAvailable(String osid,String currentTime,String dateFormat );
 
+	//小于目标时间删除
+	@SQL("delete  GE_MONITOR_OS_AVAILABLETEMP o where o.SAMPLE_DATE< date and o.OS_INFO_ID= ?1 ")
+	public void deleteTempByLessThanTime(String osid,Date date,String dateFormat );
+	
 }
 

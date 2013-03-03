@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,17 +66,29 @@ public class OsProcessService {
 		//保存本次采样
 		osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status);
 		//统计采样结果 今天
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(sampleTime)));
+		c.set(Calendar.DAY_OF_MONTH, sampleTime.getDate());
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		//取当天的前24小时整时点
 		Date todayzeroTime= c.getTime();
-		osAvailableServcie.deleteAvailable(osInfoId, todayzeroTime);
-		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime);
-		
+		osAvailableServcie.deleteAvailable(osInfoId, todayzeroTime);//删除今天的统计表记录
+		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime);//保存新统计记录
+		//获取临时表集中的最大时间
+		OsAvailabletemp osAvailabletemp=osAvailableServcie.getLastAvailable(osInfoId, sampleTime);
+		//对比当前时间是否比最大时间大一天
+		if(osAvailabletemp.getSampleDate().getDate()<sampleTime.getDate()){
+			//统计昨天的数据
+			//获得昨天的整点
+			c.set(Calendar.DAY_OF_MONTH, sampleTime.getDate()-1);
+			Date yestodayzeroTime= c.getTime();
+			//删除昨天天在统计表的数据
+			osAvailableServcie.deleteAvailable(osInfoId, yestodayzeroTime);
+			//新增昨天到统计表里的数据
+			osDataMathService.statiAvailable(osInfoId, todayzeroTime, yestodayzeroTime, interCycleTime, yestodayzeroTime);
+			osAvailableServcie.deleteTempByLessThanTime(osInfoId, sampleTime);
+		}
 	}
 	
 	/**
@@ -83,7 +96,7 @@ public class OsProcessService {
 	 * @param osInfoId
 	 * @return
 	 */
-	public String getLastSampleTime(String osInfoId ,String currentTime){
+	public String getLastSampleTime(String osInfoId ,Date currentTime){
 		//获取最后一次可用性记录
 		OsAvailabletemp osAvailabletemp=OsAvailableServcie.getLastAvailable(osInfoId, currentTime);
 		return osAvailabletemp.getSampleDate().toGMTString();
@@ -101,9 +114,8 @@ public class OsProcessService {
 	 */
 	public  void saveStatiEveryDayAvailableStati(String osInfoId ,Date currentTime,int interCycleTime){
 		//当前天数
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DAY_OF_MONTH,  currentTime.getDate());
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
@@ -117,5 +129,26 @@ public class OsProcessService {
 		//删除前天
 		OsAvailableServcie.deleteLTFHourAvailale(osInfoId, currentTime);
 	}
+	
+//	public static void main(String[] args) {
+//		Date date= new Date();
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
+//		Calendar c  = Calendar.getInstance();
+//		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(date)));
+//		c.set(Calendar.HOUR_OF_DAY,0);
+//		c.set(Calendar.MINUTE, 0);
+//		c.set(Calendar.SECOND, 0);
+//		//取当天的前24小时整时点
+//		Date todayzeroTime= c.getTime();
+//		System.out.println(todayzeroTime);
+//		
+//		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(date))-1);
+//		Date todayzeroTime1= c.getTime();
+//		System.out.println(todayzeroTime1);
+//		if(todayzeroTime.get>todayzeroTime1){
+//			
+//		}
+//}
+	
 	
 }

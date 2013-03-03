@@ -76,23 +76,33 @@ public class OsAvailableServcie {
 	 * 获取可用性临时数据
 	 *  
 	 */
-	public List<OsAvailabletemp> getAvailableTemps(String osid,String beginTime,String endTime,String dateFormat){
-		return osAvailabletempRepository.findOsAvailabletempByDate( osid,beginTime , endTime,dateFormat);
+	public List<OsAvailabletemp> getAvailableTemps(String osid,Date beginTime,Date endTime){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osAvailabletempRepository.findOsAvailabletempByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(endTime),OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**
 	 * 删除可用性临时数据
-	 *  
 	 */
-	public void deleteAvailableTemp(String osInfoId,String beginTime,String endTime,String dateFormat){
-		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, beginTime, endTime,  dateFormat);
+	public void deleteAvailableTemp(String osInfoId,Date beginTime,Date endTime){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, simpleDateFormat.format(beginTime), simpleDateFormat.format(endTime),OsUtil.ORCL_DATEFORMATE);
+	}
+	
+	/**
+	 * 删除可用性临时数据 前24小时之外的全部数据
+	 */
+	public void deleteTempByLessThanTime(String osInfoId,Date date ){
+//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		osAvailabletempRepository.deleteTempByLessThanTime(osInfoId, date,OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**
 	 * 获取最后一次可用性的记录时间
 	 */
-	public OsAvailabletemp getLastAvailable(String osInfoId,String currentTime ){
-		return osAvailabletempRepository.findLastAvailable(osInfoId, currentTime, OsUtil.ORCL_DATEFORMATE);
+	public OsAvailabletemp getLastAvailable(String osInfoId,Date currentTime ){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osAvailabletempRepository.findLastAvailable(osInfoId, simpleDateFormat.format(currentTime), OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**
@@ -133,7 +143,7 @@ public class OsAvailableServcie {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		System.out.println(simpleDateFormat.format(currentTime));
 		System.out.println(simpleDateFormat.format(d1));
-		List<OsAvailabletemp> osAvailabletemps=getAvailableTemps(osInfoId, simpleDateFormat.format(d1), simpleDateFormat.format(currentTime), OsUtil.ORCL_DATEFORMATE);
+		List<OsAvailabletemp> osAvailabletemps=getAvailableTemps(osInfoId, d1, currentTime);
 		return osAvailabletemps;
 	}
 	
@@ -180,7 +190,7 @@ public class OsAvailableServcie {
 		//取当天的前48小时整时点
 		Date d2 = c.getTime();
 		SimpleDateFormat simpleDateFormat2=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		deleteAvailableTemp(osInfoId, simpleDateFormat2.format(d2), simpleDateFormat2.format(d1), OsUtil.ORCL_DATEFORMATE);
+		deleteAvailableTemp(osInfoId, d2,d1);
 	}
 	
 	

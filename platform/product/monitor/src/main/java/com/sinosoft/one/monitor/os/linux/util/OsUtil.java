@@ -29,7 +29,7 @@ public class OsUtil {
 	/**
 	 * 年月日日期格式
 	 */
-	public static String DATEFORMATE_YEAR_MON_DAY="dd";
+	public static String DATEFORMATE_YEAR_MON_DAY="yyyy-MM-dd";
 	/**
 	 * 日期格式
 	 */
