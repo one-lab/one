@@ -167,6 +167,20 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
+        <!--ShiroDbRealm begin-->
+        <dependency>
+            <groupId>com.sinosoft</groupId>
+            <artifactId>arch4</artifactId>
+            <version>4.2.7</version>
+        </dependency>
+        <!--ShiroDbRealm end-->
+        <!--mvcUIPlugin begin-->
+        <dependency>
+            <groupId>com.sinosoft.one</groupId>
+            <artifactId>mvc-ui-plugin</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <!--mvcUIPlugin end-->
 	</dependencies>
 
 	<build>
