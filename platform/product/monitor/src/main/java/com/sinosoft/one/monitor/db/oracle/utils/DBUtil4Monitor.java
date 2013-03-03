@@ -19,9 +19,6 @@ import java.util.Date;
 public class DBUtil4Monitor {
     @Autowired
     private static InfoRepository infoRepository;
-    public static Connection getCurrConnection(){
-        return DBUtil.getConn();
-    }
     public static void openConnection(String DRIVER,String URL,String USER,String PASSWORD) {
         DBUtil.reStart(DRIVER, URL, USER, PASSWORD);
     }
