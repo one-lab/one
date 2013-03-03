@@ -4,20 +4,17 @@
 	<parent>
 		<groupId>com.sinosoft.one</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>monitor</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
-    <properties>
-        <jdk.version>1.6</jdk.version>
-    </properties>
+
 	<dependencies>
 		<!-- fast-json begin-->
 		<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.1.26</version>
         </dependency>
         <!-- fast-json end-->
 		<!-- security begin -->
@@ -76,9 +73,8 @@
 			<artifactId>asm</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.quartz</groupId>
-			<artifactId>quartz-job</artifactId>
-			<version>1.8.3</version>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -90,7 +86,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>0.2.11</version>
         </dependency>
 		<!-- WEB begin -->
 		<dependency>
@@ -144,17 +139,14 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.7</version>
         </dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-            <version>14.0-rc3</version>
 		</dependency>
         <dependency>
             <groupId>com.googlecode.disruptor</groupId>
             <artifactId>disruptor</artifactId>
-            <version>2.10.4</version>
         </dependency>
 		<!-- GENERAL UTILS end -->
 
@@ -204,6 +196,7 @@
 				<configuration>
 					<uriEncoding>UTF-8</uriEncoding>
 					<path>/monitor</path>
+                    <port>7080</port>
 				</configuration>
 			</plugin>
 		</plugins>

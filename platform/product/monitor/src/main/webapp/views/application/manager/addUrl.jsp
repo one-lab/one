@@ -91,7 +91,7 @@ function save(){
                     </ul>
                     
                 </li>
-                <li><a href="javascript:viod(0)">应用性能</a></li>
+                <li><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
                 <li><a href="javascript:viod(0)">业务仿真</a></li>
                 <li><a href="javascript:viod(0)">告警</a></li>
             </ul>
@@ -130,10 +130,10 @@ function save(){
                   <td width="25%">URL描述<span class="mandatory"></span></td>
                   <td><input name="description" type="text" class="formtext" /></td>
               </tr>
-              <tr>
+              <%--<tr>
                   <td width="25%">URL阈值<span class="mandatory">*</span></td>
                   <td><input name="threshold" type="text" class="formtext" /></td>
-              </tr>
+              </tr>--%>
               <tr>
                 <td class="group_name">&nbsp;</td>
                 <td class="group_name">

@@ -91,7 +91,7 @@ function save(){
                     </ul>
                     
                 </li>
-                <li><a href="javascript:viod(0)">应用性能</a></li>
+                <li><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
                 <li><a href="javascript:viod(0)">业务仿真</a></li>
                 <li><a href="javascript:viod(0)">告警</a></li>
             </ul>
@@ -128,11 +128,11 @@ function save(){
               </tr>
               <tr>
                 <td>方法名<span class="mandatory">*</span></td>
-                <td><input name="methodName" type="text" value="${method.className}" class="formtext" size="100" /></td>
+                <td><input name="methodName" type="text" value="${method.methodName}" class="formtext" size="100" /></td>
               </tr>
               <tr>
                   <td width="25%">方法描述<span class="mandatory"></span></td>
-                  <td><input name="description" type="text" value="${method.className}" class="formtext" size="100" /></td>
+                  <td><input name="description" type="text" value="${method.description}" class="formtext" size="100" /></td>
               </tr>
               <%--<tr>
                   <td width="25%">方法阈值<span class="mandatory"></span></td>

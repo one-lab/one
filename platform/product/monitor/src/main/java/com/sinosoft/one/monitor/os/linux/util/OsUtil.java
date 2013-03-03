@@ -1,40 +1,116 @@
 package com.sinosoft.one.monitor.os.linux.util;
 
-import java.util.Map;
 
 public class OsUtil {
 	
 	/**
-	 * CPU采集值的字符处理
-	 * @param cpuCharData
-	 * @return
+	 * 可用性统计数据类型码
 	 */
-	public static Map<String, Object>cpuCharToResult(String cpuCharData){
-		
-		return null;
-	}
+	public static String AVAILABLE="AVAILABLE";
 	
 	/**
-	 * 磁盘采集值的字符处理
-	 * @param cpuCharData
-	 * @return
+	 * 数据库日期格式
 	 */
-	public static Map<String, Object>diskCharToResult(String diskCharData){
-		
-		return null;
-	}
+	public static String ORCL_DATEFORMATE="yyyy-MM-dd hh24:mi:ss";
 	
 	/**
-	 * 内存采集值的字符处理
-	 * @param cpuCharData
-	 * @return
+	 * 小时数日期格式
 	 */
-	public static Map<String, Object>ramCharToResult(String ramCharData){
-		
-		return null;
-	}
+	public static String DATEFORMATE_HOURS="HH";
+
+	/**
+	 * 分钟数日期格式
+	 */
+	public static String DATEFORMATE_MINE="mm";
+	/**
+	 * 天的日期格式
+	 */
+	public static String DATEFORMATE_DAY="dd";
+	/**
+	 * 年月日日期格式
+	 */
+	public static String DATEFORMATE_YEAR_MON_DAY="dd";
+	/**
+	 * 日期格式
+	 */
+	public static String DATEFORMATE="yyyy-MM-dd HH:mm:ss";
 	
-	public static boolean isInMonitoring(String osId){
-		return false;
-	}
+/**
+ * ********************统计表标记*********************************************	
+ */
+//	/**
+//	 * 可用性统计标记 今天
+//	 */
+//	public static String OSAVAIL_TIMESPAN_TODAY="TODAY";
+//	
+//	/**
+//	 * 可用性统计标记 昨天
+//	 */
+//	public static String OSAVAIL_TIMESPAN_YESTODAY="YESTODAY";
+//	
+//	/**
+//	 * 可用性统计标记 本周
+//	 */
+//	public static String OSAVAIL_TIMESPAN_THISWEEK="THISWEEK";
+//	
+//	/**
+//	 * 可用性统计标记 近7天
+//	 */
+//	public static String OSAVAIL_TIMESPAN_SEVENDAY="SEVENDAY";
+//	
+//	/**
+//	 * 可用性统计标记 上周
+//	 */
+//	public static String OSAVAIL_TIMESPAN_LASTWEEK="LASTWEEK";
+//	
+//	/**
+//	 * 可用性统计标记 三十天
+//	 */
+//	public static String OSAVAIL_TIMESPAN_THIRTYDAY="THIRTYDAY";
+//	
+//	/**
+//	 * 可用性统计标记 本月
+//	 */
+//	public static String OSAVAIL_TIMESPAN_THISMOON="THISMOON";
+//	
+//	/**
+//	 * 可用性统计标记 上月
+//	 */
+//	public static String OSAVAIL_TIMESPAN_LASTMOON="LASTMOON";
+//	
+//	/**
+//	 * 可用性统计标记 本季度
+//	 */
+//	public static String OSAVAIL_TIMESPAN_QUARTER="QUARTER";
+//	
+//	/**
+//	 * 可用性统计标记 本季度
+//	 */
+//	public static String OSAVAIL_TIMESPAN_THISYEAR="THISYEAR";
+//	
+	//------------------内存统计标记-------------------------------------------//
+	/**
+	 * 物理内存统计1小时标记
+	 */
+	public static String RAM_STATIF_FLAG="RH";
+	
+	/**
+	 * 交换内存统计1小时标记
+	 */
+	public static String SWAP_STATIF_FLAG="SH";
+	
+	/**
+	 * CPU统计1小时标记
+	 */
+	public static String CPU_STATIF_FLAG="CH";
+	
+	/**
+	 * 磁盘统计1小时标记
+	 */
+	public static String DISK_STATIF_FLAG="DH";
+	
+	/**
+	 * 响应时间统计1小时标记
+	 */
+	public static String RSPOND_STATIF_FLAG="PH";
 }

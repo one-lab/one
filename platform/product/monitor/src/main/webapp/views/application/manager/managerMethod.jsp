@@ -37,8 +37,8 @@ $(function(){
 			{id:'2',text:'方法名',name:"methodName",index:'1',align:''},
 			{id:'3',text:'名称',name:"description",index:'1',align:''},
 			{id:'4',text:'可用性',name:"status",index:'1',align:''},
-			{id:'5',text:'健康状态',name:"threshold",index:'1',align:''}
-			/*{id:'5',text:'操作',name:"appellation",index:'1',align:''}*/
+			{id:'5',text:'健康状态',name:"threshold",index:'1',align:''},
+			{id:'5',text:'操作',name:"operation",index:'1',align:''}
 		],  
 		rowNum:9999,
 		pager : false,
@@ -89,9 +89,9 @@ function eidRow(e){
     var rows = $(e).parent().parent();
     var id = rows.attr('id');
     /*id前面多了“rows”*/
-    var urlId=id.substr(4,32);
+    var methodId=id.substr(4,32);
     /*更新method页面*/
-    window.location.href="${ctx}/application/manager/methodmanager/methodlist/"+urlId;
+    window.location.href="${ctx}/application/manager/methodmanager/updatemethod/${urlId}/"+methodId;
 }
 function batchDel(){
 	var $g = $("#thresholdList div.grid_view > table");
@@ -148,7 +148,7 @@ function batchDel(){
                     </ul>
                     
                 </li>
-                <li><a href="javascript:viod(0)">应用性能</a></li>
+                <li><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
                 <li><a href="javascript:viod(0)">业务仿真</a></li>
                 <li><a href="javascript:viod(0)">告警</a></li>
             </ul>

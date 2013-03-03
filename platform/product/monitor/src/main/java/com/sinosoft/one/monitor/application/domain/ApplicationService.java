@@ -8,7 +8,6 @@ import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
 import com.sinosoft.one.monitor.application.repository.MethodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ public class ApplicationService {
      */
     @Transactional(readOnly = false)
     public void deleteApplication(String id) {
-        applicationRepository.delete(id);
+        applicationRepository.deleteApplicationById(id);
     }
 
     /**
@@ -74,7 +73,7 @@ public class ApplicationService {
      * 查询所有的应用.
      */
     public List<Application> findAllApplication() {
-        List<Application> applications = (List<Application>) applicationRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
+        List<Application> applications = (List<Application>) applicationRepository.findAllActiveApplication();
         return applications;
     }
 
@@ -100,19 +99,17 @@ public class ApplicationService {
      * method包括id，className，methodName
      */
     public String getJsonDataOfUrlsAndMethods(String applicationId,List<Url> urls) {
-        JSONArray jsonArray=new JSONArray();
         JSONObject jsonUrlsObject=new JSONObject();
-        JSONObject jsonApplicationIdObject=new JSONObject();
         JSONArray jsonUrlArray=new JSONArray();
         //返回的json数据包含当前应用的id，这个数据会写入代理端的notification.info文件中
-        jsonApplicationIdObject.put("applicationId",applicationId);
-        jsonArray.add(jsonApplicationIdObject);
+	    jsonUrlsObject.put("applicationId",applicationId);
         for(Url url:urls){
             JSONObject jsonUrlObject=new JSONObject();
             //处理当前url
             jsonUrlObject.put("urlId",url.getId());
             jsonUrlObject.put("urlAddress",url.getUrl());
             List<Method> methods=findAllMethodsOfUrl(url.getId());
+	        JSONArray methodArray = new JSONArray();
             //循环处理url中所有的method
             for(Method method:methods){
                 JSONObject jsonMethodObject=new JSONObject();
@@ -120,13 +117,13 @@ public class ApplicationService {
                 jsonMethodObject.put("className",method.getClassName());
                 jsonMethodObject.put("methodName",method.getMethodName());
                 //此method作为当前url的一个节点
-                jsonUrlObject.put("method",jsonMethodObject);
+	            methodArray.add(jsonMethodObject);
             }
+	        jsonUrlObject.put("methods", methodArray);
 
             jsonUrlArray.add(jsonUrlObject);
         }
         jsonUrlsObject.put("urls",jsonUrlArray);
-        jsonArray.add(jsonUrlsObject);
-        return jsonArray.toString();
+        return jsonUrlsObject.toString();
     }
 }

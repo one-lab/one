@@ -2,21 +2,25 @@ package com.sinosoft.one.monitor.os.linux.model;
 // Generated 2013-2-27 21:43:48 by One Data Tools 1.0.0
 
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * OsAvailabile.
 
  */
 @Entity
-@Table(name="GE_MONITOR_OS_AVAILABILE"
+@Table(name="GE_MONITOR_OS_AVAILABLE"
 )
 public class OsAvailable  implements java.io.Serializable {
 
@@ -40,7 +44,7 @@ public class OsAvailable  implements java.io.Serializable {
     private String aveFaultTime;
     /**
         */
-    private String timeSpan;
+    private Date timeSpan;
 
     public OsAvailable() {
     }
@@ -54,6 +58,8 @@ public class OsAvailable  implements java.io.Serializable {
     @Id 
     
     @Column(name="ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")	
     public String getId() {
     return this.id;
     }
@@ -71,7 +77,7 @@ public class OsAvailable  implements java.io.Serializable {
     this.os = os;
     }
     
-    @Column(name="NORMAL_RUN", length=10)
+    @Column(name="NORMAL_RUN", length=20)
     public String getNormalRun() {
     return this.normalRun;
     }
@@ -80,7 +86,7 @@ public class OsAvailable  implements java.io.Serializable {
     this.normalRun = normalRun;
     }
     
-    @Column(name="CRASH_TIME", length=10)
+    @Column(name="CRASH_TIME", length=20)
     public String getCrashTime() {
     return this.crashTime;
     }
@@ -89,7 +95,7 @@ public class OsAvailable  implements java.io.Serializable {
     this.crashTime = crashTime;
     }
     
-    @Column(name="AVE_REPAIR_TIME", length=10)
+    @Column(name="AVE_REPAIR_TIME", length=20)
     public String getAveRepairTime() {
     return this.aveRepairTime;
     }
@@ -98,7 +104,7 @@ public class OsAvailable  implements java.io.Serializable {
     this.aveRepairTime = aveRepairTime;
     }
     
-    @Column(name="AVE_FAULT_TIME", length=10)
+    @Column(name="AVE_FAULT_TIME", length=20)
     public String getAveFaultTime() {
     return this.aveFaultTime;
     }
@@ -107,12 +113,12 @@ public class OsAvailable  implements java.io.Serializable {
     this.aveFaultTime = aveFaultTime;
     }
     
-    @Column(name="TIME_SPAN", length=10)
-    public String getTimeSpan() {
+    @Column(name="TIME_SPAN")
+    public Date getTimeSpan() {
     return this.timeSpan;
     }
 
-    public void setTimeSpan(String timeSpan) {
+    public void setTimeSpan(Date timeSpan) {
     this.timeSpan = timeSpan;
     }
 
