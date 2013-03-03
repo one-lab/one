@@ -77,6 +77,14 @@
             });
             $(document).unbind();
         }
+        function eidRow(appId){
+            /*管理业务场景页面*/
+            window.location.href="${ctx}/application/manager/bsmanager/bizscenariolist/"+appId;
+        }
+        function delRow(appId){
+            /*删除应用*/
+            window.location.href="${ctx}/application/manager/appmanager/delete/"+appId;
+        }
     </script>
 </head>
 
@@ -115,7 +123,7 @@
                     </ul>
 
                 </li>
-                <li class="seleck"><a href="performance.html">应用性能</a></li>
+                <li class="seleck"><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
                 <li><a href="javascript:viod(0)">业务仿真</a></li>
                 <li><a href="javascript:viod(0)">告警</a></li>
             </ul>
@@ -190,8 +198,8 @@
                                     <td></td>
                                     <td class="body_name">
                                         <div><a class="p_info_table_td_text"
-                                                href="apmservice.html">${application.applicationName} </a></div>
-                                        <div>1主机和1实例</div>
+                                                href="${ctx}/application/manager/appmanager/appinfo/${application.id}">${application.applicationName} </a></div>
+                                        <div>${application.cnName}</div>
                                     </td>
                                     <td class="body_score">
                                         <table>
@@ -214,9 +222,11 @@
                                     </td>
                                     <td class="body"><span>494.0 毫秒</span></td>
                                     <td class="body"><span>148.42 rpm</span></td>
-                                    <td class="body"><a
-                                            href="${ctx}/views/application/manager/managerBizScenario.jsp?appId=${application.id}">管理业务场景</a>
-                                            <%--href="${ctx}/application/manager/bsmanager/bizscenariolist/${application.id}">管理业务场景</a--%>>
+                                    <td class="body"><a href="${ctx}/application/manager/bsmanager/list/${application.id}">管理业务场景</a>
+                                        <a href="delete/${application.id}">删除</a>
+                                        <%--<a href="javascript:void(0), onclick=delRow(${application.id})">删除</a>--%>
+                                    </td>
+                                            <%--href="${ctx}/application/manager/bsmanager/bizscenariolist/${application.id}">管理业务场景</a--%>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -242,31 +252,5 @@
     <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
 </div>
 
-<script type="text/javascript">
-    var viewBizScenario = function (uId) {
-        $.ajax({
-            type:"post",
-            url:"${ctx}/application/manager/bsmanager/bizscenariolist/" + uId,
-            dataType:"json",
-            success:function (data) {
-                if (data != null) {
-                    $("#loginName").val(data.loginName);
-                    $("#name").val(data.name);
-                    $("#email").val(data.email);
-                    $("#groupListDiv").html("");
-                    for (var i = 0; i < data.groupList.length; i++) {
-                        $("#groupListDiv").append("<span>[" + data.groupList[i].permissionNames + "]</span><br/>");
-
-                    }
-
-                    $("#view").show();
-                }
-            },
-            error:function () {
-                alert("暂时无法获取用户信息");
-            }
-        });
-    }
-</script>
 </body>
 </html>

@@ -147,7 +147,7 @@ function batchDel(){
                     </ul>
                     
                 </li>
-                <li><a href="javascript:viod(0)">应用性能</a></li>
+                <li><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
                 <li><a href="javascript:viod(0)">业务仿真</a></li>
                 <li><a href="javascript:viod(0)">告警</a></li>
             </ul>
