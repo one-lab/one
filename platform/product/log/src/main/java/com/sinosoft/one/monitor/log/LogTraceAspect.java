@@ -61,12 +61,16 @@ public class LogTraceAspect {
 		long begin = 0;
 		long end = 0;
 		long time = 0;
+	    String exceptionStackTrace = "";
 		try {
 			begin = System.currentTimeMillis();
 			result = pjp.proceed();
 			end = System.currentTimeMillis();
 			time = end - begin;
 			return result;
+		} catch (Throwable throwable) {
+			exceptionStackTrace = TraceUtils.getExceptionStackTrace(throwable);
+			throw throwable;
 		} finally {
 			// @Interfacetrace检查
 			if(!ClassUtils.isCglibProxyClass(targetClass)) {
@@ -85,6 +89,7 @@ public class LogTraceAspect {
 	                        methodTraceLog.setClassName(sourceClass.getName());
 	                        methodTraceLog.setInParam(JSON.toJSONString(pjp.getArgs()));
 	                        methodTraceLog.setOutParam(JSON.toJSONString(result));
+							methodTraceLog.setExceptionStackTrace(exceptionStackTrace);
 
 	                        UrlTraceLog urlTraceLog = TraceUtils.getUrlTraceLog();
 	                        urlTraceLog.addMethodTraceLog(methodTraceLog);

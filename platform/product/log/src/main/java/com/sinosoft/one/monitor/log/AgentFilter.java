@@ -9,6 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import com.alibaba.fastjson.JSON;
+import com.sinosoft.one.monitor.notification.NotificationServiceFactory;
+import org.apache.log4j.MDC;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -23,7 +27,6 @@ public class AgentFilter implements Filter {
 	private String urlId;
 
 	private static final String DEFAULT_EXCLUDE_EXTENSIONS = "jspx,js,css,gif,png,jpg,jpeg,bmp,html,htm,swf,jsp";
-	private String loginPage = "";
 	private String[] excludeExtensions = null;
 
 	public void destroy() {}
@@ -34,11 +37,16 @@ public class AgentFilter implements Filter {
 		if(isExclude(url)) {
 			filterChain.doFilter(request, response);
 		} else {
-			long beginTime = System.currentTimeMillis();
-	        doUrlTraceLogBegin(httpServletRequest);
-	        filterChain.doFilter(request, response);
-	        doUrlTraceLogEnd(httpServletRequest);
-			doUrlResponseTime(beginTime);
+			try {
+				long beginTime = System.currentTimeMillis();
+		        doUrlTraceLogBegin();
+		        filterChain.doFilter(request, response);
+		        doUrlTraceLogEnd(httpServletRequest);
+				doUrlResponseTime(beginTime);
+			} catch (Throwable throwable) {
+				doThrowable(httpServletRequest, throwable);
+				throw new ServletException(throwable);
+			}
 		}
 	}
 
@@ -48,7 +56,7 @@ public class AgentFilter implements Filter {
 		excludeExtensions = DEFAULT_EXCLUDE_EXTENSIONS.split(",");
     }
 
-    private void doUrlTraceLogBegin(HttpServletRequest request) {
+    private void doUrlTraceLogBegin() {
         if(logConfigs != null) {
 	        urlId = logConfigs.isMonitorUrl(url);
            if(urlId != null) {
@@ -68,7 +76,7 @@ public class AgentFilter implements Filter {
     }
 
 	private boolean isExclude(String url) {
-		String extension = "";
+		String extension;
 		int lastIndex = url.lastIndexOf(".");
 		if(lastIndex != -1) {
 			extension = url.substring(lastIndex + 1);
@@ -83,5 +91,11 @@ public class AgentFilter implements Filter {
 	private void doUrlResponseTime(long beginTime) {
 		long endTime = System.currentTimeMillis();
 		UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(url, urlId, endTime-beginTime));
+	}
+
+	private void doThrowable(HttpServletRequest request, Throwable throwable) {
+		ExceptionModel exceptionModel = new ExceptionModel(url, throwable.getMessage(), TraceUtils.getExceptionStackTrace(throwable));
+		exceptionModel.setRequestParams(JSON.toJSONString(request.getParameterMap()));
+		NotificationServiceFactory.buildNotificationService().notification(exceptionModel);
 	}
 }

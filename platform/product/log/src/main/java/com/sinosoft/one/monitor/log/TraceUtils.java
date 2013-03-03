@@ -74,6 +74,49 @@ public class TraceUtils {
 	public static String  getUrlId(){
 		return (String) MDC.get(URL_ID_KEY);
 	}
+
+	/**
+	 * 模仿throwable的printStackTrace
+	 *
+	 * @return
+	 */
+	public static String getExceptionStackTrace(Throwable throwable) {
+		StringBuffer sb = new StringBuffer();
+		if (throwable != null) {
+			try {
+				sb.append(throwable.toString() + "\n");
+				StackTraceElement causedTrace[] = throwable
+						.getStackTrace();
+				for (StackTraceElement trace : throwable.getStackTrace()) {
+					sb.append("\tat " + trace.toString() + "\n");
+				}
+				Throwable ourCause = throwable.getCause();
+				while (ourCause != null) {
+					StackTraceElement[] trace = ourCause.getStackTrace();
+					int m = trace.length - 1, n = causedTrace.length - 1;
+					while (m >= 0 && n >= 0 && trace[m].equals(causedTrace[n])) {
+						m--;
+						n--;
+					}
+					int framesInCommon = trace.length - 1 - m;
+
+					sb.append("Caused by: " + ourCause);
+					for (int i = 0; i <= m; i++)
+						sb.append("\tat " + trace[i]);
+					if (framesInCommon != 0)
+						sb.append("\t... " + framesInCommon + " more");
+					causedTrace = ourCause.getStackTrace();
+					ourCause = ourCause.getCause();
+				}
+				sb.toString();
+			} catch (Exception e) {
+				sb = new StringBuffer();
+				sb.append("分析异常时,产生异常: " + e.getMessage());
+			}
+		} else
+			sb.append("no exception reason");
+		return sb.toString();
+	}
 	
 }
 

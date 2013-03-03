@@ -58,6 +58,10 @@ public class MethodTraceLog {
 	 * 用户ID
 	 */
 	private String userId;
+	/**
+	 * 异常堆栈信息
+	 */
+	private String exceptionStackTrace;
 
     public MethodTraceLog() {
         userId = Loggables.getUserId();
@@ -146,7 +150,15 @@ public class MethodTraceLog {
         return getClassName() + "." + getMethodName();
     }
 
-    @Override
+	public String getExceptionStackTrace() {
+		return exceptionStackTrace;
+	}
+
+	public void setExceptionStackTrace(String exceptionStackTrace) {
+		this.exceptionStackTrace = exceptionStackTrace;
+	}
+
+	@Override
     public String toString() {
         return new ToStringBuilder(this)
             .append("id", id)

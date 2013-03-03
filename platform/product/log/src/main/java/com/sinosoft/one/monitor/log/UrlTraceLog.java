@@ -47,9 +47,9 @@ public class UrlTraceLog implements NotificationModel {
 	 */
     private String userIp;
 	/**
-	 * 请求信息
+	 * 请求参数信息
 	 */
-    private byte[] requestInfo;
+    private String requestParams;
 	/**
 	 * 用户ID
 	 */
@@ -117,31 +117,17 @@ public class UrlTraceLog implements NotificationModel {
         this.sessionId = sessionId;
     }
 
-    public HttpServletRequest getRequestInfo() {
-        return requestInfo == null ? null : (HttpServletRequest) JSON.parse(requestInfo);
-    }
+	public String getRequestParams() {
+		return requestParams;
+	}
 
-    public void setRequestInfo(byte[] requestInfo) {
-        this.requestInfo = requestInfo;
-    }
+	public void setRequestParams(String requestParams) {
+		this.requestParams = requestParams;
+	}
 
 	public void addMethodTraceLog(MethodTraceLog methodTraceLog) {
 		this.methodTraceLogList.add(methodTraceLog);
 	}
-
-    public Map<String, Object> toMap() throws Exception {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        paramMap.put("url", url);
-        paramMap.put("beginTime", beginTime);
-        paramMap.put("endTime", endTime);
-        paramMap.put("consumeTime", consumeTime);
-        paramMap.put("sessionId", sessionId);
-        paramMap.put("userId", userId);
-        paramMap.put("userIp", userIp);
-        paramMap.put("requestInfo", requestInfo);
-        return paramMap;
-    }
 
     public static UrlTraceLog beginTrace() {
         UrlTraceLog urlTraceLog = new UrlTraceLog();
@@ -156,7 +142,7 @@ public class UrlTraceLog implements NotificationModel {
         targetURLTraceLog.setConsumeTime(endDate.getTime() - targetURLTraceLog.getBeginTime().getTime());
         targetURLTraceLog.setSessionId(request.getSession(false).getId());
         targetURLTraceLog.setUserIp(request.getRemoteAddr());
-        targetURLTraceLog.setRequestInfo(JSON.toJSONBytes(request));
+        targetURLTraceLog.setRequestParams(JSON.toJSONString(request.getParameterMap()));
 	    NotificationServiceFactory.buildNotificationService().notification(targetURLTraceLog);
     }
 
