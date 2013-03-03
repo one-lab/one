@@ -4,7 +4,6 @@ import com.sinosoft.one.monitor.application.domain.MethodService;
 import com.sinosoft.one.monitor.application.domain.UrlService;
 import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
-import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -59,7 +58,7 @@ public class MethodManagerController {
         List<Method> methods=methodService.findAllMethodsOfUrl(url);
         Page page=new PageImpl(methods);
         Gridable<Method> gridable=new Gridable<Method>(page);
-        String cellString=new String("className,methodName,description,status,threshold");
+        String cellString=new String("className,methodName,description,status,threshold,operation");
         gridable.setIdField("id");
         gridable.setCellStringField(cellString);
         try {
@@ -157,25 +156,28 @@ public class MethodManagerController {
     /**
      * 更新Method的表单页面.
      */
-    @Get("updatemethod/{methodId}")
-    @Post("errorupdatemethod")
-    public String methodForm(@Param("methodId") String methodId, Invocation inv) {
+    @Get("updatemethod/{urlId}/{methodId}")
+    @Post("errorupdatemethod/{methodId}")
+    public String methodForm(@Param("urlId") String urlId,@Param("methodId") String methodId, Invocation inv) {
+        inv.getRequest().setAttribute("urlId",urlId);
         inv.addModel("method", methodService.findMethod(methodId));
         //页面所在路径application/manager/
-        return "addMethod";
+        return "modifyMethod";
     }
 
     /**
      * 更新Method.
      */
-    @Post("update/{id}")
-    public String updateMethod(@Validation(errorPath = "a:errorupdatemethod") Method method, Invocation inv) {
-        method.setModifierId(CurrentUserUtil.getCurrentUser().getId());
-        method.setModifyTime(new Date());
-        methodService.saveMethod(method);
-        //Method列表页面
-        //页面所在路径application/manager/
-        return "a:methodList";
+    @Post("updatemethod/{urlId}/{methodId}")
+    public String updateMethod(@Validation(errorPath = "a:errorupdatemethod/{methodId}") Method method, @Param("urlId") String urlId, @Param("methodId") String methodId,Invocation inv) {
+        //将urlId写回，managerMethod页面发送ajax请求时会用到
+        inv.getRequest().setAttribute("urlId",urlId);
+        //获得当前用户
+        /*method.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
+        //开发阶段固定用户id
+        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        methodService.updateMethodWithModifyInfo(methodId,method.getClassName(),method.getMethodName(),method.getDescription(),modifierId);
+        return "managerMethod";
     }
 
     /**

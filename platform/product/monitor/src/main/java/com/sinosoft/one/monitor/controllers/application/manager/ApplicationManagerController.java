@@ -27,7 +27,7 @@ import java.util.List;
  * Time: 下午10:14
  * To change this template use File | Settings | File Templates.
  */
-@Path("appManager")
+@Path("appmanager")
 public class ApplicationManagerController {
 
     Log logger= LogFactory.getLog(ApplicationManagerController.class);
@@ -38,20 +38,20 @@ public class ApplicationManagerController {
     /**
      * 获得所有的应用.
      */
-    @Get("appList")
-    @Post("appList")
+    @Get("applist")
+    @Post("applist")
     public String getAllApplication(Invocation inv) {
         List<Application> applications = applicationService.findAllApplication();
         inv.addModel("applications", applications);
-        //页面所在路径application/manager/
-        return "applicationList";
+        //应用性能列表页面
+        return "performance";
     }
 
     /**
      * 增加应用的表单页面.
      */
-    @Get("createApp")
-    @Post("errorCreateApp")
+    @Get("create")
+    @Post("errorcreate")
     public String createApplication(Invocation inv) {
         inv.addModel("application", new Application());
         //页面所在路径application/manager/
@@ -62,7 +62,7 @@ public class ApplicationManagerController {
     /**
      * 新增一个应用.
      */
-    @Post("addApp")
+    @Post("add")
     public String saveApplication(@Validation(errorPath = "a:errorCreateApp") Application application, Invocation inv) {
         //获得当前用户
         //测试时固定CreatorId
@@ -111,11 +111,11 @@ public class ApplicationManagerController {
     /**
      * 删除应用.
      */
-    @Post("delete/{id}")
+    @Get("delete/{id}")
     public String deleteApplication(@Param("id") String id, Invocation inv) {
         applicationService.deleteApplication(id);
         //页面所在路径application/manager/
-        return "(应用列表页面)";
+        return "r:/application/manager/appmanager/applist";
     }
 
     /**
