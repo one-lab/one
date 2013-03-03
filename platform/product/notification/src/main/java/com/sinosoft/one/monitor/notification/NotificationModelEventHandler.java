@@ -23,6 +23,7 @@ final class NotificationModelEventHandler implements EventHandler<NotificationMo
 		String responseStr = NotificationHttpSupport.post(url, new HashMap<String, String>() {
 			{
 				put("applicationId", notificationConfiguration.getApplicationId());
+				put("notificationType", notificationModel.notificationType().name());
 				put("data", notificationModel.data());
 			}
 		});
@@ -31,6 +32,8 @@ final class NotificationModelEventHandler implements EventHandler<NotificationMo
 			logger.warn("send data to url [" + url + "] has exception.");
 		} else if(NotificationResponseType.Success.name().equalsIgnoreCase(responseStr)) {
 			logger.debug("send data to url [" + url + "] success.");
+		} else {
+
 		}
 
 	}

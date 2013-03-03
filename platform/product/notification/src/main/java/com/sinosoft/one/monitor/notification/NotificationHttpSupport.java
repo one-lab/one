@@ -62,7 +62,7 @@ final class NotificationHttpSupport {
 			if("GET".equalsIgnoreCase(requestMethod)) {
 				url += "?" + content;
 			}
-			logger.debug("打开连接:" + url);
+			logger.debug("try open connection :" + url);
 			httpURLConnection.connect();
 
 			if("POST".equalsIgnoreCase(requestMethod)) {
@@ -73,14 +73,20 @@ final class NotificationHttpSupport {
 				//flush and close
 				out.flush();
 			}
-			reader = new BufferedReader(new InputStreamReader(
-					httpURLConnection.getInputStream()));
-			logger.debug("get response .");
-			String responseMessage = "";
-			while ((responseMessage = reader.readLine()) != null) {
-				responseStrBuilder.append(responseMessage);
+			int reponseCode = httpURLConnection.getResponseCode();
+			if(reponseCode == 200) {
+				reader = new BufferedReader(new InputStreamReader(
+						httpURLConnection.getInputStream()));
+				logger.debug("get response .");
+				String responseMessage = "";
+				while ((responseMessage = reader.readLine()) != null) {
+					responseStrBuilder.append(responseMessage);
+				}
+				return responseStrBuilder.toString();
+			} else if(reponseCode == 404) {
+				logger.warn("url not exist : [" + url + "]");
 			}
-			return responseStrBuilder.toString();
+			return "Exception";
 		} catch (Exception e) {
 			logger.error("connect url exception : [" + url + "]", e);
 			return "";

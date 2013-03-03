@@ -40,6 +40,6 @@ public class UrlResponseTimeQueue implements NotificationModel {
 
 	@Override
 	public String data() {
-		return JSON.toJSONString(urlResponseTimeList);
+		return JSON.toJSONStringWithDateFormat(urlResponseTimeList, "yyyy-MM-dd HH:mm:ss");
 	}
 }

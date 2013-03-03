@@ -19,7 +19,7 @@ public class ExceptionAspect {
      *
      * @param throwable
      */
-    @AfterThrowing
+    @AfterThrowing(pointcut = "execution(* com.sinosoft.one.mvc.test..*(..))", throwing="throwable")
     public void exceptionCatch(Throwable throwable) {
         Exceptions.handleThrowable(throwable);
     }

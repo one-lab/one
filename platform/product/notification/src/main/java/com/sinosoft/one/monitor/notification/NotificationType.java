@@ -7,9 +7,9 @@ package com.sinosoft.one.monitor.notification;
  * Time: 下午5:23
  */
 public enum NotificationType {
-	LOG("/"),
-	EXCEPTION(""),
-	URLRESPONSETIME("");
+	LOG("/application/agent/message"),
+	EXCEPTION("/application/agent/message"),
+	URLRESPONSETIME("/application/agent/message");
 
 	private String _url;
 	private NotificationType(String url) {

@@ -10,6 +10,7 @@ import com.lmax.disruptor.EventFactory;
  */
 public class MessageBaseEvent {
 	private MessageBase messageBase;
+	private String alarmId;
 
 	private MessageBaseEvent() {}
 
@@ -27,5 +28,13 @@ public class MessageBaseEvent {
 
 	public void setMessageBase(MessageBase messageBase) {
 		this.messageBase = messageBase;
+	}
+
+	public String getAlarmId() {
+		return alarmId;
+	}
+
+	public void setAlarmId(String alarmId) {
+		this.alarmId = alarmId;
 	}
 }

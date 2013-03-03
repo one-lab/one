@@ -1,0 +1,11 @@
+<aspectj>
+
+    <aspects>
+        <!-- declare two existing aspects to the weaver -->
+        <aspect name="com.sinosoft.one.monitor.exception.ExceptionAspect"/>
+    </aspects>
+
+    <weaver options="-verbose">
+
+    </weaver>
+</aspectj>

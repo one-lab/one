@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 
 /**
@@ -41,10 +42,11 @@ public class MessageBaseEventSupport {
 		ringBuffer = disruptor.start();
 	}
 
-	public void doMessageBase(MessageBase messageBase) {
+	public String doMessageBase(MessageBase messageBase) {
 		long sequence = ringBuffer.next();
 		MessageBaseEvent messageBaseEvent = ringBuffer.get(sequence);
 		messageBaseEvent.setMessageBase(messageBase);
 		ringBuffer.publish(sequence);
+		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
 }

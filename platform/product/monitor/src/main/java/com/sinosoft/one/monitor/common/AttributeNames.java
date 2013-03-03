@@ -8,6 +8,7 @@ package com.sinosoft.one.monitor.common;
  */
 public enum AttributeNames {
 	Response_Time,
+	Exception,
 	Availability,
 	Health,
 	CPU_Utilization,

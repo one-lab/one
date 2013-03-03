@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.log;
 
 
+import java.util.Date;
+
 /**
  * 响应时间.
  * User: carvin
@@ -24,7 +26,7 @@ public class UrlResponseTime {
 	/**
 	 * 记录时间
 	 */
-	private long recordTime = System.currentTimeMillis();
+	private Date recordTime = new Date();
 
 	public UrlResponseTime(String url, String urlId, long responseTime) {
 		this.url = url;

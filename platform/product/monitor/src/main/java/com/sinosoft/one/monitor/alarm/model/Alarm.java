@@ -57,7 +57,6 @@ public class Alarm  implements java.io.Serializable {
 
     public Alarm() {
     }
-
 	
     public Alarm(String id) {
         this.id = id;

@@ -16,6 +16,6 @@ public class MessageBaseEventHandler implements EventHandler<MessageBaseEvent> {
 	private AlarmMessageHandler alarmMessageHandler;
 	@Override
 	public void onEvent(MessageBaseEvent event, long sequence, boolean endOfBatch) throws Exception {
-		alarmMessageHandler.doMessage(event.getMessageBase());
+		alarmMessageHandler.doMessage(event.getMessageBase(), event.getAlarmId());
 	}
 }

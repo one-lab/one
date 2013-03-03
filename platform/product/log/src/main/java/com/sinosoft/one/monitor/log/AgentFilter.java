@@ -57,6 +57,7 @@ public class AgentFilter implements Filter {
 	        urlId = logConfigs.isMonitorUrl(url);
            if(urlId != null) {
 	           urlTraceLog = UrlTraceLog.beginTrace();
+	           urlTraceLog.setUrlId(urlId);
 	           TraceUtils.beginTrace(urlTraceLog, urlId);
            }
         } else {

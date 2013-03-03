@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.sinosoft.one.monitor.notification.NotificationModel;
 import com.sinosoft.one.monitor.notification.NotificationType;
 
+import java.util.Date;
+
 /**
  * 异常信息.
  * User: carvin
@@ -19,15 +21,19 @@ public class ExceptionModel implements NotificationModel {
 	/**
 	 * 记录时间
 	 */
-	private String recordTime;
+	private Date recordTime = new Date();
 	/**
 	 * 异常堆栈
 	 */
 	private String exceptionStackTrace;
+	/**
+	 * 异常描述
+	 */
+	private String exceptionDescription;
 
-	public ExceptionModel(String urlTraceId, String recordTime, String exceptionStackTrace) {
+	public ExceptionModel(String urlTraceId,  String exceptionDescription,  String exceptionStackTrace) {
 		this.urlTraceId = urlTraceId;
-		this.recordTime = recordTime;
+		this.exceptionDescription = exceptionDescription;
 		this.exceptionStackTrace = exceptionStackTrace;
 	}
 
@@ -39,12 +45,20 @@ public class ExceptionModel implements NotificationModel {
 		this.urlTraceId = urlTraceId;
 	}
 
-	public String getRecordTime() {
+	public Date getRecordTime() {
 		return recordTime;
 	}
 
-	public void setRecordTime(String recordTime) {
+	public void setRecordTime(Date recordTime) {
 		this.recordTime = recordTime;
+	}
+
+	public String getExceptionDescription() {
+		return exceptionDescription;
+	}
+
+	public void setExceptionDescription(String exceptionDescription) {
+		this.exceptionDescription = exceptionDescription;
 	}
 
 	public String getExceptionStackTrace() {
@@ -62,6 +76,6 @@ public class ExceptionModel implements NotificationModel {
 
 	@Override
 	public String data() {
-		return JSON.toJSONString(this);
+		return JSON.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss");
 	}
 }

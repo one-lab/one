@@ -1,14 +1,17 @@
-package com.sinosoft.one.monitor.log;
+package com.sinosoft.one.monitor.application.model;
 
-import com.alibaba.fastjson.JSON;
-import com.sinosoft.one.monitor.notification.NotificationModel;
-import com.sinosoft.one.monitor.notification.NotificationServiceFactory;
-import com.sinosoft.one.monitor.notification.NotificationType;
+
+import com.sinosoft.one.monitor.common.AlarmMessage;
+import com.sinosoft.one.monitor.common.AlarmSource;
+import com.sinosoft.one.monitor.common.MessageBase;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * URL 追踪类
@@ -17,7 +20,9 @@ import java.util.*;
  * Time: 上午1:57
  * 用于记录URL追踪信息.
  */
-public class UrlTraceLog implements NotificationModel {
+@Entity
+@Table(name = "GE_MONITOR_URL_TRACE_LOG")
+public class UrlTraceLog implements MessageBase {
 	/**
 	 * 主键ID
 	 */
@@ -55,16 +60,22 @@ public class UrlTraceLog implements NotificationModel {
 	 */
 	private String userId;
 	/**
-	 * URL ID
+	 * 业务场景追踪ID
 	 */
-	private String urlId;
+	private String traceId;
+	/**
+	 * 所属业务场景ID
+	 */
+	private String bizScenarioId;
+	/**
+	 * 告警信息ID
+	 */
+	private String alarmId;
+
 
 	List<MethodTraceLog> methodTraceLogList = new ArrayList<MethodTraceLog>();
 
-    public UrlTraceLog() {
-		userId = Loggables.getUserId();
-    }
-
+	@Column(name = "USER_IP")
     public String getUserIp() {
         return userIp;
     }
@@ -73,6 +84,9 @@ public class UrlTraceLog implements NotificationModel {
         this.userIp = userIp;
     }
 
+	@Id
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
     public String getId() {
         return id;
     }
@@ -81,6 +95,7 @@ public class UrlTraceLog implements NotificationModel {
         this.id = id;
     }
 
+	@Column(name = "URL")
     public String getUrl() {
         return url;
     }
@@ -89,6 +104,7 @@ public class UrlTraceLog implements NotificationModel {
         this.url = url;
     }
 
+	@Column(name = "BEGIN_TIME")
     public Date getBeginTime() {
         return beginTime;
     }
@@ -97,6 +113,7 @@ public class UrlTraceLog implements NotificationModel {
         this.beginTime = beginTime;
     }
 
+	@Column(name = "END_TIME")
     public Date getEndTime() {
         return endTime;
     }
@@ -105,6 +122,7 @@ public class UrlTraceLog implements NotificationModel {
         this.endTime = endTime;
     }
 
+	@Column(name = "CONSUME_TIME")
     public long getConsumeTime() {
         return consumeTime;
     }
@@ -113,6 +131,7 @@ public class UrlTraceLog implements NotificationModel {
         this.consumeTime = consumeTime;
     }
 
+	@Column(name = "SESSION_ID")
     public String getSessionId() {
         return sessionId;
     }
@@ -121,6 +140,7 @@ public class UrlTraceLog implements NotificationModel {
         this.sessionId = sessionId;
     }
 
+	@Column(name = "REQUEST_PARAMS")
 	public String getRequestParams() {
 		return requestParams;
 	}
@@ -129,36 +149,53 @@ public class UrlTraceLog implements NotificationModel {
 		this.requestParams = requestParams;
 	}
 
-	public String getUrlId() {
-		return urlId;
+	@Column(name = "URL_ID")
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUrlId(String urlId) {
-		this.urlId = urlId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
-	public void addMethodTraceLog(MethodTraceLog methodTraceLog) {
-		this.methodTraceLogList.add(methodTraceLog);
+	@Column(name = "TRACE_ID")
+	public String getTraceId() {
+		return traceId;
 	}
 
-    public static UrlTraceLog beginTrace() {
-        UrlTraceLog urlTraceLog = new UrlTraceLog();
-        urlTraceLog.setBeginTime(new Timestamp(System.currentTimeMillis()));
-        return urlTraceLog;
-    }
+	public void setTraceId(String traceId) {
+		this.traceId = traceId;
+	}
 
-    public static void endTrace(HttpServletRequest request, UrlTraceLog targetURLTraceLog) {
-        targetURLTraceLog.setUrl(request.getRequestURI());
-        Date endDate = new Date();
-        targetURLTraceLog.setEndTime(new Timestamp(System.currentTimeMillis()));
-        targetURLTraceLog.setConsumeTime(endDate.getTime() - targetURLTraceLog.getBeginTime().getTime());
-        targetURLTraceLog.setSessionId(request.getSession(false).getId());
-        targetURLTraceLog.setUserIp(request.getRemoteAddr());
-        targetURLTraceLog.setRequestParams(JSON.toJSONString(request.getParameterMap()));
-	    NotificationServiceFactory.buildNotificationService().notification(targetURLTraceLog);
-    }
+	@Column(name = "BIZ_SCENARIO_ID")
+	public String getBizScenarioId() {
+		return bizScenarioId;
+	}
 
-    @Override
+	public void setBizScenarioId(String bizScenarioId) {
+		this.bizScenarioId = bizScenarioId;
+	}
+
+	@Column(name = "ALARM_ID")
+	public String getAlarmId() {
+		return alarmId;
+	}
+
+	public void setAlarmId(String alarmId) {
+		this.alarmId = alarmId;
+	}
+
+	public void setMethodTraceLogList(List<MethodTraceLog> methodTraceLogList) {
+		this.methodTraceLogList = methodTraceLogList;
+	}
+
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@JoinColumn(name = "URL_TRACE_LOG_ID")
+	public List<MethodTraceLog> getMethodTraceLogList() {
+		return methodTraceLogList;
+	}
+
+	@Override
     public String toString() {
         return new ToStringBuilder(this)
             .append("id", id)
@@ -173,12 +210,12 @@ public class UrlTraceLog implements NotificationModel {
     }
 
 	@Override
-	public NotificationType notificationType() {
-		return NotificationType.LOG;
+	public List<AlarmMessage> alarmMessages() {
+		return null;
 	}
 
 	@Override
-	public String data() {
-		return JSON.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss");
+	public AlarmSource alarmSource() {
+		return AlarmSource.LOG;
 	}
 }

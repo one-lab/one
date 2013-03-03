@@ -53,4 +53,8 @@ public final class AlarmMessage {
 	public boolean isAvailabilityAlarm() {
 		return AttributeNames.Availability.name().equals(this.attributeName);
 	}
+
+	public boolean isExceptionAlarm() {
+		return AttributeNames.Health.name().equals(this.attributeName);
+	}
 }

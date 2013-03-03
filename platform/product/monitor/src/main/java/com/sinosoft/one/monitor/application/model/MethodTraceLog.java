@@ -1,7 +1,10 @@
-package com.sinosoft.one.monitor.log;
+package com.sinosoft.one.monitor.application.model;
 
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -11,6 +14,8 @@ import java.util.Date;
  * Date: 12-11-28
  * Time: 上午6:12
  */
+@Entity
+@Table(name = "GE_MONITOR_METHOD_TRACE_LOG")
 public class MethodTraceLog {
 	/**
 	 * 主键ID
@@ -19,7 +24,7 @@ public class MethodTraceLog {
 	/**
 	 * URL追踪ID
 	 */
-    private String urlTraceId;
+    private String urlTraceLogId;
 	/**
 	 * 方法名
 	 */
@@ -52,10 +57,14 @@ public class MethodTraceLog {
 	 * 记录时间
 	 */
     private Timestamp recordTime;
+	/**
+	 * 用户ID
+	 */
+	private String userId;
 
-    public MethodTraceLog() {
-
-    }
+	@Id
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
     public String getId() {
         return id;
     }
@@ -64,14 +73,16 @@ public class MethodTraceLog {
         this.id = id;
     }
 
-    public String getUrlTraceId() {
-        return urlTraceId;
+	@Column(name = "URL_TRACE_LOG_ID")
+    public String getUrlTraceLogId() {
+        return urlTraceLogId;
     }
 
-    public void setUrlTraceId(String urlTraceId) {
-        this.urlTraceId = urlTraceId;
+    public void setUrlTraceLogId(String urlTraceLogId) {
+        this.urlTraceLogId = urlTraceLogId;
     }
 
+	@Column(name = "METHOD_NAME")
     public String getMethodName() {
         return methodName;
     }
@@ -80,6 +91,7 @@ public class MethodTraceLog {
         this.methodName = methodName;
     }
 
+	@Column(name = "CLASS_NAME")
     public String getClassName() {
         return className;
     }
@@ -88,6 +100,7 @@ public class MethodTraceLog {
         this.className = className;
     }
 
+	@Column(name = "IN_PARAM")
     public String getInParam() {
         return inParam;
     }
@@ -96,6 +109,7 @@ public class MethodTraceLog {
         this.inParam = inParam;
     }
 
+	@Column(name = "OUT_PARAM")
     public String getOutParam() {
         return outParam;
     }
@@ -104,6 +118,7 @@ public class MethodTraceLog {
         this.outParam = outParam;
     }
 
+	@Column(name = "BEGIN_TIME")
     public Date getBeginTime() {
         return beginTime;
     }
@@ -112,6 +127,7 @@ public class MethodTraceLog {
         this.beginTime = beginTime;
     }
 
+	@Column(name = "END_TIME")
     public Timestamp getEndTime() {
         return endTime;
     }
@@ -120,6 +136,7 @@ public class MethodTraceLog {
         this.endTime = endTime;
     }
 
+	@Column(name = "CONSUME_TIME")
     public long getConsumeTime() {
         return consumeTime;
     }
@@ -128,6 +145,7 @@ public class MethodTraceLog {
         this.consumeTime = consumeTime;
     }
 
+	@Column(name = "RECORD_TIME")
     public Timestamp getRecordTime() {
         return recordTime;
     }
@@ -136,6 +154,7 @@ public class MethodTraceLog {
         this.recordTime = recordTime;
     }
 
+	@Transient
     public String getFullMethodName() {
         return getClassName() + "." + getMethodName();
     }
@@ -144,7 +163,7 @@ public class MethodTraceLog {
     public String toString() {
         return new ToStringBuilder(this)
             .append("id", id)
-            .append("urlTraceId", urlTraceId)
+            .append("urlTraceLogId", urlTraceLogId)
             .append("methodName", methodName)
             .append("className", className)
             .append("inParam", inParam)
@@ -153,6 +172,7 @@ public class MethodTraceLog {
             .append("endTime", endTime)
             .append("consumeTime", consumeTime)
             .append("recordTime", recordTime)
+            .append("userId", userId)
             .build();
     }
 }
