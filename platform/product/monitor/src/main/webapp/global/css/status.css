@@ -1,0 +1,10 @@
+.red_status{width:14px;height:14px;}
+.green_status{width:14px;height:14px;}
+.yellow_status{width:14px;height:14px;}
+.red_status{ background:url(../images/timeinfo/bussinessY2.gif) no-repeat}
+.green_status{ background:url(../images/timeinfo/bussinessY.gif)}
+.yellow_status{ background:url(../images/timeinfo/bussinessY3.gif)}
+
+.stuats_mark{margin-top:20px;}
+.stuats_mark ul li{ float:left;}
+.stuats_mark ul li div{ float:left;margin-right:15px;}

@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ShiroDbRealm extends AuthorizingRealm {
 
     @Autowired
-    private AccountService accountManager;
+    private AccountService accountService;
 
-    public void setAccountManager(AccountService accountManager) {
-        this.accountManager = accountManager;
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     public ShiroDbRealm() {
@@ -31,7 +31,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken authcToken) throws AuthenticationException {
         LoginToken token = (LoginToken) authcToken;
-        Account account = accountManager.findUserByLoginName(token.getLoginName());
+        Account account = accountService.findUserByLoginName(token.getLoginName());
         if (account != null) {
             if (account.getPassword() != null && !"".equals(account.getPassword().toString())) {
                 return new SimpleAuthenticationInfo(account, account.getPassword(), getName());
