@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.db.oracle.utils;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
+import com.sinosoft.one.monitor.db.oracle.utils.db.ClassLoaderUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,6 +66,7 @@ public class DBUtil4Monitor {
         Connection conn = null;
         try {
             if (conn == null || conn.isClosed()) {
+            	ClassLoaderUtil.loadClass(driver);
                 conn = DriverManager.getConnection(url, username, password);
             }
         } catch (SQLException e1) {
