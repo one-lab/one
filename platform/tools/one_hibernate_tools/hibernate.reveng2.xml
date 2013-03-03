@@ -24,7 +24,7 @@
     <!--<table-filter match-catalog="BAD" match-schema="SCHEMA" match-name=".*" exclude="true" />-->
 
     <!--<table-filter match-schema=".*" match-name="JPA.*" package="one.data.test"/>-->
-    <table-filter match-schema="TESTS.*" match-name="PRPC.*" package="com.sinosoft.one.data.test2.model"/>
+    <table-filter match-schema="KONGYZ.*" match-name="GE_MONITOR_ORACLE_.*" package="com.sinosoft.one.db.oracle"/>
     <!--<table-filter match-schema="dbo.*" match-name="Y.*" package="com.sinosoft.ydt.model"/>-->
     <!--<table-filter match-schema="dbo.*" match-name="GE.*" package="com.sinosoft.ydt.model"/>-->
     <!--<table-filter match-schema=".*" match-name="t.*" package="com.sinosoft.ydt.model"/>-->
