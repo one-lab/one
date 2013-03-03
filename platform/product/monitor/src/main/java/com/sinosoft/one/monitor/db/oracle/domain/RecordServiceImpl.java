@@ -35,8 +35,6 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public void insertLastEvent(Info info,Date date) {
         Lastevent lastevent = new Lastevent();
-
-
         //获取event数据
         DBUtil4Monitor.changeConnection(info.getId());
         SGAStateModel sgaStateModel = new SGAStateModel();
