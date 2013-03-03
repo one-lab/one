@@ -8,7 +8,6 @@ import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
 import com.sinosoft.one.monitor.application.repository.MethodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ public class ApplicationService {
      */
     @Transactional(readOnly = false)
     public void deleteApplication(String id) {
-        applicationRepository.delete(id);
+        applicationRepository.deleteApplicationById(id);
     }
 
     /**
@@ -74,7 +73,7 @@ public class ApplicationService {
      * 查询所有的应用.
      */
     public List<Application> findAllApplication() {
-        List<Application> applications = (List<Application>) applicationRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
+        List<Application> applications = (List<Application>) applicationRepository.findAllActiveApplication();
         return applications;
     }
 

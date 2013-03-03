@@ -38,27 +38,38 @@ public class BizScenarioManagerController {
     ApplicationService applicationService;
 
     /**
+     * 管理业务场景页面.
+     */
+    @Get("list/{appId}")
+    public String getAllApplication(@Param("appId") String appId,Invocation inv) {
+        inv.getRequest().setAttribute("appId",appId);
+        //管理业务场景页面
+        return "managerBizScenario";
+    }
+
+    /**
      * 获得所有的业务场景(响应按下“管理业务场景”按钮时的ajax请求).
      */
-    @Get({"bizscenariolist/{appId}","bizscenariolist"})
-    @Post("bizscenariolist/{appId}")
+    @Post({"bizscenariolist/{appId}","bizscenariolist"})
     public void getAllBizScenario(@Param("appId") String appId,Invocation inv) throws Exception {
         List<BizScenario> bizScenarioList=bizScenarioService.findUserNameAndBizScenario(applicationService.findApplication(appId).getBizScenarios());
-        List<BizScenario> bizScenarios=new ArrayList<BizScenario>();
-        for(BizScenario bizScenario:bizScenarioList){
-            bizScenario.setBizScenarioGrade(BizScenarioGrade.parseValue(bizScenario.getBizScenarioGrade()).getDisplayName());
-            bizScenarios.add(bizScenario);
-        }
-        /*List<BizScenario> bizScenarios = bizScenarioService.findAllBizScenario();*/
-        Page page=new PageImpl(bizScenarios);
-        Gridable<BizScenario> gridable=new Gridable<BizScenario>(page);
-        String cellString=new String("name,userName,createTime,bizScenarioGrade,operation");
-        gridable.setIdField("id");
-        gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-        } catch (Exception e) {
-            throw new Exception("json数据转换出错!",e);
+        if(bizScenarioList!=null){
+            List<BizScenario> bizScenarios=new ArrayList<BizScenario>();
+            for(BizScenario bizScenario:bizScenarioList){
+                bizScenario.setBizScenarioGrade(BizScenarioGrade.parseValue(bizScenario.getBizScenarioGrade()).getDisplayName());
+                bizScenarios.add(bizScenario);
+            }
+            /*List<BizScenario> bizScenarios = bizScenarioService.findAllBizScenario();*/
+            Page page=new PageImpl(bizScenarios);
+            Gridable<BizScenario> gridable=new Gridable<BizScenario>(page);
+            String cellString=new String("name,userName,createTime,bizScenarioGrade,operation");
+            gridable.setIdField("id");
+            gridable.setCellStringField(cellString);
+            try {
+                UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+            } catch (Exception e) {
+                throw new Exception("json数据转换出错!",e);
+            }
         }
     }
 

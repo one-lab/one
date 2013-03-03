@@ -1,10 +1,6 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
-import java.sql.Clob;
-
-import javax.persistence.EntityManagerFactory;
-
-import oracle.sql.CLOB;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,17 +21,35 @@ public class OsService {
 	private OsRepository osRepository;
 	@Autowired
 	private OsShellRepository osShellRepository;
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
+	
 	/**
 	 * 读取操作系统基本信息
 	 * @return
 	 */
-	public Os getOsBasic(String osId){
-		Os os=osRepository.findOne(osId);
-		return  os;
+	public List<Os> getOsBasicByIp(String ip){
+		return  osRepository.findOsbyIp(ip);
 	}
 
+	/**
+	 * 判断IP是否已有
+	 * @param ip
+	 * @return
+	 */
+	public boolean checkOsByIp(String ip){
+		int ipcount=osRepository.checkOsByIp(ip);
+		if(ipcount>0){
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * 读取操作系统基本信息
+	 * @return
+	 */
+	public Os getOsBasicById(String id){
+		Os os=osRepository.findOne(id);
+		return  os;
+	}
 	/**
 	 * 保存操作系统基本信息
 	 * @return
@@ -51,7 +65,7 @@ public class OsService {
 	}
 	
 	/**
-	 * 保存操作系统基本信息
+	 * 删除操作系统基本信息
 	 * @return
 	 */
 	public void deleteOsBasic(String osId){
@@ -66,14 +80,12 @@ public class OsService {
 	 * 读取操作系统基本脚本
 	 * @return
 	 */
-	public String getOsShell(String type){
-		OsShell osShell=osShellRepository.findShellByType(type);
-		return osShell.getTemplate();
+	public List<OsShell> getOsShell(){
+		return osShellRepository.findShell();
 	}
 	
 	/**
-	 * 读取操作系统基本脚本
-	 * @return
+	 * 保存操作系统基本脚本
 	 */
 	public void saveShell(String type,String template){
 		OsShell osShell=new OsShell();

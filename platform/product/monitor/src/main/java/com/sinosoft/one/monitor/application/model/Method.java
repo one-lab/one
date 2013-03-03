@@ -199,6 +199,14 @@ public class Method implements java.io.Serializable {
         this.urls.add(url);
     }
 
+    @Transient
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
 
     @Override
     public String toString() {

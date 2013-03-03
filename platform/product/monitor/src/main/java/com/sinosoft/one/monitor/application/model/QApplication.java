@@ -1,15 +1,11 @@
 package com.sinosoft.one.monitor.application.model;
 
-import com.mysema.query.types.Path;
-import com.mysema.query.types.PathMetadata;
-import com.mysema.query.types.path.DateTimePath;
-import com.mysema.query.types.path.EntityPathBase;
-import com.mysema.query.types.path.ListPath;
-import com.mysema.query.types.path.StringPath;
+import static com.mysema.query.types.PathMetadataFactory.*;
+
+import com.mysema.query.types.*;
+import com.mysema.query.types.path.*;
 
 import javax.annotation.Generated;
-
-import static com.mysema.query.types.PathMetadataFactory.forVariable;
 
 
 /**

@@ -167,7 +167,7 @@ public class Application implements java.io.Serializable {
         this.status = status;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "application")
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY, mappedBy = "application")
     public List<BizScenario> getBizScenarios() {
         return this.bizScenarios;
     }

@@ -1,12 +1,19 @@
 package com.sinosoft.one.monitor.controllers;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.sinosoft.one.monitor.os.linux.domain.OsAvailableServcie;
+import com.sinosoft.one.monitor.os.linux.domain.OsProcessService;
+import com.sinosoft.one.monitor.os.linux.domain.OsService;
+import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsShell;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
@@ -14,7 +21,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 @Path
 public class OsAgentController {
 	private static String ID = "";
-	public static int pollingTime = 0;
+	public static String pollingTime = "0";
 	public static String osCmd_vmstat = "";
 	public static String osCmd_ramInfo = "";
 	public static String osCmd_diskInfo = "";
@@ -24,11 +31,21 @@ public class OsAgentController {
 	public static String ip = "";
 	public static Map<String, String> shellAndIp = new HashMap<String, String>();
 
-	public static String vmstat = "";
+	public static String cpuInfo = "";
 	public static String ramInfo = "";
 	public static String diskInfo = "";
 	public static String agentIp = "";
-	public static Map<String, String> osAgentInfo = new HashMap<String, String>();
+	public static Map<String, String[]> osAgentInfo = new HashMap<String, String[]>();
+
+	/**
+	 * 系统基本信息几脚本service
+	 */
+	@Autowired
+	private OsService osService;
+	
+	@Autowired
+	private OsProcessService osProcessService;
+
 
 	/**
 	 * 响应Angent，发送基本信息的脚本
@@ -36,31 +53,54 @@ public class OsAgentController {
 	@Post("recieveOsInfo")
 	public void recieveOsInfo(Invocation inv) {
 		try {
-			InputStream is = null;
-			is = OsAgentController.class.getClassLoader().getResourceAsStream(
-					"monitorInfo.properties");
-			Properties properties = new Properties();
-			properties.load(is);
-			pollingTime = new Integer(properties.getProperty("pollingTime"));
-			osCmd_vmstat = properties.getProperty("osCmd_vmstat");
-			osCmd_ramInfo = properties.getProperty("osCmd_ramInfo");
-			osCmd_getIp = properties.getProperty("osCmd_getIp");
-			osCmd_diskInfo = properties.getProperty("osCmd_diskInfo");
-			ip = properties.getProperty("ip");
 			osAgentInfo = inv.getRequest().getParameterMap();
-			osAgentIp = osAgentInfo.get("ip");
-			if (ip.equals(osAgentIp)) {
-				shellAndIp.put("osCmd_vmstat", osCmd_vmstat);
-				shellAndIp.put("osCmd_ramInfo", osCmd_ramInfo);
-				shellAndIp.put("osCmd_getIp", osCmd_getIp);
-				shellAndIp.put("osCmd_diskInfo", osCmd_diskInfo);
-				shellAndIp.put("ID", "1234567");
-				ObjectOutputStream oos = new ObjectOutputStream(inv
-						.getResponse().getOutputStream());
-				oos.writeObject(shellAndIp);
-				oos.flush();
-				oos.close();
+			osAgentIp = getValue("ip", osAgentInfo);
+			List<Os> oss = osService.getOsBasicByIp(osAgentIp);
+			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse()
+					.getOutputStream());
+			System.out.println(getValue("ID", osAgentInfo));
+			for (Os os : oss) {
+				if(os.getIpAddr().toString().endsWith(getValue("ip", osAgentInfo))||os.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
+					shellAndIp.put("ID", os.getOsInfoId());
+					shellAndIp.put("pollingTime", os.getIntercycleTime()+"");
+					List<OsShell>osShells=osService.getOsShell();
+					for (OsShell osShell : osShells) {
+						shellAndIp.put(osShell.getType(),osShell.getTemplate());
+					}
+					
+					System.out.println("正确返回");
+					break;
+				}else {
+					shellAndIp.put("ID", null);
+				}
 			}
+			oos.writeObject(shellAndIp);
+			
+//			if(null!=getValue("ID", osAgentInfo)&&!"".toString().equals(getValue("ID", osAgentInfo))){
+//				for (Os os : oss) {
+//					if(os.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
+//						shellAndIp.put("ID", os.getOsInfoId());
+//						shellAndIp.put("pollingTime", os.getIntercycleTime()+"");
+//						List<OsShell>osShells=osService.getOsShell();
+//						for (OsShell osShell : osShells) {
+//							shellAndIp.put(osShell.getType(),osShell.getTemplate());
+//						}
+//						oos.writeObject(shellAndIp);
+//						System.out.println("正确返回");
+//					}
+//				}
+//			}else {
+//				shellAndIp.put("ID", null);
+//				oos.writeObject(shellAndIp);
+//			}
+			
+//			for (Os o : oss) {
+//				if(o.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
+//					
+//				}
+//			}
+			oos.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -73,20 +113,46 @@ public class OsAgentController {
 	@Post("recieveOsResult")
 	public void recieveOsResult(Invocation inv) {
 		try {
-			osAgentInfo = inv.getRequest().getParameterMap();
-			ID = "1234567";
-			osAgentID = osAgentInfo.get("ID");
-			vmstat = osAgentInfo.get("vmstat");
-			ramInfo = osAgentInfo.get("ramInfo");
-			diskInfo = osAgentInfo.get("diskInfo");
-			if (ID.equals(osAgentID)) {
-				ObjectOutputStream oos = new ObjectOutputStream(inv
-						.getResponse().getOutputStream());
+			osAgentInfo =  inv.getRequest().getParameterMap();
+			osAgentID = getValue("ID", osAgentInfo);
+			Os os = osService.getOsBasicById(osAgentID);
+			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse().getOutputStream());
+			if(os!=null){
+				cpuInfo = getValue("cpuInfo", osAgentInfo);
+				System.out.println("收集返回的CPU："+cpuInfo);
+				ramInfo = getValue("ramInfo", osAgentInfo);
+				System.out.println("收集返回的内存："+ramInfo);
+				diskInfo = getValue("diskInfo", osAgentInfo);
+				System.out.println("收集返回的磁盘："+diskInfo);
+				String respondTime = getValue("respondTime", osAgentInfo);
+				System.out.println("响应时间"+respondTime);
 				oos.writeObject("继续监控");
-				oos.close();
+				//采样时间
+				Date sampleTime=new Date();
+				System.out.println(sampleTime.toLocaleString()+"1111111111111111111111");
+				//保存采样数据
+				osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, sampleTime);
+				//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
+				osProcessService.savaAvailableSampleData(os.getOsInfoId(), sampleTime, os.getIntercycleTime(), "1");
+				
+			}else {
+				oos.writeObject("停止监控");
+				Date date=new Date();
+				//保存不可用状态起始点 状态码“0”
+				osProcessService.savaAvailableSampleData(os.getOsInfoId(), date,os.getIntercycleTime(),  "0");
 			}
+			oos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	public String getValue(String key, Map<String, String[]> osInfo) {
+		return osInfo.get(key)[0];
+	}
+//	public static void main(String[] args) {
+//		System.out.println(new Date());
+//	}
 }

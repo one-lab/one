@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * OsCpu.
@@ -69,6 +71,8 @@ public class OsCpu  implements java.io.Serializable {
     @Id 
     
     @Column(name="ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
     public String getId() {
     return this.id;
     }
@@ -85,8 +89,7 @@ public class OsCpu  implements java.io.Serializable {
     public void setOs(Os os) {
     this.os = os;
     }
-    @Temporal(TemporalType.DATE)
-    @Column(name="SAMPLE_DATE", length=7)
+    @Column(name="SAMPLE_DATE")
     public Date getSampleDate() {
     return this.sampleDate;
     }
