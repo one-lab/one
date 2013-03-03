@@ -14,7 +14,10 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
 
     Application findByApplicationName(String applicationName);
 
-    Application findByApplicationNameAndApplicationIpAndApplicationPort(@Param("applicationName") String applicationName, @Param("applicationIp") String applicationIp, @Param("applicationPort") String applicationPort);
+    @SQL("select * from GE_MONITOR_APPLICATION a where a.STATUS='1' order by a.APPLICATION_NAME")
+    List<Application> findAllActiveApplication();
+
+    Application findByApplicationNameAndApplicationIpAndApplicationPort(@Param("applicationName") String applicationName,@Param("applicationIp") String applicationIp,@Param("applicationPort") String applicationPort);
 
     @SQL("select * from GE_MONITOR_URL a where a.id in (select distinct b.URL_ID from GE_MONITOR_BIZ_SCENARIO_URL b " +
             "right join GE_MONITOR_BIZ_SCENARIO c on b.BIZ_SCENARIO_ID=:bizScenarioIds)")
@@ -23,5 +26,8 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
     @SQL("select * from GE_MONITOR_METHOD a where a.id in (select b.METHOD_ID from GE_MONITOR_URL_METHOD b " +
             "right join GE_MONITOR_URL c on b.URL_ID=:urlId)")
     List<Method> selectAllMethodsWithUrlId(@Param("urlId") String urlId);
+
+    @SQL("update GE_MONITOR_APPLICATION a set a.STATUS='0' where a.ID=?1")
+    void deleteApplicationById(@Param("appId") String appId);
 }
 

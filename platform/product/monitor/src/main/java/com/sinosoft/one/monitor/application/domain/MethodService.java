@@ -106,4 +106,8 @@ public class MethodService {
     public List<Method> findAllMethodsOfUrl(Url url) {
         return methodRepository.selectMethodsOfUrlById(url.getId());
     }
+
+    public void updateMethodWithModifyInfo(String methodId, String className, String methodName, String description, String modifierId) {
+        methodRepository.updateMethod(methodId,className,methodName,description,modifierId);
+    }
 }
