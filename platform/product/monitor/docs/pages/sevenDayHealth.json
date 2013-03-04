@@ -7,8 +7,7 @@
 				"今天",
 				"100%",
 				"0 秒",
-				"0 秒",
-				"19 小时 26 分 34 秒"
+				"<div style='width:80%;'><div class='bg_bar' style='width:180px;'><div class='red_bar' style='width:20%'></div></div></div><div>20%</div>"
 			]
         },{
 			"id":"1",
@@ -16,8 +15,7 @@
 				"今天",
 				"100%",
 				"0 秒",
-				"0 秒",
-				"19 小时 26 分 34 秒"
+				"<div style='width:80%;'><div class='bg_bar' style='width:180px;'><div class='red_bar' style='width:20%'></div></div></div><div>20%</div>"
 			]
         },{
 			"id":"1",
@@ -25,8 +23,7 @@
 				"今天",
 				"100%",
 				"0 秒",
-				"0 秒",
-				"19 小时 26 分 34 秒"
+				"<div style='width:80%;'><div class='bg_bar' style='width:180px;'><div class='red_bar' style='width:20%'></div></div></div><div>20%</div>"
 			]
         }
     ]
