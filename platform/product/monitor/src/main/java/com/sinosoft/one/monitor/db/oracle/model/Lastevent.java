@@ -1,10 +1,18 @@
 package com.sinosoft.one.monitor.db.oracle.model;
-// Generated 2013-2-27 18:10:19 by One Data Tools 1.0.0
+// Generated 2013-3-4 21:44:43 by One Data Tools 1.0.0
 
 
 import java.util.Date;
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -17,14 +25,10 @@ import org.hibernate.annotations.GenericGenerator;
 )
 public class Lastevent  implements java.io.Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -7132247988935876283L;
+	private static final long serialVersionUID = 1L;
 	/**
     * 主键ID.
     */
-
     private String id;
     /**
     * 数据库ID.
@@ -43,10 +47,12 @@ public class Lastevent  implements java.io.Serializable {
     */
     private Double bufferHitRate;
     /**
-        */
+    * 数据字典命中率.
+    */
     private Double dickHitRate;
     /**
-        */
+    * 缓存库命中率.
+    */
     private Double bufferLibHitRate;
     /**
     * 记录时间.
@@ -64,7 +70,7 @@ public class Lastevent  implements java.io.Serializable {
     @Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
-    @Column(name="id", unique=true, length=32)
+    @Column(name="ID", unique=true, length=32)
     public String getId() {
     return this.id;
     }
@@ -73,7 +79,7 @@ public class Lastevent  implements java.io.Serializable {
     this.id = id;
     }
     @ManyToOne(fetch=FetchType.LAZY)
-        @JoinColumn(name="database_id")
+        @JoinColumn(name="DATABASE_ID")
     public Info getInfo() {
     return this.info;
     }
@@ -82,7 +88,7 @@ public class Lastevent  implements java.io.Serializable {
     this.info = info;
     }
     
-    @Column(name="active_count")
+    @Column(name="ACTIVE_COUNT")
     public int getActiveCount() {
     return this.activeCount;
     }
@@ -91,7 +97,7 @@ public class Lastevent  implements java.io.Serializable {
     this.activeCount = activeCount;
     }
     
-    @Column(name="connect_time")
+    @Column(name="CONNECT_TIME")
     public long getConnectTime() {
     return this.connectTime;
     }
@@ -100,7 +106,7 @@ public class Lastevent  implements java.io.Serializable {
     this.connectTime = connectTime;
     }
     
-    @Column(name="buffer_hit_rate")
+    @Column(name="BUFFER_HIT_RATE")
     public Double getBufferHitRate() {
     return this.bufferHitRate;
     }
@@ -109,7 +115,7 @@ public class Lastevent  implements java.io.Serializable {
     this.bufferHitRate = bufferHitRate;
     }
     
-    @Column(name="dick_hit_rate")
+    @Column(name="DICK_HIT_RATE")
     public Double getDickHitRate() {
     return this.dickHitRate;
     }
@@ -118,7 +124,7 @@ public class Lastevent  implements java.io.Serializable {
     this.dickHitRate = dickHitRate;
     }
     
-    @Column(name="buffer_lib_hit_rate")
+    @Column(name="BUFFER_LIB_HIT_RATE")
     public Double getBufferLibHitRate() {
     return this.bufferLibHitRate;
     }
@@ -127,7 +133,7 @@ public class Lastevent  implements java.io.Serializable {
     this.bufferLibHitRate = bufferLibHitRate;
     }
     @Temporal(TemporalType.DATE)
-    @Column(name="record_time")
+    @Column(name="RECORD_TIME")
     public Date getRecordTime() {
     return this.recordTime;
     }

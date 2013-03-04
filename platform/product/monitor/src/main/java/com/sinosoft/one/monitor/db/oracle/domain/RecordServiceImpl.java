@@ -9,10 +9,13 @@ import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
+import com.sinosoft.one.monitor.utils.DateUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,7 @@ public class RecordServiceImpl implements RecordService {
     private EventStaRepository eventStaRepository;
     @Autowired
     private LasteventRepository lasteventRepository;
+    private static Date lastDate = new Date(0);
     @Override
     public void insertLastEvent(Info info,Date date) {
         Lastevent lastevent = new Lastevent();
@@ -51,17 +55,76 @@ public class RecordServiceImpl implements RecordService {
         lastevent.setInfo(info);
         lastevent.setRecordTime(date);
         lasteventRepository.save(lastevent);
-        
-        
+        Calendar calender = DateUtil.getCalender();
+        calender.setTime(date);
+        Calendar newCalender = DateUtil.getCalender();
+        newCalender.set(
+        		calender.get(Calendar.YEAR), 
+        		calender.get(Calendar.MONTH), 
+        		calender.get(Calendar.DATE));
+        Date newDate = newCalender.getTime();
+        if(lastDate.getTime() != newDate.getTime()){
+        	insertEventSta(lastevent,newDate);
+        	lastDate = newDate;
+        }else{
+        	updateEventSta(lastevent,lastDate);
+        }
     }
 
-    @Override
-    public void insertEventSta(Info info,Date date) {
-        EventSta eventSta = new EventSta();
-
-        eventStaRepository.save(eventSta) ;
+    private void insertEventSta(Lastevent lastevent,Date inserTime) {
+    	//连接时间统计
+    	EventSta connectTimeSta = new EventSta();
+    	connectTimeSta.setInfo(lastevent.getInfo());
+    	connectTimeSta.setEventType("1");
+    	connectTimeSta.setAvg(lastevent.getConnectTime()/1.0);
+    	connectTimeSta.setMax(lastevent.getConnectTime()/1.0);
+    	connectTimeSta.setMin(lastevent.getConnectTime()/1.0);
+    	connectTimeSta.setEventRecordTime(inserTime);
+    	//连接数统计记录
+        EventSta activeCountSta = new EventSta();
+        activeCountSta.setInfo(lastevent.getInfo());
+        activeCountSta.setEventType("2");
+        activeCountSta.setAvg(lastevent.getActiveCount()/1.0);
+        activeCountSta.setMax(lastevent.getActiveCount()/1.0);
+        activeCountSta.setMin(lastevent.getActiveCount()/1.0);
+        activeCountSta.setEventRecordTime(inserTime);
+        //缓冲区击中率统计记录
+        EventSta bufferHitRateSta = new EventSta();
+        bufferHitRateSta.setInfo(lastevent.getInfo());
+        bufferHitRateSta.setEventType("3");
+        bufferHitRateSta.setAvg(lastevent.getBufferHitRate()/1.0);
+        bufferHitRateSta.setMax(lastevent.getBufferHitRate()/1.0);
+        bufferHitRateSta.setMin(lastevent.getBufferHitRate()/1.0);
+        bufferHitRateSta.setEventRecordTime(inserTime);
+        eventStaRepository.save(activeCountSta) ;
     }
-
+    private void updateEventSta(Lastevent lastevent,Date inserTime){
+    	//连接时间统计
+    	EventSta connectTimeSta = eventStaRepository.findConnectTimeSta(inserTime);
+    	connectTimeSta.setInfo(lastevent.getInfo());
+    	connectTimeSta.setEventType("1");
+    	connectTimeSta.setAvg(lastevent.getConnectTime()/1.0);
+    	connectTimeSta.setMax(lastevent.getConnectTime()/1.0);
+    	connectTimeSta.setMin(lastevent.getConnectTime()/1.0);
+    	connectTimeSta.setEventRecordTime(inserTime);
+    	//连接数统计记录
+        EventSta activeCountSta = eventStaRepository.findActiveCountSta(inserTime);
+        activeCountSta.setInfo(lastevent.getInfo());
+        activeCountSta.setEventType("2");
+        activeCountSta.setAvg(lastevent.getActiveCount()/1.0);
+        activeCountSta.setMax(lastevent.getActiveCount()/1.0);
+        activeCountSta.setMin(lastevent.getActiveCount()/1.0);
+        activeCountSta.setEventRecordTime(inserTime);
+        //缓冲区击中率统计记录
+        EventSta bufferHitRateSta = eventStaRepository.findHitRateSta(inserTime);
+        bufferHitRateSta.setInfo(lastevent.getInfo());
+        bufferHitRateSta.setEventType("3");
+        bufferHitRateSta.setAvg(lastevent.getBufferHitRate()/1.0);
+        bufferHitRateSta.setMax(lastevent.getBufferHitRate()/1.0);
+        bufferHitRateSta.setMin(lastevent.getBufferHitRate()/1.0);
+        bufferHitRateSta.setEventRecordTime(inserTime);
+        eventStaRepository.save(activeCountSta) ;
+    }
     @Override
     public void insertAva(Info info,Date date) {
         Ava ava = new Ava();
@@ -77,7 +140,6 @@ public class RecordServiceImpl implements RecordService {
         avaRepository.save(ava);
     }
 
-    @Override
     public void insertAvaSta(Info info,Date date) {
         AvaSta avaSta = new AvaSta();
 

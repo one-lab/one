@@ -47,15 +47,15 @@ public class OracleStaInfoDetailModel {
     /**
      * 最小平均值
      */
-    private int minAvg;
+    private double minAvg;
     /**
      * 最大平均值
      */
-    private int maxAvg;
+    private double maxAvg;
     /**
      * 平均值
      */
-    private int avg;
+    private double avg;
     /**
      * 阈值（严重）
      */
@@ -93,27 +93,27 @@ public class OracleStaInfoDetailModel {
         this.yName = yName;
     }
 
-    public int getMinAvg() {
+    public double getMinAvg() {
         return minAvg;
     }
 
-    public void setMinAvg(int minAvg) {
+    public void setMinAvg(double minAvg) {
         this.minAvg = minAvg;
     }
 
-    public int getMaxAvg() {
+    public double getMaxAvg() {
         return maxAvg;
     }
 
-    public void setMaxAvg(int maxAvg) {
+    public void setMaxAvg(double maxAvg) {
         this.maxAvg = maxAvg;
     }
 
-    public int getAvg() {
+    public double getAvg() {
         return avg;
     }
 
-    public void setAvg(int avg) {
+    public void setAvg(double avg) {
         this.avg = avg;
     }
 
