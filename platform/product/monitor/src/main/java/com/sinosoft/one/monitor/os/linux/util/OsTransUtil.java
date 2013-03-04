@@ -149,7 +149,7 @@ public class OsTransUtil {
 		Object ave = null;
 		if (dividend.getClass().equals(Double.class)) {
 			Double d = (Double) dividend;
-			ave = new BigDecimal(d).divide(new BigDecimal(divisor),10,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+			ave = new BigDecimal(d).divide(new BigDecimal(divisor),2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
 		}
 		if (dividend.getClass().equals(Long.class)) {
 			Long d = (Long) dividend;

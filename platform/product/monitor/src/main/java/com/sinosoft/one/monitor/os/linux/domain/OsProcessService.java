@@ -45,14 +45,19 @@ public class OsProcessService {
 		osRamService.saveRam(osInfoId,ramInfo , sampleTime);//保存内存采样
 		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存响应时间采样
 		//更新统计记录
-		List<OsStati> OsStatis=osDataMathService.statiOneHourRam(osInfoId, sampleTime);//更新内存统计
-		OsStati cpuOsStati=osDataMathService.statiOneHourCpu(osInfoId, sampleTime);//更新CPU统计
-		OsStati diskOsStati=osDataMathService.statiOneHourDisk(osInfoId, sampleTime);//更行磁盘统计
-		OsStati respondOsStati=osDataMathService.statiOneHourRespond(osInfoId, sampleTime);//更行响应时间统计
-		OsStatis.add(cpuOsStati);
-		OsStatis.add(diskOsStati);
-		OsStatis.add(respondOsStati);
-		osStatiService.saveStatiOneHourList(OsStatis);
+//		List<OsStati> OsStatis=osDataMathService.statiOneHourRam(osInfoId, sampleTime);//更新内存统计
+//		OsStati cpuOsStati=osDataMathService.statiOneHourCpu(osInfoId, sampleTime);//更新CPU统计
+//		OsStati diskOsStati=osDataMathService.statiOneHourDisk(osInfoId, sampleTime);//更行磁盘统计
+//		OsStati respondOsStati=osDataMathService.statiOneHourRespond(osInfoId, sampleTime);//更行响应时间统计
+		
+		osDataMathService.statiOneHourRam(osInfoId, sampleTime);//更新内存统计
+		osDataMathService.statiOneHourCpu(osInfoId, sampleTime);//更新CPU统计
+		osDataMathService.statiOneHourDisk(osInfoId, sampleTime);//更行磁盘统计
+		osDataMathService.statiOneHourRespond(osInfoId, sampleTime);//更行响应时间统计
+//		OsStatis.add(cpuOsStati);
+//		OsStatis.add(diskOsStati);
+//		OsStatis.add(respondOsStati);
+//		osStatiService.saveStatiOneHourList(OsStatis);
 		//删除24小时前的记录
 		Calendar c2  = Calendar.getInstance();
 		c2.set(Calendar.DATE, sampleTime.getDate());
@@ -89,6 +94,8 @@ public class OsProcessService {
 		Calendar c2  = Calendar.getInstance();
 		c2.set(Calendar.DATE, sampleTime.getDate());
 		c2.add(Calendar.HOUR_OF_DAY,-24);
+		c2.set(Calendar.MINUTE, 0);
+		c2.set(Calendar.SECOND, 0);
 		Date deleteTime= c2.getTime();
 		osAvailableServcie.deleteTempByLessThanTime(osInfoId, deleteTime);
 //		if(osAvailabletemp.getSampleDate().getDate()<sampleTime.getDate()){

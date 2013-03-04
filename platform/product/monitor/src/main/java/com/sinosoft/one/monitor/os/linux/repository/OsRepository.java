@@ -12,7 +12,7 @@ import com.sinosoft.one.monitor.os.linux.model.Os;
 public interface OsRepository extends PagingAndSortingRepository<Os, String> {
 	
 	@Query("from Os where ipAddr= ?1")
-    public List<Os> findOsbyIp(String ipAddr);
+    public Os findOsbyIp(String ipAddr);
 	
 	@SQL("select count(*) from GE_MONITOR_OS where IP_ADDR= ?1")
 	public int checkOsByIp(String ipAddr);

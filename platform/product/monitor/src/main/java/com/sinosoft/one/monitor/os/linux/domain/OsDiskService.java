@@ -29,7 +29,7 @@ public class OsDiskService {
 	 * 保存磁盘采集数据
 	 * @param disk
 	 */
-	public void saveDisk(String osInfoId, String diskInfo ,Date sampleTime){
+	public boolean saveDisk(String osInfoId, String diskInfo ,Date sampleTime){
 		List<OsDisk> osDisks=OsTransUtil.getDiskInfo(diskInfo);
 		Os os=new Os();
 		for (OsDisk osDisk : osDisks) {
@@ -38,6 +38,7 @@ public class OsDiskService {
 			osDisk.setSampleDate(sampleTime);
 		}
 		osDiskRepository.save(osDisks);
+		return true;
 	}
 	
 	/**
@@ -58,5 +59,27 @@ public class OsDiskService {
 	 */
 	public void deleteDiskByLessThanTime(String osInfoId,Date sampleTime){
 		osDiskRepository.deleteDiskByLessThanTime(osInfoId, sampleTime);
+	}
+	
+	
+	/**
+	 * 获取最大磁盘
+	 * @param osInfoId
+	 * @param begin
+	 * @param end
+	 * @return
+	 */
+	public  String getMaxDiskUtilZation(String osInfoId,Date begin,Date end){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osDiskRepository.findMaxDiskUtilZation(osInfoId,simpleDateFormat.format(begin),simpleDateFormat.format(end) , OsUtil.ORCL_DATEFORMATE);
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public  String getMinDiskUtilZation(String osInfoId,Date begin,Date end){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osDiskRepository.findMinDiskUtilZation(osInfoId,simpleDateFormat.format(begin),simpleDateFormat.format(end) , OsUtil.ORCL_DATEFORMATE);
 	}
 }
