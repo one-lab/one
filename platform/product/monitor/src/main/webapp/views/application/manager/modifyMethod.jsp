@@ -55,6 +55,39 @@
             msgSuccess("系统消息", "操作成功，监视器已保存！");
             window.location.href="manageMethod.html";
         }
+        /*校验数据*/
+        function isValid(form) {
+            String.prototype.trim = function(){
+                return this.replace(/(^\s*|\s*$)/g,'');
+            }
+            if (form.className.value==null||form.className.value.trim()=="") {
+                alert("全类名不能为空或者空格！");
+                return false;
+            }
+            /*var cName="^[A-Za-z0-9.]+$";
+            if (form.className.value.match(cName)) {
+                alert("全类名必须是英文，数字，“.”（或者以上的组合）！");
+                return false;
+            }*/
+            if (form.className.value.length>500) {
+                alert("全类名长度不能超过500！");
+                return false;
+            }
+            if (form.methodName.value==null||form.methodName.value.trim()=="") {
+                alert("方法名不能为空或者空格！");
+                return false;
+            }
+            /*var mName="^[A-Za-z0-9(),]+$";
+            if (form.methodName.value.match(mName)) {
+                alert("方法名必须是英文,(),“,”或数字（或者以上的组合）！");
+                return false;
+            }*/
+            if (form.methodName.value.length>100) {
+                alert("方法名长度不能超过300！");
+                return false;
+            }
+            return true;
+        }
     </script>
 </head>
 
@@ -118,20 +151,21 @@
             <h2 class="title2"><b>修改方法　</b>
 
             </h2>
-            <form:form id="addMethod" modelAttribute="method" action="${ctx}/application/manager/methodmanager/updatemethod/${urlId}/${method.id}" method="post" class="form-horizontal">
+            <form:form id="addMethod" modelAttribute="method" action="${ctx}/application/manager/methodmanager/updatemethod/${urlId}/${method.id}"
+                       method="post" class="form-horizontal" onsubmit="return isValid(this);">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
                     <tr>
                         <td colspan="2" class="group_name">基本信息</td>
                     </tr>
                     <tr>
                         <td>全类名<span class="mandatory">*</span></td>
-                        <td><input name="className" type="text" value="${method.className}" class="formtext" size="100" />
+                        <td><input id="className" name="className" type="text" value="${method.className}" class="formtext" size="100" />
                             <msg:errorMsg property="className" type="message"/>
                         </td>
                     </tr>
                     <tr>
                         <td>方法名<span class="mandatory">*</span></td>
-                        <td><input name="methodName" type="text" value="${method.methodName}" class="formtext" size="100" />
+                        <td><input id="methodName" name="methodName" type="text" value="${method.methodName}" class="formtext" size="100" />
                             <msg:errorMsg property="methodName" type="message"/>
                         </td>
                     </tr>

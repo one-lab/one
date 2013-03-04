@@ -55,6 +55,29 @@ function save(){
 	msgSuccess("系统消息", "操作成功，监视器已保存！");
 	window.location.href="manageBusScene.html";
 }
+/*校验数据*/
+function isValid(form) {
+    String.prototype.trim = function(){
+        return this.replace(/(^\s*|\s*$)/g,'');
+    }
+    if (form.url.value==null||form.url.value.trim()=="") {
+        alert("URL地址不能为空或者空格！");
+        return false;
+    }
+    if (form.url.value.length>500) {
+        alert("URL地址长度不能超过500！");
+        return false;
+    }
+    if (form.description.value==null||form.description.value.trim()=="") {
+        alert("URL描述不能为空或者空格！");
+        return false;
+    }
+    if (form.description.value.length>300) {
+        alert("URL描述长度不能超过300！");
+        return false;
+    }
+    return true;
+}
 </script>
 </head>
 
@@ -118,20 +141,21 @@ function save(){
        	  <h2 class="title2"><b>编辑URL　</b>
           	
           </h2>
-          <form id="addBizScenario" action="${ctx}/application/manager/urlmanager/update/${bizScenarioId}/${url.id}" method="post">
+          <form:form id="addBizScenario" action="${ctx}/application/manager/urlmanager/update/${bizScenarioId}/${url.id}"
+                     method="post" class="form-horizontal" onsubmit="return isValid(this);">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>
                 <td colspan="2" class="group_name">基本信息</td>
               </tr>
               <tr>
                 <td width="25%">URL地址<span class="mandatory">*</span></td>
-                <td><input name="url" value="${url.url}" type="text" class="formtext" />
+                <td><input id="url" name="url" value="${url.url}" type="text" class="formtext" />
                     <msg:errorMsg property="url" type="message"/>
                 </td>
               </tr>
               <tr>
-                  <td width="25%">URL描述<span class="mandatory"></span></td>
-                  <td><input name="description" value="${url.description}" type="text" class="formtext" />
+                  <td width="25%">URL描述<span class="mandatory">*</span></td>
+                  <td><input id="description" name="description" value="${url.description}" type="text" class="formtext" />
                       <msg:errorMsg property="description" type="message"/>
                   </td>
               </tr>
@@ -148,7 +172,7 @@ function save(){
                 </td>
               </tr>
             </table>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>

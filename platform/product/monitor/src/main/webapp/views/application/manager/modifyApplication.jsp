@@ -56,6 +56,34 @@
         function save() {
             msgSuccess("系统消息", "操作成功，监视器已保存！");
         }
+        /*校验数据*/
+        function isValid(form) {
+            var appName="^[A-Za-z]+$";
+            if (!form.applicationName.value.match(appName)) {
+                alert("显示名称必须是英文！");
+                return false;
+            }
+            if (form.cnName.value==null||form.cnName.value=="") {
+                alert("中文名称不能为空！");
+                return false;
+            }
+            var appIp="^[0-9.]+$";
+            if(!form.applicationIp.value.match(appIp)){
+                alert("主机IP地址必须是数字和\".\"的组合！");
+                return false;
+            }
+            var appPort="^[0-9.]+$";
+            if(!form.applicationPort.value.match(appPort)||form.applicationPort.value.length>5){
+                alert("端口必须是5位以内的数字！");
+                return false;
+            }
+            var appInterval="^[0-9.]+$";
+            if(!form.interval.value.match(appInterval)||form.interval.value.length>10){
+                alert("轮询间隔必须是10位以内的数字！");
+                return false;
+            }
+            return true;
+        }
     </script>
 </head>
 
@@ -130,8 +158,8 @@
                     </optgroup>
                 </select>--%>
             </h2>
-            <form id="addSystem" action="${ctx}/application/manager/appmanager/update/${application.id}" method="post"
-                  class="form-horizontal">
+            <form:form id="addSystem" action="${ctx}/application/manager/appmanager/update/${application.id}" method="post"
+                  class="form-horizontal" onsubmit="return isValid(this);">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
                     <tr>
                         <td colspan="2" class="group_name">基本信息</td>
@@ -178,7 +206,7 @@
                         </td>
                     </tr>
                 </table>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>

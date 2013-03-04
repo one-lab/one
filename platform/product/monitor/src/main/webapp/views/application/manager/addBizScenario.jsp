@@ -55,6 +55,19 @@ function save(){
 	msgSuccess("系统消息", "操作成功，监视器已保存！");
 	window.location.href="manageBusScene.html";
 }
+/*校验数据*/
+function isValid(form) {
+    if (form.name.value==null||form.name.value=="") {
+        alert("场景名称不能为空！");
+        return false;
+    }
+    var bsGrade=form.bizScenarioGrade.value;
+    if(bsGrade!="高"&&bsGrade!="中"&&bsGrade!="低"){
+        alert("必须选择场景级别！");
+        return false;
+    }
+    return true;
+}
 </script>
 </head>
 
@@ -118,14 +131,15 @@ function save(){
        	  <h2 class="title2"><b>添加业务场景　</b>
           	
           </h2>
-          <form id="addBizScenario" action="${ctx}/application/manager/bsmanager/addbizscenario/${appId}" method="post">
+          <form:form id="addBizScenario" action="${ctx}/application/manager/bsmanager/addbizscenario/${appId}" method="post"
+                     class="form-horizontal" onsubmit="return isValid(this);">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>
                 <td colspan="2" class="group_name">基本信息</td>
               </tr>
               <tr>
                 <td width="25%">场景名称<span class="mandatory">*</span></td>
-                <td><input name="name" value="${bizScenario.name}" type="text" class="formtext" />
+                <td><input id="name" name="name" value="${bizScenario.name}" type="text" class="formtext" />
                     <msg:errorMsg property="name" type="message"/>
                 </td>
               </tr>
@@ -140,7 +154,7 @@ function save(){
               <tr>
                 <td>级别<span class="mandatory">*</span></td>
                 <td>
-                	<select name="bizScenarioGrade" class="diySelect" >
+                	<select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect" >
                     <option>高</option>
                     <option>中</option>
                     <option>低</option>
@@ -157,7 +171,7 @@ function save(){
                 </td>
               </tr>
             </table>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>
