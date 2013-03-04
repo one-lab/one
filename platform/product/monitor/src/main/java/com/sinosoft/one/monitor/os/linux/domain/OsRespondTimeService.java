@@ -56,4 +56,14 @@ public class OsRespondTimeService {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osRespondtimeRepository.findMinRespondTime(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
+	
+	
+	/**
+	 * 删除小于该时间的记录 
+	 * @param osInfoId
+	 * @param sampleTime
+	 */
+	public void deleteResponTimekByLessThanTime(String osInfoId,Date sampleTime){
+		osRespondtimeRepository.deleteResponTimeByLessThanTime(osInfoId, sampleTime);
+	}
 }

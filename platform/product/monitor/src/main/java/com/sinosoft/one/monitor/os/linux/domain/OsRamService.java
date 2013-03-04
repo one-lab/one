@@ -96,4 +96,12 @@ public class OsRamService {
 		return osRamRepository.findMinSwapUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 	
+	/**
+	 * 删除小于该时间的记录 
+	 * @param osInfoId
+	 * @param sampleTime
+	 */
+	public void deleteRamByLessThanTime(String osInfoId,Date sampleTime){
+		osRamRepository.deleteRamByLessThanTime(osInfoId, sampleTime);
+	}
 }

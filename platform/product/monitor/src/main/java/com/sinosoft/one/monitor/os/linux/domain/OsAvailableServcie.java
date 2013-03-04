@@ -48,14 +48,31 @@ public class OsAvailableServcie {
 	 * 获取可用性统计表数据
 	 * @param ava
 	 */
-	public OsAvailable getAvailable(){
-		return null;
+	public OsAvailable getAvailable(String osInfoId,Date date){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osAvailableRepository.getOsAvailableByDate(osInfoId, simpleDateFormat.format(date), OsUtil.ORCL_DATEFORMATE);
 	}
 	
+	/**
+	 * 根据时间删除
+	 * @param osInfoId
+	 * @param timeSpan
+	 */
 	public void deleteAvailable(String osInfoId,Date timeSpan){
 		//删除
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		osAvailableRepository.deleteOsAvailableByDate(osInfoId,simpleDateFormat.format( timeSpan), OsUtil.ORCL_DATEFORMATE);
+		osAvailableRepository.deleteOsAvailableByDate(osInfoId,timeSpan);
+	}
+	
+	/**
+	 * 修改统计表记录
+	 * @param osAvailable
+	 */
+	public void updateAvailable(OsAvailable osAvailable,String nomorRun,String crashtime,String aveRepair,String aveFault ){
+		osAvailable.setNormalRun(nomorRun);
+		osAvailable.setAveFaultTime(aveFault);
+		osAvailable.setAveRepairTime(aveRepair);
+		osAvailable.setCrashTime(crashtime);
+		osAvailableRepository.save(osAvailable);
 	}
 	
 	/**
@@ -115,9 +132,9 @@ public class OsAvailableServcie {
 	 */
 	public  List<OsAvailabletemp> getTodayAvailable(String osInfoId,Date currentTime){
 		//获取当前时间的天
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DATE, currentTime.getDate());
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
@@ -133,18 +150,18 @@ public class OsAvailableServcie {
 	 * 保存到统计表
 	 */
 	public List<OsAvailabletemp> getFFHourAvailale(String osInfoId,Date currentTime){
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.HOUR_OF_DAY, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DATE, currentTime.getDate());
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		c.add(Calendar.HOUR_OF_DAY, -24);
 		//前24小时
 		Date d1 = c.getTime();
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		System.out.println(simpleDateFormat.format(currentTime));
-		System.out.println(simpleDateFormat.format(d1));
+//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+//		System.out.println(simpleDateFormat.format(currentTime));
+//		System.out.println(simpleDateFormat.format(d1));
 		List<OsAvailabletemp> osAvailabletemps=getAvailableTemps(osInfoId, d1, currentTime);
 		return osAvailabletemps;
 	}
@@ -179,9 +196,9 @@ public class OsAvailableServcie {
 	 */
 	public  void deleteLTFHourAvailale(String osInfoId,Date currentTime){
 		//当前天数
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DATE, currentTime.getDate());
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
@@ -191,7 +208,7 @@ public class OsAvailableServcie {
 		c.add(Calendar.HOUR_OF_DAY, -24);
 		//取当天的前48小时整时点
 		Date d2 = c.getTime();
-		SimpleDateFormat simpleDateFormat2=new SimpleDateFormat(OsUtil.DATEFORMATE);
+//		SimpleDateFormat simpleDateFormat2=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		deleteAvailableTemp(osInfoId, d2,d1);
 	}
 	

@@ -53,8 +53,16 @@ public class OsProcessService {
 		OsStatis.add(diskOsStati);
 		OsStatis.add(respondOsStati);
 		osStatiService.saveStatiOneHourList(OsStatis);
-		//删除前一小时的记录
-		//获取最大记录
+		//删除24小时前的记录
+		Calendar c2  = Calendar.getInstance();
+		c2.set(Calendar.DATE, sampleTime.getDate());
+		c2.add(Calendar.HOUR_OF_DAY,-24);
+		Date deleteTime= c2.getTime();
+		//删除24小时前的临时数据
+		osCpuService.deleteCpuByLessThanTime(osInfoId, deleteTime);
+		osDiskService.deleteDiskByLessThanTime(osInfoId, deleteTime);
+		osRamService.deleteRamByLessThanTime(osInfoId, deleteTime);
+		osRespondTimeService.deleteResponTimekByLessThanTime(osInfoId, deleteTime);
 	}
 	
 	/**
@@ -68,18 +76,19 @@ public class OsProcessService {
 		osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status);
 		//统计采样结果 今天
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, sampleTime.getDate());
+		c.set(Calendar.DATE, sampleTime.getDate());
+//		c.set(Calendar.DAY_OF_MONTH, sampleTime.getDay());
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		//取当天的前24小时整时点
 		Date todayzeroTime= c.getTime();
-		osAvailableServcie.deleteAvailable(osInfoId, todayzeroTime);//删除今天的统计表记录
+//		osAvailableServcie.deleteAvailable(osInfoId, todayzeroTime);//删除今天的统计表记录
 		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime);//保存新统计记录
-		//删除24小时之外的数据
+		//删除24小时前的数据
 		Calendar c2  = Calendar.getInstance();
-		c2.set(Calendar.DAY_OF_MONTH, sampleTime.getDate());
-		c2.set(Calendar.HOUR_OF_DAY,-24);
+		c2.set(Calendar.DATE, sampleTime.getDate());
+		c2.add(Calendar.HOUR_OF_DAY,-24);
 		Date deleteTime= c2.getTime();
 		osAvailableServcie.deleteTempByLessThanTime(osInfoId, deleteTime);
 //		if(osAvailabletemp.getSampleDate().getDate()<sampleTime.getDate()){
@@ -121,7 +130,8 @@ public class OsProcessService {
 	public  void saveStatiEveryDayAvailableStati(String osInfoId ,Date currentTime,int interCycleTime){
 		//当前天数
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH,  currentTime.getDate());
+		c.set(Calendar.DATE, currentTime.getDate());
+//		c.set(Calendar.DAY_OF_MONTH,  currentTime.getDay());
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
@@ -155,6 +165,16 @@ public class OsProcessService {
 //			
 //		}
 //}
+	public static void main(String[] args) {
+		Calendar c  = Calendar.getInstance();
+		c.set(Calendar.DATE, new Date().getDate());
+		Date d1 = c.getTime();
+		System.out.println(d1);
+		c.add(Calendar.HOUR_OF_DAY, -24);
+		//取当天的前48小时整时点
+		Date d2 = c.getTime();
+		System.out.println(d2);
+	}
 	
 	
 }

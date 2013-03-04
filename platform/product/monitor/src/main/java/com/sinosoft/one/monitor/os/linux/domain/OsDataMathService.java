@@ -12,6 +12,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
@@ -56,7 +57,7 @@ public class OsDataMathService {
 	 * @param timeSpan 时间段类型标记
 	 */												//当前时间		//目标时间		
 	public void statiAvailable(String osInfoId,Date currentTime,Date targetTime,int interCycleTime ,Date timeSpan ){
-		SimpleDateFormat Format=new SimpleDateFormat(OsUtil.DATEFORMATE);//开始时间字符
+//		SimpleDateFormat Format=new SimpleDateFormat(OsUtil.DATEFORMATE); 
 		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
 		long nomorRun=0;//可用时间记录
 		long crashtime=0;//不可用时间记录
@@ -149,17 +150,23 @@ public class OsDataMathService {
 		System.out.println(crashtime);
 		System.out.println(countTime);
 		System.out.println(repairTime);
-		osAvailableServcie.saveAvailable(osInfoId, normalRun(interCycleTime, countTime, nomorRun), OsTransUtil.LongToHMS(crashtime), aveRepair,  aveFault, timeSpan);
+		OsAvailable osAvailable=osAvailableServcie.getAvailable(osInfoId, timeSpan);
+		if(osAvailable!=null){//判断是否修改
+			osAvailableServcie.updateAvailable(osAvailable, normalRun(interCycleTime, countTime, nomorRun), OsTransUtil.LongToHMS(crashtime), aveRepair,  aveFault);
+		}else{
+			osAvailableServcie.saveAvailable(osInfoId, normalRun(interCycleTime, countTime, nomorRun), OsTransUtil.LongToHMS(crashtime), aveRepair,  aveFault, timeSpan);
+		}
 	}
 	/**
 	 * 统计内存，当前时间到当前小时整点
 	 * @param osInfoId
 	 */
 	public List<OsStati> statiOneHourRam(String osInfoId,Date currentTime){
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.HOUR_OF_DAY, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DATE, currentTime.getDate());
+		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
@@ -189,10 +196,11 @@ public class OsDataMathService {
 	 * @param osInfoId
 	 */
 	public OsStati statiOneHourCpu(String osInfoId,Date currentTime){
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.HOUR_OF_DAY, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DATE, currentTime.getDate());
+		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
@@ -213,10 +221,11 @@ public class OsDataMathService {
 	 * @param osInfoId
 	 */
 	public OsStati statiOneHourDisk(String osInfoId,Date currentTime){
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.HOUR_OF_DAY, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DATE, currentTime.getDate());
+		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
@@ -238,10 +247,11 @@ public class OsDataMathService {
 	 * @param osInfoId
 	 */
 	public OsStati statiOneHourRespond(String osInfoId,Date currentTime){
-		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.HOUR_OF_DAY, new Integer(simpleDateFormat1.format(currentTime)));
+		c.set(Calendar.DATE, currentTime.getDate());
+		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
