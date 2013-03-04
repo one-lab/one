@@ -4,7 +4,6 @@ import com.sinosoft.one.monitor.application.domain.ApplicationService;
 import com.sinosoft.one.monitor.application.domain.BizScenarioService;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.BizScenarioGrade;
-import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -126,35 +125,58 @@ public class BizScenarioManagerController {
     /**
      * 更新业务场景的表单页面.
      */
-    @Get("update/{id}")
-    @Post("errorUpdateBizScenario")
-    public String bizScenarioForm(@Param("id") String id, Invocation inv) {
-        inv.addModel("bizScenario", bizScenarioService.findBizScenario(id));
-        //页面所在路径application/manager/
-        return "bizScenarioForm";
+    @Get("updateform/{appId}/{bizScenarioId}")
+    @Post("errorupdatebizScenario")
+    public String bizScenarioForm(@Param("appId") String appId, @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
+        inv.getRequest().setAttribute("appId",appId);
+        inv.addModel("bizScenario", bizScenarioService.findBizScenario(bizScenarioId));
+        //更新业务场景页面
+        return "modifyBizScenario";
     }
 
     /**
      * 更新业务场景.
      */
-    @Post("update/{id}")
-    public String updateBizScenario(@Validation(errorPath = "a:errorUpdateBizScenario") BizScenario bizScenario, Invocation inv) {
-        bizScenario.setModifierId(CurrentUserUtil.getCurrentUser().getId());
-        bizScenario.setModifyTime(new Date());
-        bizScenarioService.saveBizScenario(bizScenario);
+    @Post("update/{appId}/{bizScenarioId}")
+    public String updateBizScenario(@Validation(errorPath = "a:errorupdatebizScenario") BizScenario bizScenario,@Param("appId") String appId,
+                                    @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
+        inv.getRequest().setAttribute("appId",appId);
+        //获得当前用户id
+        /*bizScenario.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
+        //开发阶段固定用户id
+        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        String bizScenarioGrade=BizScenarioGrade.parseDisplayName(bizScenario.getBizScenarioGrade()).getValue();
+        bizScenarioService.updateBizScenarioWithModifyInfo(bizScenarioId,bizScenario.getName(),bizScenarioGrade,modifierId);
         //业务场景列表页面
-        //页面所在路径application/manager/
-        return "a:bizScenarioList";
+        return "managerBizScenario";
     }
 
     /**
      * 删除业务场景.
      */
-    @Post("delete/{id}")
-    public String deleteBizScenario(@Param("id") String id, Invocation inv) {
-        bizScenarioService.deleteBizScenario(id);
+    @Get("delete/{appId}/{bizScenarioId}")
+    public String deleteBizScenario(@Param("appId") String appId, @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
+        inv.getRequest().setAttribute("appId",appId);
+        //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
+        bizScenarioService.deleteBizScenarioAndUrl(bizScenarioId);
+        //删除GE_MONITOR_BIZ_SCENARIO的记录
+        bizScenarioService.deleteBizScenario(bizScenarioId);
         //业务场景列表页面
-        //页面所在路径application/manager/
-        return "a:bizScenarioList";
+        return "managerBizScenario";
+    }
+
+    /**
+     * 批量删除业务场景.
+     */
+    @Post("batchdelete/{appId}")
+    public String batchDeleteBizScenario(@Param("appId") String appId, Invocation inv) {
+        inv.getRequest().setAttribute("appId",appId);
+        String[] bizScenarioIds=inv.getRequest().getParameterValues("bizScenarioIds[]");
+        //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
+        bizScenarioService.batchDeleteBizScenarioAndUrl(bizScenarioIds);
+        //删除GE_MONITOR_BIZ_SCENARIO的记录
+        bizScenarioService.batchDeleteBizScenario(bizScenarioIds);
+        //业务场景列表页面
+        return "managerBizScenario";
     }
 }

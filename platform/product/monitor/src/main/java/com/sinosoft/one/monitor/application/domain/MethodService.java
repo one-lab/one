@@ -107,7 +107,35 @@ public class MethodService {
         return methodRepository.selectMethodsOfUrlById(url.getId());
     }
 
+    /**
+     * 更新Method.
+     */
+    @Transactional(readOnly = false)
     public void updateMethodWithModifyInfo(String methodId, String className, String methodName, String description, String modifierId) {
         methodRepository.updateMethod(methodId,className,methodName,description,modifierId);
+    }
+
+    /**
+     * 删除URL下所有的Method.
+     */
+    @Transactional(readOnly = false)
+    public void deleteUrlAndMethod(String urlId, String methodId) {
+        methodRepository.deleteUrlAndMethod(urlId,methodId);
+    }
+
+    /**
+     * 批量删除URL下所有的Method(删除关联表记录).
+     */
+    @Transactional(readOnly = false)
+    public void batchDeleteUrlAndMethod(String urlId, String[] methodIds) {
+        methodRepository.batchDeleteUrlAndMethod(urlId,methodIds);
+    }
+
+    /**
+     * 批量删除URL下所有的Method.
+     */
+    @Transactional(readOnly = false)
+    public void batchDeleteMethod(String[] methodIds) {
+        methodRepository.batchDeleteMethod(methodIds);
     }
 }

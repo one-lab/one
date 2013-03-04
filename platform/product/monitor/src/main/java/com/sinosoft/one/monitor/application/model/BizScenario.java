@@ -65,7 +65,8 @@ public class BizScenario implements java.io.Serializable {
     /**
      * 操作(为了页面显示，可管理url或者删除该条业务场景)
      */
-    private String operation="<a href='javascript:void(0)' class='eid' onclick='eidRow(this)'>管理Url <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除";
+    private String operation="<a href='javascript:void(0)' class='eid' onclick='managerUrl(this)'>管理Url " +
+            "<a href='javascript:void(0)' class='eid' onclick='editRow(this)'>编辑 <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除";
 
     public BizScenario() {
     }

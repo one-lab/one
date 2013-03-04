@@ -4,7 +4,6 @@ import com.sinosoft.one.monitor.application.domain.ApplicationService;
 import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.Url;
-import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -89,24 +88,28 @@ public class ApplicationManagerController {
     /**
      * 更新应用的表单页面.
      */
-    @Get("update/{id}")
+    @Get("update/{appId}")
     @Post("errorUpdateApp")
-    public String applicationForm(@Param("id") String id, Invocation inv) {
-        inv.addModel("application", applicationService.findApplication(id));
+    public String applicationForm(@Param("appId") String appId, Invocation inv) {
+        inv.addModel("application", applicationService.findApplication(appId));
         //页面所在路径application/manager/
-        return "applicationForm";
+        return "modifyApplication";
     }
 
     /**
      * 更新应用.
      */
-    @Post("update/{id}")
-    public String updateApplication(@Validation(errorPath = "a:errorUpdateApp") Application application, Invocation inv) {
-        application.setModifierId(CurrentUserUtil.getCurrentUser().getId());
-        application.setModifyTime(new Date());
-        applicationService.saveApplication(application);
-        //页面所在路径application/manager/
-        return "应用性能页面(应用列表页面)的action";
+    @Post("update/{appId}")
+    public String updateApplication(@Validation(errorPath = "a:errorUpdateApp") Application application, @Param("appId") String appId, Invocation inv) {
+        //获得当前用户id
+        /*application.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
+        //开发阶段固定用户id
+        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        //更新时间使用sysdate
+        applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
+                application.getApplicationIp(),application.getApplicationPort(),modifierId);
+        //应用列表页面
+        return "r:/application/manager/appmanager/applist";
     }
 
     /**
@@ -115,7 +118,7 @@ public class ApplicationManagerController {
     @Get("delete/{id}")
     public String deleteApplication(@Param("id") String id, Invocation inv) {
         applicationService.deleteApplication(id);
-        //页面所在路径application/manager/
+        //应用列表页面
         return "r:/application/manager/appmanager/applist";
     }
 
