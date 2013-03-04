@@ -37,15 +37,12 @@ public class RecordServiceImpl implements RecordService {
         Lastevent lastevent = new Lastevent();
         //获取event数据
         DBUtil4Monitor.changeConnection(info.getId());
-        SGAStateModel sgaStateModel = new SGAStateModel();
         String sql1 = OracleMonitorSql.bufferRatio;
         String sql2 = OracleMonitorSql.dictionaryRatio;
         String sql3 = OracleMonitorSql.libraryRatio;
-        String sql4 = OracleMonitorSql.activeCount;
         List<Map<String, String>> rsList1 = DBUtil.queryStrMaps(SqlObj.newInstance(sql1));
         List<Map<String, String>> rsList2 = DBUtil.queryStrMaps(SqlObj.newInstance(sql2));
         List<Map<String, String>> rsList3 = DBUtil.queryStrMaps(SqlObj.newInstance(sql3));
-        List<Map<String, String>> rsList4 = DBUtil.queryStrMaps(SqlObj.newInstance(sql4));
         lastevent.setBufferHitRate(Double.parseDouble(rsList1.get(0).get("Hit Ratio")));
         lastevent.setActiveCount(Integer.parseInt(rsList1.get(0).get("active")));
         lastevent.setBufferLibHitRate(Double.parseDouble(rsList3.get(0).get("libHitRatio")));
@@ -54,6 +51,8 @@ public class RecordServiceImpl implements RecordService {
         lastevent.setInfo(info);
         lastevent.setRecordTime(date);
         lasteventRepository.save(lastevent);
+        
+        
     }
 
     @Override

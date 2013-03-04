@@ -2,10 +2,7 @@ package com.sinosoft.one.monitor.db.oracle.domain;
 
 import com.sinosoft.one.monitor.db.oracle.model.EventInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleSGAModel;
-import com.sinosoft.one.monitor.db.oracle.model.OracleSGAHitRateModel;
 import com.sinosoft.one.monitor.db.oracle.model.SGAStateModel;
-
-import java.util.List;
 
 /**
  * User: Chunliang.Han

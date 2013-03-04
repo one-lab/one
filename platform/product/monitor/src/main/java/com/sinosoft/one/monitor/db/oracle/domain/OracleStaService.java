@@ -1,10 +1,8 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
-import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaInfoDetailModel;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * User: Chunliang.Han

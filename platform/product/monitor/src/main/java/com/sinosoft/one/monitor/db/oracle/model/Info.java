@@ -2,7 +2,6 @@ package com.sinosoft.one.monitor.db.oracle.model;
 // Generated 2013-2-27 18:10:19 by One Data Tools 1.0.0
 
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +20,10 @@ import org.hibernate.annotations.GenericGenerator;
 public class Info implements java.io.Serializable {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3237826912763771365L;
+	/**
      * 主键ID.
      */
     private String id;

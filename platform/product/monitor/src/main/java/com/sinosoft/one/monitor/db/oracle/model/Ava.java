@@ -24,6 +24,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class Ava  implements java.io.Serializable {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8796911059465980475L;
+	/**
     * 主键ID.
     */
     private String id;

@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.db.oracle.model;
 
-import org.quartz.SimpleTrigger;
 
 /**
  * User: Chunliang.Han

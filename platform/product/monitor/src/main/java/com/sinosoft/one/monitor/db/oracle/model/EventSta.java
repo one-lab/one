@@ -2,7 +2,6 @@ package com.sinosoft.one.monitor.db.oracle.model;
 // Generated 2013-2-27 18:10:19 by One Data Tools 1.0.0
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +24,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class EventSta  implements java.io.Serializable {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8807195682362494446L;
+	/**
     * 主键ID.
     */
     private String id;
