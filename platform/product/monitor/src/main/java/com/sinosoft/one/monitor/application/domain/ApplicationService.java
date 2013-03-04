@@ -123,7 +123,11 @@ public class ApplicationService {
 
             jsonUrlArray.add(jsonUrlObject);
         }
-        jsonUrlsObject.put("urls",jsonUrlArray);
+        jsonUrlsObject.put("urls", jsonUrlArray);
         return jsonUrlsObject.toString();
+    }
+
+    public void updateApplicationWithModifyInfo(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId) {
+        applicationRepository.updateApplication(appId,applicationName,cnName,applicationIp,applicationPort,modifierId);
     }
 }

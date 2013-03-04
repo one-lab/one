@@ -2,47 +2,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%--<% request.setAttribute("appId",request.getParameter("appId")); %>--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>查看预警配置文件</title>
+<title>新建监视器</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/manageBusScene/manageBusScene.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
-	});
-	$("#thresholdList").Grid({
-        type:"post",
-		url : "${ctx}/application/manager/urlmanager/urllist/${bizScenarioId}",
-		dataType: "json",
-		colDisplay: false,  
-		clickSelect: true,
-		draggable:false,
-		height: "auto",  
-		colums:[  
-			{id:'1',text:'URL地址',name:"url",index:'1',align:''},
-			{id:'2',text:'名称',name:"description",index:'1',align:''},
-			{id:'3',text:'可用性',name:"status",index:'1',align:''},
-			{id:'4',text:'健康状态',name:"threshold",index:'1',align:''},
-			{id:'5',text:'操作',name:"operation",index:'1',align:''}
-		],  
-		rowNum:9999,
-		pager : false,
-		number:false,  
-		multiselect: true  
 	});
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
@@ -75,80 +50,9 @@ function hideNav(e){
 	});	
 	$(document).unbind();
 }
-function delRow(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    /*id前面多了“rows”*/
-    var urlId=id.substr(4,32);
-    /*删除url操作*/
-    window.location.href="${ctx}/application/manager/urlmanager/delete/${bizScenarioId}/"+urlId;
-}
-function urlBatchDel(){
-    var $g = $("#thresholdList div.grid_view > table");
-    var selecteds = $("td.multiple :checked",$g);
-    if(selecteds.length > 0){
-        msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-            var _urlIds = [];
-            selecteds.each(function(){
-                var rows = $(this).parent().parent();
-                /*id前面多了“rows”*/
-                _urlIds.push(rows.attr('id').substr(4,32));
-            });
-            alert(_urlIds);
-            $.ajax({
-                type:"post",
-                url:"${ctx}/application/manager/urlmanager/batchdelete/${bizScenarioId}",
-                data:{urlIds:_urlIds},
-                success:function(data){
-                    if(data){
-                        selecteds.each(function(){
-                            $(this).parent().parent().remove();
-                        });
-                        alert("删除成功");
-                    }
-                },
-                error:function(){
-                    alert("删除失败");
-                }
-            });
-        });
-    }else{
-        msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
-    };
-}
-function managerMethod(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    /*id前面多了“rows”*/
-    var urlId=id.substr(4,32);
-    /*管理method页面*/
-    window.location.href="${ctx}/application/manager/methodmanager/methodlist/"+urlId;
-}
-function editRow(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    /*id前面多了“rows”*/
-    var urlId=id.substr(4,32);
-    /*编辑url页面*/
-    window.location.href="${ctx}/application/manager/urlmanager/updateform/${bizScenarioId}/"+urlId;
-}
-function batchDel(){
-	var $g = $("#thresholdList div.grid_view > table");
-	var selecteds = $("td.multiple :checked",$g);
-	if(selecteds.length > 0){
-		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-			var checks = [];
-			selecteds.each(function(){
-				var rows = $(this).parent().parent();
-				checks.push(rows.attr('id'));
-				rows.remove();
-			});
-			alert(checks);
-			msgSuccess("系统消息", "操作成功，配置已删除！");
-		});
-	}else{
-		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
-	};
+function save(){
+	msgSuccess("系统消息", "操作成功，监视器已保存！");
+	window.location.href="manageBusScene.html";
 }
 </script>
 </head>
@@ -209,14 +113,37 @@ function batchDel(){
 </div>
 <div id="layout_center">
 	<div class="main">
-    	<div class="threshold_file">
-       	  <h2 class="title2"><b>业务场景名:${bizScenarioName}</b></h2>
-          <div class="tool_bar_top">
-          	<a href="${ctx}/application/manager/urlmanager/createurl/${bizScenarioId}" class="add_bus_scene" >添加url</a>
-          	<a href="javascript:void(0);" class="batch_del" onclick="urlBatchDel()">批量删除</a>
-          </div>
-          <div id="thresholdList"></div>
-          <div class="tool_bar"></div>
+    	<div class="add_monitor">
+       	  <h2 class="title2"><b>编辑URL　</b>
+          	
+          </h2>
+          <form id="addBizScenario" action="${ctx}/application/manager/urlmanager/update/${bizScenarioId}/${url.id}" method="post">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
+              <tr>
+                <td colspan="2" class="group_name">基本信息</td>
+              </tr>
+              <tr>
+                <td width="25%">URL地址<span class="mandatory">*</span></td>
+                <td><input name="url" value="${url.url}" type="text" class="formtext" /></td>
+              </tr>
+              <tr>
+                  <td width="25%">URL描述<span class="mandatory"></span></td>
+                  <td><input name="description" value="${url.description}" type="text" class="formtext" /></td>
+              </tr>
+              <%--<tr>
+                  <td width="25%">URL阈值<span class="mandatory">*</span></td>
+                  <td><input name="threshold" type="text" class="formtext" /></td>
+              </tr>--%>
+              <tr>
+                <td class="group_name">&nbsp;</td>
+                <td class="group_name">
+                	<input id="submit" type="submit" class="buttons" value="确定修改" <%--onclick="save()"--%> />　
+                    <input type="reset" class="buttons" value="重 置" />　
+                    <input type="button" class="buttons" value="取 消" onclick="window.history.back()" />
+                </td>
+              </tr>
+            </table>
+            </form>
         </div>
     </div>
 </div>

@@ -50,6 +50,14 @@ public class UrlService {
     }
 
     /**
+     * 批量删除URL，通过URL的id.
+     */
+    @Transactional(readOnly = false)
+    public void batchDeleteUrl(String[] ids) {
+        urlRepository.batchDelete(ids);
+    }
+
+    /**
      * 查询一个URL，通过URL的id.
      */
     public Url findUrl(String id) {
@@ -93,5 +101,45 @@ public class UrlService {
      */
     public List<Url> findAllUrlsOfBizScenario(BizScenario bizScenario){
         return urlRepository.selectUrlsOfBizScenarioByIds(bizScenario.getId());
+    }
+
+    /**
+     * 更新url.
+     */
+    @Transactional(readOnly = false)
+    public void updateUrlWithModifyInfo(String urlId, String url, String description,String modifierId) {
+        urlRepository.updateUrl(urlId, url, description,modifierId);
+    }
+
+    /**
+     * 删除中间表数据.
+     */
+    @Transactional(readOnly = false)
+    public void deleteBizScenarioAndUrl(String bizScenarioId,String urlId) {
+        urlRepository.deleteBizScenarioAndUrl(bizScenarioId,urlId);
+    }
+
+    /**
+     * 删除中间表数据.
+     */
+    @Transactional(readOnly = false)
+    public void deleteUrlAndMethod(String urlId) {
+        urlRepository.deleteUrlAndMethod(urlId);
+    }
+
+    /**
+     * 批量删除中间表数据.
+     */
+    @Transactional(readOnly = false)
+    public void batchDeleteBizScenarioAndUrl(String bizScenarioId,String[] urlIds) {
+        urlRepository.batchDeleteBizScenarioAndUrl(bizScenarioId,urlIds);
+    }
+
+    /**
+     * 批量删除中间表数据.
+     */
+    @Transactional(readOnly = false)
+    public void batchDeleteUrlAndMethod(String[] urlIds) {
+        urlRepository.batchDeleteUrlAndMethod(urlIds);
     }
 }

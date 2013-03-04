@@ -83,4 +83,36 @@ public class BizScenarioService {
         List<BizScenario> bizScenarioList=bizScenarioRepository.selectUserNameOfBizScenarioByIds(bizScenarioIds);
         return bizScenarioList;
     }
+
+    /**
+     * 更新一个业务场景.
+     */
+    @Transactional(readOnly = false)
+    public void updateBizScenarioWithModifyInfo(String bizScenarioId, String name, String bizScenarioGrade, String modifierId) {
+        bizScenarioRepository.updateBizScenario(bizScenarioId, name, bizScenarioGrade, modifierId);
+    }
+
+    /**
+     * 删除一个业务场景的中间表.
+     */
+    @Transactional(readOnly = false)
+    public void deleteBizScenarioAndUrl(String bizScenarioId) {
+        bizScenarioRepository.deleteBizScenarioAndUrl(bizScenarioId);
+    }
+
+    /**
+     * 批量删除一个业务场景的中间表.
+     */
+    @Transactional(readOnly = false)
+    public void batchDeleteBizScenarioAndUrl(String[] bizScenarioIds) {
+        bizScenarioRepository.batchDeleteBizScenarioAndUrl(bizScenarioIds);
+    }
+
+    /**
+     * 批量删除一个业务场景.
+     */
+    @Transactional(readOnly = false)
+    public void batchDeleteBizScenario(String[] bizScenarioIds) {
+        bizScenarioRepository.batchDeleteBizScenario(bizScenarioIds);
+    }
 }

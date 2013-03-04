@@ -4,7 +4,6 @@ import com.sinosoft.one.monitor.application.domain.BizScenarioService;
 import com.sinosoft.one.monitor.application.domain.UrlService;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.Url;
-import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -42,6 +41,7 @@ public class UrlManagerController {
     @Get("urllist/{bizScenarioId}")
     public String managerUrl(@Param("bizScenarioId") String bizScenarioId,Invocation inv) {
         inv.getRequest().setAttribute("bizScenarioId",bizScenarioId);
+        inv.getRequest().setAttribute("bizScenarioName",bizScenarioService.findBizScenario(bizScenarioId).getName());
         //页面所在路径application/manager/
         return "managerUrl";
     }
@@ -154,35 +154,60 @@ public class UrlManagerController {
     /**
      * 更新URL的表单页面.
      */
-    @Get("update/{id}")
+    @Get("updateform/{bizScenarioId}/{urlId}")
     @Post("errorUpdateUrl")
-    public String urlForm(@Param("id") String id, Invocation inv) {
-        inv.addModel("url", urlService.findUrl(id));
-        //页面所在路径application/manager/
-        return "urlForm";
+    public String urlForm(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, Invocation inv) {
+        inv.setAttribute("bizScenarioId",bizScenarioId);
+        inv.addModel("url", urlService.findUrl(urlId));
+        return "modifyUrl";
     }
 
     /**
      * 更新URL.
      */
-    @Post("update/{id}")
-    public String updateUrl(@Validation(errorPath = "a:errorUpdateUrl") Url url, Invocation inv) {
-        url.setModifierId(CurrentUserUtil.getCurrentUser().getId());
-        url.setModifyTime(new Date());
-        urlService.saveUrl(url);
+    @Post("update/{bizScenarioId}/{urlId}")
+    public String updateUrl(@Validation(errorPath = "a:errorUpdateUrl") Url url, @Param("bizScenarioId") String bizScenarioId,
+                            @Param("urlId") String urlId, Invocation inv) {
+        /*url.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
+        //开发阶段固定用户id
+        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
         //Url列表页面
-        //页面所在路径application/manager/
-        return "a:urlList";
+        return "managerUrl";
     }
 
     /**
-     * 删除业务场景.
+     * 删除url.
      */
-    @Post("delete/{id}")
-    public String deleteUrl(@Param("id") String id, Invocation inv) {
-        urlService.deleteUrl(id);
-        //业务场景列表页面
-        //页面所在路径application/manager/
-        return "a:urlList";
+    @Get("delete/{bizScenarioId}/{urlId}")
+    public String deleteUrl(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, Invocation inv) {
+        //写回bizScenarioId，返回url列表页面时用到
+        inv.getRequest().setAttribute("bizScenarioId",bizScenarioId);
+        //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
+        urlService.deleteBizScenarioAndUrl(bizScenarioId,urlId);
+        //先删除中间表GE_MONITOR_URL_METHOD的记录
+        urlService.deleteUrlAndMethod(urlId);
+        //删除GE_MONITOR_URL的记录
+        urlService.deleteUrl(urlId);
+        //url列表页面
+        return "managerUrl";
+    }
+
+    /**
+     * 批量删除url.
+     */
+    @Post("batchdelete/{bizScenarioId}")
+    public String batchDeleteUrl(@Param("bizScenarioId") String bizScenarioId, Invocation inv) {
+        //写回bizScenarioId，返回url列表页面时用到
+        inv.getRequest().setAttribute("bizScenarioId",bizScenarioId);
+        String[] urlIds=inv.getRequest().getParameterValues("urlIds[]");
+        //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
+        urlService.batchDeleteBizScenarioAndUrl(bizScenarioId,urlIds);
+        //先删除中间表GE_MONITOR_URL_METHOD的记录
+        urlService.batchDeleteUrlAndMethod(urlIds);
+        //删除GE_MONITOR_URL的记录
+        urlService.batchDeleteUrl(urlIds);
+        //url列表页面
+        return "managerUrl";
     }
 }

@@ -19,6 +19,15 @@ public interface MethodRepository extends PagingAndSortingRepository<Method, Str
     void updateMethod(@Param("methodId") String methodId,@Param("className") String className, @Param("methodName") String methodName, @Param("description") String description, @Param("modifierId") String modifierId, @Param("modifyTime") Date modifyTime);*/
 
     @SQL("update GE_MONITOR_METHOD set CLASS_NAME=?2,METHOD_NAME=?3,DESCRIPTION=?4,MODIFIER_ID=?5,MODIFY_TIME=sysdate where id=?1")
-void updateMethod(@Param("methodId") String methodId,@Param("className") String className, @Param("methodName") String methodName, @Param("description") String description, @Param("modifierId") String modifierId);
+    void updateMethod(@Param("methodId") String methodId,@Param("className") String className, @Param("methodName") String methodName, @Param("description") String description, @Param("modifierId") String modifierId);
+
+    @SQL("delete GE_MONITOR_URL_METHOD a where a.URL_ID=?1 and a.METHOD_ID=?2")
+    void deleteUrlAndMethod(String urlId, String methodId);
+
+    @SQL("delete GE_MONITOR_URL_METHOD a where a.URL_ID=?1 and a.METHOD_ID in (?2)")
+    void batchDeleteUrlAndMethod(String urlId, String[] methodIds);
+
+    @SQL("delete GE_MONITOR_METHOD a where a.ID in (?1)")
+    void batchDeleteMethod(String[] methodIds);
 }
 

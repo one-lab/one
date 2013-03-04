@@ -223,7 +223,8 @@
                                     <td class="body"><span>494.0 毫秒</span></td>
                                     <td class="body"><span>148.42 rpm</span></td>
                                     <td class="body"><a href="${ctx}/application/manager/bsmanager/list/${application.id}">管理业务场景</a>
-                                        <a href="delete/${application.id}">删除</a>
+                                        &nbsp;<a href="update/${application.id}">编辑</a>
+                                        &nbsp;<a href="delete/${application.id}">删除</a>
                                         <%--<a href="javascript:void(0), onclick=delRow(${application.id})">删除</a>--%>
                                     </td>
                                             <%--href="${ctx}/application/manager/bsmanager/bizscenariolist/${application.id}">管理业务场景</a--%>

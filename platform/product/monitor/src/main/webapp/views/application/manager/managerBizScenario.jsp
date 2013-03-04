@@ -75,38 +75,58 @@ function hideNav(e){
 	$(document).unbind();
 }
 function delRow(e){
-	var rows = $(e).parent().parent();
-	var id = rows.attr('id');
-	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-		msgSuccess("系统消息", "操作成功，配置已删除！");
-		alert(id);
-		rows.remove();
-	});
-}
-function eidRow(e){
     var rows = $(e).parent().parent();
     var id = rows.attr('id');
-    /**/
+    /*编辑业务场景页面*/
+    var bizScenarioId=id.substr(4,32);
+    window.location.href="${ctx}/application/manager/bsmanager/delete/${appId}/"+bizScenarioId;
+}
+function managerUrl(e){
+    var rows = $(e).parent().parent();
+    var id = rows.attr('id');
+    /*管理url页面*/
     var bizScenarioId=id.substr(4,32);
     window.location.href="${ctx}/application/manager/urlmanager/urllist/"+bizScenarioId;
 }
-function batchDel(){
-	var $g = $("#thresholdList div.grid_view > table");
-	var selecteds = $("td.multiple :checked",$g);
-	if(selecteds.length > 0){
-		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-			var checks = [];
-			selecteds.each(function(){
-				var rows = $(this).parent().parent();
-				checks.push(rows.attr('id'));
-				rows.remove();
-			});
-			alert(checks);
-			msgSuccess("系统消息", "操作成功，配置已删除！");
-		});
-	}else{
-		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
-	};
+function editRow(e){
+    var rows = $(e).parent().parent();
+    var id = rows.attr('id');
+    /*编辑业务场景页面*/
+    var bizScenarioId=id.substr(4,32);
+    window.location.href="${ctx}/application/manager/bsmanager/updateform/${appId}/"+bizScenarioId;
+}
+function bizScenarioBatchDel(){
+    var $g = $("#thresholdList div.grid_view > table");
+    var selecteds = $("td.multiple :checked",$g);
+    if(selecteds.length > 0){
+        msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+            var _bizScenarioIds = [];
+            selecteds.each(function(){
+                var rows = $(this).parent().parent();
+                /*id前面多了“rows”*/
+                _bizScenarioIds.push(rows.attr('id').substr(4,32));
+            });
+            alert(_bizScenarioIds);
+            $.ajax({
+                type:"post",
+                url:"${ctx}/application/manager/bsmanager/batchdelete/${appId}",
+                data:{bizScenarioIds:_bizScenarioIds},
+                success:function(data){
+                    if(data){
+                        selecteds.each(function(){
+                            $(this).parent().parent().remove();
+                        });
+                        alert("删除成功");
+                    }
+                },
+                error:function(){
+                    alert("删除失败");
+                }
+            });
+        });
+    }else{
+        msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
+    };
 }
 </script>
 </head>
@@ -171,7 +191,7 @@ function batchDel(){
        	  <h2 class="title2"><b>管理业务场景</b></h2>
           <div class="tool_bar_top">
           	<a href="${ctx}/application/manager/bsmanager/createbizscenario/${appId}" class="add_bus_scene" >添加业务场景</a>
-          	<a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a>
+          	<a href="javascript:void(0);" class="batch_del" onclick="bizScenarioBatchDel()">批量删除</a>
             <div style="float:right;">
             	<span>级别</span>
               <select class="diySelect" onchange="#">

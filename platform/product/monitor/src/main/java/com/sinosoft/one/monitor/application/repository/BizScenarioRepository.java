@@ -14,5 +14,17 @@ public interface BizScenarioRepository extends PagingAndSortingRepository<BizSce
 
     @SQL("select a.*,b.NAME as userName from GE_MONITOR_BIZ_SCENARIO a left join GE_MONITOR_ACCOUNT b on a.CREATOR_ID=b.id where a.ID in (?1)")
     List<BizScenario> selectUserNameOfBizScenarioByIds(@Param("bizScenarioIds") List<String> bizScenarioIds);
+
+    @SQL("update GE_MONITOR_BIZ_SCENARIO a set a.NAME=?2,a.BIZ_SCENARIO_GRADE=?3,a.MODIFIER_ID=?4,a.MODIFY_TIME=sysdate where a.ID=?1")
+    void updateBizScenario(String bizScenarioId, String name, String bizScenarioGrade, String modifierId);
+
+    @SQL("delete GE_MONITOR_BIZ_SCENARIO_URL a where a.BIZ_SCENARIO_ID=?1")
+    void deleteBizScenarioAndUrl(String bizScenarioId);
+
+    @SQL("delete GE_MONITOR_BIZ_SCENARIO_URL a where a.BIZ_SCENARIO_ID in (?1)")
+    void batchDeleteBizScenarioAndUrl(String[] bizScenarioIds);
+
+    @SQL("delete GE_MONITOR_BIZ_SCENARIO a where a.ID in (?1)")
+    void batchDeleteBizScenario(String[] bizScenarioIds);
 }
 

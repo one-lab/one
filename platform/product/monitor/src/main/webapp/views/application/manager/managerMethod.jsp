@@ -77,13 +77,12 @@ function hideNav(e){
 	$(document).unbind();
 }
 function delRow(e){
-	var rows = $(e).parent().parent();
-	var id = rows.attr('id');
-	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-		msgSuccess("系统消息", "操作成功，配置已删除！");
-		alert(id);
-		rows.remove();
-	});
+    var rows = $(e).parent().parent();
+    var id = rows.attr('id');
+    /*id前面多了“rows”*/
+    var methodId=id.substr(4,32);
+    /*删除method操作*/
+    window.location.href="${ctx}/application/manager/methodmanager/delete/${urlId}/"+methodId;
 }
 function eidRow(e){
     var rows = $(e).parent().parent();
@@ -98,14 +97,28 @@ function batchDel(){
 	var selecteds = $("td.multiple :checked",$g);
 	if(selecteds.length > 0){
 		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-			var checks = [];
+			var _methodIds = [];
 			selecteds.each(function(){
 				var rows = $(this).parent().parent();
-				checks.push(rows.attr('id'));
-				rows.remove();
+                /*id前面多了“rows”*/
+                _methodIds.push(rows.attr('id').substr(4,32));
 			});
-			alert(checks);
-			msgSuccess("系统消息", "操作成功，配置已删除！");
+            $.ajax({
+                type:"post",
+                url:"${ctx}/application/manager/methodmanager/batchdelete/${urlId}",
+                data:{methodIds:_methodIds},
+                success:function(data){
+                    if(data){
+                        selecteds.each(function(){
+                            $(this).parent().parent().remove();
+                        });
+                        alert("删除成功");
+                    }
+                },
+                error:function(){
+                    alert("删除失败");
+                }
+            });
 		});
 	}else{
 		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')

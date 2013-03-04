@@ -169,7 +169,8 @@ public class MethodManagerController {
      * 更新Method.
      */
     @Post("updatemethod/{urlId}/{methodId}")
-    public String updateMethod(@Validation(errorPath = "a:errorupdatemethod/{methodId}") Method method, @Param("urlId") String urlId, @Param("methodId") String methodId,Invocation inv) {
+    public String updateMethod(@Validation(errorPath = "a:errorupdatemethod/{methodId}") Method method,
+                               @Param("urlId") String urlId, @Param("methodId") String methodId,Invocation inv) {
         //将urlId写回，managerMethod页面发送ajax请求时会用到
         inv.getRequest().setAttribute("urlId",urlId);
         //获得当前用户
@@ -181,13 +182,33 @@ public class MethodManagerController {
     }
 
     /**
-     * 删除Method.
+     * 单个删除Method.
      */
-    @Post("delete/{id}")
-    public String deleteMethod(@Param("id") String id, Invocation inv) {
-        methodService.deleteMethod(id);
+    @Get("delete/{urlId}/{methodId}")
+    public String deleteMethod(@Param("urlId") String urlId, @Param("methodId") String methodId, Invocation inv) {
+        //写回urlId，返回method列表页面时用到
+        inv.getRequest().setAttribute("urlId",urlId);
+        //先删除中间表GE_MONITOR_URL_METHOD的记录
+        methodService.deleteUrlAndMethod(urlId,methodId);
+        //删除GE_MONITOR_METHOD的记录
+        methodService.deleteMethod(methodId);
         //Method列表页面
-        //页面所在路径application/manager/
-        return "a:methodList";
+        return "managerMethod";
+    }
+
+    /**
+     * 批量删除Method.
+     */
+    @Post("batchdelete/{urlId}")
+    public String batchDeleteMethod(@Param("urlId") String urlId, Invocation inv) {
+        //写回urlId，返回method列表页面时用到
+        inv.getRequest().setAttribute("urlId",urlId);
+        String[] methodIds=inv.getRequest().getParameterValues("methodIds[]");
+        //先删除中间表GE_MONITOR_URL_METHOD的记录
+        methodService.batchDeleteUrlAndMethod(urlId,methodIds);
+        //删除GE_MONITOR_METHOD的记录
+        methodService.batchDeleteMethod(methodIds);
+        //Method列表页面
+        return "managerMethod";
     }
 }
