@@ -741,6 +741,102 @@ chart8 = new Highcharts.Chart({
 		]
 	});
 }
+	function staticlinks(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "历史记录: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"staticlinks.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function fnOpenNewWindow7(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "历史记录: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"fnOpenNewWindow7.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function fnOpenNewWindow30(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "历史记录: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"fnOpenNewWindow30.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function basicReaonLinux(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "历史记录: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"basicReaonLinux.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
 </script>
 </head>
 
@@ -847,7 +943,7 @@ chart8 = new Highcharts.Chart({
       <div class="head-cpu">今天的可用性</div>
       <div class="cpu-img"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this)'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow30(this)'></a></div>
       <div id="container" style="width: 300px; height: 240px; margin: 0 auto"></div>
-      <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg">&nbsp;</a><a class="bodytext-img" href="setEmergency.html">警告配置</a></b></div>
+      <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg" href="#" onclick='basicReaonLinux(this)'></a><a class="bodytext-img" href="setEmergency.html">警告配置</a></b></div>
     </div>
   </div>
   <div class="know-time" style="width:49.5%; height:80px">
@@ -858,7 +954,7 @@ chart8 = new Highcharts.Chart({
               <tbody>
                 <tr>
                   <td width="60%" class="bodytextbold">&nbsp;&nbsp;应答时间&nbsp;&nbsp;<a class="bodytextbold1"></a></td>
-                  <td width="30%" align="right"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this)'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow30(this)'></a></td>
+                  <td width="30%" align="right"><a class="cpu7-img" href='javascript:void(0)' onclick='fnOpenNewWindow7(this)'></a><a class="cpu30-img" href='javascript:void(0)' onclick='fnOpenNewWindow30(this)'></a></td>
                 </tr>
                 <tr>
                   <td align="center" class="textResponseTime" colspan="1"> 0 毫秒 </td>
@@ -889,10 +985,10 @@ chart8 = new Highcharts.Chart({
                   <td width="100%" align="center" class="dashboard"><table width="99%" cellspacing="0" cellpadding="3" border="0">
                       <tbody >
                         <tr>
-                          <td height="28" align="center" title="CPU使用率-3 %" class="bodytext" colspan="1"><a href="#" class="speed" onclick='viewWindowCPU(this)'><div id="speed" style="width: 200px; height: 140px; margin: 0 auto; "></div></a></td>
+                          <td height="28" align="center" title="CPU使用率-35 %" class="bodytext" colspan="1"><a href="#" class="speed" onclick='viewWindowCPU(this)'><div id="speed" style="width: 200px; height: 140px; margin: 0 auto; "></div></a></td>
                         </tr>
                         <tr>
-                          <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowCPU(this)' href="javascript:void(0)">CPU使用率 - 3</a> % </td>
+                          <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowCPU(this)' href="javascript:void(0)">CPU使用率 - 35</a> % </td>
                         </tr>
                       </tbody>
                     </table></td>
@@ -905,10 +1001,10 @@ chart8 = new Highcharts.Chart({
                   <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
                       <tbody>
                         <tr>
-                          <td height="28" align="center" title="内存使用率-16 %" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindowNC'><div id="speed2" style="width: 200px; height: 140px; margin: 0 auto"></div></a></td>
+                          <td height="28" align="center" title="内存使用率-45 %" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindowNC'><div id="speed2" style="width: 200px; height: 140px; margin: 0 auto"></div></a></td>
                         </tr>
                         <tr>
-                          <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowNC(this)' href="javascript:void(0)">内存使用率-16</a> % </td>
+                          <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowNC(this)' href="javascript:void(0)">内存使用率-45</a> % </td>
                         </tr>
                       </tbody>
                     </table>
@@ -923,10 +1019,10 @@ chart8 = new Highcharts.Chart({
                   <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
                       <tbody>
                         <tr>
-                          <td height="28" align="center" title="磁盘利用率-12%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindowCP(this)'><div id="speed3" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
+                          <td height="28" align="center" title="磁盘利用率-88%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindowCP(this)'><div id="speed3" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
                         </tr>
                         <tr>
-                          <td align="center" class="bodytextbold"><a  onclick='viewWindowCP(this)' class="staticlinks"  href="javascript:void(0)">磁盘使用率-12%</a> </td>
+                          <td align="center" class="bodytextbold"><a  onclick='viewWindowCP(this)' class="staticlinks"  href="javascript:void(0)">磁盘使用率-88%</a> </td>
                         </tr>
                       </tbody>
                     </table>
@@ -947,9 +1043,9 @@ chart8 = new Highcharts.Chart({
     </table>
     <div id="CPU_line" style="height:230px"></div>
     <div class="grid-total">
-      <div id="grid_Memory" class="grid-Memory" style="width:50%; height:50px"> </div>
+      <div id="grid_Memory" class="grid-Memory" style="width:50%"> </div>
       <div class="Memory1" style="width:50%"><a class="Memory" href="setEmergency.html"> 警告配置 </a></div>
-      <div id="grid_cpu" class="grid_cpu" style="width:50%; height:50px"> </div>
+      <div id="grid_cpu" class="grid_cpu" style="width:50%"> </div>
       <div class="cpu1" style="height:20px"><a class="cpu" href="setEmergency.html"> 警告配置 </a></div>
     </div>
   </div>

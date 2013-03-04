@@ -6,7 +6,7 @@
 			"cell": [
 				"交换内存利用率",
 				"<a href='#' class='bfb'>0</a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"0",
 				"<a class='img-unknow'></a>",
 				null
@@ -16,7 +16,7 @@
 		   "cell": [
 				"物理内存利用率",
 				"<a href='#' class='bfb'>21</a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"867",
 				"<a class='img-unknow'></a>",
 				null
