@@ -131,6 +131,9 @@ $(function(){
 		multiselect:true,
 	});
 	$("#tabs").tabs({closeTab:false});
+	$(".show_table_space_a").bind("click",function(){
+			$("#tabs").find("li").eq(1).click();
+		});
 });
 function navHover(){
 	$(this).toggleClass("hover")
@@ -165,7 +168,7 @@ function createSevenDayUser() {
 	$("body").window({  
 			"id":"testOne11",   
 			"title":"7天可用",  
-			"url":"sevenDayuser.html",   
+			"url":"sevenDayUser.html",   
 			"hasIFrame":true,   
 			"top":20,   
 			"left":20,
@@ -177,7 +180,7 @@ function createThirtyDayUser() {
 	$("body").window({  
 			"id":"testOne10",   
 			"title":"30天可用性",  
-			"url":"thirtyDayuser.html",   
+			"url":"thirtyDayUser.html",   
 			"hasIFrame":true,   
 			"top":20,   
 			"left":20,
@@ -402,7 +405,7 @@ function viewRelevance(){
             <div class="sub_title">基本信息</div>
             <table class="base_info" width="100%" cellpadding="0" cellspacing="0" >
               <tr><td>名称</td><td>oracle</td></tr>
-              <tr><td>健康状况</td><td>健康状态为正常 . 没有出现严重的告警。</td></tr>
+              <tr><td>健康状况</td><td><a onclick="viewRelevance(this);"><div class="health_good">健康状态为正常 . 没有出现严重的告警。</div></a></td></tr>
               <tr><td>类型</td><td>Oracle服务器</td></tr>
               <tr><td>Oracle版本</td><td>10.2.0.1.0</td></tr>
               <tr><td>Oracle启动时间</td><td>2013-02-18 14:21:12.0</td></tr>
@@ -445,7 +448,10 @@ function viewRelevance(){
           <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
+                <tr><td>连接时间</td><td>340ms</td>
+                	<td>
+                  	<a onclick="viewRelevance(this);"><div class="threshold_icon"></div></a>
+                  </td></tr>
                 <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
               </table>
          	</div>
@@ -463,7 +469,8 @@ function viewRelevance(){
            <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
+                <tr><td>连接时间</td><td>340ms</td>
+                	<td><a onclick="viewRelevance(this);"><div class="threshold_icon"></div></a></td></tr>
                   <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
               </table>
          	</div>
@@ -605,16 +612,6 @@ function viewRelevance(){
              <img src="images/db/legend-red.png" /><span>已用空间</span></div>
             </div>
        </div>
-       <div class="threshold_file">
-            <div class="sub_title">表空间状态</div>
-            <div id="table_space_status"></div>
-          	<div class="tool_bar_top"></div>
-       </div>
-       <div class="threshold_file">
-            <div class="sub_title">数据文件的性能指标</div>
-            <div id="table_space_performance"></div>
-          	<div class="tool_bar_top"></div>
-       </div>
     </div>
     <div id="sga">
     		<table width="100%" cellpadding="0" cellspacing="0">
@@ -635,14 +632,14 @@ function viewRelevance(){
             	<div style=' border:1px solid #dfe9f2;'>
                 <div class="sub_title">SGA明细</div>
                 <div id="sga_detail"></div>
-                <a href="setEmergency.html" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
+                <a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
               </div>
             </td>
             <td width="50%">
             	<div style=' border:1px solid #dfe9f2;'>
                 <div class="sub_title">SGA状态</div>
                 <div id="sga_status"></div>
-                <a href="setEmergency.html" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
+                <a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
               </div>
             </td>
           </tr>
