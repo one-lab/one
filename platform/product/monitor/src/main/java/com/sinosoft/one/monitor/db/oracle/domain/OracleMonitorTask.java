@@ -26,44 +26,39 @@ public class OracleMonitorTask {
     @Autowired
     private static RecordService recordService;
     /**
-     * ScheduledExecutorService缓存
-     */
-    public static final Map<String, ScheduledExecutorService> scheduledExecutorServiceMap = new HashMap<String, ScheduledExecutorService>();
-    /**
      * ScheduledFuture<?>缓存
      */
     public static final Map<String, ScheduledFuture<?>> beeperHandleMap = new HashMap<String, ScheduledFuture<?>>();
-    
+    /**
+     * 定义任务处理器，线程池的长度设定为100
+     */
+    public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(100);
     public OracleMonitorTask(){
         execute();
     }
     public static void execute(){
         List<Info> infoList = (List<Info>) infoRepository.findAll();
         for(Info info:infoList){
-        	ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         	execute(scheduledExecutorService,info);
         }
     }
     public static void addTask(Info info){
-    	ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     	execute(scheduledExecutorService,info);
     }
     public static void updateTask(Info info){
-    	ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
-    	ScheduledExecutorService scheduledExecutorService = scheduledExecutorServiceMap.get(info.getId());
-    	beeperHandle.cancel(true);
+    	deleteTask(info);
     	execute(scheduledExecutorService,info);
     }
     public static void deleteTask(Info info){
-    	ScheduledExecutorService scheduledExecutorService = scheduledExecutorServiceMap.get(info.getId());
-    	scheduledExecutorService.shutdown();
+    	ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
+    	beeperHandle.cancel(true);
+    	beeperHandleMap.remove(info.getId());
     }
     private static void execute(ScheduledExecutorService scheduledExecutorService,Info info){
         int timeDuring = info.getPullInterval();
         Runnable monitorRunnable = new MonitorRunnable(info);
         ScheduledFuture<?>  beeperHandle = scheduledExecutorService.scheduleAtFixedRate(monitorRunnable,0,timeDuring, TimeUnit.MINUTES);
-        beeperHandleMap.put( info.getId(),beeperHandle);
-        scheduledExecutorServiceMap.put(info.getId(), scheduledExecutorService);
+        beeperHandleMap.put(info.getId(),beeperHandle);
     }
     
     private static class MonitorRunnable  implements Runnable{
@@ -75,8 +70,6 @@ public class OracleMonitorTask {
         public void run() {
             Date date = new Date();
             recordService.insertAva(info,date);
-            recordService.insertAvaSta(info,date);
-            recordService.insertEventSta(info,date);
             recordService.insertLastEvent(info,date);
         }
     }

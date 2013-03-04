@@ -20,7 +20,7 @@ public class OsRespondTimeService {
 	 * 保存响应时间采集数据
 	 * @param ava
 	 */
-	public void saveRespondTime(String osInfoId,String respondTime ,Date sampleTime){
+	public boolean saveRespondTime(String osInfoId,String respondTime ,Date sampleTime){
 		OsRespondtime osRespondtime=new OsRespondtime();
 		Os os=new Os();
 		os.setOsInfoId(osInfoId);
@@ -28,6 +28,7 @@ public class OsRespondTimeService {
 		osRespondtime.setSampleDate(sampleTime);
 		osRespondtime.setRespondTime(respondTime);
 		osRespondtimeRepository.save(osRespondtime);
+		return true;
 	}
 	
 	/**

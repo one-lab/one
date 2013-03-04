@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.utils;
 
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,5 +13,14 @@ public class DateUtil {
 			case Calendar.HOUR: return result / (24*60*1000);
 			default: throw new UnsupportedOperationException("this type is not support.");
 		}
+	}
+	/**
+	 * 返回一个没clear后的Calender
+	 * @return
+	 */
+	public static Calendar getCalender(){
+		Calendar clender = Calendar.getInstance();
+		clender.clear();
+		return clender;
 	}
 }

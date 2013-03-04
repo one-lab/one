@@ -73,21 +73,7 @@ public class MethodService {
         return urls;
     }
 
-    /**
-     * 得到所有的Method的全类名.
-     */
-    public List<String> findClassAndMethodName(List<Method> methods) {
-        List<String> classNames = new ArrayList<String>();
-        if (methods != null) {
-            for (Method method : methods) {
-                if (method != null) {
-                    classNames.add(method.getMethodName() + "." + method.getClassName());
-                }
-            }
-            return classNames;
-        }
-        return null;
-    }
+
 
     /**
      * 得到Method的全类名.

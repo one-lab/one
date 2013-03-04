@@ -86,6 +86,7 @@
 			var _data;
 
 			g.append($gBox);
+			g.css("overflow","hidden")
 
 			var $gW = $gBox.width();
 

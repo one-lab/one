@@ -42,8 +42,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
         if (activeConnectList == null || activeConnectList.size() == 0) {
             return eventInfoModel;
         } else {
-            long connect = activeConnectList.get(activeConnectList.size() - 1).getConnectTime();
-            int active = activeConnectList.get(activeConnectList.size() - 1).getActiveCount();
+            double connect = activeConnectList.get(activeConnectList.size() - 1).getConnectTime();
+            double active = activeConnectList.get(activeConnectList.size() - 1).getActiveCount();
             eventInfoModel[0].setEventValue(connect + " ms");
             eventInfoModel[1].setEventValue(active + "");
             int size = activeConnectList.size();

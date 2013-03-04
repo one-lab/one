@@ -52,9 +52,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                 //点列
                 List<Point> points = new ArrayList<Point>();
                 //平均值
-                int min = 0;
-                int max = 0;
-                int sum = 0;
+                double min = 0;
+                double max = 0;
+                double sum = 0;
                 for (EventSta eventSta : eventStaList) {
                     //和
                     sum += eventSta.getAvg();
@@ -68,9 +68,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                     }
                     //点
                     Point point = new Point();
-                    point.setxAxis(eventSta.getEnventRecordTime());
+                    point.setxAxis(eventSta.getEventRecordTime());
                     point.setyAxis(eventSta.getAvg());
-                    point.setDescription("连接时间" + "(" + sdf2.format(eventSta.getEnventRecordTime()) + " ," + eventSta.getAvg() + ")");
+                    point.setDescription("连接时间" + "(" + sdf2.format(eventSta.getEventRecordTime()) + " ," + eventSta.getAvg() + ")");
                     points.add(point);
                 }
                 staInfoDetailModel.setMaxAvg(max);
@@ -93,9 +93,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                 //点列
                 List<Point> points = new ArrayList<Point>();
                 //平均值
-                int min = 0;
-                int max = 0;
-                int sum = 0;
+                double min = 0;
+                double max = 0;
+                double sum = 0;
                 for (EventSta eventSta : eventStaList) {
                     //和
                     sum += eventSta.getAvg();
@@ -109,9 +109,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                     }
                     //点
                     Point point = new Point();
-                    point.setxAxis(eventSta.getEnventRecordTime());
+                    point.setxAxis(eventSta.getEventRecordTime());
                     point.setyAxis(eventSta.getAvg());
-                    point.setDescription("用户数" + "(" + sdf2.format(eventSta.getEnventRecordTime()) + " ," + eventSta.getAvg() + ")");
+                    point.setDescription("用户数" + "(" + sdf2.format(eventSta.getEventRecordTime()) + " ," + eventSta.getAvg() + ")");
                     points.add(point);
                 }
                 staInfoDetailModel.setMaxAvg(max);
@@ -134,9 +134,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                 //点列
                 List<Point> points = new ArrayList<Point>();
                 //平均值
-                int min = 0;
-                int max = 0;
-                int sum = 0;
+                double min = 0;
+                double max = 0;
+                double sum = 0;
                 for (EventSta eventSta : eventStaList) {
                     //和
                     sum += eventSta.getAvg();
@@ -150,9 +150,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                     }
                     //点
                     Point point = new Point();
-                    point.setxAxis(eventSta.getEnventRecordTime());
+                    point.setxAxis(eventSta.getEventRecordTime());
                     point.setyAxis(eventSta.getAvg());
-                    point.setDescription("缓冲区击中率" + "(" + sdf2.format(eventSta.getEnventRecordTime()) + " ," + eventSta.getAvg() + ")");
+                    point.setDescription("缓冲区击中率" + "(" + sdf2.format(eventSta.getEventRecordTime()) + " ," + eventSta.getAvg() + ")");
                     points.add(point);
                 }
                 staInfoDetailModel.setMaxAvg(max);

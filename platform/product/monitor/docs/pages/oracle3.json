@@ -6,28 +6,28 @@
 			"cell": [
 				"TV_TEMP",
 				"2.0",
-				"<a href='#'><div class='threshold_icon'></div></a>"
+				"<a onclick='viewRelevance(this)'><div class='threshold_icon'></div></a>"
 			]
         },  {
 			"id":"1",
 			"cell": [
 				"TV_TEMP",
 				"2.0",
-			"<a href='#'><div class='threshold_icon'></div></a>"
+			"<a onclick='viewRelevance(this)'><div class='threshold_icon'></div></a>"
 			]
         }, {
 			"id":"1",
 			"cell": [
 				"TV_TEMP",
 				"2.0",
-				"<a href='#'><div class='threshold_icon'></div></a>"
+				"<a onclick='viewRelevance(this)'><div class='threshold_icon'></div></a>"
 			]
         }, {
 			"id":"1",
 			"cell": [
 				"TV_TEMP",
 				"2.0",
-				"<a href='#'><div class='threshold_icon'></div></a>"
+				"<a onclick='viewRelevance(this)'><div class='threshold_icon'></div></a>"
 			]
         }
     ]

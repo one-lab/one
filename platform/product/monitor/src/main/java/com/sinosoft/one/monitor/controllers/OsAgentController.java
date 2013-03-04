@@ -55,24 +55,22 @@ public class OsAgentController {
 		try {
 			osAgentInfo = inv.getRequest().getParameterMap();
 			osAgentIp = getValue("ip", osAgentInfo);
-			List<Os> oss = osService.getOsBasicByIp(osAgentIp);
+			Os  os = osService.getOsBasicByIp(osAgentIp);
 			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse()
 					.getOutputStream());
 			System.out.println(getValue("ID", osAgentInfo));
-			for (Os os : oss) {
-				if(os.getIpAddr().toString().endsWith(getValue("ip", osAgentInfo))||os.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
-					shellAndIp.put("ID", os.getOsInfoId());
-					shellAndIp.put("pollingTime", os.getIntercycleTime()+"");
-					List<OsShell>osShells=osService.getOsShell();
-					for (OsShell osShell : osShells) {
-						shellAndIp.put(osShell.getType(),osShell.getTemplate());
-					}
-					
-					System.out.println("正确返回");
-					break;
-				}else {
-					shellAndIp.put("ID", null);
+			if(os!=null||os.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
+				shellAndIp.put("ID", os.getOsInfoId());
+				shellAndIp.put("pollingTime", os.getIntercycleTime()+"");
+				List<OsShell>osShells=osService.getOsShell();
+				for (OsShell osShell : osShells) {
+					shellAndIp.put(osShell.getType(),osShell.getTemplate());
 				}
+				
+				System.out.println("正确返回");
+//						break;
+			}else {
+				shellAndIp.put("ID", null);
 			}
 			oos.writeObject(shellAndIp);
 			
