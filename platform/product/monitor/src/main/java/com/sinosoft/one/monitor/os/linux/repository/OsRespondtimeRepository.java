@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.os.linux.repository;
 // Generated 2013-2-28 10:40:23 by One Data Tools 1.0.0
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,6 @@ public interface OsRespondtimeRepository extends PagingAndSortingRepository<OsRe
 	@Query("from OsRespondtime o where o.sampleDate between to_date(?2,?4) and to_date(?3,?4) and o.os.osInfoId= ?1 ORDER by o.sampleDate")
 	public List<OsRespondtime> findOsRespondTimeByDate(String osid,String beginTime,String endTime,String dateFormat);
 	
-	
 	//物理内存利用率最大值
 	@SQL("select MAX(RESPOND_TIME) from GE_MONITOR_OS_RESPONDTIME where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and OS_INFO_ID= ?1 ")
 	public String findMaxRespondTime(String osInfoId,String begin,String end,String dateFormat);
@@ -24,5 +24,8 @@ public interface OsRespondtimeRepository extends PagingAndSortingRepository<OsRe
 	@SQL("select MIN(RESPOND_TIME) from GE_MONITOR_OS_RESPONDTIME where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and OS_INFO_ID= ?1 ")
 	public String findMinRespondTime(String osInfoId,String begin,String end,String dateFormat);
 
+	//小于目标时间删除
+	@SQL("delete from GE_MONITOR_OS_RESPONDTIME o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
+	public void deleteResponTimeByLessThanTime(String osid,Date date);
 }
 

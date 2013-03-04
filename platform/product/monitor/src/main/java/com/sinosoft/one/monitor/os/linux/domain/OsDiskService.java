@@ -51,4 +51,12 @@ public class OsDiskService {
 		return osDiskRepository.findOsDiskByDate(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 
+	/**
+	 * 删除小于该时间的记录 
+	 * @param osInfoId
+	 * @param sampleTime
+	 */
+	public void deleteDiskByLessThanTime(String osInfoId,Date sampleTime){
+		osDiskRepository.deleteDiskByLessThanTime(osInfoId, sampleTime);
+	}
 }

@@ -71,6 +71,13 @@ public class OsCpuService {
 		return osCpuRepository.findMaxCpuUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end) ,OsUtil.ORCL_DATEFORMATE);
 	}
 	
-	
+	/**
+	 * 删除小于该时间的记录 
+	 * @param osInfoId
+	 * @param sampleTime
+	 */
+	public void deleteCpuByLessThanTime(String osInfoId,Date sampleTime){
+		osCpuRepository.deleteCpuByLessThanTime(osInfoId, sampleTime);
+	}
 	
 }
