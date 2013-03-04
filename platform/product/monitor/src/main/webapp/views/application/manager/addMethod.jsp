@@ -1,12 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>新建监视器</title>
+<title>新增Method</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
@@ -124,11 +125,15 @@ function save(){
               </tr>
               <tr>
                 <td>全类名<span class="mandatory">*</span></td>
-                <td><input name="className" type="text" value="${method.className}" class="formtext" size="100" /></td>
+                <td><input name="className" type="text" value="${method.className}" class="formtext" size="100" />
+                    <msg:errorMsg property="className" type="message"/>
+                </td>
               </tr>
               <tr>
                 <td>方法名<span class="mandatory">*</span></td>
-                <td><input name="methodName" type="text" value="${method.methodName}" class="formtext" size="100" /></td>
+                <td><input name="methodName" type="text" value="${method.methodName}" class="formtext" size="100" />
+                    <msg:errorMsg property="methodName" type="message"/>
+                </td>
               </tr>
               <tr>
                   <td width="25%">方法描述<span class="mandatory"></span></td>

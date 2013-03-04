@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://www.springframework.org/schema/beans">
@@ -129,7 +130,7 @@
                     </optgroup>
                 </select>
             </h2>
-            <form id="addSystem" action="${ctx}/application/manager/appmanager/add" method="post"
+            <form id="addSystem" action="${ctx}/addapplication/add" method="post"
                   class="form-horizontal">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
                     <tr>
@@ -137,15 +138,19 @@
                     </tr>
                     <tr>
                         <td width="25%">显示名称<span class="mandatory">*</span></td>
-                        <td><input id="applicationName" name="applicationName" type="text" class="formtext"/></td>
+                        <td><input id="applicationName" name="applicationName" value="${application.applicationName}" type="text" class="required"/>
+                            <msg:errorMsg property="applicationName" type="message"/>
+                        </td>
                     </tr>
                     <tr>
                         <td width="25%">中文名称<span class="mandatory"></span></td>
-                        <td><input id="cnName" name="cnName" type="text" class="formtext"/></td>
+                        <td><input id="cnName" name="cnName" value="${application.cnName}" type="text" class="formtext"/></td>
                     </tr>
                     <tr>
                         <td>主机IP地址<span class="mandatory">*</span></td>
-                        <td><input id="applicationIp" name="applicationIp" type="text" class="formtext" size="30"/></td>
+                        <td><input id="applicationIp" name="applicationIp" value="${application.applicationIp}" type="text" class="formtext" size="30"/>
+                            <msg:errorMsg property="applicationIp" type="message"/>
+                        </td>
                     </tr>
                     <!--<tr>
                       <td>子网掩码<span class="mandatory">*</span></td>
@@ -153,7 +158,15 @@
                     </tr>-->
                     <tr>
                         <td>端口<span class="mandatory">*</span></td>
-                        <td><input id="applicationPort" name="applicationPort" type="text" class="formtext" size="8"/></td>
+                        <td><input id="applicationPort" name="applicationPort" value="${application.applicationPort}" type="text" class="formtext" size="8"/>
+                            <msg:errorMsg property="applicationPort" type="message"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>轮询间隔<span class="mandatory"></span></td>
+                        <td><input id="interval" name="interval" value="${application.interval}" type="text" class="formtext" size="10"/>
+                            <msg:errorMsg property="interval" type="message"/>
+                        </td>
                     </tr>
                     <tr>
                         <td class="group_name">&nbsp;</td>

@@ -42,6 +42,7 @@ public class BizScenarioManagerController {
     @Get("list/{appId}")
     public String getAllApplication(@Param("appId") String appId,Invocation inv) {
         inv.getRequest().setAttribute("appId",appId);
+        inv.getRequest().setAttribute("applicationName",applicationService.findApplication(appId).getApplicationName());
         //管理业务场景页面
         return "managerBizScenario";
     }

@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>查看预警配置文件</title>
+<title>管理URL</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />

@@ -93,40 +93,6 @@ public class ApplicationService {
         return methods;
     }
 
-    /**
-     * 返回url和method所对应的json数据.
-     * url包括id和地址
-     * method包括id，className，methodName
-     */
-    public String getJsonDataOfUrlsAndMethods(String applicationId,List<Url> urls) {
-        JSONObject jsonUrlsObject=new JSONObject();
-        JSONArray jsonUrlArray=new JSONArray();
-        //返回的json数据包含当前应用的id，这个数据会写入代理端的notification.info文件中
-	    jsonUrlsObject.put("applicationId",applicationId);
-        for(Url url:urls){
-            JSONObject jsonUrlObject=new JSONObject();
-            //处理当前url
-            jsonUrlObject.put("urlId",url.getId());
-            jsonUrlObject.put("urlAddress",url.getUrl());
-            List<Method> methods=findAllMethodsOfUrl(url.getId());
-	        JSONArray methodArray = new JSONArray();
-            //循环处理url中所有的method
-            for(Method method:methods){
-                JSONObject jsonMethodObject=new JSONObject();
-                jsonMethodObject.put("methodId",method.getId());
-                jsonMethodObject.put("className",method.getClassName());
-                jsonMethodObject.put("methodName",method.getMethodName());
-                //此method作为当前url的一个节点
-	            methodArray.add(jsonMethodObject);
-            }
-	        jsonUrlObject.put("methods", methodArray);
-
-            jsonUrlArray.add(jsonUrlObject);
-        }
-        jsonUrlsObject.put("urls", jsonUrlArray);
-        return jsonUrlsObject.toString();
-    }
-
     public void updateApplicationWithModifyInfo(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId) {
         applicationRepository.updateApplication(appId,applicationName,cnName,applicationIp,applicationPort,modifierId);
     }

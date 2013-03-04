@@ -1,12 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <% request.setAttribute("appId",request.getParameter("appId")); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>编辑业务场景</title>
+<title>编辑业务场景信息</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
@@ -124,7 +125,9 @@ function save(){
               </tr>
               <tr>
                 <td width="25%">场景名称<span class="mandatory">*</span></td>
-                <td><input name="name" value="${bizScenario.name}" type="text" class="formtext" /></td>
+                <td><input name="name" value="${bizScenario.name}" type="text" class="formtext" />
+                    <msg:errorMsg property="name" type="message"/>
+                </td>
               </tr>
               <%--<tr>
                 <td>id<span class="mandatory"></span></td>
@@ -143,6 +146,7 @@ function save(){
                     <option <c:if test="${bizScenario.bizScenarioGrade=='MIDDLE'}">selected="selected"</c:if> >中</option>
                     <option <c:if test="${bizScenario.bizScenarioGrade=='LOW'}">selected="selected"</c:if> >低</option>
                   </select>
+                    <msg:errorMsg property="bizScenarioGrade" type="message"/>
                 </td>
               </tr>
               <tr>
