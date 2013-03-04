@@ -2,7 +2,6 @@ package com.sinosoft.one.monitor.db.oracle.domain;
 
 import com.sinosoft.one.monitor.db.oracle.model.*;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
-import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
@@ -23,8 +22,6 @@ import java.util.Map;
  */
 @Component
 public class OracleSGAServiceImpl implements OracleSGAService {
-    @Autowired
-    private InfoRepository infoRepository;
     @Autowired
     private LasteventRepository lasteventRepository;
 

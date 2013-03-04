@@ -2,7 +2,6 @@ package com.sinosoft.one.monitor.db.oracle.domain;
 
 import com.sinosoft.one.monitor.db.oracle.model.*;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
-import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
@@ -26,8 +25,6 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
 
     @Autowired
     private LasteventRepository lasteventRepository;
-    @Autowired
-    private InfoRepository infoRepository;
 
     @Override
     public EventInfoModel[] viewConnectInfo(String monitorId) {
@@ -55,7 +52,6 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
             List<Point> connectTimePoints = new ArrayList<Point>();
             //用户数points
             List<Point> activeCountPoints = new ArrayList<Point>();
-            SimpleDateFormat sdf = new SimpleDateFormat("HH：mm");
             //"yyyy-MM-dd HH:mm:ss E"
             SimpleDateFormat sdf2 = new SimpleDateFormat("E,dd日-MM月-yyyy年 HH:mm");
             for (int i = 0; i < size; i++) {

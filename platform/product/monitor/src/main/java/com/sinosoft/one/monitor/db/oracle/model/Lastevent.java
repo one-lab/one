@@ -2,7 +2,6 @@ package com.sinosoft.one.monitor.db.oracle.model;
 // Generated 2013-2-27 18:10:19 by One Data Tools 1.0.0
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -19,6 +18,10 @@ import org.hibernate.annotations.GenericGenerator;
 public class Lastevent  implements java.io.Serializable {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7132247988935876283L;
+	/**
     * 主键ID.
     */
 

@@ -1,7 +1,6 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
 import com.sinosoft.one.monitor.db.oracle.model.*;
-import com.sinosoft.one.monitor.db.oracle.repository.AvaStaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.EventStaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ public class OracleStaServiceImpl implements OracleStaService {
         String begin = sdf.format(time);
         staInfoDetailModel.setBegin(begin);
         staInfoDetailModel.setEnd(end);
-        SimpleDateFormat sdfGrid = new SimpleDateFormat("HH：mm");
         SimpleDateFormat sdf2 = new SimpleDateFormat("E,dd日-MM月-yyyy年 HH:mm");
         switch (eventType) {
             //连接时间

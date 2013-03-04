@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,24 +22,51 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class OracleMonitorTask {
     @Autowired
-    private InfoRepository infoRepository;
+    private static InfoRepository infoRepository;
     @Autowired
-    private RecordService recordService;
+    private static RecordService recordService;
+    /**
+     * ScheduledExecutorService缓存
+     */
+    public static final Map<String, ScheduledExecutorService> scheduledExecutorServiceMap = new HashMap<String, ScheduledExecutorService>();
+    /**
+     * ScheduledFuture<?>缓存
+     */
+    public static final Map<String, ScheduledFuture<?>> beeperHandleMap = new HashMap<String, ScheduledFuture<?>>();
+    
     public OracleMonitorTask(){
         execute();
     }
-    public void execute(){
+    public static void execute(){
         List<Info> infoList = (List<Info>) infoRepository.findAll();
         for(Info info:infoList){
-            int timeDuring = info.getPullInterval();
-            ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-            Runnable monitorRunnable = new MonitorRunnable(info);
-            //ScheduledFuture<?> beeperHandle = scheduledExecutorService.scheduleAtFixedRate(monitorRunnable,0,timeDuring, TimeUnit.MINUTES);
-            //beeperHandle.cancel(true);
-            scheduledExecutorService.scheduleAtFixedRate(monitorRunnable,0,timeDuring, TimeUnit.MINUTES);
+        	ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        	execute(scheduledExecutorService,info);
         }
     }
-    private class MonitorRunnable  implements Runnable{
+    public static void addTask(Info info){
+    	ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    	execute(scheduledExecutorService,info);
+    }
+    public static void updateTask(Info info){
+    	ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
+    	ScheduledExecutorService scheduledExecutorService = scheduledExecutorServiceMap.get(info.getId());
+    	beeperHandle.cancel(true);
+    	execute(scheduledExecutorService,info);
+    }
+    public static void deleteTask(Info info){
+    	ScheduledExecutorService scheduledExecutorService = scheduledExecutorServiceMap.get(info.getId());
+    	scheduledExecutorService.shutdown();
+    }
+    private static void execute(ScheduledExecutorService scheduledExecutorService,Info info){
+        int timeDuring = info.getPullInterval();
+        Runnable monitorRunnable = new MonitorRunnable(info);
+        ScheduledFuture<?>  beeperHandle = scheduledExecutorService.scheduleAtFixedRate(monitorRunnable,0,timeDuring, TimeUnit.MINUTES);
+        beeperHandleMap.put( info.getId(),beeperHandle);
+        scheduledExecutorServiceMap.put(info.getId(), scheduledExecutorService);
+    }
+    
+    private static class MonitorRunnable  implements Runnable{
         Info info ;
         public MonitorRunnable(Info info){
              this.info = info;
