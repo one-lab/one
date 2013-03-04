@@ -6,14 +6,16 @@
 			"cell": [
 				"<a href='oracle.html'>sjsj0</a>",
 				"<div class='sys_up' onclick='viewRelevance()'></div>",
-				"<div class='fine' onclick='viewRelevance()'></div>"
+				"<div class='fine' onclick='viewRelevance()'></div>",
+				"<a href='addOracle.html' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>"
 			]
         },{
            "id":"2",
 		   "cell": [
 				"<a href='oracle.html'>Kpd-08</a>",
 				"<div class='sys_down' onclick='viewRelevance()'></div>",
-				"<div class='poor' onclick='viewRelevance()'></div>"
+				"<div class='poor' onclick='viewRelevance()'></div>",
+				"<a href='addOracle.html' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>"
 			]         
         }
     ]
