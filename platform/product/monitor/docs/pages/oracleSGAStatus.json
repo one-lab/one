@@ -1,0 +1,34 @@
+{
+    "total": "8",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+				"2.0",
+				"<a onclick='viewRelevanceSGAStatus(this)'><div class='threshold_icon'></div></a>"
+			]
+        },  {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+				"2.0",
+			"<a onclick='viewRelevanceSGAStatus(this)'><div class='threshold_icon'></div></a>"
+			]
+        }, {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+				"2.0",
+				"<a onclick='viewRelevanceSGAStatus(this)'><div class='threshold_icon'></div></a>"
+			]
+        }, {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+				"2.0",
+				"<a onclick='viewRelevanceSGAStatus(this)'><div class='threshold_icon'></div></a>"
+			]
+        }
+    ]
+}

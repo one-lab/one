@@ -1,0 +1,58 @@
+﻿[
+	{ 
+		"attr" : {"id": "id_1"},
+		"data" : "部门一", 
+		"children" : [
+			{ 
+				"attr" : {"id": "id_1_1"},
+				"data" : "子部门一",
+				"children":[
+					{
+						"attr":{"id":"id_1_1_1"},
+						"data":"销售"
+					},
+					{
+						"attr":{"id":"id_1_1_2"},
+						"data":"维护"
+					}
+				]
+			},
+			{
+				"attr" : {"id": "id_1_2"},
+				"data" : { 
+						"title" : "子部门二", 
+						"attr" : { "href" : "#" }
+				},
+				"children":[
+					{
+						"attr":{"id":"id_1_2_1"},
+						"data":"检修"
+					},
+					{
+						"attr":{"id":"id_1_2_2"},
+						"data":"培训"
+					}
+				]
+			}
+		], 
+		"state" : "close" 
+	},
+	{ 
+		"attr" : {"id": "id_2"},
+		"data" : "部门二", 
+		"children" : [
+			{ 
+				"attr" : {"id": "id_2_1"},
+				"data" : "检修"
+			},
+			{
+				"attr" : {"id": "id_2_2"},
+				"data" : { 
+						"title" : "维护", 
+						"attr" : { "href" : "#" } 
+				}
+			}
+		], 
+		"state" : "close" 
+	}
+]

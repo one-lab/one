@@ -5,8 +5,10 @@
 <title>monitor监控系统</title>
 <link href="css/base.css" rel="stylesheet" type="text/css" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="js/jquery-1.7.1.js"></script>
 <script language="javascript" src="js/sinosoft.layout.js"></script>
+<script language="javascript" src="js/sinosoft.grid.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -16,6 +18,78 @@ $(function(){
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
+	
+	$("#thresholdList").Grid({
+		url : "index.json",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: "auto",  
+		colums:[  
+			{id:'1',text:'名称',name:"appellation",index:'1',align:''},
+			{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
+			{id:'3',text:'健康状态',name:"appellation",index:'1',align:''}
+		],  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: false  
+	});
+	$("#systemList").Grid({
+		url : "index2.json",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: "auto",  
+		colums:[  
+			{id:'1',text:'名称',name:"appellation",index:'1',align:''},
+			{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
+			{id:'3',text:'健康状态',name:"appellation",index:'1',align:''}
+		],  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: false  
+	});
+	$("#oracleList").Grid({
+		url : "index3.json",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: "auto",  
+		colums:[  
+			{id:'1',text:'名称',name:"appellation",index:'1',align:''},
+			{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
+			{id:'3',text:'健康状态',name:"appellation",index:'1',align:''}
+		],  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: false  
+	});
+	$("#emergencyList").Grid({
+		url : "alertList.json",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: "auto",  
+		colums:[  
+			{id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
+			{id:'2',text:'消息',name:"appellation",index:'1',align:''},
+			{id:'3',text:'名称',name:"appellation",index:'1',align:''},
+			{id:'4',text:'类型',name:"appellation",index:'1',align:''},
+			{id:'5',text:'时间',name:"appellation",index:'1',align:''},
+			{id:'6',text:'用户',name:"appellation",index:'1',align:''}
+		],  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: false  
+	});
 });
 function navHover(){
 	$(this).toggleClass("hover")
@@ -109,13 +183,36 @@ function hideNav(e){
 	<div class="main">
     	<table width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td><div</td>
-            <td width="15">&nbsp;</td>
-            <td>&nbsp;</td>
+            <td width="48%" rowspan="3" style="vertical-align:top">
+                <div class="threshold_file">
+                    <h3 class="title3">应用系统：</h3>
+                    <div id="thresholdList"></div>
+                </div>
+                <br />
+            	<div class="threshold_file">
+                    <h3 class="title3">预警信息：</h3>
+                    <div id="emergencyList"></div>
+                </div>
+            </td>
+            <td width="4%">&nbsp;
+            	
+            </td>
+            <td rowspan="3" style="vertical-align:top">
+            	<div class="threshold_file">
+                    <h3 class="title3">操作系统：</h3>
+                    <div id="systemList"></div>
+                </div>
+                <br />
+            	<div class="threshold_file">
+                    <h3 class="title3">数据库：</h3>
+                    <div id="oracleList"></div>
+                </div>
+            </td>
           </tr>
           <tr>
             <td>&nbsp;</td>
-            <td>&nbsp;</td>
+          </tr>
+          <tr>
             <td>&nbsp;</td>
           </tr>
         </table>

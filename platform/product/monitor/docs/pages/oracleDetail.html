@@ -7,10 +7,12 @@
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <link href="css/oracle.css" rel="stylesheet" type="text/css" />
 <link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.window.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="js/jquery-1.7.1.js"></script>
 <script language="javascript" src="js/sinosoft.layout.js"></script>
 <script language="javascript" src="js/sinosoft.grid.js"></script>  
 <script language="javascript" src="js/highcharts.src.js"></script>
+<script language="javascript" src="js/sinosoft.window.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -22,83 +24,69 @@ $(function(){
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
 	$("#sevenday_grid").Grid({
-		url : "sevenDayConnect.json",
+		url : "SevenDayAvailable.json",
 		dataType: "json",
 		height: 'auto',
 		colums:[
-			{id:'1',text:'日期',name:"methodName",width:'',index:'1',align:'',color:''},
-			{id:'2',text:'时间',name:"maxTime",width:'300',index:'1',align:'',color:''},
-			{id:'3',text:'最小值  ',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'最大值 ',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'每小时平均值 ',name:"status",width:'',index:'1',align:'',color:''}
+			{id:'1',text:'选项',name:"methodName",width:'',index:'1',align:'',color:''},
+			{id:'2',text:'正常运行时间 %',name:"maxTime",width:'300',index:'1',align:'',color:''},
+			{id:'3',text:'总停机时间',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'平均修复时间',name:"avgTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'平均故障间隔时间',name:"status",width:'',index:'1',align:'',color:''}
 		],
 		rowNum:10,
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:false,
 	});
 });
 $(function(){
 	var chart;
 	$(document).ready(function(){
-			chart = new Highcharts.Chart({
+			
+        chart4 = new Highcharts.Chart({
             chart: {
-                renderTo: 'last_sevenday',
-                type: 'line',
-								height:200
+                renderTo: 'available',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+								height:260
             },
             title: {
                 text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                categories: ['26-二月,12:00', '27-二月,00:00', '27-二月,12:00', '28-二月,00:00', '28-二月,12:00', '1-三月,00:00', '1-三月,12:00']
-            },
-            yAxis: {
-                title: {
-                    text: '用户数'
-                }
-								
-									
-            },
-            tooltip: {
-                enabled: false,
-                formatter: function() {
-                    return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ this.y ;
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false,
-									  marker:{  
-											enabled:false
-										}
-                }
             },
 						credits: { 
 							text: '',
 							href: ''
 						},
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.point.name +'</b>: '+ this.percentage +'%';
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+												formatter: function() {
+                            return this.percentage +' %';
+                        }
+                    },
+                    showInLegend: true
+                }
+            },
             series: [{
-                name: '所选时间内的平均值',
-                data: [98, 42, 57, 85, 79, 12, 17]
-            },
-						{
-                name: '平均值(每小时)',
-                data: [57, 85, 19, 42, 57, 85, 19]
-            },
-						{
-                name: '移动平均值',
-                data: [19, 42, 57, 85, 57, 85, 29]
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    
+                    ['正常运行时间',113]
+                ]
             }],
-						colors: ['#00b200', '#0000b2', '#b200b2'] 
+						colors: ['#5cff5c'] 
         });
 		})	
 })
@@ -129,51 +117,48 @@ function hideNav(e){
 	});	
 	$(document).unbind();
 }
+function createThirtyDayAvailable() { 
+	$("body").window({  
+			"id":"thirtyDayAvailable",   
+			"title":"30天可用性",  
+			"url":"thirtyDayAvailable.html",   
+			"hasIFrame":false,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+} 
 </script>
 </head>
 	
 <body>
 <div id="layout_center">
-  <div class="main" style="padding-bottom:60px;">
+  <div class="main">
      <div class="threshold_file">
-          <div class="sub_title">最近7天的每小时用户数</div>
+       <h2 class="title2"><b>可用性报表</b></h2>
+          <div class="sub_title">针对oracle的7天的可用性报表 </div>
           
           <table class="base_info" width="100%" cellpadding="0" cellspacing="0">
             <tr><td>监视器名称</td><td>oracle</td></tr>
-            <tr><td>属性 </td><td> 	连接时间 ms  </td></tr>
+            <tr><td>属性 </td><td>用户数 </td></tr>
             <tr><td>从  </td><td> 	2013-2-26 上午11:00 </td></tr>
             <tr><td>到 </td><td> 	2013-3-1 下午6:22</td></tr>
            
             <tr><td colspan="2"> 
             	<div class="days_data">
-                  <a  href="thirtyDayConnect.html"><div class="thirty_days"></div></a>
+                  <a href="thirtyDayAvailable.html"><div class="thirty_days"></div></a>
                   <a><div class="seven_days_unable"></div></a>
                 </div></td></tr>
-             <tr><td colspan="2"><div id="last_sevenday" ></div></td></tr>
-             <tr>
-               <td colspan="2">
-                 <div class="buttom_mark">
-                    <div>连接时间:</div><div>1</div>
-                    <div>最小平均值</div><div>2</div>
-                    <div>最大平均值:</div><div>23</div>
-                    <div>平均:</div><div>13.489 </div>
-                 </div>
-             </td></tr>
-             <tr>
-               <td colspan="2">
-                 <div class="buttom_mark">
-                    <div>阈值明细:</div><div>1</div>
-                    <div>严重:</div><div> > 2000  ms</div>
-                    <div>警告:</div><div>  > 1500  ms</div>
-                    <div>正常:</div><div> <= 1500  ms  </div>
-                 </div>
-             </td></tr>
+             <tr><td colspan="2"><div id="available" ></div></td></tr>
+             
           </table>
-
+          
+         
      </div>
      
      <div class="threshold_file">
-       <div class="sub_title">用户数</div>
+       <div class="sub_title">监视器停机时间历史</div>
        <div id="sevenday_grid"></div>
      </div>
   </div>

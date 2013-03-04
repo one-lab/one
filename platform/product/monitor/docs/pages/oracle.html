@@ -51,7 +51,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:false,
 	});
 	
 	$("#table_space_status").Grid({
@@ -73,7 +73,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:false,
 	});
 	
 	$("#table_space_performance").Grid({
@@ -96,11 +96,11 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:false,
 	});
 	
 		$("#sga_detail").Grid({
-		url : "oracle3.json",
+		url : "oracleSGADetail.json",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -116,7 +116,7 @@ $(function(){
 	});
 	
 	$("#sga_status").Grid({
-		url : "oracle3.json",
+		url : "oracleSGAStatus.json",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -128,9 +128,12 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:false,
 	});
 	$("#tabs").tabs({closeTab:false});
+	$(".show_table_space_a").bind("click",function(){
+			$("#tabs").find("li").eq(1).click();
+		});
 });
 function navHover(){
 	$(this).toggleClass("hover")
@@ -162,142 +165,329 @@ function hideNav(e){
 
 
 function createSevenDayUser() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne11",   
 			"title":"7天可用",  
-			"url":"sevenDayuser.html",   
-			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
+			"url":"sevenDayUser.html",   
+			"hasIFrame":true,  
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 }  
 function createThirtyDayUser() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne10",   
 			"title":"30天可用性",  
-			"url":"thirtyDayuser.html",   
+			"url":"thirtyDayUser.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 }  
 function createSevenDayConnect() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne9",   
 			"title":"7天可用",  
 			"url":"sevenDayConnect.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 }
 function createThirtyDayConnect() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne8",   
 			"title":"30天可用性",  
 			"url":"thirtyDayConnect.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 } 
 function createSevenDayHitRate() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne7",   
 			"title":"7天可用",  
 			"url":"sevenDayHitRate.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 } 
 function createThirtyDayHitRate() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne6",   
 			"title":"30天可用性",  
 			"url":"thirtyDayHitRate.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 } 
 function createSevenDayAvailable() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne5",   
 			"title":"7天可用性",  
 			"url":"sevenDayAvailable.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 } 
 function createThirtyDayAvailable() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne4",   
 			"title":"30天可用性",  
 			"url":"thirtyDayAvailable.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 } 
 function createHistoryCPU() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne3",   
 			"title":"CPU历史记录",  
 			"url":"historyCPU.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 }
 function createHistoryMemory() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne2",   
 			"title":"内存历史记录",  
 			"url":"historyMemory.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 }
 function createHistoryDisk() { 
-	$("body").window({  
+	var temWin = $("body").window({  
 			"id":"testOne1",   
 			"title":"磁盘历史记录",  
 			"url":"historyDisk.html",   
 			"hasIFrame":true,   
-			"top":20,   
-			"left":20,
 			"width":850,
-			"height":650  
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
 	}); 
 }
-function viewRelevance(){
+function viewRelevanceSGADetail(){
 	var temWin = $("body").window({
 		"id":"window",   
         "title":'根本原因分析',  
-		"url":"basicReaon.html",   
+		"url":"basicReaonSGADetail.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function viewRelevanceSGAStauts(){
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":'根本原因分析',  
+		"url":"basicReaonSGAStatus.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function viewRelevanceUser(){
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":'根本原因分析',  
+		"url":"basicReaonUser.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function viewRelevanceConnect(){
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":'根本原因分析',  
+		"url":"basicReaonConnect.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function viewRelevanceNowUserStatus(){
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":'根本原因分析',  
+		"url":"basicReaonNowUserStatus.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}function viewRelevanceNowHealth(){
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":'根本原因分析',  
+		"url":"basicReaonNowHealth.html",   
         "hasIFrame":true,
 		"width": 740,
 		"height":440,
@@ -402,7 +592,7 @@ function viewRelevance(){
             <div class="sub_title">基本信息</div>
             <table class="base_info" width="100%" cellpadding="0" cellspacing="0" >
               <tr><td>名称</td><td>oracle</td></tr>
-              <tr><td>健康状况</td><td>健康状态为正常 . 没有出现严重的告警。</td></tr>
+              <tr><td>健康状况</td><td><a onclick="viewRelevanceNowHealth(this);"><div class="health_good">健康状态为正常 . 没有出现严重的告警。</div></a></td></tr>
               <tr><td>类型</td><td>Oracle服务器</td></tr>
               <tr><td>Oracle版本</td><td>10.2.0.1.0</td></tr>
               <tr><td>Oracle启动时间</td><td>2013-02-18 14:21:12.0</td></tr>
@@ -424,7 +614,7 @@ function viewRelevance(){
             <div id="day_available" ></div>
             <div class="tool_bar_bottom">
             	<div style="width:50%;float:left; margin-left:20px;">
-              	<div style="float:left;">当前状态:</div><a href="javascript:void(0);"  onclick="viewRelevance(this);"><div class="now_status_up"></div></a></div>
+              	<div style="float:left;">当前状态:</div><a href="javascript:void(0);"  onclick="viewRelevanceNowUserStatus(this);"><div class="now_status_up"></div></a></div>
               <a href="#" >
                 <div class="warn_set">警告配置</div>
               </a>
@@ -445,8 +635,11 @@ function viewRelevance(){
           <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
-                <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
+                <tr><td>连接时间</td><td>340ms</td>
+                	<td>
+                  	<a onclick="viewRelevanceConnect(this);"><div class="threshold_icon"></div></a>
+                  </td></tr>
+                <tr><td colspan="3"><a href="setEmergency.html" ><div class="warn_set">警告配置</div></a></td></tr>
               </table>
          	</div>
          
@@ -463,8 +656,9 @@ function viewRelevance(){
            <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
-                  <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
+                <tr><td>连接时间</td><td>340ms</td>
+                	<td><a onclick="viewRelevanceUser(this);"><div class="threshold_icon"></div></a></td></tr>
+                  <tr><td colspan="3"><a href="setEmergency.html" ><div class="warn_set">警告配置</div></a></td></tr>
               </table>
          	</div>
         </td>
@@ -475,7 +669,7 @@ function viewRelevance(){
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<div class="sub_title">
                 	最少可用字节的表空间
-                  <a class="show_table_space_a" href="#">显示所有表空间</a>
+                  <a class="show_table_space_a">显示所有表空间</a>
                 </div>
                 
                 <tr><td>名称</td><td>可用字节 (MB)</td><td> 	%可用</td></tr>
@@ -604,16 +798,6 @@ function viewRelevance(){
               <div><img src="images/db/legend-green.png" /><span>可用空间</span>
              <img src="images/db/legend-red.png" /><span>已用空间</span></div>
             </div>
-       </div>
-       <div class="threshold_file">
-            <div class="sub_title">表空间状态</div>
-            <div id="table_space_status"></div>
-          	<div class="tool_bar_top"></div>
-       </div>
-       <div class="threshold_file">
-            <div class="sub_title">数据文件的性能指标</div>
-            <div id="table_space_performance"></div>
-          	<div class="tool_bar_top"></div>
        </div>
     </div>
     <div id="sga">
