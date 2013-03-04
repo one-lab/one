@@ -10,12 +10,9 @@ import org.springframework.stereotype.Component;
  * Date: 13-3-2
  * Time: 上午10:14
  */
-@Component
 public class MessageBaseEventHandler implements EventHandler<MessageBaseEvent> {
-	@Autowired
-	private AlarmMessageHandler alarmMessageHandler;
 	@Override
 	public void onEvent(MessageBaseEvent event, long sequence, boolean endOfBatch) throws Exception {
-		alarmMessageHandler.doMessage(event.getMessageBase(), event.getAlarmId());
+		AlarmMessageHandlerHelpers.getAlarmMessageHandler().doMessage(event.getMessageBase(), event.getAlarmId());
 	}
 }

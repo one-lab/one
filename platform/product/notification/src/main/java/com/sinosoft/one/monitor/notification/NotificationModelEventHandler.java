@@ -32,8 +32,9 @@ final class NotificationModelEventHandler implements EventHandler<NotificationMo
 			logger.warn("send data to url [" + url + "] has exception.");
 		} else if(NotificationResponseType.Success.name().equalsIgnoreCase(responseStr)) {
 			logger.debug("send data to url [" + url + "] success.");
-		} else {
-
+		} else if(NotificationResponseType.NotExist.name().equalsIgnoreCase(responseStr)){
+			logger.debug("this application was removed in monitor.");
+			NotificationConfiguration.getInstance().removeApplication();
 		}
 
 	}

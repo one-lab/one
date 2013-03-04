@@ -1,10 +1,6 @@
 package com.sinosoft.one.monitor.common;
 
 import com.sinosoft.one.monitor.action.domain.ActionService;
-import com.sinosoft.one.monitor.action.model.ActionType;
-import com.sinosoft.one.monitor.action.model.MailAction;
-import com.sinosoft.one.monitor.action.model.MailInfo;
-import com.sinosoft.one.monitor.action.model.SmsAction;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
@@ -15,7 +11,6 @@ import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.threshold.domain.ThresholdService;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +24,7 @@ import java.util.List;
  * Date: 13-3-1
  * Time: 下午3:57
  */
-@Component
+
 public class AlarmMessageHandler {
 	@Autowired
 	private AlarmService alarmService;
@@ -64,9 +59,9 @@ public class AlarmMessageHandler {
 			if(alarmMessage.isAvailabilityAlarm()) {
 				thresholdAlarmParams.isAvailabilityAlarm = true;
 				thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
-				thresholdAlarmParams.availabilityAttributeActions = actionService.queryAttributeActions(resourceId, AttributeNames.Availability.name(), SeverityLevel.CRITICAL.name());
+				thresholdAlarmParams.availabilityAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Availability.name(), SeverityLevel.CRITICAL);
 				if(thresholdAlarmParams.healthAttributeActions == null) {
-					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, AttributeNames.Health.name(), SeverityLevel.CRITICAL.name());
+					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Health.name(), SeverityLevel.CRITICAL);
 				}
 				break;
 			}
@@ -75,7 +70,7 @@ public class AlarmMessageHandler {
 				thresholdAlarmParams.isExceptionAlarm = true;
 				thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
 
-				thresholdAlarmParams.exceptionAttributeActions = actionService.queryAttributeActions(resourceId, AttributeNames.Exception.name(), SeverityLevel.CRITICAL.name());
+				thresholdAlarmParams.exceptionAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Exception.name(), SeverityLevel.CRITICAL);
 				break;
 			}
 
@@ -97,9 +92,9 @@ public class AlarmMessageHandler {
 				thresholdAlarmInfo.setAttribute(attribute);
 
 				if(thresholdAlarmParams.healthAttributeActions == null) {
-					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, AttributeNames.Health.name(), severityLevel.name());
+					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Health.name(), severityLevel);
 				}
-				List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(resourceId, attribute.getId(), severityLevel.name());
+				List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(resourceId, attribute.getId(), severityLevel);
 				thresholdAlarmInfo.setThresholdAttributeActions(thresholdAttributeActions);
 				thresholdAlarmParams.thresholdAlarmInfos.add(thresholdAlarmInfo);
 			}
@@ -152,7 +147,7 @@ public class AlarmMessageHandler {
 
 		// 保存告警信息
 		Alarm alarm = new Alarm(thresholdAlarmParams.alarmId);
-		Attribute attribute = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceId() + "#" + AttributeNames.Health);
+		Attribute attribute = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType() + "#" + AttributeName.Health);
 		alarm.setAlarmSource(thresholdAlarmParams.alarmSource);
 		alarm.setAttributeId(attribute.getId());
 		alarm.setMonitorId(thresholdAlarmParams.resource.getResourceId());

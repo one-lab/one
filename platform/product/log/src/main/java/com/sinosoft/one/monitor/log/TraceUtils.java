@@ -22,6 +22,11 @@ public class TraceUtils {
 
 	public static final String URL_ID_KEY = "urlId";
 
+	public static final String URL = "url";
+
+	public static final String REQUEST_PARAMS = "requestParams";
+
+
 	public static final int TRACE_ID_LENGTH = 32;
 	
 	/**
@@ -34,12 +39,28 @@ public class TraceUtils {
 		MDC.put(URL_TRACE_LOG_KEY, urlTraceLog);
 	}
 
+	/**
+	 * 开始Trace, 将url放入MDC.
+	 */
+	public static void beginTraceForNoMonitorURL(String url, String requestParams) {
+		MDC.put(URL, url);
+		MDC.put(REQUEST_PARAMS, requestParams);
+	}
 
 	/**
 	 * 开始Trace, 将traceId放入MDC.
 	 */
 	public static void beginTrace(String traceId) {
 		MDC.put(TRACE_ID_KEY, traceId);
+	}
+
+	/**
+	 * 结束一次Trace.
+	 * 清除traceId.
+	 */
+	public static void endTraceForNoMonitorURL() {
+		MDC.remove(URL);
+		MDC.remove(REQUEST_PARAMS);
 	}
 
 	/**

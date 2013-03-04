@@ -8,7 +8,6 @@ import java.util.Date;
  * User: carvin
  * Date: 13-3-2
  * Time: 下午10:47
- * To change this template use File | Settings | File Templates.
  */
 public class UrlResponseTime {
 	/**

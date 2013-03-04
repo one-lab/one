@@ -27,7 +27,7 @@
 	<!-- Jpa Entity Manager 配置 -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="dataSourceProxy" />
 		<property name="packagesToScan" value="com.sinosoft.one.monitor" />
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
 		<property name="jpaProperties">
@@ -74,6 +74,9 @@
         <property name="testOnReturn" value="false" />
         <property name="poolPreparedStatements" value="true" />
         <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+    </bean>
+    <bean id="dataSourceProxy" class="com.sinosoft.one.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSource" />
     </bean>
 
 	<bean id="loginFilter" class="com.sinosoft.one.monitor.shiro.LoginFilter"></bean>
@@ -128,4 +131,10 @@
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>
+
+    <bean id="alarmMessageHandlerHelpers" class="com.sinosoft.one.monitor.common.AlarmMessageHandlerHelpers">
+        <property name="alarmMessageHandler" ref="alarmMessageHandler" />
+    </bean>
+    <bean id="alarmMessageHandler" class="com.sinosoft.one.monitor.common.AlarmMessageHandler" />
+
 </beans>

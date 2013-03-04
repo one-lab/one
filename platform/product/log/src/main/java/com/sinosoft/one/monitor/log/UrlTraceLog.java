@@ -147,15 +147,16 @@ public class UrlTraceLog implements NotificationModel {
         return urlTraceLog;
     }
 
-    public static void endTrace(HttpServletRequest request, UrlTraceLog targetURLTraceLog) {
+    public static long endTrace(HttpServletRequest request, UrlTraceLog targetURLTraceLog) {
         targetURLTraceLog.setUrl(request.getRequestURI());
-        Date endDate = new Date();
-        targetURLTraceLog.setEndTime(new Timestamp(System.currentTimeMillis()));
-        targetURLTraceLog.setConsumeTime(endDate.getTime() - targetURLTraceLog.getBeginTime().getTime());
+        long endTime = System.currentTimeMillis();
+        targetURLTraceLog.setEndTime(new Timestamp(endTime));
+        targetURLTraceLog.setConsumeTime(endTime - targetURLTraceLog.getBeginTime().getTime());
         targetURLTraceLog.setSessionId(request.getSession(false).getId());
         targetURLTraceLog.setUserIp(request.getRemoteAddr());
         targetURLTraceLog.setRequestParams(JSON.toJSONString(request.getParameterMap()));
 	    NotificationServiceFactory.buildNotificationService().notification(targetURLTraceLog);
+	    return endTime;
     }
 
     @Override

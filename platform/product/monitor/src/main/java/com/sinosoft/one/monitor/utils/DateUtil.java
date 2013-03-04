@@ -1,11 +1,18 @@
 package com.sinosoft.one.monitor.utils;
 
-import java.text.SimpleDateFormat;
+
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
-	public static String getFormatDate(String format){
-		SimpleDateFormat sdf=new SimpleDateFormat(null==format||"".equals(format)?"yyyyMMddHHmmss":format);
-		return sdf.format(new Date());
+	public static long minus(Date minuendDate, Date subtrahendDate, int type) {
+		long result = minuendDate.getTime() - subtrahendDate.getTime();
+
+		switch(type) {
+			case Calendar.SECOND : return result / 1000;
+			case Calendar.MINUTE : return result / (60*1000);
+			case Calendar.HOUR: return result / (24*60*1000);
+			default: throw new UnsupportedOperationException("this type is not support.");
+		}
 	}
 }

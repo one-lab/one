@@ -30,6 +30,14 @@ public class ExceptionModel implements NotificationModel {
 	 * 异常描述
 	 */
 	private String exceptionDescription;
+	/**
+	 * URL地址
+	 */
+	private String url;
+	/**
+	 * URL请求参数
+	 */
+	private String requestParams;
 
 	public ExceptionModel(String urlTraceId,  String exceptionDescription,  String exceptionStackTrace) {
 		this.urlTraceId = urlTraceId;
@@ -67,6 +75,22 @@ public class ExceptionModel implements NotificationModel {
 
 	public void setExceptionStackTrace(String exceptionStackTrace) {
 		this.exceptionStackTrace = exceptionStackTrace;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getRequestParams() {
+		return requestParams;
+	}
+
+	public void setRequestParams(String requestParams) {
+		this.requestParams = requestParams;
 	}
 
 	@Override

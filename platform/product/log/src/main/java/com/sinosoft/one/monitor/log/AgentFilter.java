@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import com.alibaba.fastjson.JSON;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
@@ -31,14 +33,15 @@ public class AgentFilter implements Filter {
 			FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		url = httpServletRequest.getRequestURI();
+
 		if(isExclude(url)) {
 			filterChain.doFilter(request, response);
 		} else {
 			long beginTime = System.currentTimeMillis();
-	        doUrlTraceLogBegin();
+	        doUrlTraceLogBegin(httpServletRequest);
 	        filterChain.doFilter(request, response);
-	        doUrlTraceLogEnd(httpServletRequest);
-			doUrlResponseTime(beginTime);
+	        long endTime = doUrlTraceLogEnd(httpServletRequest);
+			UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(url, urlId, endTime-beginTime));
 		}
 	}
 
@@ -52,24 +55,31 @@ public class AgentFilter implements Filter {
 		}
     }
 
-    private void doUrlTraceLogBegin() {
+    private void doUrlTraceLogBegin(HttpServletRequest request) {
         if(logConfigs != null) {
 	        urlId = logConfigs.isMonitorUrl(url);
            if(urlId != null) {
 	           urlTraceLog = UrlTraceLog.beginTrace();
 	           urlTraceLog.setUrlId(urlId);
 	           TraceUtils.beginTrace(urlTraceLog, urlId);
+           } else {
+	           TraceUtils.beginTraceForNoMonitorURL(url, JSON.toJSONString(request.getParameterMap()));
            }
         } else {
 	        urlId = null;
         }
     }
 
-    private void doUrlTraceLogEnd(HttpServletRequest request) {
+    private long doUrlTraceLogEnd(HttpServletRequest request) {
+	    long endTime = 0l;
         if(urlTraceLog != null) {
-            UrlTraceLog.endTrace(request, urlTraceLog);
+            endTime = UrlTraceLog.endTrace(request, urlTraceLog);
             TraceUtils.endTrace();
+        } else {
+	        TraceUtils.endTraceForNoMonitorURL();
+	        endTime = System.currentTimeMillis();
         }
+	    return endTime;
     }
 
 	private boolean isExclude(String url) {
@@ -84,9 +94,5 @@ public class AgentFilter implements Filter {
 			}
 		}
 		return false;
-	}
-	private void doUrlResponseTime(long beginTime) {
-		long endTime = System.currentTimeMillis();
-		UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(url, urlId, endTime-beginTime));
 	}
 }

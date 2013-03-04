@@ -61,7 +61,7 @@ public class ActionService {
 	 * @param severity 严重程度
 	 * @return 动作信息
 	 */
-	public List<AttributeAction> queryAttributeActions(String resourceId, String attributeId, String severity) {
+	public List<AttributeAction> queryAttributeActions(String resourceId, String attributeId, SeverityLevel severity) {
 		return attributeActionRepository.findByResourceIdAndAttributeIdAndSeverity(resourceId, attributeId, severity);
 	}
 

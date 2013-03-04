@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.attribute.repository;
 // Generated 2013-3-1 10:54:17 by One Data Tools 1.0.0
 
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -14,6 +15,6 @@ public interface AttributeRepository extends PagingAndSortingRepository<Attribut
 	 * @param attribute 属性名
 	 * @return 属性对象
 	 */
-	Attribute findByResourceTypeAndAttribute(String resourceType, String attribute);
+	Attribute findByResourceTypeAndAttribute(ResourceType resourceType, String attribute);
 }
 

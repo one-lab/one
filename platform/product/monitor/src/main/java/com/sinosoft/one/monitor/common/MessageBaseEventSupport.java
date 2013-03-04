@@ -17,10 +17,11 @@ import java.util.concurrent.Executors;
  * Date: 13-3-2
  * Time: 上午10:21
  */
-@Component
 public class MessageBaseEventSupport {
-	@Autowired
-	private MessageBaseEventHandler messageBaseEventHandler;
+	private static MessageBaseEventSupport messageBaseEventSupport = new MessageBaseEventSupport();
+	public static MessageBaseEventSupport build() {
+		return messageBaseEventSupport;
+	}
 	private int ringSize = 1024;
 	private RingBuffer<MessageBaseEvent> ringBuffer;
 
@@ -28,17 +29,15 @@ public class MessageBaseEventSupport {
 		this.ringSize = ringSize;
 	}
 
-	public MessageBaseEventSupport() {
-
+	private MessageBaseEventSupport() {
+		init();
 	}
 
-	@PostConstruct
 	public void init() {
-		Disruptor<MessageBaseEvent> disruptor =
-				new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY, Executors.newSingleThreadExecutor(),
+		Disruptor<MessageBaseEvent> disruptor = new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY, Executors.newSingleThreadExecutor(),
 						new MultiThreadedClaimStrategy(ringSize),
 						new SleepingWaitStrategy());
-		disruptor.handleEventsWith(messageBaseEventHandler);
+		disruptor.handleEventsWith(new MessageBaseEventHandler());
 		ringBuffer = disruptor.start();
 	}
 
@@ -46,7 +45,9 @@ public class MessageBaseEventSupport {
 		long sequence = ringBuffer.next();
 		MessageBaseEvent messageBaseEvent = ringBuffer.get(sequence);
 		messageBaseEvent.setMessageBase(messageBase);
+		String alarmId = UUID.randomUUID().toString().replaceAll("-", "");
+		messageBaseEvent.setAlarmId(alarmId);
 		ringBuffer.publish(sequence);
-		return UUID.randomUUID().toString().replaceAll("-", "");
+		return alarmId;
 	}
 }
