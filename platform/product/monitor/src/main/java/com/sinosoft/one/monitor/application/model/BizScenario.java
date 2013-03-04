@@ -68,6 +68,10 @@ public class BizScenario implements java.io.Serializable {
      */
     private String userName;
     /**
+     * 创建时间(为了页面显示)
+     */
+    private String recodeCreateTime;
+    /**
      * 操作(为了页面显示，可管理url或者删除该条业务场景)
      */
     private String operation="<a href='javascript:void(0)' class='eid' onclick='managerUrl(this)'>管理Url " +
@@ -199,6 +203,15 @@ public class BizScenario implements java.io.Serializable {
 
     public void setOperation(String operation) {
         this.operation = operation;
+    }
+
+    @Transient
+    public String getRecodeCreateTime() {
+        return recodeCreateTime;
+    }
+
+    public void setRecodeCreateTime(String recodeCreateTime) {
+        this.recodeCreateTime = recodeCreateTime;
     }
 
     @Override

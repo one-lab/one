@@ -29,7 +29,7 @@ public class Url implements java.io.Serializable {
      * URL描述.
      */
     @NotEmpty(message = "URL描述不能为空")
-    @Size(min = 1,max = 300,message = "URL地址的长度应该在{min}-{max}之间")
+    @Size(min = 1,max = 300,message = "URL描述的长度应该在{min}-{max}之间")
     private String description;
     /**
      * URL地址.

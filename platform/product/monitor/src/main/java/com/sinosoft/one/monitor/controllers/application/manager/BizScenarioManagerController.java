@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,14 +56,16 @@ public class BizScenarioManagerController {
         List<BizScenario> bizScenarioList=bizScenarioService.findUserNameAndBizScenario(applicationService.findApplication(appId).getBizScenarios());
         if(bizScenarioList!=null){
             List<BizScenario> bizScenarios=new ArrayList<BizScenario>();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for(BizScenario bizScenario:bizScenarioList){
+                bizScenario.setRecodeCreateTime(formatter.format(bizScenario.getCreateTime()));
                 bizScenario.setBizScenarioGrade(BizScenarioGrade.parseValue(bizScenario.getBizScenarioGrade()).getDisplayName());
                 bizScenarios.add(bizScenario);
             }
             /*List<BizScenario> bizScenarios = bizScenarioService.findAllBizScenario();*/
             Page page=new PageImpl(bizScenarios);
             Gridable<BizScenario> gridable=new Gridable<BizScenario>(page);
-            String cellString=new String("name,userName,createTime,bizScenarioGrade,operation");
+            String cellString=new String("name,userName,recodeCreateTime,bizScenarioGrade,operation");
             gridable.setIdField("id");
             gridable.setCellStringField(cellString);
             try {

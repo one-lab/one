@@ -34,7 +34,7 @@ $(function(){
 		colums:[  
 			{id:'1',text:'场景名称',name:"name",index:'1',align:''},
 			{id:'2',text:'添加人',name:"userName",index:'1',align:''},
-			{id:'3',text:'添加时间',name:"createTime",index:'1',align:''},
+			{id:'3',text:'添加时间',name:"recodeCreateTime",index:'1',align:''},
 			{id:'4',text:'级别',name:"bizScenarioGrade",index:'1',align:''},
 			{id:'5',text:'操作',name:"operation",index:'1',align:''}
 		],  

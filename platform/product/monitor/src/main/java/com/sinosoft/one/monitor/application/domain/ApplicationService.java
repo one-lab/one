@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -93,7 +94,7 @@ public class ApplicationService {
         return methods;
     }
 
-    public void updateApplicationWithModifyInfo(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId) {
-        applicationRepository.updateApplication(appId,applicationName,cnName,applicationIp,applicationPort,modifierId);
+    public void updateApplicationWithModifyInfo(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId, BigDecimal interval) {
+        applicationRepository.updateApplication(appId,applicationName,cnName,applicationIp,applicationPort,modifierId,interval);
     }
 }

@@ -8,6 +8,7 @@ import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ApplicationRepository extends PagingAndSortingRepository<Application, String> {
@@ -30,7 +31,7 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
     @SQL("update GE_MONITOR_APPLICATION a set a.STATUS='0' where a.ID=?1")
     void deleteApplicationById(@Param("appId") String appId);
 
-    @SQL("update GE_MONITOR_APPLICATION a set a.APPLICATION_NAME=?2,a.CN_NAME=?3,a.APPLICATION_IP=?4,a.APPLICATION_PORT=?5,a.MODIFIER_ID=?6,a.MODIFY_TIME=sysdate where a.ID=?1")
-    void updateApplication(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId);
+    @SQL("update GE_MONITOR_APPLICATION a set a.APPLICATION_NAME=?2,a.CN_NAME=?3,a.APPLICATION_IP=?4,a.APPLICATION_PORT=?5,a.MODIFIER_ID=?6,a.MODIFY_TIME=sysdate,a.INTERVAL=?7 where a.ID=?1")
+    void updateApplication(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId, BigDecimal interval);
 }
 

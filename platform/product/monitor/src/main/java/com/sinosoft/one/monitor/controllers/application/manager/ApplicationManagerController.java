@@ -110,7 +110,7 @@ public class ApplicationManagerController {
         String modifierId="4028921a3cfb99be013cfb9ccf650000";
         //更新时间使用sysdate
         applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
-                application.getApplicationIp(),application.getApplicationPort(),modifierId);
+                application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());
         //应用列表页面
         return "r:/application/manager/appmanager/applist";
     }
