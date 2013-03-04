@@ -21,8 +21,8 @@ public interface OsAvailabletempRepository extends PagingAndSortingRepository<Os
 	public List<OsAvailabletemp> findAvailabletempByDateAndSt(String osid,String beginTime,String endTime,String dateFormat ,String status);
 	
 	//根据时间段删除
-	@SQL("delete from GE_MONITOR_OS_AVAILABLETEMP o where o.record_time between to_date(?2,?4) and to_date(?3,?4) and o.OS_INFO_ID= ?1 ")
-	public void deleteOsAvailabletempByDate(String osid,String beginTime,String endTime,String dateFormat );
+	@SQL("delete from GE_MONITOR_OS_AVAILABLETEMP o where o.record_time between ?2 and ?3 and o.OS_INFO_ID= ?1 ")
+	public void deleteOsAvailabletempByDate(String osid,Date beginTime,Date endTime );
 	
 	//获取最后一次轮询记录点时间
 //	@SQL("select * from GE_MONITOR_OS_AVAILABLETEMP o where o.sample_date=(select max(sample_date) from GE_MONITOR_OS_AVAILABLETEMP where sample_date<to_date(?2,?3)) and o.OS_INFO_ID= ?1")
@@ -30,8 +30,8 @@ public interface OsAvailabletempRepository extends PagingAndSortingRepository<Os
 	public OsAvailabletemp findLastAvailable(String osid,String currentTime,String dateFormat );
 
 	//小于目标时间删除
-	@SQL("delete  GE_MONITOR_OS_AVAILABLETEMP o where o.SAMPLE_DATE< date and o.OS_INFO_ID= ?1 ")
-	public void deleteTempByLessThanTime(String osid,Date date,String dateFormat );
+	@SQL("delete from GE_MONITOR_OS_AVAILABLETEMP o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
+	public void deleteTempByLessThanTime(String osid,Date date);
 	
 }
 

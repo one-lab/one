@@ -53,7 +53,8 @@ public class OsProcessService {
 		OsStatis.add(diskOsStati);
 		OsStatis.add(respondOsStati);
 		osStatiService.saveStatiOneHourList(OsStatis);
-		
+		//删除前一小时的记录
+		//获取最大记录
 	}
 	
 	/**
@@ -75,20 +76,25 @@ public class OsProcessService {
 		Date todayzeroTime= c.getTime();
 		osAvailableServcie.deleteAvailable(osInfoId, todayzeroTime);//删除今天的统计表记录
 		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime);//保存新统计记录
-		//获取临时表集中的最大时间
-		OsAvailabletemp osAvailabletemp=osAvailableServcie.getLastAvailable(osInfoId, sampleTime);
-		//对比当前时间是否比最大时间大一天
-		if(osAvailabletemp.getSampleDate().getDate()<sampleTime.getDate()){
-			//统计昨天的数据
-			//获得昨天的整点
-			c.set(Calendar.DAY_OF_MONTH, sampleTime.getDate()-1);
-			Date yestodayzeroTime= c.getTime();
-			//删除昨天天在统计表的数据
-			osAvailableServcie.deleteAvailable(osInfoId, yestodayzeroTime);
-			//新增昨天到统计表里的数据
-			osDataMathService.statiAvailable(osInfoId, todayzeroTime, yestodayzeroTime, interCycleTime, yestodayzeroTime);
-			osAvailableServcie.deleteTempByLessThanTime(osInfoId, sampleTime);
-		}
+		//删除24小时之外的数据
+		Calendar c2  = Calendar.getInstance();
+		c2.set(Calendar.DAY_OF_MONTH, sampleTime.getDate());
+		c2.set(Calendar.HOUR_OF_DAY,-24);
+		Date deleteTime= c2.getTime();
+		osAvailableServcie.deleteTempByLessThanTime(osInfoId, deleteTime);
+//		if(osAvailabletemp.getSampleDate().getDate()<sampleTime.getDate()){
+//			//统计昨天的数据
+//			//获得昨天的整点
+//			c.set(Calendar.DAY_OF_MONTH, sampleTime.getDate()-1);
+//			Date yestodayzeroTime= c.getTime();
+//			//删除昨天天在统计表的数据
+//			osAvailableServcie.deleteAvailable(osInfoId, yestodayzeroTime);
+//			//新增昨天到统计表里的数据
+//			osDataMathService.statiAvailable(osInfoId, todayzeroTime, yestodayzeroTime, interCycleTime, yestodayzeroTime);
+//			osAvailableServcie.deleteTempByLessThanTime(osInfoId, sampleTime);
+//		}
+		
+		
 	}
 	
 	/**

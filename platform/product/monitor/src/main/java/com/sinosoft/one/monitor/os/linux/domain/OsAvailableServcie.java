@@ -85,8 +85,10 @@ public class OsAvailableServcie {
 	 * 删除可用性临时数据
 	 */
 	public void deleteAvailableTemp(String osInfoId,Date beginTime,Date endTime){
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, simpleDateFormat.format(beginTime), simpleDateFormat.format(endTime),OsUtil.ORCL_DATEFORMATE);
+//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+//		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, simpleDateFormat.format(beginTime), simpleDateFormat.format(endTime),OsUtil.ORCL_DATEFORMATE);
+		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, beginTime, endTime);
+
 	}
 	
 	/**
@@ -94,7 +96,7 @@ public class OsAvailableServcie {
 	 */
 	public void deleteTempByLessThanTime(String osInfoId,Date date ){
 //		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		osAvailabletempRepository.deleteTempByLessThanTime(osInfoId, date,OsUtil.ORCL_DATEFORMATE);
+		osAvailabletempRepository.deleteTempByLessThanTime(osInfoId, date);
 	}
 	
 	/**
