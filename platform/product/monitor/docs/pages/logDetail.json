@@ -1,0 +1,29 @@
+{
+    "total": "400",
+		"red":180,
+		"yellow":50,
+    "method": [
+        {
+			"cell": [
+				"<a href='methodDetail.html'>方法1</a>",
+				"200"
+			]
+        }, {
+			"cell": [
+				"<a href='methodDetail.html'>方法21</a>",
+				"120"
+			]
+        },
+		 {
+			"cell": [
+				"<a href='methodDetail.html'>方法11</a>",
+				"50"
+			]
+        }, {
+			"cell": [
+				"<a href='methodDetail.html'>方法12</a>",
+				"30"
+			]
+        }
+    ]
+}

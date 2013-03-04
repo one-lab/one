@@ -1,0 +1,58 @@
+{
+    "total": "8",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+				"<div class='bg_bar'><div class='red_bar' style='width:10%'></div></div>",
+				"20,480.0",
+				"0.0",
+				"20,480.0",
+				"0",
+				"100",
+				"2,621,440",
+				"2,621,312"
+			]
+        },  {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+			"<div class='bg_bar'><div class='red_bar' style='width:0%'></div></div>",
+				"20,480.0",
+				"0.0",
+				"20,480.0",
+				"0",
+				"100",
+				"2,621,440",
+				"2,621,312"
+			]
+        }, {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+				"<div class='bg_bar'><div class='red_bar' style='width:50%'></div></div>",
+				"20,480.0",
+				"0.0",
+				"20,480.0",
+				"0",
+				"100",
+				"2,621,440",
+				"2,621,312"
+			]
+        }, {
+			"id":"1",
+			"cell": [
+				"TV_TEMP",
+				"<div class='bg_bar'><div class='red_bar' style='width:90%'></div></div>",
+				"20,480.0",
+				"0.0",
+				"20,480.0",
+				"0",
+				"100",
+				"2,621,440",
+				"2,621,312"
+			]
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+{
+    "total": "8",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"/dev/shm",
+				"<div class='bg_bar'><div class='red_bar' style='width:10%'></div></div>",
+				"20,480.0",
+				"0.0",
+				"0",
+				"100",
+				"20,480.0",
+				"<div class='seven1'><a class='seven' onclick='viewWindow(this)' href='#'></a></div>",
+				"<div class='un-know1'><a class='un-know'></div></div>",
+				"<div class='eitdor1'><a class='eitdor' href='setEmergency.html'></a></div>"
+			]
+        },  {
+			"id":"1",
+			"cell": [
+				"总的磁盘空间 ",
+			"<div class='bg_bar'><div class='red_bar' style='width:0%'></div></div>",
+				"20,480.0",
+				"85",
+				"16,480.0",
+				"15",
+				"4,336,8",
+				"<div class='seven1'><a class='seven' onclick='viewWindow(this)' href='#'></a></div>",
+				"<div class='un-know'></div>",
+				"<div class='eitdor1'><a class='eitdor' href='setEmergency.html'></a></div>"
+			]
+        }, {
+			"id":"1",
+			"cell": [
+				"/",
+				"<div class='bg_bar'><div class='red_bar' style='width:75%'></div></div>",
+				"20,480.0",
+				"75",
+				"15,480.0",
+				"25",
+				"3.443.1",
+				"<div class='seven1'><a class='seven' onclick='viewWindow(this)' href='#'></a></div>",
+				"<div class='un-know1'><a class='un-know'></div></div>",
+				"<div class='eitdor1'><a class='eitdor' href='setEmergency.html'></a></div>"
+			]
+        }
+    ]
+}

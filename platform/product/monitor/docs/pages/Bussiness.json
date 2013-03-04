@@ -1,0 +1,40 @@
+{
+    "total": "4",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"Oracle",
+				"<div class='a_image'>100%</div>",
+				"<a href='BusinessUrl.html' class='set-url' >管理URL</a>",
+				null
+			]
+        },{
+           "id":"2",
+		   "cell": [
+				"Oracle2",
+				"<div class='b_image'>80%</div>",
+               				"<a href='BusinessUrl.html' class='set-url' >管理URL</a>",
+				null
+			]         
+        },
+		{
+			"id":"3",
+			"cell": [
+				"Oracle3",
+				"<div class='c_image'>80%</div>",
+								"<a href='BusinessUrl.html' class='set-url' >管理URL</a>",
+				null
+			]
+        },
+		{
+			"id":"4",
+			"cell": [
+				"Oracle4",
+				"<div class='g_image'>100%</div>",
+								"<a href='BusinessUrl.html' class='set-url' >管理URL</a>",
+				null
+			]
+        }
+    ]
+}

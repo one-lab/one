@@ -1,0 +1,43 @@
+{
+    "total": "8",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"方法名称1",
+				"350ms",
+				"5ms",
+				"30ms",
+				"<div class='red_status'>&nbsp;</div>"
+			]
+        }, {
+			"id":"2",
+			"cell": [
+				"方法名称2",
+				"350ms",
+				"5ms",
+				"30ms",
+				"<div class='yellow_status'>&nbsp;</div>"
+			]
+        },
+		 {
+			"id":"3",
+			"cell": [
+				"方法名称3",
+				"350ms",
+				"5ms",
+				"30ms",
+				"<div class='green_status'>&nbsp;</div>"
+			]
+        }, {
+			"id":"4",
+			"cell": [
+				"方法名称4",
+				"350ms",
+				"5ms",
+				"30ms",
+				"<div class='red_status'>&nbsp;</div>"
+			]
+        }
+    ]
+}

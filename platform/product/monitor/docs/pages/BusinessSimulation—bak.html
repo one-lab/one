@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="css/bussiness.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/sinosoft.grid.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#grid").Grid({
+		url : "Bussiness.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'应用名称',name:"appellation",index:'1',align:'',color:''},
+			{id:'4',text:'状况',name:"degrees",index:'1',align:'',color:''},
+			{id:'5',text:'操作',name:"degrees",index:'1',align:'',color:''}
+		],
+		rowNum:10,
+		number:true
+	});	
+	})
+</script>
+</head>
+
+<body>
+<div>
+<h4>终端用户监视概览</h4>
+</div>
+<div id="grid"></div>
+</body>
+</html>

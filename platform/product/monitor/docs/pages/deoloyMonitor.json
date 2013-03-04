@@ -1,0 +1,30 @@
+{
+    "total": "8",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"<a href='#'>Linux</a>",
+				"操作系统",
+				"<div class='sys_up' onclick='viewRelevance()'></div>",
+				"<div class='fine' onclick='viewRelevance()'></div>"
+			]
+        },{
+           "id":"2",
+		   "cell": [
+				"<a href='#'>Kpd-08</a>",
+				"应用系统系统",
+				"<div class='sys_down' onclick='viewRelevance()'></div>",
+				"<div class='poor' onclick='viewRelevance()'></div>"
+			]         
+        },{
+           "id":"2",
+		   "cell": [
+				"<a href='#'>Kpd-08</a>",
+				"数据库",
+				"<div class='sys_down' onclick='viewRelevance()'></div>",
+				"<div class='poor' onclick='viewRelevance()'></div>"
+			]         
+        }
+    ]
+}

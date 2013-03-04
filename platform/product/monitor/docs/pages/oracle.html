@@ -1,0 +1,657 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>monitor监控系统</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/oracle.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/sinosoft.layout.js"></script>
+<script language="javascript" src="js/sinosoft.grid.js"></script>  
+<script language="javascript" src="js/highcharts.src.js"></script>
+<script language="javascript" src="js/highcharts-more.js"></script>
+<script language="javascript" src="js/sinosoft.tabs.js"></script>
+<script language="javascript" src="js/sinosoft.window.js"></script>
+<script language="javascript" src="js/oracle.js"></script>
+<script type="text/javascript">
+$(function(){
+	var usePercent = [45,100,4];
+	$(".hit_rate").each(function(i){
+			$(this).find(".hit_rate_c_m_m").css("height",100-usePercent[i]+"%");
+			$(this).find(".hit_rate_c_m_b").text(usePercent[i]+"%");
+		});
+	$("body").layout({
+		top:{topHeight:100},
+		bottom:{bottomHeight:30}
+	});
+	$("#myDesk").height($("#layout_center").height());
+	$("#nav").delegate('li', 'mouseover mouseout', navHover);
+	$("#nav,#menu").delegate('li', 'click', navClick);
+	
+	$("#table_space_detail").Grid({
+		url : "oracle.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
+			{id:'2',text:'表空间使用情况',name:"maxTime",width:'300',index:'1',align:'',color:''},
+			{id:'3',text:'已分配字节总数 (MB) ',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'已用（Byte） (MB) ',name:"avgTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'可用字节 (MB) ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'6',text:'已用百分比 ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'7',text:'%可用 ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'8',text:'已分配块数',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'9',text:'可用块数 ',name:"status",width:'',index:'1',align:'',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : false,
+		number:false,
+		multiselect:true,
+	});
+	
+	$("#table_space_status").Grid({
+		url : "oracle2.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
+			{id:'2',text:'状态',name:"maxTime",width:'300',index:'1',align:'',color:''},
+			{id:'3',text:' 	数据文件 ',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'读次数/分 ',name:"avgTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'写次数/分',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'6',text:'读时间 ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'7',text:'写时间 ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'8',text:'健康状况',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'9',text:'告警配置',name:"status",width:'',index:'1',align:'right',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : false,
+		number:false,
+		multiselect:true,
+	});
+	
+	$("#table_space_performance").Grid({
+		url : "oracle1.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'数据文件名 ',name:"methodName",width:'',index:'1',align:'',color:''},
+			{id:'2',text:'表空间名  ',name:"maxTime",width:'300',index:'1',align:'',color:''},
+			{id:'3',text:'状态',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'自动扩展',name:"avgTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'数据文件大小 (MB)',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'6',text:'读次数 ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'7',text:'写次数  ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'8',text:'平均读时间 (ms)  ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'9',text:'健康状况',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'10',text:'告警配置',name:"status",width:'',index:'1',align:'',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : false,
+		number:false,
+		multiselect:true,
+	});
+	
+		$("#sga_detail").Grid({
+		url : "oracle3.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'属性 ',name:"methodName",width:'',align:'',color:''},
+			{id:'2',text:'值  ',name:"maxTime",width:'300',align:'',color:''},
+			{id:'3',text:'阈值',name:"minTime",width:'',align:'',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : false,
+		number:false,
+		multiselect:false,
+	});
+	
+	$("#sga_status").Grid({
+		url : "oracle3.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'属性 ',name:"methodName",width:'',index:'1',align:'',color:''},
+			{id:'2',text:'值  ',name:"maxTime",width:'300',index:'1',align:'',color:''},
+			{id:'3',text:'阈值',name:"minTime",width:'',index:'1',align:'',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : false,
+		number:false,
+		multiselect:true,
+	});
+	$("#tabs").tabs({closeTab:false});
+});
+function navHover(){
+	$(this).toggleClass("hover")
+}
+function navClick(){
+	$(this).addClass("seleck").siblings().removeClass("seleck");
+	if($(this).hasClass('has_sub')){
+		var subMav = $(this).children("ul.add_sub_menu");
+		var isAdd = false;
+		if($(this).parent().attr("id") == "menu"){
+			isAdd = true;
+		};
+		subMav.slideDown('fast',function(){
+			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
+			return false;
+		});		
+	};
+}
+function hideNav(e){
+	var subMenu = e.data.dom;
+	var isAdd = e.data.add;
+	subMenu.slideUp('fast',function(){
+		if(isAdd){
+			subMenu.parent().removeClass('seleck');
+		};
+	});	
+	$(document).unbind();
+}
+
+
+function createSevenDayUser() { 
+	$("body").window({  
+			"id":"testOne11",   
+			"title":"7天可用",  
+			"url":"sevenDayuser.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+}  
+function createThirtyDayUser() { 
+	$("body").window({  
+			"id":"testOne10",   
+			"title":"30天可用性",  
+			"url":"thirtyDayuser.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+}  
+function createSevenDayConnect() { 
+	$("body").window({  
+			"id":"testOne9",   
+			"title":"7天可用",  
+			"url":"sevenDayConnect.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+}
+function createThirtyDayConnect() { 
+	$("body").window({  
+			"id":"testOne8",   
+			"title":"30天可用性",  
+			"url":"thirtyDayConnect.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+} 
+function createSevenDayHitRate() { 
+	$("body").window({  
+			"id":"testOne7",   
+			"title":"7天可用",  
+			"url":"sevenDayHitRate.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+} 
+function createThirtyDayHitRate() { 
+	$("body").window({  
+			"id":"testOne6",   
+			"title":"30天可用性",  
+			"url":"thirtyDayHitRate.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+} 
+function createSevenDayAvailable() { 
+	$("body").window({  
+			"id":"testOne5",   
+			"title":"7天可用性",  
+			"url":"sevenDayAvailable.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+} 
+function createThirtyDayAvailable() { 
+	$("body").window({  
+			"id":"testOne4",   
+			"title":"30天可用性",  
+			"url":"thirtyDayAvailable.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+} 
+function createHistoryCPU() { 
+	$("body").window({  
+			"id":"testOne3",   
+			"title":"CPU历史记录",  
+			"url":"historyCPU.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+}
+function createHistoryMemory() { 
+	$("body").window({  
+			"id":"testOne2",   
+			"title":"内存历史记录",  
+			"url":"historyMemory.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+}
+function createHistoryDisk() { 
+	$("body").window({  
+			"id":"testOne1",   
+			"title":"磁盘历史记录",  
+			"url":"historyDisk.html",   
+			"hasIFrame":true,   
+			"top":20,   
+			"left":20,
+			"width":850,
+			"height":650  
+	}); 
+}
+function viewRelevance(){
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":'根本原因分析',  
+		"url":"basicReaon.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+</script>
+</head>
+
+<body>
+<div id="layout_top">
+	<div class="header">
+    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
+    	<div class="menu_box">
+        	<ul class="nav" id="nav">
+            	<li ><a href="index.html">首页</a></li>
+                <li class="has_sub">
+                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
+                	<ul class="add_sub_menu" id="subNav">
+                    	<li class="action"><span class="sever">操作系统</span>
+                        	<ul class="list">
+                            	<li><a href="javascript:viod(0)">操作系统1</a></li>
+                                <li><a href="javascript:viod(0)">操作系统2</a></li>
+                            </ul>
+                        </li>
+                        <li class="action"><span class="system">应用系统</span>
+                        	<ul class="list">
+                            	<li><a href="javascript:viod(0)">在线投保</a></li>
+                                <li><a href="javascript:viod(0)">在线查询</a></li>
+                                <li><a href="javascript:viod(0)">应急处置</a></li>
+                                <li><a href="javascript:viod(0)">人员角色管理</a></li>
+                            </ul>
+                        </li>
+                        <li class="action" style="border:none"><span>数据库</span>
+                        	<ul class="list">
+                            	<li><a href="javascript:viod(0)">SQL DBA</a></li>
+                                <li><a href="javascript:viod(0)">SQL SYS</a></li>
+                            </ul>
+                        </li>
+                        <li class="clear"></li>
+                    </ul>
+                    
+                </li>
+                <li><a href="performance.html">应用性能</a></li>
+                <li><a href="javascript:viod(0)">业务仿真</a></li>
+                <li><a href="javascript:viod(0)">告警</a></li>
+            </ul>
+        </div>
+        <ul class="add_menu" id="menu">
+        	<li><a href="addMonitorList.html">新建监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>阈值配置文件</span></a>
+            	<ul class="add_sub_menu">
+                    <li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a></li>
+                    <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
+                </ul>
+            </li>            
+            <li><a href="javascript:viod(0)">配置监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>动作</span></a>
+            	<ul class="add_sub_menu">
+                	<li class="title"><a href="javascript:viod(0)">显示动作</a></li>
+                    <li class="action">创建新动作</li>
+                    <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
+                    <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
+                </ul>
+            </li>
+            <li><a href="setEmergency.html">配置告警</a></li>
+        </ul>
+    </div>
+</div>
+<div id="layout_center">
+	<div class="main">
+  <ul class="crumbs">
+      <li><a href="#">管理</a> ></li>
+      <li><b>配置告警</b></li>
+    </ul>
+     <hr class="top_border" />
+     <div id="tabs">
+        	<ul>
+            	<li class="tabs_select">概览</li>
+                <li>表空间</li>
+                <li>SGA</li>
+            </ul>
+  	 <br />
+    
+    
+    <div id="db_overview" >
+  	<table class="main_table" width="100%" cellpadding="0" cellspacing="0" >
+      <tr>
+        <td style="vertical-align:top">
+          <div class="threshold_file">
+            <div class="sub_title">基本信息</div>
+            <table class="base_info" width="100%" cellpadding="0" cellspacing="0" >
+              <tr><td>名称</td><td>oracle</td></tr>
+              <tr><td>健康状况</td><td>健康状态为正常 . 没有出现严重的告警。</td></tr>
+              <tr><td>类型</td><td>Oracle服务器</td></tr>
+              <tr><td>Oracle版本</td><td>10.2.0.1.0</td></tr>
+              <tr><td>Oracle启动时间</td><td>2013-02-18 14:21:12.0</td></tr>
+              <tr><td>端口</td><td>1521</td></tr>
+              <tr><td>主机名</td><td>192.168.18.217 (192.168.18.217)</td></tr>
+              <tr><td>操作系统</td><td>Linux</td></tr>
+              <tr><td>最后轮询时间</td><td>2013-2-28 下午9:02</td></tr>
+              <tr><td>下次轮询时间</td><td>2013-2-28 下午9:07</td></tr>
+            </table>
+          </div>  
+        </td>
+        <td style="vertical-align:top">
+          <div class="threshold_file">
+            <div class="sub_title">今日可用性</div>
+            <div class="days_data">
+              <a onclick="createThirtyDayAvailable(this);"><div class="thirty_days"></div></a>
+            	<a onclick="createSevenDayAvailable(this);"><div class="seven_days"></div></a>
+            </div>
+            <div id="day_available" ></div>
+            <div class="tool_bar_bottom">
+            	<div style="width:50%;float:left; margin-left:20px;">
+              	<div style="float:left;">当前状态:</div><a href="javascript:void(0);"  onclick="viewRelevance(this);"><div class="now_status_up"></div></a></div>
+              <a href="#" >
+                <div class="warn_set">警告配置</div>
+              </a>
+              </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+      	<td style="vertical-align:top">
+      		 <div class="threshold_file">
+            <div class="sub_title">连接时间图 - 最后1小时</div>
+            <div class="days_data">
+              <a onclick="createThirtyDayConnect(this);"><div class="thirty_days"></div></a>
+            	<a onclick="createSevenDayConnect(this);"><div class="seven_days"></div></a>
+            </div>
+            <div id="last_onehour" ></div>
+          </div>
+          <div class="threshold_file">
+            	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
+              	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
+                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
+                <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
+              </table>
+         	</div>
+         
+      	</td>
+        <td style="vertical-align:top">
+        	 <div class="threshold_file">
+            <div class="sub_title">用户活动性 - 最后1小时</div>
+            <div class="days_data">
+              <a onclick="createThirtyDayUser(this);"><div class="thirty_days"></div></a>
+            	<a onclick="createSevenDayUser(this)"><div class="seven_days"></div></a>
+            </div>
+            <div id="user_last_onehour" ></div>
+          </div>
+           <div class="threshold_file">
+            	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
+              	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
+                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
+                  <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
+              </table>
+         	</div>
+        </td>
+      </tr>
+      <tr>
+      	<td colspan="2">
+        	<div class="threshold_file">
+            	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
+              	<div class="sub_title">
+                	最少可用字节的表空间
+                  <a class="show_table_space_a" href="#">显示所有表空间</a>
+                </div>
+                
+                <tr><td>名称</td><td>可用字节 (MB)</td><td> 	%可用</td></tr>
+                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
+                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
+                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
+                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
+                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
+              </table>
+         	</div>
+        </td>
+      </tr>
+			<tr>
+      	<td colspan="2">
+      		<div class="threshold_file">
+            	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
+              	<div class="sub_title">数据库明细</div>
+                <tr class="samll_th"><td>属性</td><td>值</td></tr>
+                <tr><td>数据库创建时间 </td><td>  	2012-09-17 14:10:40.0</td></tr>
+                <tr><td>Open模式</td><td>  	READ WRITE</td></tr>
+                <tr><td>Log模式 </td><td>  	NOARCHIVELOG</td></tr>
+              </table>
+         	</div>
+      	</td>
+      </tr>
+      <tr>
+      	<td style="vertical-align:top;">
+        	<div class="threshold_file">
+            <div class="sub_title">击中率</div>
+            <div class="days_data">
+              <a onclick="createThirtyDayHitRate(this);"><div class="thirty_days"></div></a>
+            	<a onclick="createSevenDayHitRate(this);"><div class="seven_days"></div></a>
+            </div>
+            	<div class="hit_rate">
+              	<div style="width:100%;">
+                	<div class="hit_rate_head">缓冲器</div>
+                </div>
+                <div  class="hit_rate_c_l"></div>
+                <div class="hit_rate_c">
+                	<div class="hit_rate_c_t">
+                  	<div class="hit_rate_c_m">
+                    	<div class="hit_rate_c_m_m"></div>
+                    </div>
+                    <div  class="hit_rate_c_m_b" >97%</div>
+                  </div>
+                </div>
+                <div class="hit_rate_c_r"></div>
+                <div style="clear:both"></div>
+                <div class="hit_rate_b_l">&nbsp;</div>
+                <div class="hit_rate_b"></div>
+                <div class="hit_rate_b_r" >&nbsp;</div>
+              </div>
+              <div class="hit_rate">
+              	<div style="width:100%;">
+                	<div class="hit_rate_head">数据字典</div>
+                </div>
+                <div  class="hit_rate_c_l"></div>
+                <div class="hit_rate_c">
+                	<div class="hit_rate_c_t">
+                  	<div class="hit_rate_c_m">
+                    	<div class="hit_rate_c_m_m"></div>
+                    </div>
+                    <div  class="hit_rate_c_m_b" >97%</div>
+                  </div>
+                </div>
+                <div class="hit_rate_c_r"></div>
+                <div style="clear:both"></div>
+                <div class="hit_rate_b_l">&nbsp;</div>
+                <div class="hit_rate_b"></div>
+                <div class="hit_rate_b_r" >&nbsp;</div>
+              </div>
+              <div class="hit_rate">
+              	<div style="width:100%;">
+                	<div class="hit_rate_head">库</div>
+                </div>
+                <div  class="hit_rate_c_l"></div>
+                <div class="hit_rate_c">
+                	<div class="hit_rate_c_t">
+                  	<div class="hit_rate_c_m">
+                    	<div class="hit_rate_c_m_m"></div>
+                    </div>
+                    <div  class="hit_rate_c_m_b" >97%</div>
+                  </div>
+                </div>
+                <div class="hit_rate_c_r"></div>
+                <div style="clear:both"></div>
+                <div class="hit_rate_b_l">&nbsp;</div>
+                <div class="hit_rate_b"></div>
+                <div class="hit_rate_b_r" >&nbsp;</div>
+              </div>
+          </div>
+        </td>
+        <td style="vertical-align:top;width:50%">
+        	<div class="threshold_file">
+            <div class="sub_title">共享的SGA</div>
+            <div id="share_sga" ></div>
+          </div>
+        </td>
+        
+      </tr>
+      <tr>
+      	<td colspan="2">
+        	<div class="threshold_file">
+            	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
+              	<div class="sub_title">服务器快照-<a href="oracleMonitor.html">192.168.18.217</a></div>
+                <tr>
+                  <td style="height:200px;">
+                    	<a><div id="use_cpu"></div></a>
+                    	<a><div id="use_memory"></div></a>
+                    	<a><div id="use_disk"></div></a>
+                  </td>
+                </tr>
+               
+              </table>
+         	</div>
+        </td>
+      </tr>
+  	</table>
+    </div>
+    
+    <div id="table_space" >
+    	 <div class="threshold_file">
+            <div class="sub_title">表空间明细</div>
+            <div id="table_space_detail"></div>
+          	<div class="tool_bar_top">
+              <div><img src="images/db/legend-green.png" /><span>可用空间</span>
+             <img src="images/db/legend-red.png" /><span>已用空间</span></div>
+            </div>
+       </div>
+       <div class="threshold_file">
+            <div class="sub_title">表空间状态</div>
+            <div id="table_space_status"></div>
+          	<div class="tool_bar_top"></div>
+       </div>
+       <div class="threshold_file">
+            <div class="sub_title">数据文件的性能指标</div>
+            <div id="table_space_performance"></div>
+          	<div class="tool_bar_top"></div>
+       </div>
+    </div>
+    <div id="sga">
+    		<table width="100%" cellpadding="0" cellspacing="0">
+        	<tr>
+          	<td colspan="2" >
+            	<div class="threshold_file">
+                <div class="sub_title">SGA的指标</div>
+                <div class="days_data">
+                  <a onclick="createThirtyDayHitRate(this);"><div class="thirty_days"></div></a>
+            			<a onclick="createSevenDayHitRate(this);"><div class="seven_days"></div></a>
+                </div>
+                <div id="sga_target"></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+          	<td width="50%">
+            	<div style=' border:1px solid #dfe9f2;'>
+                <div class="sub_title">SGA明细</div>
+                <div id="sga_detail"></div>
+                <a href="setEmergency.html" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
+              </div>
+            </td>
+            <td width="50%">
+            	<div style=' border:1px solid #dfe9f2;'>
+                <div class="sub_title">SGA状态</div>
+                <div id="sga_status"></div>
+                <a href="setEmergency.html" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
+              </div>
+            </td>
+          </tr>
+        </table>
+    </div>
+  </div>
+</div></div>
+<div id="layout_bottom">
+	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
+</div>
+</body>
+</html>

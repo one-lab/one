@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>monitor监控系统</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="css/eventLog/eventLog.css" rel="stylesheet" type="text/css" />
+<link href="css/status.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/sinosoft.grid.js"></script>  
+<script language="javascript" src="js/sinosoft.layout.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("body").layout({
+		top:{topHeight:100},
+		bottom:{bottomHeight:30}
+	});
+	$("#myDesk").height($("#layout_center").height());
+	$("#nav").delegate('li', 'mouseover mouseout', navHover);
+	$("#nav,#menu").delegate('li', 'click', navClick);
+	
+	$("#event_log_grid").Grid({
+		url : "eventLog.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'IP',name:"methodName",width:'400',index:'1',align:'',color:''},
+			{id:'2',text:'访问者',name:"maxTime",width:'',index:'1',align:'',color:''},
+			{id:'3',text:'时间',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'状态',name:"avgTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'操作',name:"status",width:'',index:'1',align:'',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : true,
+		number:false,
+		multiselect:true,
+	});
+	
+});
+function navHover(){
+	$(this).toggleClass("hover")
+}
+function navClick(){
+	$(this).addClass("seleck").siblings().removeClass("seleck");
+	if($(this).hasClass('has_sub')){
+		var subMav = $(this).children("ul.add_sub_menu");
+		var isAdd = false;
+		if($(this).parent().attr("id") == "menu"){
+			isAdd = true;
+		};
+		subMav.slideDown('fast',function(){
+			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
+			return false;
+		});		
+	};
+}
+function hideNav(e){
+	var subMenu = e.data.dom;
+	var isAdd = e.data.add;
+	subMenu.slideUp('fast',function(){
+		if(isAdd){
+			subMenu.parent().removeClass('seleck');
+		};
+	});	
+	$(document).unbind();
+}
+</script>
+</head>
+
+<body>
+<div id="layout_top">
+	<div class="header">
+    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
+    	<div class="menu_box">
+        	<ul class="nav" id="nav">
+            	<li><a href="index.html">首页</a></li>
+                <li class="has_sub">
+                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
+                	<ul class="add_sub_menu" id="subNav">
+                    	<li class="action"><span class="sever">操作系统</span>
+                        	<ul class="list">
+                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
+                            </ul>
+                        </li>
+                        <li class="action"><span class="system">应用系统</span>
+                        	<ul class="list">
+                                <li><a href="performance.html">在线查询</a></li>
+                            </ul>
+                        </li>
+                        <li class="action" style="border:none"><span>数据库</span>
+                        	<ul class="list">
+                            	<li><a href="oracleMonitor.html">oracle</a></li>
+                            </ul>
+                        </li>
+                        <li class="clear"></li>
+                    </ul>
+                    
+                </li>
+                <li><a href="performance.html">应用性能</a></li>
+                <li><a href="BusinessSimulation.html">业务仿真</a></li>
+                <li><a href="alertList.html">告警</a></li>
+                <li><a href="userManager.html">用户管理</a></li>  
+            </ul>
+        </div>
+        <ul class="add_menu" id="menu">
+        	<li><a href="addMonitorList.html">新建监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>阈值配置文件</span></a>
+            	<ul class="add_sub_menu">
+                    <li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a></li>
+                    <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
+                </ul>
+            </li>            
+            <li><a href="javascript:viod(0)">配置监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>动作</span></a>
+            	<ul class="add_sub_menu">
+                	<li class="title"><a href="javascript:viod(0)">显示动作</a></li>
+                    <li class="action">创建新动作</li>
+                    <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
+                    <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
+                </ul>
+            </li>
+            <li><a href="addMonitorList.html">配置告警</a></li>
+        </ul>
+    </div>
+</div>
+<div id="layout_center">
+	<div class="event_log">
+  	<ul class="crumbs">
+      <li><a href="#">管理</a> ></li>
+      <li><b>配置告警</b></li>
+    </ul>
+      <div class="tabs">
+          <table cellpadding="0" cellspacing="0"  width="100%">
+              <tr class="tabs_tr1" >
+                <td class="tabs_l_b" ></td>
+                <td class="tabs_l_l"><a href="urlInfo.html">概况</a></td>
+                <td class="tabs_l" >&nbsp;&nbsp </td>
+                <td class="tabs_t" ><a href="eventLog.html">事件日志</a></td>
+                <td class="tabs_r" >&nbsp;&nbsp;&nbsp;</td>
+                <td></td>
+              </tr>
+          </table>
+        <div id="event_log_grid" ></div>
+      </div>
+       <div class="stuats_mark">
+        <ul>
+          <li><div class="red_status"></div><div>严重</div></li>
+          <li><div class="yellow_status"></div><div>警告</div></li>
+          <li><div class="green_status"></div><div>正常</div></li>
+        </ul>
+      </div>
+	</div>
+</div>
+<div id="layout_bottom">
+	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
+</div>
+</body>
+</html>

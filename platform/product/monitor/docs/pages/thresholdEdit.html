@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>查看预警配置文件</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/sinosoft.layout.js"></script>
+<script language="javascript" src="js/sinosoft.grid.js"></script>
+<script language="javascript" src="js/sinosoft.window.js"></script>
+<script language="javascript" src="js/sinosoft.message.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#thresholdList").Grid({
+		url : "thresholdList.json",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: "auto",  
+		colums:[  
+			{id:'1',text:'名称',name:"appellation",index:'1',align:''},
+			{id:'2',text:'描述',name:"appellation",index:'1',align:''},
+			{id:'3',text:'严重告警条件',name:"appellation",index:'1',align:''},
+			{id:'4',text:'警告告警条件',name:"appellation",index:'1',align:''},
+			{id:'5',text:'正常告警条件',name:"appellation",index:'1',align:''},
+		],  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: false  
+	});
+	$("#MonitorList").Grid({
+		url : "MonitorList.json",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: 225,  
+		colums:[  
+			{id:'1',text:'监视器名称',name:"appellation",index:'1',align:''},
+			{id:'2',text:'类型',name:"appellation",index:'1',align:''},
+			{id:'3',text:'属性吗',name:"appellation",index:'1',align:''},
+			{id:'4',text:'状态',name:"appellation",index:'1',align:''},
+			{id:'5',text:'操作',name:"appellation",index:'1',align:''}
+		],  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: false  
+	});
+});
+function shiftOut(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	msgConfirm('系统消息','是否确定移出使用阈值？',function(){		
+		alert(id);
+		rows.remove();
+		msgSuccess("系统消息", "操作成功，使用阈值已移出！");
+	});
+}
+</script>
+</head>
+
+<body>
+<div id="layout_center">
+	<div class="window_main">
+    	<div class="threshold_file">
+        	<h3 class="title3">阈值明细：</h3>
+        	<div id="thresholdList"></div>
+        </div>
+    	<div class="threshold_file">
+        	<h3 class="title3">监视器使用的阈值：</h3>
+        	<div id="MonitorList"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

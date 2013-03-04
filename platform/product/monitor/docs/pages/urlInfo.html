@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>业务仿真</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/timeinfo/timeinfo.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="css/status.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/sinosoft.grid.js"></script>  
+<script language="javascript" src="js/sinosoft.layout.js"></script>
+<script language="javascript" src="js/highcharts.src.js"></script>
+<script language="javascript" src="js/timeinfo/timeinfo.js"></script>
+<script language="javascript" src="js/sinosoft.tabs.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("body").layout({
+		top:{topHeight:100}
+	});
+	$("#myDesk").height($("#layout_center").height());
+	$("#nav").delegate('li', 'mouseover mouseout', navHover);
+	$("#nav,#menu").delegate('li', 'click', navClick);
+	//$(".up,.down").live("click",upClick);
+	//$(".cando,.cannot").live("click",canClick);
+	
+	$("#list_table").Grid({
+		url : "urlInfo.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'方法名称',name:"methodName",width:'400',index:'1',align:'center',color:''},
+			{id:'2',text:'最大响应时间',name:"maxTime",width:'',index:'1',align:'center',color:''},
+			{id:'3',text:'最小响应时间',name:"minTime",width:'',index:'1',align:'center',color:''},
+			{id:'4',text:'平均响应时间',name:"avgTime",width:'',index:'1',align:'center',color:''},
+			{id:'5',text:'状态',name:"status",width:'30',index:'1',align:'center',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : true,
+		number:false,
+		multiselect:false
+	});
+					
+	$("#event_log_grid").Grid({
+		url : "eventLog.json",
+		dataType: "json",
+		height: 'auto',
+		colums:[
+			{id:'1',text:'IP',name:"methodName",width:'400',index:'1',align:'',color:''},
+			{id:'2',text:'访问者',name:"maxTime",width:'',index:'1',align:'',color:''},
+			{id:'3',text:'时间',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'状态',name:"avgTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'操作',name:"status",width:'',index:'1',align:'',color:''}
+		],
+		rowNum:10,
+		rowList:[10,20,30],
+		pager : true,
+		number:false,
+		multiselect:false
+	});
+	
+	$("#tabs").tabs({closeTab:false});
+});
+
+
+function upClick(){
+		$(this).toggleClass("up").toggleClass("down")
+	}
+	function canClick(){
+		$(this).toggleClass("cando").toggleClass("cannot");
+		}
+function navHover(){
+	$(this).toggleClass("hover")
+}
+function navClick(){
+	$(this).addClass("seleck").siblings().removeClass("seleck");
+	if($(this).hasClass('has_sub')){
+		var subMav = $(this).children("ul.add_sub_menu");
+		var isAdd = false;
+		if($(this).parent().attr("id") == "menu"){
+			isAdd = true;
+		};
+		subMav.slideDown('fast',function(){
+			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
+			return false;
+		});		
+	};
+}
+function hideNav(e){
+	var subMenu = e.data.dom;
+	var isAdd = e.data.add;
+	subMenu.slideUp('fast',function(){
+		if(isAdd){
+			subMenu.parent().removeClass('seleck');
+		};
+	});	
+	$(document).unbind();
+}
+</script>
+</head>
+
+<body>
+<div id="layout_top">
+	<div class="header">
+    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
+    	<div class="menu_box">
+        	<ul class="nav" id="nav">
+            	<li><a href="index.html">首页</a></li>
+                <li class="has_sub">
+                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
+                	<ul class="add_sub_menu" id="subNav">
+                    	<li class="action"><span class="sever">操作系统</span>
+                        	<ul class="list">
+                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
+                            </ul>
+                        </li>
+                        <li class="action"><span class="system">应用系统</span>
+                        	<ul class="list">
+                                <li><a href="performance.html">在线查询</a></li>
+                            </ul>
+                        </li>
+                        <li class="action" style="border:none"><span>数据库</span>
+                        	<ul class="list">
+                            	<li><a href="oracleMonitor.html">oracle</a></li>
+                            </ul>
+                        </li>
+                        <li class="clear"></li>
+                    </ul>
+                    
+                </li>
+                <li><a href="performance.html">应用性能</a></li>
+                <li><a href="BusinessSimulation.html">业务仿真</a></li>
+                <li><a href="alertList.html">告警</a></li>
+                <li><a href="userManager.html">用户管理</a></li>  
+            </ul>
+        </div>
+        <ul class="add_menu" id="menu">
+          <li><a href="javascript:viod(0)">新建监视器</a></li>
+          <li><a href="javascript:viod(0)">配置监视器</a></li>
+          <li class="has_sub">
+            <a href="javascript:viod(0)"><span>预警对象管理</span></a>
+            <ul class="add_sub_menu">
+              <li class="title"><a href="javascript:viod(0)">显示动作</a></li>
+              <li class="action">创建新动作</li>
+              <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
+              <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
+            </ul>
+          </li>
+        </ul>
+    </div>
+</div>
+<div id="layout_center">
+	<div class="time_info_all">
+  	<ul class="crumbs">
+      <li><a href="#">管理</a> ></li>
+      <li><b>配置告警</b></li>
+    </ul>
+    <div class="time_info_top">
+      <div class="time_info_content">
+      	<table class="time_info_top_table" cellspacing="0" cellpadding="0" border="0">
+        	<tr>
+          	<td class="time_info_head" colspan="5">URL信息</td>
+          </tr>
+        	<tr class="time_info_title">
+          	<td>健康状况</td>
+            <td>可用性</td>
+            <td>今日可用性</td>
+            <td>今日运行时间</td>
+            <td>最后故障时间</td>
+          </tr>
+          <tr class="time_info_text">
+          	<td align="center"><div class="up"></div></td>
+            <td align="center"><div class="cando"></div></td>
+            <td><a href="#">100%</a></td>
+            <td><a href="#">24 分 10 秒</a></td>
+            <td><a href="#">2013 年 1 月 1 日</a></td>
+          </tr>
+        </table>
+      </div>
+      
+      <hr class="top_border" />
+     <div id="tabs">
+        <ul>
+          <li class="tabs_select">概览</li>
+          <li>事件日志</li>
+        </ul>
+  	 <br />
+     
+      <div class="overview" >
+      	 <div class="time_info_overview">
+      		<table class="time_info_overview_table">
+          <tr>
+          	<td style="width:45.5%;height:150px;">
+            	<table class="bar_table" cellpadding="0" cellspacing="0" style="height:150px;">
+                <tr>
+                  <td class="overview_table_head" style="font-size:15px; font-weight:bold;">过去6小时的历史</td>
+                </tr>	
+                <tr>
+                	<td>
+                    <ul class="show_bar">
+                      <li class="ky"></li>
+                      <li class="wran"></li>
+                      <li class="bky"></li>
+                      <li class="wran"></li>
+                      <li class="bky"></li>
+                      <li class="ky"></li>
+                    </ul>
+                   
+                  </td>
+                  <td> 100.0</td>
+                </tr>
+                <tr>
+                	<td>
+                  	<img  src="images/timeinfo/ruler.jpg" />
+                  </td>
+                </tr>
+                <tr>
+                	<td>
+                  	<ul class="show_time">
+                    	<li>00:00</li>
+                      <li>01:00</li>
+                      <li>02:00</li>
+                      <li>03:00</li>
+                      <li>04:00</li>
+                      <li>05:00</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                	<td>
+                  	<ul class="show_mark">
+                    	<li><div class="iky"></div>健康</li>
+                      <li><div class="ibky"></div>不健康</li>
+                      <li><div class="iwran"></div>警告</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+              	
+              
+            </td>
+            <td style="height:150px">
+            	<table class="time_info_performance_table" cellpadding="0" cellspacing="0" style="margin:0 auto;height:150px;">
+	               <tr>
+                 	<td colspan="6">性能过去6小时的历史可用性</td>
+                 </tr>
+              	<tr class="show_mark_time" >
+                	<td><b>00:00</b></td>
+                  <td><b>01:00</b></td>
+                  <td><b>02:00</b></td>
+                  <td><b>03:00</b></td>
+                  <td><b>04:00</b></td>
+                  <td><b>05:00</b></td>
+                </tr>
+                <tr >
+                	<td ><div class="unknow mark_show"></div></td>
+                  <td><a href="#"><div class="normal mark_show"></div></a></td>
+                  <td><a href="#"><div class="warning mark_show"></div></a></td>
+                  <td><a href="#"><div class="serious mark_show"></div></a></td>
+                  <td><a href="#"><div class="normal mark_show"></div></a></td>
+                  <td><a href="#"><div class="normal mark_show"></div></a></td>
+                </tr>
+                <tr>
+                	<td colspan="6" class="mark_info">
+                    <div class="unknow"></div><div>未知</div>
+                    <div class="normal"></div><div>正常</div>
+                    <div class="warning"></div><div>警告</div>
+                    <div class="serious"></div><div>严重</div>
+                  </td>
+                  
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      	 </div>
+        <div class="column_chart">
+          <div id="time_times" style="margin:0 auto;height:300px;width:70%;"></div>
+        </div>
+        <div class="type_list">
+          <div class="threshold_file">
+            <div class="tool_bar_top">方法列表</div>
+            <div id="list_table" ></div>
+          </div>
+        </div>
+        <div class="stuats_mark">
+          <ul>
+            <li><div class="red_status"></div><div>严重</div></li>
+            <li><div class="yellow_status"></div><div>警告</div></li>
+            <li><div class="green_status"></div><div>正常</div></li>
+          </ul>
+        </div>
+      </div>
+ 
+ 
+       
+      
+    	<div class="event_log">
+        <div class="threshold_file">
+          <div class="tool_bar_top">事件日志</div>
+          <div id="event_log_grid"></div>
+        </div>
+           <div class="stuats_mark">
+            <ul>
+              <li><div class="red_status"></div><div>严重</div></li>
+              <li><div class="yellow_status"></div><div>警告</div></li>
+              <li><div class="green_status"></div><div>正常</div></li>
+            </ul>
+          </div>
+      </div>  
+     
+  	  </div>
+     </div>
+  </div>
+</div>
+
+	<div id="layout_bottom">
+      <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
+    </div>
+</body>
+</html>

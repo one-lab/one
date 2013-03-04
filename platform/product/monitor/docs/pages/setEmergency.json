@@ -1,0 +1,21 @@
+{
+    "total": "8",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"<span class='etcs'>阻塞进程</span>",
+				"<a href='javascript:void(0)' onclick='setMergency()'>关联</a>",
+				"-"
+			]
+        },
+		{
+			"id":"2",
+			"cell": [
+				"<span class='etcs'>CPU利用率</span>",
+				"<a href='javascript:void(0)' onclick='setMergency()'>关联</a>",
+				"数据异常"
+			]
+        }
+    ]
+}

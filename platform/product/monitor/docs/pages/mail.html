@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>创建新的阈值配置文件</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="css/bussiness.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/sinosoft.layout.js"></script>
+<script language="javascript" src="js/sinosoft.message.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("body").layout({
+		top:{topHeight:100},
+		bottom:{bottomHeight:30}
+	});
+	$("#myDesk").height($("#layout_center").height());
+	$("#nav").delegate('li', 'mouseover mouseout', navHover);
+	$("#nav,#menu").delegate('li', 'click', navClick);
+});
+function navHover(){
+	$(this).toggleClass("hover")
+}
+$(this).ready(function(){
+        $("input[@type=radio][name=mailFormat][@value=1]").attr("checked",true);
+});
+function navClick(){
+	$(this).addClass("seleck").siblings().removeClass("seleck");
+	if($(this).hasClass('has_sub')){
+		var subMav = $(this).children("ul.add_sub_menu");
+		var isAdd = false;
+		if($(this).parent().attr("id") == "menu"){
+			isAdd = true;
+		};
+		subMav.slideDown('fast',function(){
+			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
+			return false;
+		});		
+	};
+}
+function hideNav(e){
+	var subMenu = e.data.dom;
+	var isAdd = e.data.add;
+	subMenu.slideUp('fast',function(){
+		if(isAdd){
+			subMenu.parent().removeClass('seleck');
+		};
+	});	
+	$(document).unbind();
+}
+function save(){
+	msgSuccess("系统消息", "操作成功，监视器已保存！");
+}
+function rowsTogle(){
+	var rows = $("#threshold tr.hideRows");
+	if(rows.eq(0).is(':hidden')){
+		rows.show();
+	}else{
+		rows.hide();
+	};
+	return false;
+}
+</script>
+</head>
+
+<body>
+<div id="layout_top">
+	<div class="header">
+    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
+    	<div class="menu_box">
+        	<ul class="nav" id="nav">
+            	<li><a href="index.html">首页</a></li>
+                <li class="has_sub">
+                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
+                	<ul class="add_sub_menu" id="subNav">
+                    	<li class="action"><span class="sever">操作系统</span>
+                        	<ul class="list">
+                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
+                            </ul>
+                        </li>
+                        <li class="action"><span class="system">应用系统</span>
+                        	<ul class="list">
+                                <li><a href="performance.html">在线查询</a></li>
+                            </ul>
+                        </li>
+                        <li class="action" style="border:none"><span>数据库</span>
+                        	<ul class="list">
+                            	<li><a href="oracleMonitor.html">oracle</a></li>
+                            </ul>
+                        </li>
+                        <li class="clear"></li>
+                    </ul>
+                    
+                </li>
+                <li><a href="performance.html">应用性能</a></li>
+                <li><a href="BusinessSimulation.html">业务仿真</a></li>
+                <li><a href="alertList.html">告警</a></li>
+                <li><a href="userManager.html">用户管理</a></li>  
+            </ul>
+        </div>
+        <ul class="add_menu" id="menu">
+        	<li><a href="addMonitorList.html">新建监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>阈值配置文件</span></a>
+            	<ul class="add_sub_menu">
+                    <li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a></li>
+                    <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
+                </ul>
+            </li>            
+            <li><a href="deployMonitor.html">配置监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>动作</span></a>
+            	<ul class="add_sub_menu">
+                	<li class="title"><a href="showMotion.html">显示动作</a></li>
+                    <li class="action">创建新动作</li>
+                    <li><a class="sms" href="message.html">短信动作</a></li>
+                    <li><a class="email" href="mail.html">邮件动作</a></li>
+                </ul>
+            </li>
+            <li><a href="setEmergency.html">配置告警</a></li>
+        </ul>
+    </div>
+</div>
+<div id="layout_center">
+	<div class="main">
+    	<div class="add_monitor">
+       	  <h2 class="title-mail"><b>创建动作: 发送SMS 　</b></h2>
+          <form>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box2 add_form threshold" id="threshold">
+              <tr>
+                <td width="20%">显示名<span class="mandatory">*</span></td>
+                <td colspan="2"><input type="text" class="formtext" size="45" /></td>
+              </tr>
+              <tr>
+                <td width="20%">发件人地址<span class="mandatory">*</span></td>
+                <td colspan="2"><input type="text" class="formtext" size="45"  value="apm@manageengine.com" /></td>
+              </tr>
+              <tr>
+                <td width="20%">收件人地址<span class="mandatory">*</span></td>
+                <td colspan="2"><input type="text" class="formtext" size="45" /></td>
+              </tr>
+               <tr>
+                <td width="20%">主题<span class="mandatory">*</span></td>
+                <td colspan="2"><input type="text" class="formtext" size="45"  value="来自Applications Manager的告警" /></td>
+              </tr>
+               <tr>
+                <td width="20%">消息<span class="mandatory">*</span></td>
+                <td colspan="2"><textarea class="formtext"   style="height:150px; width:270px">This information has been generated by the Applications Manager</textarea></td>
+              </tr>
+               <tr>
+                <td width="20%">经由</td>
+                <td colspan="2"><input type="radio" value="1" name="mailFormat"/>&nbsp;&nbsp;&nbsp;纯文本&nbsp;&nbsp;&nbsp;<input type="radio"  value="2"  name="mailFormat"/>&nbsp;&nbsp;&nbsp;HTML<input type="radio" name="mailFormat" checked="checked" />&nbsp;&nbsp;&nbsp;两者</td>
+              </tr>
+                    <tr>
+                <td > <label for="senior">添加告警消息</label></td><td><input class="checkbox1" name="senior" type="checkbox" value="" class="m_b"  id="senior" /></td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td > <label for="senior">在选择的小时内执行动作</label></td><td><input class="checkbox1" name="senior" type="checkbox" value="" class="m_b"  onclick="rowsTogle()" id="senior" /></td>
+                <td colspan="2"></td>
+              </tr>
+               <tr  class="hideRows">
+                <td width="20%">选择时间窗口<span class="mandatory">*</span></td>
+                <td colspan="2"><select name="select2" class="diySelect" style="font-family:Arial, Helvetica, sans-serif;width:130px">
+                  <option selected="selected">--选择工作时间--</option>
+                </select>&nbsp;&nbsp;<a class="message-time" href="#">添加新的工作时间</a></td>
+              </tr>
+              <tr>
+                <td class="group_name">&nbsp;</td>
+                <td colspan="2" class="group_name">
+                	<input type="button" class="buttons" value="创建动作" onclick="save()" />　
+                    <input type="reset" class="buttons" value="恢复缺省值" />　
+                    <input type="button" class="buttons" value="取 消" onclick="window.history.back()" />
+                </td>
+              </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="layout_bottom">
+	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
+</div>
+</body>
+</html>

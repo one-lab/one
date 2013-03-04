@@ -1,0 +1,28 @@
+{
+    "total": "8",
+    "rows": [
+        {
+			"id":"1",
+			"cell": [
+				"admin",
+				"张三",
+				"正常",
+				"13813813811",
+				"hhha@123.com",
+				"2012-10-22",
+				"<a href='adduser.html' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>"
+			]
+        },{
+           "id":"2",
+		   "cell": [
+				"lalal",
+				"李四",
+				"锁定",
+				"13813813811",
+				"hhha@123.com",
+				"2012-10-22",
+				"<a href='adduser.html' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>"
+			]         
+        }
+    ]
+}
