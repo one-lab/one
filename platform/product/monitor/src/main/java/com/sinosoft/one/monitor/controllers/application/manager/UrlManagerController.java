@@ -94,6 +94,8 @@ public class UrlManagerController {
                 if (dbUrl.getUrl().equals(url.getUrl())) {
                     dbUrl.setBizScenario(bizScenario);
                     urlService.saveUrl(dbUrl);
+                    //@todo 向EUM_URL表中插入记录（url的application信息）
+                    /*eumUrlService.saveEumUrlWithAddUrl(url.getUrl(),bizScenario.getApplication().getId());*/
                     return "managerUrl";
                 }
             }

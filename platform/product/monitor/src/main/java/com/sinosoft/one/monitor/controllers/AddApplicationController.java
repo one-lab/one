@@ -2,6 +2,9 @@ package com.sinosoft.one.monitor.controllers;
 
 import com.sinosoft.one.monitor.application.domain.ApplicationService;
 import com.sinosoft.one.monitor.application.model.Application;
+import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.monitor.resources.domain.ResourcesService;
+import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
@@ -23,6 +26,8 @@ public class AddApplicationController {
 
     @Autowired
     ApplicationService applicationService;
+    @Autowired
+    ResourcesService resourcesService;
 
     @Get("add")
     @Post("errorcreate")
@@ -42,6 +47,12 @@ public class AddApplicationController {
         application.setCreateTime(new Date());
         application.setStatus(String.valueOf('1'));
         applicationService.saveApplication(application);
+        String resourceName=application.getCnName()+"["+application.getApplicationName()+"]";
+        Resource resource=new Resource();
+        resource.setResourceName(resourceName);
+        resource.setResourceType(ResourceType.APPLICATION.cnName());
+        //RESOURCES表中保存应用信息
+        resourcesService.saveResource(resource);
         //页面所在路径application/manager/@应用性能页面
         return "r:application/manager/appmanager/appperformance";
     }
