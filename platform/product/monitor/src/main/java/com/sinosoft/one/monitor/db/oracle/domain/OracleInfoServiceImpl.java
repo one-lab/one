@@ -58,7 +58,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         Map<String, String> rsObj = rsList.get(0);
         String version = rsObj.get("VERSIONLABLE");
         String startTime = rsObj.get("STARTUPTIME");
-        info.setVersion(version);
+        info.setOracleVersion(version);
         info.setStartTime(startTime);
         infoRepository.save(info);
     }
@@ -135,7 +135,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         oracleInfoModel.setPort(info.getPort());
         //执行SQL语句查询
         oracleInfoModel.setStartTime(info.getStartTime());
-        oracleInfoModel.setVersion(info.getVersion());
+        oracleInfoModel.setVersion(info.getOracleVersion());
         return oracleInfoModel;
     }
 }

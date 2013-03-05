@@ -34,7 +34,7 @@ $(function(){
 		colums:[  
 			{id:'1',text:'场景名称',name:"name",index:'1',align:''},
 			{id:'2',text:'添加人',name:"userName",index:'1',align:''},
-			{id:'3',text:'添加时间',name:"createTime",index:'1',align:''},
+			{id:'3',text:'添加时间',name:"recodeCreateTime",index:'1',align:''},
 			{id:'4',text:'级别',name:"bizScenarioGrade",index:'1',align:''},
 			{id:'5',text:'操作',name:"operation",index:'1',align:''}
 		],  
@@ -106,7 +106,6 @@ function bizScenarioBatchDel(){
                 /*id前面多了“rows”*/
                 _bizScenarioIds.push(rows.attr('id').substr(4,32));
             });
-            alert(_bizScenarioIds);
             $.ajax({
                 type:"post",
                 url:"${ctx}/application/manager/bsmanager/batchdelete/${appId}",
@@ -188,7 +187,7 @@ function bizScenarioBatchDel(){
 <div id="layout_center">
 	<div class="main">
     	<div class="threshold_file">
-       	  <h2 class="title2"><b>管理业务场景</b></h2>
+       	  <h2 class="title2"><b>应用名称 : ${applicationName}</b></h2>
           <div class="tool_bar_top">
           	<a href="${ctx}/application/manager/bsmanager/createbizscenario/${appId}" class="add_bus_scene" >添加业务场景</a>
           	<a href="javascript:void(0);" class="batch_del" onclick="bizScenarioBatchDel()">批量删除</a>

@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>performance性能</title>
+    <title>应用性能</title>
 
     <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css"/>
@@ -34,7 +34,7 @@
         function getBarLength() {
             var _data;
             $.ajax({
-                url:"performance_bar_length.json",
+                url:"${ctx}/views/application/manager/performance_bar_length.json",
                 type:"get",
                 dataType:"json",
                 async:false,
@@ -164,7 +164,7 @@
                 <table class="p_table" cellspacing="0" cellpadding="0" border="0" align="center">
                     <tr>
                         <td class="p_table_t_l">
-                            应用系统名称
+                            应用系统列表
                         </td>
                         <td class="p_table_t_r">
                             <div>

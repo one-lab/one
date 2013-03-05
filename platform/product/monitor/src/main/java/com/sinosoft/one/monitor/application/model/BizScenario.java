@@ -4,8 +4,10 @@ package com.sinosoft.one.monitor.application.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,10 +32,13 @@ public class BizScenario implements java.io.Serializable {
     /**
      * 业务场景名称.
      */
+    @NotEmpty(message = "场景名称不能为空")
+    @Size(min = 1,max = 300,message = "场景名称不能为空,长度不能超过300")
     private String name;
     /**
      * 业务场景级别.
      */
+    @NotEmpty(message = "场景级别不能为空")
     private String bizScenarioGrade;
     /**
      * 创建时间.
@@ -62,6 +67,10 @@ public class BizScenario implements java.io.Serializable {
      * 创建人名字(为了页面显示)
      */
     private String userName;
+    /**
+     * 创建时间(为了页面显示)
+     */
+    private String recodeCreateTime;
     /**
      * 操作(为了页面显示，可管理url或者删除该条业务场景)
      */
@@ -194,6 +203,15 @@ public class BizScenario implements java.io.Serializable {
 
     public void setOperation(String operation) {
         this.operation = operation;
+    }
+
+    @Transient
+    public String getRecodeCreateTime() {
+        return recodeCreateTime;
+    }
+
+    public void setRecodeCreateTime(String recodeCreateTime) {
+        this.recodeCreateTime = recodeCreateTime;
     }
 
     @Override

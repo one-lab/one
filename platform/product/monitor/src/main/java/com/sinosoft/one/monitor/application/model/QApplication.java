@@ -1,11 +1,13 @@
 package com.sinosoft.one.monitor.application.model;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
-
-import com.mysema.query.types.*;
+import com.mysema.query.types.Path;
+import com.mysema.query.types.PathMetadata;
 import com.mysema.query.types.path.*;
 
 import javax.annotation.Generated;
+import java.math.BigDecimal;
+
+import static com.mysema.query.types.PathMetadataFactory.forVariable;
 
 
 /**
@@ -33,6 +35,8 @@ public class QApplication extends EntityPathBase<Application> {
     public final StringPath creatorId = createString("creatorId");
 
     public final StringPath id = createString("id");
+
+    public final NumberPath<BigDecimal> interval = createNumber("interval", java.math.BigDecimal.class);
 
     public final StringPath modifierId = createString("modifierId");
 

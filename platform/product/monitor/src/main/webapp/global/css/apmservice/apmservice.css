@@ -1,8 +1,8 @@
 .service_all{color:#444;padding:20px;}
 .service_all input[type='button']{width:100px;height:18px;border:1px solid #327ab5;border-radius:5px;cursor:pointer}
-.health_table {width:560px;height:296px;border:1px solid #ddd;}
+.health_table { width:100%;height:294px;border:1px solid #ddd;}
 <!--健康状况-->
-.health{width:40%;min-width:400px;}
+.health{min-width:400px;}
 .health_info{width:40%; background:url(../../images/spmservice/health-bg.gif) repeat-x}
 .health_error{ height:153px;background:url(../../images/spmservice/health-bg.gif) repeat-x;}
 .health_error .error_info{height:153px; text-align:left}
@@ -18,10 +18,10 @@
 .ican{ background: url(../../images/spmservice/icon_right.gif)}
 <!--饼状图区域-->
 #pie_availability,#pie_health {width: 250px;height:246px; height: 230px\9; margin: 0 auto}
-.pie_chart{width:800px;height:300px;}
+.pie_chart{heihgt:202px;}
 .pie {width:50%;height:252px;height:250px\9;}
-.pie_table{ min-width:500px;width:100%;text-align:center; vertical-align:top; border:1px solid #ddd;}
-.pie_head{ background:url(../../images/spmservice/bg_tableheader.gif) repeat-x;width:800px;height:25px;}
+.pie_table{height:305px;min-width:500px;width:100%;text-align:center; vertical-align:top; border:1px solid #ddd;}
+.pie_head{ background:url(../../images/spmservice/bg_tableheader.gif) repeat-x;width:800px;height:23px;}
 
 <!--底部表格-->
 .info_table{width:100%;border:1px solid #ddd;}
