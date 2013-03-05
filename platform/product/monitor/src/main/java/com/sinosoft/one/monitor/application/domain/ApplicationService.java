@@ -97,4 +97,8 @@ public class ApplicationService {
     public void updateApplicationWithModifyInfo(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId, BigDecimal interval) {
         applicationRepository.updateApplication(appId,applicationName,cnName,applicationIp,applicationPort,modifierId,interval);
     }
+
+    public List<Application> findAllApplicationNames() {
+        return applicationRepository.findAllApplicationNames();
+    }
 }

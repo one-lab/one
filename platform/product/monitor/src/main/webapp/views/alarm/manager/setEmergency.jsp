@@ -34,32 +34,61 @@
                 number:false,
                 multiselect: false
             });
-            $("#monitorType").bind("change",function(){
-                var _value = $(this).val();
-                $.ajax({
-                    url:"shshh.action?name="+_value,
-                    dataType:"json",
-                    async:false,
-                    success:function(data){
-                        var $mn = $("#monitorName");
-                       for(var i = 0; i<data.length;i++){
-                           var key = data[i].k;
-                           var name =data[i].n;
-                           $mn.append("<option value='"+key+"' > "+name+" </option> ");
-                       }
-
-                    }
-
-                });
-
-
-            })
-
-
-
-
+            $("#monitorType").bind("change",getMonitorNames)
+            $("#monitorName").bind("change",getNewGrid);
         });
+        function getMonitorNames(){
+            alert("monitorNames");
+            var _value = $(this).val();
+            $.ajax({
+                type:"post",
+                url:"${ctx}/alarm/manager/configemergency/monitornames/APPLICATION",
+                dataType:"json",
+                async:false,
+                success:function(data){
+                    alert(data[5].monitorName);
+                    var $mn = $("#monitorName");
+                    //防止每次查询时，表格中的数据不断累积
+                    $mn.html("");
+                    for(var i = 0; i<data.length;i++){
+                        var key = "monitorName";
+                        var name =data[i].monitorName;
+                        /*var name=data.monitorName;*/
+                        $("#monitorName").append("<option value='"+key+"' > "+name+" </option> ");
+                    }
+                }
+            });
+        }
+        function getNewGrid(_val){
+            $("body").layout({
+                top:{topHeight:100},
+                bottom:{bottomHeight:30}
+            });
+            $("#myDesk").height($("#layout_center").height());
+            $("#nav").delegate('li', 'mouseover mouseout', navHover);
+            $("#nav,#menu").delegate('li', 'click', navClick);
+            alert(1);
+            $("#natureList").html("");
+            $("#natureList").Grid({
+                type:"post",
+                url : "${ctx}/alarm/manager/configemergency/attributenames/APPLICATION",
+                dataType: "json",
+                colDisplay: false,
+                clickSelect: true,
+                draggable:false,
+                height: 225,
+                colums:[
+                    {id:'1',text:'属性名',name:"attributeCn",index:'1',align:''},
+                    {id:'2',text:'阈值',name:"threshold",index:'1',align:''},
+                    {id:'3',text:'动作',name:"action",index:'1',align:''}
+                ],
+                rowNum:9999,
+                pager : false,
+                number:false,
+                multiselect: false
+            });
 
+        }
         function navHover(){
             $(this).toggleClass("hover")
         }
@@ -179,12 +208,7 @@
                 </tr>
                 <tr>
                     <td> 监视器</td>
-                    <td><select id="monitorName" name="monitorName" onchange="onfnSubmit(this);" class="diySelect" style="width:200px">\
-                        <c:forEach var="cl" items="${classList}">
-                            <option>
-                                <c:out value="${cl.classId}" />
-                            </option>
-                        </c:forEach>
+                    <td><select id="monitorName" name="monitorName" class="diySelect" style="width:200px">\
                         <%--<option>应用　　</option>
                         <option>Oracle</option>
                         <option>Linux</option>--%>

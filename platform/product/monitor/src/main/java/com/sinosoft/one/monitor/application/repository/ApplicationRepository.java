@@ -33,5 +33,9 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
 
     @SQL("update GE_MONITOR_APPLICATION a set a.APPLICATION_NAME=?2,a.CN_NAME=?3,a.APPLICATION_IP=?4,a.APPLICATION_PORT=?5,a.MODIFIER_ID=?6,a.MODIFY_TIME=sysdate,a.INTERVAL=?7 where a.ID=?1")
     void updateApplication(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId, BigDecimal interval);
+
+    @SQL("select * from GE_MONITOR_APPLICATION a where a.STATUS='1'")
+    List<Application> findAllApplicationNames();
+
 }
 
