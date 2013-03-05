@@ -53,18 +53,18 @@ public class AvailableCalculate {
     }
 
     /**
-     *
-     * @param startRecordTime
-     * @param oldRunningTime
-     * @param oldStopTime
-     * @param runningCount
-     * @param falseCount
-     * @param interval
+     * 除去未知时间的计算
+     * @param startRecordTime 当天有效性开始记录的时间
+     * @param oldRunningTime 原有运行时间的记录
+     * @param oldStopTime 原有停止时间的记录
+     * @param avCount 有效次数
+     * @param falseCount 失败次数
+     * @param interval 时间间隔，以分钟为单位
      * @return
      */
     public static AvailableCalculate simpleCalculate(final Date startRecordTime, final Long oldRunningTime,final Long oldStopTime,
-                                                   final int runningCount,final Integer falseCount,final int interval){
-        return new AvailableCalculate(startRecordTime,oldRunningTime,oldStopTime,runningCount,null,falseCount,interval);
+                                                   final int avCount,final Integer falseCount,final int interval){
+        return new AvailableCalculate(startRecordTime,oldRunningTime,oldStopTime,avCount,null,falseCount,interval);
     }
 
     private AvailableCalculate(final Date startRecordTime, final Long oldRunningTime,final Long oldStopTime,
@@ -145,17 +145,22 @@ public class AvailableCalculate {
     }
 
     /**
-     * 获取平均故障时间
+     * 获取平均故障时间MTBF
      * @return
      */
    public BigDecimal getTimeBetweenFailures(){
       return  new BigDecimal(runningTime/(falseCount+1));
    }
 
-    public static void main(String[] args){
-        LocalTime localTime = LocalTime.now();
-        System.out.println(localTime.getHourOfDay());
-        System.out.println(localTime.getMinuteOfHour());
-    }
+    /**
+     * 获取平均修复时间MTTR
+     * @return
+     */
+   public BigDecimal getTimeToRepair(){
+       if(this.falseCount == 0){
+           return BigDecimal.ZERO;
+       }
+       return new BigDecimal(stopTime/this.falseCount);
+   }
 
 }
