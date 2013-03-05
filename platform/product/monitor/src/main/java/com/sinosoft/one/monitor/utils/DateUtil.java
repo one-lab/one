@@ -1,11 +1,15 @@
 package com.sinosoft.one.monitor.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 public class DateUtil {
-	public static String getFormatDate(String format){
-		SimpleDateFormat sdf=new SimpleDateFormat(null==format||"".equals(format)?"yyyyMMddHHmmss":format);
-		return sdf.format(new Date());
+	/**
+	 * 返回一个没clear后的Calender
+	 * @return
+	 */
+	public static Calendar getCalender(){
+		Calendar clender = Calendar.getInstance();
+		clender.clear();
+		return clender;
 	}
 }

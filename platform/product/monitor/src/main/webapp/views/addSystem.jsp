@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://www.springframework.org/schema/beans">
@@ -54,6 +55,34 @@
         }
         function save() {
             msgSuccess("系统消息", "操作成功，监视器已保存！");
+        }
+        /*校验数据*/
+        function isValid(form) {
+            var appName="^[A-Za-z]+$";
+            if (!form.applicationName.value.match(appName)) {
+                alert("显示名称必须是英文！");
+                return false;
+            }
+            if (form.cnName.value==null||form.cnName.value=="") {
+                alert("中文名称不能为空！");
+                return false;
+            }
+            var appIp="^[0-9.]+$";
+            if(!form.applicationIp.value.match(appIp)){
+                alert("主机IP地址必须是数字和\".\"的组合！");
+                return false;
+            }
+            var appPort="^[0-9.]+$";
+            if(!form.applicationPort.value.match(appPort)||form.applicationPort.value.length>5){
+                alert("端口必须是5位以内的数字！");
+                return false;
+            }
+            var appInterval="^[0-9.]+$";
+            if(!form.interval.value.match(appInterval)||form.interval.value.length>10){
+                alert("轮询间隔必须是10位以内的数字！");
+                return false;
+            }
+            return true;
         }
     </script>
 </head>
@@ -129,23 +158,29 @@
                     </optgroup>
                 </select>
             </h2>
-            <form id="addSystem" action="${ctx}/application/manager/appmanager/add" method="post"
-                  class="form-horizontal">
+            <form:form id="addSystem" action="${ctx}/addapplication/add" method="post"
+                  class="form-horizontal" onsubmit="return isValid(this);">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
                     <tr>
                         <td colspan="2" class="group_name">基本信息</td>
                     </tr>
                     <tr>
                         <td width="25%">显示名称<span class="mandatory">*</span></td>
-                        <td><input id="applicationName" name="applicationName" type="text" class="formtext"/></td>
+                        <td><input id="applicationName" name="applicationName" value="${application.applicationName}" type="text" class="required"/>
+                            <msg:errorMsg property="applicationName" type="message"/>
+                        </td>
                     </tr>
                     <tr>
-                        <td width="25%">中文名称<span class="mandatory"></span></td>
-                        <td><input id="cnName" name="cnName" type="text" class="formtext"/></td>
+                        <td width="25%">中文名称<span class="mandatory">*</span></td>
+                        <td><input id="cnName" name="cnName" value="${application.cnName}" type="text" class="formtext"/>
+                            <msg:errorMsg property="cnName" type="message"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>主机IP地址<span class="mandatory">*</span></td>
-                        <td><input id="applicationIp" name="applicationIp" type="text" class="formtext" size="30"/></td>
+                        <td><input id="applicationIp" name="applicationIp" value="${application.applicationIp}" type="text" class="formtext" size="30"/>
+                            <msg:errorMsg property="applicationIp" type="message"/>
+                        </td>
                     </tr>
                     <!--<tr>
                       <td>子网掩码<span class="mandatory">*</span></td>
@@ -153,7 +188,15 @@
                     </tr>-->
                     <tr>
                         <td>端口<span class="mandatory">*</span></td>
-                        <td><input id="applicationPort" name="applicationPort" type="text" class="formtext" size="8"/></td>
+                        <td><input id="applicationPort" name="applicationPort" value="${application.applicationPort}" type="text" class="formtext" size="8"/>
+                            <msg:errorMsg property="applicationPort" type="message"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>轮询间隔<span class="mandatory"></span></td>
+                        <td><input id="interval" name="interval" value="${application.interval}" type="text" class="formtext" size="10"/>
+                            <msg:errorMsg property="interval" type="message"/>
+                        </td>
                     </tr>
                     <tr>
                         <td class="group_name">&nbsp;</td>
@@ -165,7 +208,7 @@
                         </td>
                     </tr>
                 </table>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>

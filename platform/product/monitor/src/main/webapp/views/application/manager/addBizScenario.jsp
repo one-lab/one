@@ -1,12 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <% request.setAttribute("appId",request.getParameter("appId")); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>新建监视器</title>
+<title>新增业务场景</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
@@ -53,6 +54,19 @@ function hideNav(e){
 function save(){
 	msgSuccess("系统消息", "操作成功，监视器已保存！");
 	window.location.href="manageBusScene.html";
+}
+/*校验数据*/
+function isValid(form) {
+    if (form.name.value==null||form.name.value=="") {
+        alert("场景名称不能为空！");
+        return false;
+    }
+    var bsGrade=form.bizScenarioGrade.value;
+    if(bsGrade!="高"&&bsGrade!="中"&&bsGrade!="低"){
+        alert("必须选择场景级别！");
+        return false;
+    }
+    return true;
 }
 </script>
 </head>
@@ -117,14 +131,17 @@ function save(){
        	  <h2 class="title2"><b>添加业务场景　</b>
           	
           </h2>
-          <form id="addBizScenario" action="${ctx}/application/manager/bsmanager/addbizscenario/${appId}" method="post">
+          <form:form id="addBizScenario" action="${ctx}/application/manager/bsmanager/addbizscenario/${appId}" method="post"
+                     class="form-horizontal" onsubmit="return isValid(this);">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>
                 <td colspan="2" class="group_name">基本信息</td>
               </tr>
               <tr>
                 <td width="25%">场景名称<span class="mandatory">*</span></td>
-                <td><input name="name" type="text" class="formtext" /></td>
+                <td><input id="name" name="name" value="${bizScenario.name}" type="text" class="formtext" />
+                    <msg:errorMsg property="name" type="message"/>
+                </td>
               </tr>
               <%--<tr>
                 <td>id<span class="mandatory"></span></td>
@@ -137,11 +154,12 @@ function save(){
               <tr>
                 <td>级别<span class="mandatory">*</span></td>
                 <td>
-                	<select name="bizScenarioGrade" class="diySelect" >
+                	<select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect" >
                     <option>高</option>
                     <option>中</option>
                     <option>低</option>
                   </select>
+                    <msg:errorMsg property="bizScenarioGrade" type="message"/>
                 </td>
               </tr>
               <tr>
@@ -153,7 +171,7 @@ function save(){
                 </td>
               </tr>
             </table>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>

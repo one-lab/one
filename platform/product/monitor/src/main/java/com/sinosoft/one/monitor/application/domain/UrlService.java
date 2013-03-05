@@ -82,21 +82,6 @@ public class UrlService {
     }
 
     /**
-     * 得到所有的URL的地址.
-     */
-    public List<String> findAllUrlAddresses(List<Url> urls) {
-        List<String> urlAddresses = new ArrayList<String>();
-        if (urls != null) {
-            for (Url url : urls) {
-                if (url != null) {
-                    urlAddresses.add(url.getUrl());
-                }
-            }
-            return urlAddresses;
-        }
-        return null;
-    }
-    /**
      * 得到业务场景下所有的URL的地址.
      */
     public List<Url> findAllUrlsOfBizScenario(BizScenario bizScenario){

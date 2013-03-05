@@ -230,7 +230,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             Date endTime = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(endTime);
-            calendar.add(Calendar.MINUTE, -info.getPullInterval());
+            calendar.add(Calendar.MINUTE, (int) -info.getPullInterval());
             Date startTime = calendar.getTime();
             //根据报警信息接确定当前是否可用
             String[] healthyPint = new String[2];
