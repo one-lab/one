@@ -43,6 +43,7 @@ public class AlarmMessageHandler {
 	 */
 	public void doMessage(MessageBase messageBase, String alarmId) {
 		ThresholdAlarmParams thresholdAlarmParams = new ThresholdAlarmParams();
+		thresholdAlarmParams.alarmSource = messageBase.alarmSource();
 		thresholdAlarmParams.alarmId = alarmId;
 		List<AlarmMessage> alarmMessageList = messageBase.alarmMessages();
 		for(int i=0, len=alarmMessageList.size(); i<len; i++) {
@@ -137,7 +138,7 @@ public class AlarmMessageHandler {
 
 				alarmMessageBuilder.append("<br>").append(index).append(".").append(attribute.getAttributeCn())
 						.append(" ").append(threshold.getResultMessage().replaceAll("#U#", attribute.getUnits())).append(" ").append(attribute.getUnits())
-						.append(" （阈值) ");
+						.append(" （阈值） ");
 
 				allAttributeActions.addAll(thresholdAlarmInfo.getThresholdAttributeActions());
 			}
