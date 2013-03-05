@@ -9,51 +9,23 @@
     <%@ include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
         $(function(){
-            $("body").layout({
-                top:{topHeight:100},
-                bottom:{bottomHeight:30}
-            });
-            $("#myDesk").height($("#layout_center").height());
-            $("#nav").delegate('li', 'mouseover mouseout', navHover);
-            $("#nav,#menu").delegate('li', 'click', navClick);
-            $("#natureList").Grid({
-                type:"post",
-                url : "${ctx}/alarm/manager/configemergency/attributenames/APPLICATION",
-                dataType: "json",
-                colDisplay: false,
-                clickSelect: true,
-                draggable:false,
-                height: 225,
-                colums:[
-                    {id:'1',text:'属性名',name:"attributeCn",index:'1',align:''},
-                    {id:'2',text:'阈值',name:"threshold",index:'1',align:''},
-                    {id:'3',text:'动作',name:"action",index:'1',align:''}
-                ],
-                rowNum:9999,
-                pager : false,
-                number:false,
-                multiselect: false
-            });
-            $("#monitorType").bind("change",getMonitorNames)
+            $("#monitorType").bind("change",getMonitorNames);
             $("#monitorName").bind("change",getNewGrid);
         });
         function getMonitorNames(){
-            alert("monitorNames");
-            var _value = $(this).val();
             $.ajax({
                 type:"post",
-                url:"${ctx}/alarm/manager/configemergency/monitornames/APPLICATION",
+                url:"${ctx}/alarm/manager/configemergency/monitornames/"+$("#monitorType").val(),
                 dataType:"json",
                 async:false,
                 success:function(data){
-                    alert(data[5].monitorName);
                     var $mn = $("#monitorName");
                     //防止每次查询时，表格中的数据不断累积
                     $mn.html("");
+                    $("#monitorName").append("<option value='choice' >" +"--选择一个监视器--"+" </option> ");
                     for(var i = 0; i<data.length;i++){
                         var key = "monitorName";
                         var name =data[i].monitorName;
-                        /*var name=data.monitorName;*/
                         $("#monitorName").append("<option value='"+key+"' > "+name+" </option> ");
                     }
                 }
@@ -67,11 +39,11 @@
             $("#myDesk").height($("#layout_center").height());
             $("#nav").delegate('li', 'mouseover mouseout', navHover);
             $("#nav,#menu").delegate('li', 'click', navClick);
-            alert(1);
             $("#natureList").html("");
+            var _resourceType=$("#monitorType").val();
             $("#natureList").Grid({
                 type:"post",
-                url : "${ctx}/alarm/manager/configemergency/attributenames/APPLICATION",
+                url : "${ctx}/alarm/manager/configemergency/attributenames/"+_resourceType,
                 dataType: "json",
                 colDisplay: false,
                 clickSelect: true,
@@ -155,31 +127,6 @@
                 ]
             });
         };
-        $(function(){
-            //找到相应的下拉框
-            var _monitorType = $("#monitorType");
-            var _monitorName = $("#monitorName");
-            _monitorType.change(function(){
-                var monitorType=$("#monitorType").value;
-                //判断是否为空
-
-                var gradeId = $(this).val();
-                if(gradeId == ""){
-                    alert("此处不允许为空");
-                }else{
-
-                    $.ajax({
-                        type: "POST", //提交的类型
-                        url: "${ctx}/alarm/manager/configemergency/monitornames/"+monitorType,//提交地址
-                        dataType: "json",//参数
-                        success: function(data){ //回调方法
-                            $('#txt').val(data.name);
-                        }
-                    });
-                }
-            });
-
-        });
     </script>
 </head>
 
@@ -201,17 +148,15 @@
                 <tr>
                     <td width="33%"> 选择监视器类型</td>
                     <td><select id="monitorType" name="monitorType"  class="diySelect" style="width:200px">
-                        <option value="yyxt">应用系统</option>
-                        <option value="db">数据库</option>
-                        <option value="sys">操作系统</option>
+                        <option value="选择一个监视器类型">--选择一个监视器类型--</option>
+                        <option value="应用系统">应用系统</option>
+                        <option value="数据库">数据库</option>
+                        <option value="操作系统">操作系统</option>
                     </select></td>
                 </tr>
                 <tr>
                     <td> 监视器</td>
-                    <td><select id="monitorName" name="monitorName" class="diySelect" style="width:200px">\
-                        <%--<option>应用　　</option>
-                        <option>Oracle</option>
-                        <option>Linux</option>--%>
+                    <td><select id="monitorName" name="monitorName" class="diySelect" style="width:200px">
                     </select></td>
                 </tr>
             </table>

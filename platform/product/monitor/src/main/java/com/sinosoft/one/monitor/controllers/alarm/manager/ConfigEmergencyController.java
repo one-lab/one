@@ -6,6 +6,11 @@ import com.sinosoft.one.monitor.application.domain.ApplicationService;
 import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.attribute.domain.AttributeService;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.monitor.db.oracle.model.Info;
+import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
+import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -35,41 +40,92 @@ public class ConfigEmergencyController {
     AttributeService attributeService;
     @Autowired
     ApplicationService applicationService;
+    @Autowired
+    InfoRepository infoRepository;
+    @Autowired
+    OsRepository osRepository;
 
     @Get("config")
     public String configEmergencyForm(Invocation inv){
         return "setEmergency";
     }
 
-    @Post("attributenames/{resourceType}")
-    public void getAttributeNames(@Param("resourceType") String resourceType,Invocation inv) throws Exception {
-        List<Attribute> attributes=attributeService.findAllAttributesWithResourceType(resourceType);
-        Page page=new PageImpl(attributes);
-        Gridable<Attribute> gridable=new Gridable<Attribute>(page);
-        gridable.setIdField("id");
-        gridable.setCellStringField("attributeCn,threshold,action");
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-        } catch (Exception e) {
-            throw new Exception("Json数据转换出错!",e);
+    //配置告警页面，选择监视器类型时，得到相应类型下的所有可用的监视器
+    @Post("monitornames/{resourceType}")
+    public Reply getMonitorNames(@Param("resourceType") String resourceType, Invocation inv) throws Exception {
+        JSONArray jsonArray = new JSONArray();
+        String jsonMonitorNames="";
+        if ("应用系统".equals(resourceType)) {
+            List<Application> applications = applicationService.findAllApplicationNames();
+            if (applications != null) {
+                for (Application application : applications) {
+                    JSONObject jsonObject = new JSONObject();
+                    //@todo 获取应用中文名
+                    jsonObject.put("monitorName", application.getCnName());
+                    jsonArray.add(jsonObject);
+                }
+                jsonMonitorNames = jsonArray.toJSONString();
+                System.out.println("============================================================\n" + jsonMonitorNames);
+                return Replys.with(jsonMonitorNames);
+            }
+            return null;
+        }else if("数据库".equals(resourceType)){
+            List<Info> dbInfos= (List<Info>) infoRepository.findAll();
+            if (dbInfos!=null){
+                for (Info dbInfo : dbInfos) {
+                    JSONObject jsonObject = new JSONObject();
+                    //@todo 获取GE_MONITOR_ORACLE_INFO表的NAME字段值
+                    jsonObject.put("monitorName", dbInfo.getName());
+                    jsonArray.add(jsonObject);
+                }
+                jsonMonitorNames = jsonArray.toJSONString();
+                System.out.println("============================================================\n" + jsonMonitorNames);
+                return Replys.with(jsonMonitorNames);
+            }
+            return null;
+        }else if("操作系统".equals(resourceType)){
+            List<Os> oses= (List<Os>) osRepository.findAll();
+            if (oses!=null){
+                for (Os os : oses) {
+                    JSONObject jsonObject = new JSONObject();
+                    //@todo 获取GE_MONITOR_OS表的NAME字段值
+                    jsonObject.put("monitorName", os.getName());
+                    jsonArray.add(jsonObject);
+                }
+                jsonMonitorNames = jsonArray.toJSONString();
+                System.out.println("============================================================\n" + jsonMonitorNames);
+                return Replys.with(jsonMonitorNames);
+            }
+            return null;
+        }else {
+            return null;
         }
     }
 
-    @Post("monitornames/{resourceType}")
-    public Reply getMonitorNames(@Param("resourceType") String resourceType, Invocation inv) throws Exception {
-        List<Application> applications = applicationService.findAllApplicationNames();
-        JSONArray jsonArray = new JSONArray();
-        if (applications != null) {
-            for (Application application : applications) {
-                JSONObject jsonObject = new JSONObject();
-                //应用英文名
-                jsonObject.put("monitorName", application.getApplicationName());
-                jsonArray.add(jsonObject);
+    @Post("attributenames/{resourceType}")
+    public void getAttributeNames(@Param("resourceType") String resourceType,Invocation inv) throws Exception {
+        String dbResourceType="";
+        ResourceType[] resourceTypes=ResourceType.values();
+        for (ResourceType newResourceType:resourceTypes){
+            if (newResourceType.cnName().equals(resourceType)){
+                dbResourceType=newResourceType.name();
+                break;
             }
-            String jsonMonitorNames = jsonArray.toJSONString();
-            System.out.println("============================================================\n" + jsonMonitorNames);
-            return Replys.with(jsonMonitorNames);
         }
-        return null;
+        if(!"".equals(dbResourceType)){
+            List<Attribute> attributes=attributeService.findAllAttributesWithResourceType(dbResourceType);
+            Page page=new PageImpl(attributes);
+            Gridable<Attribute> gridable=new Gridable<Attribute>(page);
+            gridable.setIdField("id");
+            gridable.setCellStringField("attributeCn,threshold,action");
+            try {
+                UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+            } catch (Exception e) {
+                throw new Exception("Json数据转换出错!",e);
+            }
+        }
+        Replys.with(null);
     }
+
+
 }
