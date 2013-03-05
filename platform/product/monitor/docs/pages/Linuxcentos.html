@@ -612,6 +612,10 @@ chart8 = new Highcharts.Chart({
                 name: '数据字典击中率',
                 data: [57, 85, 19, 42, 57, 85, 19]
             },
+					{
+                name: '系统字典击中率',
+                data: [0, 5, 1, 4, 5, 8, 1]
+            },
 						{
                 name: '缓存击中率',
                 data: [19, 42, 57, 85, 57, 85, 29]
@@ -943,26 +947,25 @@ function fnOpenNewWindowUn(e){
     <div class="menu_box">
       <ul class="nav" id="nav">
         <li><a href="index.html">首页</a></li>
-          <li class="has_sub">
-                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                	<ul class="add_sub_menu" id="subNav">
-                    	<li class="action"><span class="sever">操作系统</span>
-                        	<ul class="list">
-                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                        	<ul class="list">
-                                <li><a href="performance.html">在线查询</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                        	<ul class="list">
-                            	<li><a href="oracleMonitor.html">oracle</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
+        <li class="has_sub"> <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
+          <ul class="add_sub_menu" id="subNav">
+            <li class="action"><span class="sever">操作系统</span>
+              <ul class="list">
+                <li><a href="systemMonitor.html"> Linux(2)</a></li>
+              </ul>
+            </li>
+            <li class="action"><span class="system">应用系统</span>
+              <ul class="list">
+                <li><a href="performance.html">在线查询</a></li>
+              </ul>
+            </li>
+            <li class="action" style="border:none"><span>数据库</span>
+              <ul class="list">
+                <li><a href="oracleMonitor.html">oracle</a></li>
+              </ul>
+            </li>
+            <li class="clear"></li>
+          </ul>
         </li>
         <li><a href="javascript:viod(0)">应用性能</a></li>
         <li><a href="BusinessSimulation.html">业务仿真</a></li>
@@ -984,196 +987,198 @@ function fnOpenNewWindowUn(e){
   </div>
 </div>
 <div id="layout_center">
-<div class="main-linux">
-      <ul class="crumbs">
+  <div class="main-linux">
+    <ul class="crumbs">
       <li><a href="#">管理</a> ></li>
       <li><b>Linux</b></li>
     </ul>
-     <hr class="top_border" />
-     <div id="tabs">
-        	<ul>
-            	<li class="tabs_select">概览</li>
-                <li>磁盘</li>
-            </ul>
-  	 <br />
- <div class="first">
-  <div class="linux-on" style="width:99%; height:280px">
-    <div>
-      <table width="50%" cellspacing="0" cellpadding="0" border="0" class="lrtbdarkborder" height="280px">
-        <tbody>
-          <tr>
-            <td colspan="2" class="jsq-message">监视器信息</td>
-          </tr>
-          <tr>
-            <td class="monitorinfoodd">名称 </td>
-            <td width="70%" class="monitorinfoeven">app-centos5-64-1_Linux</td>
-          </tr>
-          <tr>
-            <td class="monitorinfoodd">系统健康状况</td>
-            <td class="monitorinfoeven"><a href="#" onclick="OpenNewWindow(this)"><img src="images/bussinessY.gif" /></a>&nbsp;&nbsp;健康状态为正常  .&nbsp;没有出现严重的告警。 </td>
-          </tr>
-          <tr>
-            <td class="monitorinfoodd" >类型 </td>
-            <td class="monitorinfoeven">服务器</td>
-          </tr>
-          <tr>
-            <td class="monitorinfoodd" >主机名</td>
-            <td class="monitorinfoeven">app-centos5-64-1&nbsp;(172.18.131.121)</td>
-          </tr>
-          <tr>
-            <td class="monitorinfoodd">操作系统 </td>
-            <td class="monitorinfoeven"> Linux </td>
-          </tr>
-          <tr>
-            <td class="monitorinfoodd">最后轮询时间</td>
-            <td class="monitorinfoeven">Feb 28, 2013 11:13 PM</td>
-          </tr>
-          <tr>
-            <td class="monitorinfoodd">下次轮询时间</td>
-            <td class="monitorinfoeven">Feb 28, 2013 11:23 PM</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="tableheadingbborder" style="width:49%; height:280px">
-      <div class="head-cpu">今天的可用性</div>
-      <div class="cpu-img"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this)'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow30(this)'></a></div>
-      <div id="container" style="width: 300px; height: 240px; margin: 0 auto"></div>
-      <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg" href="#" onclick='basicReaonLinux(this)'></a><a class="bodytext-img" href="setEmergency.html">警告配置</a></b></div>
-    </div>
-  </div>
-  <div class="know-time" style="width:49.5%; height:80px">
-    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard-time" height="80">
-      <tbody>
-        <tr>
-          <td width="100%" align="center" class="dashboard"><table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <hr class="top_border" />
+    <div id="tabs">
+      <ul>
+        <li class="tabs_select">概览</li>
+        <li>磁盘</li>
+      </ul>
+      <br />
+      <div class="first">
+        <div class="linux-on" style="width:99%; height:280px">
+          <div>
+            <table width="50%" cellspacing="0" cellpadding="0" border="0" class="lrtbdarkborder" height="280px">
               <tbody>
                 <tr>
-                  <td width="60%" class="bodytextbold">&nbsp;&nbsp;应答时间&nbsp;&nbsp;<a class="bodytextbold1"></a></td>
-                  <td width="30%" align="right"><a class="cpu7-img" href='javascript:void(0)' onclick='fnOpenNewWindow7(this)'></a><a class="cpu30-img" href='javascript:void(0)' onclick='fnOpenNewWindow30(this)'></a></td>
+                  <td colspan="2" class="jsq-message">监视器信息</td>
                 </tr>
                 <tr>
-                  <td align="center" class="textResponseTime" colspan="1"> 0 毫秒 </td>
-                  <td valign="bottom" align="right"><a class="bodytext-img" href="setEmergency.html">警告配置</a>&nbsp;</td>
+                  <td class="monitorinfoodd">名称 </td>
+                  <td width="70%" class="monitorinfoeven">app-centos5-64-1_Linux</td>
                 </tr>
-              </tbody>
-            </table></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="linux-midd" style="width:99.1%; height:200px; padding-bottom:10px;" >
-    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="lrtbdarkborder3">
-      <tbody>
-        <tr>
-          <td height="26" align="center" class="tableheading" >CPU使用率</td>
-          <td height="26" align="center" class="tableheading">内存使用率</td>
-          <td height="26" align="center" class="tableheading">磁盘利用率</td>
-        </tr>
-      </tbody>
-    </table>
-    <table width="99%" cellspacing="0" cellpadding="10" border="0" class="lrbborder">
-      <tbody>
-        <tr>
-          <td width="30%" valign="top" height="180"><table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard">
-              <tbody>
                 <tr>
-                  <td width="100%" align="center" class="dashboard"><table width="99%" cellspacing="0" cellpadding="3" border="0">
-                      <tbody >
-                        <tr>
-                          <td height="28" align="center" title="CPU使用率-35 %" class="bodytext" colspan="1"><a href="#" class="speed" onclick='viewWindowCPU(this)'><div id="speed" style="width: 200px; height: 140px; margin: 0 auto; "></div></a></td>
-                        </tr>
-                        <tr>
-                          <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowCPU(this)' href="javascript:void(0)">CPU使用率 - 35</a> % </td>
-                        </tr>
-                      </tbody>
-                    </table></td>
+                  <td class="monitorinfoodd">系统健康状况</td>
+                  <td class="monitorinfoeven"><a href="#" onclick="OpenNewWindow(this)"><img src="images/bussinessY.gif" /></a>&nbsp;&nbsp;健康状态为正常  .&nbsp;没有出现严重的告警。 </td>
                 </tr>
-              </tbody>
-            </table></td>
-          <td width="30%" height="180"><table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard">
-              <tbody>
                 <tr>
-                  <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
-                      <tbody>
-                        <tr>
-                          <td height="28" align="center" title="内存使用率-45 %" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindowNC'><div id="speed2" style="width: 200px; height: 140px; margin: 0 auto"></div></a></td>
-                        </tr>
-                        <tr>
-                          <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowNC(this)' href="javascript:void(0)">内存使用率-45</a> % </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    
-                    <!--$Id$--></td>
+                  <td class="monitorinfoodd" >类型 </td>
+                  <td class="monitorinfoeven">服务器</td>
                 </tr>
-              </tbody>
-            </table></td>
-          <td width="30%" height="180"><table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard">
-              <tbody>
                 <tr>
-                  <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
-                      <tbody>
-                        <tr>
-                          <td height="28" align="center" title="磁盘利用率-88%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindowCP(this)'><div id="speed3" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
-                        </tr>
-                        <tr>
-                          <td align="center" class="bodytextbold"><a  onclick='viewWindowCP(this)' class="staticlinks"  href="javascript:void(0)">磁盘使用率-88%</a> </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    
-                    <!--$Id$-->
+                  <td class="monitorinfoodd" >主机名</td>
+                  <td class="monitorinfoeven">app-centos5-64-1&nbsp;(172.18.131.121)</td>
+                </tr>
+                <tr>
+                  <td class="monitorinfoodd">操作系统 </td>
+                  <td class="monitorinfoeven"> Linux </td>
+                </tr>
+                <tr>
+                  <td class="monitorinfoodd">最后轮询时间</td>
+                  <td class="monitorinfoeven">Feb 28, 2013 11:13 PM</td>
+                </tr>
+                <tr>
+                  <td class="monitorinfoodd">下次轮询时间</td>
+                  <td class="monitorinfoeven">Feb 28, 2013 11:23 PM</td>
+                </tr>
               </tbody>
             </table>
-      </tbody>
-    </table>
-  </div>
-  <div class="linux-down" style="width:99%; height:500px; float:right">
-    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="linux-downhead">
-      <tbody>
-        <tr>
-          <td width="100%" height="29" class="tableheadingtrans">&nbsp;CPU及内存使用率 - 最近6小时<a name="Memory Utilization"></a></td>
-        </tr>
-      </tbody>
-    </table>
-    <div id="CPU_line" style="height:230px"></div>
-    <div class="grid-total">
-      <div id="grid_Memory" class="grid-Memory" style="width:50%"> </div>
-      <div class="Memory1" style="width:50%"><a class="Memory" href="setEmergency.html"> 警告配置 </a></div>
-      <div id="grid_cpu" class="grid_cpu" style="width:50%"> </div>
-      <div class="cpu1" style="height:20px"><a class="cpu" href="setEmergency.html"> 警告配置 </a></div>
+          </div>
+          <div class="tableheadingbborder" style="width:49%; height:280px">
+            <div class="head-cpu">今天的可用性</div>
+            <div class="cpu-img"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this)'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow30(this)'></a></div>
+            <div id="container" style="width: 300px; height: 240px; margin: 0 auto"></div>
+            <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg" href="#" onclick='basicReaonLinux(this)'></a><a class="bodytext-img" href="setEmergency.html">警告配置</a></b></div>
+          </div>
+        </div>
+        <div class="know-time" style="width:49.5%; height:80px">
+          <table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard-time" height="80">
+            <tbody>
+              <tr>
+                <td width="100%" align="center" class="dashboard"><table width="100%" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                      <tr>
+                        <td width="60%" class="bodytextbold">&nbsp;&nbsp;应答时间&nbsp;&nbsp;<a class="bodytextbold1"></a></td>
+                        <td width="30%" align="right"><a class="cpu7-img" href='javascript:void(0)' onclick='fnOpenNewWindow7(this)'></a><a class="cpu30-img" href='javascript:void(0)' onclick='fnOpenNewWindow30(this)'></a></td>
+                      </tr>
+                      <tr>
+                        <td align="center" class="textResponseTime" colspan="1"> 0 毫秒 </td>
+                        <td valign="bottom" align="right"><a class="bodytext-img" href="setEmergency.html">警告配置</a>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  </table></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="linux-midd" style="width:99.1%; height:200px; padding-bottom:10px;" >
+          <table width="100%" cellspacing="0" cellpadding="0" border="0" class="lrtbdarkborder3">
+            <tbody>
+              <tr>
+                <td height="26" align="center" class="tableheading" >CPU使用率</td>
+                <td height="26" align="center" class="tableheading">内存使用率</td>
+                <td height="26" align="center" class="tableheading">磁盘利用率</td>
+              </tr>
+            </tbody>
+          </table>
+          <table width="99%" cellspacing="0" cellpadding="10" border="0" class="lrbborder">
+            <tbody>
+              <tr>
+                <td width="30%" valign="top" height="180"><table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard">
+                    <tbody>
+                      <tr>
+                        <td width="100%" align="center" class="dashboard"><table width="99%" cellspacing="0" cellpadding="3" border="0">
+                            <tbody >
+                              <tr>
+                                <td height="28" align="center" title="CPU使用率-35 %" class="bodytext" colspan="1"><a href="#" class="speed" onclick='viewWindowCPU(this)'>
+                                  <div id="speed" style="width: 200px; height: 140px; margin: 0 auto; "></div>
+                                  </a></td>
+                              </tr>
+                              <tr>
+                                <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowCPU(this)' href="javascript:void(0)">CPU使用率 - 35</a> % </td>
+                              </tr>
+                            </tbody>
+                          </table></td>
+                      </tr>
+                    </tbody>
+                  </table></td>
+                <td width="30%" height="180"><table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard">
+                    <tbody>
+                      <tr>
+                        <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
+                            <tbody>
+                              <tr>
+                                <td height="28" align="center" title="内存使用率-45 %" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindowNC'>
+                                  <div id="speed2" style="width: 200px; height: 140px; margin: 0 auto"></div>
+                                  </a></td>
+                              </tr>
+                              <tr>
+                                <td align="center" class="bodytextbold"><a class="staticlinks" onclick='viewWindowNC(this)' href="javascript:void(0)">内存使用率-45</a> % </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          
+                          <!--$Id$--></td>
+                      </tr>
+                    </tbody>
+                  </table></td>
+                <td width="30%" height="180"><table width="100%" cellspacing="0" cellpadding="0" border="0" class="dashboard">
+                    <tbody>
+                      <tr>
+                        <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
+                            <tbody>
+                              <tr>
+                                <td height="28" align="center" title="磁盘利用率-88%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindowCP(this)'>
+                                  <div id="speed3" style="width: 200px; height:140px; margin: 0 auto"></div>
+                                  </a></td>
+                              </tr>
+                              <tr>
+                                <td align="center" class="bodytextbold"><a  onclick='viewWindowCP(this)' class="staticlinks"  href="javascript:void(0)">磁盘使用率-88%</a></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          
+                          <!--$Id$-->
+                    </tbody>
+                  </table>
+            </tbody>
+          </table>
+        </div>
+        <div class="linux-down" style="width:99%; height:500px; float:right">
+          <table width="100%" cellspacing="0" cellpadding="0" border="0" class="linux-downhead">
+            <tbody>
+              <tr>
+                <td width="100%" height="29" class="tableheadingtrans">&nbsp;CPU及内存使用率 - 最近6小时<a name="Memory Utilization"></a></td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="CPU_line" style="height:230px"></div>
+          <div class="grid-total">
+            <div id="grid_Memory" class="grid-Memory" style="width:50%"> </div>
+            <div class="Memory1" style="width:50%"><a class="Memory" href="setEmergency.html"> 警告配置 </a></div>
+            <div id="grid_cpu" class="grid_cpu" style="width:50%"> </div>
+            <div class="cpu1" style="height:20px"><a class="cpu" href="setEmergency.html"> 警告配置 </a></div>
+          </div>
+        </div>
+        <div class="linux-bottom" style="width:99%; float:right; height:650px">
+          <table width="100%" cellspacing="0" cellpadding="0" border="0" class="linux-downhead">
+            <tbody>
+              <tr>
+                <td width="100%" height="29" class="tableheadingtrans">&nbsp;分解CPU利用率<a name="Memory Utilization"></a></td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="CPU_line2"></div>
+          <div class="grid_cpudo" id="grid_cpudo" style="width:70%"> </div>
+          <div class="tool_bar2" style="width:70.2%"><a class="gaojin" href="setEmergency.html">告警配置</a></div>
+        </div>
+      </div>
+      <div class="second">
+        <div class="threshold_file">
+          <h2 class="title3">磁盘空间明细</h2>
+          <div id="cipan_space_detail" style="width:100%"></div>
+          <div class="tool_bar_top"> <img  src="images/legend-green.png" /><span>空闲%</span> <img  src="images/legend-red.png" /><span>已用%</span> </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="linux-bottom" style="width:99%; float:right; height:650px">
-    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="linux-downhead">
-      <tbody>
-        <tr>
-          <td width="100%" height="29" class="tableheadingtrans">&nbsp;分解CPU利用率<a name="Memory Utilization"></a></td>
-        </tr>
-      </tbody>
-    </table>
-    <div id="CPU_line2"></div>
-    <div class="grid_cpudo" id="grid_cpudo" style="width:70%"> </div>
-    <div class="tool_bar2" style="width:70.2%"><a class="gaojin" href="setEmergency.html">告警配置</a></div>
-  </div>
-</div>
-<div class="second">
-	 <div class="threshold_file">
-            <h2 class="title3">磁盘空间明细</h2>
-            <div id="cipan_space_detail" style="width:100%"></div>
-          	<div class="tool_bar_top">
-              <img  src="images/legend-green.png" /><span>空闲%</span>
-             <img  src="images/legend-red.png" /><span>已用%</span>
-            </div>
-</div>
-</div>
-</div>
-
-</div>
 </div>
 <div id="layout_bottom">
-	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
+  <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
 </div>
 </body>
 </html>
