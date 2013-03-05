@@ -137,22 +137,35 @@ public class UrlTraceLog implements NotificationModel {
 		this.urlId = urlId;
 	}
 
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	public void addMethodTraceLog(MethodTraceLog methodTraceLog) {
 		this.methodTraceLogList.add(methodTraceLog);
 	}
 
-    public static UrlTraceLog beginTrace() {
+	public List<MethodTraceLog> getMethodTraceLogList() {
+		return methodTraceLogList;
+	}
+
+	public static UrlTraceLog beginTrace() {
         UrlTraceLog urlTraceLog = new UrlTraceLog();
         urlTraceLog.setBeginTime(new Timestamp(System.currentTimeMillis()));
         return urlTraceLog;
     }
 
-    public static long endTrace(HttpServletRequest request, UrlTraceLog targetURLTraceLog) {
+    public static long endTrace(HttpServletRequest request) {
+	    UrlTraceLog targetURLTraceLog = TraceUtils.getUrlTraceLog();
         targetURLTraceLog.setUrl(request.getRequestURI());
         long endTime = System.currentTimeMillis();
         targetURLTraceLog.setEndTime(new Timestamp(endTime));
         targetURLTraceLog.setConsumeTime(endTime - targetURLTraceLog.getBeginTime().getTime());
-        targetURLTraceLog.setSessionId(request.getSession(false).getId());
+        targetURLTraceLog.setSessionId(request.getSession().getId());
         targetURLTraceLog.setUserIp(request.getRemoteAddr());
         targetURLTraceLog.setRequestParams(JSON.toJSONString(request.getParameterMap()));
 	    NotificationServiceFactory.buildNotificationService().notification(targetURLTraceLog);

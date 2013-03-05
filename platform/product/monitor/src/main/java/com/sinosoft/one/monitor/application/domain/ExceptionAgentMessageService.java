@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class ExceptionAgentMessageService implements AgentMessageService{
 	@Autowired
 	private ExceptionInfoRepository exceptionInfoRepository;
+	@Autowired
+	private MessageBaseEventSupport messageBaseEventSupport;
 
 	/**
 	 * 处理代理端异常消息
@@ -26,7 +28,7 @@ public class ExceptionAgentMessageService implements AgentMessageService{
 	public void handleMessage(String applicationId, String data) {
 		ExceptionInfo exceptionInfo = JSON.parseObject(data, ExceptionInfo.class);
 		exceptionInfo.setApplicationId(applicationId);
-		String alarmId = MessageBaseEventSupport.build().doMessageBase(exceptionInfo);
+		String alarmId = messageBaseEventSupport.doMessageBase(exceptionInfo);
 		exceptionInfo.setAlarmId(alarmId);
 		exceptionInfoRepository.save(exceptionInfo);
 	}

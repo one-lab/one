@@ -78,7 +78,10 @@ public final class NotificationConfiguration {
 				JSONObject jsonObject = JSON.parseObject(responseStr);
 				applicationId = jsonObject.getString("applicationId");
 				if(applicationId != null) {
-					NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+					String urls = jsonObject.getString("urls");
+					if(urls != null && !urls.equals("")) {
+						NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+					}
 
 					file.createNewFile();
 					OutputStream outputStream = null;
@@ -96,17 +99,34 @@ public final class NotificationConfiguration {
 				}
 			}
 		} else {
-			reloadApplicationId(file);
+			reloadApplicationId(file, url);
 		}
 	}
 
-	private void reloadApplicationId(File file)  {
+	private void reloadApplicationId(File file, String url)  {
 		InputStream inputStream = null;
 		try {
 			inputStream = new FileInputStream(file);
 			Properties agentInfoProperties = new Properties();
 			agentInfoProperties.load(inputStream);
 			applicationId = agentInfoProperties.get("agent.id").toString();
+			String responseStr = NotificationHttpSupport.post(url, new HashMap<String, String>() {
+				{
+					put("applicationId", applicationId);
+				}
+			});
+
+			if(NotificationResponseType.Exception.name().equalsIgnoreCase(responseStr)) {
+				logger.error("Init data from monitor server url [" + url + "] exception.");
+			} else if(NotificationResponseType.NotExist.name().equalsIgnoreCase(responseStr)) {
+				removeApplication();
+			} else {
+				JSONObject jsonObject = JSON.parseObject(responseStr);
+				String urls = jsonObject.getString("urls");
+				if(urls != null && !urls.equals("")) {
+					NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+				}
+			}
 		} catch (Exception e) {
 			logger.error("read file " + NOTIFICATION_INFO_FILENAME + "exception.", e);
 		} finally {
@@ -136,7 +156,7 @@ public final class NotificationConfiguration {
 			if(!file.exists()) {
 				return false;
 			}
-			reloadApplicationId(file);
+			reloadApplicationId(file, baseUrl + MONITOR_APPLICATION_INIT_URL);
 			return true;
 		}
 	}

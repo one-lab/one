@@ -131,10 +131,4 @@
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>
-
-    <bean id="alarmMessageHandlerHelpers" class="com.sinosoft.one.monitor.common.AlarmMessageHandlerHelpers">
-        <property name="alarmMessageHandler" ref="alarmMessageHandler" />
-    </bean>
-    <bean id="alarmMessageHandler" class="com.sinosoft.one.monitor.common.AlarmMessageHandler" />
-
 </beans>

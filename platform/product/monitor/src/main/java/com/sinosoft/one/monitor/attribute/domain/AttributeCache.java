@@ -35,13 +35,18 @@ public class AttributeCache {
 				}
 			});
 
-	public Attribute getAttributeId(String key) {
+	public Attribute getAttribute(String resourceType, String attributeName) {
 		try {
-			return attributeCache.get(key);
+			return attributeCache.get(resourceType + "#" + attributeName);
 		} catch (ExecutionException e) {
 			logger.warn("get attribute id exception : " + e.getMessage());
 			return Attribute.EMPTY;
 		}
+	}
+
+	public String getAttributeId(String resourceType, String attributeName) {
+		Attribute attribute = getAttribute(resourceType, attributeName);
+		return attribute.getId();
 	}
 
 	public void removeAttributeId(String key) {

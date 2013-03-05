@@ -3,7 +3,9 @@ package com.sinosoft.one.monitor.controllers.application.manager;
 import com.sinosoft.one.monitor.application.domain.BizScenarioService;
 import com.sinosoft.one.monitor.application.domain.UrlService;
 import com.sinosoft.one.monitor.application.model.BizScenario;
+import com.sinosoft.one.monitor.application.model.EumUrl;
 import com.sinosoft.one.monitor.application.model.Url;
+import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -34,6 +36,8 @@ public class UrlManagerController {
     UrlService urlService;
     @Autowired
     BizScenarioService bizScenarioService;
+    @Autowired
+    EumUrlRepository eumUrlRepository;
 
     /**
      * 管理url页面.
@@ -88,14 +92,18 @@ public class UrlManagerController {
         inv.getRequest().setAttribute("bizScenarioId",bizScenarioId);
         BizScenario bizScenario = bizScenarioService.findBizScenario(bizScenarioId);
         List<Url> urls=urlService.findAllUrl();
+        EumUrl eumUrl=new EumUrl();
+        eumUrl.setUrl(url.getUrl());
+        eumUrl.setApplication(bizScenario.getApplication());
         if(urls.size()>0){
             for(Url dbUrl:urls){
                 //如果新增加的url是库中已经存在的，那么只需更新此url所属的业务场景即可
                 if (dbUrl.getUrl().equals(url.getUrl())) {
                     dbUrl.setBizScenario(bizScenario);
                     urlService.saveUrl(dbUrl);
-                    //@todo 向EUM_URL表中插入记录（url的application信息）
-                    /*eumUrlService.saveEumUrlWithAddUrl(url.getUrl(),bizScenario.getApplication().getId());*/
+                    //向EUM_URL表中插入记录（url的application信息）
+                    eumUrl.setRecordTime(new Date());
+                    eumUrlRepository.save(eumUrl);
                     return "managerUrl";
                 }
             }
@@ -111,6 +119,9 @@ public class UrlManagerController {
         url.setCreatorId("4028921a3cfba342013cfba4623e0000");
         url.setCreateTime(new Date());
         urlService.saveUrl(url);
+        //向EUM_URL表中插入记录（url的application信息）
+        eumUrl.setRecordTime(new Date());
+        eumUrlRepository.save(eumUrl);
         return "managerUrl";
     }
 

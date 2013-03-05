@@ -24,7 +24,7 @@ import java.util.List;
  * Date: 13-3-1
  * Time: 下午3:57
  */
-
+@Component
 public class AlarmMessageHandler {
 	@Autowired
 	private AlarmService alarmService;
@@ -51,6 +51,7 @@ public class AlarmMessageHandler {
 			if(thresholdAlarmParams.resource == null) {
 				//获取资源
 				thresholdAlarmParams.resource = resourcesCache.getResource(resourceId);
+				thresholdAlarmParams.healthAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Health.name());
 				if(thresholdAlarmParams.resource == Resource.EMPTY) {
 					return;
 				}
@@ -59,9 +60,10 @@ public class AlarmMessageHandler {
 			if(alarmMessage.isAvailabilityAlarm()) {
 				thresholdAlarmParams.isAvailabilityAlarm = true;
 				thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
-				thresholdAlarmParams.availabilityAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Availability.name(), SeverityLevel.CRITICAL);
+				String availabilityAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Availability.name());
+				thresholdAlarmParams.availabilityAttributeActions = actionService.queryAttributeActions(resourceId, availabilityAttributeId, SeverityLevel.CRITICAL);
 				if(thresholdAlarmParams.healthAttributeActions == null) {
-					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Health.name(), SeverityLevel.CRITICAL);
+					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, thresholdAlarmParams.healthAttributeId, SeverityLevel.CRITICAL);
 				}
 				break;
 			}
@@ -69,13 +71,13 @@ public class AlarmMessageHandler {
 			if(alarmMessage.isExceptionAlarm()) {
 				thresholdAlarmParams.isExceptionAlarm = true;
 				thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
-
-				thresholdAlarmParams.exceptionAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Exception.name(), SeverityLevel.CRITICAL);
+				String exceptionAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Exception.name());
+				thresholdAlarmParams.exceptionAttributeActions = actionService.queryAttributeActions(resourceId, exceptionAttributeId, SeverityLevel.CRITICAL);
 				break;
 			}
 
 			//获取属性
-			Attribute attribute = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType() + "#" + alarmMessage.getAttributeName());
+			Attribute attribute = attributeCache.getAttribute(thresholdAlarmParams.resource.getResourceType(), alarmMessage.getAttributeName());
 			if(attribute == Attribute.EMPTY) {
 				return;
 			}
@@ -92,7 +94,7 @@ public class AlarmMessageHandler {
 				thresholdAlarmInfo.setAttribute(attribute);
 
 				if(thresholdAlarmParams.healthAttributeActions == null) {
-					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, AttributeName.Health.name(), severityLevel);
+					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, thresholdAlarmParams.healthAttributeId, severityLevel);
 				}
 				List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(resourceId, attribute.getId(), severityLevel);
 				thresholdAlarmInfo.setThresholdAttributeActions(thresholdAttributeActions);
@@ -134,7 +136,7 @@ public class AlarmMessageHandler {
 				Attribute attribute = thresholdAlarmInfo.getAttribute();
 
 				alarmMessageBuilder.append("<br>").append(index).append(".").append(attribute.getAttributeCn())
-						.append(" ").append(threshold.getResultMessage()).append(" ").append(attribute.getUnits())
+						.append(" ").append(threshold.getResultMessage().replaceAll("#U#", attribute.getUnits())).append(" ").append(attribute.getUnits())
 						.append(" （阈值) ");
 
 				allAttributeActions.addAll(thresholdAlarmInfo.getThresholdAttributeActions());
@@ -147,10 +149,10 @@ public class AlarmMessageHandler {
 
 		// 保存告警信息
 		Alarm alarm = new Alarm(thresholdAlarmParams.alarmId);
-		Attribute attribute = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType() + "#" + AttributeName.Health);
-		alarm.setAlarmSource(thresholdAlarmParams.alarmSource);
+		Attribute attribute = attributeCache.getAttribute(thresholdAlarmParams.resource.getResourceType(), AttributeName.Health.name());
 		alarm.setAttributeId(attribute.getId());
 		alarm.setMonitorId(thresholdAlarmParams.resource.getResourceId());
+		alarm.setAlarmSource(thresholdAlarmParams.alarmSource);
 		alarm.setMonitorType(thresholdAlarmParams.resource.getResourceType());
 		alarm.setSeverity(thresholdAlarmParams.severityLevel);
 		alarm.setMessage(alarmMessageBuilder.toString());
@@ -202,6 +204,7 @@ public class AlarmMessageHandler {
 		private boolean isAvailabilityAlarm;
 		private boolean isExceptionAlarm;
 		private SeverityLevel severityLevel = SeverityLevel.UNKNOW;
+		private String healthAttributeId;
 		private List<AttributeAction> healthAttributeActions;
 		private List<AttributeAction> availabilityAttributeActions;
 		private List<AttributeAction> exceptionAttributeActions;

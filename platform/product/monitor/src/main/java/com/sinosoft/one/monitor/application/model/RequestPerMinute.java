@@ -23,9 +23,9 @@ public class RequestPerMinute {
 	 */
 	private String applicationId;
 	/**
-	 * 每分钟请求数
+	 * 请求数
 	 */
-	private int rpm;
+	private int requestNumber;
 	/**
 	 * 记录日期
 	 */
@@ -51,13 +51,13 @@ public class RequestPerMinute {
 		this.applicationId = applicationId;
 	}
 
-	@Column(name = "RPM")
-	public int getRpm() {
-		return rpm;
+	@Column(name = "REQUEST_NUMBER")
+	public int getRequestNumber() {
+		return requestNumber;
 	}
 
-	public void setRpm(int rpm) {
-		this.rpm = rpm;
+	public void setRequestNumber(int requestNumber) {
+		this.requestNumber = requestNumber;
 	}
 
 	@Column(name = "RECORD_TIME")
@@ -70,6 +70,6 @@ public class RequestPerMinute {
 	}
 
 	public void addRpm(int rpm) {
-		this.rpm += rpm;
+		this.requestNumber += rpm;
 	}
 }

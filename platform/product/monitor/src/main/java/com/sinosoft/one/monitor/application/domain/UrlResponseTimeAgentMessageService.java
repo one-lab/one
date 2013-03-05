@@ -5,15 +5,16 @@ import com.sinosoft.one.monitor.application.model.RequestPerMinute;
 import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import com.sinosoft.one.monitor.application.repository.RequestPerMinuteRepository;
 import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
-import com.sinosoft.one.monitor.utils.DateUtil;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -21,10 +22,10 @@ import java.util.*;
  * User: carvin
  * Date: 13-3-4
  * Time: 下午5:06
- * To change this template use File | Settings | File Templates.
  */
 @Service
 public class UrlResponseTimeAgentMessageService implements AgentMessageService{
+	private Logger logger = LoggerFactory.getLogger(UrlResponseTimeAgentMessageService.class);
 	@Autowired
 	private UrlResponseTimeRepository urlResponseTimeRepository;
 	@Autowired
@@ -40,7 +41,7 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 
 		MinMaxTime minMaxTime = new MinMaxTime();
 		Map<String, UrlResponseTime> urlResponseTimeMap = new HashMap<String, UrlResponseTime>();
-		Map<String, MinMaxTime> requestPerMinuteMap = new HashMap<String, MinMaxTime>();
+		Map<String, Integer> requestPerMinuteMap = new HashMap<String, Integer>();
 
 		generateDatas(urlResponseTimes, urlResponseTimeMap, requestPerMinuteMap, minMaxTime);
 
@@ -49,34 +50,74 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 		List<UrlResponseTime> storeUrlResponseTimes = urlResponseTimeRepository.selectUrlResponseTimes(startDate, endDate);
 
 		List<UrlResponseTime> toUpdateUrlResponseTimes = new ArrayList<UrlResponseTime>();
-		for(UrlResponseTime storeUrlResponseTime : storeUrlResponseTimes) {
-			String key = getUrlResponseTimeKey(storeUrlResponseTime);
-			if(urlResponseTimeMap.containsKey(key)) {
-				UrlResponseTime targetUrlResponseTime = urlResponseTimeMap.get(key);
-				if(storeUrlResponseTime.getMinResponseTime() > targetUrlResponseTime.getMinResponseTime()) {
-					storeUrlResponseTime.setMinResponseTime(targetUrlResponseTime.getMinResponseTime());
+		if(storeUrlResponseTimes.isEmpty()) {
+			addToUpdateUrlResponseTime(toUpdateUrlResponseTimes, urlResponseTimeMap, applicationId);
+		} else {
+			for(UrlResponseTime storeUrlResponseTime : storeUrlResponseTimes) {
+				String key = getUrlResponseTimeKey(storeUrlResponseTime);
+				if(urlResponseTimeMap.containsKey(key)) {
+					UrlResponseTime targetUrlResponseTime = urlResponseTimeMap.get(key);
+					if(storeUrlResponseTime.getMinResponseTime() > targetUrlResponseTime.getMinResponseTime()) {
+						storeUrlResponseTime.setMinResponseTime(targetUrlResponseTime.getMinResponseTime());
+					}
+					if(storeUrlResponseTime.getMaxResponseTime() < targetUrlResponseTime.getMaxResponseTime()) {
+						storeUrlResponseTime.setMaxResponseTime(targetUrlResponseTime.getMaxResponseTime());
+					}
+					storeUrlResponseTime.setAvgResponseTime((storeUrlResponseTime.getAvgResponseTime() + targetUrlResponseTime.getAvgResponseTime()) / 2);
+					toUpdateUrlResponseTimes.add(storeUrlResponseTime);
+					urlResponseTimeMap.remove(key);
 				}
-				if(storeUrlResponseTime.getMaxResponseTime() > targetUrlResponseTime.getMaxResponseTime()) {
-					storeUrlResponseTime.setMaxResponseTime(targetUrlResponseTime.getMaxResponseTime());
-				}
-				storeUrlResponseTime.setAvgResponseTime((storeUrlResponseTime.getAvgResponseTime() + targetUrlResponseTime.getAvgResponseTime())/2);
-				toUpdateUrlResponseTimes.add(storeUrlResponseTime);
 			}
+			addToUpdateUrlResponseTime(toUpdateUrlResponseTimes, urlResponseTimeMap, applicationId);
 		}
 		urlResponseTimeRepository.save(toUpdateUrlResponseTimes);
 
+
 		List<RequestPerMinute> storeRequestPerMinutes = requestPerMinuteRepository.selectRequestPerMinutes(startDate, endDate);
 		List<RequestPerMinute> toUpdateRequestPerMinutes = new ArrayList<RequestPerMinute>();
-		for(RequestPerMinute storeRequestPerMinute : storeRequestPerMinutes) {
-			String requestPerMinuteKey = getRequestPerMinuteKey(storeRequestPerMinute.getRecordTime());
-			if(requestPerMinuteMap.containsKey(requestPerMinuteKey)) {
-				storeRequestPerMinute.setRpm(storeRequestPerMinute.getRpm() + requestPerMinuteMap.get(requestPerMinuteKey).getRpm());
-				toUpdateRequestPerMinutes.add(storeRequestPerMinute);
+		if(!storeRequestPerMinutes.isEmpty()) {
+			for(RequestPerMinute storeRequestPerMinute : storeRequestPerMinutes) {
+				String requestPerMinuteKey = getRequestPerMinuteKey(storeRequestPerMinute.getRecordTime());
+				if(requestPerMinuteMap.containsKey(requestPerMinuteKey)) {
+					storeRequestPerMinute.setRequestNumber(storeRequestPerMinute.getRequestNumber() + requestPerMinuteMap.get(requestPerMinuteKey));
+					toUpdateRequestPerMinutes.add(storeRequestPerMinute);
+					requestPerMinuteMap.remove(requestPerMinuteKey);
+				}
 			}
+			addToUpdateRequestPerMinute(toUpdateRequestPerMinutes, requestPerMinuteMap, applicationId);
+		} else {
+			addToUpdateRequestPerMinute(toUpdateRequestPerMinutes, requestPerMinuteMap, applicationId);
 		}
 		requestPerMinuteRepository.save(toUpdateRequestPerMinutes);
 	}
 
+	private void addToUpdateUrlResponseTime(List<UrlResponseTime> toUpdateUrlResponseTimes,
+	                                        Map<String, UrlResponseTime> urlResponseTimeMap,
+	                                        String applicationId) {
+		for(UrlResponseTime urlResponseTime : urlResponseTimeMap.values()) {
+			urlResponseTime.setApplicationId(applicationId);
+			urlResponseTime.setRecordTime(getConditionDate(urlResponseTime.getRecordTime()));
+			toUpdateUrlResponseTimes.add(urlResponseTime);
+		}
+	}
+
+	private void addToUpdateRequestPerMinute(List<RequestPerMinute> toUpdateRequestPerMinutes,
+	                                         Map<String, Integer> requestPerMinuteMap,
+	                                         String applicationId) {
+		try {
+			for (String key : requestPerMinuteMap.keySet()) {
+				Integer rpm = requestPerMinuteMap.get(key);
+				RequestPerMinute requestPerMinute = new RequestPerMinute();
+				requestPerMinute.setRequestNumber(rpm);
+				requestPerMinute.setApplicationId(applicationId);
+				requestPerMinute.setRecordTime(getConditionDate(new SimpleDateFormat("yyyy-MM-dd HH").parse(key)));
+				toUpdateRequestPerMinutes.add(requestPerMinute);
+			}
+		} catch (Exception e) {
+			logger.error("add data to update request per minute exception.", e);
+		}
+
+	}
 	/**
 	 * 得到条件Date
 	 * @param sourceDate
@@ -98,12 +139,18 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 	 */
 	private void generateDatas(List<UrlResponseTime> urlResponseTimes,
 	                          Map<String, UrlResponseTime> urlResponseTimeMap,
-	                          Map<String, MinMaxTime> requestPerMinuteMap,
+	                          Map<String, Integer> requestPerMinuteMap,
 	                          MinMaxTime minMaxTime) {
 		UrlResponseTime firstUrlResponseTime = urlResponseTimes.get(0);
 		minMaxTime.min = firstUrlResponseTime.getRecordTime();
 		minMaxTime.max = firstUrlResponseTime.getRecordTime();
+		firstUrlResponseTime.setAvgResponseTime(firstUrlResponseTime.getResponseTime());
+		firstUrlResponseTime.setMinResponseTime(firstUrlResponseTime.getResponseTime());
+		firstUrlResponseTime.setMaxResponseTime(firstUrlResponseTime.getResponseTime());
 		urlResponseTimeMap.put(getUrlResponseTimeKey(firstUrlResponseTime), firstUrlResponseTime);
+
+		requestPerMinuteMap.put(getRequestPerMinuteKey(firstUrlResponseTime.getRecordTime()), 1);
+
 		for(int i=1, len=urlResponseTimes.size(); i<len; i++) {
 			UrlResponseTime urlResponseTime = urlResponseTimes.get(i);
 			String key = getUrlResponseTimeKey(urlResponseTime);
@@ -128,19 +175,9 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 			String requestPerMinuteKey = getRequestPerMinuteKey(urlResponseTime.getRecordTime());
 			Date recordTime = urlResponseTime.getRecordTime();
 			if(requestPerMinuteMap.containsKey(requestPerMinuteKey)) {
-				MinMaxTime tempMinMaxTime = requestPerMinuteMap.get(requestPerMinuteKey);
-				if(tempMinMaxTime.min.compareTo(recordTime) > 0) {
-					tempMinMaxTime.min = recordTime;
-				}
-				if(tempMinMaxTime.max.compareTo(recordTime) < 0) {
-					tempMinMaxTime.max = recordTime;
-				}
-				requestPerMinuteMap.put(requestPerMinuteKey , requestPerMinuteMap.get(requestPerMinuteKey).addRpm(1));
+				requestPerMinuteMap.put(requestPerMinuteKey , requestPerMinuteMap.get(requestPerMinuteKey) + 1);
 			} else {
-				MinMaxTime tempMinMaxTime = new MinMaxTime();
-				tempMinMaxTime.min = recordTime;
-				tempMinMaxTime.max = recordTime;
-				requestPerMinuteMap.put(requestPerMinuteKey , tempMinMaxTime);
+				requestPerMinuteMap.put(requestPerMinuteKey , 1);
 			}
 
 			if(minMaxTime.min.compareTo(recordTime) > 0) {
@@ -176,18 +213,6 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 	private class MinMaxTime {
 		private Date min;
 		private Date max;
-		private int rpm = 1;
-
-		public MinMaxTime addRpm(int rpm) {
-			this.rpm += rpm;
-			return this;
-		}
-		public int getRpm() {
-			return BigDecimal.valueOf(rpm).divide(BigDecimal.valueOf(getMinutes())).intValue();
-		}
-		public long getMinutes() {
-			return DateUtil.minus(max, min, Calendar.MINUTE);
-		}
 	}
 
 	/**

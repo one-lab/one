@@ -214,6 +214,7 @@ public class UrlTraceLog implements MessageBase {
 		this.urlId = urlId;
 	}
 
+
 	@Transient
 	public String getApplicationId() {
 		return applicationId;

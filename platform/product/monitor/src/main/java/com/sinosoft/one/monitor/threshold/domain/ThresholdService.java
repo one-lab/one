@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.threshold.domain;
 
 import com.sinosoft.one.monitor.threshold.model.Threshold;
 import com.sinosoft.one.monitor.threshold.repository.ThresholdRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ThresholdService {
+	@Autowired
 	private ThresholdRepository thresholdRepository;
 
 	/**

@@ -16,7 +16,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class UrlResponseTimeQueue implements NotificationModel {
 	private UrlResponseTimeQueue() {}
-	private final static int SIZE = 2;
+	private String data = "[]";
+	private final static int SIZE = 1;
 	private final static UrlResponseTimeQueue INSTANCE = new UrlResponseTimeQueue();
 
 	private List<UrlResponseTime> urlResponseTimeList = new CopyOnWriteArrayList<UrlResponseTime>();
@@ -27,7 +28,8 @@ public class UrlResponseTimeQueue implements NotificationModel {
 
 	public void append(UrlResponseTime urlResponseTime) {
 		urlResponseTimeList.add(urlResponseTime);
-		if(urlResponseTimeList.size() > SIZE) {
+		if(urlResponseTimeList.size() >= SIZE) {
+			data = JSON.toJSONStringWithDateFormat(urlResponseTimeList, "yyyy-MM-dd HH:mm:ss");
 			NotificationServiceFactory.buildNotificationService().notification(this);
 			urlResponseTimeList.clear();
 		}
@@ -40,6 +42,6 @@ public class UrlResponseTimeQueue implements NotificationModel {
 
 	@Override
 	public String data() {
-		return JSON.toJSONStringWithDateFormat(urlResponseTimeList, "yyyy-MM-dd HH:mm:ss");
+		return data;
 	}
 }

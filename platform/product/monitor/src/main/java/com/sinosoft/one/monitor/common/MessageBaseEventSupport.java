@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.common;
 
 import com.lmax.disruptor.MultiThreadedClaimStrategy;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.SingleThreadedClaimStrategy;
 import com.lmax.disruptor.SleepingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,10 @@ import java.util.concurrent.Executors;
  * Date: 13-3-2
  * Time: 上午10:21
  */
+@Component
 public class MessageBaseEventSupport {
-	private static MessageBaseEventSupport messageBaseEventSupport = new MessageBaseEventSupport();
-	public static MessageBaseEventSupport build() {
-		return messageBaseEventSupport;
-	}
+	@Autowired
+	private AlarmMessageHandler alarmMessageHandler;
 	private int ringSize = 1024;
 	private RingBuffer<MessageBaseEvent> ringBuffer;
 
@@ -29,15 +29,14 @@ public class MessageBaseEventSupport {
 		this.ringSize = ringSize;
 	}
 
-	private MessageBaseEventSupport() {
-		init();
-	}
-
+	@PostConstruct
 	public void init() {
+		MessageBaseEventHandler messageBaseEventHandler = new MessageBaseEventHandler();
+		messageBaseEventHandler.setAlarmMessageHandler(alarmMessageHandler);
 		Disruptor<MessageBaseEvent> disruptor = new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY, Executors.newSingleThreadExecutor(),
-						new MultiThreadedClaimStrategy(ringSize),
+						new SingleThreadedClaimStrategy(ringSize),
 						new SleepingWaitStrategy());
-		disruptor.handleEventsWith(new MessageBaseEventHandler());
+		disruptor.handleEventsWith(messageBaseEventHandler);
 		ringBuffer = disruptor.start();
 	}
 

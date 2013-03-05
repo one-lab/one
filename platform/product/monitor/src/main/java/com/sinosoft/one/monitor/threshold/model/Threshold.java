@@ -220,6 +220,7 @@ public class Threshold  implements java.io.Serializable {
 		conditionValue = this.getWarningThresholdValue();
 		if(isThisLevel(condition, conditionValue, attributeValue)) {
 			resultMessage = attributeValue + " " + conditionStr + " " + conditionValue;
+			resultMessage += " #U#, " + attributeValue + " " + ThresholdConditions.valueOf(criticalThresholdCondition).revertSymbol() + " " + criticalThresholdValue;
 			return SeverityLevel.WARNING;
 		}
 
@@ -234,27 +235,27 @@ public class Threshold  implements java.io.Serializable {
 
 	private boolean isThisLevel(String condition, BigDecimal conditionValue, BigDecimal attributeValue) {
 		if(ThresholdConditions.EQ.name().equals(condition)) {
-			condition = ThresholdConditions.EQ.symbol();
+			conditionStr = ThresholdConditions.EQ.symbol();
 			return conditionValue.equals(attributeValue);
 		}
 		if(ThresholdConditions.NE.name().equals(condition)) {
-			condition = ThresholdConditions.NE.symbol();
+			conditionStr = ThresholdConditions.NE.symbol();
 			return !conditionValue.equals(attributeValue);
 		}
-		if(ThresholdConditions.LT.equals(condition)) {
-			condition = ThresholdConditions.LT.symbol();
+		if(ThresholdConditions.LT.name().equals(condition)) {
+			conditionStr = ThresholdConditions.LT.symbol();
 			return attributeValue.compareTo(conditionValue) < 0;
 		}
-		if(ThresholdConditions.LE.equals(condition)) {
-			condition = ThresholdConditions.LE.symbol();
+		if(ThresholdConditions.LE.name().equals(condition)) {
+			conditionStr = ThresholdConditions.LE.symbol();
 			return attributeValue.compareTo(conditionValue) <= 0;
 		}
-		if(ThresholdConditions.GT.equals(condition)) {
-			condition = ThresholdConditions.GT.symbol();
+		if(ThresholdConditions.GT.name().equals(condition)) {
+			conditionStr = ThresholdConditions.GT.symbol();
 			return attributeValue.compareTo(conditionValue) > 0;
 		}
-		if(ThresholdConditions.GE.equals(condition)) {
-			condition = ThresholdConditions.GE.symbol();
+		if(ThresholdConditions.GE.name().equals(condition)) {
+			conditionStr = ThresholdConditions.GE.symbol();
 			return attributeValue.compareTo(conditionValue) >= 0;
 		}
 		throw new RuntimeException("invalid condition : " + condition);

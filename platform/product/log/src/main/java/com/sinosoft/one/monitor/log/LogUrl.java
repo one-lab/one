@@ -3,7 +3,9 @@ package com.sinosoft.one.monitor.log;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Log URL 类.
@@ -15,7 +17,7 @@ import java.util.List;
 public class LogUrl {
     private String url = "";
     private String id = "";
-	private List<LogMethod> logMethodList = new ArrayList<LogMethod>();
+	private Set<LogMethod> logMethodSet = new HashSet<LogMethod>();
 
     public LogUrl() {}
 
@@ -41,11 +43,11 @@ public class LogUrl {
 	}
 
 	public void addLogMethod(LogMethod logMethod) {
-		logMethodList.add(logMethod);
+		logMethodSet.add(logMethod);
 	}
 
-	public List<LogMethod> getLogMethodList() {
-		return logMethodList;
+	public Set<LogMethod> getLogMethodSet() {
+		return logMethodSet;
 	}
 
 	@Override

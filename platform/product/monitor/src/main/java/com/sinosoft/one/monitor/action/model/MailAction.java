@@ -36,7 +36,7 @@ public class MailAction implements java.io.Serializable {
     /**
     * 内容(message).
     */
-    private String desc;
+    private String description;
     /**
     * 邮件服务器(smtpserver).
     */
@@ -103,13 +103,13 @@ public class MailAction implements java.io.Serializable {
     this.subject = subject;
     }
     
-    @Column(name="desc", length=3000)
-    public String getDesc() {
-    return this.desc;
+    @Column(name="description", length=3000)
+    public String getDescription() {
+    return this.description;
     }
 
-    public void setDesc(String desc) {
-    this.desc = desc;
+    public void setDescription(String description) {
+    this.description = description;
     }
     
     @Column(name="smtp_server", length=100)

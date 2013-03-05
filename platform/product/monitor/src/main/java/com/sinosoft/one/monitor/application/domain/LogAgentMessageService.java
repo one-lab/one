@@ -22,6 +22,8 @@ public class LogAgentMessageService implements AgentMessageService {
 	private UrlTraceLogRepository urlTraceLogRepository;
 	@Autowired
 	private UrlVisitsStaRepository urlVisitsStaRepository;
+	@Autowired
+	private MessageBaseEventSupport messageBaseEventSupport;
 
 	/**
 	 * 处理代理端日志消息
@@ -29,13 +31,16 @@ public class LogAgentMessageService implements AgentMessageService {
 	 * @param data 日志数据
 	 */
 	public void handleMessage(String applicationId, String data) {
-			UrlTraceLog urlTraceLog = JSON.parseObject(data, UrlTraceLog.class);
-			urlTraceLog.setApplicationId(applicationId);
-			String alarmId = MessageBaseEventSupport.build().doMessageBase(urlTraceLog);
-			urlTraceLog.setAlarmId(alarmId);
-			urlTraceLogRepository.save(urlTraceLog);
-			UrlVisitsSta urlVisitsSta = urlVisitsStaRepository.findByUrlId(urlTraceLog.getUrlId());
+		UrlTraceLog urlTraceLog = JSON.parseObject(data, UrlTraceLog.class);
+		urlTraceLog.setApplicationId(applicationId);
+		String alarmId = messageBaseEventSupport.doMessageBase(urlTraceLog);
+		urlTraceLog.setAlarmId(alarmId);
+		urlTraceLogRepository.save(urlTraceLog);
+		UrlVisitsSta urlVisitsSta = urlVisitsStaRepository.findByUrlId(urlTraceLog.getUrlId());
+		if(urlVisitsSta != null) {
 			urlVisitsSta.increaseVisitNumber();
-			urlVisitsStaRepository.save(urlVisitsSta);
+		}
+
+		urlVisitsStaRepository.save(urlVisitsSta);
 	}
 }

@@ -14,6 +14,6 @@ import java.util.List;
  * Time: 下午4:57
  */
 public interface RequestPerMinuteRepository extends PagingAndSortingRepository<RequestPerMinute, String> {
-	@SQL("SELECT * FROM GE_MONITOR_REQUEST_PER_MINUTE t WHERE t.record_time >= ?1 AND t_record_time <= ?2")
+	@SQL("SELECT * FROM GE_MONITOR_REQUEST_PER_MINUTE t WHERE t.record_time >= ?1 AND t.record_time <= ?2")
 	List<RequestPerMinute> selectRequestPerMinutes(Date startDate, Date endDate);
 }

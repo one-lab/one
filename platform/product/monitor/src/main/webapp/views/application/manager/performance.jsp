@@ -155,7 +155,7 @@
                     </td>
                     <td class="p_sub_table_right">
                         <p>
-                            <span><strong>rpm</strong>=每分钟请求</span>,<span><strong>cpm</strong>=每分钟调用数</span>
+                            <span><strong>requestNumber</strong>=每分钟请求</span>,<span><strong>cpm</strong>=每分钟调用数</span>
                         </p>
                     </td>
                 </tr>
@@ -221,7 +221,7 @@
                                         </table>
                                     </td>
                                     <td class="body"><span>494.0 毫秒</span></td>
-                                    <td class="body"><span>148.42 rpm</span></td>
+                                    <td class="body"><span>148.42 requestNumber</span></td>
                                     <td class="body"><a href="${ctx}/application/manager/bsmanager/list/${application.id}">管理业务场景</a>
                                         &nbsp;<a href="update/${application.id}">编辑</a>
                                         &nbsp;<a href="delete/${application.id}">删除</a>

@@ -39,9 +39,12 @@ public class AgentFilter implements Filter {
 		} else {
 			long beginTime = System.currentTimeMillis();
 	        doUrlTraceLogBegin(httpServletRequest);
-	        filterChain.doFilter(request, response);
-	        long endTime = doUrlTraceLogEnd(httpServletRequest);
-			UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(url, urlId, endTime-beginTime));
+			try {
+	            filterChain.doFilter(request, response);
+			} finally {
+				long endTime = doUrlTraceLogEnd(httpServletRequest);
+				UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(url, urlId, endTime-beginTime));
+			}
 		}
 	}
 
@@ -51,8 +54,11 @@ public class AgentFilter implements Filter {
 		if(oldRootContext == null) {
 	        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml");
 			logConfigs = (LogConfigs)applicationContext.getBean("logConfigs");
-			excludeExtensions = DEFAULT_EXCLUDE_EXTENSIONS.split(",");
+		} else {
+			logConfigs = (LogConfigs)oldRootContext.getBean("logConfigs");
 		}
+		LogTraceAspect.setLogConfigs(logConfigs);
+		excludeExtensions = DEFAULT_EXCLUDE_EXTENSIONS.split(",");
     }
 
     private void doUrlTraceLogBegin(HttpServletRequest request) {
@@ -61,7 +67,7 @@ public class AgentFilter implements Filter {
            if(urlId != null) {
 	           urlTraceLog = UrlTraceLog.beginTrace();
 	           urlTraceLog.setUrlId(urlId);
-	           TraceUtils.beginTrace(urlTraceLog, urlId);
+	           TraceUtils.beginTrace(urlTraceLog, urlId, url);
            } else {
 	           TraceUtils.beginTraceForNoMonitorURL(url, JSON.toJSONString(request.getParameterMap()));
            }
@@ -71,9 +77,9 @@ public class AgentFilter implements Filter {
     }
 
     private long doUrlTraceLogEnd(HttpServletRequest request) {
-	    long endTime = 0l;
+	    long endTime;
         if(urlTraceLog != null) {
-            endTime = UrlTraceLog.endTrace(request, urlTraceLog);
+            endTime = UrlTraceLog.endTrace(request);
             TraceUtils.endTrace();
         } else {
 	        TraceUtils.endTraceForNoMonitorURL();

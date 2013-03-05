@@ -46,6 +46,7 @@ public class LogConfigs {
 			    JSONObject methodObject = methodArray.getJSONObject(j);
 			    logUrl.addLogMethod(new LogMethod(methodObject.getString("methodId"), methodObject.getString("className"), methodObject.getString("methodName")));
 		    }
+		    urls.add(logUrl);
 	    }
     }
 
@@ -60,15 +61,15 @@ public class LogConfigs {
 		return null;
 	}
 
-	public List<LogMethod> getLogMethods(String urlId) {
+	public Set<LogMethod> getLogMethods(String urlId) {
 		Iterator<LogUrl> iterator = urls.iterator();
 		while (iterator.hasNext()) {
 			LogUrl logUrl = iterator.next();
 			if(logUrl.getId().equalsIgnoreCase(urlId)) {
-				return logUrl.getLogMethodList();
+				return logUrl.getLogMethodSet();
 			}
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.EMPTY_SET;
 	}
     @ManagedOperation(description = "Add a new log url.")
     @ManagedOperationParameters({
@@ -119,7 +120,7 @@ public class LogConfigs {
         while (iterator.hasNext()) {
             LogUrl logUrl = iterator.next();
             if(logUrl.getId().equals(urlId)) {
-		        List<LogMethod> logMethods = logUrl.getLogMethodList();
+		        Set<LogMethod> logMethods = logUrl.getLogMethodSet();
 		        Iterator<LogMethod> logMethodIterator = logMethods.iterator();
 	            while(logMethodIterator.hasNext()) {
 		            LogMethod logMethod = logMethodIterator.next();

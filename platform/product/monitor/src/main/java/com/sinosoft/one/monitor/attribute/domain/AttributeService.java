@@ -6,6 +6,8 @@ import com.sinosoft.one.monitor.common.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 处理属性业务逻辑类
  * User: carvin
@@ -35,4 +37,8 @@ public class AttributeService {
 	public Attribute getAttribute(ResourceType resourceType, String attributeName) {
 		return attributeRepository.findByResourceTypeAndAttribute(resourceType, attributeName);
 	}
+
+    public List<Attribute> findAllAttributesWithResourceType(String resourceType) {
+        return attributeRepository.findAllAttributesWithResourceType(resourceType);
+    }
 }

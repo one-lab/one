@@ -2,11 +2,11 @@ package com.sinosoft.one.monitor.attribute.model;
 // Generated 2013-3-1 10:54:16 by One Data Tools 1.0.0
 
 
-import javax.persistence.*;
-
 import com.sinosoft.one.monitor.common.ResourceType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
 
 /**
  * Attribute.
@@ -39,6 +39,14 @@ public class Attribute  implements java.io.Serializable {
     * 单位.
     */
     private String units = "";
+    /**
+     * 阈值.
+     */
+    private String threshold = "<a href='javascript:void(0)' onclick='setMergency()'>关联</a>";
+    /**
+     * 动作.
+     */
+    private String action = "-";
 
     public Attribute() {
     }
@@ -96,7 +104,25 @@ public class Attribute  implements java.io.Serializable {
 		this.attributeCn = attributeCn;
 	}
 
-	@Override
+    @Transient
+    public String getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(String threshold) {
+        this.threshold = threshold;
+    }
+
+    @Transient
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    @Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}

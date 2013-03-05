@@ -51,7 +51,7 @@ public class MethodTraceLog {
 	/**
 	 * 记录时间
 	 */
-    private Timestamp recordTime;
+    private Date recordTime;
 
     public MethodTraceLog() {
 
@@ -128,11 +128,11 @@ public class MethodTraceLog {
         this.consumeTime = consumeTime;
     }
 
-    public Timestamp getRecordTime() {
+    public Date getRecordTime() {
         return recordTime;
     }
 
-    public void setRecordTime(Timestamp recordTime) {
+    public void setRecordTime(Date recordTime) {
         this.recordTime = recordTime;
     }
 
