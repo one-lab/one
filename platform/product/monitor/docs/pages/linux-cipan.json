@@ -12,7 +12,7 @@
 				"100",
 				"20,480.0",
 				"<div class='seven1'><a class='seven' onclick='viewWindow(this)' href='#'></a></div>",
-				"<div class='un-know1'><a class='un-know'></div></div>",
+				"<div class='un-know1'><a class='un-know' onclick='fnOpenNewWindowUn(this)' href='#'></div></div>",
 				"<div class='eitdor1'><a class='eitdor' href='setEmergency.html'></a></div>"
 			]
         },  {
@@ -26,7 +26,7 @@
 				"15",
 				"4,336,8",
 				"<div class='seven1'><a class='seven' onclick='viewWindow(this)' href='#'></a></div>",
-				"<div class='un-know'></div>",
+				"<div class='un-know' onclick='fnOpenNewWindowUn(this)' href='#'></div>",
 				"<div class='eitdor1'><a class='eitdor' href='setEmergency.html'></a></div>"
 			]
         }, {
@@ -40,7 +40,7 @@
 				"25",
 				"3.443.1",
 				"<div class='seven1'><a class='seven' onclick='viewWindow(this)' href='#'></a></div>",
-				"<div class='un-know1'><a class='un-know'></div></div>",
+				"<div class='un-know1' onclick='fnOpenNewWindowUn(this)' href='#'><a class='un-know'></div></div>",
 				"<div class='eitdor1'><a class='eitdor' href='setEmergency.html'></a></div>"
 			]
         }

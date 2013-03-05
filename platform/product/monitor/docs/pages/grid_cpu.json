@@ -7,7 +7,7 @@
 				"CPU使用率",
 				"<a href='#' class='bfb'>0</a>",
 				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
-				"<a  class='img-unknow'></a>",
+				"<a  class='img-unknow' onclick='fnOpenNewWindowUnknow(this)' href='#'></a>",
 				null
 			]
         }

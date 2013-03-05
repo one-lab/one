@@ -817,11 +817,107 @@ function basicReaonLinux(e){
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
 	var name = rows.children("td").eq(1).text();
-	var title = "历史记录: " + name;
+	var title = "根本原因分析: " + name;
 	var temWin = $("body").window({
 		"id":"window",   
         "title":title,  
 		"url":"basicReaonLinux.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function OpenNewWindow(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "根本原因分析: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"basicReaonLinuxTd.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function fnOpenNewWindowUnknow(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "根本原因分析: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"fnOpenNewWindowUnknow.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function fnOpenNewWindowDo(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "根本原因分析: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"fnOpenNewWindowDo.html",   
+        "hasIFrame":true,
+		"width": 740,
+		"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function fnOpenNewWindowUn(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "根本原因分析: " + name;
+	var temWin = $("body").window({
+		"id":"window",   
+        "title":title,  
+		"url":"fnOpenNewWindowUn.html",   
         "hasIFrame":true,
 		"width": 740,
 		"height":440,
@@ -914,7 +1010,7 @@ function basicReaonLinux(e){
           </tr>
           <tr>
             <td class="monitorinfoodd">系统健康状况</td>
-            <td class="monitorinfoeven"><img src="images/bussinessY.gif" />&nbsp;&nbsp;健康状态为正常  .&nbsp;没有出现严重的告警。 </td>
+            <td class="monitorinfoeven"><a href="#" onclick="OpenNewWindow(this)"><img src="images/bussinessY.gif" /></a>&nbsp;&nbsp;健康状态为正常  .&nbsp;没有出现严重的告警。 </td>
           </tr>
           <tr>
             <td class="monitorinfoodd" >类型 </td>
