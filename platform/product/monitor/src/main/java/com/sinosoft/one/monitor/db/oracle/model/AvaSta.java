@@ -5,11 +5,8 @@ package com.sinosoft.one.monitor.db.oracle.model;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,7 +30,7 @@ public class AvaSta  implements java.io.Serializable {
     /**
     * 数据库ID.
     */
-    private Info info;
+    private String databaseId;
     /**
     * 正常运行时间.
     */
@@ -55,9 +52,19 @@ public class AvaSta  implements java.io.Serializable {
     */
     private Date avaRecordTime;
     /**
-    * 统计次数.
+    * 可以次数.
     */
-    private long recordCount;
+    private long avCount;
+    /**
+     * 不可用次数.
+     */
+    private long unavCount;
+    
+    /**
+     * 未知时间
+     */
+    private long unknowTime;
+    
 
     public AvaSta() {
     }
@@ -74,20 +81,25 @@ public class AvaSta  implements java.io.Serializable {
     public String getId() {
     return this.id;
     }
-
+    
     public void setId(String id) {
-    this.id = id;
-    }
-    @ManyToOne(fetch=FetchType.LAZY)
-        @JoinColumn(name="DATABASE_ID")
-    public Info getInfo() {
-    return this.info;
-    }
-
-    public void setInfo(Info info) {
-    this.info = info;
+        this.id = id;
     }
     
+    @Column(name="DATABASE_ID")
+	public String getDatabaseId() {
+		return databaseId;
+	}
+	public void setDatabaseId(String databaseId) {
+		this.databaseId = databaseId;
+	}
+	@Column(name="UNKNOW_TIME")
+    public long getUnknowTime() {
+		return unknowTime;
+	}
+    public void setUnknowTime(long unknowTime) {
+		this.unknowTime = unknowTime;
+	}
     @Column(name="NORMAL_RUNTIME")
     public long getNormalRuntime() {
     return this.normalRuntime;
@@ -133,14 +145,26 @@ public class AvaSta  implements java.io.Serializable {
     this.avaRecordTime = avaRecordTime;
     }
     
-    @Column(name="RECORD_COUNT")
-    public long getRecordCount() {
-    return this.recordCount;
-    }
 
-    public void setRecordCount(long recordCount) {
-    this.recordCount = recordCount;
-    }
+    @Column(name="AV_COUNT")
+	public long getAvCount() {
+		return avCount;
+	}
+
+
+	public void setAvCount(long avCount) {
+		this.avCount = avCount;
+	}
+
+	 @Column(name="UNAV_COUNT")
+	public long getUnavCount() {
+		return unavCount;
+	}
+
+
+	public void setUnavCount(long unavCount) {
+		this.unavCount = unavCount;
+	}
 
 
 	@Override
