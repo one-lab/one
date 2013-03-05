@@ -1,6 +1,8 @@
+var chart,chart2,chart3,chart4,chart5,chart6,chart7,chart8;
 $(function(){
   //右上饼状图
-		var chart,chart2,chart3,chart4,chart5,chart6,chart7,chart8;
+		
+		
     $(document).ready(function() {
        chart = new Highcharts.Chart({
             chart: {
@@ -48,7 +50,8 @@ $(function(){
         });
   
 //第二排左边 曲线图
-
+					
+			
    
         chart2 = new Highcharts.Chart({
             chart: {
@@ -62,7 +65,7 @@ $(function(){
                 x: -20 //center
             },
             xAxis: {
-                categories: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00','06:00']
+                categories: []
             },
             yAxis: {
                 title: {
@@ -102,7 +105,7 @@ $(function(){
             },
             series: [{
                 name: '访问次数',
-                data: [4,7,9,0,7,1,9]
+                data: []
             }]
         });
    
@@ -543,5 +546,26 @@ $(function(){
             }],
 						colors: ['#00b200', '#0000b2', '#b200b2'] 
         });
+		getForm()
 	});
 });
+function getForm(){
+	$.ajax({
+		url:"ajaxReady.json",
+		dataType:"json",
+		cache: false,
+		success:function(_data){alert(1)
+			var data = _data.data;
+			var i =0,x=[],y=[];					
+			while(i<data.length){
+					x.push(data[i].x);
+					y.push(data[i].y);
+					i+=1;
+				}
+			 chart2.series[0].setData(y); 
+			// chart.redraw(); 
+			 chart2.xAxis[0].setCategories(x); 
+		}
+	});
+}
+setInterval(getForm,3000);  			
