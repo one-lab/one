@@ -22,18 +22,33 @@ public class TraceUtils {
 
 	public static final String URL_ID_KEY = "urlId";
 
+	public static final String URL = "url";
+
+	public static final String REQUEST_PARAMS = "requestParams";
+
+	private static final String HAS_EXCEPTION = "hasException";
+
+
 	public static final int TRACE_ID_LENGTH = 32;
 	
 	/**
 	 * 开始Trace, 默认生成本次Trace的ID(8字符长)并放入MDC.
 	 */
-	public static void beginTrace(UrlTraceLog urlTraceLog, String urlId) {
+	public static void beginTrace(UrlTraceLog urlTraceLog, String urlId, String url) {
 		String traceId = RandomStringUtils.randomAlphanumeric(TRACE_ID_LENGTH);
 		MDC.put(TRACE_ID_KEY, traceId);
 		MDC.put(URL_ID_KEY, urlId);
+		MDC.put(URL, url);
 		MDC.put(URL_TRACE_LOG_KEY, urlTraceLog);
 	}
 
+	/**
+	 * 开始Trace, 将url放入MDC.
+	 */
+	public static void beginTraceForNoMonitorURL(String url, String requestParams) {
+		MDC.put(URL, url);
+		MDC.put(REQUEST_PARAMS, requestParams);
+	}
 
 	/**
 	 * 开始Trace, 将traceId放入MDC.
@@ -46,10 +61,22 @@ public class TraceUtils {
 	 * 结束一次Trace.
 	 * 清除traceId.
 	 */
+	public static void endTraceForNoMonitorURL() {
+		MDC.remove(URL);
+		MDC.remove(REQUEST_PARAMS);
+		MDC.remove(HAS_EXCEPTION);
+	}
+
+	/**
+	 * 结束一次Trace.
+	 * 清除traceId.
+	 */
 	public static void endTrace() {
 		MDC.remove(TRACE_ID_KEY);
+		MDC.remove(URL);
 		MDC.remove(URL_ID_KEY);
 		MDC.remove(URL_TRACE_LOG_KEY);
+		MDC.remove(HAS_EXCEPTION);
 	}
 	/**
 	 * 获取TraceId

@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.action.domain;
 
+import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.monitor.action.model.MailInfo;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 处理动作业务逻辑类.
@@ -41,7 +44,7 @@ public class ActionService {
 	 * @param ids 邮件ID列表
 	 * @return 邮件列表
 	 */
-	public Iterable<MailAction> queryMailActions(List<String> ids) {
+	public Iterable<MailAction> queryMailActions(Set<String> ids) {
 		return mailActionRepository.findAll(ids);
 	}
 
@@ -50,7 +53,7 @@ public class ActionService {
 	 * @param ids 短信ID列表
 	 * @return 短信列表
 	 */
-	public Iterable<SmsAction> querySmsActions(List<String> ids) {
+	public Iterable<SmsAction> querySmsActions(Set<String> ids) {
 		return smsActionRepository.findAll(ids);
 	}
 
@@ -61,7 +64,7 @@ public class ActionService {
 	 * @param severity 严重程度
 	 * @return 动作信息
 	 */
-	public List<AttributeAction> queryAttributeActions(String resourceId, String attributeId, String severity) {
+	public List<AttributeAction> queryAttributeActions(String resourceId, String attributeId, SeverityLevel severity) {
 		return attributeActionRepository.findByResourceIdAndAttributeIdAndSeverity(resourceId, attributeId, severity);
 	}
 
@@ -88,8 +91,8 @@ public class ActionService {
 	                       SeverityLevel severityLevel,
 	                       String message) {
 
-		List<String> mailActionIds = new ArrayList<String>();
-		List<String> smsActionIds = new ArrayList<String>();
+		Set<String> mailActionIds = new HashSet<String>();
+		Set<String> smsActionIds = new HashSet<String>();
 
 		for(AttributeAction attributeAction : attributeActionList) {
 			if(attributeAction.getActionType() == ActionType.MAIL) {
@@ -100,10 +103,10 @@ public class ActionService {
 		}
 
 		if(mailActionIds.size() > 0) {
-			String cause = resource.getResourceName() + "的健康状态为" + severityLevel.cnName();
+			String cause = resource.getResourceName() + "的健康状况为" + severityLevel.cnName();
 			String title = "来自监控系统的告警 - [ "+ cause + " ]";
 
-			Iterable<MailAction> mailActions = mailActionRepository.findAll(mailActionIds);
+			Iterable<MailAction> mailActions = mailActionRepository.findAll(Lists.newArrayList(mailActionIds));
 			MailInfo mailInfo = new MailInfo();
 			mailInfo.setCause(cause);
 			mailInfo.setTitle(title);

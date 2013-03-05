@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.application.model;
 
 import com.sinosoft.one.monitor.common.AlarmMessage;
 import com.sinosoft.one.monitor.common.AlarmSource;
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.MessageBase;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
@@ -71,6 +72,15 @@ public class UrlTraceLog implements MessageBase {
 	 * 告警信息ID
 	 */
 	private String alarmId;
+	/**
+	 * 所属应用ID
+	 */
+	private String applicationId;
+	/**
+	 * URL信息ID
+	 */
+	private String urlId;
+
 
 
 	List<MethodTraceLog> methodTraceLogList = new ArrayList<MethodTraceLog>();
@@ -149,7 +159,7 @@ public class UrlTraceLog implements MessageBase {
 		this.requestParams = requestParams;
 	}
 
-	@Column(name = "URL_ID")
+	@Column(name = "USER_ID")
 	public String getUserId() {
 		return userId;
 	}
@@ -195,6 +205,25 @@ public class UrlTraceLog implements MessageBase {
 		return methodTraceLogList;
 	}
 
+	@Column(name = "URL_ID")
+	public String getUrlId() {
+		return urlId;
+	}
+
+	public void setUrlId(String urlId) {
+		this.urlId = urlId;
+	}
+
+
+	@Transient
+	public String getApplicationId() {
+		return applicationId;
+	}
+
+	public void setApplicationId(String applicationId) {
+		this.applicationId = applicationId;
+	}
+
 	@Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -211,7 +240,11 @@ public class UrlTraceLog implements MessageBase {
 
 	@Override
 	public List<AlarmMessage> alarmMessages() {
-		return null;
+		return new ArrayList<AlarmMessage>() {
+			{
+				add(AlarmMessage.valueOf(applicationId, AttributeName.ResponseTime, consumeTime+""));
+			}
+		};
 	}
 
 	@Override

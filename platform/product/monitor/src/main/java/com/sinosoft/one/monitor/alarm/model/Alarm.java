@@ -127,7 +127,7 @@ public class Alarm  implements java.io.Serializable {
     public void setAttributeId(String attributeId) {
     this.attributeId = attributeId;
     }
-    @Temporal(TemporalType.DATE)
+
     @Column(name="create_time", length=7)
     public Date getCreateTime() {
     return this.createTime;
