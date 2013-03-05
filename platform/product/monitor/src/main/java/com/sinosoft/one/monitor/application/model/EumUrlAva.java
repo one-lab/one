@@ -2,17 +2,13 @@ package com.sinosoft.one.monitor.application.model;
 // Generated 2013-3-4 15:45:30 by One Data Tools 1.0.0
 
 
+import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * EumUrlAva.
@@ -35,6 +31,10 @@ public class EumUrlAva  implements java.io.Serializable {
     * 状态 1---可用 0---不可用.
     */
     private String state;
+
+    @Pattern(regexp = "[0-9]{1,10}",message = "轮询间隔必须是数字，长度1到10位")
+    private BigDecimal interval;
+
     /**
     * 记录时间.
     */
@@ -49,10 +49,11 @@ public class EumUrlAva  implements java.io.Serializable {
     }
    
     @Id 
-    
     @Column(name="ID", unique=true, length=32)
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     public String getId() {
-    return this.id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -86,6 +87,14 @@ public class EumUrlAva  implements java.io.Serializable {
     this.recordTime = recordTime;
     }
 
+    @Column(name="INTERVAL", precision=22, scale=0)
+    public BigDecimal getInterval() {
+        return interval;
+    }
+
+    public void setInterval(BigDecimal interval) {
+        this.interval = interval;
+    }
 
 	@Override
 	public String toString() {

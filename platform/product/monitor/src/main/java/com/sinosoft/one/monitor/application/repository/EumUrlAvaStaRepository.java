@@ -11,6 +11,12 @@ import java.util.List;
 
 public interface EumUrlAvaStaRepository extends PagingAndSortingRepository<EumUrlAvaSta, String> {
 
-    List<EumUrlAvaSta> findByRecordtimeAndEumUrl(Date Date,EumUrl eumUrl);
+    /**
+     * 根据日期与仿真URL查询当天统计数据
+     * @param Date
+     * @param eumUrlId
+     * @return
+     */
+    List<EumUrlAvaSta> findByRecordTimeAndEumUrl_Id(Date Date,String eumUrlId);
 }
 
