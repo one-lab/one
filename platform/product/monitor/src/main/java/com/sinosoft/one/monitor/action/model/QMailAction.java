@@ -1,11 +1,13 @@
 package com.sinosoft.one.monitor.action.model;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
-
-import com.mysema.query.types.*;
-import com.mysema.query.types.path.*;
+import com.mysema.query.types.Path;
+import com.mysema.query.types.PathMetadata;
+import com.mysema.query.types.path.EntityPathBase;
+import com.mysema.query.types.path.StringPath;
 
 import javax.annotation.Generated;
+
+import static com.mysema.query.types.PathMetadataFactory.forVariable;
 
 
 /**
@@ -35,6 +37,8 @@ public class QMailAction extends EntityPathBase<MailAction> {
     public final StringPath subject = createString("subject");
 
     public final StringPath toAddress = createString("toAddress");
+
+    public final StringPath name = createString("name");
 
     public QMailAction(String variable) {
         super(MailAction.class, forVariable(variable));
