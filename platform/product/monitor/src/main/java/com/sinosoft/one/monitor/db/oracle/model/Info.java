@@ -203,7 +203,7 @@ public class Info  implements java.io.Serializable {
     public void setSysTime(Date sysTime) {
     this.sysTime = sysTime;
     }
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="info")
+    @OneToMany(fetch=FetchType.LAZY)
     public List<AvaSta> getAvaStas() {
     return this.avaStas;
     }
@@ -211,7 +211,7 @@ public class Info  implements java.io.Serializable {
     public void setAvaStas(List<AvaSta> avaStas) {
     this.avaStas = avaStas;
     }
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="info")
+    @OneToMany(fetch=FetchType.LAZY)
     public List<EventSta> getEventStas() {
     return this.eventStas;
     }
@@ -219,7 +219,7 @@ public class Info  implements java.io.Serializable {
     public void setEventStas(List<EventSta> eventStas) {
     this.eventStas = eventStas;
     }
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="info")
+    @OneToMany(fetch=FetchType.LAZY)
     public List<Lastevent> getLastevents() {
     return this.lastevents;
     }
@@ -227,7 +227,7 @@ public class Info  implements java.io.Serializable {
     public void setLastevents(List<Lastevent> lastevents) {
     this.lastevents = lastevents;
     }
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="info")
+    @OneToMany(fetch=FetchType.LAZY)
     public List<Ava> getAvas() {
     return this.avas;
     }
