@@ -200,12 +200,12 @@ public class ConfigEmergencyController {
 
 
 
-                JSONObject jsonObject = new JSONObject();
+                /*JSONObject jsonObject = new JSONObject();
                 //获取动作关联属性的严重程度
                 jsonObject.put("actionSeverity",mailAction.getSeverity());
                 jsonObject.put("actionId",mailAction.getId());
                 jsonObject.put("actionName", mailAction.getName());
-                jsonArray.add(jsonObject);
+                jsonArray.add(jsonObject);*/
             }
             jsonActionNames = jsonArray.toJSONString();
             return Replys.with(jsonActionNames);
