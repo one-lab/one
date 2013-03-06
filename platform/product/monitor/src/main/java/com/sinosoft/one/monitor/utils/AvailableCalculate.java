@@ -5,6 +5,7 @@ import org.joda.time.LocalTime;
 import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 可用性计算
@@ -16,7 +17,7 @@ public class AvailableCalculate {
 
     private long runningTime;
 
-    private int avCount;
+    private List<AvailableDetail> avCount;
 
     private int interval;
 
@@ -28,7 +29,7 @@ public class AvailableCalculate {
 
     private Long oldStopTime;
 
-    private Integer unAvCount;
+    private List<AvailableDetail> unAvCount;
 
     //当天时间转换的分钟数
     private long dayMinute;
@@ -47,32 +48,32 @@ public class AvailableCalculate {
      * @return
      */
     public static AvailableCalculate completeCalculate(final Date startRecordTime, final Long oldRunningTime,final Long oldStopTime,
-                                                       final Integer avCount,final Integer unAvCount,final Integer falseCount, final Integer interval){
-        Assert.notNull(unAvCount);
+                                                       final List<AvailableDetail> avCount,final List<AvailableDetail> unAvCount,final Integer falseCount, final Integer interval){
+        Assert.notEmpty(unAvCount);
         return new AvailableCalculate(startRecordTime,oldRunningTime,oldStopTime,avCount,unAvCount,falseCount,interval);
     }
 
     /**
-     *
-     * @param startRecordTime
-     * @param oldRunningTime
-     * @param oldStopTime
-     * @param runningCount
-     * @param falseCount
-     * @param interval
+     * 除去未知时间的计算
+     * @param startRecordTime 当天有效性开始记录的时间
+     * @param oldRunningTime 原有运行时间的记录
+     * @param oldStopTime 原有停止时间的记录
+     * @param avCount 有效次数
+     * @param falseCount 失败次数
+     * @param interval 时间间隔，以分钟为单位
      * @return
      */
     public static AvailableCalculate simpleCalculate(final Date startRecordTime, final Long oldRunningTime,final Long oldStopTime,
-                                                   final int runningCount,final Integer falseCount,final int interval){
-        return new AvailableCalculate(startRecordTime,oldRunningTime,oldStopTime,runningCount,null,falseCount,interval);
+                                                   final List<AvailableDetail> avCount,final Integer falseCount,final int interval){
+        return new AvailableCalculate(startRecordTime,oldRunningTime,oldStopTime,avCount,null,falseCount,interval);
     }
 
     private AvailableCalculate(final Date startRecordTime, final Long oldRunningTime,final Long oldStopTime,
-                              final int avCount,final Integer unAvCount,final Integer falseCount,final Integer interval) {
+                              final List<AvailableDetail> avCount,final List<AvailableDetail> unAvCount,final Integer falseCount,final Integer interval) {
         Assert.notNull(startRecordTime);
         Assert.notNull(oldRunningTime);
         Assert.notNull(oldStopTime);
-        Assert.notNull(avCount);
+        Assert.notEmpty(avCount);
         Assert.notNull(falseCount);
         Assert.notNull(interval);
         this.interval = interval;
@@ -98,8 +99,11 @@ public class AvailableCalculate {
 
     private void runTimeCalculate(){
         if(runningTime == 0l){
+            for(AvailableDetail availableDetail:avCount){
+                runningTime = runningTime + availableDetail.getCount()*availableDetail.getInterval();
+            }
             //正常运行次数*间隔时间即当天天可用时间
-            runningTime = avCount*interval;
+            //runningTime = avCount*interval;
         }
         Assert.isTrue(runningTime < oldRunningTime, "oldRunningTime is " + oldRunningTime + ",new CalculateRunningTime is " +
                 this.runningTime + "can't less than old !");
@@ -114,8 +118,10 @@ public class AvailableCalculate {
         if(unAvCount==null){//并不考虑未知的情况，运行时间剩下的时间即为停止时间
            this.stopTime = this.dayMinute - this.runningTime;
         }else{
-            //失败运行次数*间隔时间即当天停止时间
-           this.stopTime = this.unAvCount*interval;
+            for(AvailableDetail availableDetail:unAvCount){
+                //失败运行次数*间隔时间即当天停止时间
+                this.stopTime = this.stopTime +  availableDetail.getCount()*availableDetail.getInterval();
+            }
         }
         Assert.isTrue(stopTime < oldStopTime, "oldStopTime is " + oldStopTime + ",new CalculateStopTime is " +
                 this.stopTime + "can't less than old !");
@@ -145,17 +151,45 @@ public class AvailableCalculate {
     }
 
     /**
-     * 获取平均故障时间
+     * 获取平均故障时间MTBF
      * @return
      */
    public BigDecimal getTimeBetweenFailures(){
       return  new BigDecimal(runningTime/(falseCount+1));
    }
 
-    public static void main(String[] args){
-        LocalTime localTime = LocalTime.now();
-        System.out.println(localTime.getHourOfDay());
-        System.out.println(localTime.getMinuteOfHour());
+    /**
+     * 获取平均修复时间MTTR
+     * @return
+     */
+   public BigDecimal getTimeToRepair(){
+       if(this.falseCount == 0){
+           return BigDecimal.ZERO;
+       }
+       return new BigDecimal(stopTime/this.falseCount);
+   }
+
+   public static class AvailableDetail{
+
+        private int count;
+
+        private int interval;
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public int getInterval() {
+            return interval;
+        }
+
+        public void setInterval(int interval) {
+            this.interval = interval;
+        }
     }
 
 }

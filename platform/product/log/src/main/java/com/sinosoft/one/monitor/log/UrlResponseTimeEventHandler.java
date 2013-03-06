@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.log;
 
 import com.lmax.disruptor.EventHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -10,8 +12,14 @@ import com.lmax.disruptor.EventHandler;
  * Time: 上午10:14
  */
 final class UrlResponseTimeEventHandler implements EventHandler<UrlResponseTimeEvent> {
+	private Logger logger = LoggerFactory.getLogger(UrlResponseTimeEventHandler.class);
 	@Override
 	public void onEvent(UrlResponseTimeEvent event, long sequence, boolean endOfBatch) throws Exception {
-		UrlResponseTimeQueue.build().append(event.getUrlResponseTime());
+		try {
+			UrlResponseTimeQueue.build().append(event.getUrlResponseTime());
+		} catch (Throwable throwable) {
+			logger.error("append url response time event to queue exception.", throwable);
+		}
+
 	}
 }

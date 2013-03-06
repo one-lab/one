@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 public class NotificationModelEventSupport {
 	private static NotificationModelEventSupport notificationModelEventSupport = new NotificationModelEventSupport();
-	private final static int ringSize = 1024;
+	private final int ringSize = 1024;
 	private RingBuffer<NotificationModelEvent> ringBuffer;
 
 	public static NotificationModelEventSupport build() {

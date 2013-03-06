@@ -2,10 +2,12 @@ package com.sinosoft.one.monitor.application.model;
 
 import com.sinosoft.one.monitor.common.AlarmMessage;
 import com.sinosoft.one.monitor.common.AlarmSource;
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.MessageBase;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,10 @@ public class ExceptionInfo implements MessageBase {
 	 */
 	private Date recordTime;
 	/**
+	 * 异常描述
+	 */
+	private String exceptionDescription;
+	/**
 	 * 异常堆栈
 	 */
 	private String exceptionStackTrace;
@@ -43,6 +49,15 @@ public class ExceptionInfo implements MessageBase {
 	 * 应用系统ID
 	 */
 	private String applicationId;
+	/**
+	 * URL地址
+	 */
+	private String url;
+	/**
+	 * URL请求参数
+	 */
+	private String requestParams;
+
 
 	public ExceptionInfo() {}
 
@@ -76,6 +91,15 @@ public class ExceptionInfo implements MessageBase {
 		this.recordTime = recordTime;
 	}
 
+	@Column(name = "EXCEPTION_DESCRIPTION")
+	public String getExceptionDescription() {
+		return exceptionDescription;
+	}
+
+	public void setExceptionDescription(String exceptionDescription) {
+		this.exceptionDescription = exceptionDescription;
+	}
+
 	@Column(name = "EXCEPTION_STACK_TRACE")
 	public String getExceptionStackTrace() {
 		return exceptionStackTrace;
@@ -103,9 +127,31 @@ public class ExceptionInfo implements MessageBase {
 		this.applicationId = applicationId;
 	}
 
+	@Column(name = "URL")
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	@Column(name = "REQUEST_PARAMS")
+	public String getRequestParams() {
+		return requestParams;
+	}
+
+	public void setRequestParams(String requestParams) {
+		this.requestParams = requestParams;
+	}
+
 	@Override
 	public List<AlarmMessage> alarmMessages() {
-		return null;
+		return new ArrayList<AlarmMessage>() {
+			{
+				add(AlarmMessage.valueOf(applicationId, AttributeName.Exception, "0"));
+			}
+		};
 	}
 
 	@Override

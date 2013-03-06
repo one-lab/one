@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.common;
 
 import com.lmax.disruptor.MultiThreadedClaimStrategy;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.SingleThreadedClaimStrategy;
 import com.lmax.disruptor.SleepingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.concurrent.Executors;
 @Component
 public class MessageBaseEventSupport {
 	@Autowired
-	private MessageBaseEventHandler messageBaseEventHandler;
+	private AlarmMessageHandler alarmMessageHandler;
 	private int ringSize = 1024;
 	private RingBuffer<MessageBaseEvent> ringBuffer;
 
@@ -28,15 +29,12 @@ public class MessageBaseEventSupport {
 		this.ringSize = ringSize;
 	}
 
-	public MessageBaseEventSupport() {
-
-	}
-
 	@PostConstruct
 	public void init() {
-		Disruptor<MessageBaseEvent> disruptor =
-				new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY, Executors.newSingleThreadExecutor(),
-						new MultiThreadedClaimStrategy(ringSize),
+		MessageBaseEventHandler messageBaseEventHandler = new MessageBaseEventHandler();
+		messageBaseEventHandler.setAlarmMessageHandler(alarmMessageHandler);
+		Disruptor<MessageBaseEvent> disruptor = new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY, Executors.newSingleThreadExecutor(),
+						new SingleThreadedClaimStrategy(ringSize),
 						new SleepingWaitStrategy());
 		disruptor.handleEventsWith(messageBaseEventHandler);
 		ringBuffer = disruptor.start();
@@ -46,7 +44,9 @@ public class MessageBaseEventSupport {
 		long sequence = ringBuffer.next();
 		MessageBaseEvent messageBaseEvent = ringBuffer.get(sequence);
 		messageBaseEvent.setMessageBase(messageBase);
+		String alarmId = UUID.randomUUID().toString().replaceAll("-", "");
+		messageBaseEvent.setAlarmId(alarmId);
 		ringBuffer.publish(sequence);
-		return UUID.randomUUID().toString().replaceAll("-", "");
+		return alarmId;
 	}
 }

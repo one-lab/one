@@ -45,6 +45,7 @@ public class ApplicationManagerController {
     @Post("applist")
     public String getAllApplication(Invocation inv) {
         List<Application> applications = applicationService.findAllApplication();
+
         inv.addModel("applications", applications);
         //应用性能列表页面
         return "performance";
@@ -132,10 +133,16 @@ public class ApplicationManagerController {
     @Post("match")
     public Reply initMatchMap(Invocation inv){
         try {
-            String appName=inv.getRequest().getParameter("appName");
-            String ip=inv.getRequest().getParameter("ip");
-            String port=inv.getRequest().getParameter("port");
-            Application application=applicationService.findApplicationWithAppInfo(appName,ip,port);
+            String appName=inv.getParameter("appName");
+            String ip=inv.getParameter("ip");
+            String port=inv.getParameter("port");
+	        String applicationId = inv.getParameter("applicationId");
+	        Application application = null;
+	        if(applicationId != null && !"".equals(applicationId)) {
+		        application = applicationService.findApplication(applicationId);
+	        } else {
+		        application = applicationService.findApplicationWithAppInfo(appName,ip,port);
+	        }
             if(application!=null){
                     List<String> bizScenarioIds=new ArrayList<String>();
                     List<BizScenario> bizScenarios=application.getBizScenarios();

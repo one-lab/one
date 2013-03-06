@@ -79,6 +79,11 @@ public class Application implements java.io.Serializable {
      */
     private List<BizScenario> bizScenarios = new ArrayList<BizScenario>(0);
 
+    /**
+     * 仿真URL
+     */
+    private List<EumUrl> enumUrls;
+
     public Application() {
     }
 
@@ -201,6 +206,15 @@ public class Application implements java.io.Serializable {
 
     public void setInterval(BigDecimal interval) {
         this.interval = interval;
+    }
+
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY, mappedBy = "application")
+    public List<EumUrl> getEnumUrls() {
+        return enumUrls;
+    }
+
+    public void setEnumUrls(List<EumUrl> enumUrls) {
+        this.enumUrls = enumUrls;
     }
 
     @Override

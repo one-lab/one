@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.controllers.application.agent;
 
-import com.sinosoft.one.monitor.application.domain.AgentMessageService;
+import com.sinosoft.one.monitor.application.domain.AgentMessageServiceFactory;
+import com.sinosoft.one.monitor.application.domain.ApplicationService;
+import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
@@ -15,18 +17,24 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 13-3-3
  * Time: 下午10:31
  */
-@Path("/agent")
+@Path
 public class AgentMessageController {
 	@Autowired
-	private AgentMessageService agentMessageService;
+	private AgentMessageServiceFactory agentMessageServiceFactory;
+	@Autowired
+	private ApplicationService applicationService;
+
 	@Post("/message")
 	public Reply handleMessage(Invocation invocation) {
 		String applicationId = invocation.getParameter("applicationId");
 		String notificationType = invocation.getParameter("notificationType");
 		String data = invocation.getParameter("data");
-
+		Application application = applicationService.findApplication(applicationId);
 		try {
-			agentMessageService.handleMessage(applicationId, notificationType, data);
+			if(application == null) {
+				return Replys.with("NotExist");
+			}
+			agentMessageServiceFactory.buildAgentMessageService(notificationType).handleMessage(applicationId, data);
 		} catch (Throwable throwable) {
 			return Replys.with("Exception");
 		}

@@ -9,7 +9,7 @@
         <property name="freeMarkerConfigurer" ref="freeMarkerConfigurer" />
     </bean>
 
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
         <property name="host">
             <value>${mail.host}</value>
         </property>
@@ -23,8 +23,8 @@
 
         <property name="javaMailProperties">
             <props>
-                <prop key="mail.stmp.auth">true</prop>
-                <prop key="mail.stmp.timeput">20000</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.timeput">20000</prop>
             </props>
         </property>
     </bean>

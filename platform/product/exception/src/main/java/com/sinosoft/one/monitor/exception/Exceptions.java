@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.exception;
 
+
 import com.sinosoft.one.monitor.notification.NotificationServiceFactory;
 import org.apache.log4j.MDC;
 
@@ -16,14 +17,16 @@ public final class Exceptions {
 	 * @param throwable 异常对象
 	 */
     public static void handleThrowable(Throwable throwable) {
-	    ExceptionModel exceptionModel = new ExceptionModel((String)MDC.get("urlId"), throwable.getMessage(), getExceptionStackTrace(throwable));
+	    ExceptionModel exceptionModel = new ExceptionModel((String) MDC.get("urlId"), throwable.getMessage(), getExceptionStackTrace(throwable));
+	    exceptionModel.setUrl((String)MDC.get("url"));
+	    exceptionModel.setRequestParams((String) MDC.get("requestParams"));
 	    NotificationServiceFactory.buildNotificationService().notification(exceptionModel);
     }
 
 	/**
 	 * 模仿throwable的printStackTrace
 	 *
-	 * @return
+	 * @return 异常信息
 	 */
 	public static String getExceptionStackTrace(Throwable throwable) {
 		StringBuffer sb = new StringBuffer();

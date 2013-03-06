@@ -57,7 +57,7 @@ public class OracleMonitorTask {
     private static void execute(ScheduledExecutorService scheduledExecutorService,Info info){
         int timeDuring = info.getPullInterval();
         Runnable monitorRunnable = new MonitorRunnable(info);
-        ScheduledFuture<?>  beeperHandle = scheduledExecutorService.scheduleAtFixedRate(monitorRunnable,0,timeDuring, TimeUnit.MINUTES);
+        ScheduledFuture<?>  beeperHandle = scheduledExecutorService.scheduleAtFixedRate(monitorRunnable,timeDuring,timeDuring, TimeUnit.MINUTES);
         beeperHandleMap.put(info.getId(),beeperHandle);
     }
     
