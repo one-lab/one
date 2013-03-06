@@ -105,7 +105,7 @@ public class AvailableCalculate {
             //正常运行次数*间隔时间即当天天可用时间
             //runningTime = avCount*interval;
         }
-        Assert.isTrue(runningTime < oldRunningTime, "oldRunningTime is " + oldRunningTime + ",new CalculateRunningTime is " +
+        Assert.isTrue(runningTime > oldRunningTime, "oldRunningTime is " + oldRunningTime + ",new CalculateRunningTime is " +
                 this.runningTime + "can't less than old !");
     }
 
@@ -123,7 +123,7 @@ public class AvailableCalculate {
                 this.stopTime = this.stopTime +  availableDetail.getCount()*availableDetail.getInterval();
             }
         }
-        Assert.isTrue(stopTime < oldStopTime, "oldStopTime is " + oldStopTime + ",new CalculateStopTime is " +
+        Assert.isTrue(stopTime > oldStopTime, "oldStopTime is " + oldStopTime + ",new CalculateStopTime is " +
                 this.stopTime + "can't less than old !");
     }
 
