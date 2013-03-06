@@ -30,30 +30,57 @@ function getAllActions(){
         dataType:"json",
         async:false,
         success:function(data){
-            var $mn = $("#grave");
+            var $mn1 = $("#grave");
+            var $mn2 = $("#graveList");
+            var $mn3 = $("#alarm");
+            var $mn4 = $("#alarmList");
+            var $mn5 = $("#normal");
+            var $mn6 = $("#normalList");
+
             //防止每次查询时，表格中的数据不断累积
-            $mn.html("");
+            $mn1.html("");
+            $mn2.html("");
+            $mn3.html("");
+            $mn4.html("");
+            $mn5.html("");
+            $mn6.html("");
             /*$("#grave").append("<option value='choice' >" +"--选择一个监视器--"+" </option> ");*/
             for(var i = 0; i<data.length;i++){
                 /*动作id，关联动作时发送，保存到属性动作表*/
                 var _key = data[i].actionId;
                 alert("actionId:"+_key);
                 var _name =data[i].actionName;
-                var _severityLevel = data[i].actionSeverity;
-                if("严重"==_severityLevel){
-                    $("#graveList").append("<option value='"+_key+"' > "+_name+" </option> ");
-                }else{
-                    $("#grave").append("<option value='"+_key+"' > "+_name+" </option> ");
-                    if("警告"==_severityLevel){
+                var _severityLevel = [];
+                _severityLevel = data[i].actionSeverity;
+                var _addRight1=false;
+                var _addRight2=false;
+                var _addRight3=false;
+                for(var j = 0; j<_severityLevel.length;j++){
+                    if("严重"==_severityLevel[j].several){
+                        /*放入严重右边*/
+                        $("#graveList").append("<option value='"+_key+"' > "+_name+" </option> ");
+                        _addRight1=true;
+                    }else if("警告"==_severityLevel[j].several){
+                        /*放入警告右边*/
                         $("#alarmList").append("<option value='"+_key+"' > "+_name+" </option> ");
-                    }else{
-                        $("#alarm").append("<option value='"+_key+"' > "+_name+" </option> ");
-                        if("正常"==_severityLevel){
-                            $("#normalList").append("<option value='"+_key+"' > "+_name+" </option> ");
-                        }else{
-                            $("#normal").append("<option value='"+_key+"' > "+_name+" </option> ");
-                        }
+                        _addRight2=true;
+                    }else if("正常"==_severityLevel[j].several){
+                        /*放入正常右边*/
+                        $("#normalList").append("<option value='"+_key+"' > "+_name+" </option> ");
+                        _addRight3=true;
                     }
+                }
+                /*放入严重左边*/
+                if(!_addRight1){
+                    $("#grave").append("<option value='"+_key+"' > "+_name+" </option> ");
+                }
+                /*放入警告左边*/
+                if(!_addRight2){
+                    $("#alarm").append("<option value='"+_key+"' > "+_name+" </option> ");
+                }
+                /*放入正常左边*/
+                if(!_addRight3){
+                    $("#normal").append("<option value='"+_key+"' > "+_name+" </option> ");
                 }
             }
         }

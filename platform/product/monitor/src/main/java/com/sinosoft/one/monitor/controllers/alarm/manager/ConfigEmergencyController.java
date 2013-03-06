@@ -180,32 +180,34 @@ public class ConfigEmergencyController {
         List<MailAction> mailActions= (List<MailAction>) mailActionRepository.findAll();
         if (mailActions!=null){
             JSONArray jsonArray = new JSONArray();
+
+
             String jsonActionNames="";
             for (MailAction mailAction : mailActions) {
-                List<SeverityLevel> severityLevels=new ArrayList<SeverityLevel>();
+                JSONObject jsonObject = new JSONObject();
+                List<String> severityLevels=new ArrayList<String>();
                 severityLevels=attributeActionRepository.findAllSeverityWithActionId(mailAction.getId());
+                JSONArray jsonSeverityArray=new JSONArray();
                 if(severityLevels!=null&&severityLevels.size()>0){
-                    for(SeverityLevel severityLevel:severityLevels){
-                        String severityLevelName=severityLevel.cnName();
-                        if("严重".equals(severityLevelName)){
 
-                        }else if("严重".equals(severityLevelName)){
-
-                        }else if("严重".equals(severityLevelName)){
-
+                    for(String severityLevel:severityLevels){
+                        JSONObject jsonSeverityObject=new JSONObject();
+                        String severityLevelName=SeverityLevel.CRITICAL.name();
+                        if(SeverityLevel.CRITICAL.name().equals(severityLevel)){
+                            jsonSeverityObject.put("several","严重");
+                        }else if(SeverityLevel.WARNING.name().equals(severityLevel)){
+                            jsonSeverityObject.put("several","警告");
+                        }else if(SeverityLevel.INFO.name().equals(severityLevel)){
+                            jsonSeverityObject.put("several","正常");
                         }
+                        jsonSeverityArray.add(jsonSeverityObject);
                     }
                 }
-
-
-
-
-                /*JSONObject jsonObject = new JSONObject();
                 //获取动作关联属性的严重程度
-                jsonObject.put("actionSeverity",mailAction.getSeverity());
+                jsonObject.put("actionSeverity",jsonSeverityArray);
                 jsonObject.put("actionId",mailAction.getId());
                 jsonObject.put("actionName", mailAction.getName());
-                jsonArray.add(jsonObject);*/
+                jsonArray.add(jsonObject);
             }
             jsonActionNames = jsonArray.toJSONString();
             return Replys.with(jsonActionNames);
