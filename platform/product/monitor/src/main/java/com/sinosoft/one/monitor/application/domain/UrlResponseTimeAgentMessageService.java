@@ -5,6 +5,7 @@ import com.sinosoft.one.monitor.application.model.RequestPerMinute;
 import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import com.sinosoft.one.monitor.application.repository.RequestPerMinuteRepository;
 import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
+import com.sinosoft.one.monitor.utils.DateUtil;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +46,9 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 
 		generateDatas(urlResponseTimes, urlResponseTimeMap, requestPerMinuteMap, minMaxTime);
 
-		Date startDate = getConditionDate(minMaxTime.min);
-		Date endDate = getConditionDate(minMaxTime.max);
-		List<UrlResponseTime> storeUrlResponseTimes = urlResponseTimeRepository.selectUrlResponseTimes(startDate, endDate);
+		Date startDate = DateUtil.getHoursDate(minMaxTime.min);
+		Date endDate = DateUtil.getHoursDate(minMaxTime.max);
+		List<UrlResponseTime> storeUrlResponseTimes = urlResponseTimeRepository.selectUrlResponseTimes(applicationId, startDate, endDate);
 
 		List<UrlResponseTime> toUpdateUrlResponseTimes = new ArrayList<UrlResponseTime>();
 		if(storeUrlResponseTimes.isEmpty()) {
@@ -73,7 +74,7 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 		urlResponseTimeRepository.save(toUpdateUrlResponseTimes);
 
 
-		List<RequestPerMinute> storeRequestPerMinutes = requestPerMinuteRepository.selectRequestPerMinutes(startDate, endDate);
+		List<RequestPerMinute> storeRequestPerMinutes = requestPerMinuteRepository.selectRequestPerMinutes(applicationId, startDate, endDate);
 		List<RequestPerMinute> toUpdateRequestPerMinutes = new ArrayList<RequestPerMinute>();
 		if(!storeRequestPerMinutes.isEmpty()) {
 			for(RequestPerMinute storeRequestPerMinute : storeRequestPerMinutes) {
@@ -96,7 +97,7 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 	                                        String applicationId) {
 		for(UrlResponseTime urlResponseTime : urlResponseTimeMap.values()) {
 			urlResponseTime.setApplicationId(applicationId);
-			urlResponseTime.setRecordTime(getConditionDate(urlResponseTime.getRecordTime()));
+			urlResponseTime.setRecordTime(DateUtil.getHoursDate(urlResponseTime.getRecordTime()));
 			toUpdateUrlResponseTimes.add(urlResponseTime);
 		}
 	}
@@ -110,25 +111,13 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 				RequestPerMinute requestPerMinute = new RequestPerMinute();
 				requestPerMinute.setRequestNumber(rpm);
 				requestPerMinute.setApplicationId(applicationId);
-				requestPerMinute.setRecordTime(getConditionDate(new SimpleDateFormat("yyyy-MM-dd HH").parse(key)));
+				requestPerMinute.setRecordTime(DateUtil.getHoursDate(new SimpleDateFormat("yyyy-MM-dd HH").parse(key)));
 				toUpdateRequestPerMinutes.add(requestPerMinute);
 			}
 		} catch (Exception e) {
 			logger.error("add data to update request per minute exception.", e);
 		}
 
-	}
-	/**
-	 * 得到条件Date
-	 * @param sourceDate
-	 * @return
-	 */
-	private Date getConditionDate(Date sourceDate) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(sourceDate);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		return c.getTime();
 	}
 
 	/**

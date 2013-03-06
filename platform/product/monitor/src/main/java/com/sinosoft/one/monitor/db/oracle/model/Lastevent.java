@@ -5,11 +5,8 @@ package com.sinosoft.one.monitor.db.oracle.model;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,7 +30,7 @@ public class Lastevent  implements java.io.Serializable {
     /**
     * 数据库ID.
     */
-    private Info info;
+    private String databaseId;
     /**
     * 活动连接数.
     */
@@ -78,15 +75,14 @@ public class Lastevent  implements java.io.Serializable {
     public void setId(String id) {
     this.id = id;
     }
-    @ManyToOne(fetch=FetchType.LAZY)
-        @JoinColumn(name="DATABASE_ID")
-    public Info getInfo() {
-    return this.info;
-    }
-
-    public void setInfo(Info info) {
-    this.info = info;
-    }
+    @Column(name="DATABASE_ID")
+    public String getDatabaseId() {
+		return databaseId;
+	}
+    
+    public void setDatabaseId(String databaseId) {
+		this.databaseId = databaseId;
+	}
     
     @Column(name="ACTIVE_COUNT")
     public int getActiveCount() {

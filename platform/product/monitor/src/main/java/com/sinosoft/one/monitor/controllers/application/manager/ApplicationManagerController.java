@@ -45,6 +45,7 @@ public class ApplicationManagerController {
     @Post("applist")
     public String getAllApplication(Invocation inv) {
         List<Application> applications = applicationService.findAllApplication();
+
         inv.addModel("applications", applications);
         //应用性能列表页面
         return "performance";

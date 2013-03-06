@@ -31,6 +31,10 @@ public class UrlVisitsSta {
 	 * 记录时间
 	 */
 	private Date recordTime;
+	/**
+	 * 所属业务系统ID
+	 */
+	private String applicationId;
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
@@ -64,6 +68,15 @@ public class UrlVisitsSta {
 	@Column(name = "RECORD_TIME")
 	public Date getRecordTime() {
 		return recordTime;
+	}
+
+	@Column(name = "APPLICATION_ID")
+	public String getApplicationId() {
+		return applicationId;
+	}
+
+	public void setApplicationId(String applicationId) {
+		this.applicationId = applicationId;
 	}
 
 	public void setRecordTime(Date recordTime) {

@@ -89,60 +89,7 @@
 </head>
 
 <body>
-<div id="layout_top">
-    <div class="header">
-        <p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-
-        <div class="menu_box">
-            <ul class="nav" id="nav">
-                <li><a href="javascript:viod(0)">首页</a></li>
-                <li class="has_sub">
-                    <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                    <ul class="add_sub_menu" id="subNav">
-                        <li class="action"><span class="sever">操作系统</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">操作系统1</a></li>
-                                <li><a href="javascript:viod(0)">操作系统2</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">在线投保</a></li>
-                                <li><a href="javascript:viod(0)">在线查询</a></li>
-                                <li><a href="javascript:viod(0)">应急处置</a></li>
-                                <li><a href="javascript:viod(0)">人员角色管理</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">SQL DBA</a></li>
-                                <li><a href="javascript:viod(0)">SQL SYS</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
-
-                </li>
-                <li class="seleck"><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
-                <li><a href="javascript:viod(0)">业务仿真</a></li>
-                <li><a href="javascript:viod(0)">告警</a></li>
-            </ul>
-        </div>
-        <ul class="add_menu" id="menu">
-            <li><a href="javascript:viod(0)">新建监视器</a></li>
-            <li><a href="javascript:viod(0)">配置监视器</a></li>
-            <li class="has_sub">
-                <a href="javascript:viod(0)"><span>预警对象管理</span></a>
-                <ul class="add_sub_menu">
-                    <li class="title"><a href="javascript:viod(0)">显示动作</a></li>
-                    <li class="action">创建新动作</li>
-                    <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
-                    <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
+<%@include file="${ctx}/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
     <div class="p_all">
         <div class="p_sub_index">
@@ -155,7 +102,7 @@
                     </td>
                     <td class="p_sub_table_right">
                         <p>
-                            <span><strong>requestNumber</strong>=每分钟请求</span>,<span><strong>cpm</strong>=每分钟调用数</span>
+                            <span><strong>rpm</strong>=每分钟请求</span>
                         </p>
                     </td>
                 </tr>
@@ -204,7 +151,6 @@
                                     <td class="body_score">
                                         <table>
                                             <tr>
-                                                <td><strong>0.98</strong></td>
                                                 <td style="width:100%">
                                                     <div class="p_info_table_body_bar">
                                                         <div class="green">&nbsp;</div>
@@ -221,7 +167,7 @@
                                         </table>
                                     </td>
                                     <td class="body"><span>494.0 毫秒</span></td>
-                                    <td class="body"><span>148.42 requestNumber</span></td>
+                                    <td class="body"><span>148.42 rpm</span></td>
                                     <td class="body"><a href="${ctx}/application/manager/bsmanager/list/${application.id}">管理业务场景</a>
                                         &nbsp;<a href="update/${application.id}">编辑</a>
                                         &nbsp;<a href="delete/${application.id}">删除</a>
@@ -236,11 +182,11 @@
                     <table class="p_info_table_bottom">
                         <tr style="width:30%;">
                             <td class="user_info">
-                                <div><img src="${ctx}/global/images/performance/legend-green.png"/><span>满意用户</span>
+                                <div><img src="${ctx}/global/images/performance/legend-green.png"/><span>正常</span>
                                 </div>
-                                <div><img src="${ctx}/global/images/performance/legend-orange.png"/><span>容忍用户</span>
+                                <div><img src="${ctx}/global/images/performance/legend-orange.png"/><span>警告</span>
                                 </div>
-                                <div><img src="${ctx}/global/images/performance/legend-red.png"/><span>失望用户</span></div>
+                                <div><img src="${ctx}/global/images/performance/legend-red.png"/><span>严重</span></div>
                             </td>
                         </tr>
                     </table>

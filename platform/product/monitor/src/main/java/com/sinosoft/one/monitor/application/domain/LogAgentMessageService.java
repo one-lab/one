@@ -6,6 +6,7 @@ import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
 import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
 import com.sinosoft.one.monitor.application.repository.UrlVisitsStaRepository;
 import com.sinosoft.one.monitor.common.MessageBaseEventSupport;
+import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,12 @@ public class LogAgentMessageService implements AgentMessageService {
 		UrlVisitsSta urlVisitsSta = urlVisitsStaRepository.findByUrlId(urlTraceLog.getUrlId());
 		if(urlVisitsSta != null) {
 			urlVisitsSta.increaseVisitNumber();
+		} else {
+			urlVisitsSta = new UrlVisitsSta();
+			urlVisitsSta.setApplicationId(applicationId);
+			urlVisitsSta.setRecordTime(DateUtil.getHoursDate(urlTraceLog.getBeginTime()));
+			urlVisitsSta.setUrlId(urlTraceLog.getUrlId());
+			urlVisitsSta.setVisitNumber(1);
 		}
 
 		urlVisitsStaRepository.save(urlVisitsSta);

@@ -1,34 +1,45 @@
 package com.sinosoft.one.monitor.application.domain;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.sinosoft.one.monitor.application.model.Application;
-import com.sinosoft.one.monitor.application.model.Method;
-import com.sinosoft.one.monitor.application.model.Url;
-import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
-import com.sinosoft.one.monitor.application.repository.MethodRepository;
+import com.sinosoft.one.monitor.alarm.domain.AlarmService;
+import com.sinosoft.one.monitor.alarm.model.Alarm;
+import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.application.model.*;
+import com.sinosoft.one.monitor.application.model.viewmodel.IndexViewModel;
+import com.sinosoft.one.monitor.application.repository.*;
+import com.sinosoft.one.monitor.common.HealthSta;
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * 应用服务类
  * User: zfb
  * Date: 13-2-27
  * Time: 下午7:41
- * To change this template use File | Settings | File Templates.
  */
 @Component
 @Transactional(readOnly = true)
 public class ApplicationService {
 
     @Autowired
-    ApplicationRepository applicationRepository;
+    private ApplicationRepository applicationRepository;
     @Autowired
-    MethodRepository methodRepository;
+    private MethodRepository methodRepository;
+	@Autowired
+	private AlarmRepository alarmRepository;
+	@Autowired
+	private UrlResponseTimeRepository urlResponseTimeRepository;
+	@Autowired
+	private RequestPerMinuteRepository requestPerMinuteRepository;
+	@Autowired
+	private UrlVisitsStaRepository urlVisitsStaRepository;
 
     /**
      * 新增一个应用.
@@ -66,7 +77,7 @@ public class ApplicationService {
      * 查询一个应用，通过应用名.
      */
     public Application findApplicationWithAppInfo(String applicationName,String applicationIp,String applicationPort) {
-        Application application = applicationRepository.findByApplicationNameAndApplicationIpAndApplicationPort(applicationName,applicationIp,applicationPort);
+        Application application = applicationRepository.findByApplicationNameAndApplicationIpAndApplicationPort(applicationName, applicationIp, applicationPort);
         return application;
     }
 
@@ -101,4 +112,42 @@ public class ApplicationService {
     public List<Application> findAllApplicationNames() {
         return applicationRepository.findAllApplicationNames();
     }
+
+	public List<IndexViewModel> generateIndexViewModels(int recentHour) {
+		Iterable<Application> applicationList = applicationRepository.findAll();
+		Iterator<Application> applicationIterator = applicationList.iterator();
+		while(applicationIterator.hasNext()) {
+			Application application = applicationIterator.next();
+			IndexViewModel indexViewModel = new IndexViewModel();
+
+			Date startDate = DateUtil.getCurrentBeginDate();
+			Date endDate = DateUtil.getCurrentEndDate();
+			// 计算健康度
+			generateHealthBar(application.getId(), indexViewModel, startDate, endDate);
+			// 获取平均响应时间
+
+			// 获取吞吐量
+
+		}
+		return null;
+
+	}
+
+	private void generateHealthBar(String applicationId, IndexViewModel indexViewModel, Date startDate, Date endDate) {
+		List<HealthSta> healthStas = alarmRepository.selectHealthSta(applicationId, startDate, endDate);
+		int criticalCount = 0;
+		int warningCount = 0;
+		for(HealthSta healthSta : healthStas) {
+			if(healthSta.getSeverityLevel() == SeverityLevel.CRITICAL) {
+				criticalCount = healthSta.getCount();
+			} else if(healthSta.getSeverityLevel() == SeverityLevel.WARNING) {
+				warningCount = healthSta.getCount();
+			}
+		}
+	}
+
+	private void generateAvgResponseTime(String applicationId, Date startDate, Date endDate) {
+
+
+	}
 }
