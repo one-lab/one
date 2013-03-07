@@ -30,7 +30,7 @@
 .time_info_text{height:44px; background:url(../../images/timeinfo/conf-bg-tile.png); font-size:18px; font-weight:bold; white-space:pre;}
 .time_info_text div{ text-align:center;}
 .time_info_overview{width:100%;text-align:left;}
-.time_info_overview table{padding:10px 0;}
+.time_info_overview table{padding:0 10px;}
 .time_info_overview_table{margin-top:20px;}
 .time_info_overview_table table{border:1px solid #eee;}
 .serious,.warning,.normal,.unknow {width:20px;height:10px;margin-right:5px;}
@@ -57,7 +57,7 @@
 .show_mark li div{float:left;margin:0 10px;}
 .tool_bar_top{ text-align:left;}
 .column_chart{margin:20px 0;}
-
+.column_chart .threshold_file{float:left;margin: 0 10px 20px 0;}
 #type_list_head{font-size:16px;padding:2px 20px; text-align:left; font-weight:bold;height:25px; background:url(../../images/timeinfo/bg_tableheader.gif) repeat-x;}
 
 .red_status{width:14px;height:14px;}

@@ -8,7 +8,7 @@
 				"350ms",
 				"5ms",
 				"30ms",
-				"健康性"
+				"<div class='green_bar'><div class='red_bar' style='width:20%'></div><div class='yellow_bar' style='width:20%'></div>"
 			]
         }, {
 			"id":"2",
@@ -17,7 +17,7 @@
 				"350ms",
 				"5ms",
 				"30ms",
-				"健康性"
+				"<div class='green_bar'><div class='red_bar' style='width:12%'></div><div class='yellow_bar' style='width:10%'></div>"
 			]
         },
 		 {
@@ -27,7 +27,7 @@
 				"350ms",
 				"5ms",
 				"30ms",
-				"健康性"
+				"<div class='green_bar'><div class='red_bar' style='width:56%'></div><div class='yellow_bar' style='width:40%'></div>"
 			]
         }, {
 			"id":"4",
@@ -36,7 +36,7 @@
 				"350ms",
 				"5ms",
 				"30ms",
-				"健康性"
+				"<div class='green_bar'><div class='red_bar' style='width:28%'></div><div class='yellow_bar' style='width:34%'></div>"
 			]
         }
     ]

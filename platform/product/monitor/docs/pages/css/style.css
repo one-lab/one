@@ -153,3 +153,11 @@ padding-left:25px}
 .big{margin-top:20px;text-align:center;padding:10px 0;border:#eee 1px solid}
 .user_manager .title2 b{background-image:url(../images/uses.gif)}
 .prompt{background:url(../images/tool_icons.gif) no-repeat 8px bottom;padding-left:26px;color:#999;}
+.help{padding-top:0}
+.help .conf_title_r,.help .conf_title_l{background-image:url(../images/conf_title2.gif);}
+.help .conf_title,.help .conf_cont_box{background-color:#fff4bf}
+.help .conf_cont{border-color:#fff4bf;background:#fffae0}
+.help .conf_title span{background:url(../images/helpCue.gif) no-repeat right center;padding-right:22px}
+.help li{padding-top:30px;background:url(../images/liu.gif) no-repeat center 4px;color:#555}
+.help .first{padding:0 0 30px;background-position:center bottom;margin-bottom:4px;}
+.help .the_set{padding:2px 4px;background:#fff;border:#f6a107 1px solid;color:#000}

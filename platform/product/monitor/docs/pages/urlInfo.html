@@ -9,11 +9,14 @@
 <link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <link href="css/status.css" rel="stylesheet" type="text/css" />
 <link href="css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<link href="css/oracle.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.window.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="js/jquery-1.7.1.js"></script>
 <script language="javascript" src="js/sinosoft.grid.js"></script>  
 <script language="javascript" src="js/sinosoft.layout.js"></script>
 <script language="javascript" src="js/highcharts.src.js"></script>
 <script language="javascript" src="js/timeinfo/timeinfo.js"></script>
+<script language="javascript" src="js/sinosoft.window.js"></script>
 <script language="javascript" src="js/sinosoft.tabs.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -98,7 +101,86 @@ function hideNav(e){
 		};
 	});	
 	$(document).unbind();
+}function createSevenURLTime() { 
+	var temWin = $("body").window({  
+			"id":"testOne11",   
+			"title":"URL访问次数",  
+			"url":"sevenDayURLTime.html",   
+			"hasIFrame":true,  
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
+	}); 
+}  
+function createThirtyURLTime() { 
+	var temWin = $("body").window({  
+			"id":"testOne10",   
+			"title":"URL访问次数",  
+			"url":"thirtyDayURLTime.html",   
+			"hasIFrame":true,   
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
+	}); 
+}  
+function createSevenDayResponseTime() { 
+	var temWin = $("body").window({  
+			"id":"testOne9",   
+			"title":"响应时间",  
+			"url":"sevenDayResponseTime.html",   
+			"hasIFrame":true,   
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
+	}); 
 }
+function createThirtyDayResponseTime() { 
+	var temWin = $("body").window({  
+			"id":"testOne8",   
+			"title":"响应时间",  
+			"url":"thirtyDayResponseTime.html",   
+			"hasIFrame":true,   
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
+	}); 
+} 
 </script>
 </head>
 
@@ -178,10 +260,10 @@ function hideNav(e){
             <td><a href="#">24 分 10 秒</a></td>
             <td><a href="#">2013 年 1 月 1 日</a></td>
           </tr>
+          
         </table>
       </div>
-      
-      <hr class="top_border" />
+      <div style=" height:15px;background: url(images/timeinfo/conf-shadow.png) center no-repeat"></div>
      <div id="tabs">
         <ul>
           <li class="tabs_select">概览</li>
@@ -196,7 +278,7 @@ function hideNav(e){
           	<td style="width:45.5%;height:150px;">
             	<table class="bar_table" cellpadding="0" cellspacing="0" style="height:150px;">
                 <tr>
-                  <td class="overview_table_head" style="font-size:15px; font-weight:bold;">过去6小时的历史</td>
+                  <td class="overview_table_head" style="font-size:15px; font-weight:bold;">过去6小时的可用性</td>
                 </tr>	
                 <tr>
                 	<td>
@@ -232,8 +314,8 @@ function hideNav(e){
                 <tr>
                 	<td>
                   	<ul class="show_mark">
-                    	<li><div class="iky"></div>健康</li>
-                      <li><div class="ibky"></div>不健康</li>
+                    	<li><div class="iky"></div>可用</li>
+                      <li><div class="ibky"></div>不可用</li>
                       <li><div class="iwran"></div>警告</li>
                     </ul>
                   </td>
@@ -245,7 +327,7 @@ function hideNav(e){
             <td style="height:150px">
             	<table class="time_info_performance_table" cellpadding="0" cellspacing="0" style="margin:0 auto;height:150px;">
 	               <tr>
-                 	<td colspan="6">性能过去6小时的历史可用性</td>
+                 	<td colspan="6" style="font-size:15px; font-weight:bold;">过去6小时的健康性</td>
                  </tr>
               	<tr class="show_mark_time" >
                 	<td><b>00:00</b></td>
@@ -266,9 +348,9 @@ function hideNav(e){
                 <tr>
                 	<td colspan="6" class="mark_info">
                     <div class="unknow"></div><div>未知</div>
-                    <div class="normal"></div><div>正常</div>
+                    <div class="normal"></div><div>健康</div>
                     <div class="warning"></div><div>警告</div>
-                    <div class="serious"></div><div>严重</div>
+                    <div class="serious"></div><div>不健康</div>
                   </td>
                   
                 </tr>
@@ -278,8 +360,25 @@ function hideNav(e){
         </table>
       	 </div>
         <div class="column_chart">
-          <div id="time_times" style="margin:0 auto;height:300px;width:70%;"></div>
+        	 <div class="threshold_file" style="height:400px;width:49%;">
+            <div class="sub_title">url访问次数</div>
+            <div class="days_data">
+              <a onclick="createThirtyURLTime(this);"><div class="thirty_days"></div></a>
+            	<a onclick="createSevenURLTime(this);"><div class="seven_days"></div></a>
+            </div>
+            <div id="time_times" style="height:300px;"></div>
+          </div>
+           <div class="threshold_file" style="height:400px;width:49%;">
+            <div class="sub_title">url响应时间</div>
+            <div class="days_data">
+              <a onclick="createThirtyDayResponseTime(this);"><div class="thirty_days"></div></a>
+            	<a onclick="createSevenDayResponseTime(this);"><div class="seven_days"></div></a>
+            </div>
+           <div id="time_response_time" style="height:300px;width:98%">1</div>
+          </div>
+          
         </div>
+        <div style="clear:both;"></div>
         <div class="type_list">
           <div class="threshold_file">
             <div class="tool_bar_top">方法列表</div>
