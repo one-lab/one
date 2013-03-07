@@ -89,7 +89,7 @@
 </head>
 
 <body>
-<%@include file="${ctx}/WEB-INF/layouts/menu.jsp"%>
+<%@ include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
     <div class="p_all">
         <div class="p_sub_index">
