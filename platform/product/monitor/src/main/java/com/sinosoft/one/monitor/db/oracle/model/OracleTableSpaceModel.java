@@ -1,5 +1,7 @@
 package com.sinosoft.one.monitor.db.oracle.model;
 
+import javax.persistence.Transient;
+
 /**
  * User: Chunliang.Han
  * Date: 13-2-27
@@ -17,7 +19,28 @@ package com.sinosoft.one.monitor.db.oracle.model;
 表空间状态
  */
 public class OracleTableSpaceModel {
-    /**
+	
+	private String id;
+	@Transient
+    public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	private String statusBar = "<div class='bg_bar'><div class='red_bar' style='width:10%'></div></div>";
+	@Transient
+	public String getStatusBar() {
+		return statusBar;
+	}
+
+	public void setStatusBar(String statusBar) {
+		this.statusBar = statusBar;
+	}
+
+	/**
      * 表空间名称
      */
     private String tableSpaceName;

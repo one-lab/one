@@ -49,7 +49,7 @@ public class AvailableCalculate {
      */
     public static AvailableCalculate completeCalculate(final Date startRecordTime, final Long oldRunningTime,final Long oldStopTime,
                                                        final List<AvailableDetail> avCount,final List<AvailableDetail> unAvCount,final Integer falseCount, final Integer interval){
-        Assert.notEmpty(unAvCount);
+        //Assert.notEmpty(unAvCount);
         return new AvailableCalculate(startRecordTime,oldRunningTime,oldStopTime,avCount,unAvCount,falseCount,interval);
     }
 
@@ -70,12 +70,12 @@ public class AvailableCalculate {
 
     private AvailableCalculate(final Date startRecordTime, final Long oldRunningTime,final Long oldStopTime,
                               final List<AvailableDetail> avCount,final List<AvailableDetail> unAvCount,final Integer falseCount,final Integer interval) {
-        Assert.notNull(startRecordTime);
-        Assert.notNull(oldRunningTime);
-        Assert.notNull(oldStopTime);
-        Assert.notEmpty(avCount);
-        Assert.notNull(falseCount);
-        Assert.notNull(interval);
+//        Assert.notNull(startRecordTime);
+//        Assert.notNull(oldRunningTime);
+//        Assert.notNull(oldStopTime);
+//        Assert.notEmpty(avCount);
+//        Assert.notNull(falseCount);
+//        Assert.notNull(interval);
         this.interval = interval;
         this.avCount = avCount;
         this.oldRunningTime = oldRunningTime;
@@ -105,8 +105,8 @@ public class AvailableCalculate {
             //正常运行次数*间隔时间即当天天可用时间
             //runningTime = avCount*interval;
         }
-        Assert.isTrue(runningTime < oldRunningTime, "oldRunningTime is " + oldRunningTime + ",new CalculateRunningTime is " +
-                this.runningTime + "can't less than old !");
+        //Assert.isTrue(runningTime > oldRunningTime, "oldRunningTime is " + oldRunningTime + ",new CalculateRunningTime is " +
+        //        this.runningTime + "can't less than old !");
     }
 
     private void timeCalculate(){
@@ -123,8 +123,8 @@ public class AvailableCalculate {
                 this.stopTime = this.stopTime +  availableDetail.getCount()*availableDetail.getInterval();
             }
         }
-        Assert.isTrue(stopTime < oldStopTime, "oldStopTime is " + oldStopTime + ",new CalculateStopTime is " +
-                this.stopTime + "can't less than old !");
+        //Assert.isTrue(stopTime > oldStopTime, "oldStopTime is " + oldStopTime + ",new CalculateStopTime is " +
+        //        this.stopTime + "can't less than old !");
     }
 
     /**

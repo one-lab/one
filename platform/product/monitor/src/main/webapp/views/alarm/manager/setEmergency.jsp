@@ -24,9 +24,9 @@
                     $mn.html("");
                     $("#monitorName").append("<option value='choice' >" +"--选择一个监视器--"+" </option> ");
                     for(var i = 0; i<data.length;i++){
-                        var key = "monitorName";
-                        var name =data[i].monitorName;
-                        $("#monitorName").append("<option value='"+key+"' > "+name+" </option> ");
+                        var _key = data[i].monitorId;
+                        var _name =data[i].monitorName;
+                        $("#monitorName").append("<option value='"+_key+"' > "+_name+" </option> ");
                     }
                 }
             });
@@ -50,7 +50,7 @@
                 draggable:false,
                 height: 225,
                 colums:[
-                    {id:'1',text:'属性名',name:"attributeCn",index:'1',align:''},
+                    {id:'1',text:'属性名',name:"attributeCn",index:'1',align:'',colDisplay:false},
                     {id:'2',text:'阈值',name:"threshold",index:'1',align:''},
                     {id:'3',text:'动作',name:"action",index:'1',align:''}
                 ],
@@ -88,11 +88,16 @@
             });
             $(document).unbind();
         }
-        function setEmergency(){
+        function setEmergency(monitorType,monitorId){
+            alert(monitorType+":"+monitorId);
+            var _monitorType=monitorType;
+            var _monitorId=monitorId;
+            var _health="Health";
             var temWin = $("body").window({
                 "id":"window",
                 "title":'配置告警',
-                "url":"setNature.html",
+                "url":"${ctx}/alarm/manager/configemergency/health/"+_monitorType+"/"+_monitorId+"/"+_health,
+                /*"url":"${ctx}/alarm/manager/configemergency/health",*/
                 "hasIFrame":true,
                 "width": 740,
                 "height":440,
@@ -172,7 +177,7 @@
                     <ul>
                         <li><b>动作：</b>配置动作，当产生告警时配置动作将被执行。</li>
                     </ul>
-                    <p class="set_etc"><input type="button" class="buttons" onclick="setEmergency()" value="配置健康状态" /><span>动作</span></p>
+                    <p class="set_etc"><input type="button" id="Health" class="buttons" onclick="setEmergency($('#monitorType').val(),$('#monitorName').val())" value="配置健康状态" /><span>动作</span></p>
                 </div>
             </div>
         </div>

@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -135,7 +134,6 @@ public class AvaSta  implements java.io.Serializable {
     public void setAvgFailureTime(long avgFailureTime) {
     this.avgFailureTime = avgFailureTime;
     }
-    @Temporal(TemporalType.DATE)
     @Column(name="AVA_RECORD_TIME")
     public Date getAvaRecordTime() {
     return this.avaRecordTime;

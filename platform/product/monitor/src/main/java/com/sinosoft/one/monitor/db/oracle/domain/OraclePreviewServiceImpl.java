@@ -25,6 +25,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
 
     @Autowired
     private LasteventRepository lasteventRepository;
+    @Autowired
+    private DBUtil4Monitor dbUtil4Monitor;
 
     @Override
     public EventInfoModel[] viewConnectInfo(String monitorId) {
@@ -80,7 +82,7 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
     @Override
     public OracleDetailModel viewDbDetail(String monitorId) {
         OracleDetailModel oracleDetailModel = new OracleDetailModel();
-        DBUtil4Monitor.changeConnection(monitorId);
+        dbUtil4Monitor.changeConnection(monitorId);
         String sql = OracleMonitorSql.dbInfo;
         List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
         Map<String, String> rsObj = rsList.get(0);
