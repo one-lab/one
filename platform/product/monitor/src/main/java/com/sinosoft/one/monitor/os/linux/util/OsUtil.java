@@ -17,6 +17,11 @@ public class OsUtil {
 	 * 小时数日期格式
 	 */
 	public static String DATEFORMATE_HOURS="HH";
+	
+	/**
+	 * 小时数分钟整点日期格式
+	 */
+	public static String DATEFORMATE_HOURS_MINE="HH:mm";
 
 	/**
 	 * 分钟数日期格式
