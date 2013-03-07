@@ -22,7 +22,7 @@ public class ApplicationDetailPieViewModel {
 	}
 
 	public String getHealthValue() {
-		return criticalCount + ":" + (warningCount + normalCount);
+		return criticalCount + ":" + warningCount + ":" +  normalCount;
 	}
 
 	public int getCriticalCount() {
