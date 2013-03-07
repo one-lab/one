@@ -14,7 +14,7 @@ public interface LasteventRepository extends PagingAndSortingRepository<Lasteven
     Date findLastExecTime();
     @SQL("select t1.* from ge_monitor_oracle_lastevent t1 WHERE record_time between ?2 AND ?3 order by record_time")
     List<Lastevent> findLastEventList(String monitorId, Date start, Date end);
-    @SQL("delete from GE_MONITOR_ORACLE_LASTEVENT  where record_time < to_date(?1,'yyyy-MM-dd HH:mm:ss')")
+    @SQL("delete from GE_MONITOR_ORACLE_LASTEVENT  where record_time < ?1")
 	void clear(Date timePoint);
 }
 

@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -75,18 +74,6 @@ public class Info  implements java.io.Serializable {
     * 创建时间.
     */
     private Date sysTime;
-    /**
-        */
-    private List<AvaSta> avaStas = new ArrayList<AvaSta>(0) ;
-    /**
-        */
-    private List<EventSta> eventStas = new ArrayList<EventSta>(0) ;
-    /**
-        */
-    private List<Lastevent> lastevents = new ArrayList<Lastevent>(0) ;
-    /**
-        */
-    private List<Ava> avas = new ArrayList<Ava>(0) ;
 
     public Info() {
     }
@@ -194,49 +181,14 @@ public class Info  implements java.io.Serializable {
     public void setInstanceName(String instanceName) {
     this.instanceName = instanceName;
     }
-    @Temporal(TemporalType.DATE)
     @Column(name="SYS_TIME")
     public Date getSysTime() {
     return this.sysTime;
     }
 
     public void setSysTime(Date sysTime) {
-    this.sysTime = sysTime;
+         this.sysTime = sysTime;
     }
-    @OneToMany(fetch=FetchType.LAZY)
-    public List<AvaSta> getAvaStas() {
-    return this.avaStas;
-    }
-
-    public void setAvaStas(List<AvaSta> avaStas) {
-    this.avaStas = avaStas;
-    }
-    @OneToMany(fetch=FetchType.LAZY)
-    public List<EventSta> getEventStas() {
-    return this.eventStas;
-    }
-
-    public void setEventStas(List<EventSta> eventStas) {
-    this.eventStas = eventStas;
-    }
-    @OneToMany(fetch=FetchType.LAZY)
-    public List<Lastevent> getLastevents() {
-    return this.lastevents;
-    }
-
-    public void setLastevents(List<Lastevent> lastevents) {
-    this.lastevents = lastevents;
-    }
-    @OneToMany(fetch=FetchType.LAZY)
-    public List<Ava> getAvas() {
-    return this.avas;
-    }
-
-    public void setAvas(List<Ava> avas) {
-    this.avas = avas;
-    }
-
-
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

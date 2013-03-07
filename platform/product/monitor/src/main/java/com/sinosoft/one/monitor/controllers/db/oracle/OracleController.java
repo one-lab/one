@@ -3,6 +3,8 @@ package com.sinosoft.one.monitor.controllers.db.oracle;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,6 +39,7 @@ import com.sinosoft.one.uiutil.UIUtil;
  * @author Administrator
  * 
  */
+@Path("home")
 public class OracleController {
 
 	@Autowired
@@ -83,7 +86,7 @@ public class OracleController {
 		data.add(state);
 		return "@" + json;
 	}
-
+    @Post("viewConnect")
 	// 用户连接数和连接时间所用数据
 	public String viewConnectAndActive(String monitorId) {
 		EventInfoModel[] eventInfoModel = oraclePreviewServiceImpl
@@ -103,7 +106,7 @@ public class OracleController {
 		// 用户活动数y轴
 		JSONArray activeSeries = new JSONArray();
 		JSONObject surr2 = new JSONObject();
-		surr.put("name", activeCount.getEventName());
+		surr2.put("name", activeCount.getEventName());
 		JSONArray activeData = new JSONArray();
 		// x轴和连接时间y轴添加值
 		List<Point> connectPoints = connectEvent.getPoints();
@@ -125,7 +128,7 @@ public class OracleController {
 
 		// 组装两个json
 		JSONObject result = new JSONObject();
-		result.put("x轴", xAxis);
+		result.put("xaxis", xAxis);
 		result.put("connectSeries", connectSeries);
 		result.put("activeSeries", activeSeries);
 		json = result.toJSONString();
@@ -146,7 +149,7 @@ public class OracleController {
 		String fixedSGASize = oracleSGAModel.getFixedSGASize();
 		String json = "";
 		// 拼接data的json对象
-		JSONObject data = new JSONObject();
+		JSONArray data = new JSONArray();
 		JSONArray surround = new JSONArray();
 		JSONObject bufferCache = new JSONObject();
 		bufferCache.put("name", "缓存存储器大小");
@@ -171,16 +174,16 @@ public class OracleController {
 		JSONArray fixedSGA = new JSONArray();
 		fixedSGA.add("固定区域大小");
 		fixedSGA.add(fixedSGASize);
-		data.put("surround", surround);
-		data.put("bufferCache", bufferCache);
-		data.put("sharePool", sharePool);
-		data.put("libCache", libCache);
-		data.put("dict", dict);
-		data.put("sqlArea", sqlArea);
-		data.put("fixedSGASize", fixedSGASize);
+
+		data.add( bufferCache);
+		data.add(sharePool);
+        data.add(redoLogCache);
+		data.add(libCache);
+		data.add(dict);
+		data.add(sqlArea);
+		data.add(fixedSGA);
 		json = data.toJSONString();
 		return "@" + json;
-
 	}
 
 	// 表空间所用数据

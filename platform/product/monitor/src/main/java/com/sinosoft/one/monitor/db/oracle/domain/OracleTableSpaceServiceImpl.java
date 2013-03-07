@@ -5,6 +5,8 @@ import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,10 +18,11 @@ import java.util.List;
  */
 @Component
 public class OracleTableSpaceServiceImpl implements OracleTableSpaceService {
-
+	@Autowired
+    private DBUtil4Monitor dbUtil4Monitor;
     @Override
     public List<OracleTableSpaceModel> listTableSpaceInfo(String monitorId) {
-        DBUtil4Monitor.changeConnection(monitorId);
+    	dbUtil4Monitor.changeConnection(monitorId);
         String sql = OracleMonitorSql.tableSpaceInfo;
         List<OracleTableSpaceModel> rsList = DBUtil.queryBeans(SqlObj.newInstance(sql), OracleTableSpaceModel.class);
         return rsList;

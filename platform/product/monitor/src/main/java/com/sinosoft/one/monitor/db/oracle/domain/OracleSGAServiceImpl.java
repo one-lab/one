@@ -24,10 +24,11 @@ import java.util.Map;
 public class OracleSGAServiceImpl implements OracleSGAService {
     @Autowired
     private LasteventRepository lasteventRepository;
-
+    @Autowired
+    private DBUtil4Monitor dbUtil4Monitor;
     @Override
     public OracleSGAModel viewSGAInfo(String monitorId) {
-        DBUtil4Monitor.changeConnection(monitorId);
+    	dbUtil4Monitor.changeConnection(monitorId);
         OracleSGAModel oracleSGAModel = new OracleSGAModel();
         String sql1 = OracleMonitorSql.sgaInfo1;
         String sql2 = OracleMonitorSql.sgaInfo2;
@@ -59,7 +60,7 @@ public class OracleSGAServiceImpl implements OracleSGAService {
 
     @Override
     public SGAStateModel viewSGAStateInfo(String monitorId) {
-        DBUtil4Monitor.changeConnection(monitorId);
+    	dbUtil4Monitor.changeConnection(monitorId);
         SGAStateModel sgaStateModel = new SGAStateModel();
         String sql1 = OracleMonitorSql.bufferRatio;
         String sql2 = OracleMonitorSql.dictionaryRatio;

@@ -1,11 +1,18 @@
 package com.sinosoft.one.monitor.db.oracle;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class FastJsonTest {
 	public static void main(String[] args) {
-		
+		//testFastJson1();
+		System.out.println(JSON.toJSON(new JsonTestObj()));
 	}
 	public static void testFastJson(){
 		JSONArray jsonArray = new JSONArray();
@@ -23,7 +30,21 @@ public class FastJsonTest {
 		System.out.println(jsonArray.toJSONString());
 		System.out.println(jsonObject1.toJSONString());
 	}
+	public static void testFastJson1(){
+		Map<String, String> mp = new HashMap<String, String>();
+		mp.put("as", "sdd");
+		
+		System.out.println(JSON.toJSON(mp));
+	}
 	public static void testDoubleAndLong(){
 		System.out.println(10000000000000000002.11);
+		
+	}
+	public static class JsonTestObj {
+		String id = "ass0011";
+		String name = "assname";
+//		String[] point = new String[]{"23","34","34"};
+//		Map<String, String> mp = new HashMap<String, String>();
+//		List<String> list = new ArrayList<String>();
 	}
 }
