@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.attribute.repository;
 // Generated 2013-3-1 10:54:17 by One Data Tools 1.0.0
 
+import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.attribute.model.AttributeAction;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -24,5 +25,8 @@ public interface AttributeActionRepository extends PagingAndSortingRepository<At
 	 * @return 动作信息
 	 */
 	List<AttributeAction> findByResourceIdAndAttributeId(String resourceId, String attributeId);
+
+    @SQL("select distinct a.SEVERITY from GE_MONITOR_ATTRIBUTE_ACTION a where a.ACTION_ID=?1")
+    public List<String> findAllSeverityWithActionId(String actionId);
 }
 
