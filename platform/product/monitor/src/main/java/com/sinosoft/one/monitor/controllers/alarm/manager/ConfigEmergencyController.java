@@ -71,6 +71,7 @@ public class ConfigEmergencyController {
     public Reply getMonitorNames(@Param("resourceType") String resourceType, Invocation inv) throws Exception {
         JSONArray jsonArray = new JSONArray();
         String jsonMonitorNames="";
+        //@todo 使用枚举类型判断
         if ("应用系统".equals(resourceType)) {
             List<Application> applications = applicationService.findAllApplicationNames();
             if (applications != null) {
@@ -120,14 +121,6 @@ public class ConfigEmergencyController {
 
     @Post("attributenames/{resourceType}")
     public void getAttributeNames(@Param("resourceType") String resourceType,Invocation inv) throws Exception {
-        /*String dbResourceType="";
-        ResourceType[] resourceTypes=ResourceType.values();
-        for (ResourceType newResourceType:resourceTypes){
-            if (newResourceType.cnName().equals(resourceType)){
-                dbResourceType=newResourceType.name();
-                break;
-            }
-        }*/
         String dbResourceType=getResourceEnumString(resourceType);
         if(!"".equals(dbResourceType)){
             List<Attribute> attributes=attributeService.findAllAttributesWithResourceType(dbResourceType);
@@ -164,9 +157,11 @@ public class ConfigEmergencyController {
         inv.addModel("monitorName",applicationService.findApplication(monitorId).getCnName());
         //写回应用id
         inv.getRequest().setAttribute("monitorId",monitorId);
+        /*inv.addModel("monitorId",monitorId);*/
         String attributeId= attributeCache.getAttributeId(getResourceEnumString(resourceType),attributeName);
         //写回属性id
         inv.getRequest().setAttribute("attributeId",attributeId);
+        /*inv.addModel("attributeId",attributeId);*/
         //获得属性名字
         inv.addModel("attributeName",attributeRepository.findOne(attributeId).getAttributeCn());
         inv.getRequest().setAttribute("resourceType",resourceType);
@@ -174,22 +169,19 @@ public class ConfigEmergencyController {
         return "setHealth";
     }
 
-    //获得所有动作
-    @Post("actions")
-    public Reply getAllActions(Invocation inv){
+    //获得所有动作,如果当前属性有关联的动作，放入右边框中
+    @Post("actions/{monitorId}/{attributeId}")
+    public Reply getAllActions(@Param("monitorId") String monitorId,@Param("attributeId") String attributeId,Invocation inv){
         List<MailAction> mailActions= (List<MailAction>) mailActionRepository.findAll();
         if (mailActions!=null){
             JSONArray jsonArray = new JSONArray();
-
-
             String jsonActionNames="";
             for (MailAction mailAction : mailActions) {
                 JSONObject jsonObject = new JSONObject();
                 List<String> severityLevels=new ArrayList<String>();
-                severityLevels=attributeActionRepository.findAllSeverityWithActionId(mailAction.getId());
+                severityLevels=attributeActionRepository.findAllSeverityWithCurrentAttribute(monitorId,attributeId,mailAction.getId());
                 JSONArray jsonSeverityArray=new JSONArray();
                 if(severityLevels!=null&&severityLevels.size()>0){
-
                     for(String severityLevel:severityLevels){
                         JSONObject jsonSeverityObject=new JSONObject();
                         String severityLevelName=SeverityLevel.CRITICAL.name();
@@ -215,9 +207,57 @@ public class ConfigEmergencyController {
         return null;
     }
 
-    @Post("save")
-    public String saveHealthConfig(Invocation inv){
-
+    @Post("save/{monitorId}/{attributeId}")
+    public String saveHealthConfig(@Param("monitorId") String monitorId,
+                                   @Param("attributeId") String attributeId,Invocation inv){
+        //相应的动作的id
+        String[] criticalIds=inv.getRequest().getParameterValues("CRITICAL[]");
+        String[] warningIds=inv.getRequest().getParameterValues("WARNING[]");
+        String[] infoIds=inv.getRequest().getParameterValues("INFO[]");
+        List<AttributeAction> attributeActions=new ArrayList<AttributeAction>();
+        if(criticalIds!=null&&criticalIds.length>0){
+            for(String criticalId:criticalIds){
+                AttributeAction attributeAction=new AttributeAction();
+                attributeAction.setResourceId(monitorId);
+                //需要得到属性id
+                attributeAction.setAttributeId(attributeId);
+                attributeAction.setActionId(criticalId);
+                attributeAction.setSeverity(SeverityLevel.CRITICAL);
+                attributeActions.add(attributeAction);
+            }
+        }
+        if(warningIds!=null&&warningIds.length>0){
+            for(String warningId:warningIds){
+                AttributeAction attributeAction=new AttributeAction();
+                attributeAction.setResourceId(monitorId);
+                //需要得到属性id
+                attributeAction.setAttributeId(attributeId);
+                attributeAction.setActionId(warningId);
+                attributeAction.setSeverity(SeverityLevel.WARNING);
+                attributeActions.add(attributeAction);
+            }
+        }
+        if(infoIds!=null&&infoIds.length>0){
+            for(String infoId:infoIds){
+                AttributeAction attributeAction=new AttributeAction();
+                attributeAction.setResourceId(monitorId);
+                //需要得到属性id
+                attributeAction.setAttributeId(attributeId);
+                attributeAction.setActionId(infoId);
+                attributeAction.setSeverity(SeverityLevel.INFO);
+                attributeActions.add(attributeAction);
+            }
+        }
+        if(attributeActions!=null&&attributeActions.size()>0){
+            List<AttributeAction> dbAttributeActions=new ArrayList<AttributeAction>();
+            dbAttributeActions=attributeActionRepository.findAllAttributeActionsWithAttributeId(attributeId);
+            //如果db中已经有当前属性关联的记录，那么将这些记录全部删除
+            attributeActionRepository.delete(dbAttributeActions);
+            //之后，保存当前属性新关联的动作
+            for(AttributeAction attributeAction:attributeActions){
+                attributeActionRepository.save(attributeAction);
+            }
+        }
         return "setEmergency";
     }
 }
