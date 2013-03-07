@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.application.model;
 
 
+import com.sinosoft.one.monitor.common.HealthStaCache;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -35,15 +36,15 @@ public class UrlResponseTime {
 	/**
 	 * 最小响应时间
 	 */
-	private long minResponseTime;
+	private Long minResponseTime;
 	/**
 	 * 最大响应时间
 	 */
-	private long maxResponseTime;
+	private Long maxResponseTime;
 	/**
 	 * 平均响应时间
 	 */
-	private long avgResponseTime;
+	private Long avgResponseTime;
 	/**
 	 * 响应时间
 	 */
@@ -53,6 +54,10 @@ public class UrlResponseTime {
 	 * 记录时间
 	 */
 	private Date recordTime;
+	/**
+	 * 健康度
+	 */
+	private String healthBar;
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
@@ -93,30 +98,30 @@ public class UrlResponseTime {
 	}
 
 	@Column(name = "MIN_RESPONSE_TIME")
-	public long getMinResponseTime() {
-		return minResponseTime;
+	public Long getMinResponseTime() {
+		return minResponseTime == null ? 0l : minResponseTime;
 	}
 
-	public void setMinResponseTime(long minResponseTime) {
+	public void setMinResponseTime(Long minResponseTime) {
 		this.minResponseTime = minResponseTime;
 	}
 
 	@Column(name = "MAX_RESPONSE_TIME")
-	public long getMaxResponseTime() {
-		return maxResponseTime;
+	public Long getMaxResponseTime() {
+		return maxResponseTime == null ? 0l : maxResponseTime;
 	}
 
 
-	public void setMaxResponseTime(long maxResponseTime) {
+	public void setMaxResponseTime(Long maxResponseTime) {
 		this.maxResponseTime = maxResponseTime;
 	}
 
 	@Column(name = "AVG_RESPONSE_TIME")
-	public long getAvgResponseTime() {
-		return avgResponseTime;
+	public Long getAvgResponseTime() {
+		return avgResponseTime == null ? 0l : avgResponseTime;
 	}
 
-	public void setAvgResponseTime(long avgResponseTime) {
+	public void setAvgResponseTime(Long avgResponseTime) {
 		this.avgResponseTime = avgResponseTime;
 	}
 
@@ -137,4 +142,17 @@ public class UrlResponseTime {
 	public void setResponseTime(long responseTime) {
 		this.responseTime = responseTime;
 	}
+
+	/**
+	 * 获得健康度条
+	 */
+	@Transient
+	public String getHealthBar() {
+		return healthBar;
+	}
+
+	public void setHealthBar(String healthBar) {
+		this.healthBar = healthBar;
+	}
+
 }
