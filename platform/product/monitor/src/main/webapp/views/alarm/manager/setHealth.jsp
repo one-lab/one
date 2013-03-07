@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%--<% request.setAttribute("monitorId",request.getParameter("monitorId")); %>
+<% request.setAttribute("attributeId",request.getParameter("attributeId")); %>--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -9,24 +11,29 @@
 <%@ include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
 $(function(){
-	
+
 });
-function rowsTogle(){
+function rowsTogle(monitorId,attributeId){
 	var rows = $("#threshold tr.hideRows");
+    var _monitorId=monitorId;
+    var _attributeId=attributeId;
+    alert("monitorid:"+_monitorId);
+    alert("attributeId:"+_attributeId);
 	if(rows.eq(0).is(':hidden')){
-        getAllActions();
+        getAllActions(monitorId,attributeId);
 		rows.show();
 	}else{
 		rows.hide();
 	};
 	return false;
 }
+
 /*获得动作表中的数据，后台需判断这个动作是否已经被关联*/
-function getAllActions(){
+function getAllActions(monitorId,attributeId){
     $.ajax({
         type:"post",
         /*url:"${ctx}/alarm/manager/configemergency/actions/${monitorId}/",*/
-        url:"${ctx}/alarm/manager/configemergency/actions",
+        url:"${ctx}/alarm/manager/configemergency/actions/"+monitorId+"/"+attributeId,
         dataType:"json",
         async:false,
         success:function(data){
@@ -48,7 +55,6 @@ function getAllActions(){
             for(var i = 0; i<data.length;i++){
                 /*动作id，关联动作时发送，保存到属性动作表*/
                 var _key = data[i].actionId;
-                alert("actionId:"+_key);
                 var _name =data[i].actionName;
                 var _severityLevel = [];
                 _severityLevel = data[i].actionSeverity;
@@ -147,7 +153,9 @@ function setNatureLeftAll(name){
       	    </tr>--%>
         	  <tr>
         	    <td>
-                	<input name="senior" type="checkbox" value="" class="m_b"  onclick="rowsTogle()" id="senior" /> <label for="senior">配置属性级别动作</label>
+                    <input type="hidden" id="monitorId" name="monitorId" value="${monitorId}"/>
+                    <input type="hidden" id="attributeId" name="attributeId" value="${attributeId}"/>
+                	<input name="senior" type="checkbox" class="m_b"  onclick="rowsTogle($('#monitorId').val(),$('#attributeId').val())" id="senior" /> <label for="senior">配置属性级别动作</label>
                 </td>
         	    <td>&nbsp;</td>
       	    </tr>

@@ -107,6 +107,51 @@
                     "value": "保存",
                     "onclickEvent" : "selectLear",
                     "btFun": function() {
+                        var option = $("#window_iframe").contents().find("#graveList option")
+                        /*var vals = [];
+                        option.each(function(){
+                            var val = $(this).val();
+                            vals.push(val);
+                        })*/
+                        var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                        var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
+                        var _graveList=$("#window_iframe").contents().find("#graveList option");
+                        var _garveIds=[];
+                        var _alarmList=$("#window_iframe").contents().find("#alarmList option");
+                        var _alarmIds=[];
+                        var _normalList=$("#window_iframe").contents().find("#normalList option");
+                        var _normalIds=[];
+                        for(var i=0;i<_graveList.length;i++){
+                            alert("严重每个值："+_graveList[i].value);
+                            _garveIds.push(_graveList[i].value);
+                        }
+                        for(var i=0;i<_alarmList.length;i++){
+                            alert("警告每个值："+_alarmList[i].value);
+                            _alarmIds.push(_alarmList[i].value);
+                        }
+                        for(var i=0;i<_normalList.length;i++){
+                            alert("正常每个值："+_normalList[i].value);
+                            _normalIds.push(_normalList[i].value);
+                        }
+                        $.ajax({
+                            type : "POST",
+                            /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
+                            url : "${ctx}/alarm/manager/configemergency/save/"+_monitorId+"/"+_attributeId,
+                            dataType : "json",
+                            data : {
+                                CRITICAL : _garveIds,
+                                WARNING : _alarmIds,
+                                INFO : _normalIds
+                            },
+                            success : function(data) {
+                                if(data != null){
+                                    alert("保存成功！");
+                                }
+                            },
+                            error:function(){
+                                alert("保存失败");
+                            }
+                        });
                         msgSuccess("系统消息", "操作成功，配置已保存！");
                         temWin.closeWin();
                     }
