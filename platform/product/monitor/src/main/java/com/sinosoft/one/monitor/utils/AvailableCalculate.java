@@ -80,7 +80,7 @@ public class AvailableCalculate {
         boolean  failureCountNeedAdd = false;
         //本次结果正确，观察与上次的时间差是否满足设置间隔，不满足则认为失败
         if(this.currentResult){
-            //如果上次状态成功，但两次时间差大于设置间隔，则认为可能，且上次间隔时间与这次间隔时间一致
+            //如果上次状态成功，且上次间隔时间与这次间隔时间一致,但两次时间差大于设置间隔则代表有问题。此处等待将来linux端改为其他方式后，可以进行调整
             if(previousInf!=null&&previousInf.getStatus()&&previousInf.getInterval().equals(interval)){
                 Interval timeInterval = new Interval(new DateTime(previousInf.getRecordDate()),DateTime.now());
                 if(timeInterval.toDuration().getStandardMinutes()>interval){
@@ -92,9 +92,9 @@ public class AvailableCalculate {
             if(previousInf!=null&&previousInf.getStatus()){
                 failureCountNeedAdd = true;
             }
-            else if(previousInf.getStatus() == null){
+            //第一条数据即为空
+            else if(previousInf == null)
                 failureCountNeedAdd = true;
-            }
         }
 
         if(failureCountNeedAdd)
@@ -109,14 +109,15 @@ public class AvailableCalculate {
 
 
     private void runTimeCalculate(){
-        if(runningTime == 0l){
-            for(AvailableCountsGroupByInterval availableDetail:avCount){
-                runningTime = runningTime + availableDetail.getCount()*availableDetail.getInterval();
-            }
-            //正常运行次数*间隔时间即当天天可用时间
-            //runningTime = avCount*interval;
+        if(this.currentResult){
+            runningTime = interval;
         }
-        Assert.isTrue(runningTime > oldRunningTime, "oldRunningTime is " + oldRunningTime + ",new CalculateRunningTime is " +
+        for (AvailableCountsGroupByInterval availableDetail : avCount) {
+            runningTime = runningTime + availableDetail.getCount() * availableDetail.getInterval();
+        }
+        //正常运行次数*间隔时间即当天天可用时间
+        //runningTime = avCount*interval;
+        Assert.isTrue(runningTime >= oldRunningTime, "oldRunningTime is " + oldRunningTime + ",new CalculateRunningTime is " +
                 this.runningTime + "can't less than old !");
     }
 
@@ -129,12 +130,15 @@ public class AvailableCalculate {
         if(unAvCount==null){//并不考虑未知的情况，运行时间剩下的时间即为停止时间
             this.stopTime = this.dayMinute - this.runningTime;
         }else{
+            if(!this.currentResult){
+                this.stopTime = this.stopTime+interval;
+            }
             for(AvailableCountsGroupByInterval availableDetail:unAvCount){
                 //失败运行次数*间隔时间即当天停止时间
                 this.stopTime = this.stopTime +  availableDetail.getCount()*availableDetail.getInterval();
             }
         }
-        Assert.isTrue(stopTime > oldStopTime, "oldStopTime is " + oldStopTime + ",new CalculateStopTime is " +
+        Assert.isTrue(stopTime >= oldStopTime, "oldStopTime is " + oldStopTime + ",new CalculateStopTime is " +
                 this.stopTime + "can't less than old !");
     }
 
@@ -189,7 +193,6 @@ public class AvailableCalculate {
      */
     public static class AvailableCalculateParam{
 
-        private final Date startRecordTime;
         private final Long oldRunningTime;
         private final Long oldStopTime;
         private final Integer oldFalseCount;
@@ -215,12 +218,9 @@ public class AvailableCalculate {
         public AvailableCalculateParam(AvailableStatistics statistics, List<AvailableCountsGroupByInterval> avCount,
                                        List<AvailableCountsGroupByInterval> unAvCount, Integer interval,
                                        boolean currentResult, AvailableInf previous) {
-            Assert.notNull(statistics.getStartRecordTime());
             Assert.notNull(statistics.getOldRunningTime());
             Assert.notNull(statistics.getOldStopTime());
             Assert.notNull(interval);
-            Assert.notNull(previous);
-            this.startRecordTime = statistics.getStartRecordTime();
             this.oldRunningTime = statistics.getOldRunningTime();
             this.oldStopTime = statistics.getOldStopTime();
             this.avCount = avCount;
@@ -231,9 +231,6 @@ public class AvailableCalculate {
             this.previous = previous;
         }
 
-        public Date getStartRecordTime() {
-            return startRecordTime;
-        }
 
         public Long getOldRunningTime() {
             return oldRunningTime;
@@ -270,20 +267,14 @@ public class AvailableCalculate {
 
     public static class  AvailableStatistics{
 
-        private  Date startRecordTime;
         private  Long oldRunningTime;
         private  Long oldStopTime;
         private  Integer oldFalseCount;
 
-        public AvailableStatistics(Date startRecordTime, Long oldRunningTime, Long oldStopTime, Integer oldFalseCount) {
-            this.startRecordTime = startRecordTime;
+        public AvailableStatistics( Long oldRunningTime, Long oldStopTime, Integer oldFalseCount) {
             this.oldRunningTime = oldRunningTime;
             this.oldStopTime = oldStopTime;
             this.oldFalseCount = oldFalseCount;
-        }
-
-        public Date getStartRecordTime() {
-            return startRecordTime;
         }
 
         public Long getOldRunningTime() {
