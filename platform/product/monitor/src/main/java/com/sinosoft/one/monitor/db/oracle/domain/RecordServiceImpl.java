@@ -1,7 +1,21 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
-import com.sinosoft.one.data.jade.parsers.util.StringFillFormat;
-import com.sinosoft.one.monitor.db.oracle.model.*;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.sinosoft.one.monitor.db.oracle.model.Ava;
+import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
+import com.sinosoft.one.monitor.db.oracle.model.EventSta;
+import com.sinosoft.one.monitor.db.oracle.model.Info;
+import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
 import com.sinosoft.one.monitor.db.oracle.repository.AvaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.AvaStaRepository;
@@ -11,19 +25,10 @@ import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableCountsGroupByInterval;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableInf;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableStatistics;
 import com.sinosoft.one.monitor.utils.DateUtil;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: Chunliang.Han Date: 13-3-3 Time: 下午10:21
@@ -265,11 +270,19 @@ public class RecordServiceImpl implements RecordService {
     	}else if(StringUtils.equals(ava.getState(), "1")){
     		avaSta.setAvCount(++avCount);
     	}
-    	List<AvailableCalculate.AvailableDetail> avCountList = avaRepository.findAvCount(inserTime);
-    	List<AvailableCalculate.AvailableDetail> unAvCountList = avaRepository.findUnAvCount(inserTime);
-    	AvailableCalculate availableCalculate =  AvailableCalculate.completeCalculate(
-    			avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), 
-    			avCountList, unAvCountList, falseCount, interval);
+    	List<AvailableCalculate.AvailableCountsGroupByInterval> avCountList = avaRepository.findAvCount(inserTime);
+    	List<AvailableCalculate.AvailableCountsGroupByInterval> unAvCountList = avaRepository.findUnAvCount(inserTime);
+    	
+    	AvailableCalculate.AvailableCalculateParam avaCalParam = new AvailableCalculate.AvailableCalculateParam(
+    			new AvailableStatistics(avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), falseCount),
+    			avCountList,unAvCountList,interval,ava.getState().equals("1"),
+    			new AvailableInf(ava.getRecordTime(),ava.getState().equals("1"),new Long(ava.getInterval()).intValue())
+    	);
+    	
+//    	AvailableCalculate availableCalculate =  AvailableCalculate.calculate(
+//    			avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), 
+//    			avCountList, unAvCountList, falseCount, interval);
+    	AvailableCalculate availableCalculate =  AvailableCalculate.calculate(avaCalParam);
         //正常运行时间
         avaSta.setNormalRuntime(availableCalculate.getAliveTime().longValue());
         //总停机时间
