@@ -34,18 +34,28 @@ public class DateUtil {
 		c.setTime(sourceDate);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
 
-	public static Date getCurrentBeginDate() {
+	/**
+	 * 获得今天开始日期对象
+	 * @return
+	 */
+	public static Date getTodayBeginDate() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar.getTime();
 	}
 
-	public static Date getCurrentEndDate() {
+	/**
+	 * 获得今天结束日期对象
+	 * @return
+	 */
+	public static Date getTodayEndDate() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 23);
 		calendar.set(Calendar.MINUTE, 59);
@@ -60,9 +70,22 @@ public class DateUtil {
 	 */
 	public static Date getRecentHourDate(int recentHour) {
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR_OF_DAY, recentHour*(-1));
+		calendar.add(Calendar.HOUR_OF_DAY, recentHour*(-1));
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 获得今天结束日期对象
+	 * @return
+	 */
+	public static Date getCurrentHourDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar.getTime();
 	}
 
