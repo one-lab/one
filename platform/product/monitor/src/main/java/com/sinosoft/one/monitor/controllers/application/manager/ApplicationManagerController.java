@@ -7,6 +7,7 @@ import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationIndexViewModel;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -41,12 +42,13 @@ public class ApplicationManagerController {
     /**
      * 获得所有的应用.
      */
-    @Get("applist")
-    @Post("applist")
-    public String getAllApplication(Invocation inv) {
-        List<Application> applications = applicationService.findAllApplication();
+    @Get("applist/{recentHour}")
+    public String getAllApplication(@Param("recentHour") int recentHour, Invocation inv) {
+//        List<Application> applications = applicationService.findAllApplication();
 
-        inv.addModel("applications", applications);
+		List<ApplicationIndexViewModel> applicationIndexViewModels = applicationService.generateIndexViewModels(recentHour);
+        inv.addModel("applicationIndexViewModels", applicationIndexViewModels);
+	    inv.addModel("recentHour", recentHour);
         //应用性能列表页面
         return "performance";
     }
@@ -145,7 +147,7 @@ public class ApplicationManagerController {
 	        }
             if(application!=null){
                     List<String> bizScenarioIds=new ArrayList<String>();
-                    List<BizScenario> bizScenarios=application.getBizScenarios();
+                    List<BizScenario> bizScenarios = application.getBizScenarios();
                     for(BizScenario bizScenario:bizScenarios){
                         bizScenarioIds.add(bizScenario.getId());
                     }

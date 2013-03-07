@@ -12,7 +12,8 @@ public enum ResourceType {
 	APPLICATION_SCENARIO_URL("业务场景URL"),
 	APPLICATION_EUM_URL("业务仿真URL"),
 	OS("操作系统"),
-	DB("数据库");
+	DB("数据库"),
+	NONE("");
 
 	private String _cnName;
 

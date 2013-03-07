@@ -45,6 +45,8 @@ public class AlarmMessageHandler {
 		ThresholdAlarmParams thresholdAlarmParams = new ThresholdAlarmParams();
 		thresholdAlarmParams.alarmSource = messageBase.alarmSource();
 		thresholdAlarmParams.alarmId = alarmId;
+		thresholdAlarmParams.subResourceType = messageBase.subResourceType();
+		thresholdAlarmParams.subResourceId = messageBase.subResourceId();
 		List<AlarmMessage> alarmMessageList = messageBase.alarmMessages();
 		for(int i=0, len=alarmMessageList.size(); i<len; i++) {
 			AlarmMessage alarmMessage = alarmMessageList.get(i);
@@ -88,19 +90,22 @@ public class AlarmMessageHandler {
 			//获取严重级别
 			SeverityLevel severityLevel = threshold.evalSeverityLevel(alarmMessage.getAttributeValue());
 
-			if(severityLevel == SeverityLevel.CRITICAL || severityLevel == SeverityLevel.WARNING) {
+			if(thresholdAlarmParams.severityLevel == SeverityLevel.UNKNOW || severityLevel.ordinal() < thresholdAlarmParams.severityLevel.ordinal()) {
 				thresholdAlarmParams.severityLevel = severityLevel;
-				ThresholdAlarmInfo thresholdAlarmInfo = new ThresholdAlarmInfo();
-				thresholdAlarmInfo.setThreshold(threshold);
-				thresholdAlarmInfo.setAttribute(attribute);
+			}
 
+			ThresholdAlarmInfo thresholdAlarmInfo = new ThresholdAlarmInfo();
+			thresholdAlarmInfo.setThreshold(threshold);
+			thresholdAlarmInfo.setAttribute(attribute);
+
+			if(thresholdAlarmParams.severityLevel.ordinal() < SeverityLevel.INFO.ordinal()) {
 				if(thresholdAlarmParams.healthAttributeActions == null) {
 					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, thresholdAlarmParams.healthAttributeId, severityLevel);
 				}
 				List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(resourceId, attribute.getId(), severityLevel);
 				thresholdAlarmInfo.setThresholdAttributeActions(thresholdAttributeActions);
-				thresholdAlarmParams.thresholdAlarmInfos.add(thresholdAlarmInfo);
 			}
+			thresholdAlarmParams.thresholdAlarmInfos.add(thresholdAlarmInfo);
 		}
 		doAlarm(thresholdAlarmParams);
 	}
@@ -132,15 +137,21 @@ public class AlarmMessageHandler {
 			}
 		} else {
 			int index = 1;
+			if(thresholdAlarmParams.severityLevel == SeverityLevel.INFO) {
+				alarmMessageBuilder.append("<br>").append(index++).append(".").append(thresholdAlarmParams.resource.getResourceName())
+						.append("可用性为可用.");
+			}
 			for(ThresholdAlarmInfo thresholdAlarmInfo : thresholdAlarmParams.thresholdAlarmInfos) {
 				Threshold threshold = thresholdAlarmInfo.getThreshold();
 				Attribute attribute = thresholdAlarmInfo.getAttribute();
 
-				alarmMessageBuilder.append("<br>").append(index).append(".").append(attribute.getAttributeCn())
+				alarmMessageBuilder.append("<br>").append(index++).append(".").append(attribute.getAttributeCn())
 						.append(" ").append(threshold.getResultMessage().replaceAll("#U#", attribute.getUnits())).append(" ").append(attribute.getUnits())
-						.append(" （阈值） ");
+						.append(" （阈值）. ");
 
-				allAttributeActions.addAll(thresholdAlarmInfo.getThresholdAttributeActions());
+				if(thresholdAlarmInfo.getThresholdAttributeActions() != null && thresholdAlarmInfo.getThresholdAttributeActions().size() > 0) {
+					allAttributeActions.addAll(thresholdAlarmInfo.getThresholdAttributeActions());
+				}
 			}
 		}
 
@@ -158,6 +169,8 @@ public class AlarmMessageHandler {
 		alarm.setSeverity(thresholdAlarmParams.severityLevel);
 		alarm.setMessage(alarmMessageBuilder.toString());
 		alarm.setCreateTime(new Date());
+		alarm.setSubResourceId(thresholdAlarmParams.subResourceId);
+		alarm.setSubResourceType(thresholdAlarmParams.subResourceType);
 		alarmService.saveAlarm(alarm);
 
 		// 处理动作
@@ -206,9 +219,11 @@ public class AlarmMessageHandler {
 		private boolean isExceptionAlarm;
 		private SeverityLevel severityLevel = SeverityLevel.UNKNOW;
 		private String healthAttributeId;
+		private ResourceType subResourceType;
+		private String subResourceId;
 		private List<AttributeAction> healthAttributeActions;
 		private List<AttributeAction> availabilityAttributeActions;
 		private List<AttributeAction> exceptionAttributeActions;
-		private List<ThresholdAlarmInfo> thresholdAlarmInfos = new ArrayList<ThresholdAlarmInfo>();;
+		private List<ThresholdAlarmInfo> thresholdAlarmInfos = new ArrayList<ThresholdAlarmInfo>();
 	}
 }

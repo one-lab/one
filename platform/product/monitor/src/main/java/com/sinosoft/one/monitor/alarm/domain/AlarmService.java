@@ -29,6 +29,6 @@ public class AlarmService {
 	 * @return 所有告警信息
 	 */
 	public List<Alarm> queryCurrentDayAlarms(String monitorId) {
-		return alarmRepository.findAlarmByMonitorId(monitorId, DateUtil.getCurrentBeginDate(), DateUtil.getCurrentEndDate());
+		return alarmRepository.findAlarmByMonitorId(monitorId, DateUtil.getTodayBeginDate(), DateUtil.getTodayEndDate());
 	}
 }

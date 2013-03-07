@@ -11,4 +11,6 @@ import java.util.List;
 public interface MessageBase {
 	List<AlarmMessage> alarmMessages();
 	AlarmSource alarmSource();
+	ResourceType subResourceType();
+	String subResourceId();
 }
