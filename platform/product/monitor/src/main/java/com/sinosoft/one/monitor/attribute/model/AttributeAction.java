@@ -2,11 +2,12 @@ package com.sinosoft.one.monitor.attribute.model;
 // Generated 2013-3-1 10:54:16 by One Data Tools 1.0.0
 
 
-import javax.persistence.*;
-
 import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * AttributeAction.
@@ -46,8 +47,9 @@ public class AttributeAction  implements java.io.Serializable {
     }
 
    
-    @Id 
-    
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid",strategy = "uuid")
     @Column(name="id", unique=true, length=32)
     public String getId() {
     return this.id;
