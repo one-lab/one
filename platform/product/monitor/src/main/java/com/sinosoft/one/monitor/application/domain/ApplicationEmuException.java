@@ -6,7 +6,7 @@ package com.sinosoft.one.monitor.application.domain;
  * Date: 13-3-6
  * Time: PM3:04
  */
-class ApplicationEmuException extends Exception{
+class ApplicationEmuException extends RuntimeException{
     public ApplicationEmuException(String message) {
         super(message);
     }

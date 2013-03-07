@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.application.domain;
 
+import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.application.model.EumUrl;
 import com.sinosoft.one.monitor.application.model.EumUrlAva;
 import com.sinosoft.one.monitor.application.model.EumUrlAvaSta;
@@ -7,7 +8,9 @@ import com.sinosoft.one.monitor.application.repository.EumUrlAvaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaStaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
 import com.sinosoft.one.monitor.common.Trend;
+import com.sinosoft.one.monitor.utils.AvailableCalculate;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +31,8 @@ import java.util.List;
  */
 @Service
 public class ApplicationEmuService {
+
+
 
     @Autowired
     private EumUrlRepository eumUrlRepository;
@@ -64,6 +69,16 @@ public class ApplicationEmuService {
         return eumUrlAvas.get(0);
     }
 
+    public EumUrlAva getEumUrlAvaTodayAndLatestAndUnavailable(String eumUrlId){
+        Assert.hasText(eumUrlId);
+        Sort desc = new Sort(Sort.Direction.DESC,"recordTime");
+        Pageable pageDesc = new PageRequest(0,1,desc);
+        List<EumUrlAva> eumUrlAvas = eumUrlAvaRepository.findByEumUrlIdAndState(eumUrlId,"0", pageDesc).getContent();
+        if(eumUrlAvas.isEmpty())
+            return  null;
+        return eumUrlAvas.get(0);
+    }
+
     public EumUrlAva getTodayFirstEumUrlAva(String eumUrlId){
         Sort asc = new Sort("recordTime");
         Pageable pageAsc = new PageRequest(0,1,asc);
@@ -82,25 +97,56 @@ public class ApplicationEmuService {
         return eumUrlAvaSta;
     }
 
-    public Trend applicationAvaTrend(String applicationId){
+    public ApplicationAvailableInf getApplicationAvailableToday(String applicationId){
+        Assert.hasText(applicationId);
+
         List<EumUrl> eumUrls = eumUrlRepository.findByApplication_Id(applicationId);
-        return calTrend(eumUrls);
+        if(eumUrls.isEmpty())
+            throw new IllegalArgumentException("application Id is "+applicationId+" not found any eumUrls!");
+        int  count = 0;
+        int  avCount = 0;
+        for(EumUrl eumUrl:eumUrls){
+            UrlAvailableInf urlAvailableInf =  getUrlAvailableToday(eumUrl.getId());
+            count+=urlAvailableInf.getCount();
+            avCount+=urlAvailableInf.getAvailableCount();
+        }
+        return new  ApplicationAvailableInf(calTrend(eumUrls),count,avCount);
     }
+
+
+
 
     public Trend urlAvaTrendByUrlId(String urlId){
-        List<EumUrl> eumUrls =  eumUrlRepository.findByUrlId(urlId);
-        return calTrend(eumUrls);
+        EumUrl eumUrl = getEumUrlByUrlId(urlId);
+        return calTrend(Lists.newArrayList(eumUrl));
     }
 
 
-    void saveApplicationEnumUrlAvailable(String eumUrlId,boolean result,BigDecimal interval,EumUrlAva eumAvaLast){
-        DateTime today = DateTime.now();
-        if(eumAvaLast!=null){
-            DateTime prevDate = new DateTime(eumAvaLast.getRecordTime());
-            if(prevDate.getDayOfYear()<  today.getDayOfYear()){
-                eumUrlAvaRepository.deleteAll();
-            }
-        }
+    public UrlAvailableInf getUrlAvailableToday(String urlId){
+
+        EumUrl eumUrl = getEumUrlByUrlId(urlId);
+        Interval interval = new Interval(DateTime.now(),new DateTime(getTodayFirstEumUrlAva(eumUrl.getId()).getRecordTime()));
+        int seconds = interval.toPeriod().getSeconds();
+        return new UrlAvailableInf(urlAvaTrendByUrlId(urlId),
+                eumUrlAvaRepository.countByEmuId(eumUrl.getId()),
+                eumUrlAvaRepository.countByEmuIdAndStatus(eumUrl.getId(),"1"),
+                seconds,getEumUrlAvaTodayAndLatestAndUnavailable(eumUrl.getId()).getRecordTime());
+
+    }
+
+    EumUrl getEumUrlByUrlId(String urlId) {
+        Assert.hasText(urlId);
+        List<EumUrl> eumUrls = eumUrlRepository.findByUrlId(urlId);
+        if (eumUrls.isEmpty())
+            throw new IllegalArgumentException("urlId is " + urlId + ",can't find eumUrl");
+        if (eumUrls.size() > 1)
+            throw new MutileEumUrlException();
+        return eumUrls.get(0);
+    }
+
+
+    void saveEnumUrlAvailableDetail(String eumUrlId,boolean result,BigDecimal interval){
+        deleteEnumUrlAvaData(eumUrlId);
         EumUrlAva eumUrlAva = new EumUrlAva();
         eumUrlAva.setEumUrlId(eumUrlId);
         eumUrlAva.setInterval(interval);
@@ -109,16 +155,26 @@ public class ApplicationEmuService {
         eumUrlAvaRepository.save(eumUrlAva);
     }
 
+    void deleteEnumUrlAvaData(String eumUrlId){
+        EumUrlAva eumAvaLast = getTodayLatestEumUrlAva(eumUrlId);
+        DateTime today = DateTime.now();
+        if(eumAvaLast!=null){
+            DateTime prevDate = new DateTime(eumAvaLast.getRecordTime());
+            if(prevDate.getDayOfYear()<  today.getDayOfYear()){
+                eumUrlAvaRepository.deleteAll();
+            }
+        }
+    }
+
     List<EumUrl> findEumUrlByApplicationId(String applicationId){
         return  eumUrlRepository.findByApplication_Id(applicationId);
     }
 
 
-
     private Trend calTrend(List<EumUrl> eumUrls ){
         int yesterdayCount=0;
         int todayCount=0;
-        Date yesterday = DateTime.now().plusDays(-1).toDate();
+        Date yesterday = DateTime.now().minusDays(1).toDate();
         for(EumUrl eumUrl:eumUrls){
             todayCount += getTodayEumUrlStatistics(eumUrl.getId()).getFailureCount().intValue();
             yesterdayCount+= getEumUrlStatisticsByEnumIdAndDate(eumUrl.getId(),yesterday).getFailureCount().intValue();
@@ -134,5 +190,31 @@ public class ApplicationEmuService {
     }
 
 
+    public void saveEnumUrlAvailableStatistics(String eumUrlId,boolean result,BigDecimal interval) {
+        Assert.hasText(eumUrlId);
+        Assert.notNull(interval);
+        EumUrlAvaSta eumUrlAvaSta = getTodayEumUrlStatistics(eumUrlId);
+        List<AvailableCalculate.AvailableCountsGroupByInterval> avaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"1");
+        List<AvailableCalculate.AvailableCountsGroupByInterval> unAvaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"0");
 
+        EumUrlAva eumAvaLast = getTodayLatestEumUrlAva(eumUrlId);
+
+        AvailableCalculate.AvailableCalculateParam availableCalculateParam =  new AvailableCalculate.AvailableCalculateParam(
+                new AvailableCalculate.AvailableStatistics( eumUrlAvaSta.getNormalRuntime().longValue(),
+                        eumUrlAvaSta.getTotalFailureTime().longValue(), eumUrlAvaSta.getFailureCount().intValue()),
+                avaCount,unAvaCount,interval.intValue(),result,
+                eumAvaLast == null?null:new AvailableCalculate.AvailableInf(
+                        eumAvaLast.getRecordTime(), eumAvaLast.getState().equals("1"), eumAvaLast.getInterval().intValue())
+        );
+        AvailableCalculate avaResult = AvailableCalculate.calculate(availableCalculateParam);
+
+        eumUrlAvaSta.setTotalFailureTime(avaResult.getStopTime());
+        eumUrlAvaSta.setFailureCount(avaResult.getFalseCount());
+        eumUrlAvaSta.setAvgFailureTime(avaResult.getTimeBetweenFailures());
+        eumUrlAvaSta.setNormalRuntime(avaResult.getAliveTime());
+        eumUrlAvaSta.setRecordTime(new Date());
+        eumUrlAvaSta.setEumUrlId(eumUrlId);
+
+        eumUrlAvaStaRepository.save(eumUrlAvaSta);
+    }
 }
