@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -77,7 +76,6 @@ public class Ava  implements java.io.Serializable {
     public void setInterval(long interval) {
 		this.interval = interval;
 	}
-    @Temporal(TemporalType.DATE)
     @Column(name="RECORD_TIME")
     public Date getRecordTime() {
     return this.recordTime;

@@ -54,6 +54,10 @@ public class SmsAction implements java.io.Serializable {
     * 附加信息(appendmessage).
     */
     private String appendMessage;
+    /**
+     * 动作名称(name).
+     */
+    private String name;
 
     public SmsAction() {
     }
@@ -149,8 +153,16 @@ public class SmsAction implements java.io.Serializable {
     this.appendMessage = appendMessage;
     }
 
+    @Column(name="name", length=100)
+    public String getName() {
+        return name;
+    }
 
-	@Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
