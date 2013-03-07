@@ -30,7 +30,7 @@
 .time_info_text{height:44px; background:url(../../images/timeinfo/conf-bg-tile.png); font-size:18px; font-weight:bold; white-space:pre;}
 .time_info_text div{ text-align:center;}
 .time_info_overview{width:100%;text-align:left;}
-.time_info_overview table{padding:10px 0;}
+.time_info_overview table{padding:0 10px;}
 .time_info_overview_table{margin-top:20px;}
 .time_info_overview_table table{border:1px solid #eee;}
 .serious,.warning,.normal,.unknow {width:20px;height:10px;margin-right:5px;}

@@ -260,10 +260,10 @@ function createThirtyDayResponseTime() {
             <td><a href="#">24 分 10 秒</a></td>
             <td><a href="#">2013 年 1 月 1 日</a></td>
           </tr>
+          
         </table>
       </div>
-      
-      <hr class="top_border" />
+      <div style=" height:15px;background: url(images/timeinfo/conf-shadow.png) center no-repeat"></div>
      <div id="tabs">
         <ul>
           <li class="tabs_select">概览</li>
@@ -278,7 +278,7 @@ function createThirtyDayResponseTime() {
           	<td style="width:45.5%;height:150px;">
             	<table class="bar_table" cellpadding="0" cellspacing="0" style="height:150px;">
                 <tr>
-                  <td class="overview_table_head" style="font-size:15px; font-weight:bold;">过去6小时的历史</td>
+                  <td class="overview_table_head" style="font-size:15px; font-weight:bold;">过去6小时的可用性</td>
                 </tr>	
                 <tr>
                 	<td>
@@ -314,8 +314,8 @@ function createThirtyDayResponseTime() {
                 <tr>
                 	<td>
                   	<ul class="show_mark">
-                    	<li><div class="iky"></div>健康</li>
-                      <li><div class="ibky"></div>不健康</li>
+                    	<li><div class="iky"></div>可用</li>
+                      <li><div class="ibky"></div>不可用</li>
                       <li><div class="iwran"></div>警告</li>
                     </ul>
                   </td>
@@ -327,7 +327,7 @@ function createThirtyDayResponseTime() {
             <td style="height:150px">
             	<table class="time_info_performance_table" cellpadding="0" cellspacing="0" style="margin:0 auto;height:150px;">
 	               <tr>
-                 	<td colspan="6">性能过去6小时的历史可用性</td>
+                 	<td colspan="6" style="font-size:15px; font-weight:bold;">过去6小时的健康性</td>
                  </tr>
               	<tr class="show_mark_time" >
                 	<td><b>00:00</b></td>
@@ -348,9 +348,9 @@ function createThirtyDayResponseTime() {
                 <tr>
                 	<td colspan="6" class="mark_info">
                     <div class="unknow"></div><div>未知</div>
-                    <div class="normal"></div><div>正常</div>
+                    <div class="normal"></div><div>健康</div>
                     <div class="warning"></div><div>警告</div>
-                    <div class="serious"></div><div>严重</div>
+                    <div class="serious"></div><div>不健康</div>
                   </td>
                   
                 </tr>
