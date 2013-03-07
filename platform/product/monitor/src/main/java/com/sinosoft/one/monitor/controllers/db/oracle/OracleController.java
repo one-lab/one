@@ -1,13 +1,13 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.sinosoft.one.mvc.web.annotation.Param;
-import com.sinosoft.one.mvc.web.annotation.Path;
-import com.sinosoft.one.mvc.web.annotation.rest.Post;
-import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +31,9 @@ import com.sinosoft.one.monitor.db.oracle.model.OracleTableSpaceModel;
 import com.sinosoft.one.monitor.db.oracle.model.Point;
 import com.sinosoft.one.monitor.db.oracle.model.SGAStateModel;
 import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Param;
+import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -92,7 +95,7 @@ public class OracleController {
     @Get("viewConnect/{monitorId}")
 	// 用户连接数和连接时间所用数据
 	public String viewConnectAndActive(@Param("monitorId")String monitorId) {
-        System.out.println("==============================================");
+        //System.out.println("==============================================");
 		EventInfoModel[] eventInfoModel = oraclePreviewServiceImpl
 				.viewConnectInfo(monitorId);
 		EventInfoModel connectEvent = eventInfoModel[0];
@@ -137,63 +140,94 @@ public class OracleController {
 		result.put("connectSeries", connectSeries);
 		result.put("activeSeries", activeSeries);
 		json = result.toJSONString();
-        System.out.println("==============================================");
+        //System.out.println("==============================================");
 
         System.out.println(json);
-        System.out.println("==============================================");
+        //System.out.println("==============================================");
 
         return "@" + json;
 	}
-
+    
+/*    @Get("testSGA")
+    public Reply testSGA() {
+    	*//**
+    	 * series:[
+            {
+                type:'pie',
+                name:'Browser share',
+                data:[
+                    {
+                        name:'缓存存储器大小',
+                        y:392,
+                        sliced:false,
+                        selected:false
+                    },
+                    ['共享池大小', 113],
+                    ['重做日志缓冲器大小', 199],
+                    ['库存存储器大小', 199],
+                    ['数据字典存储器大小', 299],
+                    ['sql区域大小', 399],
+                    ['固定区域大小', 499],
+                    ['重做日志缓冲器大小', 699]
+                ]
+            }
+        ]
+    	 *//*
+    	List<Object> chart = new ArrayList<Object>();
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("name", "缓存存储器大小");
+    	map.put("y", "392");
+    	map.put("sliced", false);
+    	map.put("selected", false);
+    	List<Object> l1 = new ArrayList<Object>();
+    	l1.add("共享池大小");
+    	l1.add(113);
+    	List<Object> l2 = new ArrayList<Object>();
+    	l2.add("重做日志缓冲器大小");
+    	l2.add(113);
+    	List<Object> l3 = new ArrayList<Object>();
+    	l3.add("库存存储器大小");
+    	List<Object> l4 = new ArrayList<Object>();
+    	l3.add("库存存储器大小");
+    	List<Object> l5 = new ArrayList<Object>();
+    	l3.add("库存存储器大小");
+    	List<Object> l6 = new ArrayList<Object>();
+    	l3.add("库存存储器大小");
+    	List<Object> l7 = new ArrayList<Object>();
+    	l3.add("库存存储器大小");
+    	l3.add(113);
+    	chart.add(map);
+    	chart.add(l1);
+    	chart.add(l2);
+    	chart.add(l3);
+    	return Replys.with(chart).as(Json.class);
+    }*/
 	// sga饼状图所用数据
-	public String viewSGA(String monitorId) {
-
-		OracleSGAModel oracleSGAModel = oracleSGAServiceImpl
-				.viewSGAInfo(monitorId);
-		String bufferCacheSize = oracleSGAModel.getBufferCacheSize();
-		String sharePoolSize = oracleSGAModel.getSharePoolSize();
-		String redoLogCacheSize = oracleSGAModel.getRedoLogCacheSize();
-		String libCacheSize = oracleSGAModel.getLibCacheSize();
-		String dictSize = oracleSGAModel.getDictSize();
-		String sqlAreaSize = oracleSGAModel.getSqlAreaSize();
-		String fixedSGASize = oracleSGAModel.getFixedSGASize();
-		String json = "";
-		// 拼接data的json对象
+    
+    @Get("viewSGA/{monitorId}")
+	public String viewSGA(@Param("monitorId")String monitorId) {
+    	System.out.println(monitorId);
+    	System.out.println("==============================================");
+    	System.out.println("==============================================");
+    	System.out.println("==============================================");
+    	
+		OracleSGAModel oracleSGAModel = oracleSGAServiceImpl.viewSGAInfo(monitorId);
+		BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize());;
+		BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize());
+		BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize());
+		BigDecimal libCacheSize =  new BigDecimal(oracleSGAModel.getLibCacheSize());
+		BigDecimal dictSize =  new BigDecimal(oracleSGAModel.getDictSize());
+		BigDecimal sqlAreaSize =  new BigDecimal(oracleSGAModel.getSqlAreaSize());
+		BigDecimal fixedSGASize = new BigDecimal( oracleSGAModel.getFixedSGASize());
 		JSONArray data = new JSONArray();
-		JSONArray surround = new JSONArray();
-		JSONObject bufferCache = new JSONObject();
-		bufferCache.put("name", "缓存存储器大小");
-		bufferCache.put("y", bufferCacheSize);
-		bufferCache.put("sliced", false);
-		bufferCache.put("selected", false);
-		JSONArray sharePool = new JSONArray();
-		sharePool.add("共享池大小");
-		sharePool.add(sharePoolSize);
-		JSONArray redoLogCache = new JSONArray();
-		redoLogCache.add("重做日志缓冲器大小");
-		redoLogCache.add(redoLogCacheSize);
-		JSONArray libCache = new JSONArray();
-		libCache.add("库存存储器大小");
-		libCache.add(libCacheSize);
-		JSONArray dict = new JSONArray();
-		dict.add("数据字典存储器大小");
-		dict.add(dictSize);
-		JSONArray sqlArea = new JSONArray();
-		sqlArea.add("sql区域大小");
-		sqlArea.add(sqlAreaSize);
-		JSONArray fixedSGA = new JSONArray();
-		fixedSGA.add("固定区域大小");
-		fixedSGA.add(fixedSGASize);
-
-		data.add( bufferCache);
-		data.add(sharePool);
-        data.add(redoLogCache);
-		data.add(libCache);
-		data.add(dict);
-		data.add(sqlArea);
-		data.add(fixedSGA);
-		json = data.toJSONString();
-		return "@" + json;
+		data.add(bufferCacheSize);
+		data.add(sharePoolSize);
+		data.add(redoLogCacheSize);
+		data.add(libCacheSize);
+		data.add(dictSize);
+		data.add(sqlAreaSize);
+		data.add(fixedSGASize);
+		return "@" +data.toJSONString();
 	}
 
 	// 表空间所用数据
