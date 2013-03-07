@@ -82,7 +82,7 @@ public class Application implements java.io.Serializable {
     /**
      * 仿真URL
      */
-    private List<EumUrl> enumUrls;
+    private List<EumUrl> enumUrls = new ArrayList<EumUrl>(0);
 
     public Application() {
     }

@@ -15,14 +15,19 @@ import org.hibernate.annotations.GenericGenerator;
  * 业务仿真URL信息表
  */
 @Entity
-@Table(name = "GE_MONITOR_EUM_URL"
-)
+@Table(name = "GE_MONITOR_EUM_URL")
 public class EumUrl implements java.io.Serializable {
 
     /**
      * 主键ID.
      */
     private String id;
+
+    /**
+     * 如果有url的话，url的Id
+     */
+    private String urlId;
+
     /**
      * URL地址.
      */
@@ -104,7 +109,8 @@ public class EumUrl implements java.io.Serializable {
         this.eumUrlAvaStas = eumUrlAvaStas;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "eumUrl")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="EUM_URL_ID")
     public List<EumUrlAva> getEumUrlAvas() {
         return this.eumUrlAvas;
     }
@@ -119,6 +125,14 @@ public class EumUrl implements java.io.Serializable {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    @Column(name = "URL_ID", length = 32)
+    public String getUrlId() {
+        return urlId;
+    }
+
+    public void setUrlId(String urlId) {
+        this.urlId = urlId;
+    }
 }
 
 
