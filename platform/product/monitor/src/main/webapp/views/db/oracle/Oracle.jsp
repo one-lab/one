@@ -11,14 +11,17 @@
 <link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
 <script language="javascript" src="${ctx}/global/js/oracle.js"></script>
 <script type="text/javascript">
+var ctx = '${ctx}';
 $(function(){
 	$("body").layout({
 		top:{topHeight:100},
@@ -48,6 +51,7 @@ $(function(){
 		number:false,
 		multiselect:true
 	});
+	
 	
 //	$("#table_space_status").Grid({
 //		url : "oracle2.json",
@@ -153,6 +157,47 @@ function hideNav(e){
 		};
 	});	
 	$(document).unbind();
+}
+function createSevenDayUser() { 
+	var temWin = $("body").window({  
+			"id":"testOne11",   
+			"title":"7天可用",  
+			"url":"",   
+			"hasIFrame":true,  
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
+	}); 
+}
+function createSevenDayConnect() { 
+	alert(111);
+	var temWin = $("body").window({  
+			"id":"testOne9",   
+			"title":"7天可用",  
+			"url":ctx+"/db/oracle/oneDayConn/view/4028921b3d3fba36013d3fbb061c0000",   
+			"hasIFrame":true,   
+			"width":850,
+			"height":440,
+			"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]  
+	}); 
 }
 </script>
 </head>
@@ -269,7 +314,7 @@ function hideNav(e){
             <div class="sub_title">连接时间图 - 最后1小时</div>
             <div class="days_data">
               <a href="#"><div class="thirty_days"></div></a>
-            	<a href="#"><div class="seven_days"></div></a>
+            	<a onclick="createSevenDayConnect()"><div class="seven_days"></div></a>
             </div>
             <div id="last_onehour" ></div>
           </div>
