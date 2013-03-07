@@ -100,7 +100,8 @@ public class EumUrl implements java.io.Serializable {
         this.recordTime = recordTime;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "eumUrl")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="EUM_URL_ID")
     public List<EumUrlAvaSta> getEumUrlAvaStas() {
         return this.eumUrlAvaStas;
     }
