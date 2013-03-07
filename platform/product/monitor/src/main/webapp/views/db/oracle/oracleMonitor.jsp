@@ -1,25 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ctx" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>查看预警配置文件</title>
-<link href="${ctx }/golbal/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/golbal/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/golbal/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/golbal/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/golbal/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/golbal/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx }/golbal/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx }/golbal/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx }/golbal/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx }/golbal/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx }/golbal/js/sinosoft.message.js"></script>
-<script language="javascript" src="${ctx }/golbal/js/sinosoft.tabs.js"></script>
-<script language="javascript" src="${ctx }/golbal/js/highcharts.src.js"></script>
+<%@ include file="/WEB-INF/layouts/base.jsp" %>
+<link href="${ctx }/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx }/global/js/sinosoft.tabs.js"></script>
+<script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>
+<script language="javascript" src="${ctx }/global/js/oracleMonitor.js"></script>
 <script type="text/javascript">
+var rootPath = '${ctx}';
 $(function(){
 	$("body").layout({
 		top:{topHeight:100},
@@ -44,210 +35,31 @@ $(function(){
 		number:false,  
 		multiselect: true  
 	});
+	
 	$("#healthList").Grid({
-		url : "oracleMonitor.json",  
+		url : rootPath+"/db/oracle/healthList",  
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
 		draggable:false,
 		height: 'auto',  
-		colums:[  
-			{id:'1',text:'名称',name:"appellation",index:'1',align:'',width:'100'},
-			{id:'2',text:'01',name:"appellation",index:'1',align:''},
-			{id:'3',text:'02',name:"appellation",index:'1',align:''},
-			{id:'4',text:'03',name:"appellation",index:'1',align:''},
-			{id:'5',text:'04',name:"appellation",index:'1',align:''},
-			{id:'6',text:'05',name:"appellation",index:'1',align:''},
-			{id:'7',text:'06',name:"appellation",index:'1',align:''},
-			{id:'8',text:'07',name:"appellation",index:'1',align:''},
-			{id:'9',text:'08',name:"appellation",index:'1',align:''},
-			{id:'10',text:'09',name:"appellation",index:'1',align:''},
-			{id:'11',text:'10',name:"appellation",index:'1',align:''},
-			{id:'12',text:'11',name:"appellation",index:'1',align:''},
-			{id:'13',text:'12',name:"appellation",index:'1',align:''},
-			{id:'14',text:'13',name:"appellation",index:'1',align:''},
-			{id:'16',text:'15',name:"appellation",index:'1',align:''},
-			{id:'17',text:'16',name:"appellation",index:'1',align:''},
-			{id:'19',text:'18',name:"appellation",index:'1',align:''},
-			{id:'20',text:'19',name:"appellation",index:'1',align:''},
-			{id:'21',text:'20',name:"appellation",index:'1',align:''},
-			{id:'22',text:'21',name:"appellation",index:'1',align:''},
-			{id:'23',text:'22',name:"appellation",index:'1',align:''},
-			{id:'24',text:'23',name:"appellation",index:'1',align:''},
-			{id:'25',text:'24',name:"appellation",index:'1',align:''}
-		],  
+		colums: dayColumnStyle,  
 		rowNum:9999,
 		pager : false,
 		number:false,  
 		multiselect: false  
 	});
-	new Highcharts.Chart({
-            chart: {
-                renderTo: 'memory_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['23:00', '23:30', '00:00', '00:30', '01:00', '01:30']
-            },
-            yAxis: {
-                title: {
-                    text: 'KB'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'oracle',
-                data: [550654,550654,550654,550654,550654,550654,550654]
-            }]
-        });
-		
-		new Highcharts.Chart({
-            chart: {
-                renderTo: 'CPU_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['22:40', '23:00', '23:20', '23:40', '00:00', '00:20','00:40','01:00','01:20','01:40']
-            },
-            yAxis: {
-                title: {
-                    text: '%'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'oracle',
-                data: [1,1,1,1,1,1,1,1,1,1]
-            }]
-        });
-		
-		new Highcharts.Chart({
-            chart: {
-                renderTo: 'exchange_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['22:40', '23:00', '23:20', '23:40', '00:00', '00:20','00:40','01:00','01:20','01:40']
-            },
-            yAxis: {
-                title: {
-                    text: '%'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'oracle',
-                data: [0,20,120,0,172,1,0,120,0,172]
-            }]
-        });
-		
-		new Highcharts.Chart({
-            chart: {
-                renderTo: 'reply_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['22:40', '23:00', '23:20', '23:40', '00:00', '00:20','00:40','01:00','01:20','01:40']
-            },
-            yAxis: {
-                title: {
-                    text: '%'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'oracle',
-                data: [9,9,10,9,9,9,9,9,9,9]
-            }]
-        });
+	
+	$.ajax({
+		type:"get",
+		dataType: "json",
+		url : rootPath+"/db/oracle/performance",  
+		success:function(data) {
+			$(data).each(function(i, d){
+				buildHighchart(d);
+			});
+		}
+	});
 	
 	$("#tabs").tabs({closeTab:false});
 	$("#myDesk").height($("#layout_center").height());
@@ -333,63 +145,7 @@ function viewRelevance(){
 </head>
 
 <body>
-<div id="layout_top">
-	<div class="header">
-    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-    	<div class="menu_box">
-        	<ul class="nav" id="nav">
-            	<li><a href="index.html">首页</a></li>
-                <li class="has_sub seleck">
-                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                	<ul class="add_sub_menu" id="subNav">
-                    	<li class="action"><span class="sever">操作系统</span>
-                        	<ul class="list">
-                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                        	<ul class="list">
-                                <li><a href="performance.html">在线查询</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                        	<ul class="list">
-                            	<li><a href="oracleMonitor.html">oracle</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
-                    
-                </li>
-                <li><a href="performance.html">应用性能</a></li>
-                <li><a href="BusinessSimulation.html">业务仿真</a></li>
-                <li><a href="alertList.html">告警</a></li>
-                <li><a href="userManager.html">用户管理</a></li>  
-            </ul>
-        </div>
-        <ul class="add_menu" id="menu">
-        	<li><a href="addMonitorList.html">新建监视器</a></li>
-            <li class="has_sub">
-            	<a href="javascript:viod(0)"><span>阈值配置文件</span></a>
-            	<ul class="add_sub_menu">
-                    <li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a></li>
-                    <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
-                </ul>
-            </li>            
-            <li><a href="deployMonitor.html">配置监视器</a></li>
-            <li class="has_sub">
-            	<a href="javascript:viod(0)"><span>动作</span></a>
-            	<ul class="add_sub_menu">
-                	<li class="title"><a href="showMotion.html">显示动作</a></li>
-                    <li class="action">创建新动作</li>
-                    <li><a class="sms" href="message.html">短信动作</a></li>
-                    <li><a class="email" href="mail.html">邮件动作</a></li>
-                </ul>
-            </li>
-            <li><a href="setEmergency.html">配置告警</a></li>
-        </ul>
-    </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp" %>
 <div id="layout_center">
 	<div class="main">
     	<ul class="crumbs">
