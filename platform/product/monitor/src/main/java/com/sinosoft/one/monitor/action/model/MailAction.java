@@ -2,11 +2,9 @@ package com.sinosoft.one.monitor.action.model;
 // Generated 2013-3-1 10:54:16 by One Data Tools 1.0.0
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import javax.persistence.*;
 
 /**
  * MailAction.
@@ -36,7 +34,7 @@ public class MailAction implements java.io.Serializable {
     /**
     * 内容(message).
     */
-    private String desc;
+    private String description;
     /**
     * 邮件服务器(smtpserver).
     */
@@ -53,6 +51,14 @@ public class MailAction implements java.io.Serializable {
     * 附加信息(appendmessage).
     */
     private String appendMessage;
+    /**
+     * 动作名称(name).
+     */
+    private String name;
+    /**
+     * 动作属性表中，已经配置的动作对应的严重程度(severity).
+     */
+    private String severity;
 
     public MailAction() {
     }
@@ -103,13 +109,13 @@ public class MailAction implements java.io.Serializable {
     this.subject = subject;
     }
     
-    @Column(name="desc", length=3000)
-    public String getDesc() {
-    return this.desc;
+    @Column(name="description", length=3000)
+    public String getDescription() {
+    return this.description;
     }
 
-    public void setDesc(String desc) {
-    this.desc = desc;
+    public void setDescription(String description) {
+    this.description = description;
     }
     
     @Column(name="smtp_server", length=100)
@@ -148,8 +154,17 @@ public class MailAction implements java.io.Serializable {
     this.appendMessage = appendMessage;
     }
 
+    @Column(name="name", length=100)
+    public String getName() {
+        return name;
+    }
 
-	@Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    @Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}

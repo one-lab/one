@@ -25,6 +25,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
 
     @Autowired
     private LasteventRepository lasteventRepository;
+    @Autowired
+    private DBUtil4Monitor dbUtil4Monitor;
 
     @Override
     public EventInfoModel[] viewConnectInfo(String monitorId) {
@@ -33,6 +35,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
         Date start = new Date(time - 3600 * 1000);
         List<Lastevent> activeConnectList = lasteventRepository.findLastEventList(monitorId, start, end);
         EventInfoModel[] eventInfoModel = new EventInfoModel[2];
+        eventInfoModel[0]  = new EventInfoModel();
+        eventInfoModel[1]  = new EventInfoModel();
         eventInfoModel[0].setStartTime(start.getTime() + "");
         eventInfoModel[0].setEndTime(end.getTime() + "");
         eventInfoModel[0].setEventName("连接时间");
@@ -42,8 +46,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
         if (activeConnectList == null || activeConnectList.size() == 0) {
             return eventInfoModel;
         } else {
-            long connect = activeConnectList.get(activeConnectList.size() - 1).getConnectTime();
-            int active = activeConnectList.get(activeConnectList.size() - 1).getActiveCount();
+            double connect = activeConnectList.get(activeConnectList.size() - 1).getConnectTime();
+            double active = activeConnectList.get(activeConnectList.size() - 1).getActiveCount();
             eventInfoModel[0].setEventValue(connect + " ms");
             eventInfoModel[1].setEventValue(active + "");
             int size = activeConnectList.size();
@@ -80,7 +84,7 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
     @Override
     public OracleDetailModel viewDbDetail(String monitorId) {
         OracleDetailModel oracleDetailModel = new OracleDetailModel();
-        DBUtil4Monitor.changeConnection(monitorId);
+        dbUtil4Monitor.changeConnection(monitorId);
         String sql = OracleMonitorSql.dbInfo;
         List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
         Map<String, String> rsObj = rsList.get(0);

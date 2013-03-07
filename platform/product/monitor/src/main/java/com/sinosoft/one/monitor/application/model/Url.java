@@ -4,8 +4,10 @@ package com.sinosoft.one.monitor.application.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +28,14 @@ public class Url implements java.io.Serializable {
     /**
      * URL描述.
      */
+    @NotEmpty(message = "URL描述不能为空")
+    @Size(min = 1,max = 300,message = "URL描述的长度应该在{min}-{max}之间")
     private String description;
     /**
      * URL地址.
      */
+    @NotEmpty(message = "URL地址不能为空")
+    @Size(min = 1,max = 500,message = "URL地址的长度应该在{min}-{max}之间")
     private String url;
     /**
      * URL阈值，单位ms.
@@ -173,7 +179,7 @@ public class Url implements java.io.Serializable {
     //定义中间关联表的信息
     //inverseJoinColumns：被维护端的外键
     //joinColumns：维护端的外键
-    @ManyToMany(cascade = {CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.LAZY)
     @JoinTable(name = "GE_MONITOR_BIZ_SCENARIO_URL",
             inverseJoinColumns = @JoinColumn(name = "BIZ_SCENARIO_ID"),
             joinColumns = @JoinColumn(name = "URL_ID"))

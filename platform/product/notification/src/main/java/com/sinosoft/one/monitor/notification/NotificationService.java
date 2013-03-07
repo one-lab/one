@@ -18,7 +18,7 @@ public class NotificationService {
 
 	public String getUrlData() {
 		if(urlData == null || "".equals(urlData)) {
-			NotificationConfiguration.getInstance().init();
+			NotificationConfiguration.getInstance().initUrlData();
 		}
 		return urlData;
 	}

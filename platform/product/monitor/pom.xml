@@ -173,6 +173,13 @@
             <version>1.0.4</version>
         </dependency>
         <!--mvcUIPlugin end-->
+        <!--log4jdbc begin-->
+        <dependency>
+            <groupId>com.sinosoft.one</groupId>
+            <artifactId>log4jdbc</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!--log4jdbc end-->
 	</dependencies>
 
 	<build>
@@ -196,7 +203,7 @@
 				<configuration>
 					<uriEncoding>UTF-8</uriEncoding>
 					<path>/monitor</path>
-                    <port>7080</port>
+                    <port>8080</port>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -28,13 +28,14 @@ public class OsCpuService {
 	 * 保存CPU采集数据
 	 * @param cpu
 	 */
-	public void saveCpu(String osInfoId,String cpuinfo ,Date sampleTime){
+	public boolean saveCpu(String osInfoId,String cpuinfo ,Date sampleTime){
 		OsCpu osCpu=OsTransUtil.getCpuInfo(cpuinfo);
 		Os os =new Os();
 		os.setOsInfoId(osInfoId);
 		osCpu.setOs(os);
 		osCpu.setSampleDate(sampleTime);
 		osCpuRepository.save(osCpu);
+		return true;
 	}
 	
 	

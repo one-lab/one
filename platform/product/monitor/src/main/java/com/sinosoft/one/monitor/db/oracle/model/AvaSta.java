@@ -1,18 +1,16 @@
 package com.sinosoft.one.monitor.db.oracle.model;
-// Generated 2013-2-27 18:10:19 by One Data Tools 1.0.0
+// Generated 2013-3-4 21:44:43 by One Data Tools 1.0.0
 
 
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * AvaSta.
@@ -23,10 +21,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 )
 public class AvaSta  implements java.io.Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -6625185157088689086L;
+	private static final long serialVersionUID = 1L;
 	/**
     * 主键ID.
     */
@@ -34,23 +29,41 @@ public class AvaSta  implements java.io.Serializable {
     /**
     * 数据库ID.
     */
-    private Info info;
+    private String databaseId;
     /**
-        */
+    * 正常运行时间.
+    */
     private long normalRuntime;
     /**
-        */
-    private  long totalPoweroffTime;
+    * 总停机时间.
+    */
+    private long totalPoweroffTime;
     /**
-        */
+    * 停机次数.
+    */
     private long poweroffCount;
     /**
-        */
+    * 平均故障间隔时间.
+    */
     private long avgFailureTime;
     /**
     * 记录时间.
     */
     private Date avaRecordTime;
+    /**
+    * 可以次数.
+    */
+    private long avCount;
+    /**
+     * 不可用次数.
+     */
+    private long unavCount;
+    
+    /**
+     * 未知时间
+     */
+    private long unknowTime;
+    
 
     public AvaSta() {
     }
@@ -60,27 +73,33 @@ public class AvaSta  implements java.io.Serializable {
         this.id = id;
     }
    
-    @Id 
-    
-    @Column(name="id", unique=true, length=32)
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Column(name="ID", unique=true, length=32)
     public String getId() {
     return this.id;
     }
-
+    
     public void setId(String id) {
-    this.id = id;
-    }
-    @ManyToOne(fetch=FetchType.LAZY)
-        @JoinColumn(name="database_id")
-    public Info getInfo() {
-    return this.info;
-    }
-
-    public void setInfo(Info info) {
-    this.info = info;
+        this.id = id;
     }
     
-    @Column(name="normal_runtime")
+    @Column(name="DATABASE_ID")
+	public String getDatabaseId() {
+		return databaseId;
+	}
+	public void setDatabaseId(String databaseId) {
+		this.databaseId = databaseId;
+	}
+	@Column(name="UNKNOW_TIME")
+    public long getUnknowTime() {
+		return unknowTime;
+	}
+    public void setUnknowTime(long unknowTime) {
+		this.unknowTime = unknowTime;
+	}
+    @Column(name="NORMAL_RUNTIME")
     public long getNormalRuntime() {
     return this.normalRuntime;
     }
@@ -89,7 +108,7 @@ public class AvaSta  implements java.io.Serializable {
     this.normalRuntime = normalRuntime;
     }
     
-    @Column(name="total_poweroff_time")
+    @Column(name="TOTAL_POWEROFF_TIME")
     public long getTotalPoweroffTime() {
     return this.totalPoweroffTime;
     }
@@ -98,7 +117,7 @@ public class AvaSta  implements java.io.Serializable {
     this.totalPoweroffTime = totalPoweroffTime;
     }
     
-    @Column(name="poweroff_count")
+    @Column(name="POWEROFF_COUNT")
     public long getPoweroffCount() {
     return this.poweroffCount;
     }
@@ -107,7 +126,7 @@ public class AvaSta  implements java.io.Serializable {
     this.poweroffCount = poweroffCount;
     }
     
-    @Column(name="avg_failure_time")
+    @Column(name="AVG_FAILURE_TIME")
     public long getAvgFailureTime() {
     return this.avgFailureTime;
     }
@@ -115,8 +134,7 @@ public class AvaSta  implements java.io.Serializable {
     public void setAvgFailureTime(long avgFailureTime) {
     this.avgFailureTime = avgFailureTime;
     }
-    @Temporal(TemporalType.DATE)
-    @Column(name="ava_record_time", length=7)
+    @Column(name="AVA_RECORD_TIME")
     public Date getAvaRecordTime() {
     return this.avaRecordTime;
     }
@@ -124,6 +142,27 @@ public class AvaSta  implements java.io.Serializable {
     public void setAvaRecordTime(Date avaRecordTime) {
     this.avaRecordTime = avaRecordTime;
     }
+    
+
+    @Column(name="AV_COUNT")
+	public long getAvCount() {
+		return avCount;
+	}
+
+
+	public void setAvCount(long avCount) {
+		this.avCount = avCount;
+	}
+
+	 @Column(name="UNAV_COUNT")
+	public long getUnavCount() {
+		return unavCount;
+	}
+
+
+	public void setUnavCount(long unavCount) {
+		this.unavCount = unavCount;
+	}
 
 
 	@Override

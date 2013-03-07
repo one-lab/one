@@ -21,7 +21,7 @@ public class OsServiceTest extends AbstractJUnit4SpringContextTests {
 	private OsService osService;
 	
 	@Test
-	public void saveOsBasic(){
+	public void saveOsBasic() throws Exception{
 		osService.saveOsBasic( "test", "linux", "192.168.18.217", "255.255.255.0", 5);
 	}
 	

@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>查看预警配置文件</title>
+<title>管理Method</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
@@ -184,7 +184,7 @@ function batchDel(){
 <div id="layout_center">
 	<div class="main">
     	<div class="threshold_file">
-       	  <h2 class="title2"><b>URL名称 : XXXXXX       URL地址 : XXXXXX</b></h2>
+       	  <h2 class="title2"><b>URL名称 : ${urlName}       URL地址 : ${urlAddress}</b></h2>
           
           <div class="tool_bar_top">
           	<a href="${ctx}/application/manager/methodmanager/createmethod/${urlId}" class="add_bus_scene" >添加方法</a>

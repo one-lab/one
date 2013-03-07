@@ -1,18 +1,16 @@
 package com.sinosoft.one.monitor.db.oracle.model;
-// Generated 2013-2-27 18:10:19 by One Data Tools 1.0.0
+// Generated 2013-3-4 21:44:43 by One Data Tools 1.0.0
 
 
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Ava.
@@ -23,10 +21,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 )
 public class Ava  implements java.io.Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -8796911059465980475L;
+	private static final long serialVersionUID = 1L;
 	/**
     * 主键ID.
     */
@@ -34,14 +29,19 @@ public class Ava  implements java.io.Serializable {
     /**
     * 数据库ID.
     */
-    private Info info;
+    private String databaseId;
     /**
     * 记录时间.
     */
     private Date recordTime;
     /**
-        */
+    * 0.不可用,1.可用.
+    */
     private String state;
+    /**
+     * 轮询时间
+     */
+    private long interval;
 
     public Ava() {
     }
@@ -51,9 +51,10 @@ public class Ava  implements java.io.Serializable {
         this.id = id;
     }
    
-    @Id 
-    
-    @Column(name="id", unique=true, length=32)
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Column(name="ID", unique=true, length=32)
     public String getId() {
     return this.id;
     }
@@ -61,17 +62,21 @@ public class Ava  implements java.io.Serializable {
     public void setId(String id) {
     this.id = id;
     }
-    @ManyToOne(fetch=FetchType.LAZY)
-        @JoinColumn(name="database_id")
-    public Info getInfo() {
-    return this.info;
-    }
-
-    public void setInfo(Info info) {
-    this.info = info;
-    }
-    @Temporal(TemporalType.DATE)
-    @Column(name="record_time", length=7)
+    @Column(name="DATABASE_ID")
+    public String getDatabaseId() {
+		return databaseId;
+	}
+    public void setDatabaseId(String databaseId) {
+		this.databaseId = databaseId;
+	}
+    @Column(name="INTERVAL")
+    public long getInterval() {
+		return interval;
+	}
+    public void setInterval(long interval) {
+		this.interval = interval;
+	}
+    @Column(name="RECORD_TIME")
     public Date getRecordTime() {
     return this.recordTime;
     }
@@ -80,7 +85,7 @@ public class Ava  implements java.io.Serializable {
     this.recordTime = recordTime;
     }
     
-    @Column(name="state", length=1)
+    @Column(name="STATE", length=1)
     public String getState() {
     return this.state;
     }

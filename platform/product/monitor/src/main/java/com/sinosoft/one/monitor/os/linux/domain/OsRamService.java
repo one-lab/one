@@ -29,13 +29,14 @@ public class OsRamService {
 	/**
 	 * 保存内存采集数据
 	 */
-	public void saveRam(String osInfoId,String ramInfo  ,Date sampleTime){
+	public boolean saveRam(String osInfoId,String ramInfo  ,Date sampleTime){
 		OsRam osRam=OsTransUtil.getRamInfo(ramInfo);
 		Os os=new Os();
 		os.setOsInfoId(osInfoId);
 		osRam.setOs(os);
 		osRam.setSampleDate(sampleTime);
 		osRamRepository.save(osRam);
+		return true;
 	}
 	/**
 	 * 获取内存采集数据
@@ -69,7 +70,7 @@ public class OsRamService {
 	 */
 	public String getMinMemUtilZation(String osInfoId,Date begin,Date end){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		return osRamRepository.findMaxMemUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
+		return osRamRepository.findMinMemUtilZation(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**

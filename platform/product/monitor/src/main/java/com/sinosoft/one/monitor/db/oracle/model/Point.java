@@ -15,7 +15,7 @@ public class Point {
     /**
      * y轴
      */
-    private int yAxis;
+    private double yAxis;
     /**
      * 描述
      */
@@ -29,11 +29,11 @@ public class Point {
         this.xAxis = xAxis;
     }
 
-    public int getyAxis() {
+    public double getyAxis() {
         return yAxis;
     }
 
-    public void setyAxis(int yAxis) {
+    public void setyAxis(double yAxis) {
         this.yAxis = yAxis;
     }
 

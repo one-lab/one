@@ -193,7 +193,7 @@
 					$.ajax({
 						url: defaults.url,
 						dataType: "html",
-						type: "POST",
+						type: "GET",
 						success: function (data){
 							$ifr = $("#"+ defaults.id + "_iframe");
 							$ifr.attr("src", defaults.url);

@@ -2,11 +2,10 @@ package com.sinosoft.one.monitor.resources.model;
 // Generated 2013-3-1 10:54:16 by One Data Tools 1.0.0
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * Resource.
@@ -40,7 +39,8 @@ public class Resource implements java.io.Serializable {
     }
    
     @Id 
-    
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid",strategy = "uuid")
     @Column(name="resource_id", unique=true, length=32)
     public String getResourceId() {
     return this.resourceId;

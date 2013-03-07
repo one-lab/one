@@ -37,16 +37,18 @@ public class OsStatiService {
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
-//		SimpleDateFormat simpleDateFormat2=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		osStatiRepository.deleteStatiRmThisHour(osInfoId, type, hourPoint);
-		OsStati osStati=new OsStati();
+		SimpleDateFormat simpleDateFormat2=new SimpleDateFormat(OsUtil.DATEFORMATE);
+//		osStatiRepository.deleteStatiRmThisHour(osInfoId, type,simpleDateFormat2.format( hourPoint),OsUtil.ORCL_DATEFORMATE);
+		OsStati osStati=osStatiRepository.getStatiRmThisHour(osInfoId, type, simpleDateFormat2.format( hourPoint), OsUtil.ORCL_DATEFORMATE);
+		if(osStati==null)
+			osStati=new OsStati();
 		osStati.setOsid(osInfoId);
 		osStati.setRecordTime(hourPoint);
 		osStati.setType(type);
 		osStati.setMaxValue(maxValue);
 		osStati.setMinValue(minValue);
 		osStati.setAverageValue(averageValue);
-		return osStati;
+		return osStatiRepository.save(osStati);
 	}
 	
 	/**

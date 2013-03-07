@@ -21,6 +21,7 @@ import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
+import com.sinosoft.one.monitor.utils.BussinessUtil;
 
 /**
  * 信息处理类
@@ -132,7 +133,7 @@ public class OsDataMathService {
 		}
 		if(stopCount!=0){
 			 aveRepair=OsTransUtil.LongToHMS(repairTime/stopCount);//平均回复时间
-			 aveFault=OsTransUtil.LongToHMS(repairTime/stopCount);//平均故障间隔
+			 aveFault=OsTransUtil.LongToHMS(BussinessUtil.getAvgErrorTime(nomorRun, stopCount));//平均故障间隔
 		}else{
 			aveRepair=0+"";
 			aveFault=0+"";
@@ -236,8 +237,8 @@ public class OsDataMathService {
 		}
 		String diskUitliZatiionAverage=OsTransUtil.countAve(diskUtilZationCount, osDisks.size());
 		System.out.println(diskUitliZatiionAverage);
-		String diskUitliZatiionMax=osCpuService.getMaxCpuUtilZation(osInfoId, hourPoint, currentTime);
-		String diskUitliZatiionMin=osCpuService.getMinCpuUtilZation(osInfoId, hourPoint, currentTime);
+		String diskUitliZatiionMax=osDiskService.getMaxDiskUtilZation(osInfoId, hourPoint, currentTime);
+		String diskUitliZatiionMin=osDiskService.getMinDiskUtilZation(osInfoId, hourPoint, currentTime);
 		OsStati osStati= osStatiService.creatStatiOneHour(osInfoId, OsUtil.DISK_STATIF_FLAG, hourPoint, diskUitliZatiionMax, diskUitliZatiionMin, diskUitliZatiionAverage);
 		return osStati;
 	}

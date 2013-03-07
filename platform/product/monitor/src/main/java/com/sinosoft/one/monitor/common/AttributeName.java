@@ -6,14 +6,14 @@ package com.sinosoft.one.monitor.common;
  * Date: 13-3-1
  * Time: 上午11:37
  */
-public enum AttributeNames {
-	Response_Time,
+public enum AttributeName {
+	ResponseTime,
 	Exception,
 	Availability,
 	Health,
-	CPU_Utilization,
-	Physical_Memory_Utilization,
-	Swap_Memory_Utilization,
-	Active_Connection,
-	Buffer_Hit_Ratio
+	CPUUtilization,
+	PhysicalMemoryUtilization,
+	SwapMemoryUtilization,
+	ActiveConnection,
+	BufferHitRatio
 }

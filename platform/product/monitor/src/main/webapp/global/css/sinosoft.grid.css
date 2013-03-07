@@ -36,7 +36,7 @@
 .grid_box div.hover .grid_head_menu{display:block}
 .grid_box div.hover .grid_head_menu span{background:none}
 .grid_box .grid_head_menu label{display:block}
-.grid_box .grid_page{border-top:#b0bac9 1px solid;background:#cfdbec}
+.grid_box .grid_page{background:#EDF2F7}
 .grid_box .grid_page_box{height:21px;padding:4px 6px 0;border-top:#e1eaf7 1px solid}
 .grid_box .grid_page_box div,.grid_box .grid_page_box span{float:left;}
 .grid_box .prick{border-left:#b0bac9 1px solid;border-right:#e1eaf7 1px solid;height:16px;margin:0 6px;}

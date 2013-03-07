@@ -42,6 +42,9 @@ public class MethodManagerController {
     /*@Post("methodList")*/
     public String managerMethod(@Param("urlId") String urlId,Invocation inv) {
         inv.getRequest().setAttribute("urlId",urlId);
+        Url url=urlService.findUrl(urlId);
+        inv.getRequest().setAttribute("urlName",url.getDescription());
+        inv.getRequest().setAttribute("urlAddress",url.getUrl());
         return "managerMethod";
     }
 
@@ -53,8 +56,8 @@ public class MethodManagerController {
     public void getAllMethodsOfUrl(@Param("urlId") String urlId,Invocation inv) throws Exception {
         inv.getRequest().setAttribute("urlId",urlId);
         Url url=urlService.findUrl(urlId);
-        inv.getRequest().setAttribute("urlName",url.getDescription());
-        inv.getRequest().setAttribute("urlAddress",url.getUrl());
+/*        inv.getRequest().setAttribute("urlName",url.getDescription());
+        inv.getRequest().setAttribute("urlAddress",url.getUrl());*/
         List<Method> methods=methodService.findAllMethodsOfUrl(url);
         Page page=new PageImpl(methods);
         Gridable<Method> gridable=new Gridable<Method>(page);
@@ -89,16 +92,22 @@ public class MethodManagerController {
     public String saveMethod(@Validation(errorPath = "a:errorcreatemethod") Method method,
                              @Param("urlId") String urlId, Invocation inv) {
         Url url = urlService.findUrl(urlId);
-        List<Method> methodList = methodService.findAllMethod();
+        List<Method> methods = methodService.findAllMethod();
         //获得当前用户id
         /*String creatorId = CurrentUserUtil.getCurrentUser().getId();*/
         //开发阶段固定用户id
         String creatorId = "4028921a3cfba342013cfba4623e0000";
-        List<String> classAndMethodNames = methodService.findClassAndMethodName(methodList);
-        //如果新增加的method是库中已存在的，那么只需更新此Method所属的URL即可.
-        if (classAndMethodNames.contains(methodService.findClassAndMethodName(method))) {
-            method.setUrl(url);
-            return "managerMethod";
+        String methodAndClassName=findClassAndMethodName(method);
+        if(methods.size()>0){
+            for(Method dbMethod:methods){
+                String dbMethodAndClassName=findClassAndMethodName(dbMethod);
+                //如果新增加的method是库中已存在的，那么只需更新此Method所属的URL即可.
+                if (dbMethodAndClassName.equals(methodAndClassName)) {
+                    dbMethod.setUrl(url);
+                    methodService.saveMethod(dbMethod);
+                    return "managerMethod";
+                }
+            }
         }
         //如果是新增加的method，保存method入库
         //当前Method所属的Url
@@ -109,6 +118,18 @@ public class MethodManagerController {
         method.setCreateTime(new Date());
         methodService.saveMethod(method);
         return "managerMethod";
+    }
+
+    /**
+     * 得到的Method的全类名.
+     */
+    public String findClassAndMethodName(Method method) {
+        if (method != null) {
+            String methodAndClassName="";
+            methodAndClassName = method.getMethodName() + "." + method.getClassName();
+            return methodAndClassName;
+        }
+        return null;
     }
 
     /**

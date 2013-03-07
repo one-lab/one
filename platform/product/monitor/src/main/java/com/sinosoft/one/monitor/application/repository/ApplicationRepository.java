@@ -5,9 +5,10 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
-import com.sinosoft.one.mvc.web.annotation.Param;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ApplicationRepository extends PagingAndSortingRepository<Application, String> {
@@ -17,7 +18,7 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
     @SQL("select * from GE_MONITOR_APPLICATION a where a.STATUS='1' order by a.APPLICATION_NAME")
     List<Application> findAllActiveApplication();
 
-    Application findByApplicationNameAndApplicationIpAndApplicationPort(@Param("applicationName") String applicationName,@Param("applicationIp") String applicationIp,@Param("applicationPort") String applicationPort);
+    Application findByApplicationNameAndApplicationIpAndApplicationPort(String applicationName, String applicationIp, String applicationPort);
 
     @SQL("select * from GE_MONITOR_URL a where a.id in (select distinct b.URL_ID from GE_MONITOR_BIZ_SCENARIO_URL b " +
             "right join GE_MONITOR_BIZ_SCENARIO c on b.BIZ_SCENARIO_ID in (?1))")
@@ -30,7 +31,11 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
     @SQL("update GE_MONITOR_APPLICATION a set a.STATUS='0' where a.ID=?1")
     void deleteApplicationById(@Param("appId") String appId);
 
-    @SQL("update GE_MONITOR_APPLICATION a set a.APPLICATION_NAME=?2,a.CN_NAME=?3,a.APPLICATION_IP=?4,a.APPLICATION_PORT=?5,a.MODIFIER_ID=?6,a.MODIFY_TIME=sysdate where a.ID=?1")
-    void updateApplication(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId);
+    @SQL("update GE_MONITOR_APPLICATION a set a.APPLICATION_NAME=?2,a.CN_NAME=?3,a.APPLICATION_IP=?4,a.APPLICATION_PORT=?5,a.MODIFIER_ID=?6,a.MODIFY_TIME=sysdate,a.INTERVAL=?7 where a.ID=?1")
+    void updateApplication(String appId, String applicationName, String cnName, String applicationIp, String applicationPort, String modifierId, BigDecimal interval);
+
+    @SQL("select * from GE_MONITOR_APPLICATION a where a.STATUS='1'")
+    List<Application> findAllApplicationNames();
+
 }
 

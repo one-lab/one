@@ -21,18 +21,21 @@ public final class NotificationConfiguration {
 	private final static NotificationConfiguration INSTANCE = new NotificationConfiguration();
 	public final static String NOTIFICATION_INFO_FILENAME = "notification.info";
 	private final static String NOTIFICATION_PROPERTIES_FILENAME = "notification.properties";
-	private final static String MONITOR_APPLICATION_INIT_URL = "/application/manager/appManager/match/";
+	private final static String MONITOR_APPLICATION_INIT_URL = "/application/manager/appmanager/match/";
 
-	private NotificationConfiguration() {}
+	private NotificationConfiguration() {
+		init();
+	}
 	private Properties notificationProperties;
-	private static String applicationId = "";
-	private static String baseUrl = "";
+	private String applicationId = "";
+	private int ringBufferSize = 1024;
+	private String baseUrl = "";
 
 	public static NotificationConfiguration getInstance() {
 		return INSTANCE;
 	}
 
-	public void init()  {
+	private void init()  {
 		try {
 			loadProperties();
 		} catch (Exception e) {
@@ -44,10 +47,19 @@ public final class NotificationConfiguration {
 		notificationProperties = new Properties();
 		notificationProperties.load(this.getClass().getClassLoader().getResourceAsStream(NOTIFICATION_PROPERTIES_FILENAME));
 		baseUrl = "http://" + notificationProperties.get("monitor.server.ip") + ":" + notificationProperties.get("monitor.server.port") + "/monitor";
-		loadInitData(baseUrl + MONITOR_APPLICATION_INIT_URL);
+		ringBufferSize = Integer.parseInt(notificationProperties.getProperty("ringbuffer.size"));
 	}
 
-	private void loadInitData(String url) throws Exception {
+	void initUrlData() {
+		try {
+			loadInitData();
+		} catch (Exception e) {
+			logger.error("Notification configuration init url exception.", e);
+		}
+	}
+
+	private void loadInitData() throws Exception {
+		String url = baseUrl + MONITOR_APPLICATION_INIT_URL;
 		File file = new File(NOTIFICATION_INFO_FILENAME);
 		if(!file.exists()) {
 			String responseStr = NotificationHttpSupport.post(url, new HashMap<String, String>() {
@@ -65,34 +77,56 @@ public final class NotificationConfiguration {
 			} else {
 				JSONObject jsonObject = JSON.parseObject(responseStr);
 				applicationId = jsonObject.getString("applicationId");
-				NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+				if(applicationId != null) {
+					String urls = jsonObject.getString("urls");
+					if(urls != null && !urls.equals("")) {
+						NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+					}
 
-				file.createNewFile();
-				OutputStream outputStream = null;
-				try {
-					outputStream = new FileOutputStream(file);
-					outputStream.write(("agent.enable=true\nagent.id=" + applicationId).getBytes());
-					outputStream.flush();
-				} catch (Exception e) {
-					logger.error("write file " + NOTIFICATION_INFO_FILENAME + "exception.", e);
-				} finally {
-					if(null != outputStream) {
-						outputStream.close();
+					file.createNewFile();
+					OutputStream outputStream = null;
+					try {
+						outputStream = new FileOutputStream(file);
+						outputStream.write(("agent.enable=true\nagent.id=" + applicationId).getBytes());
+						outputStream.flush();
+					} catch (Exception e) {
+						logger.error("write file " + NOTIFICATION_INFO_FILENAME + "exception.", e);
+					} finally {
+						if(null != outputStream) {
+							outputStream.close();
+						}
 					}
 				}
 			}
 		} else {
-			reloadApplicationId(file);
+			reloadApplicationId(file, url);
 		}
 	}
 
-	public void reloadApplicationId(File file)  {
+	private void reloadApplicationId(File file, String url)  {
 		InputStream inputStream = null;
 		try {
 			inputStream = new FileInputStream(file);
 			Properties agentInfoProperties = new Properties();
 			agentInfoProperties.load(inputStream);
 			applicationId = agentInfoProperties.get("agent.id").toString();
+			String responseStr = NotificationHttpSupport.post(url, new HashMap<String, String>() {
+				{
+					put("applicationId", applicationId);
+				}
+			});
+
+			if(NotificationResponseType.Exception.name().equalsIgnoreCase(responseStr)) {
+				logger.error("Init data from monitor server url [" + url + "] exception.");
+			} else if(NotificationResponseType.NotExist.name().equalsIgnoreCase(responseStr)) {
+				removeApplication();
+			} else {
+				JSONObject jsonObject = JSON.parseObject(responseStr);
+				String urls = jsonObject.getString("urls");
+				if(urls != null && !urls.equals("")) {
+					NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+				}
+			}
 		} catch (Exception e) {
 			logger.error("read file " + NOTIFICATION_INFO_FILENAME + "exception.", e);
 		} finally {
@@ -122,9 +156,13 @@ public final class NotificationConfiguration {
 			if(!file.exists()) {
 				return false;
 			}
-			reloadApplicationId(file);
+			reloadApplicationId(file, baseUrl + MONITOR_APPLICATION_INIT_URL);
 			return true;
 		}
+	}
+
+	public int getRingBufferSize() {
+		return ringBufferSize;
 	}
 
 	public String getApplicationId() {

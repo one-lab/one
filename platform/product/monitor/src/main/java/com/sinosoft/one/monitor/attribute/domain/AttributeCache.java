@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +31,22 @@ public class AttributeCache {
 				public Attribute load(String key) throws Exception {
 					logger.info("fetch attribute from database");
 					String[] keys = key.split("#");
-					return attributeService.getAttribute(keys[0], keys[1]);
+					return attributeService.getAttribute(ResourceType.valueOf(keys[0]), keys[1]);
 				}
 			});
 
-	public Attribute getAttributeId(String key) {
+	public Attribute getAttribute(String resourceType, String attributeName) {
 		try {
-			return attributeCache.get(key);
+			return attributeCache.get(resourceType + "#" + attributeName);
 		} catch (ExecutionException e) {
 			logger.warn("get attribute id exception : " + e.getMessage());
 			return Attribute.EMPTY;
 		}
+	}
+
+	public String getAttributeId(String resourceType, String attributeName) {
+		Attribute attribute = getAttribute(resourceType, attributeName);
+		return attribute.getId();
 	}
 
 	public void removeAttributeId(String key) {

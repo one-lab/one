@@ -4,8 +4,11 @@ package com.sinosoft.one.monitor.application.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,10 +33,16 @@ public class Method implements java.io.Serializable {
     /**
      * 方法所属类名.
      */
+    @NotEmpty(message = "全类名不能为空")
+    @Size(min = 1,max = 500,message = "全类名长度应该在{min} - {max}之间")
+    @Pattern(regexp = "[0-9a-zA-Z.]{1,500}",message = "全类名必须是英文，数字，“.”（或者以上的组合）")
     private String className;
     /**
      * 方法名称.
      */
+    @NotEmpty(message = "方法名不能为空")
+    @Size(min = 1,max = 100,message = "方法名长度应该在{min} - {max}之间")
+    @Pattern(regexp = "[0-9a-zA-Z(),]{1,100}",message = "方法名必须是英文,(),“,”，数字（或者以上的组合）")
     private String methodName;
     /**
      * 方法阈值,单位ms.

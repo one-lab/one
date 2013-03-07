@@ -1,7 +1,6 @@
 package com.sinosoft.one.monitor.common;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 告警消息
@@ -18,10 +17,10 @@ public final class AlarmMessage {
 
 	}
 
-	public static AlarmMessage valueOf(String resourceId, String attributeName, String attributeValue) {
+	public static AlarmMessage valueOf(String resourceId, AttributeName attributeName, String attributeValue) {
 		AlarmMessage alarmMessage = new AlarmMessage();
 		alarmMessage.resourceId = resourceId;
-		alarmMessage.attributeName = attributeName;
+		alarmMessage.attributeName = attributeName.name();
 		alarmMessage.attributeValue = new BigDecimal(attributeValue);
 		return alarmMessage;
 	}
@@ -51,10 +50,10 @@ public final class AlarmMessage {
 	}
 
 	public boolean isAvailabilityAlarm() {
-		return AttributeNames.Availability.name().equals(this.attributeName);
+		return AttributeName.Availability.name().equals(this.attributeName);
 	}
 
 	public boolean isExceptionAlarm() {
-		return AttributeNames.Health.name().equals(this.attributeName);
+		return AttributeName.Exception.name().equals(this.attributeName);
 	}
 }

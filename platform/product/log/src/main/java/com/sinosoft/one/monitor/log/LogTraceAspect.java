@@ -3,7 +3,10 @@ package com.sinosoft.one.monitor.log;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
 import com.alibaba.fastjson.JSON;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -24,10 +27,10 @@ public class LogTraceAspect {
 
     private static Logger logger = LoggerFactory.getLogger(LogTraceAspect.class);
 
-    private LogConfigs logConfigs;
+    private static  LogConfigs logConfigs;
 
-    public void setLogConfigs(LogConfigs logConfigs) {
-        this.logConfigs = logConfigs;
+    public static void setLogConfigs(LogConfigs logConfigs) {
+	    LogTraceAspect.logConfigs = logConfigs;
     }
 
     /**
@@ -72,7 +75,7 @@ public class LogTraceAspect {
 			// @Interfacetrace检查
 			if(!ClassUtils.isCglibProxyClass(targetClass)) {
 				String urlId = TraceUtils.getUrlId();
-				List<LogMethod> logMethods = logConfigs.getLogMethods(urlId);
+				Set<LogMethod> logMethods = logConfigs.getLogMethods(urlId);
                 if(logMethods != null && logMethods.size() > 0) {
                     for(LogMethod logMethod : logMethods) {
                         if(logMethod.getClassName().equals(sourceClass.getName()) && logMethod.getMethodName().equals(specificMethod.getName())) {
@@ -86,6 +89,7 @@ public class LogTraceAspect {
 	                        methodTraceLog.setClassName(sourceClass.getName());
 	                        methodTraceLog.setInParam(JSON.toJSONString(pjp.getArgs()));
 	                        methodTraceLog.setOutParam(JSON.toJSONString(result));
+	                        methodTraceLog.setRecordTime(new Date());
 
 	                        UrlTraceLog urlTraceLog = TraceUtils.getUrlTraceLog();
 	                        urlTraceLog.addMethodTraceLog(methodTraceLog);

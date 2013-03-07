@@ -4,8 +4,11 @@ package com.sinosoft.one.monitor.application.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,16 +29,24 @@ public class Application implements java.io.Serializable {
     /**
      * 应用系统英文名称.
      */
+    @NotEmpty(message = "显示名称不能为空")
+    @Pattern(regexp = "[a-zA-Z]{1,100}",message = "显示名称必须是英文，长度应该在1到100位")
     private String applicationName;
     /**
      * 应用系统中文名称.
      */
     private String cnName;
     /**
+     * 应用IP
      */
+    @NotEmpty(message = "主机IP不能为空")
+    @Pattern(regexp = "[0-9.]{7,30}",message = "主机IP必须是数字和“.”的组合，长度应该在7到30位")
     private String applicationIp;
     /**
+     * 应用端口
      */
+    @NotEmpty(message = "端口不能为空")
+    @Pattern(regexp = "[0-9]{1,5}",message = "端口必须是数字，长度1到5位")
     private String applicationPort;
     /**
      * 创建时间.
@@ -58,8 +69,20 @@ public class Application implements java.io.Serializable {
      */
     private String status;
     /**
+     * 轮询间隔.
+     */
+    /*@NotNull(message = "轮询间隔不能为空")
+    @Pattern(regexp = "[0-9]{1,10}",message = "轮询间隔必须是数字，长度1到10位")*/
+    private BigDecimal interval;
+    /**
+     * 应用下的业务场景
      */
     private List<BizScenario> bizScenarios = new ArrayList<BizScenario>(0);
+
+    /**
+     * 仿真URL
+     */
+    private List<EumUrl> enumUrls;
 
     public Application() {
     }
@@ -176,6 +199,23 @@ public class Application implements java.io.Serializable {
         this.bizScenarios = bizScenarios;
     }
 
+    @Column(name="INTERVAL", precision=22, scale=0)
+    public BigDecimal getInterval() {
+        return interval;
+    }
+
+    public void setInterval(BigDecimal interval) {
+        this.interval = interval;
+    }
+
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY, mappedBy = "application")
+    public List<EumUrl> getEnumUrls() {
+        return enumUrls;
+    }
+
+    public void setEnumUrls(List<EumUrl> enumUrls) {
+        this.enumUrls = enumUrls;
+    }
 
     @Override
     public String toString() {

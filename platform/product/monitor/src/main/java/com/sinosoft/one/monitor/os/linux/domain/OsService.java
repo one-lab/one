@@ -26,7 +26,7 @@ public class OsService {
 	 * 读取操作系统基本信息
 	 * @return
 	 */
-	public List<Os> getOsBasicByIp(String ip){
+	public Os getOsBasicByIp(String ip){
 		return  osRepository.findOsbyIp(ip);
 	}
 
@@ -53,15 +53,20 @@ public class OsService {
 	/**
 	 * 保存操作系统基本信息
 	 * @return
+	 * @throws Exception 
 	 */
-	public void saveOsBasic(String name,String type,String ipAddr,String subnetMask,int interCycle){
-		Os os =new Os();
-		os.setName(name);
-		os.setType(type);
-		os.setIpAddr(ipAddr);
-		os.setSubnetMask(subnetMask);
-		os.setIntercycleTime(interCycle);
-		osRepository.save(os);
+	public void saveOsBasic(String name,String type,String ipAddr,String subnetMask,int interCycle) throws Exception{
+		Os os=osRepository.findOsbyIp(ipAddr);
+		if(os!=null){
+			 throw new Exception();
+		}
+		Os newos =new Os();
+		newos.setName(name);
+		newos.setType(type);
+		newos.setIpAddr(ipAddr);
+		newos.setSubnetMask(subnetMask);
+		newos.setIntercycleTime(interCycle);
+		osRepository.save(newos);
 	}
 	
 	/**
@@ -92,5 +97,13 @@ public class OsService {
 		osShell.setType(type);
 		osShell.setTemplate(template);
 		osShellRepository.save(osShell);
+	}
+	
+	/**
+	 * 获取所有OS监控器信息
+	 * @return
+	 */
+	public List<Os> getAllOs(){
+		return (List<Os>) osRepository.findAll();
 	}
 }

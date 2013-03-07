@@ -1,9 +1,13 @@
 package com.sinosoft.one.monitor.controllers.application.manager;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sinosoft.one.monitor.application.domain.ApplicationService;
 import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.BizScenario;
+import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationIndexViewModel;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -38,11 +42,13 @@ public class ApplicationManagerController {
     /**
      * 获得所有的应用.
      */
-    @Get("applist")
-    @Post("applist")
-    public String getAllApplication(Invocation inv) {
-        List<Application> applications = applicationService.findAllApplication();
-        inv.addModel("applications", applications);
+    @Get("applist/{recentHour}")
+    public String getAllApplication(@Param("recentHour") int recentHour, Invocation inv) {
+//        List<Application> applications = applicationService.findAllApplication();
+
+		List<ApplicationIndexViewModel> applicationIndexViewModels = applicationService.generateIndexViewModels(recentHour);
+        inv.addModel("applicationIndexViewModels", applicationIndexViewModels);
+	    inv.addModel("recentHour", recentHour);
         //应用性能列表页面
         return "performance";
     }
@@ -56,18 +62,18 @@ public class ApplicationManagerController {
         inv.addModel("application", new Application());
         //页面所在路径application/manager/
         /*return "applicationForm";*/
-        return "addSystem";
+        return "r:/addapplication/add";
     }
 
     /**
      * 新增一个应用.
      */
     @Post("add")
-    public String saveApplication(@Validation(errorPath = "a:errorCreateApp") Application application, Invocation inv) {
+    public String saveApplication(@Validation(errorPath = "a:errorcreate") Application application, Invocation inv) {
         //获得当前用户
         //测试时固定CreatorId
         /*application.setCreatorId(CurrentUserUtil.getCurrentUser().getId());*/
-        application.setCreatorId(inv.getRequest().getSession().getId());
+        application.setCreatorId("4028921a3cfb99be013cfb9ccf650000");
         application.setCreateTime(new Date());
         application.setStatus(String.valueOf('1'));
         applicationService.saveApplication(application);
@@ -89,7 +95,7 @@ public class ApplicationManagerController {
      * 更新应用的表单页面.
      */
     @Get("update/{appId}")
-    @Post("errorUpdateApp")
+    @Post("errorupdateapp")
     public String applicationForm(@Param("appId") String appId, Invocation inv) {
         inv.addModel("application", applicationService.findApplication(appId));
         //页面所在路径application/manager/
@@ -100,14 +106,14 @@ public class ApplicationManagerController {
      * 更新应用.
      */
     @Post("update/{appId}")
-    public String updateApplication(@Validation(errorPath = "a:errorUpdateApp") Application application, @Param("appId") String appId, Invocation inv) {
+    public String updateApplication(@Validation(errorPath = "a:errorupdateapp") Application application, @Param("appId") String appId, Invocation inv) {
         //获得当前用户id
         /*application.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
         //开发阶段固定用户id
         String modifierId="4028921a3cfb99be013cfb9ccf650000";
         //更新时间使用sysdate
         applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
-                application.getApplicationIp(),application.getApplicationPort(),modifierId);
+                application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());
         //应用列表页面
         return "r:/application/manager/appmanager/applist";
     }
@@ -129,20 +135,26 @@ public class ApplicationManagerController {
     @Post("match")
     public Reply initMatchMap(Invocation inv){
         try {
-            String appName=inv.getRequest().getParameter("appName");
-            String ip=inv.getRequest().getParameter("ip");
-            String port=inv.getRequest().getParameter("port");
-            Application application=applicationService.findApplicationWithAppInfo(appName,ip,port);
+            String appName=inv.getParameter("appName");
+            String ip=inv.getParameter("ip");
+            String port=inv.getParameter("port");
+	        String applicationId = inv.getParameter("applicationId");
+	        Application application = null;
+	        if(applicationId != null && !"".equals(applicationId)) {
+		        application = applicationService.findApplication(applicationId);
+	        } else {
+		        application = applicationService.findApplicationWithAppInfo(appName,ip,port);
+	        }
             if(application!=null){
                     List<String> bizScenarioIds=new ArrayList<String>();
-                    List<BizScenario> bizScenarios=application.getBizScenarios();
+                    List<BizScenario> bizScenarios = application.getBizScenarios();
                     for(BizScenario bizScenario:bizScenarios){
                         bizScenarioIds.add(bizScenario.getId());
                     }
                     List<Url> urls=applicationService.findAllUrlsOfApplication(bizScenarioIds);
                     //URL.id,URL.url(address),URL.Method
                     //Method.id,Method.className,Method.methodName
-                    String jsonString=applicationService.getJsonDataOfUrlsAndMethods(application.getId(),urls);
+                    String jsonString=getJsonDataOfUrlsAndMethods(application.getId(),urls);
                     return Replys.with(jsonString);
             }
             return Replys.simple().fail("NotExist");
@@ -150,5 +162,38 @@ public class ApplicationManagerController {
             logger.error(e.getMessage(),e);
             return Replys.simple().fail("Exception");
         }
+    }
+
+    /**
+     * 返回url和method所对应的json数据.
+     * url包括id和地址
+     * method包括id，className，methodName
+     */
+    public String getJsonDataOfUrlsAndMethods(String applicationId,List<Url> urls) {
+        JSONObject jsonUrlsObject=new JSONObject();
+        JSONArray jsonUrlArray=new JSONArray();
+        //返回的json数据包含当前应用的id，这个数据会写入代理端的notification.info文件中
+        jsonUrlsObject.put("applicationId",applicationId);
+        for(Url url:urls){
+            JSONObject jsonUrlObject=new JSONObject();
+            //处理当前url
+            jsonUrlObject.put("urlId",url.getId());
+            jsonUrlObject.put("urlAddress",url.getUrl());
+            List<Method> methods=applicationService.findAllMethodsOfUrl(url.getId());
+            JSONArray methodArray = new JSONArray();
+            //循环处理url中所有的method
+            for(Method method:methods){
+                JSONObject jsonMethodObject=new JSONObject();
+                jsonMethodObject.put("methodId",method.getId());
+                jsonMethodObject.put("className",method.getClassName());
+                jsonMethodObject.put("methodName",method.getMethodName());
+                //此method作为当前url的一个节点
+                methodArray.add(jsonMethodObject);
+            }
+            jsonUrlObject.put("methods", methodArray);
+            jsonUrlArray.add(jsonUrlObject);
+        }
+        jsonUrlsObject.put("urls", jsonUrlArray);
+        return jsonUrlsObject.toString();
     }
 }
