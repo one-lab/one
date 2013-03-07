@@ -7,6 +7,7 @@ import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailAla
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailPieViewModel;
 import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
 import com.sinosoft.one.monitor.common.HealthSta;
+import com.sinosoft.one.monitor.common.HealthStaCache;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class ApplicationDetailService {
 	private AlarmRepository alarmRepository;
 	@Autowired
 	private UrlResponseTimeRepository urlResponseTimeRepository;
+	@Autowired
+	private HealthStaCache healthStaCache;
 
 
 	/**
@@ -47,18 +50,22 @@ public class ApplicationDetailService {
 		// 获得可用性
 
 		// 获得健康度
-		Pageable pageable = new PageRequest(1, 10, Sort.Direction.DESC, "create_time");
+		Pageable pageable = new PageRequest(0, 1, Sort.Direction.DESC, "create_time");
 		Page<Alarm> alarmPage = alarmRepository.selectAlarmsByMonitorId(pageable, applicationId, startDate, endDate);
- 		Alarm alarm = alarmPage.iterator().next();
+		Iterator<Alarm> alarmIterator = alarmPage.iterator();
+		Alarm alarm = null;
+		if(alarmIterator.hasNext()) {
+			alarm = alarmPage.iterator().next();
+		}
 		applicationDetailAlarmViewModel.setSeverityLevel(alarm == null ? SeverityLevel.INFO : alarm.getSeverity());
 
-		int criticalCount = 0;
+		pageable = new PageRequest(0, 10, Sort.Direction.DESC, "create_time");
 		alarmPage = alarmRepository.selectCriticalAlarmsByMonitorId(pageable, applicationId, startDate, endDate);
-		Iterator<Alarm> alarmIterator = alarmPage.iterator();
+		alarmIterator = alarmPage.iterator();
 		while (alarmIterator.hasNext()) {
 			applicationDetailAlarmViewModel.addAlarmInfo(alarmIterator.next().getMessage());
-			criticalCount++;
 		}
+		int criticalCount = alarmRepository.countCriticalByMonitorId(applicationId, startDate, endDate);
 		applicationDetailAlarmViewModel.setCriticalCount(criticalCount);
 		return applicationDetailAlarmViewModel;
 	}
@@ -89,7 +96,11 @@ public class ApplicationDetailService {
 	public List<UrlResponseTime> queryUrlResponseTimes(String applicationId) {
 		Date startDate = DateUtil.getTodayBeginDate();
 		Date endDate = new Date();
-		return urlResponseTimeRepository.selectUrlResponseTimes(applicationId, startDate, endDate);
+		List<UrlResponseTime> urlResponseTimes = urlResponseTimeRepository.selectUrlResponseTimesForMonitorUrl(applicationId, startDate, endDate);
+		for(UrlResponseTime urlResponseTime : urlResponseTimes) {
+			urlResponseTime.setHealthBar(healthStaCache.getHealthBar(applicationId, urlResponseTime.getUrlId()));
+		}
+		return urlResponseTimes;
 	}
 
 }

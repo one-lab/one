@@ -52,8 +52,8 @@
                 ${alarmViewModel.alarmInfoes}
             </p>
 
-            <div class="show_all_error" style="float:right;cursor:pointer;"><img src="images/spmservice/icon_plus.gif" />显示所有信息</div>
-            <div class="hide_some_error" style="display:none;float:right;cursor:pointer;"><img src="images/spmservice/icon_minus.gif" />隐藏部分信息</div>
+            <div class="show_all_error" style="float:right;cursor:pointer;"><img src="${ctx}/global/images/spmservice/icon_plus.gif" />&nbsp;&nbsp;显示所有信息</div>
+            <div class="hide_some_error" style="display:none;float:right;cursor:pointer;"><img src="${ctx}/global/images/spmservice/icon_minus.gif" />&nbsp;&nbsp;隐藏部分信息</div>
         </td>
 
     </tr>

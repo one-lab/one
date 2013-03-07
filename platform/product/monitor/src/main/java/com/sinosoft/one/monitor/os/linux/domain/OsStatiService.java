@@ -32,8 +32,7 @@ public class OsStatiService {
 //		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.DATE, recordTime.getDate());
-		c.set(Calendar.HOUR_OF_DAY, recordTime.getHours());
+		c.setTime(recordTime);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();

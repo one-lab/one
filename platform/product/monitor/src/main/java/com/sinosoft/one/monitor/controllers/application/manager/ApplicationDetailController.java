@@ -10,6 +10,7 @@ import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.portal.Pipe;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -32,6 +33,13 @@ public class ApplicationDetailController {
 	@Autowired
 	private ApplicationDetailService applicationDetailService;
 
+	@Get("/main/{applicationId}")
+	public String applicationDetail(@Param("applicationId") String applicationId, Pipe pipe, Invocation invocation) {
+		invocation.addModel("applicationId", applicationId);
+		pipe.addWindow("alarm", "/application/manager/detail/alarm/" + applicationId);
+		pipe.addWindow("pie", "/application/manager/detail/pie/" + applicationId);
+		return "applicationDetail";
+	}
 
 	@Get("/alarm/{applicationId}")
 	public String alarm(@Param("applicationId") String applicationId, Invocation invocation) {
@@ -50,9 +58,9 @@ public class ApplicationDetailController {
 	@Get("/urls/{applicationId}")
 	public void urls(@Param("applicationId") String applicationId, HttpServletResponse response) throws  Exception{
 		List<UrlResponseTime> urlResponseTimeList = applicationDetailService.queryUrlResponseTimes(applicationId);
-		Page page=new PageImpl(urlResponseTimeList);
-		Gridable<UrlResponseTime> gridable=new Gridable<UrlResponseTime>(page);
-		String cellString = "url,minResponseTime,avgResponseTime,maxResponseTime";
+		Page page = new PageImpl(urlResponseTimeList);
+		Gridable<UrlResponseTime> gridable = new Gridable<UrlResponseTime>(page);
+		String cellString = "url,minResponseTime,maxResponseTime,avgResponseTime,healthBar";
 		gridable.setIdField("urlId");
 		gridable.setCellStringField(cellString);
 		UIUtil.with(gridable).as(UIType.Json).render(response);

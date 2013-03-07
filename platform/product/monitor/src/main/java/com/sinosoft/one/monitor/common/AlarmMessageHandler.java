@@ -11,6 +11,7 @@ import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.threshold.domain.ThresholdService;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,8 @@ public class AlarmMessageHandler {
 	private ThresholdService thresholdService;
 	@Autowired
 	private ActionService actionService;
+	@Autowired
+	private HealthStaCache healthStaCache;
 
 	/**
 	 * 处理告警消息
@@ -172,6 +175,9 @@ public class AlarmMessageHandler {
 		alarm.setSubResourceId(thresholdAlarmParams.subResourceId);
 		alarm.setSubResourceType(thresholdAlarmParams.subResourceType);
 		alarmService.saveAlarm(alarm);
+		if(thresholdAlarmParams.subResourceType != ResourceType.NONE && StringUtils.isNotBlank(thresholdAlarmParams.subResourceId)) {
+			healthStaCache.increase(thresholdAlarmParams.resource.getResourceId(), thresholdAlarmParams.subResourceId, thresholdAlarmParams.severityLevel);
+		}
 
 		// 处理动作
 		if(allAttributeActions != null && allAttributeActions.size() > 0) {

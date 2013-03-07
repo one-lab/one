@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.repository.OsRespondtimeRepository;
@@ -66,5 +67,23 @@ public class OsRespondTimeService {
 	 */
 	public void deleteResponTimekByLessThanTime(String osInfoId,Date sampleTime){
 		osRespondtimeRepository.deleteResponTimeByLessThanTime(osInfoId, sampleTime);
+	}
+	
+	/**
+	 * 获取最后一次记 在轮询时间内的响应时间
+	 */
+	public OsRespondtime findNealyResponTime(String osInfoId,Date currentTime,int interCycle ){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		Date date=new Date(currentTime.getTime()-interCycle*60*1000);
+		return osRespondtimeRepository.findNealyResponTime(osInfoId, simpleDateFormat.format(currentTime), simpleDateFormat.format(date), OsUtil.ORCL_DATEFORMATE);
+	} 
+	
+	
+	/**
+	 * 获取最后一次记 在轮询时间内的响应时间(不定在轮询点内)
+	 */
+	public String findLastResponTime(String osInfoId,Date currentTime ){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osRespondtimeRepository.findLastResponTime(osInfoId, simpleDateFormat.format(currentTime), OsUtil.ORCL_DATEFORMATE);
 	}
 }

@@ -81,6 +81,14 @@ public class ApplicationService {
     }
 
     /**
+     * 获取所有有效的应用
+     * @return
+     */
+    public List<Application> findValidateApplication(){
+        return  applicationRepository.findByStatus("1");
+    }
+
+    /**
      * 查询所有的应用.
      */
     public List<Application> findAllApplication() {
