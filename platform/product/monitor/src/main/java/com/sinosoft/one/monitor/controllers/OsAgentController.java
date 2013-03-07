@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sinosoft.one.data.jade.parsers.sqljep.function.Hash;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableServcie;
 import com.sinosoft.one.monitor.os.linux.domain.OsProcessService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
@@ -115,6 +116,7 @@ public class OsAgentController {
 			osAgentID = getValue("ID", osAgentInfo);
 			Os os = osService.getOsBasicById(osAgentID);
 			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse().getOutputStream());
+			Map<String, Object>requestInfo=new HashMap<String, Object>();//返回代理端的响应信息;
 			if(os!=null){
 				cpuInfo = getValue("cpuInfo", osAgentInfo);
 				System.out.println("收集返回的CPU："+cpuInfo);
@@ -124,7 +126,7 @@ public class OsAgentController {
 				System.out.println("收集返回的磁盘："+diskInfo);
 				String respondTime = getValue("respondTime", osAgentInfo);
 				System.out.println("响应时间"+respondTime);
-				oos.writeObject("继续监控");
+//				oos.writeObject("继续监控");
 				//采样时间
 				Date sampleTime=new Date();
 				System.out.println(sampleTime.toLocaleString()+"1111111111111111111111");
@@ -133,12 +135,14 @@ public class OsAgentController {
 				//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
 				osProcessService.savaAvailableSampleData(os.getOsInfoId(), sampleTime, os.getIntercycleTime(), "1");
 				
+				requestInfo.put("interCycle", os.getIntercycleTime());//返回轮询时间
 			}else {
-				oos.writeObject("停止监控");
-				Date date=new Date();
-				//保存不可用状态起始点 状态码“0”
-				osProcessService.savaAvailableSampleData(os.getOsInfoId(), date,os.getIntercycleTime(),  "0");
+//				oos.writeObject("停止监控");
+//				Date date=new Date();
+//				//保存不可用状态起始点 状态码“0”
+//				osProcessService.savaAvailableSampleData(os.getOsInfoId(), date,os.getIntercycleTime(),  "0");
 			}
+			oos.writeObject(requestInfo);
 			oos.close();
 		} catch (IOException e) {
 			e.printStackTrace();

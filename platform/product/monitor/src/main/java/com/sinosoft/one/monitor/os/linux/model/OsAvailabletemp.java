@@ -37,7 +37,9 @@ public class OsAvailabletemp  implements java.io.Serializable {
     /**
         */
     private String status;
-
+    /**
+     */
+    private int intercycleTime;
     public OsAvailabletemp() {
     }
 
@@ -90,6 +92,17 @@ public class OsAvailabletemp  implements java.io.Serializable {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+
+	@Column(name="INTERCYCLE_TIME", length=2)
+	public int getIntercycleTime() {
+		return intercycleTime;
+	}
+
+
+	public void setIntercycleTime(int intercycleTime) {
+		this.intercycleTime = intercycleTime;
+	}
+	
 
 }
 

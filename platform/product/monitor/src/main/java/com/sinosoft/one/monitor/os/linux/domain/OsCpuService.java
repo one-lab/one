@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.repository.OsCpuRepository;
@@ -80,5 +81,20 @@ public class OsCpuService {
 	public void deleteCpuByLessThanTime(String osInfoId,Date sampleTime){
 		osCpuRepository.deleteCpuByLessThanTime(osInfoId, sampleTime);
 	}
+	
+	
+	/**
+	 * 获取最后一次Cpu的记录
+	 * @param osInfoId
+	 * @param currentTime 当前时间
+	 * @param interCycle 采样轮询
+	 * @return
+	 */
+	public OsCpu findNealyCpu(String osInfoId,Date currentTime ,int interCycle ){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		Date date=new Date(currentTime.getTime()-interCycle*60*1000);
+		return osCpuRepository.findNealyCpu(osInfoId, simpleDateFormat.format(currentTime),simpleDateFormat.format(date) ,OsUtil.ORCL_DATEFORMATE);
+	}
+	
 	
 }

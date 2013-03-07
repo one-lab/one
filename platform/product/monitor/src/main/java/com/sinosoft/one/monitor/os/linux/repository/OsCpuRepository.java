@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 
 public interface OsCpuRepository extends PagingAndSortingRepository<OsCpu, String> {
@@ -21,11 +22,14 @@ public interface OsCpuRepository extends PagingAndSortingRepository<OsCpu, Strin
 	public String findMaxCpuUtilZation(String osInfoId,String beginTime,String endTime,String dateFormat);
 	
 	//CPU利用率最小值
-	@SQL("select MIN(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?2,?4 and to_date(?3,?4) and OS_INFO_ID= ?1 ")
+	@SQL("select MIN(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and OS_INFO_ID= ?1 ")
 	public String findMinCpuUtilZation(String osInfoId,String beginTime,String endTime,String dateFormat);
 
 	//小于目标时间删除
 	@SQL("delete from GE_MONITOR_OS_CPU o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
 	public void deleteCpuByLessThanTime(String osid,Date date);
+	
+	@Query("from OsCpu o where o.sampleDate=(select max(sampleDate) from OsCpu where sampleDate between to_date(?3,?4) and to_date(?2,?4)) and o.os.osInfoId = ?1")
+	public OsCpu findNealyCpu(String osid,String currentTime,String currentTime2,String dateFormat );
 }
 

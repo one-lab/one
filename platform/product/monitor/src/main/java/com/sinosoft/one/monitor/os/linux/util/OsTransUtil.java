@@ -101,15 +101,22 @@ public class OsTransUtil {
 	}
 
 	public static String countUtilZation(String total, String used) {
-		double tota = new Double(total);
-		double use = new Double(used);
+//		double tota = new Double(total);
+//		double use = new Double(used);
+		Long totalNumber=Long.valueOf(total);
+		if(totalNumber==0){
+			totalNumber=Long.valueOf("1");
+		}
+		BigDecimal bigDecimal=BigDecimal.valueOf(Long.valueOf(used)).divide(BigDecimal.valueOf(Long.valueOf(totalNumber)),4,BigDecimal.ROUND_HALF_UP);
 		DecimalFormat df = new DecimalFormat("##.00%");
-		String utilZation = df.format(use / tota);
+//		String utilZation = df.format(use / tota);
+		String utilZation =df.format(bigDecimal.doubleValue());
 		utilZation = utilZation.substring(0, utilZation.indexOf("%"));
 		if (utilZation.startsWith(".")) {
 			utilZation = "0" + utilZation;
 		}
-		return utilZation;
+		utilZation=utilZation.substring(0,utilZation.length()-1);
+		return utilZation.toString();
 	}
 
 	/**
@@ -142,14 +149,14 @@ public class OsTransUtil {
 	public static void main(String[] args) {
 		double a = 2.2;
 		int b= 2;
-		System.out.println(countAve(a, b));
+		System.out.println(countUtilZation("98", "33"));
 	}
 	
 	public static String countAve(Object dividend, int divisor) {
 		Object ave = null;
 		if (dividend.getClass().equals(Double.class)) {
 			Double d = (Double) dividend;
-			ave = new BigDecimal(d).divide(new BigDecimal(divisor),2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+			ave = new BigDecimal(d).divide(new BigDecimal(divisor),2,BigDecimal.ROUND_HALF_UP).doubleValue();
 		}
 		if (dividend.getClass().equals(Long.class)) {
 			Long d = (Long) dividend;

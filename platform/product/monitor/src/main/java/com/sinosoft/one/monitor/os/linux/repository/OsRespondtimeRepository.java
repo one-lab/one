@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
 
 public interface OsRespondtimeRepository extends PagingAndSortingRepository<OsRespondtime, String> {
@@ -27,5 +28,15 @@ public interface OsRespondtimeRepository extends PagingAndSortingRepository<OsRe
 	//小于目标时间删除
 	@SQL("delete from GE_MONITOR_OS_RESPONDTIME o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
 	public void deleteResponTimeByLessThanTime(String osid,Date date);
+	
+	//获取离轮询间隔内最近一次的记录
+	@Query("from OsRespondtime o where o.sampleDate=(select max(sampleDate) from OsRespondtime where sampleDate between to_date(?3,?4) and to_date(?2,?4) ) and o.os.osInfoId = ?1")
+	public OsRespondtime findNealyResponTime(String osid,String currentTime,String currentTime2,String dateFormat );
+	
+	
+	//获取当前时间前最后一次响应时间(不定在轮询点内)
+	@SQL("select MAX(RESPOND_TIME) from GE_MONITOR_OS_RESPONDTIME where SAMPLE_DATE < to_date(?2,?3) ")
+	public String findLastResponTime(String osid,String currentTime,String dateFormat );
+
 }
 

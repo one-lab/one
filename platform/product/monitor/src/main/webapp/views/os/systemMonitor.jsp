@@ -25,6 +25,7 @@
 <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
+<script language="javascript" src="${ctx}/global/js/os/HighchartsTest.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -32,7 +33,7 @@ $(function(){
 		bottom:{bottomHeight:30}
 	});
 	$("#thresholdList").Grid({
-		url : "systemMonitor.json",  
+		url : " ",  
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
@@ -49,7 +50,7 @@ $(function(){
 		multiselect: true  
 	});
 	$("#healthList").Grid({
-		url : "healthList.json",  
+		url : " ",  
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
@@ -85,185 +86,7 @@ $(function(){
 		number:false,  
 		multiselect: false  
 	});
-	new Highcharts.Chart({
-            chart: {
-                renderTo: 'memory_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['00:00', '00:02', '00:04', '00:06', '00:08', '00:10','00:12']
-            },
-            yAxis: {
-                title: {
-                    text: '%'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'linux',
-                data: [4,7,9,0,7,1,9]
-            },{
-				name: 'linux2',
-                data: [1,1,4,5,0,9,12]
-            }]
-        });
-		
-		new Highcharts.Chart({
-            chart: {
-                renderTo: 'CPU_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['19:40', '20:00', '20:20', '20:40', '21:00', '21:20','21:40']
-            },
-            yAxis: {
-                title: {
-                    text: '%'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'linux',
-                data: [6,14,5,20,27,32,24]
-            },{
-				name: 'linux2',
-                data: [12,19,9,16,17,12,12]
-            }]
-        });
-		
-		new Highcharts.Chart({
-            chart: {
-                renderTo: 'exchange_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['19:40', '19:45', '19:50', '19:55', '20:00', '20:05','20:10']
-            },
-            yAxis: {
-                title: {
-                    text: '%'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'linux',
-                data: [0,0,0,0,0,1,0]
-            },{
-				name: 'linux2',
-                data: [0,0,0,0,0,0,0]
-            }]
-        });
-		
-		new Highcharts.Chart({
-            chart: {
-                renderTo: 'reply_utilization',
-                type: 'line',
-                marginRight: 50,
-                marginBottom: 75,
-				height:200
-            },
-            title: {
-                text: ' ',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['17:00', '18:00', '19:00', '20:00', '21:00', '22:20']
-            },
-            yAxis: {
-                title: {
-                    text: '%'
-                },
-                plotLines: false
-				},
-				plotOptions:{
-					series: {
-                        marker: {
-                            radius: 0
-                        }
-                    }
-				},
-          credits: { 
-            text: '',
-            href: ''
-          },
-            tooltip: false,
-            legend: {
-				enabled :true,
-            },
-            series: [{
-				name: 'linux',
-                data: [0,0,0,0,0,0]
-            },{
-				name: 'linux2',
-                data: [1,0,1,0,3,0]
-            }]
-        });
+	
 	
 	$("#tabs").tabs({closeTab:false});
 	$("#myDesk").height($("#layout_center").height());
@@ -447,21 +270,21 @@ function viewRelevance(){
 								<th width="75%" style="text-align: center">可用性</th>
 								<th>可用性%</th>
 							</tr>
-							<c:forEach items="${map }" var="entry">
+							<%-- <c:forEach items="${map }" var="entry">
 								<tr>
-									<td><a href="Linuxcentos.html">${entry.key }</a></td>
+									<td><a href="Linuxcentos.html">${entry.key}</a></td>
 									<td><table width="100%" border="0" cellspacing="0"
 											cellpadding="0" class="green_bar">
 											<tr>
 												<c:forEach items="${entry.value }" var="model">
 													<c:if test="${model.status == '0'}">
-														<td class="not_available" width="${model.percentage }">&nbsp;</td>
+														<td class="not_available" width="${model.percentage }%"></td>
 													</c:if>
 													<c:if test="${model.status == '2' }">
-														<td class="not_available" width="${model.percentage }">&nbsp;</td>
+														<td class="not_available" width="${model.percentage }%"></td>
 													</c:if>
 													<c:if test="${model.status == '1' }">
-														<td width="${model.percentage }">&nbsp;</td>
+														<td width="${model.percentage }%"></td>
 													</c:if>
 												</c:forEach>
 											</tr>
@@ -470,14 +293,40 @@ function viewRelevance(){
 									<td>100</td>
 								</tr>
 
-							</c:forEach>
-
+							</c:forEach> --%>
+							<c:forEach items="${maplist }" var="list">
+								
+								<tr>
+									<td><a href="${ctx}/os/linuxcentos/${list.id}">${list.name}</a></td>
+									<td><table width="100%" border="0" cellspacing="0"
+											cellpadding="0" class="green_bar">
+											<tr>
+												<c:forEach items="${list.list}" var="model">
+											  	
+													<c:if test="${model.status == '0'}">
+														<td class="not_available" width="${model.percentage }%"></td>
+													</c:if>
+													<c:if test="${model.status == '2' }">
+														<td class="not_available" width="${model.percentage }%"></td>
+													</c:if>
+													<c:if test="${model.status == '1' }">
+														<td width="${model.percentage }%"></td>
+													</c:if>  
+												</c:forEach>
+											</tr>
+										</table>
+									</td>
+									<td>100</td>
+								</tr>
+								
+								 
+							</c:forEach> 
 							<tr class="last_row">
 								<td>&nbsp;</td>
 								<td><table width="100%" border="0" cellspacing="0"
 										cellpadding="0" class="ruler_bar">
 										<tr>
-											<td>&nbsp;</td>
+											<td>&nbsp</td>
 											<td>&nbsp;</td>
 											<td>&nbsp;</td>
 											<td>&nbsp;</td>
@@ -511,18 +360,9 @@ function viewRelevance(){
 								<td><table width="100%" border="0" cellspacing="0"
 										cellpadding="0" class="time_bar">
 										<tr>
-											<td>01:00</td>
-											<td>02:00</td>
-											<td>03:00</td>
-											<td>04:00</td>
-											<td>05:00</td>
-											<td>06:00</td>
-											<td>07:00</td>
-											<td>08:00</td>
-											<td>09:00</td>
-											<td>10:00</td>
-											<td>11:00</td>
-											<td>12:00</td>
+											<c:forEach items="${timeList }" var="time">
+												<td>${time}</td>
+											</c:forEach> 
 										</tr>
 									</table>
 								</td>
@@ -551,9 +391,9 @@ function viewRelevance(){
 								</td>
 							</tr>
 							<tr>
-								<td width="50%"><div id="memory_utilization"></div>
+								<td width="50%"><div id="chartMem"></div>
 								</td>
-								<td width="50%"><div id="exchange_utilization"></div>
+								<td width="50%"><div id="chartSwap"></div>
 								</td>
 							</tr>
 							<tr>
@@ -563,9 +403,9 @@ function viewRelevance(){
 								</td>
 							</tr>
 							<tr>
-								<td><div id="CPU_utilization"></div>
+								<td><div id="chartCpu"></div>
 								</td>
-								<td><div id="reply_utilization"></div>
+								<td><div id="chartReply"></div>
 								</td>
 							</tr>
 							<tr>

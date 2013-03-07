@@ -45,19 +45,10 @@ public class OsProcessService {
 		osRamService.saveRam(osInfoId,ramInfo , sampleTime);//保存内存采样
 		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存响应时间采样
 		//更新统计记录
-//		List<OsStati> OsStatis=osDataMathService.statiOneHourRam(osInfoId, sampleTime);//更新内存统计
-//		OsStati cpuOsStati=osDataMathService.statiOneHourCpu(osInfoId, sampleTime);//更新CPU统计
-//		OsStati diskOsStati=osDataMathService.statiOneHourDisk(osInfoId, sampleTime);//更行磁盘统计
-//		OsStati respondOsStati=osDataMathService.statiOneHourRespond(osInfoId, sampleTime);//更行响应时间统计
-		
 		osDataMathService.statiOneHourRam(osInfoId, sampleTime);//更新内存统计
 		osDataMathService.statiOneHourCpu(osInfoId, sampleTime);//更新CPU统计
 		osDataMathService.statiOneHourDisk(osInfoId, sampleTime);//更行磁盘统计
 		osDataMathService.statiOneHourRespond(osInfoId, sampleTime);//更行响应时间统计
-//		OsStatis.add(cpuOsStati);
-//		OsStatis.add(diskOsStati);
-//		OsStatis.add(respondOsStati);
-//		osStatiService.saveStatiOneHourList(OsStatis);
 		//删除24小时前的记录
 		Calendar c2  = Calendar.getInstance();
 		c2.set(Calendar.DATE, sampleTime.getDate());
@@ -78,50 +69,36 @@ public class OsProcessService {
 	 */
 	public void savaAvailableSampleData(String osInfoId,Date sampleTime,int interCycleTime ,String Status){
 		//保存本次采样
-		osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status);
+		osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status,interCycleTime);
 		//统计采样结果 今天
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DATE, sampleTime.getDate());
-//		c.set(Calendar.DAY_OF_MONTH, sampleTime.getDay());
+		c.setTime( sampleTime);
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		//取当天的前24小时整时点
 		Date todayzeroTime= c.getTime();
-//		osAvailableServcie.deleteAvailable(osInfoId, todayzeroTime);//删除今天的统计表记录
+		//修改今天的统计表记录
 		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime);//保存新统计记录
 		//删除24小时前的数据
 		Calendar c2  = Calendar.getInstance();
-		c2.set(Calendar.DATE, sampleTime.getDate());
+		c2.setTime( sampleTime);
 		c2.add(Calendar.HOUR_OF_DAY,-24);
 		c2.set(Calendar.MINUTE, 0);
 		c2.set(Calendar.SECOND, 0);
 		Date deleteTime= c2.getTime();
 		osAvailableServcie.deleteTempByLessThanTime(osInfoId, deleteTime);
-//		if(osAvailabletemp.getSampleDate().getDate()<sampleTime.getDate()){
-//			//统计昨天的数据
-//			//获得昨天的整点
-//			c.set(Calendar.DAY_OF_MONTH, sampleTime.getDate()-1);
-//			Date yestodayzeroTime= c.getTime();
-//			//删除昨天天在统计表的数据
-//			osAvailableServcie.deleteAvailable(osInfoId, yestodayzeroTime);
-//			//新增昨天到统计表里的数据
-//			osDataMathService.statiAvailable(osInfoId, todayzeroTime, yestodayzeroTime, interCycleTime, yestodayzeroTime);
-//			osAvailableServcie.deleteTempByLessThanTime(osInfoId, sampleTime);
-//		}
-		
-		
 	}
 	
 	/**
-	 * 获取最后一次轮询点时间
+	 * 获取最后一次轮询时间
 	 * @param osInfoId
 	 * @return
 	 */
-	public String getLastSampleTime(String osInfoId ,Date currentTime){
+	public Date getLastSampleTime(String osInfoId ,Date currentTime){
 		//获取最后一次可用性记录
-		OsAvailabletemp osAvailabletemp=OsAvailableServcie.getLastAvailable(osInfoId, currentTime);
-		return osAvailabletemp.getSampleDate().toGMTString();
+ 		OsAvailabletemp osAvailabletemp=OsAvailableServcie.getLastAvailable(osInfoId, currentTime);
+		return osAvailabletemp.getSampleDate();
 	}
 	
 	
@@ -137,7 +114,7 @@ public class OsProcessService {
 	public  void saveStatiEveryDayAvailableStati(String osInfoId ,Date currentTime,int interCycleTime){
 		//当前天数
 		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DATE, currentTime.getDate());
+		c.setTime(currentTime);
 //		c.set(Calendar.DAY_OF_MONTH,  currentTime.getDay());
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);

@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
+import com.sinosoft.one.monitor.os.linux.model.OsRam;
 
 public interface OsDiskRepository extends PagingAndSortingRepository<OsDisk, String> {
 	
@@ -27,5 +29,9 @@ public interface OsDiskRepository extends PagingAndSortingRepository<OsDisk, Str
 	//小于目标时间删除
 	@SQL("delete from GE_MONITOR_OS_DISK o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
 	public void deleteDiskByLessThanTime(String osid,Date date);
+	
+	@Query("from OsDisk o where o.sampleDate=(select max(sampleDate) from OsDisk where sampleDate between to_date(?2,?4) and to_date(?3,?4)) and o.os.osInfoId = ?1")
+	public List<OsDisk> findNealyDisk(String osid,String currentTime, String currentTime2,String dateFormat );
+
 }
 
