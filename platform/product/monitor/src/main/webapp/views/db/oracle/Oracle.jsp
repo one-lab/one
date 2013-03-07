@@ -294,7 +294,7 @@ function hideNav(e){
            <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
+                <tr><td>用户数</td><td>340ms</td><td></td></tr>
                   <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
               </table>
          	</div>
@@ -431,8 +431,8 @@ function hideNav(e){
             <div class="sub_title">表空间明细</div>
             <div id="table_space_detail"></div>
           	<div class="tool_bar_top">
-              <div><img src="images/db/legend-green.png" /><span>可用空间</span>
-             <img src="images/db/legend-red.png" /><span>已用空间</span></div>
+              <div><img src="${ctx}/global/images/db/legend-green.png" /><span>可用空间</span>
+             <img src="${ctx}/global/images/db/legend-red.png" /><span>已用空间</span></div>
             </div>
        </div>
        <div class="threshold_file">

@@ -35,6 +35,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
         Date start = new Date(time - 3600 * 1000);
         List<Lastevent> activeConnectList = lasteventRepository.findLastEventList(monitorId, start, end);
         EventInfoModel[] eventInfoModel = new EventInfoModel[2];
+        eventInfoModel[0]  = new EventInfoModel();
+        eventInfoModel[1]  = new EventInfoModel();
         eventInfoModel[0].setStartTime(start.getTime() + "");
         eventInfoModel[0].setEndTime(end.getTime() + "");
         eventInfoModel[0].setEventName("连接时间");
