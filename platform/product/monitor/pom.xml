@@ -203,7 +203,7 @@
 				<configuration>
 					<uriEncoding>UTF-8</uriEncoding>
 					<path>/monitor</path>
-                    <port>8080</port>
+                    <port>7080</port>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -80,7 +80,7 @@
                                 <tr class="p_info_table_body">
                                     <td class="body_name">
                                         <div><a class="p_info_table_td_text"
-                                                href="${ctx}/application/manager/appmanager/appinfo/${applicationIndexViewModel.applicationId}">${applicationIndexViewModel.applicationName} </a></div>
+                                                href="${ctx}/application/manager/detail/main/${applicationIndexViewModel.applicationId}">${applicationIndexViewModel.applicationName} </a></div>
                                     </td>
                                     <td class="body_score">
                                         <table>
@@ -89,7 +89,7 @@
                                                     <div class="p_info_table_body_bar">
                                                         <div class="green" style="width:${applicationIndexViewModel.greenBarLength}%">&nbsp;</div>
                                                         <div class="yellow" style="width:${applicationIndexViewModel.yellowBarLength}%">&nbsp;</div>
-                                                        <div class="red" style="width:${applicationIndexViewModel.redBarLength}">&nbsp;</div>
+                                                        <div class="red" style="width:${applicationIndexViewModel.redBarLength}%">&nbsp;</div>
                                                     </div>
 
                                                 </td>

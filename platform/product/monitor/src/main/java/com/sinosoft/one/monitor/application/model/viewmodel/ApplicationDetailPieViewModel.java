@@ -1,5 +1,8 @@
 package com.sinosoft.one.monitor.application.model.viewmodel;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * 应用明细页饼图信息展示实体
  * User: carvin
@@ -7,22 +10,35 @@ package com.sinosoft.one.monitor.application.model.viewmodel;
  * Time: 下午9:51
  */
 public class ApplicationDetailPieViewModel {
-	private String availabilityValue;
+	private int availabilityCount = 64;
+	private int unavailabilityCount = 36;
 
 	private int criticalCount = 0;
 	private int warningCount = 0;
 	private int normalCount = 0;
 
 	public String getAvailabilityValue() {
-		return availabilityValue;
-	}
+		int total = availabilityCount + unavailabilityCount;
+		availabilityCount = total == 0 ? 1 : availabilityCount;
+		total = total == 0 ? 1 : total;
 
-	public void setAvailabilityValue(String availabilityValue) {
-		this.availabilityValue = availabilityValue;
+		BigDecimal totalBigDecimal = BigDecimal.valueOf(total);
+		BigDecimal hundredBigDecimal = BigDecimal.valueOf(100);
+
+		return BigDecimal.valueOf(availabilityCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue() + ":" +
+				BigDecimal.valueOf(unavailabilityCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue();
 	}
 
 	public String getHealthValue() {
-		return criticalCount + ":" + (warningCount + normalCount);
+		int total = criticalCount + warningCount + normalCount;
+		normalCount = total == 0 ? 1 : normalCount;
+		total = total == 0 ? 1 : total;
+
+		BigDecimal totalBigDecimal = BigDecimal.valueOf(total);
+		BigDecimal hundredBigDecimal = BigDecimal.valueOf(100);
+		return BigDecimal.valueOf(criticalCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue() + ":" +
+				BigDecimal.valueOf(warningCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue() + ":" +
+				BigDecimal.valueOf(normalCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue();
 	}
 
 	public int getCriticalCount() {

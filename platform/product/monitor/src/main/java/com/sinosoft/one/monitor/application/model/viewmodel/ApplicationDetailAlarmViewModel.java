@@ -44,7 +44,7 @@ public class ApplicationDetailAlarmViewModel {
 	}
 
 	public void addAlarmInfo(String alarmInfo) {
-		alarmInfoes.append("<br/>").append(alarmInfo);
+		alarmInfoes.append("<br/>------").append(alarmInfo).append("<br/>");
 	}
 
 	public String getAlarmInfoes() {

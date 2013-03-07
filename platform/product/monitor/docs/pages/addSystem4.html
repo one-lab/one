@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>查看预警配置文件</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<link href="css/manageBusScene/manageBusScene.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="js/jquery-1.7.1.js"></script>
+<script language="javascript" src="js/sinosoft.layout.js"></script>
+<script language="javascript" src="js/sinosoft.grid.js"></script>
+<script language="javascript" src="js/sinosoft.window.js"></script>
+<script language="javascript" src="js/sinosoft.message.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("body").layout({
+		top:{topHeight:100},
+		bottom:{bottomHeight:30}
+	});
+	$("#thresholdList").Grid({
+		url : "addSystem4.json",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: "auto",  
+		colums:[  
+			{id:'1',text:'URL地址',name:"appellation",index:'1',align:''},
+			{id:'2',text:'名称',name:"appellation",index:'1',align:''},
+			{id:'3',text:'可用性',name:"appellation",index:'1',align:''},
+			{id:'4',text:'健康状态',name:"appellation",index:'1',align:''},
+			{id:'5',text:'操作',name:"appellation",index:'1',align:''}
+		],  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: true  
+	});
+	$("#myDesk").height($("#layout_center").height());
+	$("#nav").delegate('li', 'mouseover mouseout', navHover);
+	$("#nav,#menu").delegate('li', 'click', navClick);
+});
+function navHover(){
+	$(this).toggleClass("hover")
+}
+function navClick(){
+	$(this).addClass("seleck").siblings().removeClass("seleck");
+	if($(this).hasClass('has_sub')){
+		var subMav = $(this).children("ul.add_sub_menu");
+		var isAdd = false;
+		if($(this).parent().attr("id") == "menu"){
+			isAdd = true;
+		};
+		subMav.slideDown('fast',function(){
+			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
+			return false;
+		});		
+	};
+}
+function hideNav(e){
+	var subMenu = e.data.dom;
+	var isAdd = e.data.add;
+	subMenu.slideUp('fast',function(){
+		if(isAdd){
+			subMenu.parent().removeClass('seleck');
+		};
+	});	
+	$(document).unbind();
+}
+function delRow(e){
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+		msgSuccess("系统消息", "操作成功，配置已删除！");
+		alert(id);
+		rows.remove();
+	});
+}
+function batchDel(){
+	var $g = $("#thresholdList div.grid_view > table");
+	var selecteds = $("td.multiple :checked",$g);
+	if(selecteds.length > 0){
+		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+			var checks = [];
+			selecteds.each(function(){
+				var rows = $(this).parent().parent();
+				checks.push(rows.attr('id'));
+				rows.remove();
+			});
+			alert(checks);
+			msgSuccess("系统消息", "操作成功，配置已删除！");
+		});
+	}else{
+		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
+	};
+}
+</script>
+</head>
+
+<body>
+<div id="layout_top">
+	<div class="header">
+    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
+    	<div class="menu_box">
+        	<ul class="nav" id="nav">
+            	<li><a href="index.html">首页</a></li>
+                <li class="has_sub">
+                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
+                	<ul class="add_sub_menu" id="subNav">
+                    	<li class="action"><span class="sever">操作系统</span>
+                        	<ul class="list">
+                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
+                            </ul>
+                        </li>
+                        <li class="action"><span class="system">应用系统</span>
+                        	<ul class="list">
+                                <li><a href="performance.html">在线查询</a></li>
+                            </ul>
+                        </li>
+                        <li class="action" style="border:none"><span>数据库</span>
+                        	<ul class="list">
+                            	<li><a href="oracleMonitor.html">oracle</a></li>
+                            </ul>
+                        </li>
+                        <li class="clear"></li>
+                    </ul>
+                    
+                </li>
+                <li><a href="performance.html">应用性能</a></li>
+                <li><a href="BusinessSimulation.html">业务仿真</a></li>
+                <li><a href="alertList.html">告警</a></li>
+                <li><a href="userManager.html">用户管理</a></li>  
+            </ul>
+        </div>
+        <ul class="add_menu" id="menu">
+        	<li><a href="addMonitorList.html">新建监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>阈值配置文件</span></a>
+            	<ul class="add_sub_menu">
+                    <li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a></li>
+                    <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
+                </ul>
+            </li>            
+            <li><a href="deployMonitor.html">配置监视器</a></li>
+            <li class="has_sub">
+            	<a href="javascript:viod(0)"><span>动作</span></a>
+            	<ul class="add_sub_menu">
+                	<li class="title"><a href="showMotion.html">显示动作</a></li>
+                    <li class="action">创建新动作</li>
+                    <li><a class="sms" href="message.html">短信动作</a></li>
+                    <li><a class="email" href="mail.html">邮件动作</a></li>
+                </ul>
+            </li>
+            <li><a href="setEmergency.html">配置告警</a></li>
+        </ul>
+    </div>
+</div>
+<div id="layout_center">
+	<div class="main">
+   	<ul class="crumbs">
+      <li><a href="#">管理</a> ></li>
+      <li><b>配置告警</b></li>
+    </ul>
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    	  <tr>
+    	    <td style="vertical-align:top"><div class="threshold_file">
+    	      <h2 class="title2"><b>业务场景名:XXXXXX</b></h2>
+    	      <div class="tool_bar_top"> <a href="addBusiScene.html" class="add_bus_scene" >添加url</a> <a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a> </div>
+    	      <div id="thresholdList"></div>
+    	      <div class="tool_bar"></div>
+  	      </div></td>
+    	    <td width="15">&nbsp;</td>
+    	    <td width="33%" style="vertical-align:top"><div class="conf_box help">
+    	      <div class="conf_title">
+    	        <div class="conf_title_r"></div>
+    	        <div class="conf_title_l"></div>
+    	        <span>帮助信息</span> </div>
+    	      <div class="conf_cont_box">
+    	        <div class="conf_cont">
+    	          <ul>
+    	            <li class="first"><b>新建应用系统监视器</b><br />
+    	              创建系统监视器后可根据业务需求配置业务场景。</li>
+    	            <li class="first"><b>管理业务场景</b><br />
+    	              点击“管理业务场景”,可以增加新业务场景或管理已有业务场景。</li>
+    	            <li class="first"><b>管理URL</b><br />
+    	              点击“管理URL”,对应业务场景将URL按流程顺序进行添加与监控配置。</li>
+    	            <li class="the_set"><b>管理方法</b><br />
+    	              点击“管理方法”,对URL中所执行的方法按顺序进行添加与监控配置</li>
+  	            </ul>
+  	          </div>
+  	        </div>
+  	      </div></td>
+  	    </tr>
+  	  </table>
+	</div>
+</div>
+<div id="layout_bottom">
+	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
+</div>
+</body>
+</html>

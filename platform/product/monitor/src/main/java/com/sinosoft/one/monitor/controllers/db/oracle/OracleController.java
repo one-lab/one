@@ -1,10 +1,13 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -86,9 +89,10 @@ public class OracleController {
 		data.add(state);
 		return "@" + json;
 	}
-    @Post("viewConnect")
+    @Get("viewConnect/{monitorId}")
 	// 用户连接数和连接时间所用数据
-	public String viewConnectAndActive(String monitorId) {
+	public String viewConnectAndActive(@Param("monitorId")String monitorId) {
+        System.out.println("==============================================");
 		EventInfoModel[] eventInfoModel = oraclePreviewServiceImpl
 				.viewConnectInfo(monitorId);
 		EventInfoModel connectEvent = eventInfoModel[0];
@@ -110,8 +114,9 @@ public class OracleController {
 		JSONArray activeData = new JSONArray();
 		// x轴和连接时间y轴添加值
 		List<Point> connectPoints = connectEvent.getPoints();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		for (int i = 0; i < connectPoints.size(); i++) {
-			categories.add(connectPoints.get(i).getxAxis());
+			categories.add(sdf.format(connectPoints.get(i).getxAxis()));
 			connectData.add(connectPoints.get(i).getyAxis());
 		}
 
@@ -119,7 +124,7 @@ public class OracleController {
 		surr.put("data", connectData);
 		connectSeries.add(surr);
 		// 用户活动数y轴添加值
-		List<Point> activePoints = connectEvent.getPoints();
+		List<Point> activePoints = activeCount.getPoints();
 		for (int i = 0; i < activePoints.size(); i++) {
 			activeData.add(activePoints.get(i).getyAxis());
 		}
@@ -132,7 +137,12 @@ public class OracleController {
 		result.put("connectSeries", connectSeries);
 		result.put("activeSeries", activeSeries);
 		json = result.toJSONString();
-		return "@" + json;
+        System.out.println("==============================================");
+
+        System.out.println(json);
+        System.out.println("==============================================");
+
+        return "@" + json;
 	}
 
 	// sga饼状图所用数据

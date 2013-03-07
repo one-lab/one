@@ -6,7 +6,7 @@ $(function () {
 
 // 第二排左边 曲线图
 
-
+         getForm2();
         // 第二排右边 曲线图
         chart3 = new Highcharts.Chart({
             chart:{
@@ -422,11 +422,11 @@ $(function () {
             ],
             colors:['#00b200', '#0000b2', '#b200b2']
         });
-        getForm()
+        //getForm()
     });
 });
 // 用户活动数和连接时间曲线图
-function refreshChart2(_xAxis, _series, _rederTo, _yName) {
+function refreshChart2(_xAxis, _series, _rederTo, _yName,_text,_unit) {
     $("#"+_rederTo).html("");
     new Highcharts.Chart({
         chart:{
@@ -436,7 +436,8 @@ function refreshChart2(_xAxis, _series, _rederTo, _yName) {
             marginBottom:25
         },
         title:{
-            text:'时间',
+            //text:'时间',
+            text:_text  ,
             x:-20 // center
         },
 // xAxis: {
@@ -474,7 +475,7 @@ function refreshChart2(_xAxis, _series, _rederTo, _yName) {
         tooltip:{
             formatter:function () {
                 return '<b>' + this.series.name + '</b><br/>' +
-                    +this.y + '次';
+                    +this.y + _unit;
             }
         },
         legend:{
@@ -599,13 +600,14 @@ function refreshPie1(){
     });
 }
 function getForm1() {
+    //alert("ssss");
     $.ajax({
-        url:"ajaxReady.json",
+        url:"/monitor/db/oracle/home/viewConnect/402892173d3f2eae013d3f32543e0000",
         dataType:"json",
         cache:false,
         success:function (_data) {
-            refreshChart2(_data["xaxis"], _data["connectSeries"], "last_onehour", "连接时间ms");
-            refreshChart2(_data["xaxis"], _data["activeSeries"], "user_last_onehour", "用户数");
+            refreshChart2(_data["xaxis"], _data["connectSeries"], "last_onehour", "连接时间ms","时间","ms");
+            refreshChart2(_data["xaxis"], _data["activeSeries"], "user_last_onehour", "用户数","用户数","个");
         }
     });
 }
@@ -622,5 +624,5 @@ function getForm2() {
     });
 }
 
-setInterval(getForm1, 300000);
-setInterval(getForm2, 300000);
+setInterval(getForm1, 30000);
+//setInterval(getForm2, 300000);

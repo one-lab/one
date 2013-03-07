@@ -15,6 +15,8 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
 
     Application findByApplicationName(String applicationName);
 
+    List<Application> findByStatus(String status);
+
     @SQL("select * from GE_MONITOR_APPLICATION a where a.STATUS='1' order by a.APPLICATION_NAME")
     List<Application> findAllActiveApplication();
 

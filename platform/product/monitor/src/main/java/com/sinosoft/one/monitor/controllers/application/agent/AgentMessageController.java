@@ -8,6 +8,8 @@ import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Path
 public class AgentMessageController {
+	private Logger logger = LoggerFactory.getLogger(AgentMessageController.class);
 	@Autowired
 	private AgentMessageServiceFactory agentMessageServiceFactory;
 	@Autowired
@@ -36,6 +39,7 @@ public class AgentMessageController {
 			}
 			agentMessageServiceFactory.buildAgentMessageService(notificationType).handleMessage(applicationId, data);
 		} catch (Throwable throwable) {
+			logger.error("handler applicaiton agent message exception.", throwable);
 			return Replys.with("Exception");
 		}
 		return Replys.with("Success");

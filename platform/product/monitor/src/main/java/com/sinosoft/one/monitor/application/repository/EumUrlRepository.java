@@ -4,7 +4,12 @@ package com.sinosoft.one.monitor.application.repository;
 import com.sinosoft.one.monitor.application.model.EumUrl;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
+
 
 public interface EumUrlRepository extends PagingAndSortingRepository<EumUrl, String> {
+    List<EumUrl> findByApplication_Id(String applicationId);
+
+    List<EumUrl> findByUrlId(String urlId);
 }
 

@@ -17,6 +17,6 @@ public interface EumUrlAvaStaRepository extends PagingAndSortingRepository<EumUr
      * @param eumUrlId
      * @return
      */
-    List<EumUrlAvaSta> findByRecordTimeAndEumUrl_Id(Date Date,String eumUrlId);
+    List<EumUrlAvaSta> findByRecordTimeAndEumUrlId(Date Date,String eumUrlId);
 }
 

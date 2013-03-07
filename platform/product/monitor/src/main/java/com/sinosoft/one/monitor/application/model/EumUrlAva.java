@@ -23,16 +23,17 @@ public class EumUrlAva  implements java.io.Serializable {
     * 主键ID.
     */
     private String id;
+
     /**
     * 业务仿真ID.
     */
-    private EumUrl eumUrl;
+    private String eumUrlId;
+
     /**
     * 状态 1---可用 0---不可用.
     */
     private String state;
 
-    @Pattern(regexp = "[0-9]{1,10}",message = "轮询间隔必须是数字，长度1到10位")
     private BigDecimal interval;
 
     /**
@@ -57,16 +58,17 @@ public class EumUrlAva  implements java.io.Serializable {
     }
 
     public void setId(String id) {
-    this.id = id;
-    }
-    @ManyToOne(fetch=FetchType.LAZY)
-        @JoinColumn(name="EUM_URL_ID")
-    public EumUrl getEumUrl() {
-    return this.eumUrl;
+        this.id = id;
     }
 
-    public void setEumUrl(EumUrl eumUrl) {
-    this.eumUrl = eumUrl;
+
+    @Column(name="EUM_URL_ID")
+    public String getEumUrlId() {
+        return this.eumUrlId;
+    }
+
+    public void setEumUrlId(String eumUrlId) {
+        this.eumUrlId = eumUrlId;
     }
     
     @Column(name="STATE", length=1)
@@ -77,7 +79,7 @@ public class EumUrlAva  implements java.io.Serializable {
     public void setState(String state) {
     this.state = state;
     }
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="RECORD_TIME", length=7)
     public Date getRecordTime() {
     return this.recordTime;
