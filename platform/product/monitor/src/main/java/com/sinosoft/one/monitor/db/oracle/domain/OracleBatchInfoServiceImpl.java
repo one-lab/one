@@ -47,31 +47,107 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "sysTime"));
         List<Info> infoList = (List<Info>) infoRepository.findAll(sort);
         List<OracleAvaInfoModel> oracleAvaInfoModelList = new ArrayList<OracleAvaInfoModel>();
-
+        Date now = new Date();
+        Date timeStart =  StaTimeEnum.getTime(staTimeEnum,now);
+        double total = 0;
+        double during =  now.getTime()-timeStart.getTime();
         for (Info info : infoList) {
             OracleAvaInfoModel oracleAvaInfoModel = new OracleAvaInfoModel();
             AvaSta avaSta = avaStaRepository.findAvaSta(info.getId());
             oracleAvaInfoModel.setMonitorID(info.getId());
             oracleAvaInfoModel.setMonitorName(info.getName());
-            double avaRate = avaSta.getNormalRuntime() / (avaSta.getNormalRuntime() + avaSta.getTotalPoweroffTime());
+            double avaRate = avaSta.getNormalRuntime() / ((avaSta.getNormalRuntime() + avaSta.getTotalPoweroffTime())/1.0);
             oracleAvaInfoModel.setAvaRate(avaRate + "");
-            Sort sort1 = new Sort(new Sort.Order(Sort.Direction.ASC, "recordTime"));
-            List<Ava> avaList = (List<Ava>) avaRepository.findAll(sort1);
-            List<String[]> parts = new ArrayList<String[]>();
-            for (int i = 0; i < avaList.size() - 1; i++) {
-                Ava start = avaList.get(i);
-                Ava end = avaList.get(i + 1);
-                String[] part = new String[2];
-                part[0] = (end.getRecordTime().getTime() - start.getRecordTime().getTime()) + "";
-                part[1] = start.getState();
-                parts.add(part);
+            if(staTimeEnum==StaTimeEnum.LAST_24HOUR){
+                Sort sort1 = new Sort(new Sort.Order(Sort.Direction.ASC, "recordTime"));
+                List<Ava> avaList0 = (List<Ava>) avaRepository.findAll(sort1);
+                List<Ava> avaList = caculate(avaList0);
+                List<String[]> parts = new ArrayList<String[]>();
+                for (int i = 0; i < avaList.size() - 1; i++) {
+                    Ava start = avaList.get(i);
+                    Ava end = avaList.get(i + 1);
+                    long startTime = timeStart.getTime();
+                    if(startTime-start.getRecordTime().getTime()>0){
+                        continue;
+                    }
+                    String[] part = new String[3];
+                    long len = start.getRecordTime().getTime()-startTime-start.getInterval()*60000;
+                    if(i==0&&len>1000){
+                        part[0] = startTime+"";
+                        part[1] = "2";
+                        part[2] = ((start.getRecordTime().getTime()-startTime)/during)+"";
+                        parts.add(part);
+                        total += start.getRecordTime().getTime()-startTime;
+                        continue;
+                    }
+                    String[] part1 = new String[3];
+                    part1[0] = start.getRecordTime().getTime()+"";
+                    part1[1] = start.getState();
+                    part1[2] = ((end.getRecordTime().getTime()-start.getRecordTime().getTime())/during)+"";
+                    total += end.getRecordTime().getTime()-start.getRecordTime().getTime();
+                    parts.add(part1);
+                }
+                Ava ava = avaList.get(avaList.size()-1);
+                String[] part = new String[3];
+                part[0] = ava.getRecordTime().getTime()+"";
+                part[1] = ava.getState();
+                long lastTime = ava.getRecordTime().getTime()+ava.getInterval()*60000;
+                if(now.getTime()<=lastTime+1000){
+                    part[2] = ((now.getTime()-ava.getRecordTime().getTime())/during)+"";
+                    parts.add(part) ;
+                }else {
+                    part[2] = ava.getInterval()*60000/during+"";
+                    parts.add(part);
+                    String[] part1 = new String[3];
+                    part1[0] = lastTime+"";
+                    part1[1] = "2";
+                    part1[2] = (now.getTime()-lastTime )/during +"";
+                    parts.add(part1) ;
+                }
+                total = total+ now.getTime()-ava.getRecordTime().getTime();
+                oracleAvaInfoModel.setGraphInfo(parts);
+                oracleAvaInfoModelList.add(oracleAvaInfoModel);
             }
-            oracleAvaInfoModel.setGraphInfo(parts);
-            oracleAvaInfoModelList.add(oracleAvaInfoModel);
         }
+        double rate = total/during;
+        System.out.print(rate);
         return oracleAvaInfoModelList;
     }
-
+    private List<Ava> caculate(List<Ava> avaList){
+        List<Ava> avas = new ArrayList<Ava>();
+        for(int i=0;i<avaList.size()-1;i++){
+            int j=i;
+            int flag = 0;
+            while(j+1<avaList.size()&&avaList.get(j).getState().equals(avaList.get(j+1).getState())){
+                long interval = avaList.get(j).getInterval()*60000;
+                long recordTime = avaList.get(j).getRecordTime().getTime();
+                long nextTime =  avaList.get(j+1).getRecordTime().getTime();
+                j++;
+                if(nextTime-recordTime>interval+1000){
+                    flag = 1;
+                    j--;
+                    break;
+                }
+            }
+            if(flag == 0){
+                Ava ava = new Ava();
+                ava.setState(avaList.get(i).getState());
+                ava.setRecordTime(avaList.get(i).getRecordTime());
+                avas.add(ava);
+            } else {
+                Ava ava = new Ava();
+                ava.setState(avaList.get(i).getState());
+                ava.setRecordTime(avaList.get(i).getRecordTime());
+                avas.add(ava);
+                Ava ava1 = new Ava();
+                ava1.setState("2");
+                ava1.setRecordTime(new Date(avaList.get(j).getRecordTime().getTime()+avaList.get(j).getInterval()*60000));
+                avas.add(ava1);
+            }
+            i = j;
+        }
+        return avas;
+    }
     @Override
     public List<OracleHealthInfoModel> healthInfoList(StaTimeEnum staTimeEnum) {
 
