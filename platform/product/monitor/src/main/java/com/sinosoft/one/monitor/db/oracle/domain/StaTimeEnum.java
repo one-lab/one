@@ -67,6 +67,10 @@ public enum StaTimeEnum {
                 break;
             }
             case LAST_7DAY: {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currTime);
+                calendar.add(Calendar.DATE, -7);
+                returnTime = calendar.getTime();
                 break;
             }
             case LAST_WEEK: {

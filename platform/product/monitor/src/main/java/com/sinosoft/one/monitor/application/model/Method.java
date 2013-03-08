@@ -217,6 +217,10 @@ public class Method implements java.io.Serializable {
         this.operation = operation;
     }
 
+	@Transient
+	public String getFullName() {
+		return className + "." + methodName;
+	}
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);

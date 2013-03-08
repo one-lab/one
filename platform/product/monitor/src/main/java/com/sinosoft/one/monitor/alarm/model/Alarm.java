@@ -2,13 +2,13 @@ package com.sinosoft.one.monitor.alarm.model;
 // Generated 2013-3-1 10:29:53 by One Data Tools 1.0.0
 
 
-import java.util.Date;
-import javax.persistence.*;
-
 import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Alarm.
@@ -63,6 +63,18 @@ public class Alarm  implements java.io.Serializable {
 	 * 资源ID(subResourceId).
 	 */
 	private String subResourceId;
+    /**
+     * 页面显示状态(status).
+     */
+    private String status;
+    /**
+     * 页面显示名称(status).
+     */
+    private String appName;
+    /**
+     * 页面显示的记录时间(recordtime).
+     */
+    private String recordtime;
 
 
     public Alarm() {
@@ -175,7 +187,34 @@ public class Alarm  implements java.io.Serializable {
 		this.subResourceId = subResourceId;
 	}
 
-	@Override
+    @Transient
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Transient
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    @Transient
+    public String getRecordtime() {
+        return recordtime;
+    }
+
+    public void setRecordtime(String recordtime) {
+        this.recordtime = recordtime;
+    }
+
+    @Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}

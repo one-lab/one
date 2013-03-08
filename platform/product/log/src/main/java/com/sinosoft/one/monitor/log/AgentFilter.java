@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.log;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,33 +18,52 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 public class AgentFilter implements Filter {
-
-    private UrlTraceLog urlTraceLog;
 	private ApplicationContext applicationContext;
-
     private LogConfigs logConfigs;
-	private String url;
-	private String urlId;
 
-	private static final String DEFAULT_EXCLUDE_EXTENSIONS = "jspx,js,css,gif,png,jpg,jpeg,bmp,html,htm,swf,jsp";
+	private static final String DEFAULT_EXCLUDE_EXTENSIONS = "jspx,js,css,gif,png,jpg,jpeg,bmp,html,htm,swf";
 	private String[] excludeExtensions = new String[0];
 
 	public void destroy() {}
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		url = httpServletRequest.getRequestURI();
+		String url = httpServletRequest.getRequestURI();
 
-		if(isExclude(url)) {
+		String extension = getExtension(url);
+		if(isExclude(extension)) {
 			filterChain.doFilter(request, response);
 		} else {
-			long beginTime = System.currentTimeMillis();
-	        doUrlTraceLogBegin(httpServletRequest);
+			TraceModel traceModel = TraceUtils.getTraceModel();
+			if(traceModel == null) {
+				traceModel = new TraceModel();
+
+				if(logConfigs != null) {
+					String urlId = logConfigs.isMonitorUrl(url);
+					if(urlId != null) {
+						UrlTraceLog urlTraceLog = new UrlTraceLog();
+						urlTraceLog.setUrlId(urlId);
+						urlTraceLog.setBeginTime(new Timestamp(traceModel.getBeginTime()));
+						traceModel.setUrlId(urlId);
+						traceModel.setUrlTraceLog(urlTraceLog);
+					}
+					traceModel.setRequestParams(JSON.toJSONString(request.getParameterMap()));
+				}
+				traceModel.setUrl(logConfigs.getRealPath(url));
+				TraceUtils.beginTrace(traceModel);
+			} else {
+				traceModel.increaseIndex();
+			}
+
 			try {
 	            filterChain.doFilter(request, response);
 			} finally {
-				long endTime = doUrlTraceLogEnd(httpServletRequest);
-				UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(url, urlId, endTime-beginTime));
+				TraceModel resultTraceModel = TraceUtils.getTraceModel();
+				if(resultTraceModel.getIndex() == 0) {
+					doUrlTraceLogEnd(httpServletRequest, resultTraceModel);
+				} else {
+					resultTraceModel.decreaseIndex();
+				}
 			}
 		}
 	}
@@ -61,38 +81,24 @@ public class AgentFilter implements Filter {
 		excludeExtensions = DEFAULT_EXCLUDE_EXTENSIONS.split(",");
     }
 
-    private void doUrlTraceLogBegin(HttpServletRequest request) {
-        if(logConfigs != null) {
-	        urlId = logConfigs.isMonitorUrl(url);
-           if(urlId != null) {
-	           urlTraceLog = UrlTraceLog.beginTrace();
-	           urlTraceLog.setUrlId(urlId);
-	           TraceUtils.beginTrace(urlTraceLog, urlId, url);
-           } else {
-	           TraceUtils.beginTraceForNoMonitorURL(url, JSON.toJSONString(request.getParameterMap()));
-           }
-        } else {
-	        urlId = null;
-        }
-    }
-
-    private long doUrlTraceLogEnd(HttpServletRequest request) {
+    private void doUrlTraceLogEnd(HttpServletRequest request, TraceModel traceModel) {
 	    long endTime;
-        if(urlTraceLog != null) {
-            endTime = UrlTraceLog.endTrace(request);
-            TraceUtils.endTrace();
+        if(traceModel.getUrlId() != null) {
+            endTime = UrlTraceLog.endTrace(request, traceModel);
         } else {
-	        TraceUtils.endTraceForNoMonitorURL();
 	        endTime = System.currentTimeMillis();
         }
-	    return endTime;
+	    try {
+		    if(!traceModel.hasException()) {
+			    UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(traceModel.getUrl(), traceModel.getUrlId(), endTime-traceModel.getBeginTime()));
+		    }
+	    } finally {
+		    TraceUtils.endTrace();
+	    }
     }
 
-	private boolean isExclude(String url) {
-		String extension;
-		int lastIndex = url.lastIndexOf(".");
-		if(lastIndex != -1) {
-			extension = url.substring(lastIndex + 1);
+	private boolean isExclude(String extension) {
+		if(null != extension && !"".equals(extension)) {
 			for(int i=0, len=excludeExtensions.length; i<len; i++) {
 				if(extension.equalsIgnoreCase(excludeExtensions[i])) {
 					return true;
@@ -100,5 +106,19 @@ public class AgentFilter implements Filter {
 			}
 		}
 		return false;
+	}
+
+	private String getExtension(String url) {
+		String extension = "";
+		int lastIndex = url.lastIndexOf(".");
+		if(lastIndex != -1) {
+			extension = url.substring(lastIndex + 1);
+		}
+		return extension;
+	}
+
+	private boolean isAjaxRequest(HttpServletRequest request) {
+		String requestType = request.getHeader("X-Requested-With");
+		return "XMLHttpRequest".equals(requestType);
 	}
 }

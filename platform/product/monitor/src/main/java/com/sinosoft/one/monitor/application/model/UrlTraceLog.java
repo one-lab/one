@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "GE_MONITOR_URL_TRACE_LOG")
-public class UrlTraceLog extends AbstractMessageBase {
+public class UrlTraceLog {
 	/**
 	 * 主键ID
 	 */
@@ -77,6 +77,10 @@ public class UrlTraceLog extends AbstractMessageBase {
 	 * URL信息ID
 	 */
 	private String urlId;
+	/**
+	 * 日志记录时间
+	 */
+	private Date recordTime;
 
 
 
@@ -221,6 +225,15 @@ public class UrlTraceLog extends AbstractMessageBase {
 		this.applicationId = applicationId;
 	}
 
+	@Column(name = "RECORD_TIME")
+	public Date getRecordTime() {
+		return recordTime;
+	}
+
+	public void setRecordTime(Date recordTime) {
+		this.recordTime = recordTime;
+	}
+
 	@Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -234,28 +247,4 @@ public class UrlTraceLog extends AbstractMessageBase {
             .append("userIp", userIp)
             .build();
     }
-
-	@Override
-	public List<AlarmMessage> alarmMessages() {
-		return new ArrayList<AlarmMessage>() {
-			{
-				add(AlarmMessage.valueOf(applicationId, AttributeName.ResponseTime, consumeTime+""));
-			}
-		};
-	}
-
-	@Override
-	public AlarmSource alarmSource() {
-		return AlarmSource.LOG;
-	}
-
-	@Override
-	public ResourceType subResourceType() {
-		return ResourceType.APPLICATION_SCENARIO_URL;
-	}
-
-	@Override
-	public String subResourceId() {
-		return urlId;
-	}
 }

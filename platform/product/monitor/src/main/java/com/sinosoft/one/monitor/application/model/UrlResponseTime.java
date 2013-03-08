@@ -1,7 +1,6 @@
 package com.sinosoft.one.monitor.application.model;
 
 
-import com.sinosoft.one.monitor.common.HealthStaCache;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -36,15 +35,23 @@ public class UrlResponseTime {
 	/**
 	 * 最小响应时间
 	 */
-	private Long minResponseTime;
+	private Long minResponseTime = 0l;
 	/**
 	 * 最大响应时间
 	 */
-	private Long maxResponseTime;
+	private Long maxResponseTime = 0l;
 	/**
 	 * 平均响应时间
 	 */
-	private Long avgResponseTime;
+	private Long avgResponseTime = 0l;
+	/**
+	 * 总响应时间
+	 */
+	private Long totalResponseTime = 0l;
+	/**
+	 * 总次数
+	 */
+	private Integer totalCount = 0;
 	/**
 	 * 响应时间
 	 */
@@ -116,9 +123,9 @@ public class UrlResponseTime {
 		this.maxResponseTime = maxResponseTime;
 	}
 
-	@Column(name = "AVG_RESPONSE_TIME")
-	public Long getAvgResponseTime() {
-		return avgResponseTime == null ? 0l : avgResponseTime;
+	@Transient
+	 public Long getAvgResponseTime() {
+		return avgResponseTime;
 	}
 
 	public void setAvgResponseTime(Long avgResponseTime) {
@@ -143,6 +150,24 @@ public class UrlResponseTime {
 		this.responseTime = responseTime;
 	}
 
+	@Column(name = "TOTAL_RESPONSE_TIME")
+	public Long getTotalResponseTime() {
+		return totalResponseTime == null ? 0l : totalResponseTime;
+	}
+
+	public void setTotalResponseTime(Long totalResponseTime) {
+		this.totalResponseTime = totalResponseTime;
+	}
+
+	@Column(name = "TOTAL_COUNT")
+	public Integer getTotalCount() {
+		return totalCount == null ? 1 : totalCount;
+	}
+
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
+
 	/**
 	 * 获得健康度条
 	 */
@@ -154,5 +179,15 @@ public class UrlResponseTime {
 	public void setHealthBar(String healthBar) {
 		this.healthBar = healthBar;
 	}
+
+	public void increaseTotalCount() {
+		totalCount++;
+	}
+
+	public void addTotalResponseTime(long responseTime) {
+		totalResponseTime += responseTime;
+	}
+
+
 
 }

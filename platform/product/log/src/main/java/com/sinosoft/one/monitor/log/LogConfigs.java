@@ -20,18 +20,19 @@ public class LogConfigs {
     public static final String MBEAN_NAME = "log:name=LogConfigs";
     private Logger logger = LoggerFactory.getLogger(getClass());
     private List<LogUrl> urls = new ArrayList<LogUrl>();
+	private String applicationName = "";
 
     @PostConstruct
     public void init() {
         try {
-            initUrls();
+            initData();
         } catch (Exception e) {
             logger.error("init log config exception.", e);
         }
     }
 
 
-    private void initUrls() {
+    private void initData() {
 		NotificationService notificationService = NotificationServiceFactory.buildNotificationService();
 	    String initUrls = notificationService.getUrlData();
 	    if(initUrls == null || initUrls.equals("")) {
@@ -48,17 +49,23 @@ public class LogConfigs {
 		    }
 		    urls.add(logUrl);
 	    }
+	    applicationName = notificationService.getApplicationName();
     }
 
 	public String isMonitorUrl(String url) {
 		Iterator<LogUrl> iterator = urls.iterator();
 		while (iterator.hasNext()) {
 			LogUrl logUrl = iterator.next();
-			if(logUrl.getUrl().equalsIgnoreCase(url)) {
+			String tempUrl = logUrl.getUrl().startsWith("/") ? logUrl.getUrl() : "/" + logUrl.getUrl();
+			if(("/" + applicationName  + tempUrl).equalsIgnoreCase(url)) {
 				return logUrl.getId();
 			}
 		}
 		return null;
+	}
+
+	public String getRealPath(String url) {
+		return url.replace("/" + applicationName, "");
 	}
 
 	public Set<LogMethod> getLogMethods(String urlId) {

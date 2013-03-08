@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.application.domain;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.sinosoft.one.monitor.application.model.EumUrl;
 import com.sinosoft.one.monitor.application.model.EumUrlAva;
 import com.sinosoft.one.monitor.application.model.EumUrlAvaSta;
@@ -20,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 仿真URL服务对象
@@ -106,7 +109,7 @@ public class ApplicationEmuService {
         int  count = 0;
         int  avCount = 0;
         for(EumUrl eumUrl:eumUrls){
-            UrlAvailableInf urlAvailableInf =  getUrlAvailableToday(eumUrl.getId());
+            UrlAvailableInf urlAvailableInf =  getUrlAvailableToday(eumUrl.getUrlId());
             count+=urlAvailableInf.getCount();
             avCount+=urlAvailableInf.getAvailableCount();
         }
@@ -123,14 +126,15 @@ public class ApplicationEmuService {
 
 
     public UrlAvailableInf getUrlAvailableToday(String urlId){
-
         EumUrl eumUrl = getEumUrlByUrlId(urlId);
-        Interval interval = new Interval(DateTime.now(),new DateTime(getTodayFirstEumUrlAva(eumUrl.getId()).getRecordTime()));
+        Interval interval = new Interval(new DateTime(getTodayFirstEumUrlAva(eumUrl.getId()).getRecordTime()), DateTime.now());
+
         int seconds = interval.toPeriod().getSeconds();
+	    EumUrlAva eumUrlAva = getEumUrlAvaTodayAndLatestAndUnavailable(eumUrl.getId());
         return new UrlAvailableInf(urlAvaTrendByUrlId(urlId),
                 eumUrlAvaRepository.countByEmuId(eumUrl.getId()),
                 eumUrlAvaRepository.countByEmuIdAndStatus(eumUrl.getId(),"1"),
-                seconds,getEumUrlAvaTodayAndLatestAndUnavailable(eumUrl.getId()).getRecordTime());
+                seconds, eumUrlAva == null ? null : eumUrlAva.getRecordTime());
 
     }
 
@@ -142,6 +146,36 @@ public class ApplicationEmuService {
         if (eumUrls.size() > 1)
             throw new MutileEumUrlException();
         return eumUrls.get(0);
+    }
+
+
+    List<TimeQuantumAvailableInfo> findAvailableStatisticsByUrlId(String urlId) {
+        Assert.hasText(urlId);
+        ArrayList<TimeQuantumAvailableStatistics> availableStatisticsList = new ArrayList<TimeQuantumAvailableStatistics>(0);
+        DateTime now = DateTime.now();
+        DateTime prev = now.minusHours(6);
+        List<TimeQuantumAvailableStatistics>  list = eumUrlAvaRepository.statisticsByEumUrlIdAndRecordTime(getEumUrlByUrlId(urlId).getId(),now.toDate(),prev.toDate());
+        Map<String,TimeQuantumAvailableInfo> map = Maps.newHashMap();
+        for(TimeQuantumAvailableStatistics statistics:list){
+            TimeQuantumAvailableInfo timeQuantumAvailableInfo = null;
+            if(map.get(statistics.getTimeQuantum())==null){
+                 timeQuantumAvailableInfo = new TimeQuantumAvailableInfo();
+                if(statistics.getStatus().equals("1")){
+                    timeQuantumAvailableInfo.setAvaCount(statistics.getCount());
+                }
+                timeQuantumAvailableInfo.setCount(statistics.getCount());
+                map.put(statistics.getTimeQuantum(),timeQuantumAvailableInfo);
+            }else{
+                timeQuantumAvailableInfo =map.get(statistics.getTimeQuantum());
+                if(statistics.getStatus().equals("1")){
+                    timeQuantumAvailableInfo.setAvaCount(statistics.getCount());
+                }
+                int count = timeQuantumAvailableInfo.getCount()+statistics.getCount();
+                timeQuantumAvailableInfo.setCount(count);
+                timeQuantumAvailableInfo.setTimeQuantum(statistics.getTimeQuantum());
+            }
+        }
+        return Lists.newArrayList(map.values());
     }
 
 
@@ -204,7 +238,8 @@ public class ApplicationEmuService {
                         eumUrlAvaSta.getTotalFailureTime().longValue(), eumUrlAvaSta.getFailureCount().intValue()),
                 avaCount,unAvaCount,interval.intValue(),result,
                 eumAvaLast == null?null:new AvailableCalculate.AvailableInf(
-                        eumAvaLast.getRecordTime(), eumAvaLast.getState().equals("1"), eumAvaLast.getInterval().intValue())
+                        eumAvaLast.getRecordTime(), eumAvaLast.getState().equals("1"),
+                        eumAvaLast.getInterval().intValue())
         );
         AvailableCalculate avaResult = AvailableCalculate.calculate(availableCalculateParam);
 

@@ -6,5 +6,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 
 public interface AttributeThresholdRepository extends PagingAndSortingRepository<AttributeThreshold, String> {
+
+    public AttributeThreshold findByResourceIdAndAttributeId(String resourceId,String attributeId);
+
+    public AttributeThreshold findByResourceIdAndAttributeIdAndThresholdId(String resourceId,String attributeId,String thresholdId);
 }
 

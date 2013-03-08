@@ -13,10 +13,6 @@
 <script language="javascript" src="js/highcharts.src.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
@@ -36,8 +32,9 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:true
 	});
+	
 });
 $(function(){
 	var chart;
@@ -133,7 +130,6 @@ function hideNav(e){
 </head>
 	
 <body>
-<div id="layout_center">
   <div class="main" style="margin-bottom:60px;">
      <div class="threshold_file">
      
@@ -171,6 +167,5 @@ function hideNav(e){
        <div id="sevenday_grid"></div>
      </div>
   </div>
-</div>
 </body>
 </html>

@@ -28,8 +28,8 @@ public class HealthStaCacheModel {
 		increase(severityLevel, count);
 	}
 
-	public void increase(HealthSta healthSta) {
-		increase(healthSta.getSeverity(), healthSta.getCount());
+	public void increase(HealthStaForMonitor healthStaForMonitor) {
+		increase(healthStaForMonitor.getSeverity(), healthStaForMonitor.getCount());
 	}
 
 	public void increase(SeverityLevel severityLevel) {

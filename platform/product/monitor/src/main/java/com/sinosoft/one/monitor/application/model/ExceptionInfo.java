@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "GE_MONITOR_EXCEPTION_INFO")
-public class ExceptionInfo extends AbstractMessageBase {
+public class ExceptionInfo {
 	/**
 	 * 主键ID
 	 */
@@ -140,19 +140,5 @@ public class ExceptionInfo extends AbstractMessageBase {
 
 	public void setRequestParams(String requestParams) {
 		this.requestParams = requestParams;
-	}
-
-	@Override
-	public List<AlarmMessage> alarmMessages() {
-		return new ArrayList<AlarmMessage>() {
-			{
-				add(AlarmMessage.valueOf(applicationId, AttributeName.Exception, "0"));
-			}
-		};
-	}
-
-	@Override
-	public AlarmSource alarmSource() {
-		return AlarmSource.EXCEPTION;
 	}
 }

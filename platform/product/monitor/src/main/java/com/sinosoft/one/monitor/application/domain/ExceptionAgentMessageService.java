@@ -3,6 +3,9 @@ package com.sinosoft.one.monitor.application.domain;
 import com.alibaba.fastjson.JSON;
 import com.sinosoft.one.monitor.application.model.ExceptionInfo;
 import com.sinosoft.one.monitor.application.repository.ExceptionInfoRepository;
+import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AlarmSource;
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.MessageBaseEventSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +21,7 @@ public class ExceptionAgentMessageService implements AgentMessageService{
 	@Autowired
 	private ExceptionInfoRepository exceptionInfoRepository;
 	@Autowired
-	private MessageBaseEventSupport messageBaseEventSupport;
+	private AlarmMessageBuilder alarmMessageBuilder;
 
 	/**
 	 * 处理代理端异常消息
@@ -28,7 +31,10 @@ public class ExceptionAgentMessageService implements AgentMessageService{
 	public void handleMessage(String applicationId, String data) {
 		ExceptionInfo exceptionInfo = JSON.parseObject(data, ExceptionInfo.class);
 		exceptionInfo.setApplicationId(applicationId);
-		String alarmId = messageBaseEventSupport.doMessageBase(exceptionInfo);
+		String alarmId = alarmMessageBuilder.newMessageBase(applicationId)
+				.alarmSource(AlarmSource.EXCEPTION)
+				.addAlarmAttribute(AttributeName.Exception, "0")
+				.alarm();
 		exceptionInfo.setAlarmId(alarmId);
 		exceptionInfoRepository.save(exceptionInfo);
 	}

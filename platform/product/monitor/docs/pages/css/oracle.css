@@ -44,10 +44,10 @@ a{ cursor:pointer; text-decoration:none; color:#000;}
 .hit_rate_head{text-align:center;height:35px; padding-top:15px;width:60%;background:#468ed5;margin:20px 0 0 20%}
 .hit_rate_c_l{width:10%;border-right:1px solid #000;height:300px;}
 .hit_rate_c{width:75%;border-top:1px solid #000; text-align:center;}
-.hit_rate_c_t{background:#000;height:225px;width:60%; margin:20%;text-align:center;}
-.hit_rate_c_m{width:80%;height:80%;margin:10%; background:url(../images/db/hit.png);}
+.hit_rate .hit_rate_c_t{background:#000;height:225px;width:60%; margin:20% auto 0;text-align:center;float:none}
+.hit_rate .hit_rate_c_m{width:80%;height:80%;margin:10% auto 2%;background:url(../images/db/hit.png);float:none}
 .hit_rate_c_m_m{width:100%;height:30%; background: url(../images/db/hit2.png);}
-.hit_rate_c_m_b{color:#0F0; margin-left:40%;}
+.hit_rate .hit_rate_c_m_b{color:#0F0;float:none;text-align:center}
 .hit_rate_c_r{width:10%;border-left:1px solid #000;height:300px;}
 .hit_rate_b_l{width:10%}
 .hit_rate_b{width:75%;border-top:1px solid #000;}

@@ -5,9 +5,9 @@
 			"id":"1",
 			"cell": [
 				"运行队列",
-				"<a href='#' class='bfb'>0</a>",
-				"<a  class='img-unknow'></a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='#' class='bfb' onclick='staticlinks(this)' >0</a>",
+				"<a  class='img-unknow' href='javascript:void(0)' onclick='fnOpenNewWindowDo(this)'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"0",
 				null
 			]
@@ -15,9 +15,9 @@
            "id":"2",
 		   "cell": [
 				"阻塞进程",
-				"<a href='#' class='bfb'>3</a>",
-				"<a  class='img-unknow'></a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='#' class='bfb' onclick='staticlinks(this)'>3</a>",
+				"<a  class='img-unknow' href='javascript:void(0)' onclick='fnOpenNewWindowDo(this)'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"867",
 				null
 			]         
@@ -25,9 +25,9 @@
            "id":"2",
 		   "cell": [
 				"用户时间(%)",
-				"<a href='#' class='bfb'>21</a>",
-				"<a href='#' class='img-unknow'></a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='#' class='bfb' onclick='staticlinks(this)'>21</a>",
+				"<a href='#' class='img-unknow' href='javascript:void(0)' onclick='fnOpenNewWindowDo(this)'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"867",
 				null
 			]         
@@ -35,9 +35,9 @@
            "id":"2",
 		   "cell": [
 				"系统时间(%) ",
-				"<a href='#' class='bfb'>1</a>",
-				"<a  class='img-unknow'></a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='#' class='bfb' onclick='staticlinks(this)'>1</a>",
+				"<a  class='img-unknow' href='javascript:void(0)' onclick='fnOpenNewWindowDo(this)'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"867",
 				null
 			]         
@@ -45,9 +45,9 @@
            "id":"2",
 		   "cell": [
 				"I/O等待(%) ",
-				"<a href='#' class='bfb'>21</a>",
-				"<a  class='img-unknow'></a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='#' class='bfb' onclick='staticlinks(this)'>21</a>",
+				"<a  class='img-unknow' href='javascript:void(0)' onclick='fnOpenNewWindowDo(this)'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"867",
 				null
 			]         
@@ -55,9 +55,9 @@
            "id":"2",
 		   "cell": [
 				"空闲时间(%) ",
-				"<a href='#' class='bfb'>0</a>",
-				"<a  class='img-unknow'></a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='#' class='bfb' onclick='staticlinks(this)'>0</a>",
+				"<a  class='img-unknow' href='javascript:void(0)' onclick='fnOpenNewWindowDo(this)'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"867",
 				null
 			]         
@@ -65,9 +65,9 @@
            "id":"2",
 		   "cell": [
 				"中断/秒",
-				"<a href='#' class='bfb'>1</a>",
-				"<a  class='img-unknow'></a>",
-				"<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>",
+				"<a href='#' class='bfb' onclick='staticlinks(this)'>1</a>",
+				"<a  class='img-unknow' href='javascript:void(0)' onclick='fnOpenNewWindowDo(this)'></a>",
+				"<a href='javascript:void(0)' onclick='fnOpenNewWindow7(this)' class='img-7'></a>",
 				"867",
 				null
 			]         

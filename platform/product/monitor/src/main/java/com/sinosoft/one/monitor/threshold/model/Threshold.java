@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Threshold.
@@ -75,16 +76,26 @@ public class Threshold  implements java.io.Serializable {
 	 */
 	private String conditionStr;
 
-    public Threshold() {
-    }
+	private String operation="<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
+	public Threshold() {
+	}
 
+	@Transient
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
 	
     public Threshold(String id) {
         this.id = id;
     }
    
-    @Id 
-    
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Column(name="id", unique=true, length=32)
     public String getId() {
     return this.id;

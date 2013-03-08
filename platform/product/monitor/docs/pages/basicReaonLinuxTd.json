@@ -1,0 +1,58 @@
+[
+	{ 
+		"attr" : {"id": "id_1"},
+		"data" : "Linux的健康状况 ", 
+		"children" : [
+			{ 
+				"attr" : {"id": "id_1_1"},
+				"data" : "kauditd的Health ",
+				"children":[
+					{
+						"attr":{"id":"id_1_1_1"},
+						"data":"Linux的可用性"
+					},
+					{
+						"attr":{"id":"id_1_1_2"},
+						"data":"Linux的Error"
+					}
+				]
+			},
+			{
+				"attr" : {"id": "id_1_2"},
+				"data" : { 
+						"title" : " udevd的Health ", 
+						"attr" : { "href" : "#" }
+				},
+				"children":[
+					{
+						"attr":{"id":"id_1_2_1"},
+						"data":"kauditd的Availability "
+					},
+					{
+						"attr":{"id":"id_1_2_2"},
+						"data":"udevd的Availability"
+					}
+				]
+			}
+		], 
+		"state" : "close" 
+	},
+	{ 
+		"attr" : {"id": "id_2"},
+		"data" : " kmpathd/的Health ", 
+		"children" : [
+			{ 
+				"attr" : {"id": "id_2_1"},
+				"data" : "udevd的Availability"
+			},
+			{
+				"attr" : {"id": "id_2_2"},
+				"data" : { 
+						"title" : "udevd的Availability", 
+						"attr" : { "href" : "#" } 
+				}
+			}
+		], 
+		"state" : "close" 
+	}
+]

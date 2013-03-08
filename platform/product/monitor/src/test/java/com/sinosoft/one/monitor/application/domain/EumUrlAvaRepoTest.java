@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.application.domain;
 
+import com.sinosoft.one.monitor.application.model.EumUrlAva;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaStaRepository;
 import com.sinosoft.one.util.test.SpringTxTestCase;
@@ -15,6 +16,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -43,12 +45,21 @@ public class EumUrlAvaRepoTest extends SpringTxTestCase {
     @Test
     public void findByRecordTimeAndEumUrlId(){
 
-        Assert.assertEquals(1, avaStaRepository.findByRecordTimeAndEumUrl_Id(new Date(), "11111").size());
+        Assert.assertEquals(1, avaStaRepository.findByRecordTimeAndEumUrlId(new Date(), "11111").size());
     }
 
 
     @Test
+    @Transactional
     public void saveEumUrlAvaTest(){
-        emuService.saveApplicationEnumUrlAvailable("11111",true, BigDecimal.ONE,null);
+        Date now = new Date();
+        EumUrlAva eumUrlAva = new EumUrlAva();
+        eumUrlAva.setEumUrlId("11111");
+        eumUrlAva.setInterval(BigDecimal.TEN);
+        eumUrlAva.setRecordTime(now);
+        avaRepository.save(eumUrlAva);
+        EumUrlAva eumUrlAva1 =emuService.getTodayLatestEumUrlAva("11111");
+        Assert.assertEquals(0, eumUrlAva1.getRecordTime().compareTo(now));
+        //emuService.saveEnumUrlAvailableDetail("11111",true, BigDecimal.ONE);
     }
 }

@@ -42,7 +42,7 @@ public class Attribute  implements java.io.Serializable {
     /**
      * 阈值.
      */
-    private String threshold = "<a href='javascript:void(0)' onclick='setMergency()'>关联</a>";
+    private String threshold = "<a href='javascript:void(0)' onclick='setAttributeEmergency(this)'>关联</a>";
     /**
      * 动作.
      */

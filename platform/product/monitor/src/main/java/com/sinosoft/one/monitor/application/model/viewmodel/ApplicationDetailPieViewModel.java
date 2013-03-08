@@ -10,8 +10,8 @@ import java.math.RoundingMode;
  * Time: 下午9:51
  */
 public class ApplicationDetailPieViewModel {
-	private int availabilityCount = 64;
-	private int unavailabilityCount = 36;
+	private int availabilityCount = 0;
+	private int unavailabilityCount = 0;
 
 	private int criticalCount = 0;
 	private int warningCount = 0;
@@ -63,5 +63,21 @@ public class ApplicationDetailPieViewModel {
 
 	public void setNormalCount(int normalCount) {
 		this.normalCount = normalCount;
+	}
+
+	public int getAvailabilityCount() {
+		return availabilityCount;
+	}
+
+	public void setAvailabilityCount(int availabilityCount) {
+		this.availabilityCount = availabilityCount;
+	}
+
+	public int getUnavailabilityCount() {
+		return unavailabilityCount;
+	}
+
+	public void setUnavailabilityCount(int unavailabilityCount) {
+		this.unavailabilityCount = unavailabilityCount;
 	}
 }
