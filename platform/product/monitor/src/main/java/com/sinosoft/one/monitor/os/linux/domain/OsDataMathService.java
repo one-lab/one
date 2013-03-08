@@ -25,7 +25,7 @@ import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
 import com.sinosoft.one.monitor.utils.BussinessUtil;
-import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
+//import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
 
 /**
  * 信息处理类
@@ -65,7 +65,7 @@ public class OsDataMathService {
 		int stopCount=0;//停机次数
 		OsAvailable osAvailable=osAvailableServcie.getAvailable(osInfoId, timeSpan);
 		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
-		List<AvailableDetail> availableDetails=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
+//		List<AvailableDetail> availableDetails=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
 		long lastRecordTime = 0;//上次时间变量
 		for (int i = 0; i < osAvailabletemps.size(); i++) {
 			if(i==0){//判断第一次与查询时间起始时间targetTime 是否大于轮询时间
@@ -80,13 +80,13 @@ public class OsDataMathService {
 			lastRecordTime=osAvailabletemps.get(i).getSampleDate().getTime();
 		}
 		if(osAvailable==null){
-			AvailableCalculate availableCalculate=AvailableCalculate.simpleCalculate(osAvailabletemps.get(0).getSampleDate(),Long.valueOf(interCycleTime*1000), Long.valueOf(0), availableDetails, Integer.valueOf(0), interCycleTime);
+//			AvailableCalculate availableCalculate=AvailableCalculate.simpleCalculate(osAvailabletemps.get(0).getSampleDate(),Long.valueOf(interCycleTime*1000), Long.valueOf(0), availableDetails, Integer.valueOf(0), interCycleTime);
 			//初始一条统计的运行时间=轮询时间
 			osAvailableServcie.saveAvailable(osInfoId, 1,0, 0, 1, timeSpan);
 		}else{
-			AvailableCalculate availableCalculate=AvailableCalculate.simpleCalculate(osAvailabletemps.get(0).getSampleDate(), osAvailable.getNormalRun(), osAvailable.getCrashTime(), availableDetails,osAvailable.getStopCount(), 1);
+//			AvailableCalculate availableCalculate=AvailableCalculate.simpleCalculate(osAvailabletemps.get(0).getSampleDate(), osAvailable.getNormalRun(), osAvailable.getCrashTime(), availableDetails,osAvailable.getStopCount(), 1);
 //			osAvailableServcie.saveAvailable(osInfoId,availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(),availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(), timeSpan);
-			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),osAvailable.getStopCount());
+//			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),osAvailable.getStopCount());
 		}
 	}
 	

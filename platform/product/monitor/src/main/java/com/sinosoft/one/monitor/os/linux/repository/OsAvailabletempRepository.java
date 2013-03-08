@@ -10,7 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
-import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
+//import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
 
 public interface OsAvailabletempRepository extends PagingAndSortingRepository<OsAvailabletemp, String> {
 	
@@ -37,8 +37,8 @@ public interface OsAvailabletempRepository extends PagingAndSortingRepository<Os
 	
 	
 	//统计临时表的 轮询时间改变次数
-	@SQL("select count(intercycle_time) \"count\",intercycle_time \"interval\" from ge_monitor_os_availabletemp where OS_INFO_ID= ?1 and SAMPLE_DATE > to_date(?2,?3) group by intercycle_time")
-	public List<AvailableDetail> findGroupByInterCycleTime(String osid,String time,String dateformat);
+//	@SQL("select count(intercycle_time) \"count\",intercycle_time \"interval\" from ge_monitor_os_availabletemp where OS_INFO_ID= ?1 and SAMPLE_DATE > to_date(?2,?3) group by intercycle_time")
+//	public List<AvailableDetail> findGroupByInterCycleTime(String osid,String time,String dateformat);
 	
 }
 

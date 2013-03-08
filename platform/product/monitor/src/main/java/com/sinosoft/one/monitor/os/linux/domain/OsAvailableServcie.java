@@ -15,7 +15,6 @@ import com.sinosoft.one.monitor.os.linux.repository.OsAvailableRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsAvailabletempRepository;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
-import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
 
 /**
  * 可用性的数据库操作
@@ -212,12 +211,12 @@ public class OsAvailableServcie {
 		deleteAvailableTemp(osInfoId, d2,d1);
 	}
 	
-	/**
-	 * 获取临时表统计轮询时间改变的计算
-	 */
-	public List<AvailableDetail> findGroupByInterCycleTime(String osinfoID,Date todaytime){
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		return osAvailabletempRepository.findGroupByInterCycleTime(osinfoID, simpleDateFormat.format(todaytime),OsUtil.ORCL_DATEFORMATE);
-	}
+//	/**
+//	 * 获取临时表统计轮询时间改变的计算
+//	 */
+//	public List<AvailableDetail> findGroupByInterCycleTime(String osinfoID,Date todaytime){
+//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+//		return osAvailabletempRepository.findGroupByInterCycleTime(osinfoID, simpleDateFormat.format(todaytime),OsUtil.ORCL_DATEFORMATE);
+//	}
 	
 }
