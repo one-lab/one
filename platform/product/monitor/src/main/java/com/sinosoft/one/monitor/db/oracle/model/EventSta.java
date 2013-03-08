@@ -4,18 +4,16 @@ package com.sinosoft.one.monitor.db.oracle.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
-
-import com.sinosoft.one.monitor.utils.DateUtil;
 
 /**
  * EventSta.
@@ -60,18 +58,20 @@ public class EventSta  implements java.io.Serializable {
     */
     private long eventCount;
     
-    @Transient
+   
     private String date;
    
-    @Transient
+ 
     private String time;
 
+    @Transient
     public String getDate() {
     	
 		return date;
 	}
 
 
+    @Transient
 	public String getTime() {
 		
 		return time;

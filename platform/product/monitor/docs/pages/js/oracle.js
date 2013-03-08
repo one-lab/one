@@ -281,7 +281,7 @@ $(function(){
 	        tickColor: '#666',
 	        labels: {
 	            step: 5, //步长 *5的数值
-	              rotation: 'auto'
+	            rotation: 'auto'
 	        },
 	        title: {
 	            text: '百分比' //表盘中央显示数值信息
@@ -365,7 +365,7 @@ $(function(){
 	        tickColor: '#666',
 	        labels: {
 	            step: 5, //步长 *5的数值
-	              rotation: 'auto'
+	            rotation: 'auto'
 	        },
 	        title: {
 	            text: '百分比' //表盘中央显示数值信息
@@ -449,7 +449,7 @@ $(function(){
 	        tickColor: '#666',
 	        labels: {
 	            step: 5, //步长 *5的数值
-	              rotation: 'auto'
+	            rotation: 'auto'
 	        },
 	        title: {
 	            text: '百分比' //表盘中央显示数值信息

@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.common;
 
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -35,10 +34,10 @@ public final class HealthStaCache {
 			public HealthStaCacheModel load(String key) throws Exception {
 				String[] keys = key.split("#");
 
-				List<HealthSta> healthStaList = alarmRepository.selectHealthStaForUrl(keys[0], keys[1], LocalDate.now().toDate(), LocalDateTime.now().toDate());
+				List<HealthStaForMonitor> healthStaForMonitorList = alarmRepository.selectHealthStaForUrl(keys[0], keys[1], LocalDate.now().toDate(), LocalDateTime.now().toDate());
 				HealthStaCacheModel healthStaCacheModel = new HealthStaCacheModel();
-				for(HealthSta healthSta : healthStaList) {
-					healthStaCacheModel.increase(healthSta);
+				for(HealthStaForMonitor healthStaForMonitor : healthStaForMonitorList) {
+					healthStaCacheModel.increase(healthStaForMonitor);
 				}
 				return healthStaCacheModel;
 			}

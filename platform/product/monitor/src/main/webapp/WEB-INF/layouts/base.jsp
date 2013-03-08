@@ -11,8 +11,10 @@
 <link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+<script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>

@@ -92,6 +92,7 @@ public class OracleController {
 		data.add(state);
 		return "@" + json;
 	}
+    ///monitor/db/oracle/sevenDayConn/viewConnect/
     @Get("viewConnect/{monitorId}")
 	// 用户连接数和连接时间所用数据
 	public String viewConnectAndActive(@Param("monitorId")String monitorId) {

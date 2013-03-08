@@ -10,8 +10,20 @@
     <script type="text/javascript">
         $(function(){
             $("#monitorType").bind("change",getMonitorNames);
-            $("#monitorName").bind("change",getNewGrid);
+            /*var _resourceType=$("#monitorType").val();
+            var _monitorId=$('#monitorName').val();*/
+            /*$("#monitorName").bind("change",getNewGrid($("#monitorType").val(),$('#monitorName').val()));*/
         });
+
+        function setHealthOrAvailable(monitorType,monitorId,attributeType,attributeId){
+            if(null!=attributeType&&""!=attributeType){
+                setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeType);
+            }else if(null!=attributeId&&""!=attributeId) {
+                setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeId);
+            }
+        }
+
+
         function getMonitorNames(){
             $.ajax({
                 type:"post",
@@ -31,7 +43,7 @@
                 }
             });
         }
-        function getNewGrid(_val){
+        function getNewGrid(resourceType,monitorId){
             $("body").layout({
                 top:{topHeight:100},
                 bottom:{bottomHeight:30}
@@ -40,17 +52,24 @@
             $("#nav").delegate('li', 'mouseover mouseout', navHover);
             $("#nav,#menu").delegate('li', 'click', navClick);
             $("#natureList").html("");
-            var _resourceType=$("#monitorType").val();
+            if(monitorId==null){
+                var _resourceType=$("#monitorType").val();
+                var _monitorId=$('#monitorName').val();
+            }else{
+                _resourceType=resourceType;
+                _monitorId=monitorId;
+            }
+
             $("#natureList").Grid({
                 type:"post",
-                url : "${ctx}/alarm/manager/configemergency/attributenames/"+_resourceType,
+                url : "${ctx}/alarm/manager/configemergency/attributenames/"+_resourceType+"/"+_monitorId,
                 dataType: "json",
                 colDisplay: false,
                 clickSelect: true,
                 draggable:false,
                 height: 225,
                 colums:[
-                    {id:'1',text:'属性名',name:"attributeCn",index:'1',align:'',colDisplay:false},
+                    {id:'1',text:'属性名',name:"attributeCn",index:'1',align:''},
                     {id:'2',text:'阈值',name:"threshold",index:'1',align:''},
                     {id:'3',text:'动作',name:"action",index:'1',align:''}
                 ],
@@ -88,16 +107,16 @@
             });
             $(document).unbind();
         }
-        function setEmergency(monitorType,monitorId){
-            alert(monitorType+":"+monitorId);
+
+        /*通用的JS*/
+        function setHealthOrAvailableEmergencyForm(monitorType,monitorId,attribute){
             var _monitorType=monitorType;
             var _monitorId=monitorId;
-            var _health="Health";
+            var _attribute=attribute;
             var temWin = $("body").window({
                 "id":"window",
                 "title":'配置告警',
-                "url":"${ctx}/alarm/manager/configemergency/health/"+_monitorType+"/"+_monitorId+"/"+_health,
-                /*"url":"${ctx}/alarm/manager/configemergency/health",*/
+                "url":"${ctx}/alarm/manager/configemergency/sub/"+_monitorType+"/"+_monitorId+"/"+_attribute,
                 "hasIFrame":true,
                 "width": 740,
                 "height":440,
@@ -107,6 +126,52 @@
                     "value": "保存",
                     "onclickEvent" : "selectLear",
                     "btFun": function() {
+                        var option = $("#window_iframe").contents().find("#graveList option")
+                        /*var vals = [];
+                         option.each(function(){
+                         var val = $(this).val();
+                         vals.push(val);
+                         })*/
+                        var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                        var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
+                        var _graveList=$("#window_iframe").contents().find("#graveList option");
+                        var _garveIds=[];
+                        var _alarmList=$("#window_iframe").contents().find("#alarmList option");
+                        var _alarmIds=[];
+                        var _normalList=$("#window_iframe").contents().find("#normalList option");
+                        var _normalIds=[];
+                        //@todo 如何取得当前下拉列表数据的value（现在取得的是第一个）
+                        var _attributeThresholdId=$("#window_iframe").contents().find("#attributeThreshold option:selected").val();
+                        for(var i=0;i<_graveList.length;i++){
+                            _garveIds.push(_graveList[i].value);
+                        }
+                        for(var i=0;i<_alarmList.length;i++){
+                            _alarmIds.push(_alarmList[i].value);
+                        }
+                        for(var i=0;i<_normalList.length;i++){
+                            _normalIds.push(_normalList[i].value);
+                        }
+                        $.ajax({
+                            type : "POST",
+                            /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
+                            url : "${ctx}/alarm/manager/configemergency/save/"+_monitorId+"/"+_attributeId,
+                            dataType : "json",
+                            async:false,
+                            data : {
+                                CRITICAL : _garveIds,
+                                WARNING : _alarmIds,
+                                INFO : _normalIds,
+                                THRESHOLDID:_attributeThresholdId
+                            },
+                            success : function(dataFromJson) {
+                                    var _resourceTypeAfterUpdate=dataFromJson[0].resourceTypeAfterUpdate;
+                                    var _monitorIdAfterUpdate=dataFromJson[0].monitorIdAfterUpdate;
+                                    getNewGrid(_resourceTypeAfterUpdate,_monitorIdAfterUpdate);
+                            },
+                            error:function(){
+                             alert("保存失败");
+                             }
+                        });
                         msgSuccess("系统消息", "操作成功，配置已保存！");
                         temWin.closeWin();
                     }
@@ -126,12 +191,243 @@
                         "value": "删除配置",
                         "onclickEvent" : "selectLear",
                         "btFun": function() {
+                            var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                            var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
+                            $.ajax({
+                                type : "POST",
+                                /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
+                                url : "${ctx}/alarm/manager/configemergency/delete/"+_monitorId+"/"+_attributeId,
+                                dataType : "json",
+                                async:false,
+                                success : function(dataFromJson) {
+                                    if(dataFromJson != null){
+                                        alert("删除成功！");
+                                        var _resourceTypeAfterUpdate=dataFromJson[0].resourceTypeAfterUpdate;
+                                        var _monitorIdAfterUpdate=dataFromJson[0].monitorIdAfterUpdate;
+                                        getNewGrid(_resourceTypeAfterUpdate,_monitorIdAfterUpdate);
+                                    }
+                                },
+                                error:function(){
+                                 alert("删除失败");
+                                 }
+                            });
                             temWin.closeWin();
                         }
                     }
                 ]
             });
         };
+
+
+        function setHealthEmergency(monitorType,monitorId){
+            var _monitorType=monitorType;
+            var _monitorId=monitorId;
+            var _health="Health";
+            var temWin = $("body").window({
+                "id":"window",
+                "title":'配置告警',
+                "url":"${ctx}/alarm/manager/configemergency/health/"+_monitorType+"/"+_monitorId+"/"+_health,
+                "hasIFrame":true,
+                "width": 740,
+                "height":440,
+                "diyButton":[{
+                    "id": "btOne",
+                    "btClass": "buttons",
+                    "value": "保存",
+                    "onclickEvent" : "selectLear",
+                    "btFun": function() {
+                        var option = $("#window_iframe").contents().find("#graveList option")
+                        /*var vals = [];
+                        option.each(function(){
+                            var val = $(this).val();
+                            vals.push(val);
+                        })*/
+                        var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                        var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
+                        var _graveList=$("#window_iframe").contents().find("#graveList option");
+                        var _garveIds=[];
+                        var _alarmList=$("#window_iframe").contents().find("#alarmList option");
+                        var _alarmIds=[];
+                        var _normalList=$("#window_iframe").contents().find("#normalList option");
+                        var _normalIds=[];
+                        for(var i=0;i<_graveList.length;i++){
+                            _garveIds.push(_graveList[i].value);
+                        }
+                        for(var i=0;i<_alarmList.length;i++){
+                            _alarmIds.push(_alarmList[i].value);
+                        }
+                        for(var i=0;i<_normalList.length;i++){
+                            _normalIds.push(_normalList[i].value);
+                        }
+                        $.ajax({
+                            type : "POST",
+                            /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
+                            url : "${ctx}/alarm/manager/configemergency/save/"+_monitorId+"/"+_attributeId,
+                            dataType : "json",
+                            data : {
+                                CRITICAL : _garveIds,
+                                WARNING : _alarmIds,
+                                INFO : _normalIds
+                            },
+                            success : function(data) {
+                                if(data != null){
+                                    alert("保存成功！");
+                                }
+                            }
+                            /*error:function(){
+                                alert("保存失败");
+                            }*/
+                        });
+                        msgSuccess("系统消息", "操作成功，配置已保存！");
+                        temWin.closeWin();
+                    }
+                },
+                    {
+                        "id": "btOne",
+                        "btClass": "buttons",
+                        "value": "关闭",
+                        "onclickEvent" : "selectLear",
+                        "btFun": function() {
+                            temWin.closeWin();
+                        }
+                    },
+                    {
+                        "id": "btOne",
+                        "btClass": "buttons",
+                        "value": "删除配置",
+                        "onclickEvent" : "selectLear",
+                        "btFun": function() {
+                            var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                            var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
+                            $.ajax({
+                                type : "POST",
+                                /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
+                                url : "${ctx}/alarm/manager/configemergency/delete/"+_monitorId+"/"+_attributeId,
+                                dataType : "json",
+                                success : function(data) {
+                                        alert("删除成功！");
+
+                                }
+                                /*error:function(){
+                                    alert("删除失败");
+                                }*/
+                            });
+                            temWin.closeWin();
+                        }
+                    }
+                ]
+            });
+        };
+        /*配置可用性*/
+        function setAvailableEmergency(monitorType,monitorId){
+            var _monitorType=monitorType;
+            var _monitorId=monitorId;
+            var _available="Availability";
+            var temWin = $("body").window({
+                "id":"window",
+                "title":'配置告警',
+                "url":"${ctx}/alarm/manager/configemergency/available/"+_monitorType+"/"+_monitorId+"/"+_available,
+                "hasIFrame":true,
+                "width": 740,
+                "height":440,
+                "diyButton":[{
+                    "id": "btOne",
+                    "btClass": "buttons",
+                    "value": "保存",
+                    "onclickEvent" : "selectLear",
+                    "btFun": function() {
+                        var option = $("#window_iframe").contents().find("#graveList option")
+                        /*var vals = [];
+                         option.each(function(){
+                         var val = $(this).val();
+                         vals.push(val);
+                         })*/
+                        var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                        var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
+
+                        var _graveList=$("#window_iframe").contents().find("#graveList option");
+                        var _garveIds=[];
+                        /*var _alarmList=$("#window_iframe").contents().find("#alarmList option");
+                        var _alarmIds=[];*/
+                        var _normalList=$("#window_iframe").contents().find("#normalList option");
+                        var _normalIds=[];
+                        for(var i=0;i<_graveList.length;i++){
+                            _garveIds.push(_graveList[i].value);
+                        }
+                        /*for(var i=0;i<_alarmList.length;i++){
+                            _alarmIds.push(_alarmList[i].value);
+                        }*/
+                        for(var i=0;i<_normalList.length;i++){
+                            _normalIds.push(_normalList[i].value);
+                        }
+                        $.ajax({
+                            type : "POST",
+                            /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
+                            url : "${ctx}/alarm/manager/configemergency/save/"+_monitorId+"/"+_attributeId,
+                            dataType : "json",
+                            data : {
+                                CRITICAL : _garveIds,
+                                /*WARNING : _alarmIds,*/
+                                INFO : _normalIds
+                            },
+                            success : function(data) {
+                                if(data != null){
+                                    alert("保存成功！");
+                                }
+                            }
+                            /*error:function(){
+                             alert("保存失败");
+                             }*/
+                        });
+                        msgSuccess("系统消息", "操作成功，配置已保存！");
+                        temWin.closeWin();
+                    }
+                },
+                    {
+                        "id": "btOne",
+                        "btClass": "buttons",
+                        "value": "关闭",
+                        "onclickEvent" : "selectLear",
+                        "btFun": function() {
+                            temWin.closeWin();
+                        }
+                    },
+                    {
+                        "id": "btOne",
+                        "btClass": "buttons",
+                        "value": "删除配置",
+                        "onclickEvent" : "selectLear",
+                        "btFun": function() {
+                            var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                            var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
+                            $.ajax({
+                                type : "POST",
+                                /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
+                                url : "${ctx}/alarm/manager/configemergency/delete/"+_monitorId+"/"+_attributeId,
+                                dataType : "json",
+                                success : function(data) {
+                                    alert("删除成功！");
+
+                                }
+                                /*error:function(){
+                                 alert("删除失败");
+                                 }*/
+                            });
+                            temWin.closeWin();
+                        }
+                    }
+                ]
+            });
+        };
+        function setAttributeEmergency(e){
+            var rows = $(e).parent().parent();
+            var id = rows.attr('id');
+            /*id前面多了“rows”*/
+            var _attributeId=id.substr(4,32);
+            var _monitorId=$("#monitorName").val();
+            var _monitorType=$("#monitorType").val();
+            setHealthOrAvailable(_monitorType,_monitorId,'',_attributeId);
+        }
     </script>
 </head>
 
@@ -154,14 +450,14 @@
                     <td width="33%"> 选择监视器类型</td>
                     <td><select id="monitorType" name="monitorType"  class="diySelect" style="width:200px">
                         <option value="选择一个监视器类型">--选择一个监视器类型--</option>
-                        <option value="应用系统">应用系统</option>
-                        <option value="数据库">数据库</option>
-                        <option value="操作系统">操作系统</option>
+                        <option value="APPLICATION">应用系统</option>
+                        <option value="DB">数据库</option>
+                        <option value="OS">操作系统</option>
                     </select></td>
                 </tr>
                 <tr>
                     <td> 监视器</td>
-                    <td><select id="monitorName" name="monitorName" class="diySelect" style="width:200px">
+                    <td><select id="monitorName" name="monitorName" class="diySelect" style="width:200px" onchange="getNewGrid($($('#monitorType').val(),$('#monitorName').val()))">
                     </select></td>
                 </tr>
             </table>
@@ -177,7 +473,8 @@
                     <ul>
                         <li><b>动作：</b>配置动作，当产生告警时配置动作将被执行。</li>
                     </ul>
-                    <p class="set_etc"><input type="button" id="Health" class="buttons" onclick="setEmergency($('#monitorType').val(),$('#monitorName').val())" value="配置健康状态" /><span>动作</span></p>
+                    <%--<p class="set_etc"><input type="button" id="Health" class="buttons" onclick="setHealthEmergency($('#monitorType').val(),$('#monitorName').val(),'Health','')" value="配置健康状态" /><span>动作</span></p>--%>
+                    <p class="set_etc"><input type="button" id="Health" class="buttons" onclick="setHealthOrAvailable($('#monitorType').val(),$('#monitorName').val(),'Health','')" value="配置健康状态" /><span>动作</span></p>
                 </div>
             </div>
         </div>
@@ -192,7 +489,8 @@
                     <ul>
                         <li><b>动作：</b>配置动作，当产生告警时配置动作将被执行。</li>
                     </ul>
-                    <p class="set_etc"><input type="button" class="buttons" onclick="setEmergency()" value="　配置可用性　" /><span class="is_set">动作</span></p>
+                    <%--<p class="set_etc"><input type="button" id="Availability" class="buttons" onclick="setAvailableEmergency($('#monitorType').val(),$('#monitorName').val(),'Availability','')" value="　配置可用性　" /><span class="is_set">动作</span></p>--%>
+                    <p class="set_etc"><input type="button" id="Availability" class="buttons" onclick="setHealthOrAvailable($('#monitorType').val(),$('#monitorName').val(),'Availability','')" value="　配置可用性　" /><span class="is_set">动作</span></p>
                 </div>
             </div>
         </div>

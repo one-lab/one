@@ -26,6 +26,9 @@ $(function(){
 	});
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
+	var autoWidth = $("#layout_center").width() - 100;
+	$("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
+	$("#cipan_space_detail").width(autoWidth + 65)
 	$("#nav,#menu").delegate('li', 'click', navClick);
 
 		$("#grid_Memory").Grid({
@@ -35,7 +38,7 @@ $(function(){
 		colums:[
 			{id:'1',text:'Memory Usage',name:"appellation",index:'1',align:'',color:''},
 			{id:'2',text:'%',name:"degrees",index:'1',align:'',color:''},
-			{id:'6',text:'',name:"degrees",index:'1',align:'',color:''},
+			{id:'6',text:'aa',name:"degrees",index:'1',align:'',color:''},
 			{id:'3',text:'MB',name:"degrees",index:'1',align:'',color:''},
 			{id:'4',text:'Threshold',name:"degrees",index:'1',align:'',color:''}
 		],
@@ -54,7 +57,7 @@ $(function(){
 		colums:[
 			{id:'1',text:'CPU Usage',name:"appellation",index:'1',align:'',color:''},
 			{id:'2',text:'%',name:"degrees",index:'1',align:'',color:''},
-			{id:'6',text:'',name:"degrees",index:'1',align:'',color:''},
+			{id:'6',text:'%',name:"degrees",index:'1',align:'',color:''},
 			{id:'4',text:'Threshold',name:"degrees",index:'1',align:'',color:''}
 		],
 		rowNum:10,
@@ -76,14 +79,13 @@ $(function(){
 			{id:'1',text:'参数名称',name:"appellation",index:'1',align:''},
 			{id:'2',text:'当前值',name:"appellation",index:'1',align:''},
 			{id:'3',text:'状态',name:"appellation",index:'1',align:''},
-			{id:'4',text:'',name:"appellation",index:'1',align:''}
+			{id:'4',text:'%',name:"appellation",index:'1',align:''}
 		],  
 		rowNum:9999,
 		pager : false,
 		number:false,  
 		sorts: false,
 		multiselect: false
-		 
 	});
 		$("#cipan_space_detail").Grid({
 		url : "linux-cipan.json",
@@ -91,14 +93,14 @@ $(function(){
 		height: 'auto',
 		colums:[
 			{id:'1',text:'磁盘',name:"methodName",width:'',index:'1',align:'',color:''},
-			{id:'1',text:'',name:"methodName",width:'300',index:'1',align:'',color:''},
+			{id:'1',text:'aa ',name:"methodName",width:'300',index:'1',align:'',color:''},
 			{id:'2',text:'磁盘总空间',name:"maxTime",width:'',index:'1',align:'',color:''},
 			{id:'3',text:'已用%',name:"minTime",width:'',index:'1',align:'',color:''},
 			{id:'4',text:'已用 (MB) ',name:"avgTime",width:'',index:'1',align:'',color:''},
 			{id:'5',text:'空闲% ',name:"status",width:'',index:'1',align:'',color:''},
 			{id:'6',text:'空间(MB) ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'7',text:' ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'8',text:' ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'7',text:'aa ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'8',text:' aa',name:"status",width:'',index:'1',align:'',color:''},
 			{id:'9',text:'配置告警 ',name:"status",width:'',index:'1',align:'',color:''}
 		],
 		rowNum:10,
@@ -766,6 +768,7 @@ chart8 = new Highcharts.Chart({
     </div>
     <ul class="add_menu" id="menu">
       <li><a href="javascript:viod(0)">新建监视器</a></li>
+
       <li><a href="javascript:viod(0)">配置监视器</a></li>
       <li class="has_sub"> <a href="javascript:viod(0)"><span>预警对象管理</span></a>
         <ul class="add_sub_menu">
@@ -962,7 +965,7 @@ chart8 = new Highcharts.Chart({
     </table>
     <div id="CPU_line2"></div>
     <div class="grid_cpudo" id="grid_cpudo" style="width:70%"> </div>
-    <div class="tool_bar2" style="width:70.2%"><a class="gaojin" href="setEmergency.html">告警配置</a></div>
+    <div class="tool_bar2" id="grid_cpudo_tool" style="width:70%"><a class="gaojin" href="setEmergency.html">告警配置</a></div>
   </div>
 </div>
 <div class="second">
