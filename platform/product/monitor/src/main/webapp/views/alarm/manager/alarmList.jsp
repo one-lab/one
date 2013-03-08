@@ -1,3 +1,7 @@
+<%@ page language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -11,19 +15,20 @@ $(function(){
 		bottom:{bottomHeight:30}
 	});
 	$("#thresholdList").Grid({
-		url : "alertList.json",  
+        type:"post",
+		url : "${ctx}/alarm/manager/alarmmanager/alarmdata",
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
 		draggable:false,
 		height: "auto",  
 		colums:[  
-			{id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
-			{id:'2',text:'消息',name:"appellation",index:'1',align:''},
-			{id:'3',text:'名称',name:"appellation",index:'1',align:''},
-			{id:'4',text:'类型',name:"appellation",index:'1',align:''},
-			{id:'5',text:'时间',name:"appellation",index:'1',align:''},
-			{id:'6',text:'用户',name:"appellation",index:'1',align:''}
+			{id:'1',text:'状态',name:"status",index:'1',align:'',width:'52'},
+			{id:'2',text:'消息',name:"message",index:'1',align:''},
+			{id:'3',text:'名称',name:"appName",index:'1',align:''},
+			{id:'4',text:'类型',name:"monitorType",index:'1',align:''},
+			{id:'5',text:'时间',name:"createTime",index:'1',align:''},
+			{id:'6',text:'用户',name:"ownerName",index:'1',align:''}
 		],  
 		rowNum:10,
 		pager : true,
@@ -34,6 +39,18 @@ $(function(){
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
 });
+/*得到告警的详细信息*/
+function alarmDetailInfo(e){
+    var rows = $(e).parent().parent();
+    var id = rows.attr('id');
+    /*id前面多了“rows”*/
+    var _alarmId=id.substr(4,32);
+    /*告警详细信息页面*/
+    window.location.href="${ctx}/alarm/manager/alarmmanager/detailinfo/"+_alarmId;
+}
+
+
+
 function navHover(){
 	$(this).toggleClass("hover")
 }

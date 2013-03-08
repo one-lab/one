@@ -29,7 +29,7 @@
                 </li>
                 <li><a href="performance.html">应用性能</a></li>
                 <li><a href="BusinessSimulation.html">业务仿真</a></li>
-                <li><a href="alertList.html">告警</a></li>
+                <li><a href="${ctx}/alarm/manager/alarmmanager/list">告警</a></li>
                 <li><a href="userManager.html">用户管理</a></li>
             </ul>
         </div>
@@ -52,7 +52,7 @@
                     <li><a class="email" href="mail.html">邮件动作</a></li>
                 </ul>
             </li>
-            <li><a href="setEmergency.html">配置告警</a></li>
+            <li><a href="${ctx}/alarm/manager/configemergency/config">配置告警</a></li>
         </ul>
     </div>
 </div>
