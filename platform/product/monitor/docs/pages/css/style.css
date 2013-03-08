@@ -105,7 +105,7 @@ display:block;height:22px;float:left}
 .set_etc .is_set{background-position:right -394px}
 .grid_view .etcs{padding-left:16px;background:url(../images/icon_arrow_childattribute.gif) no-repeat 3px center}
 .select_tab td{padding:0;}
-.top_border{background:none;height:15px;border:none;border-top:#c6d3e0 1px dashed}
+.top_border{background:none;height:0;border:none;border-top:#c6d3e0 1px dashed;margin-bottom:15px;}
 .availability .title2 b{background:url(../images/icon_mon_avail.gif) 8px center no-repeat;font-size:14px;}
 .my_table th{text-align:left}
 .my_table a{color:#005590}
@@ -129,6 +129,7 @@ display:block;height:22px;float:left}
 .grid_view .sys_down{background-image:url(../images/icon_availability_down.gif)}
 .grid_view .fine{background-image:url(../images/bussinessY.gif)}
 .grid_view .poor{background-image:url(../images/icon_health_critical.gif)}
+.grid_view .y_poor{background-image:url(../images/bussinessY3.gif)}
 .tree_box{width:90%;margin:0 auto;border:#ccc 1px solid;margin-top:20px}
 .tree_box .tree_cont{width:100%;height:150px;overflow:hidden;overflow-y:auto;}
 .tree_box .title3{background:#eaecee;border:#c5cfda 1px solid;border-width:1px 0}
@@ -161,3 +162,4 @@ padding-left:25px}
 .help li{padding-top:30px;background:url(../images/liu.gif) no-repeat center 4px;color:#555}
 .help .first{padding:0 0 30px;background-position:center bottom;margin-bottom:4px;}
 .help .the_set{padding:2px 4px;background:#fff;border:#f6a107 1px solid;color:#000}
+*+html #main{position:relative;overflow:hidden;overflow-y:auto;position:absolute}

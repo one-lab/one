@@ -66,6 +66,10 @@ $(function(){
 	});
 	
 	$("#tabs").tabs({closeTab:false});
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center")
+		$("#main").width(center.width() - 40).height(center.height() - 30)
+	}
 });
 
 
@@ -235,7 +239,7 @@ function createThirtyDayResponseTime() {
     </div>
 </div>
 <div id="layout_center">
-	<div class="time_info_all">
+	<div class="time_info_all" id="main">
   	<ul class="crumbs">
       <li><a href="#">管理</a> ></li>
       <li><b>配置告警</b></li>
@@ -382,7 +386,7 @@ function createThirtyDayResponseTime() {
         <div class="type_list">
           <div class="threshold_file">
             <div class="tool_bar_top">方法列表</div>
-            <div id="list_table" ></div>
+            <div id="list_table"></div>
           </div>
         </div>
         <div class="stuats_mark">

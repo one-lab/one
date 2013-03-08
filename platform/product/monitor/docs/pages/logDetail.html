@@ -28,13 +28,13 @@ $(function(){
 			var time = _data.method[i].cell[1];  
 			var percent = _data.method[i].cell[1] / sumLeng *100;
 			if(time >= _data.red){
-					$(this).find("div").removeClass().addClass("red_bar");
+					$(this).find(".line_bar").addClass("red_bar");
 			}else if(time >=_data.yellow){
-					$(this).find("div").removeClass().addClass("yellow_bar");
+					$(this).find(".line_bar").addClass("yellow_bar");
 			}else{
-					$(this).find("div").removeClass().addClass("green_bar");
+					$(this).find(".line_bar").addClass("green_bar");
 				}
-			$(this).find("div").css({"margin-left":addLeng+"%","width":percent+"%"});
+			$(this).find(".line_bar").css({"margin-left":addLeng+"%","width":percent+"%"});
 			
 			addLeng= addLeng+percent;
 			$(this).find("td").eq(1).text("耗时:"+_data.method[i].cell[1]+"ms");
@@ -52,7 +52,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : true,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	
 	
@@ -173,30 +173,30 @@ function hideNav(e){
           <div class="tool_bar_top">日志操作详细</div>
             <table class="log_detail_table" width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <th class="m_name"><a>方法</a></th>
-                <th id="total_time" class="m_time">总耗时:300ms</th>
-                <th><div class="green_bar" style="width:100%">&nbsp;</div></th>
+                <th width="20%" class="m_name"><a>方法</a></th>
+                <th width="20%" class="m_time" id="total_time">总耗时:300ms</th>
+                <th width="60%"><div><div class="green_bar">&nbsp;</div></div></th>
               </tr>
              
               <tr>
                 <td class="m_name"></td>
                 <td class="m_time">耗时:180ms</td>
-                <td><a href="methodDetail.html"><div class="red_bar">&nbsp;</div></a></td>
+                <td><div><a href="methodDetail.html"><div class="line_bar">&nbsp;</div></a></div></td>
               </tr>
               <tr>
                 <td class="m_name">></td>
                 <td class="m_time">耗时:100ms</td>
-                <td><a href="methodDetail.html"><div class="yellow_bar" >&nbsp;</div></a></td>
+                <td><div><a href="methodDetail.html"><div class="line_bar" >&nbsp;</div></a></div></td>
               </tr>
                 <tr>
                 <td class="m_name"></td>
                 <td class="m_time">耗时:20ms</td> <!--可以使用全局变量累加宽度来设置margin-left值-->
-                <td><a href="methodDetail.html"><div class="green_bar" >&nbsp;</div></a></td>
+                <td><div><a href="methodDetail.html"><div class="line_bar" >&nbsp;</div></a></div></td>
               </tr>
                <tr>
                 <td class="m_name"></td>
                 <td class="m_time">耗时:20ms</td> <!--可以使用全局变量累加宽度来设置margin-left值-->
-                <td><a href="methodDetail.html"><div class="green_bar" >&nbsp;</div></a></td>
+                <td><div><a href="methodDetail.html"><div class="line_bar" >&nbsp;</div></a></div></td>
               </tr>
             </table>
                 

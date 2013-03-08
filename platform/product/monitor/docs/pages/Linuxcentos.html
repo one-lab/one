@@ -27,8 +27,7 @@ $(function(){
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
-});
-$(function(){
+
 		$("#grid_Memory").Grid({
 		url : "gridMemory.json",
 		dataType: "json",
@@ -47,8 +46,7 @@ $(function(){
 		multiselect:false,
 		draggable:false
 	});
-})
-$(function(){
+
 		$("#grid_cpu").Grid({
 		url : "grid_cpu.json",
 		dataType: "json",
@@ -66,12 +64,7 @@ $(function(){
 		multiselect:false,
 		draggable:false
 	});
-})
-$(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
+
 	$("#grid_cpudo").Grid({
 		url : "griddo.json",  
 		dataType: "json",
@@ -112,12 +105,13 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	$("#tabs").tabs({closeTab:false});
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center")
+		$("#main").width(center.width() - 31).height(center.height() - 30)
+	}
 });
 function navHover(){
 	$(this).toggleClass("hover")
@@ -162,6 +156,10 @@ $(function () {
             title: {
                 text: ''
             },
+			credits: { 
+				text: '',
+				href: ''
+			},
             tooltip: {
                 formatter: function() {
                     return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
@@ -213,13 +211,12 @@ $(function () {
 	        plotBackgroundImage: null,
 	        plotBorderWidth: 0,
 	        plotShadow: false,
-				events:{
-						click:function(e){
-								viewWindowCPU(this);
-							}
-						},
+			events:{
+				click:function(e){
+						viewWindowCPU(this);
+					}
+				}
 	    },
-	    
 	    title: {
 	        text: ''
 	    },
@@ -227,7 +224,6 @@ $(function () {
 			text: '',
 			href: ''
 		},
-	    
 	    pane: {
 	        startAngle: -150,
 	        endAngle: 150,
@@ -240,12 +236,11 @@ $(function () {
 	            innerRadius: '103%'
 	        }]
 	    },
-			labels:{
-					style:{
-							color:'#222'
-						}
-				},
-	       
+		labels:{
+				style:{
+						color:'#222'
+					}
+		},
 	    // the value axis
 	    yAxis: {
 	        min: 0,
@@ -254,8 +249,7 @@ $(function () {
 	        minorTickWidth: 1,
 	        minorTickLength: 10,
 	        minorTickPosition: 'inside',
-	        minorTickColor: '#666',
-	
+	        minorTickColor: '#666',	
 	        tickPixelInterval: 30,
 	        tickWidth: 2,
 	        tickPosition: 'inside',
@@ -263,7 +257,7 @@ $(function () {
 	        tickColor: '#666',
 	        labels: {
 	            step: 5, //步长 *5的数值
-	            rotation: 'auto',
+	            rotation: 'auto'
 	        },
 	        title: {
 	            text: '' //表盘中央显示数值信息
@@ -282,7 +276,6 @@ $(function () {
 	            color: '#DF5353' // red
 	        }]        
 	    },
-	
 	    series: [{
 	        name: '使用率',
 	        data: [35],
@@ -290,14 +283,8 @@ $(function () {
 	            valueSuffix: ' %'
 	        }
 	    }]
-	
-	}, 
-	// Add some life
-	function (chart) {
-			
-	   
-		});
 	});
+  });
 });
 $(function () {
 	 $(document).ready(function() {
@@ -315,7 +302,7 @@ $(function () {
 						click:function(e){
 								viewWindowNC(this);
 							}
-						},
+						}
 	    },
 	    
 	    title: {
@@ -353,7 +340,6 @@ $(function () {
 	        minorTickLength: 10,
 	        minorTickPosition: 'inside',
 	        minorTickColor: '#666',
-	
 	        tickPixelInterval: 30,
 	        tickWidth: 2,
 	        tickPosition: 'inside',
@@ -361,7 +347,7 @@ $(function () {
 	        tickColor: '#666',
 	        labels: {
 	            step: 5, //步长 *5的数值
-	            rotation: 'auto',
+	            rotation: 'auto'
 	        },
 	        title: {
 	            text: '' //表盘中央显示数值信息
@@ -412,7 +398,7 @@ $(function () {
 						click:function(e){
 								viewWindowCP(this);
 							}
-						},
+						}
 	    },	
 	    
 	    title: {
@@ -450,7 +436,6 @@ $(function () {
 	        minorTickLength: 10,
 	        minorTickPosition: 'inside',
 	        minorTickColor: '#666',
-	
 	        tickPixelInterval: 30,
 	        tickWidth: 2,
 	        tickPosition: 'inside',
@@ -458,7 +443,7 @@ $(function () {
 	        tickColor: '#666',
 	        labels: {
 	            step: 5, //步长 *5的数值
-	            rotation: 'auto',
+	            rotation: 'auto'
 	        },
 	        title: {
 	            text: '' //表盘中央显示数值信息
@@ -515,9 +500,7 @@ chart8 = new Highcharts.Chart({
             yAxis: {
                 title: {
                     text: '值%'
-                }
-								
-									
+                }				
             },
             tooltip: {
                 enabled: false,
@@ -796,7 +779,7 @@ chart8 = new Highcharts.Chart({
   </div>
 </div>
 <div id="layout_center">
-<div class="main-linux">
+<div class="main-linux" id="main">
       <ul class="crumbs">
       <li><a href="#">管理</a> ></li>
       <li><b>Linux</b></li>
@@ -951,10 +934,22 @@ chart8 = new Highcharts.Chart({
     </table>
     <div id="CPU_line" style="height:230px"></div>
     <div class="grid-total">
-      <div id="grid_Memory" class="grid-Memory" style="width:50%; height:50px"> </div>
-      <div class="Memory1" style="width:50%"><a class="Memory" href="setEmergency.html"> 警告配置 </a></div>
-      <div id="grid_cpu" class="grid_cpu" style="width:50%; height:50px"> </div>
-      <div class="cpu1" style="height:20px"><a class="cpu" href="setEmergency.html"> 警告配置 </a></div>
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="49%" style="vertical-align:top">
+        	<div id="grid_Memory"></div>
+      		<div style="text-align:right;padding:10px 20px 0 0"><a class="Memory" href="setEmergency.html"> 警告配置 </a></div>
+        </td>
+        <td width="2%">&nbsp;</td>
+        <td width="49%" style="vertical-align:top">
+        	<div id="grid_cpu"> </div>
+     		<div style="text-align:right;padding:10px 20px 0 0"><a class="cpu" href="setEmergency.html"> 警告配置 </a></div>
+        </td>
+      </tr>
+    </table>
+
+      
+      
     </div>
   </div>
   <div class="linux-bottom" style="width:99%; float:right; height:650px">

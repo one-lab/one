@@ -47,8 +47,10 @@ function hideNav(e){
 	$(document).unbind();
 }
 function save(){
-	msgSuccess("系统消息", "操作成功，监视器已保存！");
-	window.location.href="manageBusScene.html";
+	msgSuccess("系统消息", "操作成功，监视器已保存！",function(){
+		window.location.href="manageBusScene.html";
+	});
+	
 }
 </script>
 </head>

@@ -116,7 +116,7 @@
 /*磁盘*/
 .bg_bar{ height:11px;background:url(../images/green-bar.png) repeat-x; border:1px solid #666;}
 .red_bar{ height:11px;background:url(../images/red-bar.png) repeat-x; float:right;}
-.seven{background:url(../images/icon_7daysdata.gif) no-repeat; padding-left:25px}
-.un-know{background:url(../images/icon_unknown_status.gif) no-repeat; padding-left:12px}
-.eitdor{background:url(../images/icon_associateaction.gif) no-repeat; padding-left:12px}
+.seven{background:url(../images/icon_7daysdata.gif) no-repeat;display:block;width:24px;height:16px;}
+.un-know{background:url(../images/icon_unknown_status.gif) no-repeat;display:block;width:13px;height:13px;}
+.eitdor{background:url(../images/icon_associateaction.gif) no-repeat;display:block;width:13px;height:13px;}
 .sub_title{background:url(../images/table-head.gif) repeat-x; color:#444; font-size:12px; font-weight:bold;}
