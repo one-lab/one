@@ -35,6 +35,8 @@ public class ApplicationDetailService {
 	private UrlResponseTimeRepository urlResponseTimeRepository;
 	@Autowired
 	private HealthStaCache healthStaCache;
+	@Autowired
+	private ApplicationEmuService applicationEmuService;
 
 
 	/**

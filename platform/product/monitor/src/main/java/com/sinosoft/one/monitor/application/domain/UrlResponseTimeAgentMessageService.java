@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -64,7 +66,8 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 					if(storeUrlResponseTime.getMaxResponseTime() < targetUrlResponseTime.getMaxResponseTime()) {
 						storeUrlResponseTime.setMaxResponseTime(targetUrlResponseTime.getMaxResponseTime());
 					}
-					storeUrlResponseTime.setAvgResponseTime((storeUrlResponseTime.getAvgResponseTime() + targetUrlResponseTime.getAvgResponseTime()) / 2);
+					storeUrlResponseTime.addTotalResponseTime(targetUrlResponseTime.getTotalResponseTime());
+					storeUrlResponseTime.increaseTotalCount();
 					toUpdateUrlResponseTimes.add(storeUrlResponseTime);
 					urlResponseTimeMap.remove(key);
 				}
@@ -133,9 +136,10 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 		UrlResponseTime firstUrlResponseTime = urlResponseTimes.get(0);
 		minMaxTime.min = firstUrlResponseTime.getRecordTime();
 		minMaxTime.max = firstUrlResponseTime.getRecordTime();
-		firstUrlResponseTime.setAvgResponseTime(firstUrlResponseTime.getResponseTime());
+		firstUrlResponseTime.setTotalResponseTime(firstUrlResponseTime.getResponseTime());
 		firstUrlResponseTime.setMinResponseTime(firstUrlResponseTime.getResponseTime());
 		firstUrlResponseTime.setMaxResponseTime(firstUrlResponseTime.getResponseTime());
+		firstUrlResponseTime.increaseTotalCount();
 		urlResponseTimeMap.put(getUrlResponseTimeKey(firstUrlResponseTime), firstUrlResponseTime);
 
 		requestPerMinuteMap.put(getRequestPerMinuteKey(firstUrlResponseTime.getRecordTime()), 1);
@@ -152,12 +156,14 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 				if(targetUrlResponseTime.getMaxResponseTime() < responseTime) {
 					targetUrlResponseTime.setMaxResponseTime(responseTime);
 				}
-				targetUrlResponseTime.setAvgResponseTime((targetUrlResponseTime.getAvgResponseTime() + responseTime) / 2);
+				targetUrlResponseTime.addTotalResponseTime(responseTime);
+				targetUrlResponseTime.increaseTotalCount();
 			} else {
 				long responseTime = urlResponseTime.getResponseTime();
 				urlResponseTime.setMaxResponseTime(responseTime);
-				urlResponseTime.setAvgResponseTime(responseTime);
+				urlResponseTime.setTotalResponseTime(responseTime);
 				urlResponseTime.setMinResponseTime(responseTime);
+				urlResponseTime.increaseTotalCount();
 				urlResponseTimeMap.put(key, urlResponseTime);
 			}
 

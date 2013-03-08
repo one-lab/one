@@ -25,7 +25,7 @@ public interface EumUrlAvaRepository extends PagingAndSortingRepository<EumUrlAv
      @SQL("select count(1) from GE_MONITOR_EUM_URL_AVA where eum_url_id=?1")
      public int countByEmuId(String eumUrlId);
 
-     @SQL("SELECT count(1) from GE_MONITOR_EUM_URL_AVA where eum_url_id=?1 and status = ?2")
+     @SQL("SELECT count(1) from GE_MONITOR_EUM_URL_AVA where eum_url_id=?1 and STATE = ?2")
      public int countByEmuIdAndStatus(String eumUrlId,String status);
 }
 

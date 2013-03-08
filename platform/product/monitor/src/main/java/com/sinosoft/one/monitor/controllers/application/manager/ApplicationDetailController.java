@@ -1,10 +1,13 @@
 package com.sinosoft.one.monitor.controllers.application.manager;
 
+import com.sinosoft.one.monitor.application.domain.ApplicationAvailableInf;
 import com.sinosoft.one.monitor.application.domain.ApplicationDetailService;
+import com.sinosoft.one.monitor.application.domain.ApplicationEmuService;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailAlarmViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailPieViewModel;
+import com.sinosoft.one.monitor.common.Trend;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -32,10 +35,14 @@ import java.util.List;
 public class ApplicationDetailController {
 	@Autowired
 	private ApplicationDetailService applicationDetailService;
+	@Autowired
+	private ApplicationEmuService applicationEmuService;
 
 	@Get("/main/{applicationId}")
 	public String applicationDetail(@Param("applicationId") String applicationId, Pipe pipe, Invocation invocation) {
 		invocation.addModel("applicationId", applicationId);
+		ApplicationAvailableInf applicationAvailableInf = applicationEmuService.getApplicationAvailableToday(applicationId);
+		invocation.addModel("applicationAvailableInf", applicationAvailableInf);
 		pipe.addWindow("alarm", "/application/manager/detail/alarm/" + applicationId);
 		pipe.addWindow("pie", "/application/manager/detail/pie/" + applicationId);
 		return "applicationDetail";
@@ -43,14 +50,25 @@ public class ApplicationDetailController {
 
 	@Get("/alarm/{applicationId}")
 	public String alarm(@Param("applicationId") String applicationId, Invocation invocation) {
+		ApplicationAvailableInf applicationAvailableInf = (ApplicationAvailableInf)invocation.getModel("applicationAvailableInf");
 		ApplicationDetailAlarmViewModel applicationDetailAlarmViewModel = applicationDetailService.generateAlarmViewModel(applicationId);
+		String availability = "";
+		if(applicationAvailableInf.getTrend() == Trend.DROP) {
+			availability = "idown";
+		} else if(applicationAvailableInf.getTrend() == Trend.RISE) {
+			availability = "iup";
+		}
+		applicationDetailAlarmViewModel.setAvailability(availability);
 		invocation.addModel("alarmViewModel", applicationDetailAlarmViewModel);
 		return "applicationDetailAlarm";
 	}
 
 	@Get("/pie/{applicationId}")
 	public String pie(@Param("applicationId") String applicationId, Invocation invocation) {
+		ApplicationAvailableInf applicationAvailableInf = (ApplicationAvailableInf)invocation.getModel("applicationAvailableInf");
 		ApplicationDetailPieViewModel applicationDetailPieViewModel = applicationDetailService.generatePieViewModel(applicationId);
+		applicationDetailPieViewModel.setAvailabilityCount(applicationAvailableInf.getAvailableCount());
+		applicationDetailPieViewModel.setUnavailabilityCount(applicationAvailableInf.getCount() - applicationAvailableInf.getAvailableCount());
 		invocation.addModel("pieViewModel", applicationDetailPieViewModel);
 		return "applicationDetailPie";
 	}

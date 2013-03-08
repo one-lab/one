@@ -25,9 +25,9 @@ public interface UrlResponseTimeRepository extends PagingAndSortingRepository<Ur
 	 * @param endDate 结束时间
 	 * @return URL响应时间列表
 	 */
-	@SQL("select u.id as url_Id, u.url, round(sum(urt.min_response_time)/count(1), 0) as min_response_time," +
-			"       round(sum(urt.max_response_time)/count(1), 0) as max_response_time," +
-			"       round(sum(urt.avg_response_time)/count(1), 0) as avg_response_time" +
+	@SQL("select u.id as url_Id, u.url, min(urt.min_response_time) as min_response_time," +
+			"       max(urt.max_response_time) as max_response_time," +
+			"       round(sum(urt.total_response_time)/sum(total_count), 0) as avg_response_time" +
 			"  from ge_monitor_application       a," +
 			"       ge_monitor_biz_scenario      bs," +
 			"       ge_monitor_biz_scenario_url  bsu," +

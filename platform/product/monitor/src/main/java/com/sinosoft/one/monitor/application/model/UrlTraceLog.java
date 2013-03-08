@@ -77,6 +77,10 @@ public class UrlTraceLog {
 	 * URL信息ID
 	 */
 	private String urlId;
+	/**
+	 * 日志记录时间
+	 */
+	private Date recordTime;
 
 
 
@@ -219,6 +223,15 @@ public class UrlTraceLog {
 
 	public void setApplicationId(String applicationId) {
 		this.applicationId = applicationId;
+	}
+
+	@Column(name = "RECORD_TIME")
+	public Date getRecordTime() {
+		return recordTime;
+	}
+
+	public void setRecordTime(Date recordTime) {
+		this.recordTime = recordTime;
 	}
 
 	@Override

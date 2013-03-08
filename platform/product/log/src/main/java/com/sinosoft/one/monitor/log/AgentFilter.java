@@ -43,7 +43,7 @@ public class AgentFilter implements Filter {
 					if(urlId != null) {
 						UrlTraceLog urlTraceLog = new UrlTraceLog();
 						urlTraceLog.setUrlId(urlId);
-						urlTraceLog.setBeginTime(new Timestamp(System.currentTimeMillis()));
+						urlTraceLog.setBeginTime(new Timestamp(traceModel.getBeginTime()));
 						traceModel.setUrlId(urlId);
 						traceModel.setUrlTraceLog(urlTraceLog);
 					}

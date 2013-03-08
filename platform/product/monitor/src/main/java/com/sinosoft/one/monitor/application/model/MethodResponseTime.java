@@ -1,70 +1,32 @@
 package com.sinosoft.one.monitor.application.model;
 
-
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
- * 响应时间.
+ * 方法响应时间.
  * User: carvin
- * Date: 13-3-2
- * Time: 下午10:47
- * To change this template use File | Settings | File Templates.
+ * Date: 13-3-8
+ * Time: 下午8:03
+ *
  */
 @Entity
-@Table(name = "GE_MONITOR_URL_RESPONSE_TIME")
-public class UrlResponseTime {
-	/**
-	 * 主键ID
-	 */
+@Table(name = "GE_MONITOR_METHOD_RESPONSETIME")
+public class MethodResponseTime {
 	private String id;
-	/**
-	 * URL
-	 */
-	private String url;
-	/**
-	 * URLID
-	 */
+	private String methodName;
 	private String urlId;
-	/**
-	 * 所属应用系统ID
-	 */
-	private String applicationId;
-	/**
-	 * 最小响应时间
-	 */
 	private Long minResponseTime = 0l;
-	/**
-	 * 最大响应时间
-	 */
 	private Long maxResponseTime = 0l;
-	/**
-	 * 平均响应时间
-	 */
-	private Long avgResponseTime = 0l;
-	/**
-	 * 总响应时间
-	 */
 	private Long totalResponseTime = 0l;
-	/**
-	 * 总次数
-	 */
 	private Integer totalCount = 0;
-	/**
-	 * 响应时间
-	 */
-	private long responseTime;
 
-	/**
-	 * 记录时间
-	 */
 	private Date recordTime;
-	/**
-	 * 健康度
-	 */
-	private String healthBar;
+	private String applicationId;
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
@@ -77,13 +39,13 @@ public class UrlResponseTime {
 		this.id = id;
 	}
 
-	@Column(name = "URL")
-	public String getUrl() {
-		return url;
+	@Column(name = "METHOD_NAME")
+	public String getMethodName() {
+		return methodName;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
 	}
 
 	@Column(name = "URL_ID")
@@ -93,15 +55,6 @@ public class UrlResponseTime {
 
 	public void setUrlId(String urlId) {
 		this.urlId = urlId;
-	}
-
-	@Column(name = "APPLICATION_ID")
-	public String getApplicationId() {
-		return applicationId;
-	}
-
-	public void setApplicationId(String applicationId) {
-		this.applicationId = applicationId;
 	}
 
 	@Column(name = "MIN_RESPONSE_TIME")
@@ -118,18 +71,14 @@ public class UrlResponseTime {
 		return maxResponseTime == null ? 0l : maxResponseTime;
 	}
 
-
 	public void setMaxResponseTime(Long maxResponseTime) {
 		this.maxResponseTime = maxResponseTime;
 	}
 
 	@Transient
-	 public Long getAvgResponseTime() {
-		return avgResponseTime;
-	}
-
-	public void setAvgResponseTime(Long avgResponseTime) {
-		this.avgResponseTime = avgResponseTime;
+	public long getAvgResponseTime() {
+		return BigDecimal.valueOf(totalCount)
+				.divide(BigDecimal.valueOf(totalCount), 0, RoundingMode.HALF_UP).longValue();
 	}
 
 	@Column(name = "RECORD_TIME")
@@ -141,13 +90,13 @@ public class UrlResponseTime {
 		this.recordTime = recordTime;
 	}
 
-	@Transient
-	public long getResponseTime() {
-		return responseTime;
+	@Column(name = "APPLICATION_ID")
+	public String getApplicationId() {
+		return applicationId;
 	}
 
-	public void setResponseTime(long responseTime) {
-		this.responseTime = responseTime;
+	public void setApplicationId(String applicationId) {
+		this.applicationId = applicationId;
 	}
 
 	@Column(name = "TOTAL_RESPONSE_TIME")
@@ -168,18 +117,6 @@ public class UrlResponseTime {
 		this.totalCount = totalCount;
 	}
 
-	/**
-	 * 获得健康度条
-	 */
-	@Transient
-	public String getHealthBar() {
-		return healthBar;
-	}
-
-	public void setHealthBar(String healthBar) {
-		this.healthBar = healthBar;
-	}
-
 	public void increaseTotalCount() {
 		totalCount++;
 	}
@@ -187,7 +124,4 @@ public class UrlResponseTime {
 	public void addTotalResponseTime(long responseTime) {
 		totalResponseTime += responseTime;
 	}
-
-
-
 }

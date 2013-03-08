@@ -1,16 +1,19 @@
 package com.sinosoft.one.monitor.application.domain;
 
 import com.alibaba.fastjson.JSON;
-import com.sinosoft.one.monitor.application.model.UrlTraceLog;
-import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
+import com.sinosoft.one.monitor.application.model.*;
+import com.sinosoft.one.monitor.application.repository.MethodResponseTimeRepository;
 import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
 import com.sinosoft.one.monitor.application.repository.UrlVisitsStaRepository;
 import com.sinosoft.one.monitor.common.*;
 import com.sinosoft.one.monitor.utils.DateUtil;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * 日志代理端消息处理服务类.
@@ -27,6 +30,8 @@ public class LogAgentMessageService implements AgentMessageService {
 	private UrlVisitsStaRepository urlVisitsStaRepository;
 	@Autowired
 	private AlarmMessageBuilder alarmMessageBuilder;
+	@Autowired
+	private MethodResponseTimeRepository methodResponseTimeRepository;
 
 	/**
 	 * 处理代理端日志消息
@@ -43,6 +48,7 @@ public class LogAgentMessageService implements AgentMessageService {
 				.addAlarmAttribute(AttributeName.ResponseTime, urlTraceLog.getConsumeTime() + "")
 				.alarm();
 		urlTraceLog.setAlarmId(alarmId);
+		urlTraceLog.setRecordTime(new Date());
 		urlTraceLogRepository.save(urlTraceLog);
 		Date currentHourDate = DateUtil.getHoursDate(urlTraceLog.getBeginTime());
 		UrlVisitsSta urlVisitsSta = urlVisitsStaRepository.findByUrlIdAndRecordTime(urlTraceLog.getUrlId(), currentHourDate);
@@ -57,5 +63,57 @@ public class LogAgentMessageService implements AgentMessageService {
 		}
 
 		urlVisitsStaRepository.save(urlVisitsSta);
+
+		// 处理方法响应时间统计
+		handleMethodReponseTime(applicationId, urlTraceLog.getUrlId(), urlTraceLog.getMethodTraceLogList());
+	}
+
+	private void handleMethodReponseTime(String applicationId, String urlId, List<MethodTraceLog> methodTraceLogList) {
+		List<String> methodNames = new ArrayList<String>();
+		Map<String, MethodTraceLog> methodMap = new HashMap<String, MethodTraceLog>();
+		for(MethodTraceLog methodTraceLog : methodTraceLogList) {
+			methodNames.add(methodTraceLog.getFullMethodName());
+			methodMap.put(methodTraceLog.getFullMethodName(), methodTraceLog);
+		}
+		List<MethodResponseTime> methodResponseTimes = methodResponseTimeRepository.selectMethodResponseTimes(applicationId,
+				urlId, methodNames, LocalDateTime.now().toString("yyyy-MM-dd HH"));
+
+		List<MethodResponseTime> toUpdateMethodResponseTimes = new ArrayList<MethodResponseTime>();
+		Date currentDate = new Date();
+		if(methodResponseTimes != null && methodResponseTimes.size() > 0) {
+
+			for(MethodResponseTime methodResponseTime : methodResponseTimes) {
+				MethodTraceLog methodTraceLog = methodMap.get(methodResponseTime.getMethodName());
+				if(methodTraceLog != null) {
+					long responseTime = methodTraceLog.getConsumeTime();
+					if(methodResponseTime.getMinResponseTime() > responseTime) {
+						methodResponseTime.setMinResponseTime(responseTime);
+					} else if(methodResponseTime.getMaxResponseTime() < responseTime) {
+						methodResponseTime.setMaxResponseTime(responseTime);
+					}
+					methodResponseTime.addTotalResponseTime(responseTime);
+					methodResponseTime.setApplicationId(applicationId);
+					methodResponseTime.setUrlId(urlId);
+					methodResponseTime.setRecordTime(currentDate);
+					methodResponseTime.increaseTotalCount();
+					toUpdateMethodResponseTimes.add(methodResponseTime);
+				}
+			}
+		} else {
+			for(MethodTraceLog methodTraceLog : methodTraceLogList) {
+				long responseTime = methodTraceLog.getConsumeTime();
+				MethodResponseTime methodResponseTime = new MethodResponseTime();
+				methodResponseTime.setApplicationId(applicationId);
+				methodResponseTime.setUrlId(urlId);
+				methodResponseTime.setRecordTime(currentDate);
+				methodResponseTime.setMethodName(methodTraceLog.getFullMethodName());
+				methodResponseTime.setMinResponseTime(responseTime);
+				methodResponseTime.setMaxResponseTime(responseTime);
+				methodResponseTime.setTotalResponseTime(responseTime);
+				methodResponseTime.increaseTotalCount();
+				toUpdateMethodResponseTimes.add(methodResponseTime);
+			}
+		}
+		methodResponseTimeRepository.save(toUpdateMethodResponseTimes);
 	}
 }

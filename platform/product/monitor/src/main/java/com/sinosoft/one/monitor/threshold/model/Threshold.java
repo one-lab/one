@@ -95,7 +95,7 @@ public class Threshold  implements java.io.Serializable {
    
     @Id
     @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Column(name="id", unique=true, length=32)
     public String getId() {
     return this.id;
