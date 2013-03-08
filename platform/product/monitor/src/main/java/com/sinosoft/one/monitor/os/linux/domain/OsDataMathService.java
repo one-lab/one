@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
@@ -21,7 +23,9 @@ import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
+import com.sinosoft.one.monitor.utils.AvailableCalculate;
 import com.sinosoft.one.monitor.utils.BussinessUtil;
+//import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
 
 /**
  * 信息处理类
@@ -56,108 +60,42 @@ public class OsDataMathService {
 	 * @param targetTime目标时间
 	 * @param interCycleTime轮询时间
 	 * @param timeSpan 时间段类型标记
-	 */												//当前时间		//目标时间		
+	 */											//当前时间           //查询时间段的目标时间	 //轮询时间 分钟
 	public void statiAvailable(String osInfoId,Date currentTime,Date targetTime,int interCycleTime ,Date timeSpan ){
-//		SimpleDateFormat Format=new SimpleDateFormat(OsUtil.DATEFORMATE); 
-		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
-		long nomorRun=0;//可用时间记录
-		long crashtime=0;//不可用时间记录
-		long repairTime=0;//总回复时间
-		long stopSpacCount=0;//总故障间隔
-		String aveRepair;//平均回复时间
-		String aveFault;//平均故障间隔
-		List<Map<Integer,OsAvailabletemp>>stopSpacs=new ArrayList<Map<Integer,OsAvailabletemp>>();//故障间隔集合
-		Map<Integer,OsAvailabletemp>stopSpacMap=new HashMap<Integer, OsAvailabletemp>();//故障间隔记录
-		int listSize=osAvailabletemps.size();//记录长度
 		int stopCount=0;//停机次数
-		int stopSapcFlag=1;//故障标记 1 ：第一次故障| 2：第二次故障
-		String lastStatus=osAvailabletemps.get(0).getStatus();//上一次状态 先记录第一次
-		Date lastDate=osAvailabletemps.get(0).getSampleDate(); //上一次的时间 先记录第一次
-		String thisStatus;//本次状态
-		for (int i = 0;  i <= listSize-1; i++) {
-			OsAvailabletemp osAvtemp=osAvailabletemps.get(i);
-			thisStatus=osAvtemp.getStatus();
-			if(i==0){//如果是第一次
-//				 //第一次时间减0点
-//				if(thisStatus.toString().equals("0")){//第一次为0 计入不可用时间
-//					stopCount=stopCount+1;//记录停机数
-//					canNoUseCount=osAvtemp.getSampleDate().getTime()-targetTime.getTime();
-//					stopSpacMap.put(1, osAvtemp);
-//				}else{
-//					//计入可用时间 
-//					canUseCount=osAvtemp.getSampleDate().getTime()-targetTime.getTime();
-//				}
-			}else{
-				//不等于上次状态
-				if(!thisStatus.toString().equals(lastStatus)){
-					if(thisStatus.toString().equals("0")){//本次是0 上次是1  记为可用
-						stopCount=stopCount+1;//本次为停机记录停机数
-						nomorRun +=osAvtemp.getSampleDate().getTime()-lastDate.getTime();
-						if(stopSapcFlag==1){//如果为1是 两次故障间隔的 起点
-							stopSpacMap.put(1, osAvtemp);
-							stopSapcFlag=2;
-						}else{//如果为1是 两次故障间隔的 终点
-							stopSpacMap.put(2, osAvtemp);
-							stopSapcFlag=1;
-							stopSpacs.add(stopSpacMap);
-						}
-					}
-					if(thisStatus.toString().equals("1")){//本次是1 上次是0 记为不可用
-						crashtime+=osAvtemp.getSampleDate().getTime()-lastDate.getTime();
-						repairTime+=osAvtemp.getSampleDate().getTime()-lastDate.getTime();//回复时间
-					}
-				}else{
-				//等于上次状态
-					if(thisStatus.toString().equals("0")){//本次是0 上次是0  记为不可用
-						crashtime+=osAvtemp.getSampleDate().getTime()-lastDate.getTime();
-						stopCount=stopCount+1;
-					}
-					if(thisStatus.toString().equals("1")){//本次是1 上次是1  
-						if(osAvtemp.getSampleDate().getTime()-osAvailabletemps.get(i-1).getSampleDate().getTime()>interCycleTime*60*1000){
-							//如果相隔时间大于轮询时间则为不可用
-							crashtime+=osAvtemp.getSampleDate().getTime()-lastDate.getTime();
-							repairTime+=osAvtemp.getSampleDate().getTime()-lastDate.getTime();
-							stopCount=stopCount+1;
-						}else{
-							nomorRun+=osAvtemp.getSampleDate().getTime()-lastDate.getTime();
-						}
-					}
-				}
-				lastDate=osAvtemp.getSampleDate();//记录上次时间
-				lastStatus=thisStatus;//循环中上一次的状态记录
-			}
-		}
-		long countTime=osAvailabletemps.get(listSize-1).getSampleDate().getTime()-targetTime.getTime();//总时间
-		for (Map<Integer,OsAvailabletemp>  map : stopSpacs) {
-			stopSpacCount+=map.get(2).getSampleDate().getTime()-map.get(1).getSampleDate().getTime();
-		}
-		if(stopCount!=0){
-			 aveRepair=OsTransUtil.LongToHMS(repairTime/stopCount);//平均回复时间
-			 aveFault=OsTransUtil.LongToHMS(BussinessUtil.getAvgErrorTime(nomorRun, stopCount));//平均故障间隔
-		}else{
-			aveRepair=0+"";
-			aveFault=0+"";
-		}
-		//正常运行时间计算
-		System.out.println("总故障间隔"+stopSpacCount);
-		System.out.println("故障次数"+stopCount);
-		System.out.println("最后一个点时间"+osAvailabletemps.get(listSize-1).getSampleDate());
-		System.out.println("最后一个点时间"+osAvailabletemps.get(listSize-1).getSampleDate().getTime());
-		System.out.println("当前时间"+currentTime);
-		System.out.println("当前时间"+currentTime.getTime());
-		System.out.println("目标时间"+targetTime.getTime());
-		System.out.println("目标时间"+targetTime);
-		System.out.println(nomorRun);
-		System.out.println(crashtime);
-		System.out.println(countTime);
-		System.out.println(repairTime);
 		OsAvailable osAvailable=osAvailableServcie.getAvailable(osInfoId, timeSpan);
-		if(osAvailable!=null){//判断是否修改
-			osAvailableServcie.updateAvailable(osAvailable, normalRun(interCycleTime, countTime, nomorRun), OsTransUtil.LongToHMS(crashtime), aveRepair,  aveFault);
+		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
+//		List<AvailableDetail> availableDetails=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
+		long lastRecordTime = 0;//上次时间变量
+		for (int i = 0; i < osAvailabletemps.size(); i++) {
+			if(i==0){//判断第一次与查询时间起始时间targetTime 是否大于轮询时间
+				if(osAvailabletemps.get(i).getSampleDate().getTime()-targetTime.getTime()>osAvailabletemps.get(i).getIntercycleTime()*60*1000){
+					stopCount=stopCount+1;
+				}
+			}else{
+				if(osAvailabletemps.get(i).getSampleDate().getTime()-lastRecordTime>osAvailabletemps.get(i).getIntercycleTime()*60*1000){
+					stopCount=stopCount+1;
+				}
+			}
+			lastRecordTime=osAvailabletemps.get(i).getSampleDate().getTime();
+		}
+		if(osAvailable==null){
+//			AvailableCalculate availableCalculate=AvailableCalculate.simpleCalculate(osAvailabletemps.get(0).getSampleDate(),Long.valueOf(interCycleTime*1000), Long.valueOf(0), availableDetails, Integer.valueOf(0), interCycleTime);
+			//初始一条统计的运行时间=轮询时间
+			osAvailableServcie.saveAvailable(osInfoId, 1,0, 0, 1, timeSpan);
 		}else{
-			osAvailableServcie.saveAvailable(osInfoId, normalRun(interCycleTime, countTime, nomorRun), OsTransUtil.LongToHMS(crashtime), aveRepair,  aveFault, timeSpan);
+//			AvailableCalculate availableCalculate=AvailableCalculate.simpleCalculate(osAvailabletemps.get(0).getSampleDate(), osAvailable.getNormalRun(), osAvailable.getCrashTime(), availableDetails,osAvailable.getStopCount(), 1);
+//			osAvailableServcie.saveAvailable(osInfoId,availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(),availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(), timeSpan);
+//			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),osAvailable.getStopCount());
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 统计内存，当前时间到当前小时整点
 	 * @param osInfoId
@@ -166,8 +104,7 @@ public class OsDataMathService {
 //		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.DATE, currentTime.getDate());
-		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
+		c.setTime(currentTime);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
@@ -200,8 +137,7 @@ public class OsDataMathService {
 //		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.DATE, currentTime.getDate());
-		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
+		c.setTime(currentTime);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
@@ -225,8 +161,7 @@ public class OsDataMathService {
 //		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.DATE, currentTime.getDate());
-		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
+		c.setTime(currentTime);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
@@ -251,8 +186,7 @@ public class OsDataMathService {
 //		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.set(Calendar.DATE, currentTime.getDate());
-		c.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
+		c.setTime(currentTime);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
@@ -275,7 +209,7 @@ public class OsDataMathService {
 	 * @param normrolRunTime
 	 * @return
 	 */
-	public String  normalRun(int interCycleTime ,long countTime,long normrolRunTime){
+	public long  normalRun(int interCycleTime ,long countTime,long normrolRunTime){
 		long interCycle =interCycleTime*60*1000+1;
 		BigDecimal  normalRun;
 		if(normrolRunTime+interCycle<=countTime){
@@ -283,6 +217,6 @@ public class OsDataMathService {
 		}else{
 			normalRun=BigDecimal.valueOf(normrolRunTime+interCycle).divide(BigDecimal.valueOf(countTime),4, BigDecimal.ROUND_HALF_DOWN);
 		}
-		return normalRun.multiply(BigDecimal.valueOf(100)).setScale(2).toString();
+		return normalRun.multiply(BigDecimal.valueOf(100)).setScale(2).longValue();
 	}
 }

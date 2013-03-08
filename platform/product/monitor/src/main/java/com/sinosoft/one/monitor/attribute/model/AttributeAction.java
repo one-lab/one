@@ -14,8 +14,7 @@ import javax.persistence.*;
 * 属性动作信息表
  */
 @Entity
-@Table(name="GE_MONITOR_ATTRIBUTE_ACTION"
-)
+@Table(name="GE_MONITOR_ATTRIBUTE_ACTION")
 public class AttributeAction  implements java.io.Serializable {
 
     /**

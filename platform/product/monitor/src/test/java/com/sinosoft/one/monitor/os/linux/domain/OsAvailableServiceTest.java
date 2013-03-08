@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
+import com.sinosoft.one.monitor.utils.AvailableCalculate;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
 
 
 @DirtiesContext
@@ -56,5 +58,16 @@ public class OsAvailableServiceTest extends AbstractJUnit4SpringContextTests  {
 		c.set(Calendar.SECOND, 0);
 		Date date=c.getTime();
 		osAvailableServcie.deleteTempByLessThanTime("402892163d208194013d208198790000", date);
+	}
+	
+	@Test
+	public void groupByinterCycleTime(){
+		Calendar c  = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		Date date=c.getTime();
+//		List<AvailableDetail> availableDetails=osAvailableServcie.findGroupByInterCycleTime("402892163d208194013d208198790000", date);
+		System.out.println(1);
 	}
 }

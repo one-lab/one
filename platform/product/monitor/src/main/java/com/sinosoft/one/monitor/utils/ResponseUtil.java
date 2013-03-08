@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.utils;
 
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -9,10 +10,9 @@ public class ResponseUtil {
 		HttpURLConnection httpConnection =null;
 		try {
 			URL url = new URL(urlString);
-			httpConnection= (HttpURLConnection) url
-					.openConnection();
+			httpConnection= (HttpURLConnection) url.openConnection();
 //			httpConnection.getURL();
-			System.out.println("-------------------"+httpConnection.getResponseCode());
+			System.out.println("urlString = "+urlString + "-------------------"+httpConnection.getResponseCode());
 			responseCode = httpConnection.getResponseCode();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -23,4 +23,5 @@ public class ResponseUtil {
 		}
 		return responseCode;
 	}
+
 }

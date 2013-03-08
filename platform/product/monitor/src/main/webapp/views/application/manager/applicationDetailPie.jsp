@@ -1,7 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<script language="javascript" src="${ctx}/global/js/apmservice/apmservice.js" />
+<script type="text/javascript" src="${ctx}/global/js/apmservice/apmservicepie.js" />
+<style type="text/css">
+    #pie_availability,#pie_health {width: 250px;height:246px;  margin: 0 auto}
+</style>
 <table class="pie_table">
     <tr class="pie_head">
         <td>今天可用性</td>
@@ -13,8 +16,8 @@
     </tr>
     <tr>
         <td>
-            <input type="hidden" id="availabilityValue" value="${availabilityValue}">
-            <input type="hidden" id="healthValue" value="${healthValue}">
+            <input type="hidden" id="availabilityValue" value="${pieViewModel.availabilityValue}">
+            <input type="hidden" id="healthValue" value="${pieViewModel.healthValue}">
         </td>
         <td>&nbsp;</td>
     </tr>

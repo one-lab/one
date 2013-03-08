@@ -38,7 +38,7 @@ $(function () {
                 line:{              // 数据点的点击事件
                     events:{
                         click:function (event) {
-                            alert('The bar was clicked, and you can add any other functions.');
+                            //alert('The bar was clicked, and you can add any other functions.');
                         }
                     },
                     marker:{
@@ -489,6 +489,7 @@ function refreshChart2(_xAxis, _series, _rederTo, _yName,_text,_unit) {
     });
 }
 function refreshSgaPie(_data) {
+	
     // 右下饼状图
     $("#share_sga").html("");
     new Highcharts.Chart({
@@ -507,7 +508,7 @@ function refreshSgaPie(_data) {
         },
         tooltip:{
             formatter:function () {
-                return '<b>' + this.point.name + '</b>: ' + this.y + 'MB';
+                return '<b>' + this.point.name + '</b>: ' + this.y.toFixed(6) + 'MB';
             }
         },
         plotOptions:{
@@ -517,7 +518,7 @@ function refreshSgaPie(_data) {
                 dataLabels:{
                     enabled:true,
                     formatter:function () {
-                        return this.y + ' MB';
+                        return this.y.toFixed(6) + ' MB';
                     }
                 },
                 showInLegend:true
@@ -527,22 +528,21 @@ function refreshSgaPie(_data) {
             {
                 type:'pie',
                 name:'Browser share',
-//                data:[
-//                    {
-//                        name:'缓存存储器大小',
-//                        y:392,
-//                        sliced:false,
-//                        selected:false
-//                    },
-//                    ['共享池大小', 113],
-//                    ['重做日志缓冲器大小', 199],
-//                    ['库存存储器大小', 199],
-//                    ['数据字典存储器大小', 299],
-//                    ['sql区域大小', 399],
-//                    ['固定区域大小', 499],
-//                    ['重做日志缓冲器大小', 699]
-//                ]
-                data:  _data
+                data:[
+                   {
+                       name:'缓存存储器大小',
+                       y:_data[0],
+                       sliced:false,
+                       selected:false
+                    },
+                    ['共享池大小', _data[1]],
+                    ['重做日志缓冲器大小', _data[2]],
+                    ['库存存储器大小', _data[3]],
+                    ['数据字典存储器大小', _data[4]],
+                    ['sql区域大小', _data[5]],
+                    ['固定区域大小', _data[6]],
+                ]
+                //data:  _data
             }
         ],
         colors:['#5cdfff', '#ff9900', '#8b008b', '#2f4f4f', '#ff5555', '#5555ff', '#55ff55']
@@ -602,7 +602,7 @@ function refreshPie1(){
 function getForm1() {
     //alert("ssss");
     $.ajax({
-        url:"/monitor/db/oracle/home/viewConnect/402892173d3f2eae013d3f32543e0000",
+        url:"/monitor/db/oracle/home/viewConnect/4028921b3d3fba36013d3fbb061c0000",
         dataType:"json",
         cache:false,
         success:function (_data) {
@@ -614,8 +614,9 @@ function getForm1() {
 
 // 右下饼状图,既SGA饼状图
 function getForm2() {
+	
     $.ajax({
-        url:"ajaxReady.json",
+        url:"/monitor/db/oracle/home/viewSGA/4028921b3d3fba36013d3fbb061c0000",
         dataType:"json",
         cache:false,
         success:function (_data) {
@@ -625,4 +626,4 @@ function getForm2() {
 }
 
 setInterval(getForm1, 30000);
-//setInterval(getForm2, 300000);
+setInterval(getForm2, 30000);

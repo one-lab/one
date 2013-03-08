@@ -5,7 +5,7 @@ import com.sinosoft.one.monitor.application.model.UrlTraceLog;
 import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
 import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
 import com.sinosoft.one.monitor.application.repository.UrlVisitsStaRepository;
-import com.sinosoft.one.monitor.common.MessageBaseEventSupport;
+import com.sinosoft.one.monitor.common.*;
 import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class LogAgentMessageService implements AgentMessageService {
 	@Autowired
 	private UrlVisitsStaRepository urlVisitsStaRepository;
 	@Autowired
-	private MessageBaseEventSupport messageBaseEventSupport;
+	private AlarmMessageBuilder alarmMessageBuilder;
 
 	/**
 	 * 处理代理端日志消息
@@ -36,7 +36,12 @@ public class LogAgentMessageService implements AgentMessageService {
 	public void handleMessage(String applicationId, String data) {
 		UrlTraceLog urlTraceLog = JSON.parseObject(data, UrlTraceLog.class);
 		urlTraceLog.setApplicationId(applicationId);
-		String alarmId = messageBaseEventSupport.doMessageBase(urlTraceLog);
+		String alarmId = alarmMessageBuilder.newMessageBase(applicationId)
+				.alarmSource(AlarmSource.LOG)
+				.subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
+				.subResourceId(urlTraceLog.getUrlId())
+				.addAlarmAttribute(AttributeName.ResponseTime, urlTraceLog.getConsumeTime() + "")
+				.alarm();
 		urlTraceLog.setAlarmId(alarmId);
 		urlTraceLogRepository.save(urlTraceLog);
 		Date currentHourDate = DateUtil.getHoursDate(urlTraceLog.getBeginTime());

@@ -1,8 +1,4 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
 <div id="layout_top">
     <div class="header">
         <p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>

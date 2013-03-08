@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.exception;
 
 
+import com.sinosoft.one.monitor.log.TraceModel;
+import com.sinosoft.one.monitor.log.TraceUtils;
 import com.sinosoft.one.monitor.notification.NotificationServiceFactory;
 import org.apache.log4j.MDC;
 
@@ -17,9 +19,10 @@ public final class Exceptions {
 	 * @param throwable 异常对象
 	 */
     public static void handleThrowable(Throwable throwable) {
-	    ExceptionModel exceptionModel = new ExceptionModel((String) MDC.get("urlId"), throwable.getMessage(), getExceptionStackTrace(throwable));
-	    exceptionModel.setUrl((String)MDC.get("url"));
-	    exceptionModel.setRequestParams((String) MDC.get("requestParams"));
+		TraceModel traceModel = TraceUtils.getTraceModel();
+	    ExceptionModel exceptionModel = new ExceptionModel((String) traceModel.getUrlId(), throwable.getMessage(), getExceptionStackTrace(throwable));
+	    exceptionModel.setUrl(traceModel.getUrl());
+	    exceptionModel.setRequestParams(traceModel.getRequestParams());
 	    NotificationServiceFactory.buildNotificationService().notification(exceptionModel);
     }
 

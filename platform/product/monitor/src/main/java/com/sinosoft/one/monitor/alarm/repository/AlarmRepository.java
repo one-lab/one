@@ -3,7 +3,6 @@ package com.sinosoft.one.monitor.alarm.repository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
-import com.sinosoft.one.monitor.common.AlarmMessage;
 import com.sinosoft.one.monitor.common.HealthSta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +37,7 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 	 * @param endTime 结束时间
 	 * @return 健康度统计对象列表
 	 */
-	@SQL("select severity, count(1) as count from ge_monitor_alarm where monitor_id=?1 and resource_type='APPLICATION_SCENARIO_URL' " +
+	@SQL("select severity, count(1) as count from ge_monitor_alarm where monitor_id=?1 and sub_resource_type='APPLICATION_SCENARIO_URL' " +
 			"and sub_resource_id=?2 and create_time between ?3 and ?4 group by severity")
 	List<HealthSta> selectHealthStaForUrl(String monitorId, String urlId, Date startTime, Date endTime);
 
@@ -50,7 +49,7 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 	 * @param endDate 结束时间
 	 * @return 分页告警信息
 	 */
-	@SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3")
+	@SQL("select * from ge_monitor_alarm where monitor_id = ?2 and create_time between ?3 and ?4")
 	Page<Alarm> selectAlarmsByMonitorId(Pageable pageable, String monitorId, Date startDate, Date endDate);
 
 	/**
@@ -61,7 +60,17 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 	 * @param endDate 结束时间
 	 * @return 分页严重告警信息
 	 */
-	@SQL("select * from ge_monitor_alarm where monitor_id = ?1 and severity='CRITICAL' and create_time between ?2 and ?3")
+	@SQL("select * from ge_monitor_alarm where monitor_id = ?2 and severity='CRITICAL' and create_time between ?3 and ?4")
 	Page<Alarm> selectCriticalAlarmsByMonitorId(Pageable pageable, String monitorId, Date startDate, Date endDate);
+
+	/**
+	 * 根据监视器ID、开始结束时间分页查询严重告警信息数量
+	 * @param monitorId 监视器ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return 分页严重告警信息
+	 */
+	@SQL("select count(1) from ge_monitor_alarm where monitor_id = ?1 and severity='CRITICAL' and create_time between ?2 and ?3")
+	int countCriticalByMonitorId(String monitorId, Date startDate, Date endDate);
 }
 

@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.exception;
 
 
+import com.sinosoft.one.monitor.log.TraceModel;
+import com.sinosoft.one.monitor.log.TraceUtils;
 import org.apache.log4j.MDC;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,10 +23,10 @@ public class ExceptionAspect {
      */
     @AfterThrowing(pointcut = "execution(* com.sinosoft.one.mvc.test..*(..))", throwing="throwable")
     public void exceptionCatch(Throwable throwable) {
-	    String hasException = (String)MDC.get("hasException");
-	    if(hasException == null) {
-		    MDC.put("hasException", "true");
-		    Exceptions.handleThrowable(throwable);
-	    }
+	    TraceModel traceModel = TraceUtils.getTraceModel();
+		if(!traceModel.hasException()) {
+			traceModel.setException(true);
+			Exceptions.handleThrowable(throwable);
+		}
     }
 }

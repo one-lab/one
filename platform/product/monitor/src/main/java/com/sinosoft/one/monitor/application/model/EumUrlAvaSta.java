@@ -23,9 +23,9 @@ public class EumUrlAvaSta implements java.io.Serializable {
      */
     private String id;
     /**
-     * 业务仿真URLID.
+     * 业务仿真ID.
      */
-    private EumUrl eumUrl;
+    private String eumUrlId;
     /**
      * 正常运行时间.
      */
@@ -67,14 +67,13 @@ public class EumUrlAvaSta implements java.io.Serializable {
         this.id = id;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EUM_URL_ID")
-    public EumUrl getEumUrl() {
-        return this.eumUrl;
+    @Column(name="EUM_URL_ID")
+    public String getEumUrlId() {
+        return this.eumUrlId;
     }
 
-    public void setEumUrl(EumUrl eumUrl) {
-        this.eumUrl = eumUrl;
+    public void setEumUrlId(String eumUrlId) {
+        this.eumUrlId = eumUrlId;
     }
 
     @Column(name = "NORMAL_RUNTIME", precision = 22, scale = 0)

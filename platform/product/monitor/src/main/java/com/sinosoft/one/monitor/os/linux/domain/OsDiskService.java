@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.repository.OsDiskRepository;
@@ -81,5 +82,14 @@ public class OsDiskService {
 	public  String getMinDiskUtilZation(String osInfoId,Date begin,Date end){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osDiskRepository.findMinDiskUtilZation(osInfoId,simpleDateFormat.format(begin),simpleDateFormat.format(end) , OsUtil.ORCL_DATEFORMATE);
+	}
+	
+	/**
+	 * 获取在轮询间隔内最后一次记录
+	 */
+	public List<OsDisk> findNealyDisk(String osInfoId,Date currentTime,int interCycle ){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		Date date=new Date(currentTime.getTime()-interCycle*60*1000);
+		return osDiskRepository.findNealyDisk(osInfoId, simpleDateFormat.format(date), simpleDateFormat.format(currentTime),OsUtil.ORCL_DATEFORMATE);
 	}
 }
