@@ -43,10 +43,11 @@ public class LogTraceAspect {
     @Around("execution(* com.sinosoft.one.mvc.test..*(..))")
 	public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
 			throws Throwable {
-	    String traceId = TraceUtils.getTraceId();
-	    if(traceId == null) {
+	    TraceModel traceModel = TraceUtils.getTraceModel();
+	    if(traceModel == null) {
 		    return pjp.proceed();
 	    }
+	    String traceId = traceModel.getTraceId();
 		Class<?> sourceClass = pjp.getSignature().getDeclaringType();
 		Class<?> targetClass = pjp.getTarget().getClass();
         if(logger.isDebugEnabled()){
@@ -74,7 +75,7 @@ public class LogTraceAspect {
 		} finally {
 			// @Interfacetrace检查
 			if(!ClassUtils.isCglibProxyClass(targetClass)) {
-				String urlId = TraceUtils.getUrlId();
+				String urlId = traceModel.getUrlId();
 				Set<LogMethod> logMethods = logConfigs.getLogMethods(urlId);
                 if(logMethods != null && logMethods.size() > 0) {
                     for(LogMethod logMethod : logMethods) {
@@ -91,7 +92,7 @@ public class LogTraceAspect {
 	                        methodTraceLog.setOutParam(JSON.toJSONString(result));
 	                        methodTraceLog.setRecordTime(new Date());
 
-	                        UrlTraceLog urlTraceLog = TraceUtils.getUrlTraceLog();
+	                        UrlTraceLog urlTraceLog = traceModel.getUrlTraceLog();
 	                        urlTraceLog.addMethodTraceLog(methodTraceLog);
                         }
                     }

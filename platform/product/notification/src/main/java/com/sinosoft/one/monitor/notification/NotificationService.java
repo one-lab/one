@@ -8,13 +8,16 @@ package com.sinosoft.one.monitor.notification;
  */
 public class NotificationService {
 	private String urlData = "";
+	private String applicationName = "";
 	NotificationService() {
 
 	}
 
-	void initUrlData(String urlData) {
+	void initData(String urlData, String applicationName) {
 		this.urlData = urlData;
+		this.applicationName = applicationName;
 	}
+
 
 	public String getUrlData() {
 		if(urlData == null || "".equals(urlData)) {
@@ -23,6 +26,9 @@ public class NotificationService {
 		return urlData;
 	}
 
+	public String getApplicationName() {
+		return applicationName;
+	}
 
 	public void notification(NotificationModel notificationModel) {
 		if(NotificationConfiguration.getInstance().isMonitor()) {

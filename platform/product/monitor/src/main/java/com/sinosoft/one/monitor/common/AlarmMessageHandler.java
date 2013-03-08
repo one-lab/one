@@ -46,24 +46,22 @@ public class AlarmMessageHandler {
 	 */
 	public void doMessage(MessageBase messageBase, String alarmId) {
 		ThresholdAlarmParams thresholdAlarmParams = new ThresholdAlarmParams();
-		thresholdAlarmParams.alarmSource = messageBase.alarmSource();
+		thresholdAlarmParams.alarmSource = messageBase.getAlarmSource();
 		thresholdAlarmParams.alarmId = alarmId;
-		thresholdAlarmParams.subResourceType = messageBase.subResourceType();
-		thresholdAlarmParams.subResourceId = messageBase.subResourceId();
-		List<AlarmMessage> alarmMessageList = messageBase.alarmMessages();
-		for(int i=0, len=alarmMessageList.size(); i<len; i++) {
-			AlarmMessage alarmMessage = alarmMessageList.get(i);
-			String resourceId = alarmMessage.getResourceId();
-			if(thresholdAlarmParams.resource == null) {
-				//获取资源
-				thresholdAlarmParams.resource = resourcesCache.getResource(resourceId);
-				thresholdAlarmParams.healthAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Health.name());
-				if(thresholdAlarmParams.resource == Resource.EMPTY) {
-					return;
-				}
-			}
+		thresholdAlarmParams.subResourceType = messageBase.getSubResourceType();
+		thresholdAlarmParams.subResourceId = messageBase.getSubResourceId();
+		List<AlarmAttribute> alarmMessageList = messageBase.getAlarmAttributes();
 
-			if(alarmMessage.isAvailabilityAlarm()) {
+		String resourceId = messageBase.getResourceId();
+		thresholdAlarmParams.resource = resourcesCache.getResource(resourceId);
+		if(thresholdAlarmParams.resource == Resource.EMPTY) {
+			return;
+		}
+		thresholdAlarmParams.healthAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Health.name());
+		for(int i=0, len=alarmMessageList.size(); i<len; i++) {
+			AlarmAttribute alarmAttribute = alarmMessageList.get(i);
+
+			if(alarmAttribute.isAvailabilityAlarm()) {
 				thresholdAlarmParams.isAvailabilityAlarm = true;
 				thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
 				String availabilityAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Availability.name());
@@ -74,7 +72,7 @@ public class AlarmMessageHandler {
 				break;
 			}
 
-			if(alarmMessage.isExceptionAlarm()) {
+			if(alarmAttribute.isExceptionAlarm()) {
 				thresholdAlarmParams.isExceptionAlarm = true;
 				thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
 				String exceptionAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Exception.name());
@@ -83,7 +81,7 @@ public class AlarmMessageHandler {
 			}
 
 			//获取属性
-			Attribute attribute = attributeCache.getAttribute(thresholdAlarmParams.resource.getResourceType(), alarmMessage.getAttributeName());
+			Attribute attribute = attributeCache.getAttribute(thresholdAlarmParams.resource.getResourceType(), alarmAttribute.getAttributeName());
 			if(attribute == Attribute.EMPTY) {
 				return;
 			}
@@ -91,7 +89,7 @@ public class AlarmMessageHandler {
 			//获取阈值
 			Threshold threshold = thresholdService.queryThreshold(resourceId, attribute.getId());
 			//获取严重级别
-			SeverityLevel severityLevel = threshold.evalSeverityLevel(alarmMessage.getAttributeValue());
+			SeverityLevel severityLevel = threshold.evalSeverityLevel(alarmAttribute.getAttributeValue());
 
 			if(thresholdAlarmParams.severityLevel == SeverityLevel.UNKNOW || severityLevel.ordinal() < thresholdAlarmParams.severityLevel.ordinal()) {
 				thresholdAlarmParams.severityLevel = severityLevel;

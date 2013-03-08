@@ -3,7 +3,6 @@ package com.sinosoft.one.monitor.alarm.repository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
-import com.sinosoft.one.monitor.common.AlarmMessage;
 import com.sinosoft.one.monitor.common.HealthSta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
