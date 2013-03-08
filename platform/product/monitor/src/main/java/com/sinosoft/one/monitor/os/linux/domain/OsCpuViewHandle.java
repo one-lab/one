@@ -75,7 +75,7 @@ public class OsCpuViewHandle {
 			maps.add(m);//第一次取之前5分钟内最大的值
 			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
 			for (int i = 0; i < osCpus.size(); i++) {
-				if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>5*60*1000){
+				if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
 					int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
 					for (int j = 0; j < ptime; j++) {
 						Map<String, Object> map=new HashMap<String, Object>();
@@ -127,7 +127,7 @@ public class OsCpuViewHandle {
 	 * @param os
 	 * @param currentTime
 	 * @param interCycle
-	 * @param timespan
+	 * @param timespan 小时数 
 	 * @return
 	 */
 	public List<Map<String, Object>> creatOneCpuUsedLineData(Os os,Date currentTime,int interCycle,int timespan){
@@ -150,7 +150,7 @@ public class OsCpuViewHandle {
 		maps.add(m);//第一次取之前5分钟内最大的值
 		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
 		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>5*60*1000){
+			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
 				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
 				for (int j = 0; j < ptime; j++) {
 					Map<String, Object> map=new HashMap<String, Object>();
@@ -223,7 +223,7 @@ public class OsCpuViewHandle {
 		maps.add(m);//第一次取之前5分钟内最大的值
 		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
 		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>5*60*1000){
+			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
 				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
 				for (int j = 0; j < ptime; j++) {
 					Map<String, Object> map=new HashMap<String, Object>();
@@ -296,7 +296,7 @@ public class OsCpuViewHandle {
 		maps.add(m);//第一次取之前5分钟内最大的值
 		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
 		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>5*60*1000){
+			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
 				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
 				for (int j = 0; j < ptime; j++) {
 					Map<String, Object> map=new HashMap<String, Object>();
@@ -369,7 +369,7 @@ public class OsCpuViewHandle {
 		maps.add(m);//第一次取之前5分钟内最大的值
 		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
 		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>5*60*1000){
+			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
 				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
 				for (int j = 0; j < ptime; j++) {
 					Map<String, Object> map=new HashMap<String, Object>();
@@ -442,7 +442,7 @@ public class OsCpuViewHandle {
 		maps.add(m);//第一次取之前5分钟内最大的值
 		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
 		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>5*60*1000){
+			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
 				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
 				for (int j = 0; j < ptime; j++) {
 					Map<String, Object> map=new HashMap<String, Object>();

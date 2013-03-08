@@ -1,19 +1,14 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
@@ -23,9 +18,6 @@ import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
-import com.sinosoft.one.monitor.utils.AvailableCalculate;
-import com.sinosoft.one.monitor.utils.BussinessUtil;
-//import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
 
 /**
  * 信息处理类
@@ -100,14 +92,7 @@ public class OsDataMathService {
 	 * 统计内存，当前时间到当前小时整点
 	 * @param osInfoId
 	 */
-	public List<OsStati> statiOneHourRam(String osInfoId,Date currentTime){
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
-		Calendar c  = Calendar.getInstance();
-		////获取当前时间的小时数 取整时点
-		c.setTime(currentTime);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		Date hourPoint=c.getTime();
+	public void statiOneHourRam(String osInfoId,Date currentTime,Date hourPoint){
 		List<OsRam> osRams = osRamService.getRamByDate(osInfoId, hourPoint, currentTime);
 		double memUtilZationCount=0;//物理内存利用率总数
 		double swapUtilZationCount = 0;//交换内存利用率总数
@@ -121,26 +106,15 @@ public class OsDataMathService {
 		String ramUitliZatiionMin=osRamService.getMinMemUtilZation(osInfoId, hourPoint, currentTime);
 		String swapUitliZatiionMax=osRamService.getMaxSwapUtilZation(osInfoId, hourPoint, currentTime);
 		String swapUitliZatiionMin=osRamService.getMinSwapUtilZation(osInfoId, hourPoint, currentTime);
-		OsStati ramOsStati=osStatiService.creatStatiOneHour(osInfoId, OsUtil.RAM_STATIF_FLAG, hourPoint, ramUitliZatiionMax, ramUitliZatiionMin, remUitliZatiionAverage);
-		OsStati swapOsStati=osStatiService.creatStatiOneHour(osInfoId, OsUtil.SWAP_STATIF_FLAG, hourPoint, swapUitliZatiionMax, swapUitliZatiionMin, swapUitliZatiionAverage);
-		List<OsStati>osStatis=new ArrayList<OsStati>();
-		osStatis.add(ramOsStati);
-		osStatis.add(swapOsStati);
-		return osStatis;
+		osStatiService.creatStatiOneHour(osInfoId, OsUtil.RAM_STATIF_FLAG, hourPoint, ramUitliZatiionMax, ramUitliZatiionMin, remUitliZatiionAverage);
+		osStatiService.creatStatiOneHour(osInfoId, OsUtil.SWAP_STATIF_FLAG, hourPoint, swapUitliZatiionMax, swapUitliZatiionMin, swapUitliZatiionAverage);
 	}
 	
 	/**
 	 * 统计CPU，当前时间到当前小时整点
 	 * @param osInfoId
 	 */
-	public OsStati statiOneHourCpu(String osInfoId,Date currentTime){
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
-		Calendar c  = Calendar.getInstance();
-		////获取当前时间的小时数 取整时点
-		c.setTime(currentTime);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		Date hourPoint=c.getTime();
+	public void statiOneHourCpu(String osInfoId,Date currentTime,Date hourPoint){
 		List<OsCpu>osCpus=osCpuService.getCpuByDate(osInfoId, hourPoint, currentTime);
 		double cpuUtilZationCount=0;//cpu利用率总数
 		for (OsCpu osCpu : osCpus) {
@@ -149,22 +123,14 @@ public class OsDataMathService {
 		String cpuUitliZatiionAverage=OsTransUtil.countAve(cpuUtilZationCount, osCpus.size());
 		String cpuUitliZatiionMax=osCpuService.getMaxCpuUtilZation(osInfoId, hourPoint, currentTime);
 		String cpuUitliZatiionMin=osCpuService.getMinCpuUtilZation(osInfoId, hourPoint, currentTime);
-		OsStati cpuOsStati=osStatiService.creatStatiOneHour(osInfoId, OsUtil.CPU_STATIF_FLAG, hourPoint, cpuUitliZatiionMax, cpuUitliZatiionMin, cpuUitliZatiionAverage);
-		return cpuOsStati;
+		osStatiService.creatStatiOneHour(osInfoId, OsUtil.CPU_STATIF_FLAG, hourPoint, cpuUitliZatiionMax, cpuUitliZatiionMin, cpuUitliZatiionAverage);
 	}
 	
 	/**
 	 * 统计磁盘，当前时间到当前小时整点
 	 * @param osInfoId
 	 */
-	public OsStati statiOneHourDisk(String osInfoId,Date currentTime){
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
-		Calendar c  = Calendar.getInstance();
-		////获取当前时间的小时数 取整时点
-		c.setTime(currentTime);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		Date hourPoint=c.getTime();
+	public void statiOneHourDisk(String osInfoId,Date currentTime,Date hourPoint){
 		List<OsDisk>osDisks=osDiskService.getDiskByDate(osInfoId, hourPoint, currentTime);
 		double diskUtilZationCount=0;//磁盘利用率总数
 		for (OsDisk osDisk : osDisks) {
@@ -174,24 +140,16 @@ public class OsDataMathService {
 		System.out.println(diskUitliZatiionAverage);
 		String diskUitliZatiionMax=osDiskService.getMaxDiskUtilZation(osInfoId, hourPoint, currentTime);
 		String diskUitliZatiionMin=osDiskService.getMinDiskUtilZation(osInfoId, hourPoint, currentTime);
-		OsStati osStati= osStatiService.creatStatiOneHour(osInfoId, OsUtil.DISK_STATIF_FLAG, hourPoint, diskUitliZatiionMax, diskUitliZatiionMin, diskUitliZatiionAverage);
-		return osStati;
+		osStatiService.creatStatiOneHour(osInfoId, OsUtil.DISK_STATIF_FLAG, hourPoint, diskUitliZatiionMax, diskUitliZatiionMin, diskUitliZatiionAverage);
 	}
 	
 	/**
 	 * 统计磁盘，当前时间到当前小时整点
 	 * @param osInfoId
 	 */
-	public OsStati statiOneHourRespond(String osInfoId,Date currentTime){
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
-		Calendar c  = Calendar.getInstance();
-		////获取当前时间的小时数 取整时点
-		c.setTime(currentTime);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		Date hourPoint=c.getTime();
+	public void statiOneHourRespond(String osInfoId,Date currentTime,Date hourPoint){
 		List<OsRespondtime>osRespondtimes=osRespondTimeService.getRespondTimeByTime(osInfoId, hourPoint, currentTime);
-		long respondTime=0;//磁盘利用率总数
+		long respondTime=0;//响应时间总数
 		for (OsRespondtime osRespondtime : osRespondtimes) {
 			respondTime+=Long.parseLong(osRespondtime.getRespondTime());
 		}
@@ -199,9 +157,9 @@ public class OsDataMathService {
 		System.out.println(respondTimeAverage);
 		String respondTimeMax=osRespondTimeService.getMaxRespondTime(osInfoId, hourPoint, currentTime);
 		String respondTimeMin=osRespondTimeService.getMinRespondTime(osInfoId, hourPoint, currentTime);
-		OsStati osStati= osStatiService.creatStatiOneHour(osInfoId, OsUtil.RSPOND_STATIF_FLAG, hourPoint, respondTimeMax, respondTimeMin, respondTimeAverage);
-		return osStati;
+		osStatiService.creatStatiOneHour(osInfoId, OsUtil.RSPOND_STATIF_FLAG, hourPoint, respondTimeMax, respondTimeMin, respondTimeAverage);
 	}
+	 
 	/**
 	 * 计算Long的百分比 为2位小数
 	 * @param interCycleTime
@@ -209,7 +167,7 @@ public class OsDataMathService {
 	 * @param normrolRunTime
 	 * @return
 	 */
-	public long  normalRun(int interCycleTime ,long countTime,long normrolRunTime){
+	 long  normalRun(int interCycleTime ,long countTime,long normrolRunTime){
 		long interCycle =interCycleTime*60*1000+1;
 		BigDecimal  normalRun;
 		if(normrolRunTime+interCycle<=countTime){

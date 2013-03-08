@@ -89,14 +89,24 @@ public class LinuxcentosController {
 		return Replys.with(map).as(Json.class);
 	}
 
+	/**
+	 * 今天的可用性图饼
+	 * @param osId
+	 * @return
+	 */
 	@Post("getUsability/{osId}")
 	public Reply getUsability(@Param("osId") String osId ) {
 		Map<String, Double> map = new HashMap<String, Double>();
 		Date currentTime=new Date();
-		map = osAvailableViewHandle.creatAvailablePie(osId, currentTime, 0);
+		map = osAvailableViewHandle.creatAvailablePie(osId, currentTime, 1);
 		return Replys.with(map).as(Json.class);
 	}
 
+	/**
+	 * 今天的利用率 罗盘
+	 * @param osId
+	 * @return
+	 */
 	@Post("getUtilzation/{osId}")
 	public Reply getUtilzation(@Param("osId") String osId ) {
 		Date currentTime=new Date();
@@ -106,7 +116,7 @@ public class LinuxcentosController {
 	}
 
 	/**
-	 * 概览页面CPU 内存曲线
+	 * 概览页面CPU 与内存曲线
 	 * @param osId
 	 * @return
 	 */
@@ -117,40 +127,11 @@ public class LinuxcentosController {
 		return Replys.with(oneOsCpuAndMem).as(Json.class);
 	}
 
-	/**
-	 * 概览页面CPU分解信息曲线
-	 * @param osId
-	 * @return
-	 */
-	@Post("getCpuInfo/{osId}")
-	public Reply getCpuInfo(@Param("osId") String osId ) {
-		Date currentTime=new Date();
-		Map<String, List<Map<String, Object>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 2);
-		return Replys.with(lineMap).as(Json.class);
-	}
+
 
 	/**
-	 * 概览页面CPU分解grid 当前时间 io 中断等grid
-	 * @param osId
-	 * @return
-	 */
-	@Post("gridCpuResolve/{osId}")
-	public void gridCpuResolve(@Param("osId") String osId ,Invocation inv ){
-		Date currentTime=new Date();
-		List<OsGridModel> osGridModels=osCpuViewHandle.creatCpuResolveView(osId, currentTime);
-		Page page = new PageImpl(osGridModels);
-		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
-		gridable.setIdField("id");
-		gridable.setCellStringField("name,value,stuts,link");
-		try {
-			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * 概览页面内存利用率
+	 *  CPU与内存利用率曲线下面的表格
+	 * 概览页面内存利用率表格
 	 * @param osId
 	 * @param inv
 	 */
@@ -169,8 +150,10 @@ public class LinuxcentosController {
 		}
 
 	}
+	
+	
 	/**
-	 * 概览页面CPU利用率
+	 * 概览页面CPU利用率  CPU与内存利用率曲线下面（ 内存表格左边）的表格
 	 * @param osId
 	 * @param inv
 	 */
@@ -188,6 +171,39 @@ public class LinuxcentosController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 概览页面CPU分解信息曲线  cpu利用率曲线（内存CPU表格下面的曲线）
+	 * @param osId
+	 * @return
+	 */
+	@Post("getCpuInfo/{osId}")
+	public Reply getCpuInfo(@Param("osId") String osId ) {
+		Date currentTime=new Date();
+		Map<String, List<Map<String, Object>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 2);
+		return Replys.with(lineMap).as(Json.class);
+	}
+	/**
+	 * 概览页面CPU分解grid 当前时间 io 中断等grid 最下面的分解CPU信息表格
+	 * @param osId
+	 * @return
+	 */
+	@Post("gridCpuResolve/{osId}")
+	public void gridCpuResolve(@Param("osId") String osId ,Invocation inv ){
+		Date currentTime=new Date();
+		List<OsGridModel> osGridModels=osCpuViewHandle.creatCpuResolveView(osId, currentTime);
+		Page page = new PageImpl(osGridModels);
+		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
+		gridable.setIdField("id");
+		gridable.setCellStringField("name,value,stuts,link");
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
 	
 
 }

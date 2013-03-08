@@ -109,16 +109,17 @@ public class OsAvailableServcie {
 	
 	/**
 	 * 获取可用统计数据
-	 * timespan 时间段 1 7等
+	 * timespan 时间1  7 30 等  天为单位
 	 */
 	public List<OsAvailable> getAvailablesByDate(String osid,Date curruntTime,int timespan){
+		//取当天的24小时整时点
 		Calendar c  = Calendar.getInstance();
 		c.setTime(curruntTime);
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		curruntTime=c.getTime();
-		Date beginTime =new Date(curruntTime.getTime()-9*24*60*60*1000);
+		Date beginTime =new Date(curruntTime.getTime()-((timespan-1)*24*60*60*1000));
 		System.out.println(curruntTime);
 		System.out.println(beginTime);
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);

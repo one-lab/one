@@ -24,11 +24,18 @@ public class OsViewDataHandleServiceTest extends AbstractJUnit4SpringContextTest
 	private OsService osService;
 	
 	@Autowired
-	private OsViewHandle osLineViewHandle;
+	private OsViewHandle osViewHandle;
+	
 	
 	@Test
 	public void createlineView(){
-		Map<String,  Map<String,List<Map<String, Object>>>> viewMap=osLineViewHandle.createlineView(new Date(), 5, 1);
+		Map<String,  Map<String,List<Map<String, Object>>>> viewMap=osViewHandle.createlineView(new Date(), 5, 1);
 		System.out.println(1);
+	}
+	
+	
+	@Test
+	public void createCpuStaticLineView(){
+	  	System.out.println(1);
 	}
 }

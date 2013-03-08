@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sinosoft.one.monitor.db.oracle.domain.OracleBatchInfoService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsProcessService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
@@ -136,5 +137,38 @@ public class OsManagerController {
 		return Replys.with(viewMap).as(Json.class);
 	}
 	
-	
+	/**
+	 * 健康状态列表
+	 * @return
+	 */
+	public Reply healthList(Invocation inv) {
+		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+		List<OracleHealthInfoModel> oracleHealthInfoModels = OracleBatchInfoService.healthInfoList(StaTimeEnum.LAST_24HOUR);
+		String messageFormat0 = "<a href='{0}'>{1}</a>";
+		String messageFormat1 = "<span class={0}>{1}</span>";
+		for(OracleHealthInfoModel oracleHealthInfoModel : oracleHealthInfoModels) {
+			Map<String, Object> row = new HashMap<String, Object>();
+			row.put("id", oracleHealthInfoModel.getMonitorID());
+			List<String> cell = new ArrayList<String>();
+			cell.add(MessageFormat.format(messageFormat0, "",oracleHealthInfoModel.getMonitorName()));
+			for(int i=0; i<oracleHealthInfoModel.getGraphInfo().size(); i++) {
+				String[] values = oracleHealthInfoModel.getGraphInfo().get(i);
+				String cssClass = "";
+				if("1".equals(values[0])) {
+					cssClass = "normal";
+				} else if("2".equals(values[0])) {
+					cssClass = "warn";
+				} else {
+					cssClass = "";
+				}
+				String value = MessageFormat.format(messageFormat1, cssClass, values[1]);
+				cell.add(value);
+			}
+			row.put("cell", cell);
+			rows.add(row);
+		}
+		Map<String, Object> grid = new HashMap<String, Object>();
+		grid.put("rows", rows);
+		return Replys.with(grid).as(Json.class);
+	}
 }

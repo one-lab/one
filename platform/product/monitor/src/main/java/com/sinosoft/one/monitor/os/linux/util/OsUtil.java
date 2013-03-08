@@ -118,4 +118,31 @@ public class OsUtil {
 	 * 响应时间统计1小时标记
 	 */
 	public static String RSPOND_STATIF_FLAG="PH";
+	
+	
+	/**
+	 * 物理内存统计一天标记
+	 */
+	public static String RAM_STATIF_FLAG_D="RD";
+	
+	/**
+	 * 交换内存统计一天标记
+	 */
+	public static String SWAP_STATIF_FLAG_D="SD";
+	
+	/**
+	 * CPU统计一天标记
+	 */
+	public static String CPU_STATIF_FLAG_D="CD";
+	
+	/**
+	 * 磁盘统计一天标记
+	 */
+	public static String DISK_STATIF_FLAG_D="DD";
+	
+	/**
+	 * 响应时间统计一天标记
+	 */
+	public static String RSPOND_STATIF_FLAG_D="PD";
+	
 }

@@ -1,6 +1,6 @@
-var id;
+var osid;
 $(function() {
-	id =$("#osid").val();
+	osid =$("#osid").val();
 			refresh();
 			setInterval(refresh, 1000 * 10 * 60);
 		});
@@ -9,7 +9,7 @@ $(function() {
 $(function() {
 			$.ajax({
 						type : "post",
-						url : "/monitor/os/osInfo/"+id,
+						url : "/monitor/os/osInfo/"+osid,
 						dataType : "json",
 						cache : false,
 						success : function(data) {
@@ -27,7 +27,7 @@ function refresh() {
 	// 可用性饼图（完成）
 	$.ajax({
 				type : "post",
-				url : "/monitor/os/getUsability/"+id,
+				url : "/monitor/os/getUsability/"+osid,
 				dataType : "json",
 				cache : false,
 				success : function(data) {
@@ -84,7 +84,7 @@ function refresh() {
 	// cpu,ram,disk使用率表盘（完成）
 	$.ajax({
 				type : "post",
-				url : "/monitor/os/getUtilzation/"+id,
+				url : "/monitor/os/getUtilzation/"+osid,
 				dataType : "json",
 				cache : false,
 				success : function(data) {
@@ -197,7 +197,7 @@ function refresh() {
 	// cpu及内存使用率图表（完成）
 	$.ajax({
 				type : "post",
-				url : "/monitor/os/getCpuAndRam/"+id,
+				url : "/monitor/os/getCpuAndRam/"+osid,
 				dataType : "json",
 				cache : false,
 				success : function(data) {
@@ -280,7 +280,7 @@ function refresh() {
 	// 分解cpu利用率图表（完成）
 	$.ajax({
 				type : "post",
-				url : "/monitor/os/getCpuInfo/"+id,
+				url : "/monitor/os/getCpuInfo/"+osid,
 				dataType : "json",
 				cache : false,
 				success : function(data) {
@@ -380,7 +380,7 @@ $(function() {
 $(function() {
 			$("#grid_Memory").Grid({
 						type : "post",
-						url : "/monitor/os/gridMemory/"+id,
+						url : "/monitor/os/gridMemory/"+osid,
 						dataType : "json",
 						height : 'auto',
 						colums : [{
@@ -431,7 +431,7 @@ $(function() {
 $(function() {
 			$("#grid_cpu").Grid({
 				type:"post",
-						url : "/monitor/os/gridCpu/"+id,
+						url : "/monitor/os/gridCpu/"+osid,
 						dataType : "json",
 						height : 'auto',
 						colums : [{
@@ -484,7 +484,7 @@ $(function() {
 					});
 			$("#grid_cpudo").Grid({
 				type:"post",
-						url : "/monitor/os/gridCpuResolve/"+id,
+						url : "/monitor/os/gridCpuResolve/"+osid,
 						dataType : "json",
 						colDisplay : false,
 						clickSelect : true,
@@ -650,4 +650,29 @@ function hideNav(e) {
 				};
 			});
 	$(document).unbind();
+}
+function viewWindow(e,url) {
+	alert(url);
+	alert(osid);
+	var rows = $(e).parent().parent();
+	var id = rows.attr('id');
+	var name = rows.children("td").eq(1).text();
+	var title = "历史记录: " + name;
+	var temWin = $("body").window({
+				"id" : "window",
+				"title" : title,
+				"url" : "/monitor/os/"+url+"/"+osid,
+				"hasIFrame" : true,
+				"width" : 740,
+				"height" : 440,
+				"diyButton" : [{
+							"id" : "btOne",
+							"btClass" : "buttons",
+							"value" : "关闭",
+							"onclickEvent" : "selectLear",
+							"btFun" : function() {
+								temWin.closeWin();
+							}
+						}]
+			});
 }

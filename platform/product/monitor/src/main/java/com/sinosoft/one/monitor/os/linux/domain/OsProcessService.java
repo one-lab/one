@@ -40,15 +40,21 @@ public class OsProcessService {
 	 * @param sampleTime 采集时间
 	 */
 	public void saveSampleData(String osInfoId,String cpuInfo,String ramInfo,String diskInfo,String respondTime ,Date sampleTime){
+		Calendar c  = Calendar.getInstance();
+		////获取当前时间的小时数 取整时点
+		c.setTime(sampleTime);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		Date hourPoint=c.getTime();
 		osCpuService.saveCpu(osInfoId,cpuInfo ,sampleTime);//保存CPU采样
 		osDiskService.saveDisk(osInfoId,diskInfo, sampleTime);//保存磁盘采样
 		osRamService.saveRam(osInfoId,ramInfo , sampleTime);//保存内存采样
 		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存响应时间采样
 		//更新统计记录
-		osDataMathService.statiOneHourRam(osInfoId, sampleTime);//更新内存统计
-		osDataMathService.statiOneHourCpu(osInfoId, sampleTime);//更新CPU统计
-		osDataMathService.statiOneHourDisk(osInfoId, sampleTime);//更行磁盘统计
-		osDataMathService.statiOneHourRespond(osInfoId, sampleTime);//更行响应时间统计
+		osDataMathService.statiOneHourRam(osInfoId, sampleTime,hourPoint);//更新内存统计
+		osDataMathService.statiOneHourCpu(osInfoId, sampleTime,hourPoint);//更新CPU统计
+		osDataMathService.statiOneHourDisk(osInfoId, sampleTime,hourPoint);//更行磁盘统计
+		osDataMathService.statiOneHourRespond(osInfoId, sampleTime,hourPoint);//更行响应时间统计
 		//删除24小时前的记录
 		Calendar c2  = Calendar.getInstance();
 		c2.set(Calendar.DATE, sampleTime.getDate());
@@ -149,16 +155,6 @@ public class OsProcessService {
 //			
 //		}
 //}
-	public static void main(String[] args) {
-		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DATE, new Date().getDate());
-		Date d1 = c.getTime();
-		System.out.println(d1);
-		c.add(Calendar.HOUR_OF_DAY, -24);
-		//取当天的前48小时整时点
-		Date d2 = c.getTime();
-		System.out.println(d2);
-	}
 	
 	
 }

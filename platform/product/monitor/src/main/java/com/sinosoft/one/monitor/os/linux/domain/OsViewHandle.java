@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.os.linux.domain;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
+import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 
@@ -26,6 +28,8 @@ public class OsViewHandle {
 	@Autowired
 	private OsRespondViewHadle osRespondViewHadle;
 	@Autowired
+	private OsStatiViewHandle osStatiViewHandle;
+	@Autowired
 	private OsRamService osRamService;
 	@Autowired
 	private OsCpuService osCpuService;
@@ -33,6 +37,8 @@ public class OsViewHandle {
 	private OsDiskService osDiskService;
 	@Autowired
 	private OsService osService;
+	@Autowired
+	private OsStatiService osStatiService;
 	
 	/**
 	 * 构建多个操作系统的线
@@ -136,4 +142,40 @@ public class OsViewHandle {
 		}
 		return map;
 	}
+	
+	/**
+	 * CPU统计报表曲线
+	 * @param osid
+	 * @param currentTime
+	 * @param timespan 时间段 1 7 30
+	 * @return
+	 */
+	public Map<String,List<Map<String, Object>>> creatStatiLine(String osid,String statitype, Date currentTime,int timespan ){
+		int span;
+		if(timespan>1){
+			span=(timespan-1)*24;
+		}else{
+			span=(timespan*24);
+		}
+		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		Os os =osService.getOsBasicById(osid);
+		Calendar c  = Calendar.getInstance();
+		////获取天时间 取整时点
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		currentTime=c.getTime();
+		Date dayPoint= new Date(currentTime.getTime()-Long.valueOf(span*60*60*1000));
+		
+		List<OsStati> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime, timespan);
+		List<Map<String, Object>> cpuMaxmaps=osStatiViewHandle.creatCpuMaxStatiLine( osStatis, currentTime, dayPoint, timespan);
+		List<Map<String, Object>> cpuMinmaps=osStatiViewHandle.creatCpuMinStatiLine( osStatis, currentTime, dayPoint, timespan);
+		List<Map<String, Object>> cpuAvamaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis, currentTime, dayPoint, timespan);
+		viewMap.put("CPU利用率最大值%", cpuMaxmaps);
+		viewMap.put("CPU利用率最小值%", cpuMinmaps);
+		viewMap.put("CPU利用率平均值%", cpuAvamaps);
+		return viewMap;
+		
+	}
+	
 }

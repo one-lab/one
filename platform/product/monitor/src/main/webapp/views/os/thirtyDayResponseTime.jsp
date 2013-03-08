@@ -22,7 +22,7 @@ $(function(){
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
 	$("#sevenday_grid").Grid({
-		url : "historyMemory.json",
+		url : "sevenDayResponseTime.json",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -46,7 +46,7 @@ $(function(){
             chart: {
                 renderTo: 'last_sevenday',
                 type: 'line',
-								height:300
+								height:200
             },
             title: {
                 text: ''
@@ -59,7 +59,7 @@ $(function(){
             },
             yAxis: {
                 title: {
-                    text: '物理内存利用率%'
+                    text: '响应时间(ms)'
                 }
 								
 									
@@ -87,18 +87,9 @@ $(function(){
 							href: ''
 						},
             series: [{
-                name: '所选时间内的平均值',
+                name: '响应时间',
                 data: [98, 42, 57, 85, 79, 12, 17]
-            },
-						{
-                name: '平均值(每小时)',
-                data: [57, 85, 19, 42, 57, 85, 19]
-            },
-						{
-                name: '移动平均值',
-                data: [19, 42, 57, 85, 57, 85, 29]
-            }],
-						colors: ['#00b200', '#0000b2', '#b200b2'] 
+            }]
         });
 		})	
 })
@@ -134,42 +125,38 @@ function hideNav(e){
 	
 <body>
 <div id="layout_center">
-  <div class="main" style="margin-bottom:60px;">
+  <div class="main"  style="margin-bottom:60px;">
      <div class="threshold_file">
-          <div class="sub_title">物理内存利用率</div>
-          
+          <div class="sub_title">最近30天的URL响应时间</div>
           <table class="base_info" width="100%" cellpadding="0" cellspacing="0">
             <tr><td>监视器名称</td><td>oracle</td></tr>
-            <tr><td>属性 </td><td>物理内存利用率 %  </td></tr>
+            <tr><td>属性 </td><td>用户数 </td></tr>
             <tr><td>从  </td><td> 	2013-2-26 上午11:00 </td></tr>
             <tr><td>到 </td><td> 	2013-3-1 下午6:22</td></tr>
            
-            <tr>
-              <td colspan="2"> 
-            		<div class="days_data">
-                  <a href="historyMemoryThirtyDay.html"><div class="thirty_days"></div></a>
-                  <a href="historyMemorySevenDay.html"><div class="seven_days"></div></a>
-                </div>
-              </td>
-            </tr>
+            <tr><td colspan="2"> 
+            	<div class="days_data">
+                  <a><div class="thirty_days_unable"></div></a>
+                  <a  href="sevenDayResponseTime.jsp"><div class="seven_days"></div></a>
+                </div></td></tr>
              <tr><td colspan="2"><div id="last_sevenday" ></div></td></tr>
-            <tr>
-              <td colspan="2">
-                <div class="buttom_mark">
-                  <div>物理内存利用率(%) :</div><div>1</div>
-                  <div>最小平均值</div><div>2</div>
-                  <div>最大平均值:</div><div>23</div>
-                  <div>平均:</div><div>13.489 </div>
-                </div>
-              </td>
-            </tr>
+             <tr>
+               <td colspan="2">
+               
+                 <div class="buttom_mark">
+                    <div>用户数:</div><div>1</div>
+                    <div>最小平均值</div><div>2</div>
+                    <div>最大平均值:</div><div>23</div>
+                    <div>平均:</div><div>13.489 </div>
+                 </div>
+             </td></tr>
           </table>
           
          
      </div>
      
      <div class="threshold_file">
-       <div class="sub_title">物理内存利用(%)</div>
+       <div class="sub_title">用户数</div>
        <div id="sevenday_grid"></div>
      </div>
   </div>

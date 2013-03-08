@@ -38,7 +38,7 @@ public class OsAvailableViewHandle {
 		Map<String, Object> map=new HashMap<String, Object>();
 		List<Map<String, Object>>mapList=new ArrayList<Map<String, Object>>();
 		Calendar c  = Calendar.getInstance();//获取当前时间的小时数 取整时点
-		c.set(Calendar.DATE, currentTime.getDate());
+		c.setTime(currentTime);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		c.add(Calendar.HOUR_OF_DAY, -24);
@@ -181,9 +181,16 @@ public class OsAvailableViewHandle {
 	}
 	 
 	
+	/**
+	 * 获取可用性图饼
+	 * @param osinfoId
+	 * @param currentDate 当前时间
+	 * @param timeSpan 1 7 30天等
+	 * @return
+	 */
 	public Map<String, Double> creatAvailablePie(String osinfoId, Date currentDate ,int timeSpan ){
 		Map<String, Double> map=new HashMap<String, Double>();
-		//取当天的前24小时整时点
+		
 		List<OsAvailable> osAvailables=osAvailableServcie.getAvailablesByDate(osinfoId, currentDate, timeSpan);
 		long normalRun=0;
 		long crashTime=0;
