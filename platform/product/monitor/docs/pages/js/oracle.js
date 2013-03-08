@@ -102,7 +102,7 @@ $(function () {
                 }
             },
             legend:{
-                enabled:false,
+                enabled:false
 
             },
             series:[
@@ -177,7 +177,7 @@ $(function () {
                 tickColor:'#666',
                 labels:{
                     step:5, // 步长 *5的数值
-                    rotation:'auto',
+                    rotation:'auto'
                 },
                 title:{
                     text:'百分比' // 表盘中央显示数值信息
@@ -274,7 +274,7 @@ $(function () {
                 tickColor:'#666',
                 labels:{
                     step:5, // 步长 *5的数值
-                    rotation:'auto',
+                    rotation:'auto'
                 },
                 title:{
                     text:'百分比' // 表盘中央显示数值信息
@@ -372,7 +372,7 @@ $(function () {
                 tickColor:'#666',
                 labels:{
                     step:5, // 步长 *5的数值
-                    rotation:'auto',
+                    rotation:'auto'
                 },
                 title:{
                     text:'百分比' // 表盘中央显示数值信息
@@ -472,9 +472,7 @@ $(function () {
 });
 // 用户活动数和连接时间曲线图
 function refreshChart2(_xAxis, _series, _rederTo, _yName) {
-    $(#_rederTo
-).
-    html("");
+    $("#"+_rederTo).html("");
     new Highcharts.Chart({
         chart:{
             renderTo:_rederTo,
@@ -525,7 +523,7 @@ function refreshChart2(_xAxis, _series, _rederTo, _yName) {
             }
         },
         legend:{
-            enabled:false,
+            enabled:false
 
         },
 // series: [{

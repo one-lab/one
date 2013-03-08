@@ -63,7 +63,7 @@ function buildHighchart(_highChart) {
 	  },
 	    tooltip: false,
 	    legend: {
-			enabled :true,
+			enabled :true
 	    },
 	    series: _highChart.series
 	});
