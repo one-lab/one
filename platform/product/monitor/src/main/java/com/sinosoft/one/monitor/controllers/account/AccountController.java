@@ -1,61 +1,106 @@
 package com.sinosoft.one.monitor.controllers.account;
 
 
-import com.sinosoft.one.monitor.account.model.Account;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
 import com.sinosoft.one.monitor.account.domain.AccountService;
-import com.sinosoft.one.monitor.controllers.LoginRequired;
+import com.sinosoft.one.monitor.account.model.Account;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
-import com.sinosoft.one.mvc.web.validation.annotation.Validation;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import com.sinosoft.one.uiutil.Gridable;
+import com.sinosoft.one.uiutil.UIType;
+import com.sinosoft.one.uiutil.UIUtil;
 
 /**
  * @author Administrator
  */
-@LoginRequired
 @Path("user")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
-    @LoginRequired
     @Get("list")
-    public String list(Invocation inv) {
-        List<Account> accounts = accountService.getAllAccount();
-        inv.addModel("accounts", accounts);
-        return "userList";
+    public String list() {
+        return "userManager";
     }
 
+    @Post("data")
+	public void list(Invocation inv) throws Exception{
+		List<Account> accountList = accountService.getAllAccount();
+		List<Account> accounts = new ArrayList<Account>();
+		for (Account account : accountList) {
+			accounts.add(account);
+		}
+		Page<Account> page = new PageImpl<Account>(accounts);
+		Gridable<Account>  gridable = new Gridable<Account> (page);
+//		名称 发件人 到 主题 一直运行 操作
+		String cellString = new String(
+				"loginName,name,status,phone,email,createTime,operation");
+		gridable.setIdField("id");
+		gridable.setCellStringField(cellString);
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			throw new Exception("json数据转换出错!", e);
+		}
+	}
+    
     @Get("create")
     @Post("errorCreate")
     public String createForm(Invocation inv) {
         inv.addModel("user", new Account());
-        return "userForm";
+        return "adduser";
     }
 
     @Post("save")
-    public String save(@Validation(errorPath = "a:errorCreate") Account account, Invocation inv) throws IllegalStateException, IOException {
+    public String save(Account account, Invocation inv) {
         account.setCreateTime(new Date());
-        account.setStatus(String.valueOf(1));
+        if("".equals(account.getStatus())||account.getStatus()==null){
+        	account.setStatus(String.valueOf(1));
+        }
         accountService.saveAccount(account);
         return "r:/account/user/list";
     }
-
-    @Get("delete/{id}")
-    public String delete(@Param("id") String id, Invocation inv) {
-        accountService.deleteAccount(id);
-        inv.addFlash("message", "删除用户成功");
-        return "r:/account/user/list";
+    
+    @Get("update/{id}")
+	public String update(@Param("id")String id,Invocation inv){
+		inv.addModel("user", accountService.getAccount(id));
+		return "adduser";
+	}
+    @Post("delete/{id}")
+    public Reply delete(@Param("id") String id, Invocation inv) {
+        try{
+        	accountService.deleteAccount(id);
+		}catch(Exception e){
+			return Replys.simple().fail();
+		}
+        return Replys.simple().success();
+    }
+    
+    @Post("batchDelete/{ids}")
+    public Reply batchDelete(@Param("ids") String ids) {
+    	String str[]=ids.split(",");
+        try{
+        	for (String string : str) {
+        		accountService.deleteAccount(string);
+    		}
+		}catch(Exception e){
+			return Replys.simple().fail();
+		}
+        return Replys.simple().success();
     }
 
     @Post("view/{id}")

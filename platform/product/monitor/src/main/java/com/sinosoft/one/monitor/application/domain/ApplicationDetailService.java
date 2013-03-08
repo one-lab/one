@@ -6,7 +6,7 @@ import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailAlarmViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailPieViewModel;
 import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
-import com.sinosoft.one.monitor.common.HealthSta;
+import com.sinosoft.one.monitor.common.HealthStaForMonitor;
 import com.sinosoft.one.monitor.common.HealthStaCache;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.utils.DateUtil;
@@ -79,14 +79,14 @@ public class ApplicationDetailService {
 		ApplicationDetailPieViewModel applicationDetailPieViewModel = new ApplicationDetailPieViewModel();
 		Date startDate = DateUtil.getTodayBeginDate();
 		Date endDate = new Date();
-		List<HealthSta> healthStas = alarmRepository.selectHealthStaForMonitor(applicationId, startDate, endDate);
-		for(HealthSta healthSta : healthStas) {
-			if(healthSta.getSeverity() == SeverityLevel.CRITICAL) {
-				applicationDetailPieViewModel.setCriticalCount(healthSta.getCount());
-			} else if(healthSta.getSeverity() == SeverityLevel.WARNING) {
-				applicationDetailPieViewModel.setWarningCount(healthSta.getCount());
-			} else if(healthSta.getSeverity() == SeverityLevel.INFO) {
-				applicationDetailPieViewModel.setNormalCount(healthSta.getCount());
+		List<HealthStaForMonitor> healthStaForMonitors = alarmRepository.selectHealthStaForMonitor(applicationId, startDate, endDate);
+		for(HealthStaForMonitor healthStaForMonitor : healthStaForMonitors) {
+			if(healthStaForMonitor.getSeverity() == SeverityLevel.CRITICAL) {
+				applicationDetailPieViewModel.setCriticalCount(healthStaForMonitor.getCount());
+			} else if(healthStaForMonitor.getSeverity() == SeverityLevel.WARNING) {
+				applicationDetailPieViewModel.setWarningCount(healthStaForMonitor.getCount());
+			} else if(healthStaForMonitor.getSeverity() == SeverityLevel.INFO) {
+				applicationDetailPieViewModel.setNormalCount(healthStaForMonitor.getCount());
 			}
 		}
 

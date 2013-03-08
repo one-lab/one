@@ -3,13 +3,14 @@ package com.sinosoft.one.monitor.account.domain;
 
 import java.util.List;
 
-import com.sinosoft.one.monitor.account.repository.AccountRepository;
-import com.sinosoft.one.monitor.account.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.sinosoft.one.monitor.account.model.Account;
+import com.sinosoft.one.monitor.account.repository.AccountRepository;
 
 /**
  * @author Administrator
@@ -21,7 +22,6 @@ public class AccountService {
     //private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
 	
     private AccountRepository accountRepository;
-
     @Transactional(readOnly = false)
     public void saveAccount(Account account) {
         accountRepository.save(account);
@@ -43,6 +43,9 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+    public void deleteEntities(String ids){
+    	accountRepository.deleteByIDs(ids);
+    }
     public Account getAccount(String id) {
         return accountRepository.findOne(id);
     }
@@ -55,7 +58,7 @@ public class AccountService {
         return accountRepository.findByLoginName(loginName);
     }
     @Autowired
-	public void setAccountRepository(AccountRepository accountRepository) {
+	public void setaccountRepository(AccountRepository accountRepository) {
 		this.accountRepository = accountRepository;
 	}
     
