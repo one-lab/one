@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
-import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableDetail;
 
 
 @DirtiesContext

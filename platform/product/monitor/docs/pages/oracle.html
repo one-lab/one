@@ -19,6 +19,11 @@
 <script language="javascript" src="js/oracle.js"></script>
 <script type="text/javascript">
 $(function(){
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center");
+		$("#main").width(center.width() - 31).height(center.height() - 30);
+	}
+	
 	var usePercent = [45,100,4];
 	$(".hit_rate").each(function(i){
 			$(this).find(".hit_rate_c_m_m").css("height",100-usePercent[i]+"%");
@@ -31,6 +36,8 @@ $(function(){
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
+	
+	
 	
 	$("#table_space_detail").Grid({
 		url : "oracle.json",
@@ -51,7 +58,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	
 	$("#table_space_status").Grid({
@@ -73,7 +80,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	
 	$("#table_space_performance").Grid({
@@ -96,7 +103,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	
 		$("#sga_detail").Grid({
@@ -112,7 +119,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	
 	$("#sga_status").Grid({
@@ -128,12 +135,16 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	$("#tabs").tabs({closeTab:false});
 	$(".show_table_space_a").bind("click",function(){
 			$("#tabs").find("li").eq(1).click();
 		});
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center")
+		$("#main").width(center.width() - 31).height(center.height() - 30)
+	}
 });
 function navHover(){
 	$(this).toggleClass("hover")
@@ -569,7 +580,7 @@ function viewRelevanceNowUserStatus(){
     </div>
 </div>
 <div id="layout_center">
-	<div class="main">
+	<div class="main" id="main">
   <ul class="crumbs">
       <li><a href="#">管理</a> ></li>
       <li><b>配置告警</b></li>

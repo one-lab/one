@@ -40,8 +40,12 @@ $(function(){
 		rowList:[10,20,30],
 		pager : true,
 		number:false,
-		multiselect:true,
+		multiselect:true
 	});
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center")
+		$("#main").width(center.width() - 31).height(center.height() - 30)
+	}
 });
 
 function showAllError(){
@@ -143,7 +147,7 @@ function hideNav(e){
     </div>
 </div>
 <div id="layout_center">
-	<div class="service_all">
+	<div class="main" id="main"">
   	<ul class="crumbs">
       <li><a href="#">管理</a> ></li>
       <li><b>配置告警</b></li>
@@ -257,7 +261,7 @@ function hideNav(e){
               URL地址信息
             </div>
             <div id="grid_info_table"></div>
-          	<div class="explain">
+          	<div class="explain" style="float:left">
               <ul>
                   <li><span class="ex_no"></span>不健康</li>
                   <li><span class="ex_is"></span>健康</li>

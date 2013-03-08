@@ -47,7 +47,7 @@ $(function () {
                 }
             },
             legend:{
-                enabled:false,
+                enabled:false
 
             },
             series:[
@@ -102,7 +102,7 @@ $(function () {
                 }
             },
             legend: {
-								enabled :false,
+					enabled :false
                
             },
             series: [{

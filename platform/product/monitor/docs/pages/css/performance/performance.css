@@ -31,7 +31,7 @@
 .p_info_table_body_bar div{width:15px;}
 .p_info_table_body .body{width:15%; }
 .p_info_table_body .body_name{width:20%; }
-.p_info_table_body .body_score{width:30%; padding-right:3%;}
+.p_info_table_body .body_score{width:34%; padding-right:5px;}
 .p_info_table_bottom{margin:8px;}
 .user_info div{float:left;margin-left:20px; color:#444; font-size:14px;}
 .user_info span{margin-left:10px;}

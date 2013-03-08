@@ -24,21 +24,21 @@ $(function(){
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
 	$("#sevenday_grid").Grid({
-		url : "historyCPU.json",
+		url : "fnOpenNewWindow7.json",
 		dataType: "json",
 		height: 'auto',
 		colums:[
 			{id:'1',text:'日期',name:"methodName",width:'',index:'1',align:'',color:''},
-			{id:'2',text:'时间',name:"maxTime",width:'300',index:'1',align:'',color:''},
-			{id:'3',text:'最小值  ',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'最大值 ',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'每小时平均值 ',name:"status",width:'',index:'1',align:'',color:''}
+			{id:'2',text:'时间',name:"maxTime",width:'',index:'1',align:'',color:''},
+			{id:'2',text:'最小值ms',name:"maxTime",width:'',index:'1',align:'',color:''},
+			{id:'2',text:'最大只ms',name:"maxTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'每小时平均值ms ',name:"status",width:'',index:'1',align:'',color:''}
 		],
 		rowNum:10,
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:false
 	});
 });
 $(function(){
@@ -56,11 +56,11 @@ chart8 = new Highcharts.Chart({
                 text: ''
             },
             xAxis: {
-                categories: ['19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15','21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00','23:15']
+                categories: ['19:40','19:50', '20:00', '20:10', ,'20:20','20:30', '20:40', '20:50','21:00', '21:10','21:20', '21:30','21:40','21:50', '22:00', '22:10', '22:20', '22:30', '22:40','22:50','23:00','23:10']
             },
             yAxis: {
                 title: {
-                    text: '值%'
+                    text: 'ms'
                 }
 								
 									
@@ -90,14 +90,6 @@ chart8 = new Highcharts.Chart({
             series: [{
                 name: '缓冲区击中率',
                 data: [48, 12, 37,25, 39, 12, 17]
-            },
-						{
-                name: '数据字典击中率',
-                data: [17, 35, 19, 42, 17, 25, 19]
-            },
-						{
-                name: '缓存击中率',
-                data: [19, 42, 27, 25, 37, 45, 29]
             }],
 						colors: ['#00b200', '#0000b2', '#b200b2'] 
         });
@@ -138,19 +130,25 @@ function hideNav(e){
 <div id="layout_center">
   <div class="main" style="padding-bottom:60px">
      <div class="threshold_file">
-          <div class="sub_title">CPU利用率</div>
+          <div class="sub_title">最近30天的每小时应答时间</div>
           
           <table class="base_info" width="100%" cellpadding="0" cellspacing="0">
             <tr><td>监视器名称</td><td>linux</td></tr>
-            <tr><td>属性 </td><td>CPU利用率 % </td></tr>
+            <tr><td>属性 </td><td>用户数 </td></tr>
             <tr><td>从  </td><td> 	2013-2-26 上午11:00 </td></tr>
             <tr><td>到 </td><td> 	2013-3-1 下午6:22</td></tr>
+           
+            <tr><td colspan="2"> 
+            	<div class="days_data">
+                  <a href="fnOpenNewWindow30.html"><div class="thirty_days"></div></a>
+                  <a href="fnOpenNewWindow7.html"><div class="seven_days"></div></a>
+                </div></td></tr>
              <tr><td colspan="2"><div id="last_sevenday" ></div></td></tr>
              <tr>
-               <td colspan="2">
+                  <td colspan="2">
                
                  <div class="buttom_mark">
-                    <div>CPU利用率(%) :</div><div>1</div>
+                    <div>应答时间:</div><div>1</div>
                     <div>最小平均值</div><div>2</div>
                     <div>最大平均值:</div><div>23</div>
                     <div>平均:</div><div>13.489 </div>
@@ -162,10 +160,11 @@ function hideNav(e){
      </div>
      
      <div class="threshold_file">
-       <div class="sub_title">CPU利用率(%)</div>
+       <div class="sub_title">应答时间</div>
        <div id="sevenday_grid"></div>
      </div>
   </div>
 </div>
 </body>
 </html>
+

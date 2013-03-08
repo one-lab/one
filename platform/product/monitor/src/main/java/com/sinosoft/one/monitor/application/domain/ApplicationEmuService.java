@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.application.domain;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.sinosoft.one.monitor.application.model.EumUrl;
 import com.sinosoft.one.monitor.application.model.EumUrlAva;
 import com.sinosoft.one.monitor.application.model.EumUrlAvaSta;
@@ -23,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 仿真URL服务对象
@@ -124,9 +126,9 @@ public class ApplicationEmuService {
 
 
     public UrlAvailableInf getUrlAvailableToday(String urlId){
-
         EumUrl eumUrl = getEumUrlByUrlId(urlId);
         Interval interval = new Interval(new DateTime(getTodayFirstEumUrlAva(eumUrl.getId()).getRecordTime()), DateTime.now());
+
         int seconds = interval.toPeriod().getSeconds();
 	    EumUrlAva eumUrlAva = getEumUrlAvaTodayAndLatestAndUnavailable(eumUrl.getId());
         return new UrlAvailableInf(urlAvaTrendByUrlId(urlId),
@@ -147,11 +149,33 @@ public class ApplicationEmuService {
     }
 
 
-    List<AvailableStatistics> findAvailableStatisticsByUrlId(String urlId) {
+    List<TimeQuantumAvailableInfo> findAvailableStatisticsByUrlId(String urlId) {
         Assert.hasText(urlId);
-        ArrayList<AvailableStatistics> availableStatisticsList = new ArrayList<AvailableStatistics>(0);
-
-        return availableStatisticsList;
+        ArrayList<TimeQuantumAvailableStatistics> availableStatisticsList = new ArrayList<TimeQuantumAvailableStatistics>(0);
+        DateTime now = DateTime.now();
+        DateTime prev = now.minusHours(6);
+        List<TimeQuantumAvailableStatistics>  list = eumUrlAvaRepository.statisticsByEumUrlIdAndRecordTime(getEumUrlByUrlId(urlId).getId(),now.toDate(),prev.toDate());
+        Map<String,TimeQuantumAvailableInfo> map = Maps.newHashMap();
+        for(TimeQuantumAvailableStatistics statistics:list){
+            TimeQuantumAvailableInfo timeQuantumAvailableInfo = null;
+            if(map.get(statistics.getTimeQuantum())==null){
+                 timeQuantumAvailableInfo = new TimeQuantumAvailableInfo();
+                if(statistics.getStatus().equals("1")){
+                    timeQuantumAvailableInfo.setAvaCount(statistics.getCount());
+                }
+                timeQuantumAvailableInfo.setCount(statistics.getCount());
+                map.put(statistics.getTimeQuantum(),timeQuantumAvailableInfo);
+            }else{
+                timeQuantumAvailableInfo =map.get(statistics.getTimeQuantum());
+                if(statistics.getStatus().equals("1")){
+                    timeQuantumAvailableInfo.setAvaCount(statistics.getCount());
+                }
+                int count = timeQuantumAvailableInfo.getCount()+statistics.getCount();
+                timeQuantumAvailableInfo.setCount(count);
+                timeQuantumAvailableInfo.setTimeQuantum(statistics.getTimeQuantum());
+            }
+        }
+        return Lists.newArrayList(map.values());
     }
 
 
