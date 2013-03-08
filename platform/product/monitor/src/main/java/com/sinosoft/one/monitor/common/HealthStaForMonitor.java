@@ -8,7 +8,7 @@ import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
  * Date: 13-3-5
  * Time: 下午11:24
  */
-public class HealthSta {
+public class HealthStaForMonitor {
 	private SeverityLevel severity;
 	private int count;
 

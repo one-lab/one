@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -52,11 +54,22 @@ public class Account  implements java.io.Serializable {
         */
     private Date createTime;
 
+    private String operation="<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
     public Account() {
     }
 
-	
-    public Account(String id, String loginName, String status) {
+	@Transient
+    public String getOperation() {
+		return operation;
+	}
+
+
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+
+
+	public Account(String id, String loginName, String status) {
         this.id = id;
         this.loginName = loginName;
         this.status = status;

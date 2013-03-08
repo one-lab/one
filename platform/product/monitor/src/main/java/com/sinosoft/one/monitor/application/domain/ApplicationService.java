@@ -4,7 +4,7 @@ import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationIndexViewModel;
 import com.sinosoft.one.monitor.application.repository.*;
-import com.sinosoft.one.monitor.common.HealthSta;
+import com.sinosoft.one.monitor.common.HealthStaForMonitor;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,17 +159,17 @@ public class ApplicationService {
 	 * @param applicationIndexViewModel 首页显示对象
 	 */
 	private void generateHealthBar(String applicationId, Date startDate, Date endDate, ApplicationIndexViewModel applicationIndexViewModel) {
-		List<HealthSta> healthStas = alarmRepository.selectHealthStaForMonitor(applicationId, startDate, endDate);
+		List<HealthStaForMonitor> healthStaForMonitors = alarmRepository.selectHealthStaForMonitor(applicationId, startDate, endDate);
 		int criticalCount = 0;
 		int warningCount = 0;
 		int normalCount = 0;
-		for(HealthSta healthSta : healthStas) {
-			if(healthSta.getSeverity() == SeverityLevel.CRITICAL) {
-				criticalCount = healthSta.getCount();
-			} else if(healthSta.getSeverity() == SeverityLevel.WARNING) {
-				warningCount = healthSta.getCount();
-			} else if(healthSta.getSeverity() == SeverityLevel.INFO) {
-				normalCount = healthSta.getCount();
+		for(HealthStaForMonitor healthStaForMonitor : healthStaForMonitors) {
+			if(healthStaForMonitor.getSeverity() == SeverityLevel.CRITICAL) {
+				criticalCount = healthStaForMonitor.getCount();
+			} else if(healthStaForMonitor.getSeverity() == SeverityLevel.WARNING) {
+				warningCount = healthStaForMonitor.getCount();
+			} else if(healthStaForMonitor.getSeverity() == SeverityLevel.INFO) {
+				normalCount = healthStaForMonitor.getCount();
 			}
 		}
 		int totalCount = criticalCount + warningCount + normalCount;

@@ -4,6 +4,7 @@ package com.sinosoft.one.monitor.threshold.repository;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 
 /**
@@ -18,5 +19,8 @@ public interface ThresholdRepository extends PagingAndSortingRepository<Threshol
 	 */
 	@SQL("SELECT mt.* FROM GE_MONITOR_THRESHOLD mt, GE_MONITOR_ATTRIBUTE_THRESHOLD mat WHERE mt.id=mat.THRESHOLD_ID and mat.RESOURCE_ID=?1 and mat.ATTRIBUTE_ID=?2")
 	Threshold selectByResourceIdAndAttributeId(String resourceId, String attributeId);
+
+	@SQL("DELETE FROM ge_monitor_threshold  WHERE id in (?1) ")
+	void deleteByIDs(@Param("ids")String ids);
 }
 

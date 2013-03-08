@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -106,7 +107,7 @@ public class ApplicationEmuService {
         int  count = 0;
         int  avCount = 0;
         for(EumUrl eumUrl:eumUrls){
-            UrlAvailableInf urlAvailableInf =  getUrlAvailableToday(eumUrl.getId());
+            UrlAvailableInf urlAvailableInf =  getUrlAvailableToday(eumUrl.getUrlId());
             count+=urlAvailableInf.getCount();
             avCount+=urlAvailableInf.getAvailableCount();
         }
@@ -142,6 +143,14 @@ public class ApplicationEmuService {
         if (eumUrls.size() > 1)
             throw new MutileEumUrlException();
         return eumUrls.get(0);
+    }
+
+
+    List<AvailableStatistics> findAvailableStatisticsByUrlId(String urlId) {
+        Assert.hasText(urlId);
+        ArrayList<AvailableStatistics> availableStatisticsList = new ArrayList<AvailableStatistics>(0);
+
+        return availableStatisticsList;
     }
 
 
@@ -204,7 +213,8 @@ public class ApplicationEmuService {
                         eumUrlAvaSta.getTotalFailureTime().longValue(), eumUrlAvaSta.getFailureCount().intValue()),
                 avaCount,unAvaCount,interval.intValue(),result,
                 eumAvaLast == null?null:new AvailableCalculate.AvailableInf(
-                        eumAvaLast.getRecordTime(), eumAvaLast.getState().equals("1"), eumAvaLast.getInterval().intValue())
+                        eumAvaLast.getRecordTime(), eumAvaLast.getState().equals("1"),
+                        eumAvaLast.getInterval().intValue())
         );
         AvailableCalculate avaResult = AvailableCalculate.calculate(availableCalculateParam);
 

@@ -51,7 +51,11 @@
             <artifactId>aspectjweaver</artifactId>
         </dependency>
         <!-- Aspectj end -->
-
+        <dependency>
+            <groupId>com.sinosoft.one.monitor</groupId>
+            <artifactId>log</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.sinosoft.one.monitor</groupId>
             <artifactId>notification</artifactId>

@@ -2,13 +2,13 @@ package com.sinosoft.one.monitor.alarm.model;
 // Generated 2013-3-1 10:29:53 by One Data Tools 1.0.0
 
 
-import java.util.Date;
-import javax.persistence.*;
-
 import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Alarm.

@@ -180,10 +180,10 @@ function createSevenDayUser() {
 }
 function createSevenDayConnect() { 
 	alert(111);
-	var temWin = $("body").window({  
+	var temWin = $("body").window({
 			"id":"testOne9",   
 			"title":"7天可用",  
-			"url":ctx+"/db/oracle/oneDayConn/view/4028921b3d3fba36013d3fbb061c0000",   
+			"url":ctx+"/db/oracle/sevenDayConn/view/4028921b3d3fba36013d3fbb061c0000",
 			"hasIFrame":true,   
 			"width":850,
 			"height":440,

@@ -348,7 +348,7 @@ function viewRelevance(){
             <div>
             	<br />
                 <div class="threshold_file">
-                  <h2 class="title2"><b>操作系统列表视图　</b></h2>
+                  <h2 class="title2"><b>数据库列表视图　</b></h2>
                   <div class="tool_bar_top"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></div>
                   <div id="thresholdList"></div>
                   <div class="tool_bar"></div>

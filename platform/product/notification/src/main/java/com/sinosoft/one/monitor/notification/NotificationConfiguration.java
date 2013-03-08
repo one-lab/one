@@ -64,9 +64,9 @@ public final class NotificationConfiguration {
 		if(!file.exists()) {
 			String responseStr = NotificationHttpSupport.post(url, new HashMap<String, String>() {
 				{
-					put("ip", notificationProperties.get("application.ip").toString());
-					put("port", notificationProperties.get("application.port").toString());
-					put("appName", notificationProperties.get("application.name").toString());
+					put("ip", notificationProperties.getProperty("application.ip"));
+					put("port", notificationProperties.getProperty("application.port"));
+					put("appName", notificationProperties.getProperty("application.name"));
 				}
 			});
 
@@ -80,7 +80,7 @@ public final class NotificationConfiguration {
 				if(applicationId != null) {
 					String urls = jsonObject.getString("urls");
 					if(urls != null && !urls.equals("")) {
-						NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+						NotificationServiceFactory.buildNotificationService().initData(jsonObject.getString("urls"), notificationProperties.getProperty("application.name"));
 					}
 
 					file.createNewFile();
@@ -124,7 +124,7 @@ public final class NotificationConfiguration {
 				JSONObject jsonObject = JSON.parseObject(responseStr);
 				String urls = jsonObject.getString("urls");
 				if(urls != null && !urls.equals("")) {
-					NotificationServiceFactory.buildNotificationService().initUrlData(jsonObject.getString("urls"));
+					NotificationServiceFactory.buildNotificationService().initData(jsonObject.getString("urls"), notificationProperties.getProperty("application.name"));
 				}
 			}
 		} catch (Exception e) {
