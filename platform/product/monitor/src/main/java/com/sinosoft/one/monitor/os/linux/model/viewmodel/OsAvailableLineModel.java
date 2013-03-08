@@ -1,12 +1,33 @@
 package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 
+import java.util.List;
+
 /**
  * 可用性传输对象
  * @author Administrator
  *
  */
-public class OsAvailableViewModel {
+public class OsAvailableLineModel {
 	
+private String osid;
+	
+	private List<String> view;
+
+	public String getOsid() {
+		return osid;
+	}
+
+	public void setOsid(String osid) {
+		this.osid = osid;
+	}
+
+	public List<String> getView() {
+		return view;
+	}
+
+	public void setView(List<String> view) {
+		this.view = view;
+	}
 	/**
 	 * 颜色序号
 	 */
@@ -22,6 +43,11 @@ public class OsAvailableViewModel {
 	 */
 	private String percentage;
 
+	/**
+	 * 时间段
+	 */
+	private String timeSpan;
+	
 	public int getIndex() {
 		return index;
 	}
@@ -44,6 +70,14 @@ public class OsAvailableViewModel {
 
 	public void setPercentage(String percentage) {
 		this.percentage = percentage;
+	}
+
+	public String getTimeSpan() {
+		return timeSpan;
+	}
+
+	public void setTimeSpan(String timeSpan) {
+		this.timeSpan = timeSpan;
 	}
 	
 	

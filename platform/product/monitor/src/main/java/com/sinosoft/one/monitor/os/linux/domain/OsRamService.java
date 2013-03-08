@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.repository.OsRamRepository;
@@ -105,4 +106,15 @@ public class OsRamService {
 	public void deleteRamByLessThanTime(String osInfoId,Date sampleTime){
 		osRamRepository.deleteRamByLessThanTime(osInfoId, sampleTime);
 	}
+	
+
+	/**
+	 * 获取最近轮询点的记录
+	 */
+	public OsRam findNealyRam(String osInfoId,Date currentTime ,int interCycle){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		Date date=new Date(currentTime.getTime()-interCycle*60*1000);
+		return osRamRepository.findNealyRam(osInfoId, simpleDateFormat.format(currentTime),simpleDateFormat.format(date) ,OsUtil.ORCL_DATEFORMATE);
+	}
+	 
 }

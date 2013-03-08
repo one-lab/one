@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -14,10 +15,20 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 public class OsViewDataHandleServiceTest extends AbstractJUnit4SpringContextTests {
 	
 	@Autowired
-	private OsViewDataHandleService osViewDataHandleService;
+	private OsAvailableViewHandle osViewDataHandleService;
+	
+	@Autowired
+	private OsCpuViewHandle osCpuViewDataHanleService;
+	
+	@Autowired
+	private OsService osService;
+	
+	@Autowired
+	private OsViewHandle osLineViewHandle;
 	
 	@Test
-	public void getAvailableViewData(){
-		 Map<String, Object> s=	osViewDataHandleService.getAvailableViewData(new Date(),5);
+	public void createlineView(){
+		Map<String,  Map<String,List<Map<String, Object>>>> viewMap=osLineViewHandle.createlineView(new Date(), 5, 1);
+		System.out.println(1);
 	}
 }

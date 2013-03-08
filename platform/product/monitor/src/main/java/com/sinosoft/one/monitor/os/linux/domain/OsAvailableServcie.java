@@ -14,6 +14,7 @@ import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.repository.OsAvailableRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsAvailabletempRepository;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
+import com.sinosoft.one.monitor.utils.AvailableCalculate;
 
 /**
  * 可用性的数据库操作
@@ -32,7 +33,7 @@ public class OsAvailableServcie {
 	 * 保存可用性统计表数据 //每天00点保存
 	 * @param ava
 	 */
-	public void saveAvailable(String osId,String nomorRun,String crashtime,String aveRepair,String aveFault ,Date timeSpan){
+	public void saveAvailable(String osId,long nomorRun,long crashtime,long aveRepair,long aveFault ,Date timeSpan){
 		OsAvailable osAvailable =new OsAvailable();
 		Os os=new Os();
 		os.setOsInfoId(osId);
@@ -44,9 +45,11 @@ public class OsAvailableServcie {
 		osAvailable.setNormalRun(nomorRun);
 		osAvailableRepository.save(osAvailable);
 	}
+	
 	/**
-	 * 获取可用性统计表数据
+	 * 获取可用性统计表数据 （统计表中时间为天的整点）
 	 * @param ava
+	 * @param date（一天时间整点）
 	 */
 	public OsAvailable getAvailable(String osInfoId,Date date){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
@@ -67,11 +70,12 @@ public class OsAvailableServcie {
 	 * 修改统计表记录
 	 * @param osAvailable
 	 */
-	public void updateAvailable(OsAvailable osAvailable,String nomorRun,String crashtime,String aveRepair,String aveFault ){
+	public void updateAvailable(OsAvailable osAvailable,long nomorRun,long crashtime,long aveRepair,long aveFault,int stopCount){
 		osAvailable.setNormalRun(nomorRun);
 		osAvailable.setAveFaultTime(aveFault);
 		osAvailable.setAveRepairTime(aveRepair);
 		osAvailable.setCrashTime(crashtime);
+		osAvailable.setStopCount(stopCount);
 		osAvailableRepository.save(osAvailable);
 	}
 	
@@ -79,13 +83,14 @@ public class OsAvailableServcie {
 	 * 保存可用性临时数据//每个采样点保存
 	 * @param ava
 	 */
-	public void saveAvailableTemp(String osId,Date time,String Status){
+	public void saveAvailableTemp(String osId,Date time,String Status,int intercycleTime){
 		OsAvailabletemp osAvailabletemp=new OsAvailabletemp();
 		Os os=new Os();
 		os.setOsInfoId(osId);
 		osAvailabletemp.setOs(os);
 		osAvailabletemp.setSampleDate(time);
 		osAvailabletemp.setStatus(Status);	
+		osAvailabletemp.setIntercycleTime(intercycleTime);
 		osAvailabletempRepository.save(osAvailabletemp);
 	}
 	
@@ -96,6 +101,28 @@ public class OsAvailableServcie {
 	public List<OsAvailabletemp> getAvailableTemps(String osid,Date beginTime,Date endTime){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osAvailabletempRepository.findOsAvailabletempByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(endTime),OsUtil.ORCL_DATEFORMATE);
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+	
+	/**
+	 * 获取可用统计数据
+	 * timespan 时间段 1 7等
+	 */
+	public List<OsAvailable> getAvailablesByDate(String osid,Date curruntTime,int timespan){
+		Calendar c  = Calendar.getInstance();
+		c.setTime(curruntTime);
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		curruntTime=c.getTime();
+		Date beginTime =new Date(curruntTime.getTime()-9*24*60*60*1000);
+		System.out.println(curruntTime);
+		System.out.println(beginTime);
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osAvailableRepository.getOsAvailablesByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**
@@ -125,43 +152,17 @@ public class OsAvailableServcie {
 	}
 	
 	/**
-	 * 获取今天的可用性数据 00点--- 当前
-	 * @param osInfoId
-	 * @param currentTime
-	 * @return
-	 */
-	public  List<OsAvailabletemp> getTodayAvailable(String osInfoId,Date currentTime){
-		//获取当前时间的天
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
-		Calendar c  = Calendar.getInstance();
-		c.set(Calendar.DATE, currentTime.getDate());
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		//取当天的前00点整时点
-		Date today = c.getTime();
-		//查询当前时间到 本天00点的数据
-		SimpleDateFormat simpleDateFormat2= new SimpleDateFormat(OsUtil.DATEFORMATE);
-		List<OsAvailabletemp> osAvailabletemps=osAvailabletempRepository.findOsAvailabletempByDate(osInfoId,simpleDateFormat2.format(today),simpleDateFormat2.format(currentTime), OsUtil.ORCL_DATEFORMATE);
-		return osAvailabletemps;
-	}
-	/**
 	 * 获取前24时中保存的可用性状态  最近24小时 数据
 	 * 保存到统计表
 	 */
 	public List<OsAvailabletemp> getFFHourAvailale(String osInfoId,Date currentTime){
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
 		c.set(Calendar.DATE, currentTime.getDate());
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		c.add(Calendar.HOUR_OF_DAY, -24);
-		//前24小时
-		Date d1 = c.getTime();
-//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-//		System.out.println(simpleDateFormat.format(currentTime));
-//		System.out.println(simpleDateFormat.format(d1));
+		Date d1 = c.getTime();	//前24小时
 		List<OsAvailabletemp> osAvailabletemps=getAvailableTemps(osInfoId, d1, currentTime);
 		return osAvailabletemps;
 	}
@@ -196,7 +197,6 @@ public class OsAvailableServcie {
 	 */
 	public  void deleteLTFHourAvailale(String osInfoId,Date currentTime){
 		//当前天数
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
 		Calendar c  = Calendar.getInstance();
 		c.set(Calendar.DATE, currentTime.getDate());
 		c.set(Calendar.HOUR_OF_DAY,0);
@@ -208,9 +208,15 @@ public class OsAvailableServcie {
 		c.add(Calendar.HOUR_OF_DAY, -24);
 		//取当天的前48小时整时点
 		Date d2 = c.getTime();
-//		SimpleDateFormat simpleDateFormat2=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		deleteAvailableTemp(osInfoId, d2,d1);
 	}
 	
+//	/**
+//	 * 获取临时表统计轮询时间改变的计算
+//	 */
+//	public List<AvailableDetail> findGroupByInterCycleTime(String osinfoID,Date todaytime){
+//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+//		return osAvailabletempRepository.findGroupByInterCycleTime(osinfoID, simpleDateFormat.format(todaytime),OsUtil.ORCL_DATEFORMATE);
+//	}
 	
 }

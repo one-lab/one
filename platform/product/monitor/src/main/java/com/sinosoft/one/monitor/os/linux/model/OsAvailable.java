@@ -32,16 +32,18 @@ public class OsAvailable  implements java.io.Serializable {
     private Os os;
     /**
         */
-    private String normalRun;
+    private Long normalRun;
     /**
         */
-    private String crashTime;
+    private Long crashTime;
     /**
         */
-    private String aveRepairTime;
+    private Long aveRepairTime;
     /**
         */
-    private String aveFaultTime;
+    private Long aveFaultTime;
+
+    private int stopCount;
     /**
         */
     private Date timeSpan;
@@ -78,38 +80,38 @@ public class OsAvailable  implements java.io.Serializable {
     }
     
     @Column(name="NORMAL_RUN", length=20)
-    public String getNormalRun() {
+    public Long getNormalRun() {
     return this.normalRun;
     }
 
-    public void setNormalRun(String normalRun) {
+    public void setNormalRun(Long normalRun) {
     this.normalRun = normalRun;
     }
     
     @Column(name="CRASH_TIME", length=20)
-    public String getCrashTime() {
+    public Long getCrashTime() {
     return this.crashTime;
     }
 
-    public void setCrashTime(String crashTime) {
+    public void setCrashTime(Long crashTime) {
     this.crashTime = crashTime;
     }
     
     @Column(name="AVE_REPAIR_TIME", length=20)
-    public String getAveRepairTime() {
+    public Long getAveRepairTime() {
     return this.aveRepairTime;
     }
 
-    public void setAveRepairTime(String aveRepairTime) {
+    public void setAveRepairTime(Long aveRepairTime) {
     this.aveRepairTime = aveRepairTime;
     }
     
     @Column(name="AVE_FAULT_TIME", length=20)
-    public String getAveFaultTime() {
+    public Long getAveFaultTime() {
     return this.aveFaultTime;
     }
 
-    public void setAveFaultTime(String aveFaultTime) {
+    public void setAveFaultTime(Long aveFaultTime) {
     this.aveFaultTime = aveFaultTime;
     }
     
@@ -128,6 +130,15 @@ public class OsAvailable  implements java.io.Serializable {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
+	@Column(name="STOP_COUNT")
+	public int getStopCount() {
+		return stopCount;
+	}
+
+	public void setStopCount(int stopCount) {
+		this.stopCount = stopCount;
+	}
+	
 }
 
 

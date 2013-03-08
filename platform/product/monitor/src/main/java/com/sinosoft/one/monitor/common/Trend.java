@@ -1,11 +1,12 @@
 package com.sinosoft.one.monitor.common;
 
 /**
- * Created with IntelliJ IDEA.
+ * 趋势.
  * User: ChengQi
  * Date: 13-3-6
  * Time: PM11:06
  * To change this template use File | Settings | File Templates.
  */
-public class Trend {
+public enum Trend {
+   RISE,SAME,DROP
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
+import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 
 public interface OsRamRepository extends PagingAndSortingRepository<OsRam, String> {
@@ -35,5 +36,8 @@ public interface OsRamRepository extends PagingAndSortingRepository<OsRam, Strin
 	//小于目标时间删除
 	@SQL("delete from GE_MONITOR_OS_RAM o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
 	public void deleteRamByLessThanTime(String osid,Date date);
+	
+	@Query("from OsRam o where o.sampleDate=(select max(sampleDate) from OsRam where sampleDate between to_date(?3,?4) and to_date(?2,?4) ) and o.os.osInfoId = ?1")
+	public OsRam findNealyRam(String osid,String currentTime, String currentTime2,String dateFormat );
 }
 

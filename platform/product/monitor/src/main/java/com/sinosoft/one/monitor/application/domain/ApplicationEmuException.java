@@ -1,11 +1,17 @@
 package com.sinosoft.one.monitor.application.domain;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ChengQi
+ * ApplicationEmuException
+ * User: cq
  * Date: 13-3-6
  * Time: PM3:04
- * To change this template use File | Settings | File Templates.
  */
-public class ApplicationEmuException {
+class ApplicationEmuException extends RuntimeException{
+    public ApplicationEmuException(String message) {
+        super(message);
+    }
+
+    public ApplicationEmuException() {
+        super();
+    }
 }

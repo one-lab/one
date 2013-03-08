@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.db.oracle.model;
 // Generated 2013-3-4 21:44:43 by One Data Tools 1.0.0
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.sinosoft.one.monitor.utils.DateUtil;
 
 /**
  * EventSta.
@@ -54,8 +59,26 @@ public class EventSta  implements java.io.Serializable {
     * 统计次数.
     */
     private long eventCount;
+    
+    @Transient
+    private String date;
+   
+    @Transient
+    private String time;
 
-    public EventSta() {
+    public String getDate() {
+    	
+		return date;
+	}
+
+
+	public String getTime() {
+		
+		return time;
+	}
+
+
+	public EventSta() {
     }
 
 	
@@ -125,10 +148,25 @@ public class EventSta  implements java.io.Serializable {
     }
 
     public void setEventRecordTime(Date eventRecordTime) {
+    	
     this.eventRecordTime = eventRecordTime;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM");
+    SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+    this.date = sdf.format(eventRecordTime);
+     this.time = sdf2.format(eventRecordTime);
     }
     
-    @Column(name="EVENT_COUNT")
+    public void setDate(String date) {
+		this.date = date;
+	}
+
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+
+	@Column(name="EVENT_COUNT")
     public long getEventCount() {
     return this.eventCount;
     }
