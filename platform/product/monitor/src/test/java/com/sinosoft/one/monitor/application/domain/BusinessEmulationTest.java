@@ -13,9 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 public class BusinessEmulationTest extends SpringTxTestCase {
 
     @Autowired
-    private BusinessEmulation businessEmulation;
-
-    @Autowired
     private ApplicationService applicationService;
 
     @Test

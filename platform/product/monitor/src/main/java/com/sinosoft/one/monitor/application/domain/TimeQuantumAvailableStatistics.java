@@ -13,12 +13,23 @@ public class TimeQuantumAvailableStatistics {
 
     private int available;
 
-    private int timeQuantum;
+    private String timeQuantum;
 
-    public AvailableStatistics(int count, int available, int timeQuantum) {
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public TimeQuantumAvailableStatistics(int count, int available, String timeQuantum, String status) {
         this.count = count;
         this.available = available;
         this.timeQuantum = timeQuantum;
+		this.status = status;
     }
 
     public int getCount(){
@@ -29,7 +40,7 @@ public class TimeQuantumAvailableStatistics {
         return this.available;
     }
 
-    public int getTimeQuantum(){
+    public String getTimeQuantum(){
         return this.timeQuantum;
     }
 }
