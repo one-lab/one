@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -120,7 +119,6 @@ public class EventSta  implements java.io.Serializable {
     public void setAvg(Double avg) {
     this.avg = avg;
     }
-    @Temporal(TemporalType.DATE)
     @Column(name="EVENT_RECORD_TIME")
     public Date getEventRecordTime() {
     return this.eventRecordTime;

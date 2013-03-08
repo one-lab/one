@@ -7,17 +7,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>monitor监控系统</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/globalcss/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/globalcss/oracle.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/globalcss/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/globalcss/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/globaljs/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/globaljs/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/globaljs/sinosoft.grid.js"></script>  
-<script language="javascript" src="${ctx}/globaljs/highcharts.src.js"></script>
-<script language="javascript" src="${ctx}/globaljs/highcharts-more.js"></script>
-<script language="javascript" src="${ctx}/globaljs/sinosoft.tabs.js"></script>
-<script language="javascript" src="${ctx}/globaljs/oracle.js"></script>
+<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
+<script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
+<script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
+<script language="javascript" src="${ctx}/global/js/oracle.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -35,65 +35,64 @@ $(function(){
 		colums:[
 			{id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
 			{id:'2',text:'表空间使用情况',name:"maxTime",width:'300',index:'1',align:'',color:''},
-			{id:'3',text:'已分配字节总数 (MB) ',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'已用（Byte） (MB) ',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'可用字节 (MB) ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'6',text:'已用百分比 ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'7',text:'%可用 ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'8',text:'已分配块数',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'9',text:'可用块数 ',name:"status",width:'',index:'1',align:'',color:''}
+			{id:'3',text:'总空间大小(MB) ',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'总块数',name:"avgTime",width:'',index:'1',align:'',color:''},
+			{id:'5',text:'已使用(MB) ',name:"status",width:'',index:'1',align:'',color:''},
+            {id:'6',text:'已用百分比 ',name:"status",width:'',index:'1',align:'',color:''},
+            {id:'7',text:'未使用 ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'8',text:'可用百分比',name:"status",width:'',index:'1',align:'',color:''}
 		],
 		rowNum:10,
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:true
 	});
 	
-	$("#table_space_status").Grid({
-		url : "oracle2.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
-			{id:'2',text:'状态',name:"maxTime",width:'300',index:'1',align:'',color:''},
-			{id:'3',text:' 	数据文件 ',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'读次数/分 ',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'写次数/分',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'6',text:'读时间 ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'7',text:'写时间 ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'8',text:'健康状况',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'9',text:'告警配置',name:"status",width:'',index:'1',align:'right',color:''}
-		],
-		rowNum:10,
-		rowList:[10,20,30],
-		pager : false,
-		number:false,
-		multiselect:true,
-	});
+//	$("#table_space_status").Grid({
+//		url : "oracle2.json",
+//		dataType: "json",
+//		height: 'auto',
+//		colums:[
+//			{id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
+//			{id:'2',text:'状态',name:"maxTime",width:'300',index:'1',align:'',color:''},
+//			{id:'3',text:' 	数据文件 ',name:"minTime",width:'',index:'1',align:'',color:''},
+//			{id:'4',text:'读次数/分 ',name:"avgTime",width:'',index:'1',align:'',color:''},
+//			{id:'5',text:'写次数/分',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'6',text:'读时间 ',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'7',text:'写时间 ',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'8',text:'健康状况',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'9',text:'告警配置',name:"status",width:'',index:'1',align:'right',color:''}
+//		],
+//		rowNum:10,
+//		rowList:[10,20,30],
+//		pager : false,
+//		number:false,
+//		multiselect:true
+//	});
 	
-	$("#table_space_performance").Grid({
-		url : "oracle1.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'数据文件名 ',name:"methodName",width:'',index:'1',align:'',color:''},
-			{id:'2',text:'表空间名  ',name:"maxTime",width:'300',index:'1',align:'',color:''},
-			{id:'3',text:'状态',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'自动扩展',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'数据文件大小 (MB)',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'6',text:'读次数 ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'7',text:'写次数  ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'8',text:'平均读时间 (ms)  ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'9',text:'健康状况',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'10',text:'告警配置',name:"status",width:'',index:'1',align:'',color:''}
-		],
-		rowNum:10,
-		rowList:[10,20,30],
-		pager : false,
-		number:false,
-		multiselect:true,
-	});
+//	$("#table_space_performance").Grid({
+//		url : "oracle1.json",
+//		dataType: "json",
+//		height: 'auto',
+//		colums:[
+//			{id:'1',text:'数据文件名 ',name:"methodName",width:'',index:'1',align:'',color:''},
+//			{id:'2',text:'表空间名  ',name:"maxTime",width:'300',index:'1',align:'',color:''},
+//			{id:'3',text:'状态',name:"minTime",width:'',index:'1',align:'',color:''},
+//			{id:'4',text:'自动扩展',name:"avgTime",width:'',index:'1',align:'',color:''},
+//			{id:'5',text:'数据文件大小 (MB)',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'6',text:'读次数 ',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'7',text:'写次数  ',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'8',text:'平均读时间 (ms)  ',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'9',text:'健康状况',name:"status",width:'',index:'1',align:'',color:''},
+//			{id:'10',text:'告警配置',name:"status",width:'',index:'1',align:'',color:''}
+//		],
+//		rowNum:10,
+//		rowList:[10,20,30],
+//		pager : false,
+//		number:false,
+//		multiselect:true
+//	});
 	
 		$("#sga_detail").Grid({
 		url : "oracle3.json",
@@ -108,7 +107,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:false,
+		multiselect:false
 	});
 	
 	$("#sga_status").Grid({
@@ -124,7 +123,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true,
+		multiselect:true
 	});
 	$("#tabs").tabs({closeTab:false});
 });
@@ -219,7 +218,7 @@ function hideNav(e){
 <div id="layout_center">
 	<div class="main">
   <ul class="crumbs">
-      <li><a href="#">管理</a> ></li>
+      <li><a href="#">管理</a> </li>
       <li><b>配置告警</b></li>
     </ul>
      <hr class="top_border" />
@@ -295,7 +294,7 @@ function hideNav(e){
            <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>340ms</td><td></td></tr>
+                <tr><td>用户数</td><td>340ms</td><td></td></tr>
                   <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
               </table>
          	</div>
@@ -432,8 +431,8 @@ function hideNav(e){
             <div class="sub_title">表空间明细</div>
             <div id="table_space_detail"></div>
           	<div class="tool_bar_top">
-              <div><img src="images/db/legend-green.png" /><span>可用空间</span>
-             <img src="images/db/legend-red.png" /><span>已用空间</span></div>
+              <div><img src="${ctx}/global/images/db/legend-green.png" /><span>可用空间</span>
+             <img src="${ctx}/global/images/db/legend-red.png" /><span>已用空间</span></div>
             </div>
        </div>
        <div class="threshold_file">

@@ -1,9 +1,6 @@
 package com.sinosoft.one.monitor.application.model;
 
-import com.sinosoft.one.monitor.common.AlarmMessage;
-import com.sinosoft.one.monitor.common.AlarmSource;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.common.MessageBase;
+import com.sinosoft.one.monitor.common.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -20,7 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "GE_MONITOR_EXCEPTION_INFO")
-public class ExceptionInfo implements MessageBase {
+public class ExceptionInfo extends AbstractMessageBase {
 	/**
 	 * 主键ID
 	 */

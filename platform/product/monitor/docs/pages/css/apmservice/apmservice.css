@@ -29,3 +29,7 @@
 .info_head{width:100%; min-width:800px;height:25px; background:url(../../images/spmservice/bg_tableheader.gif) repeat-x;}
 .info_thead{ font-weight:bold;}
 .grid_info{margin-top:10px;width:100% }
+.red_bar,.yellow_bar{float:left;}
+.green_bar{height:12px;}
+.red_bar{height:12px; background:url(../../images/red-bar.png) repeat-x;}
+.yellow_bar{height:12px; background: url(../../images/bg_available_y.gif) repeat-x}

@@ -6,9 +6,10 @@ package com.sinosoft.one.monitor.application.model.viewmodel;
  * Date: 13-3-5
  * Time: 下午10:00
  */
-public class IndexViewModel {
+public class ApplicationIndexViewModel {
 	private String applicationId;
 	private String applicationName;
+	private String applicationCnName;
 	private int greenBarLength;
 	private int yellowBarLength;
 	private int redBarLength;
@@ -29,6 +30,14 @@ public class IndexViewModel {
 
 	public void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
+	}
+
+	public String getApplicationCnName() {
+		return applicationCnName;
+	}
+
+	public void setApplicationCnName(String applicationCnName) {
+		this.applicationCnName = applicationCnName;
 	}
 
 	public int getGreenBarLength() {

@@ -47,7 +47,9 @@ function hideNav(e){
 	$(document).unbind();
 }
 function save(){
-	msgSuccess("系统消息", "操作成功，监视器已保存！");
+	msgSuccess("系统消息", "操作成功，监视器已保存！",function(){
+		window.location.href="addSystem2.html";
+	});
 }
 </script>
 </head>
@@ -112,7 +114,10 @@ function save(){
 </div>
 <div id="layout_center">
 	<div class="main">
-    	<div class="add_monitor">
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td>
+            	<div class="add_monitor">
        	  <h2 class="title2"><b>新建监视器类型　</b>
           	<select name="" class="diySelect" onchange="top.location=this.value;">
             	<optgroup label="应用服务器">
@@ -162,6 +167,29 @@ function save(){
             </table>
             </form>
         </div>
+            </td>
+            <td width="15">&nbsp;</td>
+            <td width="33%" style="vertical-align:top">
+            	<div class="conf_box help">
+        	<div class="conf_title">
+            	<div class="conf_title_r"></div>
+                <div class="conf_title_l"></div>
+           	  <span>帮助信息</span>
+            </div>
+            <div class="conf_cont_box">
+            	<div class="conf_cont">
+                	<ul>
+                    	<li class="first the_set"><b>新建应用系统监视器</b><br />创建系统监视器后可根据业务需求配置业务场景。</li>
+                      <li><b>管理业务场景</b><br />点击“管理业务场景”,可以增加新业务场景或管理已有业务场景。</li>
+                      <li><b>管理URL</b><br />点击“管理URL”,对应业务场景将URL按流程顺序进行添加与监控配置。</li>
+                      <li><b>管理方法</b><br />点击“管理方法”,对URL中所执行的方法按顺序进行添加与监控配置</li>
+                    </ul>                    
+              </div>
+            </div>
+        </div>
+            </td>
+          </tr>
+        </table>
     </div>
 </div>
 <div id="layout_bottom">

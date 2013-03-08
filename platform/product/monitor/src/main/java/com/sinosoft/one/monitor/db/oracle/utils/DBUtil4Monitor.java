@@ -6,6 +6,7 @@ import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.db.ClassLoaderUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,13 +18,14 @@ import java.util.Date;
  * Date: 13-3-2
  * Time: 上午10:15
  */
+@Component
 public class DBUtil4Monitor {
     @Autowired
-    private static InfoRepository infoRepository;
+    private InfoRepository infoRepository;
     public static void openConnection(String DRIVER,String URL,String USER,String PASSWORD) {
         DBUtil.reStart(DRIVER, URL, USER, PASSWORD);
     }
-    public static void changeConnection(String monitorId) {
+    public void changeConnection(String monitorId) {
         Info info = infoRepository.findOne(monitorId);
         String ip = info.getIpAddress();
         String port = info.getPort();
@@ -34,7 +36,7 @@ public class DBUtil4Monitor {
         String url = "jdbc:oracle:thin:@"+ip+":"+port+":"+instanceName;
         DBUtil.reStart(driver, url, username, password);
     }
-    public static long connectTime(Info info){
+    public long connectTime(Info info){
         Date begin = new Date();
         Connection conn = getConnection(info);
         Date end = new Date();
@@ -42,7 +44,7 @@ public class DBUtil4Monitor {
         closeConnection(conn);
         return connectTime;
     }
-    public static void closeConnection(Connection conn){
+    public void closeConnection(Connection conn){
         try {
             if(conn!=null&&!conn.isClosed()){
                 conn.close();
@@ -63,6 +65,7 @@ public class DBUtil4Monitor {
         String password = info.getPassword();
         String driver = OracleMonitorSql.DRIVER;
         String url = "jdbc:oracle:thin:@"+ip+":"+port+":"+instanceName;
+        System.out.print(url);
         Connection conn = null;
         try {
             if (conn == null || conn.isClosed()) {

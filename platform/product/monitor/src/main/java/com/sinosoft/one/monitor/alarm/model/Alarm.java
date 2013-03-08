@@ -2,12 +2,13 @@ package com.sinosoft.one.monitor.alarm.model;
 // Generated 2013-3-1 10:29:53 by One Data Tools 1.0.0
 
 
-import java.util.Date;
-import javax.persistence.*;
-
 import com.sinosoft.one.monitor.common.AlarmSource;
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Alarm.
@@ -54,6 +55,15 @@ public class Alarm  implements java.io.Serializable {
     * 所有者(ownername).
     */
     private String ownerName;
+	/**
+	 * 资源类型(resouceType).
+	 */
+	private ResourceType subResourceType;
+	/**
+	 * 资源ID(subResourceId).
+	 */
+	private String subResourceId;
+
 
     public Alarm() {
     }
@@ -146,6 +156,24 @@ public class Alarm  implements java.io.Serializable {
     this.ownerName = ownerName;
     }
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "SUB_RESOURCE_TYPE")
+	public ResourceType getSubResourceType() {
+		return subResourceType;
+	}
+
+	public void setSubResourceType(ResourceType subResourceType) {
+		this.subResourceType = subResourceType;
+	}
+
+	@Column(name = "SUB_RESOURCE_ID")
+	public String getSubResourceId() {
+		return subResourceId;
+	}
+
+	public void setSubResourceId(String subResourceId) {
+		this.subResourceId = subResourceId;
+	}
 
 	@Override
 	public String toString() {

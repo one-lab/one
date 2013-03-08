@@ -17,8 +17,6 @@ function rowsTogle(monitorId,attributeId){
 	var rows = $("#threshold tr.hideRows");
     var _monitorId=monitorId;
     var _attributeId=attributeId;
-    alert("monitorid:"+_monitorId);
-    alert("attributeId:"+_attributeId);
 	if(rows.eq(0).is(':hidden')){
         getAllActions(monitorId,attributeId);
 		rows.show();

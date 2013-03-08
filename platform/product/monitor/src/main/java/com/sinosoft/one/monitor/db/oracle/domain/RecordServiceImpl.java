@@ -1,6 +1,21 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
-import com.sinosoft.one.monitor.db.oracle.model.*;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.sinosoft.one.monitor.db.oracle.model.Ava;
+import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
+import com.sinosoft.one.monitor.db.oracle.model.EventSta;
+import com.sinosoft.one.monitor.db.oracle.model.Info;
+import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
 import com.sinosoft.one.monitor.db.oracle.repository.AvaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.AvaStaRepository;
@@ -10,18 +25,10 @@ import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableCountsGroupByInterval;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableInf;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableStatistics;
 import com.sinosoft.one.monitor.utils.DateUtil;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Connection;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: Chunliang.Han Date: 13-3-3 Time: 下午10:21
@@ -36,33 +43,37 @@ public class RecordServiceImpl implements RecordService {
 	private EventStaRepository eventStaRepository;
 	@Autowired
 	private LasteventRepository lasteventRepository;
+	@Autowired
+    private DBUtil4Monitor dbUtil4Monitor;
 	private static Date lastDate = new Date(0);
 	private static Date avaLastDate = new Date(0);
 
-	@Transactional
 	@Override
 	public void insertLastEvent(Info info, Date date) {
 		Lastevent lastevent = new Lastevent();
 		// 获取event数据
-		DBUtil4Monitor.changeConnection(info.getId());
+		dbUtil4Monitor.changeConnection(info.getId());
 		String sql1 = OracleMonitorSql.bufferRatio;
 		String sql2 = OracleMonitorSql.dictionaryRatio;
 		String sql3 = OracleMonitorSql.libraryRatio;
-		List<Map<String, String>> rsList1 = DBUtil.queryStrMaps(SqlObj
-				.newInstance(sql1));
-		List<Map<String, String>> rsList2 = DBUtil.queryStrMaps(SqlObj
-				.newInstance(sql2));
-		List<Map<String, String>> rsList3 = DBUtil.queryStrMaps(SqlObj
-				.newInstance(sql3));
-		lastevent.setBufferHitRate(Double.parseDouble(rsList1.get(0).get(
-				"Hit Ratio")));
-		lastevent
-				.setActiveCount(Integer.parseInt(rsList1.get(0).get("active")));
-		lastevent.setBufferLibHitRate(Double.parseDouble(rsList3.get(0).get(
-				"libHitRatio")));
-		lastevent.setConnectTime(DBUtil4Monitor.connectTime(info));
-		lastevent.setDickHitRate(Double.parseDouble(rsList2.get(0).get(
-				"dictRatio")));
+        String sql4 = OracleMonitorSql.activeCount;
+		List<Map<String, Object>> rsList1 = DBUtil.queryObjMaps(SqlObj
+                .newInstance(sql1));
+        List<Map<String, Object>> rsList2 = DBUtil.queryObjMaps(SqlObj
+                .newInstance(sql2));
+		List<Map<String, Object>> rsList3 = DBUtil.queryObjMaps(SqlObj
+                .newInstance(sql3));
+        List<Map<String, Object>> rsList4 = DBUtil.queryObjMaps(SqlObj
+                .newInstance(sql4));
+        double hitRatio = ((BigDecimal)rsList1.get(0).get("Hit Ratio")).doubleValue();
+		lastevent.setBufferHitRate(hitRatio);
+        int active =   ((BigDecimal)rsList4.get(0).get("active") ).intValue();
+		lastevent.setActiveCount(active);
+        double libHitRatio = ((BigDecimal)rsList3.get(0).get("libHitRatio") ).doubleValue();
+		lastevent.setBufferLibHitRate(libHitRatio);
+		lastevent.setConnectTime(dbUtil4Monitor.connectTime(info));
+        double dictRatio = ((BigDecimal)rsList2.get(0).get( "dictRatio") ).doubleValue();
+		lastevent.setDickHitRate(dictRatio);
 		lastevent.setDatabaseId(info.getId());
 		lastevent.setRecordTime(date);
 		lasteventRepository.save(lastevent);
@@ -76,10 +87,10 @@ public class RecordServiceImpl implements RecordService {
 			insertEventSta(lastevent, newDate);
 			lastDate = newDate;
 		} else {
-			updateEventSta(lastevent, lastDate);
+			//updateEventSta(lastevent, lastDate);
 		}
 		Date timePoint = StaTimeEnum.getTime(StaTimeEnum.LAST_24HOUR, date);
-		lasteventRepository.clear(timePoint);
+		//lasteventRepository.clear(timePoint);
 	}
 
 	private void insertEventSta(Lastevent lastevent, Date inserTime) {
@@ -100,7 +111,7 @@ public class RecordServiceImpl implements RecordService {
 		activeCountSta.setMax(lastevent.getActiveCount() / 1.0);
 		activeCountSta.setMin(lastevent.getActiveCount() / 1.0);
 		activeCountSta.setEventRecordTime(inserTime);
-		connectTimeSta.setEventCount(1);
+        activeCountSta.setEventCount(1);
 		// 缓冲区击中率统计记录
 		EventSta bufferHitRateSta = new EventSta();
 		bufferHitRateSta.setDatabaseId(lastevent.getDatabaseId());
@@ -109,7 +120,7 @@ public class RecordServiceImpl implements RecordService {
 		bufferHitRateSta.setMax(lastevent.getBufferHitRate() / 1.0);
 		bufferHitRateSta.setMin(lastevent.getBufferHitRate() / 1.0);
 		bufferHitRateSta.setEventRecordTime(inserTime);
-		connectTimeSta.setEventCount(1);
+        bufferHitRateSta.setEventCount(1);
 		eventStaRepository.save(connectTimeSta);
 		eventStaRepository.save(activeCountSta);
 		eventStaRepository.save(bufferHitRateSta);
@@ -178,7 +189,6 @@ public class RecordServiceImpl implements RecordService {
 		eventStaRepository.save(activeCountSta);
 		eventStaRepository.save(bufferHitRateSta);
 	}
-	@Transactional
 	@Override
 	public void insertAva(Info info, Date date) {
 		Ava ava = new Ava();
@@ -188,7 +198,7 @@ public class RecordServiceImpl implements RecordService {
 		} else {
 			ava.setState("0");
 		}
-		DBUtil4Monitor.closeConnection(conn);
+		dbUtil4Monitor.closeConnection(conn);
 		ava.setRecordTime(date);
 		ava.setDatabaseId(info.getId());
 		ava.setInterval(info.getPullInterval());
@@ -203,10 +213,10 @@ public class RecordServiceImpl implements RecordService {
 			insertAvaSta(ava, newDate,info.getPullInterval());
 			avaLastDate = newDate;
 		} else {
-			updateAvaSta(ava, lastDate,info.getPullInterval());
+			//updateAvaSta(ava, lastDate,info.getPullInterval());
 		}
 		Date timePoint = StaTimeEnum.getTime(StaTimeEnum.LAST_24HOUR, date);
-		avaRepository.clear(timePoint);
+		//avaRepository.clear(timePoint);
 	}
 
 	private void insertAvaSta(Ava ava, Date inserTime,int interval) {
@@ -260,11 +270,19 @@ public class RecordServiceImpl implements RecordService {
     	}else if(StringUtils.equals(ava.getState(), "1")){
     		avaSta.setAvCount(++avCount);
     	}
-    	List<AvailableCalculate.AvailableDetail> avCountList = avaRepository.findAvCount(inserTime);
-    	List<AvailableCalculate.AvailableDetail> unAvCountList = avaRepository.findUnAvCount(inserTime);
-    	AvailableCalculate availableCalculate =  AvailableCalculate.completeCalculate(
-    			avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), 
-    			avCountList, unAvCountList, falseCount, interval);
+    	List<AvailableCalculate.AvailableCountsGroupByInterval> avCountList = avaRepository.findAvCount(inserTime);
+    	List<AvailableCalculate.AvailableCountsGroupByInterval> unAvCountList = avaRepository.findUnAvCount(inserTime);
+    	
+    	AvailableCalculate.AvailableCalculateParam avaCalParam = new AvailableCalculate.AvailableCalculateParam(
+    			new AvailableStatistics(avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), falseCount),
+    			avCountList,unAvCountList,interval,ava.getState().equals("1"),
+    			new AvailableInf(ava.getRecordTime(),ava.getState().equals("1"),new Long(ava.getInterval()).intValue())
+    	);
+    	
+//    	AvailableCalculate availableCalculate =  AvailableCalculate.calculate(
+//    			avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), 
+//    			avCountList, unAvCountList, falseCount, interval);
+    	AvailableCalculate availableCalculate =  AvailableCalculate.calculate(avaCalParam);
         //正常运行时间
         avaSta.setNormalRuntime(availableCalculate.getAliveTime().longValue());
         //总停机时间

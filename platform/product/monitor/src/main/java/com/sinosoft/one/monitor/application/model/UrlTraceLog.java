@@ -1,10 +1,7 @@
 package com.sinosoft.one.monitor.application.model;
 
 
-import com.sinosoft.one.monitor.common.AlarmMessage;
-import com.sinosoft.one.monitor.common.AlarmSource;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.common.MessageBase;
+import com.sinosoft.one.monitor.common.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,7 +20,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "GE_MONITOR_URL_TRACE_LOG")
-public class UrlTraceLog implements MessageBase {
+public class UrlTraceLog extends AbstractMessageBase {
 	/**
 	 * 主键ID
 	 */
@@ -250,5 +247,15 @@ public class UrlTraceLog implements MessageBase {
 	@Override
 	public AlarmSource alarmSource() {
 		return AlarmSource.LOG;
+	}
+
+	@Override
+	public ResourceType subResourceType() {
+		return ResourceType.APPLICATION_SCENARIO_URL;
+	}
+
+	@Override
+	public String subResourceId() {
+		return urlId;
 	}
 }

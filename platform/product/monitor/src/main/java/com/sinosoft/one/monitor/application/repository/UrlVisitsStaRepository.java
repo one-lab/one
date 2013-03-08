@@ -13,15 +13,15 @@ import java.util.Date;
  * Time: 下午10:17
  */
 public interface UrlVisitsStaRepository extends PagingAndSortingRepository<UrlVisitsSta, String> {
-	UrlVisitsSta findByUrlId(String urlId);
+	UrlVisitsSta findByUrlIdAndRecordTime(String urlId, Date currentHourDate);
 
 	/**
 	 * 统计访问数量
 	 * @param applicationId 应用ID
-	 * @param startTime 开始时间
-	 * @param endTime 结束时间
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
 	 * @return 访问数量
 	 */
 	@SQL("select sum(visit_number) from ge_monitor_url_visits_sta where application_id=?1 and record_time between ?2 and ?3")
-	int countVisits(String applicationId, Date startTime, Date endTime);
+	Integer countVisits(String applicationId, Date startDate, Date endDate);
 }

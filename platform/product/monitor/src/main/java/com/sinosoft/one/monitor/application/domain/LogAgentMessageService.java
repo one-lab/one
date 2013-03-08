@@ -10,6 +10,8 @@ import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * 日志代理端消息处理服务类.
  * User: carvin
@@ -37,7 +39,8 @@ public class LogAgentMessageService implements AgentMessageService {
 		String alarmId = messageBaseEventSupport.doMessageBase(urlTraceLog);
 		urlTraceLog.setAlarmId(alarmId);
 		urlTraceLogRepository.save(urlTraceLog);
-		UrlVisitsSta urlVisitsSta = urlVisitsStaRepository.findByUrlId(urlTraceLog.getUrlId());
+		Date currentHourDate = DateUtil.getHoursDate(urlTraceLog.getBeginTime());
+		UrlVisitsSta urlVisitsSta = urlVisitsStaRepository.findByUrlIdAndRecordTime(urlTraceLog.getUrlId(), currentHourDate);
 		if(urlVisitsSta != null) {
 			urlVisitsSta.increaseVisitNumber();
 		} else {

@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.controllers.db.oracle;
 
 import java.util.Date;
 
+import com.sinosoft.one.mvc.web.annotation.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.monitor.db.oracle.domain.OracleInfoService;
@@ -17,19 +18,15 @@ public class AddOracleController {
 
 	
 	@Autowired
-	private OracleInfoService oracleInfoServiceImpl;
+	private OracleInfoService oracleInfoService;
 	
 	//添加监视器
 	@Post("add")
 	public Reply addOracleMonitor(Info info){
-		
-		
 		Date sysTime = new Date();
 		info.setSysTime(sysTime);
-		//oracleInfoServiceImpl.saveMonitor(info);
+        System.out.println(info);
+		oracleInfoService.saveMonitor(info);
 		return Replys.simple().success() ;
 	}
-	
-	
-	
 }

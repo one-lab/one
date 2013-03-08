@@ -9,15 +9,15 @@ import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
  * Time: 下午11:24
  */
 public class HealthSta {
-	private SeverityLevel severityLevel;
+	private SeverityLevel severity;
 	private int count;
 
-	public SeverityLevel getSeverityLevel() {
-		return severityLevel;
+	public SeverityLevel getSeverity() {
+		return severity;
 	}
 
-	public void setSeverityLevel(SeverityLevel severityLevel) {
-		this.severityLevel = severityLevel;
+	public void setSeverity(SeverityLevel severity) {
+		this.severity = severity;
 	}
 
 	public int getCount() {

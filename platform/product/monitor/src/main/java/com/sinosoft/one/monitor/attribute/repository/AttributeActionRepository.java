@@ -27,9 +27,12 @@ public interface AttributeActionRepository extends PagingAndSortingRepository<At
 	List<AttributeAction> findByResourceIdAndAttributeId(String resourceId, String attributeId);
 
     @SQL("select distinct a.SEVERITY from GE_MONITOR_ATTRIBUTE_ACTION a where a.RESOURCE_ID=?1 and a.ATTRIBUTE_ID=?2 and a.ACTION_ID=?3")
-    public List<String> findAllSeverityWithCurrentAttribute(String monitorId, String attributeId, String actionId);
+    public List<String> findAllSeverityWithCurrentAttribute(String resourceId, String attributeId, String actionId);
 
     @SQL("select * from GE_MONITOR_ATTRIBUTE_ACTION a where a.ATTRIBUTE_ID=?1")
     List<AttributeAction> findAllAttributeActionsWithAttributeId(String attributeId);
+
+    @SQL("select a.")
+    List<String> findAllActionsWithResourceIdAndAttributeId(String resourceId,String attributeId);
 }
 

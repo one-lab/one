@@ -1,10 +1,8 @@
 package com.sinosoft.one.monitor.application.domain;
 
-import com.sinosoft.one.monitor.alarm.domain.AlarmService;
-import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.application.model.*;
-import com.sinosoft.one.monitor.application.model.viewmodel.IndexViewModel;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationIndexViewModel;
 import com.sinosoft.one.monitor.application.repository.*;
 import com.sinosoft.one.monitor.common.HealthSta;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
@@ -14,9 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * 应用服务类
@@ -40,6 +37,8 @@ public class ApplicationService {
 	private RequestPerMinuteRepository requestPerMinuteRepository;
 	@Autowired
 	private UrlVisitsStaRepository urlVisitsStaRepository;
+	@Autowired
+	private ExceptionInfoRepository exceptionInfoRepository;
 
     /**
      * 新增一个应用.
@@ -113,41 +112,110 @@ public class ApplicationService {
         return applicationRepository.findAllApplicationNames();
     }
 
-	public List<IndexViewModel> generateIndexViewModels(int recentHour) {
-		Iterable<Application> applicationList = applicationRepository.findAll();
+	/**
+	 * 生成首页展示对象
+	 * @param recentHour 最近几小时
+	 * @return
+	 */
+	public List<ApplicationIndexViewModel> generateIndexViewModels(int recentHour) {
+		Iterable<Application> applicationList = applicationRepository.findAllActiveApplication();
 		Iterator<Application> applicationIterator = applicationList.iterator();
+		List<ApplicationIndexViewModel> applicationIndexViewModelList = new ArrayList<ApplicationIndexViewModel>();
 		while(applicationIterator.hasNext()) {
 			Application application = applicationIterator.next();
-			IndexViewModel indexViewModel = new IndexViewModel();
+			ApplicationIndexViewModel applicationIndexViewModel = new ApplicationIndexViewModel();
 
-			Date startDate = DateUtil.getCurrentBeginDate();
-			Date endDate = DateUtil.getCurrentEndDate();
+			applicationIndexViewModel.setApplicationId(application.getId());
+			applicationIndexViewModel.setApplicationName(application.getApplicationName());
+			applicationIndexViewModel.setApplicationCnName(application.getCnName());
+
+			Date startDate = DateUtil.getRecentHourDate(recentHour - 1);
+			Date endDate = Calendar.getInstance().getTime();
 			// 计算健康度
-			generateHealthBar(application.getId(), indexViewModel, startDate, endDate);
+			generateHealthBar(application.getId(), startDate, endDate, applicationIndexViewModel);
 			// 获取平均响应时间
-
+			generateAvgResponseTime(application.getId(), startDate, endDate, applicationIndexViewModel);
 			// 获取吞吐量
+			generateRpm(application.getId(), startDate, endDate, applicationIndexViewModel);
 
+			applicationIndexViewModelList.add(applicationIndexViewModel);
 		}
-		return null;
-
+		return applicationIndexViewModelList;
 	}
 
-	private void generateHealthBar(String applicationId, IndexViewModel indexViewModel, Date startDate, Date endDate) {
-		List<HealthSta> healthStas = alarmRepository.selectHealthSta(applicationId, startDate, endDate);
+	/**
+	 * 生成健康度状况
+	 * @param applicationId 应用ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @param applicationIndexViewModel 首页显示对象
+	 */
+	private void generateHealthBar(String applicationId, Date startDate, Date endDate, ApplicationIndexViewModel applicationIndexViewModel) {
+		List<HealthSta> healthStas = alarmRepository.selectHealthStaForMonitor(applicationId, startDate, endDate);
 		int criticalCount = 0;
 		int warningCount = 0;
+		int normalCount = 0;
 		for(HealthSta healthSta : healthStas) {
-			if(healthSta.getSeverityLevel() == SeverityLevel.CRITICAL) {
+			if(healthSta.getSeverity() == SeverityLevel.CRITICAL) {
 				criticalCount = healthSta.getCount();
-			} else if(healthSta.getSeverityLevel() == SeverityLevel.WARNING) {
+			} else if(healthSta.getSeverity() == SeverityLevel.WARNING) {
 				warningCount = healthSta.getCount();
+			} else if(healthSta.getSeverity() == SeverityLevel.INFO) {
+				normalCount = healthSta.getCount();
 			}
 		}
+		int totalCount = criticalCount + warningCount + normalCount;
+		totalCount = totalCount == 0 ? 1 : totalCount;
+		normalCount = normalCount == 0 ? 1 : normalCount;
+		BigDecimal totalBigDecimal = BigDecimal.valueOf(totalCount);
+		BigDecimal hundredBigDecimal = BigDecimal.valueOf(100);
+		applicationIndexViewModel.setGreenBarLength(BigDecimal.valueOf(normalCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue());
+		applicationIndexViewModel.setRedBarLength(BigDecimal.valueOf(criticalCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue());
+		applicationIndexViewModel.setYellowBarLength(BigDecimal.valueOf(warningCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue());
 	}
 
-	private void generateAvgResponseTime(String applicationId, Date startDate, Date endDate) {
-
-
+	/**
+	 * 生成平均响应时间
+	 * @param applicationId 应用ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @param applicationIndexViewModel 首页显示对象
+	 */
+	private void generateAvgResponseTime(String applicationId, Date startDate, Date endDate, ApplicationIndexViewModel applicationIndexViewModel) {
+		BigDecimal avgResponseTime = urlResponseTimeRepository.staAvgResponseTimeSta(applicationId, startDate, endDate);
+		avgResponseTime = avgResponseTime == null ? BigDecimal.valueOf(0) : avgResponseTime;
+		applicationIndexViewModel.setAvgResponseTime(avgResponseTime.intValue());
 	}
+
+
+	/**
+	 * 生成吞吐量
+	 * @param applicationId 应用ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @param applicationIndexViewModel 首页显示对象
+	 */
+	private void generateRpm(String applicationId, Date startDate, Date endDate, ApplicationIndexViewModel applicationIndexViewModel) {
+		List<RequestPerMinute> rpms = requestPerMinuteRepository.selectRequestPerMinutes(applicationId, startDate, endDate);
+		Calendar calendar = Calendar.getInstance();
+		int minute = calendar.get(Calendar.MINUTE);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		Date currentHourDate = calendar.getTime();
+		int rpm = 0;
+		for(RequestPerMinute requestPerMinute : rpms) {
+			rpm += requestPerMinute.getRequestNumber();
+			if(currentHourDate.equals(requestPerMinute.getRecordTime())) {
+				continue;
+			} else {
+				minute += 60;
+			}
+		}
+		BigDecimal rpmBigDecimal = BigDecimal.valueOf(rpm);
+		BigDecimal minuteBigDecimal = BigDecimal.valueOf(minute);
+		applicationIndexViewModel.setRpm(rpmBigDecimal.divide(minuteBigDecimal, 2, RoundingMode.HALF_UP).doubleValue());
+	}
+
+
 }
