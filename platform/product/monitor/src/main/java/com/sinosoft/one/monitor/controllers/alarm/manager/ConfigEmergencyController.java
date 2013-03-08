@@ -144,16 +144,16 @@ public class ConfigEmergencyController {
             if(dbAttributes!=null&&dbAttributes.size()>0){
                 String thresholdOfAttributeStart="<a href='javascript:void(0)' onclick='setAttributeEmergency(this)'>";
                 String thresholdOfAttributeEnd="</a>";
-                String thresholdOfAttribute="关联";
                 AttributeThreshold dbAttributeThreshold=new AttributeThreshold();
                 List<AttributeAction> dbAttributeAction=new ArrayList<AttributeAction>();
-                String actionsOfAttribute="-";
-                List<String> actionNames=new ArrayList<String>();
                 for(Attribute attribute:dbAttributes){
+                    List<String> actionNames=new ArrayList<String>();
+                    String thresholdOfAttributeMiddle="关联";
+                    String actionsOfAttribute="-";
                     //得到属性关联的阈值
                     dbAttributeThreshold=attributeThresholdRepository.findByResourceIdAndAttributeId(monitorId,attribute.getId());
                     if(dbAttributeThreshold!=null){
-                        thresholdOfAttribute=thresholdRepository.findOne(dbAttributeThreshold.getThresholdId()).getName();
+                        thresholdOfAttributeMiddle=thresholdRepository.findOne(dbAttributeThreshold.getThresholdId()).getName();
                     }
                     //得到属性关联的所有动作(需要去重)
                     dbAttributeAction=attributeActionRepository.findByResourceIdAndAttributeId(monitorId,attribute.getId());
@@ -173,7 +173,7 @@ public class ConfigEmergencyController {
                         actionsOfAttribute= stringBuffer.toString();
                     }
                     //拼接属性关联的阈值字符串
-                    attribute.setThreshold(thresholdOfAttributeStart+thresholdOfAttribute+thresholdOfAttributeEnd);
+                    attribute.setThreshold(thresholdOfAttributeStart+thresholdOfAttributeMiddle+thresholdOfAttributeEnd);
                     //拼接属性关联的动作字符串
                     attribute.setAction(actionsOfAttribute);
                     newAttributes.add(attribute);

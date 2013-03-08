@@ -21,7 +21,7 @@ $(function(){
             var $mn = $("#attributeThreshold");
             //防止每次查询时，表格中的数据不断累积
             $mn.html("");
-            $("#attributeThreshold").append("<option value='choice' >" +"--选择一个阈值--"+" </option> ");
+            $("#attributeThreshold").append("<option value='' >" +"--选择一个阈值--"+" </option> ");
             for(var i = 0; i<data.length;i++){
                 var _key = data[i].thresholdId;
                 var _name =data[i].thresholdName;

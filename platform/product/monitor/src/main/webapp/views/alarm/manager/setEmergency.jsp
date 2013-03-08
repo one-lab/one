@@ -141,10 +141,7 @@
                         var _normalList=$("#window_iframe").contents().find("#normalList option");
                         var _normalIds=[];
                         //@todo 如何取得当前下拉列表数据的value（现在取得的是第一个）
-                        var _attributeThresholdId=$("#window_iframe").contents().find("#attributeThreshold option").val();
-                        alert("能不能取得当前阈值的ID："+_attributeThresholdId);
-                        //@todo 上一个问题没有解决，写成固定值
-                        _attributeThresholdId="12qwe";
+                        var _attributeThresholdId=$("#window_iframe").contents().find("#attributeThreshold option:selected").val();
                         for(var i=0;i<_graveList.length;i++){
                             _garveIds.push(_graveList[i].value);
                         }
@@ -166,7 +163,6 @@
                                 INFO : _normalIds,
                                 THRESHOLDID:_attributeThresholdId
                             },
-                            /*@todo 需要发送ajax刷新属性列表*/
                             success : function(dataFromJson) {
                                     var _resourceTypeAfterUpdate=dataFromJson[0].resourceTypeAfterUpdate;
                                     var _monitorIdAfterUpdate=dataFromJson[0].monitorIdAfterUpdate;
@@ -273,7 +269,6 @@
                                 WARNING : _alarmIds,
                                 INFO : _normalIds
                             },
-                            /*@todo 需要发送ajax刷新属性列表*/
                             success : function(data) {
                                 if(data != null){
                                     alert("保存成功！");
@@ -310,7 +305,6 @@
                                 url : "${ctx}/alarm/manager/configemergency/delete/"+_monitorId+"/"+_attributeId,
                                 dataType : "json",
                                 success : function(data) {
-                                    /*@todo 需要发送ajax刷新属性列表*/
                                         alert("删除成功！");
 
                                 }
@@ -376,7 +370,6 @@
                                 /*WARNING : _alarmIds,*/
                                 INFO : _normalIds
                             },
-                            /*@todo 需要发送ajax刷新属性列表*/
                             success : function(data) {
                                 if(data != null){
                                     alert("保存成功！");
@@ -413,7 +406,6 @@
                                 url : "${ctx}/alarm/manager/configemergency/delete/"+_monitorId+"/"+_attributeId,
                                 dataType : "json",
                                 success : function(data) {
-                                    /*@todo 需要发送ajax刷新属性列表*/
                                     alert("删除成功！");
 
                                 }
