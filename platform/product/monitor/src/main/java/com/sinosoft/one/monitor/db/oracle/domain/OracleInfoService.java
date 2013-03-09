@@ -24,6 +24,8 @@ public interface OracleInfoService {
      * 删除Oracle监视器
      */
     void deleteMonitor(String monitorId);
+    
+    Info getInfo(String monitorId);
 
     /**
      * 展现监视器详细信息
