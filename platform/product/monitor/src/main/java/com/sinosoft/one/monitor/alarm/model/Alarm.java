@@ -72,9 +72,9 @@ public class Alarm  implements java.io.Serializable {
      */
     private String appName;
     /**
-     * 页面显示的记录时间(recordtime).
+     * 页面显示的记录时间(recordTime).
      */
-    private String recordtime;
+    private String recordTime;
 
 
     public Alarm() {
@@ -206,12 +206,12 @@ public class Alarm  implements java.io.Serializable {
     }
 
     @Transient
-    public String getRecordtime() {
-        return recordtime;
+    public String getRecordTime() {
+        return recordTime;
     }
 
-    public void setRecordtime(String recordtime) {
-        this.recordtime = recordtime;
+    public void setRecordTime(String recordTime) {
+        this.recordTime = recordTime;
     }
 
     @Override

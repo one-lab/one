@@ -10,7 +10,6 @@
 <script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>
 <script language="javascript" src="${ctx }/global/js/oracleMonitor.js"></script>
 <script type="text/javascript">
-var rootPath = '${ctx}';
 $(function(){
 	$("body").layout({
 		top:{topHeight:100},
@@ -18,36 +17,17 @@ $(function(){
 	});
 	
 	$("#thresholdList").Grid({
-		url : "oracleMonitor2.json",  
-		dataType: "json",
-		colDisplay: false,  
-		clickSelect: true,
-		draggable:false,
-		height: "auto",  
-		colums:[  
-			{id:'1',text:'名称',name:"appellation",index:'1',align:''},
-			{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
-			{id:'3',text:'健康状态',name:"appellation",index:'1',align:''},
-			{id:'4',text:'操作',name:"appellation",index:'1',align:''}
-		],  
-		rowNum:9999,
-		pager : false,
-		number:false,  
-		multiselect: true  
-	});
-	
-	$("#healthList").Grid({
-		url : rootPath+"/db/oracle/healthList",  
+		url : rootPath+"/db/oracle/thresholdList",  
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
 		draggable:false,
 		height: 'auto',  
-		colums: dayColumnStyle,  
+		colums: thresholdColumnStyle,  
 		rowNum:9999,
 		pager : false,
 		number:false,  
-		multiselect: false  
+		multiselect: true  
 	});
 	
 	$.ajax({
@@ -60,6 +40,9 @@ $(function(){
 			});
 		}
 	});
+	
+	$("#healthListStyle").bind("change", {}, healthList);
+	$("#healthListStyle").trigger("change");
 	
 	$("#tabs").tabs({closeTab:false});
 	$("#myDesk").height($("#layout_center").height());
@@ -94,53 +77,6 @@ function hideNav(e){
 	});	
 	$(document).unbind();
 }
-function delRow(e){
-	var rows = $(e).parent().parent();
-	var id = rows.attr('id');
-	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-		msgSuccess("系统消息", "操作成功，配置已删除！");
-		alert(id);
-		rows.remove();
-	});
-}
-function batchDel(){
-	var $g = $("#thresholdList div.grid_view > table");
-	var selecteds = $("td.multiple :checked",$g);
-	if(selecteds.length > 0){
-		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-			var checks = [];
-			selecteds.each(function(){
-				var rows = $(this).parent().parent();
-				checks.push(rows.attr('id'));
-				rows.remove();
-			});
-			alert(checks);
-			msgSuccess("系统消息", "操作成功，配置已删除！");
-		});
-	}else{
-		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
-	};
-}
-function viewRelevance(){
-	var temWin = $("body").window({
-		"id":"window",   
-        "title":'根本原因分析',  
-		"url":"basicReaon.html",   
-        "hasIFrame":true,
-		"width": 740,
-		"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]
-	});
-}
 </script>
 </head>
 
@@ -173,9 +109,10 @@ function viewRelevance(){
                         <th width="75%" style="text-align:center">可用性</th>
                         <th>可用性%</th>
                       </tr>
+                      <c:forEach items="${oracleAvaInfoList }" var="oracleAvaInfo">
                       <tr>
                         <td>
-                        	<a href="oracle.html">oracle1</a>
+                        	<a href="oracle.html">${oracleAvaInfo。monitorName }</a>
                         </td>
                         <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="green_bar">
                           <tr>
@@ -207,38 +144,7 @@ function viewRelevance(){
                         </table></td>
                         <td>100</td>
                       </tr>
-                      <tr>
-                        <td><a href="oracle.html">oracle2</a></td>
-                        <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="green_bar">
-                          <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td class="xp_available">&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                          </tr>
-                        </table></td>
-                        <td>100</td>
-                      </tr>
+                      </c:forEach>
                       <tr class="last_row">
                         <td>&nbsp;</td>
                         <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="ruler_bar">
@@ -329,9 +235,9 @@ function viewRelevance(){
                     </table>
                 	<div class="threshold_file availability">
                 	  <h2 class="title2"><b> 健康状态操控板</b>
-                	    <select name="select" class="diySelect">
-                	      <option value="">最近24小时</option>
-                	      <option value="">最近30天</option>
+                	    <select id="healthListStyle" name="select" class="diySelect">
+                	      <option value="1">最近24小时</option>
+                	      <option value="30">最近30天</option>
               	      </select>
               	    </h2>
                 	  <div id="healthList"></div>

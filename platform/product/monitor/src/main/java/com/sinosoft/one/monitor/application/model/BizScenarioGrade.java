@@ -12,8 +12,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public enum BizScenarioGrade {
-
-    HIGH("HIGH","高"),MIDDLE("MIDDLE","中"),LOW("LOW","低");
+    HIGH("HIGH","高"),INTERMEDIATE("INTERMEDIATE","中"),LOW("LOW","低");
 
     private static Map<String, BizScenarioGrade> displayNameMap = Maps.newHashMap();
     private static Map<String, BizScenarioGrade> valueMap = Maps.newHashMap();

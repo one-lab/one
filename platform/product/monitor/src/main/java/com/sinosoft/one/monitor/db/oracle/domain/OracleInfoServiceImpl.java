@@ -138,4 +138,9 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         oracleInfoModel.setVersion(info.getOracleVersion());
         return oracleInfoModel;
     }
+
+	@Override
+	public Info getInfo(String monitorId) {
+		return infoRepository.findOne(monitorId);
+	}
 }

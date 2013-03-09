@@ -18,3 +18,6 @@
 <script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
 <script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>
+<script type="text/javascript">
+	var rootPath = '${ctx}';
+</script>

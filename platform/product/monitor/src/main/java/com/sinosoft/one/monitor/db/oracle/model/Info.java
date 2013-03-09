@@ -2,17 +2,14 @@ package com.sinosoft.one.monitor.db.oracle.model;
 // Generated 2013-3-4 21:44:43 by One Data Tools 1.0.0
 
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -21,8 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
 * Oracle数据库信息表
  */
 @Entity
-@Table(name="GE_MONITOR_ORACLE_INFO"
-)
+@Table(name="GE_MONITOR_ORACLE_INFO")
 public class Info  implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
