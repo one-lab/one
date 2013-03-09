@@ -1,7 +1,5 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,7 +15,6 @@ import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
-import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 
 @Component
 public class OsViewHandle {
@@ -164,16 +161,17 @@ public class OsViewHandle {
 		c.set(Calendar.HOUR_OF_DAY, 0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
 		currentTime=c.getTime();
 		Date dayPoint= new Date(currentTime.getTime()-Long.valueOf(span*60*60*1000));
 		
 		List<OsStati> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime, timespan);
 		List<Map<String, Object>> cpuMaxmaps=osStatiViewHandle.creatCpuMaxStatiLine( osStatis, currentTime, dayPoint, timespan);
 		List<Map<String, Object>> cpuMinmaps=osStatiViewHandle.creatCpuMinStatiLine( osStatis, currentTime, dayPoint, timespan);
-		List<Map<String, Object>> cpuAvamaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis, currentTime, dayPoint, timespan);
-		viewMap.put("CPU利用率最大值%", cpuMaxmaps);
-		viewMap.put("CPU利用率最小值%", cpuMinmaps);
-		viewMap.put("CPU利用率平均值%", cpuAvamaps);
+		List<Map<String, Object>> cpuAvemaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis, currentTime, dayPoint, timespan);
+		viewMap.put("max", cpuMaxmaps);
+		viewMap.put("min", cpuMinmaps);
+		viewMap.put("ave", cpuAvemaps);
 		return viewMap;
 		
 	}

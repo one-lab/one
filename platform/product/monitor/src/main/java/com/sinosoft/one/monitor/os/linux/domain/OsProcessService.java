@@ -1,17 +1,12 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
-import com.sinosoft.one.monitor.os.linux.model.OsStati;
-import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 
 @Component
 public class OsProcessService {
@@ -55,7 +50,6 @@ public class OsProcessService {
 		osDataMathService.statiOneHourCpu(osInfoId, sampleTime,hourPoint);//更新CPU统计
 		osDataMathService.statiOneHourDisk(osInfoId, sampleTime,hourPoint);//更行磁盘统计
 		osDataMathService.statiOneHourRespond(osInfoId, sampleTime,hourPoint);//更行响应时间统计
-		//删除24小时前的记录
 		Calendar c2  = Calendar.getInstance();
 		c2.set(Calendar.DATE, sampleTime.getDate());
 		c2.add(Calendar.HOUR_OF_DAY,-24);

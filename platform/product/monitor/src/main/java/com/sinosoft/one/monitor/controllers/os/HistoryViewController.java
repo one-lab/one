@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.controllers.os;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class HistoryViewController {
 //		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
 //		return "historyCPUSevenDay";
 //	}
+	//CPU天数报表的统计
 	@Get("historyCPU/{timespan}/{osId}")
 	public String historyCPUSevenDay(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
@@ -54,7 +56,7 @@ public class HistoryViewController {
 		}
 		return "historyCPUThirtyDay";
 	}
-	
+	//DISK天数报表的统计
 	@Get("historyDISK/{timespan}/{osId}")
 	public String historyDiskSevenDay(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
@@ -70,7 +72,7 @@ public class HistoryViewController {
 		return "historyDiskThirtyDay";
 	}
 	
-	
+	//MEM天数报表的统计
 	@Get("historyMem/{timespan}/{osId}")
 	public String historyRamSevenDay(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
@@ -87,12 +89,15 @@ public class HistoryViewController {
 	}
 	
 	
-	
 	@Post("historyCPUStatiLine/{timespan}/{osId}")
 	public Reply historyCPUSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
 		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.CPU_STATIF_FLAG_D, currentDate, Integer.valueOf(timespan));
-		return Replys.with(map).as(Json.class);
+		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		viewMap.put("CPU利用率最大值%", map.get("max"));
+		viewMap.put("CPU利用率最小值%", map.get("min"));
+		viewMap.put("CPU利用率最平均值%", map.get("ave"));
+		return Replys.with(viewMap).as(Json.class);
 	}
 	
 	
@@ -100,13 +105,21 @@ public class HistoryViewController {
 	public Reply historyDiksSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
 		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.DISK_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		return Replys.with(map).as(Json.class);
+		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		viewMap.put("磁盘利用率最大值%", map.get("max"));
+		viewMap.put("磁盘利用率最小值%", map.get("min"));
+		viewMap.put("磁盘利用率最平均值%", map.get("ave"));
+		return Replys.with(viewMap).as(Json.class);
 	}
 	
 	@Post("historyMemStatiLine/{timespan}/{osId}")
 	public Reply historyMemSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
 		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		return Replys.with(map).as(Json.class);
+		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		viewMap.put("内存利用率最大值%", map.get("max"));
+		viewMap.put("内存利用率最小值%", map.get("min"));
+		viewMap.put("内存利用率最平均值%", map.get("ave"));
+		return Replys.with(viewMap).as(Json.class);
 	}
 }

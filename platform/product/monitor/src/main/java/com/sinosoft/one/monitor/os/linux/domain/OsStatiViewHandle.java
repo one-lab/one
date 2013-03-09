@@ -41,7 +41,7 @@ public class OsStatiViewHandle {
 		Date date=new Date();//上次循环的时间变量
 		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
 		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getRecordTime().getTime()-dayPoint.getTime()>(timeSize*60*60*1000-10*60*1000)){
+			if(osStatis.get(i).getRecordTime().getTime()-dayPoint.getTime()>(timeSize*60*60*1000-1*60*1000)){
 				Integer ptime=(Integer) BigDecimal.valueOf(osStatis.get(i).getRecordTime().getTime()-dayPoint.getTime()).divide(BigDecimal.valueOf(Long.parseLong(timeSize*60*60*1000+"")),0,BigDecimal.ROUND_UP).intValue();//空了几次
 				for (int j = 0; j < ptime; j++) {
 					Map<String, Object> map=new HashMap<String, Object>();
@@ -100,7 +100,7 @@ public class OsStatiViewHandle {
 		Date date=new Date();//上次循环的时间变量
 		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
 		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getRecordTime().getTime()-dayPoint.getTime()>(timeSize*60*60*1000-10*60*1000)){
+			if(osStatis.get(i).getRecordTime().getTime()-dayPoint.getTime()>(timeSize*60*60*1000-1*60*1000)){
 				Integer ptime = (Integer) BigDecimal
 				.valueOf(
 						osStatis.get(i).getRecordTime().getTime()
@@ -165,7 +165,7 @@ public class OsStatiViewHandle {
 		Date date=new Date();//上次循环的时间变量
 		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
 		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getRecordTime().getTime()-dayPoint.getTime()>(timeSize*60*60*1000-10*60*1000)){
+			if(osStatis.get(i).getRecordTime().getTime()-dayPoint.getTime()>(timeSize*60*60*1000-1*60*1000)){
 				Integer ptime = (Integer) BigDecimal
 						.valueOf(
 								osStatis.get(i).getRecordTime().getTime()

@@ -83,11 +83,6 @@ public class OsDataMathService {
 	}
 	
 	
-	
-	
-	
-	
-	
 	/**
 	 * 统计内存，当前时间到当前小时整点
 	 * @param osInfoId
@@ -144,7 +139,7 @@ public class OsDataMathService {
 	}
 	
 	/**
-	 * 统计磁盘，当前时间到当前小时整点
+	 * 统计响应时间，当前时间到当前小时整点
 	 * @param osInfoId
 	 */
 	public void statiOneHourRespond(String osInfoId,Date currentTime,Date hourPoint){

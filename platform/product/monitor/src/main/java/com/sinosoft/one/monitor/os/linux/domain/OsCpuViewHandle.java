@@ -29,7 +29,6 @@ public class OsCpuViewHandle {
 	
 	private static Map<String,String> map=new HashMap<String, String>();
 	static{
-		
 		 map.put("runQueue", "运行队列");
 		 map.put("Link", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 		 map.put("blockProcess", "阻塞进程");

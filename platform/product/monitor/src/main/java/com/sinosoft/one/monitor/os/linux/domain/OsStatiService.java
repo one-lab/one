@@ -87,11 +87,11 @@ public class OsStatiService {
 			String ave=osStatiRepository.findStatiAveByTimeSpan(osid, type, simpleDateFormat.format(begin), OsUtil.DATEFORMATE_YEAR_MON_DAY);
 			OsStati osStati=new OsStati();
 			if(max==null)
-				max="0";
+				max="-1.0";
 			if(min==null)
-				min="0";
+				min="-1.0";
 			if(ave==null)
-				ave="0";
+				ave="-1.0";
 			osStati.setMaxValue(BigDecimal.valueOf(Double.valueOf(max)).divide(BigDecimal.valueOf(1),2,BigDecimal.ROUND_HALF_UP).toString());
 			osStati.setMinValue(BigDecimal.valueOf(Double.valueOf(min)).divide(BigDecimal.valueOf(1),2,BigDecimal.ROUND_HALF_UP).toString());
 			osStati.setAverageValue(BigDecimal.valueOf(Double.valueOf(ave)).divide(BigDecimal.valueOf(1),2,BigDecimal.ROUND_HALF_UP).toString());

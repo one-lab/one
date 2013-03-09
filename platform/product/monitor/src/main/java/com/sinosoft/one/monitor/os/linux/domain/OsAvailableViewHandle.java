@@ -1,7 +1,5 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

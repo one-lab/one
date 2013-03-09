@@ -190,7 +190,7 @@
                   <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
                       <tbody>
                         <tr>
-                          <td id="ramUtilzation1" height="28" align="center" title="内存使用率-16 %" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindow(this,"historyMemoryLinux.jsp")'><div id="ramUtilzation" style="width: 200px; height: 140px; margin: 0 auto"></div></a></td>
+                          <td id="ramUtilzation1" height="28" align="center" title="内存使用率-16 %" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindow(this,"historyMem/7")'><div id="ramUtilzation" style="width: 200px; height: 140px; margin: 0 auto"></div></a></td>
                         </tr>
                         <tr>
                           <td  align="center" class="bodytextbold"><a id="ramUtilzation2" class="staticlinks" onclick='viewWindow(this,"historyMem/7")' href="javascript:void(0)">内存使用率-16</a> % </td>
@@ -208,7 +208,7 @@
                   <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
                       <tbody>
                         <tr>
-                          <td id="diskUtilzation1" height="28" align="center" title="磁盘利用率-12%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindow(this,"historyDiskLinux.jsp")'><div id="diskUtilzation" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
+                          <td id="diskUtilzation1" height="28" align="center" title="磁盘利用率-12%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindow(this,"historyDISK/7")'><div id="diskUtilzation" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
                         </tr>
                         <tr>
                           <td  align="center" class="bodytextbold"><a id="diskUtilzation2"  onclick='viewWindow(this,"historyDISK/7")' class="staticlinks"  href="javascript:void(0)">磁盘使用率-12</a> %</td>
