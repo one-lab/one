@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +57,65 @@ public class AlarmManagerController {
         }
     }
 
-    @Post("alarmdata")
-    public void getAlarmData(Invocation inv) throws Exception {
+    //没有选择时间和类型的ajax请求
+    @Post("alarm")
+    public void getAlarmListWithNoChoice(Invocation inv) throws Exception {
+        List<Alarm> allAlarms= (List<Alarm>) alarmRepository.findAllAlarms();
+        getAlarmListWithGivenCondition(allAlarms, inv);
+    }
 
-        //暂时不需要显示用户
-        /*String owerNameStart="<div class='people'>";
-        String owerNameEnd="</div>";*/
-        List<Alarm> dbAlarms= (List<Alarm>) alarmRepository.findAllAlarms();
+    //只选择时间,或者只选择类型的ajax请求
+    @Post("onecondition/{givenTimeOrType}")
+    public void getAlarmListWithGivenTimeOrType(@Param("givenTimeOrType")String givenTimeOrType,Invocation inv) throws Exception {
+        List<Alarm> timeOrTypeAlarms=new ArrayList<Alarm>();
+        String givenTime="";
+        String givenType="";
+        if(!StringUtils.isBlank(givenTimeOrType)){
+            if("twentyFourHours".equals(givenTimeOrType)){
+                givenTime=String.valueOf(24);
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime);
+            }else if("thirtyDays".equals(givenTimeOrType)){
+                givenTime=String.valueOf(30);
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime);
+            }else if(ResourceType.APPLICATION.name().equals(givenTimeOrType)){
+                givenType=ResourceType.APPLICATION.name();
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType);
+            }else if(ResourceType.OS.name().equals(givenTimeOrType)){
+                givenType=ResourceType.OS.name();
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType);
+            }else if(ResourceType.DB.name().equals(givenTimeOrType)){
+                givenType=ResourceType.DB.name();
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType);
+            }
+
+            getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
+        }else {
+            timeOrTypeAlarms= (List<Alarm>) alarmRepository.findAll();
+            getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
+        }
+    }
+
+    //时间和类型都选择的ajax请求
+    @Post("twocondition/{givenTime}/{givenType}")
+    public void getAlarmListWithGivenTimeAndType(@Param("givenTime")String givenTime, @Param("givenType") String givenType,Invocation inv) throws Exception {
+        if("twentyFourHours".equals(givenTime)){
+            givenTime=String.valueOf(24);
+        }else if("thirtyDays".equals(givenTime)){
+            givenTime=String.valueOf(30);
+        }
+        if(ResourceType.APPLICATION.name().equals(givenType)){
+            givenType=ResourceType.APPLICATION.name();
+        }else if(ResourceType.OS.name().equals(givenType)){
+            givenType=ResourceType.OS.name();
+        }else if(ResourceType.DB.name().equals(givenType)){
+            givenType=ResourceType.DB.name();
+        }
+        List<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType);
+        getAlarmListWithGivenCondition(allAlarmsWithGivenTimeAndType,inv);
+    }
+
+    //各种条件组个统一调用这个方法，获得告警列表
+    private void getAlarmListWithGivenCondition(List<Alarm> dbAlarms,Invocation inv) throws Exception {
         List<Alarm> newAlarms=new ArrayList<Alarm>();
         if(dbAlarms!=null&&dbAlarms.size()>0){
             String statusStart="<div class='";

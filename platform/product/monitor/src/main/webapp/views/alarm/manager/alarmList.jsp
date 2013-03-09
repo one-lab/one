@@ -14,20 +14,38 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
-    getAlarmList();
+    getAlarmListOfGivenTimeAndType();
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
+    $("#timeSelect").bind("change",getAlarmListOfGivenTimeAndType);
+    $("#typeSelect").bind("change",getAlarmListOfGivenTimeAndType);
 });
 
-/*得到告警信息列表*/
-function getAlarmList(){
+/*得到指定时间段和指定类型的告警信息列表*/
+function getAlarmListOfGivenTimeAndType(){
+    var _givenTime=$("#timeSelect").val();
+    var _givenType=$("#typeSelect").val();
+    var _url="${ctx}/alarm/manager/alarmmanager/alarm";
+    /*没有选择*/
+    if(''==_givenTime&&''==_givenType){
+        _url="${ctx}/alarm/manager/alarmmanager/alarm";
+        /*只选择时间段*/
+    }else if(''!=_givenTime&&''==_givenType){
+        _url="${ctx}/alarm/manager/alarmmanager/onecondition/"+_givenTime;
+        /*只选择类型*/
+    }else if(''==_givenTime&&''!=_givenType){
+        _url="${ctx}/alarm/manager/alarmmanager/onecondition/"+_givenType;
+        /*时间和类型都选择*/
+    }else{
+        _url="${ctx}/alarm/manager/alarmmanager/twocondition/"+_givenTime+"/"+_givenType;
+    }
     var $mn = $("#thresholdList");
     //防止每次查询时，表格中的数据不断累积
     $mn.html("");
     $("#thresholdList").Grid({
         type:"post",
-        url : "${ctx}/alarm/manager/alarmmanager/alarmdata",
+        url : _url,
         dataType: "json",
         colDisplay: false,
         clickSelect: true,
@@ -47,8 +65,6 @@ function getAlarmList(){
         multiselect: true
     });
 }
-
-/*得到告警的详细信息*/
 function alarmDetailInfo(e){
     var rows = $(e).parent().parent();
     var id = rows.attr('id');
@@ -57,8 +73,6 @@ function alarmDetailInfo(e){
     /*告警详细信息页面*/
     window.location.href="${ctx}/alarm/manager/alarmmanager/detail/"+_alarmId;
 }
-
-
 
 function navHover(){
 	$(this).toggleClass("hover")
@@ -119,7 +133,7 @@ function batchDel(){
                         });*/
                         alert("删除成功");
                         /*调用ajax，重新获得告警信息列表*/
-                        getAlarmList();
+                        getAlarmListOfGivenTimeAndType();
                     }
                 },
                 error:function(){
@@ -165,16 +179,16 @@ function viewRelevance(){
     	<div class="threshold_file alerts">
        	  <h2 class="title2">
           	<strong class="right">筛选表单：
-                <select name="" class="diySelect">
+                <select id="timeSelect" name="timeSelect" class="diySelect">
                     <option value="">选择时间</option>
-                    <option value="">最近24小时</option>
-                    <option value="">最近30天</option>
+                    <option value="twentyFourHours">最近24小时</option>
+                    <option value="thirtyDays">最近30天</option>
                 </select>
-                <select name="" class="diySelect">
+                <select id="typeSelect" name="typeSelect" class="diySelect">
                     <option value="">选择类型</option>
-                    <option value="">操作系统</option>
-                    <option value="">应用系统</option>
-                    <option value="">数据库</option>
+                    <option value="APPLICATION">应用系统</option>
+                    <option value="OS">操作系统</option>
+                    <option value="DB">数据库</option>
                 </select>
             </strong>
           	<b>告警信息列表　</b>
