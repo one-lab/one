@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ import com.sinosoft.one.monitor.db.oracle.model.Highchart;
 import com.sinosoft.one.monitor.db.oracle.model.HighchartSerie;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
-import com.sinosoft.one.monitor.db.oracle.model.OracleAvaInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.StaGraphModel;
@@ -44,13 +44,6 @@ public class OracleMonitorController {
 	
 	/* 返回前台ajax请求数据信息*/
 	private Map<String, Object> message = new HashMap<String, Object>();
-	
-	@Get("oracleMonitor")
-    public String oracleMonitor (Invocation inv){
-        List<OracleAvaInfoModel> oracleAvaInfoList = oracleBatchInfoService.avaInfoList(StaTimeEnum.LAST_24HOUR);
-        inv.addModel("oracleAvaInfoList",oracleAvaInfoList);
-        return "@ok";
-    }
 	
 	/**
 	 * 性能信息
@@ -123,13 +116,13 @@ public class OracleMonitorController {
 			for(int i=0; i<oracleHealthInfo.getGraphInfo().size(); i++) {
 				String[] values = oracleHealthInfo.getGraphInfo().get(i);
 				String cssClass = "";
-				if("1".equals(values[0])) {
+				if("1".equals(values[0])) { //正常
 					cssClass = "normal";
-				} else if("2".equals(values[0])) {
-					cssClass = "critical";
-				} else if("3".equals(values[0])) {
+				} else if("2".equals(values[0])) { //警告
 					cssClass = "warn";
-				}  else {
+				} else if("3".equals(values[0])) { //严重
+					cssClass = "critical";
+				}  else { //未知
 					cssClass = "";
 				}
 				String value = MessageFormat.format(messageFormat1, cssClass, values[1]);
@@ -168,6 +161,8 @@ public class OracleMonitorController {
 	 */
 	@Post("add")
 	public Reply add(Info oracleInfo,Invocation inv) {
+		oracleInfo.setSysTime(new Date());
+		//oracleInfoService.saveMonitor(oracleInfo);
 		return Replys.with(message).as(Json.class);
 	}
 	
