@@ -20,5 +20,9 @@ public interface MethodResponseTimeRepository extends PagingAndSortingRepository
 			" and t.method_name in (?3) and to_char(t.record_time, 'yyyy-MM-dd HH24')=?4")
 	List<MethodResponseTime> selectMethodResponseTimes(String applicationId, String urlId, List<String> methodNames, String dateStr);
 
+	@SQL("SELECT * FROM GE_MONITOR_METHOD_RESPONSETIME t WHERE t.application_id=?1 and t.url_id=?2" +
+			" and t.record_time between ?3 and ?4")
+	List<MethodResponseTime> selectMethodResponseTimes(String applicationId, String urlId, Date startDate, Date endDate);
+
 
 }

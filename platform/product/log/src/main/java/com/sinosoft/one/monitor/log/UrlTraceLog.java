@@ -55,6 +55,10 @@ public class UrlTraceLog implements NotificationModel {
 	 */
 	private String userId;
 	/**
+	 * 用户名
+	 */
+	private String username;
+	/**
 	 * URL ID
 	 */
 	private String urlId;
@@ -63,6 +67,7 @@ public class UrlTraceLog implements NotificationModel {
 
     public UrlTraceLog() {
 		userId = Loggables.getUserId();
+		username = Loggables.getUserName();
     }
 
     public String getUserIp() {
@@ -143,6 +148,14 @@ public class UrlTraceLog implements NotificationModel {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void addMethodTraceLog(MethodTraceLog methodTraceLog) {

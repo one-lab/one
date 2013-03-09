@@ -7,147 +7,21 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>业务仿真</title>
-<link href="css/base.css" rel="stylesheet" type="text/css" />
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<link href="css/timeinfo/timeinfo.css" rel="stylesheet" type="text/css" />
-<link href="css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="css/status.css" rel="stylesheet" type="text/css" />
-<link href="css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
-<link href="css/oracle.css" rel="stylesheet" type="text/css" />
-<link href="css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="js/jquery-1.7.1.js"></script>
-<script language="javascript" src="js/sinosoft.grid.js"></script>  
-<script language="javascript" src="js/sinosoft.layout.js"></script>
-<script language="javascript" src="js/highcharts.src.js"></script>
-<script language="javascript" src="js/timeinfo/timeinfo.js"></script>
-<script language="javascript" src="js/sinosoft.window.js"></script>
-<script language="javascript" src="js/sinosoft.tabs.js"></script>
-<script type="text/javascript">
-$(function(){
-	$("body").layout({
-		top:{topHeight:100}
-	});
-	
-	$("#list_table").Grid({
-		url : "urlInfo.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'方法名称',name:"methodName",width:'400',index:'1',align:'center',color:''},
-			{id:'2',text:'最大响应时间',name:"maxTime",width:'',index:'1',align:'center',color:''},
-			{id:'3',text:'最小响应时间',name:"minTime",width:'',index:'1',align:'center',color:''},
-			{id:'4',text:'平均响应时间',name:"avgTime",width:'',index:'1',align:'center',color:''},
-			{id:'5',text:'状态',name:"status",width:'30',index:'1',align:'center',color:''}
-		],
-		rowNum:10,
-		rowList:[10,20,30],
-		pager : true,
-		number:false,
-		multiselect:false
-	});
-					
-	$("#event_log_grid").Grid({
-		url : "eventLog.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'IP',name:"methodName",width:'400',index:'1',align:'',color:''},
-			{id:'2',text:'访问者',name:"maxTime",width:'',index:'1',align:'',color:''},
-			{id:'3',text:'时间',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'状态',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'操作',name:"status",width:'',index:'1',align:'',color:''}
-		],
-		rowNum:10,
-		rowList:[10,20,30],
-		pager : true,
-		number:false,
-		multiselect:false
-	});
-	
-	$("#tabs").tabs({closeTab:false});
-});
-
-}function createSevenURLTime() { 
-	var temWin = $("body").window({  
-			"id":"testOne11",   
-			"title":"URL访问次数",  
-			"url":"sevenDayURLTime.html",   
-			"hasIFrame":true,  
-			"width":850,
-			"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]  
-	}); 
-}  
-function createThirtyURLTime() { 
-	var temWin = $("body").window({  
-			"id":"testOne10",   
-			"title":"URL访问次数",  
-			"url":"thirtyDayURLTime.html",   
-			"hasIFrame":true,   
-			"width":850,
-			"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]  
-	}); 
-}  
-function createSevenDayResponseTime() { 
-	var temWin = $("body").window({  
-			"id":"testOne9",   
-			"title":"响应时间",  
-			"url":"sevenDayResponseTime.html",   
-			"hasIFrame":true,   
-			"width":850,
-			"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]  
-	}); 
-}
-function createThirtyDayResponseTime() { 
-	var temWin = $("body").window({  
-			"id":"testOne8",   
-			"title":"响应时间",  
-			"url":"thirtyDayResponseTime.html",   
-			"hasIFrame":true,   
-			"width":850,
-			"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]  
-	}); 
-} 
-</script>
+<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/timeinfo/timeinfo.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/status.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
+<script language="javascript" src="${ctx}/global/js/timeinfo/timeinfo.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 </head>
 
 <body>
@@ -181,7 +55,7 @@ function createThirtyDayResponseTime() {
           
         </table>
       </div>
-      <div style=" height:15px;background: url(images/timeinfo/conf-shadow.png) center no-repeat"></div>
+      <div style=" height:15px;background: url(${ctx}/global/images/timeinfo/conf-shadow.png) center no-repeat"></div>
      <div id="tabs">
         <ul>
           <li class="tabs_select">概览</li>
@@ -214,7 +88,7 @@ function createThirtyDayResponseTime() {
                 </tr>
                 <tr>
                 	<td>
-                  	<img  src="images/timeinfo/ruler.jpg" />
+                  	<img  src="${ctx}/global/images/timeinfo/ruler.jpg" />
                   </td>
                 </tr>
                 <tr>

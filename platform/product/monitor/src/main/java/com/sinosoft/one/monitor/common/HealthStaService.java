@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.common;
 
+import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.joda.time.LocalDate;
@@ -49,12 +50,62 @@ public class HealthStaService {
 	 * @param hours 小时数
 	 * @return 健康度Map
 	 */
+	public Map<Integer, SeverityLevel> healthStaForHours(String monitorId, String subResourceType, String subResourceId, int hours) {
+		LocalDateTime localDateTime = LocalDateTime.now();
+		Date startDate =  localDateTime.minusHours(hours).toDate();
+		Date endDate = localDateTime.toDate();
+		List<HealthStaForTime> healthStaForTimeList = alarmRepository.selectHealthStaForHour(monitorId, startDate, endDate);
+		return generateHealthStaMap(healthStaForTimeList);
+	}
+
+	/**
+	 * 根据小时数得到健康度Map
+	 * @param monitorId 监控器ID
+	 * @param hours 小时数
+	 * @return 健康度Map
+	 */
 	public Map<Integer, SeverityLevel> healthStaForHours(String monitorId, int hours) {
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Date startDate =  localDateTime.minusHours(hours).toDate();
 		Date endDate = localDateTime.toDate();
 		List<HealthStaForTime> healthStaForTimeList = alarmRepository.selectHealthStaForHour(monitorId, startDate, endDate);
 		return generateHealthStaMap(healthStaForTimeList);
+	}
+
+	/**
+	 * 获取最新的健康状况
+	 * @param moinitorId 监视器ID
+	 * @param minutes 分钟数
+	 * @return 健康状况
+	 */
+	public SeverityLevel healthStaForCurrent(String moinitorId, int minutes) {
+		LocalDateTime localDateTime = LocalDateTime.now();
+		Date endDate = localDateTime.toDate();
+		Date startDate = localDateTime.minusMinutes(5).toDate();
+		List<Alarm> alarms = alarmRepository.findAlarmByMonitorId(moinitorId, startDate, endDate);
+		if(alarms == null || alarms.size() > 0) {
+			return SeverityLevel.UNKNOW;
+		}
+		Alarm alarm = alarms.get(0);
+		return alarm.getSeverity();
+	}
+
+	/**
+	 * 获取最新的健康状况
+	 * @param moinitorId 监视器ID
+	 * @param minutes 分钟数
+	 * @return 健康状况
+	 */
+	public SeverityLevel healthStaForCurrent(String moinitorId, ResourceType subResourceType, String subResourceId, int minutes) {
+		LocalDateTime localDateTime = LocalDateTime.now();
+		Date endDate = localDateTime.toDate();
+		Date startDate = localDateTime.minusMinutes(5).toDate();
+		List<Alarm> alarms = alarmRepository.findAlarmByMonitorId(moinitorId, subResourceType.name(), subResourceId, startDate, endDate);
+		if(alarms == null || alarms.size() > 0) {
+			return SeverityLevel.UNKNOW;
+		}
+		Alarm alarm = alarms.get(0);
+		return alarm.getSeverity();
 	}
 
 	private Map<Integer, SeverityLevel> generateHealthStaMap(List<HealthStaForTime> healthStaForTimes) {

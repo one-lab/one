@@ -30,4 +30,8 @@ public class Loggables {
 	public static String getUserId() {
         return user != null ? user.getUserCode() : "";
     }
+
+	public static String getUserName() {
+		return user != null ? user.getUserName() : "";
+	}
 }

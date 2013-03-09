@@ -17,8 +17,12 @@ import java.util.List;
  */
 public interface AlarmRepository extends PagingAndSortingRepository<Alarm, String> {
 
-    @SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3")
+    @SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3 order by create_time desc")
     List<Alarm> findAlarmByMonitorId(String monitorId, Date startTime, Date endTime);
+
+	@SQL("select * from ge_monitor_alarm where monitor_id = ?1 and sub_resource_type=?2 " +
+			"and sub_resource_id=?3 and create_time between ?4 and ?5 order by create_time desc")
+	List<Alarm> findAlarmByMonitorId(String monitorId, String subResourceType, String subResourceId, Date startTime, Date endTime);
 
 	/**
 	 * 根据监视器ID，开始结束时间查询健康度统计数据
@@ -88,6 +92,20 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 	List<HealthStaForTime> selectHealthStaForHour(String monitorId, Date startDate, Date endDate);
 
 	/**
+	 * 根据时间查询健康度小时统计数量
+	 * @param monitorId 监视器ID
+	 * @param
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return 健康度统计列表
+	 */
+	@SQL("select to_number(to_char(create_time, 'HH24')) as time_index,  severity, count(1) as count" +
+			"  from ge_monitor_alarm" +
+			"  where monitor_id = ?1 and sub_resource_id=?2 and sub_resource_id=?3 and create_time between ?4 and ?5" +
+			" group by to_char(create_time, 'yyyy-MM-dd HH24'), to_char(create_time, 'HH24'), severity")
+	List<HealthStaForTime> selectHealthStaForHour(String monitorId, String subResourceType, String subResourceId, Date startDate, Date endDate);
+
+	/**
 	 * 根据时间查询健康度天统计数量
 	 * @param monitorId 监视器ID
 	 * @param startDate 开始时间
@@ -99,5 +117,18 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 			"  where monitor_id = ?1 and create_time between ?2 and ?3" +
 			" group by to_char(create_time, 'yyyy-MM-dd'), to_char(create_time, 'dd'), severity")
 	List<HealthStaForTime> selectHealthStaForDay(String monitorId, Date startDate, Date endDate);
+
+	/**
+	 * 根据时间查询健康度天统计数量
+	 * @param monitorId 监视器ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return 健康度统计列表
+	 */
+	@SQL("select to_number(to_char(create_time, 'dd')) as time_index,  severity, count(1) as count" +
+			"  from ge_monitor_alarm" +
+			"  where monitor_id = ?1 and sub_resource_type = ?2 and sub_resource_id = ?3 and create_time between ?2 and ?3" +
+			" group by to_char(create_time, 'yyyy-MM-dd'), to_char(create_time, 'dd'), severity")
+	List<HealthStaForTime> selectHealthStaForDay(String monitorId, String subResourceType, String subResourceId, Date startDate, Date endDate);
 }
 

@@ -53,6 +53,17 @@ public interface UrlResponseTimeRepository extends PagingAndSortingRepository<Ur
 	 * @param endDate 结束时间
 	 * @return 平均响应时间
 	 */
-	@SQL("select sum(urt.avg_response_time) / count(1) from ge_monitor_url_response_time urt where urt.application_id=?1 and urt.record_time >= ?2 AND urt.record_time <= ?3")
+	@SQL("select sum(urt.total_response_time) / sum(urt.total_count) from ge_monitor_url_response_time urt where urt.application_id=?1 and urt.record_time >= ?2 AND urt.record_time <= ?3")
 	BigDecimal staAvgResponseTimeSta(String applicationId, Date startDate, Date endDate);
+
+	/**
+	 * 根据应用ID，URLID 以及开始结束时间查询响应时间列表
+	 * @param applicationId 应用ID
+	 * @param urlId URLID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return 响应时间列表
+	 */
+	@SQL("SELECT * FROM GE_MONITOR_URL_RESPONSE_TIME t WHERE t.application_id=?1 and t.url_id=?2 and t.record_time >= ?3 AND t.record_time <= ?4")
+	List<UrlResponseTime> selectUrlResponseTimes(String applicationId, String urlId, Date startDate, Date endDate);
 }

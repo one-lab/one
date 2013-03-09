@@ -16,8 +16,8 @@ public interface User {
     String getUserCode();
 
     /**
-     * 获取当前登陆用户的机构代码
+     * 获取当前登陆用户的用户名
      * @return
      */
-    String getCompanyCode();
+    String getUserName();
 }

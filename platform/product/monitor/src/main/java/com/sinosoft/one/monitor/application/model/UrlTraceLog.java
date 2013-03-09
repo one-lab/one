@@ -58,6 +58,10 @@ public class UrlTraceLog {
 	 */
 	private String userId;
 	/**
+	 * 用户名
+	 */
+	private String username;
+	/**
 	 * 业务场景追踪ID
 	 */
 	private String traceId;
@@ -81,8 +85,6 @@ public class UrlTraceLog {
 	 * 日志记录时间
 	 */
 	private Date recordTime;
-
-
 
 	List<MethodTraceLog> methodTraceLogList = new ArrayList<MethodTraceLog>();
 
@@ -215,6 +217,14 @@ public class UrlTraceLog {
 		this.urlId = urlId;
 	}
 
+	@Column(name = "USERNAME")
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	@Transient
 	public String getApplicationId() {
