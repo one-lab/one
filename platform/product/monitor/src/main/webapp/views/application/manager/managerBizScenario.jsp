@@ -23,33 +23,50 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
-	$("#thresholdList").Grid({
-        type:"post",
-		url : "${ctx}/application/manager/bsmanager/bizscenariolist/${appId}",
-		dataType: "json",
-		colDisplay: false,  
-		clickSelect: true,
-		draggable:false,
-		height: "auto",  
-		colums:[  
-			{id:'1',text:'场景名称',name:"name",index:'1',align:''},
-			{id:'2',text:'添加人',name:"userName",index:'1',align:''},
-			{id:'3',text:'添加时间',name:"recodeCreateTime",index:'1',align:''},
-			{id:'4',text:'级别',name:"bizScenarioGrade",index:'1',align:''},
-			{id:'5',text:'操作',name:"operation",index:'1',align:''}
-		],  
-		rowNum:9999,
-		pager : false,
-		number:false,  
-		multiselect: true  
-	});
+    getBizScenarioList();
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
+    $("#bizScenarioGrade").bind("change",getBizScenarioOfGivenGrade);
 });
 function navHover(){
 	$(this).toggleClass("hover")
 }
+/*获得指定级别的业务场景*/
+function getBizScenarioOfGivenGrade(){
+    getBizScenarioList();
+}
+/*获得业务场景列表*/
+function getBizScenarioList(){
+    var _url="${ctx}/application/manager/bsmanager/bizscenariolist/${appId}";
+    var _givenGrade=$("#bizScenarioGrade").val();
+    if(''!=_givenGrade){
+        _url="${ctx}/application/manager/bsmanager/bizscenariolist/${appId}"+"/"+_givenGrade;
+    }
+    var $mn=$("#thresholdList");
+    $mn.html("");
+    $("#thresholdList").Grid({
+        type:"post",
+        url : _url,
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'场景名称',name:"name",index:'1',align:''},
+            {id:'2',text:'添加人',name:"userName",index:'1',align:''},
+            {id:'3',text:'添加时间',name:"recodeCreateTime",index:'1',align:''},
+            {id:'4',text:'级别',name:"bizScenarioGrade",index:'1',align:''},
+            {id:'5',text:'操作',name:"operation",index:'1',align:''}
+        ],
+        rowNum:9999,
+        pager : false,
+        number:false,
+        multiselect: true
+    });
+}
+
 function navClick(){
 	$(this).addClass("seleck").siblings().removeClass("seleck");
 	if($(this).hasClass('has_sub')){
@@ -193,10 +210,11 @@ function bizScenarioBatchDel(){
           	<a href="javascript:void(0);" class="batch_del" onclick="bizScenarioBatchDel()">批量删除</a>
             <div style="float:right;">
             	<span>级别</span>
-              <select class="diySelect" onchange="#">
-              	<option>高</option>
-                <option>中</option>
-                <option>低</option>
+              <select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect">
+                <option value="">选择类型</option>
+              	<option value="HIGH">高</option>
+                <option value="INTERMEDIATE">中</option>
+                <option value="LOW">低</option>
               </select>
             </div>
           </div>

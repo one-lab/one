@@ -54,6 +54,24 @@ public class BizScenarioManagerController {
     @Post({"bizscenariolist/{appId}","bizscenariolist"})
     public void getAllBizScenario(@Param("appId") String appId,Invocation inv) throws Exception {
         List<BizScenario> bizScenarioList=bizScenarioService.findUserNameAndBizScenario(applicationService.findApplication(appId).getBizScenarios());
+        rendJsonDataOfBizScenarios(bizScenarioList,inv);
+
+    }
+
+    /**
+     * 获得所选择级别的业务场景(响应按下“级别”按钮时的ajax请求).
+     */
+    @Post("bizscenariolist/{appId}/{givenGrade}")
+    public void getBizScenarioOfGivenGrade(@Param("appId") String appId,@Param("givenGrade") String givenGrade,Invocation inv) throws Exception {
+        givenGrade=BizScenarioGrade.parseValue(givenGrade).value;
+        List<BizScenario> bizScenarioList=bizScenarioService.findUserNameAndBizScenarioWithGivenGrade(applicationService.findApplication(appId).getBizScenarios(), givenGrade);
+        rendJsonDataOfBizScenarios(bizScenarioList,inv);
+    }
+
+    /**
+    *获得业务场景列表的JSON数据
+    */
+    private void rendJsonDataOfBizScenarios(List<BizScenario> bizScenarioList,Invocation inv) throws Exception {
         if(bizScenarioList!=null){
             List<BizScenario> bizScenarios=new ArrayList<BizScenario>();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -75,22 +93,6 @@ public class BizScenarioManagerController {
             }
         }
     }
-
-    /**
-     * 获得当前应用下所有的业务场景.
-     *//*
-    @Get("bizscenariolist/{id}")
-    @Post("bizscenariolist/{id}")
-    public String getAllBizScenarioOfApplication(@Param("id") String id,Invocation inv) {
-        List<BizScenario> bizScenarios = applicationService.findApplication(id).getBizScenarios();
-        //构造gridable
-        //UIUtil.
-        inv.addModel("applicationId",id);
-        //返回id，供新增业务场景时，用以确定属于哪个应用
-        //应用列表页面
-        //页面所在路径application/manager/
-        return "manageBizScenario";
-    }*/
 
     /**
      * 增加业务场景的表单页面(其中id是所属的应用的id).

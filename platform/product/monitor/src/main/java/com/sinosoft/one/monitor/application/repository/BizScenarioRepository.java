@@ -12,7 +12,7 @@ public interface BizScenarioRepository extends PagingAndSortingRepository<BizSce
 
     BizScenario findByName(String name);
 
-    @SQL("select a.*,b.NAME as userName from GE_MONITOR_BIZ_SCENARIO a left join GE_MONITOR_ACCOUNT b on a.CREATOR_ID=b.id where a.ID in (?1)")
+    @SQL("select a.*,b.NAME as userName from GE_MONITOR_BIZ_SCENARIO a left join GE_MONITOR_ACCOUNT b on a.CREATOR_ID=b.ID where a.ID in (?1) order by a.BIZ_SCENARIO_GRADE")
     List<BizScenario> selectUserNameOfBizScenarioByIds(@Param("bizScenarioIds") List<String> bizScenarioIds);
 
     @SQL("update GE_MONITOR_BIZ_SCENARIO a set a.NAME=?2,a.BIZ_SCENARIO_GRADE=?3,a.MODIFIER_ID=?4,a.MODIFY_TIME=sysdate where a.ID=?1")
@@ -26,5 +26,8 @@ public interface BizScenarioRepository extends PagingAndSortingRepository<BizSce
 
     @SQL("delete GE_MONITOR_BIZ_SCENARIO a where a.ID in (?1)")
     void batchDeleteBizScenario(String[] bizScenarioIds);
+
+    @SQL("select a.*,b.NAME as userName from GE_MONITOR_BIZ_SCENARIO a left join GE_MONITOR_ACCOUNT b on a.CREATOR_ID=b.ID where a.ID in (?1) and a.BIZ_SCENARIO_GRADE=?2")
+    List<BizScenario> selectUserNameOfBizScenarioByIdsAndGivenGrade(List<String> bizScenarioIds, String givenGrade);
 }
 

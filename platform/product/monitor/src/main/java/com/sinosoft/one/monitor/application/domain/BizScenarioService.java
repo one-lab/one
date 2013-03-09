@@ -85,6 +85,18 @@ public class BizScenarioService {
     }
 
     /**
+     * 查询指定级别的业务场景以及创建人.
+     */
+    public List<BizScenario> findUserNameAndBizScenarioWithGivenGrade(List<BizScenario> bizScenarios,String givenGrade){
+        List<String> bizScenarioIds=new ArrayList<String>();
+        for(BizScenario bizScenario:bizScenarios){
+            bizScenarioIds.add(bizScenario.getId());
+        }
+        List<BizScenario> bizScenarioList=bizScenarioRepository.selectUserNameOfBizScenarioByIdsAndGivenGrade(bizScenarioIds,givenGrade);
+        return bizScenarioList;
+    }
+
+    /**
      * 更新一个业务场景.
      */
     @Transactional(readOnly = false)
