@@ -99,5 +99,17 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 			"  where monitor_id = ?1 and create_time between ?2 and ?3" +
 			" group by to_char(create_time, 'yyyy-MM-dd'), to_char(create_time, 'dd'), severity")
 	List<HealthStaForTime> selectHealthStaForDay(String monitorId, Date startDate, Date endDate);
+
+    //获得告警信息列表
+    @SQL("select * from GE_MONITOR_ALARM a order by a.CREATE_TIME desc,a.SEVERITY asc")
+    List<Alarm> findAllAlarms();
+
+    //获得当前监视器的历史告警信息
+    @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1 order by CREATE_TIME desc")
+    List<Alarm> findByMonitorId(String monitorId);
+
+    //批量删除告警信息
+    @SQL("delete GE_MONITOR_ALARM a where a.ID in (?1)")
+    void batchDeleteAlarms(String[] alarmIds);
 }
 

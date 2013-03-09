@@ -14,31 +14,40 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
-	$("#thresholdList").Grid({
-        type:"post",
-		url : "${ctx}/alarm/manager/alarmmanager/alarmdata",
-		dataType: "json",
-		colDisplay: false,  
-		clickSelect: true,
-		draggable:false,
-		height: "auto",  
-		colums:[  
-			{id:'1',text:'状态',name:"status",index:'1',align:'',width:'52'},
-			{id:'2',text:'消息',name:"message",index:'1',align:''},
-			{id:'3',text:'名称',name:"appName",index:'1',align:''},
-			{id:'4',text:'类型',name:"monitorType",index:'1',align:''},
-			{id:'5',text:'时间',name:"createTime",index:'1',align:''},
-			{id:'6',text:'用户',name:"ownerName",index:'1',align:''}
-		],  
-		rowNum:10,
-		pager : true,
-		number:false,  
-		multiselect: true  
-	});
+    getAlarmList();
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
 });
+
+/*得到告警信息列表*/
+function getAlarmList(){
+    var $mn = $("#thresholdList");
+    //防止每次查询时，表格中的数据不断累积
+    $mn.html("");
+    $("#thresholdList").Grid({
+        type:"post",
+        url : "${ctx}/alarm/manager/alarmmanager/alarmdata",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'状态',name:"status",index:'1',align:'',width:'52'},
+            {id:'2',text:'消息',name:"message",index:'1',align:''},
+            {id:'3',text:'名称',name:"appName",index:'1',align:''},
+            {id:'4',text:'类型',name:"monitorType",index:'1',align:''},
+            {id:'5',text:'时间',name:"recordTime",index:'1',align:''}/*,
+             {id:'6',text:'用户',name:"ownerName",index:'1',align:''}*/
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: true
+    });
+}
+
 /*得到告警的详细信息*/
 function alarmDetailInfo(e){
     var rows = $(e).parent().parent();
@@ -46,7 +55,7 @@ function alarmDetailInfo(e){
     /*id前面多了“rows”*/
     var _alarmId=id.substr(4,32);
     /*告警详细信息页面*/
-    window.location.href="${ctx}/alarm/manager/alarmmanager/detailinfo/"+_alarmId;
+    window.location.href="${ctx}/alarm/manager/alarmmanager/detail/"+_alarmId;
 }
 
 
@@ -92,14 +101,31 @@ function batchDel(){
 	var selecteds = $("td.multiple :checked",$g);
 	if(selecteds.length > 0){
 		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-			var checks = [];
+			var _alarmIds = [];
 			selecteds.each(function(){
 				var rows = $(this).parent().parent();
-				checks.push(rows.attr('id'));
-				rows.remove();
+                /*id前面多了“rows”*/
+                _alarmIds.push(rows.attr('id').substr(4,32));
 			});
-			alert(checks);
-			msgSuccess("系统消息", "操作成功，配置已删除！");
+            $.ajax({
+                type:"post",
+                url:"${ctx}/alarm/manager/alarmmanager/batchdelete/",
+                data:{alarmIds:_alarmIds},
+                async:false,
+                success:function(data){
+                    if("successDeleted"==data){
+                        /*selecteds.each(function(){
+                            $(this).parent().parent().remove();
+                        });*/
+                        alert("删除成功");
+                        /*调用ajax，重新获得告警信息列表*/
+                        getAlarmList();
+                    }
+                },
+                error:function(){
+                    alert("删除失败");
+                }
+            });
 		});
 	}else{
 		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')

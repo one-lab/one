@@ -6,9 +6,12 @@ import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.mvc.web.Invocation;
+import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -16,8 +19,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,17 +45,32 @@ public class AlarmManagerController {
         return "alarmList";
     }
 
+    //向页面返回json数据
+    private void getJsonDataOfAlarms(List<Alarm> alarms,Invocation inv) throws Exception {
+        Page alarmPage=new PageImpl(alarms);
+        Gridable<Alarm> gridable=new Gridable<Alarm>(alarmPage);
+        gridable.setIdField("id");
+        gridable.setCellStringField("status,message,appName,monitorType,recordTime");
+        try {
+            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+        } catch (Exception e) {
+            throw new Exception("JSON数据转化出错！",e);
+        }
+    }
+
     @Post("alarmdata")
     public void getAlarmData(Invocation inv) throws Exception {
-        String statusStart="<div class='";
-        String statusEnd="' onclick='viewRelevance()'></div>";
-        String messageNameStart="<a href='javascript:void(0)' onclick='alarmDetailInfo(this)'>";
-        String messageNameEnd="</a>";
-        String owerNameStart="<div class='people'>";
-        String owerNameEnd="</div>";
-        List<Alarm> dbAlarms= (List<Alarm>) alarmRepository.findAll(new Sort(Sort.Direction.DESC,"createTime"));
+
+        //暂时不需要显示用户
+        /*String owerNameStart="<div class='people'>";
+        String owerNameEnd="</div>";*/
+        List<Alarm> dbAlarms= (List<Alarm>) alarmRepository.findAllAlarms();
+        List<Alarm> newAlarms=new ArrayList<Alarm>();
         if(dbAlarms!=null&&dbAlarms.size()>0){
-            List<Alarm> newAlarms=new ArrayList<Alarm>();
+            String statusStart="<div class='";
+            String statusEnd="' onclick='viewRelevance()'></div>";
+            String messageNameStart="<a href='javascript:void(0)' onclick='alarmDetailInfo(this)'>";
+            String messageNameEnd="</a>";
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for(Alarm alarm:dbAlarms){
                 String statusMiddle="";
@@ -77,30 +95,28 @@ public class AlarmManagerController {
                 //获得类型对应的中文名
                 alarm.setMonitorType(ResourceType.valueOf(alarm.getMonitorType()).cnName());
                 //格式化时间，供页面显示
-                alarm.setRecordtime(formatter.format(alarm.getCreateTime()));
-                String owerNameMiddle="无";
+                alarm.setRecordTime(formatter.format(alarm.getCreateTime()));
+                //暂时不需要显示用户
+                /*String owerNameMiddle="无";
                 if(!StringUtils.isBlank(alarm.getOwnerName())){
                     owerNameMiddle=alarm.getOwnerName();
                 }
                 //拼接所有者
-                alarm.setOwnerName(owerNameStart+owerNameMiddle+owerNameEnd);
+                alarm.setOwnerName(owerNameStart+owerNameMiddle+owerNameEnd);*/
                 //保存每一个格式化过的Alarm
                 newAlarms.add(alarm);
             }
-            Page alarmPage=new PageImpl(newAlarms);
-            Gridable<Alarm> gridable=new Gridable<Alarm>(alarmPage);
-            gridable.setIdField("id");
-            gridable.setCellStringField("status,message,appName,monitorType,createTime,ownerName");
-            try {
-                UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-            } catch (Exception e) {
-                throw new Exception("JSON数据转化出错！",e);
-            }
+            getJsonDataOfAlarms(newAlarms,inv);
+            return;
+            /*gridable.setCellStringField("status,message,appName,monitorType,recordTime,ownerName");*/
+        }else {
+            getJsonDataOfAlarms(newAlarms,inv);
+            return;
         }
     }
 
-    //获得与前台相对应的状态
-    public String getStatusOfAlarm(SeverityLevel severityLevel){
+    //获得与前台页面相对应的状态
+    private  String getStatusOfAlarm(SeverityLevel severityLevel){
         if(severityLevel!=null){
             if(severityLevel.name().equals("CRITICAL")){
                 return "poor";
@@ -112,5 +128,72 @@ public class AlarmManagerController {
         }
         return "";
     }
+    //获得与前台页面相对应的图片
+    private String getImageOfAlarm(SeverityLevel severityLevel){
+        if(severityLevel!=null){
+            if(severityLevel.name().equals("CRITICAL")){
+                return "bussinessY2.gif";
+            }else if(severityLevel.name().equals("WARNING")){
+                return "bussinessY3.gif";
+            }else if(severityLevel.name().equals("INFO")){
+                return "bussinessY.gif";
+            }
+        }
+        return "";
+    }
 
+    //告警详细信息页面
+    @Get("detail/{alarmId}")
+    public String getAlarmDetail(@Param("alarmId") String alarmId,Invocation inv){
+        Alarm dbAlarm=alarmRepository.findOne(alarmId);
+        inv.addModel("alarm",dbAlarm);
+        inv.addModel("monitorName",applicationRepository.findOne(dbAlarm.getMonitorId()).getCnName());
+        inv.addModel("_cnName",dbAlarm.getSeverity().cnName());
+        inv.addModel("alarmImage",getImageOfAlarm(dbAlarm.getSeverity()));
+        //用以发送ajax，获得当前监视器的历史告警信息
+        inv.addModel("monitorId",dbAlarm.getMonitorId());
+        return "alarmDetail";
+    }
+
+    //当前监视器的历史告警信息
+    @Post("history/{monitorId}")
+    public void getHistoryAlarm(@Param("monitorId") String monitorId,Invocation inv) throws Exception {
+        List<Alarm> dbAlarms=alarmRepository.findByMonitorId(monitorId);
+        if(null!=dbAlarms&&dbAlarms.size()>0){
+            String statusStart="<div class='";
+            String statusEnd="'></div>";
+            String messageStart="<p class=\"magess\">";
+            String messageEnd="</p>";
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            List<Alarm> tempAlarms=new ArrayList<Alarm>();
+            for(Alarm alarm:dbAlarms){
+                //拼接页面显示的状态
+                alarm.setStatus(statusStart+getStatusOfAlarm(alarm.getSeverity())+statusEnd);
+                alarm.setRecordTime(formatter.format(alarm.getCreateTime()));
+                alarm.setMessage(messageStart+alarm.getMessage()+messageEnd);
+                tempAlarms.add(alarm);
+            }
+            Page historyAlarmPage=new PageImpl(tempAlarms);
+            Gridable<Alarm> gridable=new Gridable<Alarm>(historyAlarmPage);
+            gridable.setIdField("id");
+            gridable.setCellStringField("status,recordTime,message");
+            try {
+                UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+            } catch (Exception e) {
+                throw new Exception("JSON数据转换出错！",e);
+            }
+        }
+    }
+
+    //批量删除告警详细信息
+    @Post("batchdelete")
+    public Reply batchDeleteAlarms(Invocation inv){
+        String[] alarmIds=inv.getRequest().getParameterValues("alarmIds[]");
+        //执行批量删除告警的SQL
+        if(null!=alarmIds&&alarmIds.length>0){
+            alarmRepository.batchDeleteAlarms(alarmIds);
+            return Replys.with("successDeleted");
+        }
+        return Replys.with("failDeleted");
+    }
 }
