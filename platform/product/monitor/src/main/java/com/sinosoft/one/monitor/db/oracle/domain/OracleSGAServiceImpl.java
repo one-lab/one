@@ -1,21 +1,25 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
-import com.sinosoft.one.monitor.db.oracle.model.*;
-import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
-import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
-import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
-import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
-import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.sinosoft.one.monitor.db.oracle.model.EventInfoModel;
+import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
+import com.sinosoft.one.monitor.db.oracle.model.OracleSGAHitRateModel;
+import com.sinosoft.one.monitor.db.oracle.model.OracleSGAModel;
+import com.sinosoft.one.monitor.db.oracle.model.SGAStateModel;
+import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
+import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
+import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
+import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
+import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
 
 /**
  * User: Chunliang.Han

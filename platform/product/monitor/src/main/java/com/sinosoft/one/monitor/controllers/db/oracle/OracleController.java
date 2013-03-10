@@ -94,6 +94,7 @@ public class OracleController {
 		//System.out.println(y.toJSONString());
 		return "@"+y.toJSONString();
 	}
+	
     @Get("viewConnect/{monitorId}")
 	// 用户连接数和连接时间所用数据
 	public String viewConnectAndActive(@Param("monitorId")String monitorId) {
@@ -123,7 +124,14 @@ public class OracleController {
 			categories.add(sdf.format(connectPoints.get(i).getxAxis()));
 			connectData.add(connectPoints.get(i).getyAxis());
 		}
-
+		/*
+		 * labels: { 
+									  	:3
+										} 
+		 */
+		JSONObject jos = new JSONObject();
+		jos.put("step", 4);
+		xAxis.put("labels", jos);
 		xAxis.put("categories", categories);
 		surr.put("data", connectData);
 		connectSeries.add(surr);
@@ -145,13 +153,8 @@ public class OracleController {
 	}
     
 	// sga饼状图所用数据
-    
     @Get("viewSGA/{monitorId}")
 	public String viewSGA(@Param("monitorId")String monitorId) {
-    	/*System.out.println(monitorId);
-    	System.out.println("==============================================");
-    	System.out.println("==============================================");
-    	System.out.println("==============================================");*/
     	
 		OracleSGAModel oracleSGAModel = oracleSGAService.viewSGAInfo(monitorId);
 		BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize());;
