@@ -1,21 +1,29 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
+
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.db.oracle.model.*;
+import com.sinosoft.one.monitor.db.oracle.model.Ava;
+import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
+import com.sinosoft.one.monitor.db.oracle.model.Info;
+import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
+import com.sinosoft.one.monitor.db.oracle.model.OracleAvaInfoModel;
+import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
+import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
+import com.sinosoft.one.monitor.db.oracle.model.StaGraphModel;
 import com.sinosoft.one.monitor.db.oracle.repository.AvaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.AvaStaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * User: Chunliang.Han
@@ -148,10 +156,10 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         }
         return avas;
     }
+    
     @Override
     public List<OracleHealthInfoModel> healthInfoList(StaTimeEnum staTimeEnum) {
-
-        List<OracleHealthInfoModel> oracleHealthInfoModelList = new ArrayList<OracleHealthInfoModel>();
+        List<OracleHealthInfoModel> oracleHealthInfoList = new ArrayList<OracleHealthInfoModel>();
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "sysTime"));
         List<Info> infoList = (List<Info>) infoRepository.findAll(sort);
         Date endTime = new Date();
@@ -159,14 +167,58 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         for (Info info : infoList) {
             String monitorId = info.getId();
             List<Alarm> alarmList = alarmRepository.findAlarmByMonitorId(monitorId, startTime, endTime);
-            OracleHealthInfoModel oracleHealthInfoModel = new OracleHealthInfoModel();
-            oracleHealthInfoModel.setMonitorID(monitorId);
-            oracleHealthInfoModel.setMonitorName(info.getName());
+            OracleHealthInfoModel oracleHealthInfo = new OracleHealthInfoModel();
+            oracleHealthInfo.setMonitorID(monitorId);
+            oracleHealthInfo.setMonitorName(info.getName());
             List<String[]> alarms = getHealthyState(alarmList, staTimeEnum, startTime, endTime);
-            oracleHealthInfoModel.setGraphInfo(alarms);
-            oracleHealthInfoModelList.add(oracleHealthInfoModel);
+            /* 构建健康状态集合*/
+            buildHealths(alarmList, staTimeEnum, startTime, endTime, oracleHealthInfo);
+            oracleHealthInfo.setGraphInfo(alarms);
+            oracleHealthInfoList.add(oracleHealthInfo);
         }
-        return oracleHealthInfoModelList;
+        return oracleHealthInfoList;
+    }
+    
+    private void buildHealths(List<Alarm> alarmList, StaTimeEnum staTimeEnum, Date startTime, Date endTime, OracleHealthInfoModel oracleHealthInfo) {
+    	SeverityLevel health = SeverityLevel.INFO;
+        List<Long[]> dateMapList = new ArrayList<Long[]>();
+        //如果统计24小时的健康状况
+        if (staTimeEnum.equals(StaTimeEnum.LAST_24HOUR)) {
+            pullDateMapList(dateMapList, startTime, endTime, TimeGranularityEnum.HOUR);
+            for (Long[] dateMap : dateMapList) {
+                long start = dateMap[0];
+                long end = dateMap[1];
+                for (Alarm alarm : alarmList) {
+                    Date recordTime = alarm.getCreateTime();
+                    long recordTimeNumber = recordTime.getTime();
+                    if (recordTimeNumber < start) {
+                        continue;
+                    } else if (recordTimeNumber >= end) {
+                        break;
+                    } else if (alarm.getSeverity() != null) {
+                    	health = alarm.getSeverity();
+                    }
+                }
+            }
+        } else if (staTimeEnum.equals(StaTimeEnum.LAST_30DAY)) { //如果统计30天的健康状况
+            pullDateMapList(dateMapList, startTime, startTime, TimeGranularityEnum.DAY);
+            for (Long[] dateMap : dateMapList) {
+                long start = dateMap[0];
+                long end = dateMap[1];
+                for (Alarm alarm : alarmList) {
+                    Date recordTime = alarm.getCreateTime();
+                    long recordTimeNumber = recordTime.getTime();
+                    if (recordTimeNumber < start) {
+                        continue;
+                    } else if (recordTimeNumber >= end) {
+                        break;
+                    } else if (alarm.getSeverity() != null) {
+                    	health = alarm.getSeverity();
+                    }
+                }
+            }
+        }
+        oracleHealthInfo.addHealth(health);
     }
 
     /**
@@ -215,9 +267,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                 healthyPint[1] = info.toString();
                 healthy.add(healthyPint);
             }
-        }
-        //如果统计30天的健康状况
-        else if (staTimeEnum.equals(StaTimeEnum.LAST_30DAY)) {
+        } else if (staTimeEnum.equals(StaTimeEnum.LAST_30DAY)) { //如果统计30天的健康状况
             pullDateMapList(dateMapList, startTime, currTime, TimeGranularityEnum.DAY);
             for (Long[] dateMap : dateMapList) {
                 String[] healthyPint = new String[2];
@@ -260,8 +310,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
      * @param currTime    结束时间
      * @param currTime    timeGranularityEnum 时间粒度
      */
-    private void pullDateMapList(List<Long[]> dateMapList, Date startTime,
-                                 Date currTime, TimeGranularityEnum timeGranularityEnum) {
+    private void pullDateMapList(List<Long[]> dateMapList, Date startTime, Date currTime, TimeGranularityEnum timeGranularityEnum) {
         Calendar calendar = Calendar.getInstance();
         switch (timeGranularityEnum) {
             case HOUR: {

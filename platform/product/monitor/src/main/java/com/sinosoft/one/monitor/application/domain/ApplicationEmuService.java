@@ -1,5 +1,21 @@
 package com.sinosoft.one.monitor.application.domain;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sinosoft.one.monitor.application.model.EumUrl;
@@ -10,20 +26,6 @@ import com.sinosoft.one.monitor.application.repository.EumUrlAvaStaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
 import com.sinosoft.one.monitor.common.Trend;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import javax.sound.midi.SysexMessage;
-import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * 仿真URL服务对象
