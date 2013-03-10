@@ -22,6 +22,8 @@ import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+import com.sinosoft.one.util.date.DateUtils;
+import com.sinosoft.one.util.date.DateUtils.Formatter;
 
 /**
  * 首页
@@ -72,7 +74,7 @@ public class IndexController {
 			cell.add(MessageFormat.format(messageFormat1, url, message, subMessage));
 			cell.add(alarm.getAppName());
 			cell.add(alarm.getMonitorType());
-			cell.add(alarm.getRecordTime());
+			cell.add(DateUtils.toFormatString(alarm.getCreateTime(), Formatter.YEAR_TO_MINUTE));
 			row.put("cell", cell);
 			rows.add(row);
 		}
