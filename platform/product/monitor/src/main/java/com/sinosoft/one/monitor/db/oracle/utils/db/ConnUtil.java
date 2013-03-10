@@ -21,10 +21,13 @@ public class ConnUtil {
     protected static void clearPool(){
         Connection conn;
         Set<Thread> keyset = localConnPool.keySet();
-        for(Thread key:keyset){
-            conn = localConnPool.get(key);
-            close(conn);
-            localConnPool.remove(key);
+        if(keyset!=null){
+            for(Thread key:keyset){
+                conn = localConnPool.get(key);
+                close(conn);
+                //localConnPool.remove(key);
+                localConnPool.put(key,null);
+            }
         }
     }
 	/**
