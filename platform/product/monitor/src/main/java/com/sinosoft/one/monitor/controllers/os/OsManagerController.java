@@ -122,43 +122,15 @@ public class OsManagerController {
 		
 		
 	}
-//	/**
-//	 * 可用性页面
-//	 * @param inv
-//	 * @return
-//	 */
-//	@Get("toSystemMonitor")
-//	public String toSystemMonitor(Invocation inv) {
-//		Date date=new Date();
-//		Map<String, Object> Modelmap =  osViewDataHandleService.getAvailableViewData(date);
-//		List<String> timeList= new ArrayList<String>();
-//		Date time=(Date) Modelmap.get("beginTime");
-//		System.out.println(time);
-//		SimpleDateFormat simpleDateFormat =new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-//		Calendar c  = Calendar.getInstance();
-//		for (int i = 0; i < 12; i++) {
-//			if(i==0){
-//				c.set(Calendar.HOUR_OF_DAY,time.getHours());
-//				c.set(Calendar.MINUTE, 0);
-//				c.set(Calendar.SECOND, 0);
-//				timeList.add(simpleDateFormat.format(c.getTime()));
-//			}else{
-//				c.set(Calendar.HOUR_OF_DAY,time.getHours()+2);
-//				c.set(Calendar.MINUTE, 0);
-//				c.set(Calendar.SECOND, 0);
-//				 
-//				System.out.println(simpleDateFormat.format(c.getTime()));
-//				timeList.add(simpleDateFormat.format(c.getTime()));
-//				time=c.getTime();
-//			}
-//		}
-//		System.out.println(Modelmap.get("beginTime"));
-//		List<Map<String, Object>> maplist= (List<Map<String, Object>>) Modelmap.get("mapList");
-//		inv.addModel("maplist",maplist);
-//		inv.addModel("timeList",timeList);
-//		
-//		return "systemMonitor";
-//	}
+	/**
+	 * 可用性页面
+	 * @param inv
+	 * @return
+	 */
+	@Get("toSystemMonitor")
+	public String toSystemMonitor(Invocation inv) {
+		return "systemMonitor";
+	}
 	
 	/**
 	 * 可用性条块
