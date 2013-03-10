@@ -150,7 +150,7 @@ public class HistoryViewController {
 	}
 	
 	/**
-	 * 可用性图饼
+	 * 可用性报表图饼
 	 * @param osId
 	 * @return
 	 */
@@ -161,15 +161,19 @@ public class HistoryViewController {
 		map = osAvailableViewHandle.creatAvailablePie(osId, currentTime, 1);
 		return Replys.with(map).as(Json.class);
 	}
-	
+	/**
+	 * 可用性报表表格
+	 * @param osId
+	 * @return
+	 */
 	@Post("historyAvailableGrid/{timespan}/{osId}")
 	public void historyAvailableGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
-		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Page page = new PageImpl(osRamViewModels);
+		List<OsGridModel> osViewModels=osViewHandle.creatAvailableHistoryGrid(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osViewModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id"); 
-		gridable.setCellStringField("time,minValue,maxValue,averageValue");
+		gridable.setCellStringField("time,normalRun,crashTime,aveRepairTime,aveFaultTime");
 		try {
 			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
 		} catch (Exception e) {
@@ -204,8 +208,8 @@ public class HistoryViewController {
 	@Post("historyCPUStatiGrid/{timespan}/{osId}")
 	public void historyCPUSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
-		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Page page = new PageImpl(osRamViewModels);
+		List<OsGridModel> osViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osViewModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id"); 
 		gridable.setCellStringField("time,minValue,maxValue,averageValue");
@@ -235,8 +239,8 @@ public class HistoryViewController {
 	@Post("historyDiskStatiGrid/{timespan}/{osId}")
 	public void historyDiskSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
-		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.DISK_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Page page = new PageImpl(osRamViewModels);
+		List<OsGridModel> osViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.DISK_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osViewModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id"); 
 		gridable.setCellStringField("time,minValue,maxValue,averageValue");
@@ -265,8 +269,8 @@ public class HistoryViewController {
 	@Post("historyMemStatiGrid/{timespan}/{osId}")
 	public void historyMemSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
-		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Page page = new PageImpl(osRamViewModels);
+		List<OsGridModel> osViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osViewModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id"); 
 		gridable.setCellStringField("time,minValue,maxValue,averageValue");
@@ -296,8 +300,8 @@ public class HistoryViewController {
 	@Post("historyRepStatiGrid/{timespan}/{osId}")
 	public void historyRepSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
-		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Page page = new PageImpl(osRamViewModels);
+		List<OsGridModel> osViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osViewModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id"); 
 		gridable.setCellStringField("time,minValue,maxValue,averageValue");

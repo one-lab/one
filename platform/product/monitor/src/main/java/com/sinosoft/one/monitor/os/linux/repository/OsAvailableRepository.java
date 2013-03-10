@@ -9,6 +9,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
+import com.sinosoft.one.monitor.os.linux.model.OsStati;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 
 public interface OsAvailableRepository extends PagingAndSortingRepository<OsAvailable, String> {
 	
@@ -24,5 +27,12 @@ public interface OsAvailableRepository extends PagingAndSortingRepository<OsAvai
 	//根据时间获取可用性统计记录
 	@Query("from OsAvailable o where o.os.osInfoId=?1 and o.timeSpan between to_date(?2,?4) and to_date(?3,?4)")
 	public List<OsAvailable> getOsAvailablesByDate(String osInfoId,String begin,String end ,String dateFormat);
+	
+	
+	
+	
+	//根据时间获取可用性统计记录
+	@SQL("select TIME_SPAN \"date\",NORMAL_RUN \"normalRun\" ,CRASH_TIME \"crashTime\", AVE_REPAIR_TIME \"aveRepairTime\" , AVE_FAULT_TIME \"aveFaultTime\"  from GE_MONITOR_OS_AVAILABLE o where o.OS_INFO_ID=?1 and o.TIME_SPAN between to_date(?2,?4) and to_date(?3,?4)")
+	public List<StatiDataModel> getOsAvailablesHistoryByDate(String osInfoId,String begin,String end ,String dateFormat);
 }
 
