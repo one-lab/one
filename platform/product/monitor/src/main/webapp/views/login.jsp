@@ -39,8 +39,8 @@
                 <div class="side_middle fl">
                     <ul>
                         <li class="tip" style="visibility:hidden;">用户名或密码无效</li>
-                        <li class="side_top"><strong>用户名</strong><span class="input_bg"><input id="loginName" name="loginName" type="text" value=""></span></li>
-                        <li class="side_top"><strong>密码</strong><span class="input_bg"><input id="password" name="password" type="password" value=""></span></li>
+                        <li class="side_top"><strong>用户名：</strong><span class="input_bg"><input id="loginName" name="loginName" type="text" value=""></span></li>
+                        <li class="side_top"><strong>密码：</strong><span class="input_bg"><input id="password" name="password" type="password" value=""></span></li>
                         <li class="side_check"><input type="checkbox" name="" value=""><strong>记住密码</strong></li>
                         <li><a href="#" class="btn" onclick="trigger()">登录</a></li><p class="clear"></p>
                     </ul>
