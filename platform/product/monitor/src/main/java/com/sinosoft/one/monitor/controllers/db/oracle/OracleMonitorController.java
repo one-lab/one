@@ -46,6 +46,11 @@ public class OracleMonitorController {
 	/* 返回前台ajax请求数据信息*/
 	private Map<String, Object> message = new HashMap<String, Object>();
 	
+	@Get("oracleMonitor")
+	public String oracleMonitor() {
+		return "oracleMonitor";
+	}
+	
 	/**
 	 * oracle - 批量配置视图
 	 * 包含：可用性、性能、列表视图
@@ -79,13 +84,13 @@ public class OracleMonitorController {
 	 */
 	public Reply performance(){
 		List<StaGraphModel> staGraphs = oracleBatchInfoService.listMonitorEventSta();
-		/* 已用的内存*/
+		/* 缓存库命中率*/
 		Highchart memory_utilization = new Highchart("memory_utilization");
 		/* 活动的远程连接数*/
 		//Highchart CPU_utilization = new Highchart("CPU_utilization");
 		/* 连接时间*/
 		Highchart exchange_utilization = new Highchart("exchange_utilization");
-		/* 活动的用户连接数*/
+		/* 活动连接数*/
 		Highchart reply_utilization = new Highchart("reply_utilization");
 		for(StaGraphModel staGraph : staGraphs) {
 			HighchartSerie memorySerie = new HighchartSerie(staGraph.getName());
