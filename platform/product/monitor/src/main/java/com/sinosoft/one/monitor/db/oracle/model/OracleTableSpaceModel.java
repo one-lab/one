@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.db.oracle.model;
 
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 
 /**
  * User: Chunliang.Han
@@ -47,27 +48,27 @@ public class OracleTableSpaceModel {
     /**
      * 总空间大小
      */
-    private String totalSize;
+    private BigDecimal totalSize;
     /**
      * 总模块数
      */
-    private String totalBlock;
+    private BigDecimal totalBlock;
     /**
      * 已使用
      */
-    private String used;
+    private BigDecimal used;
     /**
      * 使用率
      */
-    private String usedRate;
+    private BigDecimal usedRate;
     /**
      * 未使用
      */
-    private String unused;
+    private BigDecimal unused;
     /**
      * 未使用率
      */
-    private String unusedRate;
+    private BigDecimal unusedRate;
 
 
     public String getTableSpaceName() {
@@ -78,51 +79,51 @@ public class OracleTableSpaceModel {
         this.tableSpaceName = tableSpaceName;
     }
 
-    public String getTotalSize() {
+    public BigDecimal getTotalSize() {
         return totalSize;
     }
 
-    public void setTotalSize(String totalSize) {
+    public void setTotalSize(BigDecimal totalSize) {
         this.totalSize = totalSize;
     }
 
-    public String getTotalBlock() {
+    public BigDecimal getTotalBlock() {
         return totalBlock;
     }
 
-    public void setTotalBlock(String totalBlock) {
+    public void setTotalBlock(BigDecimal totalBlock) {
         this.totalBlock = totalBlock;
     }
 
-    public String getUsed() {
+    public BigDecimal getUsed() {
         return used;
     }
 
-    public void setUsed(String used) {
+    public void setUsed(BigDecimal used) {
         this.used = used;
     }
 
-    public String getUsedRate() {
+    public BigDecimal getUsedRate() {
         return usedRate;
     }
 
-    public void setUsedRate(String usedRate) {
+    public void setUsedRate(BigDecimal usedRate) {
         this.usedRate = usedRate;
     }
 
-    public String getUnused() {
+    public BigDecimal getUnused() {
         return unused;
     }
 
-    public void setUnused(String unused) {
+    public void setUnused(BigDecimal unused) {
         this.unused = unused;
     }
 
-    public String getUnusedRate() {
+    public BigDecimal getUnusedRate() {
         return unusedRate;
     }
 
-    public void setUnusedRate(String unusedRate) {
+    public void setUnusedRate(BigDecimal unusedRate) {
         this.unusedRate = unusedRate;
     }
 

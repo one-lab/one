@@ -30,9 +30,9 @@ $(function(){
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
-	
+
 	$("#table_space_detail").Grid({
-		url : "oracle.json",
+		url : ctx+"/db/oracle/home/viewTableSpace/4028921b3d3fba36013d3fbb061c0000",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -51,8 +51,23 @@ $(function(){
 		number:false,
 		multiselect:true
 	});
-	
-	
+    $("#table_space_overview").Grid({
+        url : ctx+"/db/oracle/home/viewTableSpaceOverPreview/4028921b3d3fba36013d3fbb061c0000",
+        dataType: "json",
+        height: 'auto',
+        colums:[
+            {id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
+            {id:'7',text:'未使用 ',name:"status",width:'',index:'1',align:'',color:''},
+            {id:'8',text:'可用百分比',name:"status",width:'',index:'1',align:'',color:''}
+        ],
+        rowNum:10,
+        rowList:[10,20,30],
+        pager : false,
+        number:false,
+        multiselect:true
+    });
+
+
 //	$("#table_space_status").Grid({
 //		url : "oracle2.json",
 //		dataType: "json",
@@ -74,7 +89,7 @@ $(function(){
 //		number:false,
 //		multiselect:true
 //	});
-	
+
 //	$("#table_space_performance").Grid({
 //		url : "oracle1.json",
 //		dataType: "json",
@@ -97,9 +112,9 @@ $(function(){
 //		number:false,
 //		multiselect:true
 //	});
-	
+
 		$("#sga_detail").Grid({
-		url : "oracle3.json",
+		url :  ctx+"/db/oracle/home/viewSGADetail/4028921b3d3fba36013d3fbb061c0000",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -113,9 +128,9 @@ $(function(){
 		number:false,
 		multiselect:false
 	});
-	
+
 	$("#sga_status").Grid({
-		url : "oracle3.json",
+		url : ctx+"/db/oracle/home/viewSGAStatus/4028921b3d3fba36013d3fbb061c0000",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -145,7 +160,7 @@ function navClick(){
 		subMav.slideDown('fast',function(){
 			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
 			return false;
-		});		
+		});
 	};
 }
 function hideNav(e){
@@ -155,15 +170,15 @@ function hideNav(e){
 		if(isAdd){
 			subMenu.parent().removeClass('seleck');
 		};
-	});	
+	});
 	$(document).unbind();
 }
-function createSevenDayUser() { 
-	var temWin = $("body").window({  
-			"id":"testOne11",   
-			"title":"7天可用",  
-			"url":"",   
-			"hasIFrame":true,  
+function createSevenDayUser() {
+	var temWin = $("body").window({
+			"id":"testOne11",
+			"title":"7天可用",
+			"url":"",
+			"hasIFrame":true,
 			"width":850,
 			"height":440,
 		"diyButton":[{
@@ -175,16 +190,15 @@ function createSevenDayUser() {
 					temWin.closeWin();
 				}
 			}
-		]  
-	}); 
+		]
+	});
 }
-function createSevenDayConnect() { 
-	alert(111);
+function createSevenDayConnect() {
 	var temWin = $("body").window({
-			"id":"testOne9",   
-			"title":"7天可用",  
-			"url":ctx+"/db/oracle/sevenDayConn/view/4028921b3d3fba36013d3fbb061c0000",
-			"hasIFrame":true,   
+			"id":"testOne9",
+			"title":"7天可用",
+			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/1/1/1",
+			"hasIFrame":true,
 			"width":850,
 			"height":440,
 			"diyButton":[{
@@ -196,70 +210,115 @@ function createSevenDayConnect() {
 					temWin.closeWin();
 				}
 			}
-		]  
-	}); 
+		]
+	});
 }
+function createThirtyDayConnect() {
+	var temWin = $("body").window({
+			"id":"testOne8",
+			"title":"30天可用",
+			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/1/1/2",
+			"hasIFrame":true,
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function createSevenDayUser() {
+	var temWin = $("body").window({
+			"id":"testOne11",
+			"title":"7天可用  ",
+			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/2/2/1",
+			"hasIFrame":true,
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function createThirtyDayUser() {
+	var temWin = $("body").window({
+			"id":"testOne10",
+			"title":"30天可用  ",
+			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/2/2/2",
+			"hasIFrame":true,
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function createSevenDayHitRate() {
+	var temWin = $("body").window({
+			"id":"testOne7",
+			"title":"7天可用",
+			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/3/3/1",
+			"hasIFrame":true,
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+function createThirtyDayHitRate() {
+	var temWin = $("body").window({
+			"id":"testOne6",
+			"title":"30天可用性",
+			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/3/3/2",
+			"hasIFrame":true,
+			"width":850,
+			"height":440,
+		"diyButton":[{
+			"id": "btOne",
+			"btClass": "buttons",
+			"value": "关闭",
+			"onclickEvent" : "selectLear",
+			"btFun": function() {
+					temWin.closeWin();
+				}
+			}
+		]
+	});
+}
+
 </script>
 </head>
 
 <body>
-<div id="layout_top">
-	<div class="header">
-    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-    	<div class="menu_box">
-        	<ul class="nav" id="nav">
-            	<li ><a href="index.html">首页</a></li>
-                <li class="has_sub">
-                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                	<ul class="add_sub_menu" id="subNav">
-                    	<li class="action"><span class="sever">操作系统</span>
-                        	<ul class="list">
-                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                        	<ul class="list">
-                                <li><a href="performance.html">在线查询</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                        	<ul class="list">
-                            	<li><a href="oracleMonitor.html">oracle</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
-                    
-                </li>
-                <li><a href="performance.html">应用性能</a></li>
-                <li><a href="BusinessSimulation.html">业务仿真</a></li>
-                <li><a href="alertList.html">告警</a></li>
-                <li><a href="userManager.html">用户管理</a></li>  
-            </ul>
-        </div>
-        <ul class="add_menu" id="menu">
-        	<li><a href="addMonitorList.html">新建监视器</a></li>
-            <li class="has_sub">
-            	<a href="javascript:viod(0)"><span>阈值配置文件</span></a>
-            	<ul class="add_sub_menu">
-                    <li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a></li>
-                    <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
-                </ul>
-            </li>            
-            <li><a href="javascript:viod(0)">配置监视器</a></li>
-            <li class="has_sub">
-            	<a href="javascript:viod(0)"><span>动作</span></a>
-            	<ul class="add_sub_menu">
-                	<li class="title"><a href="javascript:viod(0)">显示动作</a></li>
-                    <li class="action">创建新动作</li>
-                    <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
-                    <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
-                </ul>
-            </li>
-            <li><a href="setEmergency.html">配置告警</a></li>
-        </ul>
-    </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp" %>
 <div id="layout_center">
 	<div class="main">
   <ul class="crumbs">
@@ -285,7 +344,7 @@ function createSevenDayConnect() {
             <table class="base_info" width="100%" cellpadding="0" cellspacing="0" >
               <tr><td>名称</td><td>${oracleInfoModel.monitorName }</td></tr>
               <tr><td>健康状况</td><td>${oracleInfoModel.health[2] }</td></tr>
-              <tr><td>类型</td><td>${oracleInfoModel.MONITOR_TYPE }</td></tr>
+              <tr><td>类型</td><td>${oracleInfoModel.monitorType }</td></tr>
               <tr><td>Oracle版本</td><td>${oracleInfoModel.version }</td></tr>
               <tr><td>Oracle启动时间</td><td>${oracleInfoModel.startTime }</td></tr>
               <tr><td>端口</td><td>${oracleInfoModel.port }</td></tr>
@@ -313,7 +372,7 @@ function createSevenDayConnect() {
       		 <div class="threshold_file">
             <div class="sub_title">连接时间图 - 最后1小时</div>
             <div class="days_data">
-              <a href="#"><div class="thirty_days"></div></a>
+              <a onclick="createThirtyDayConnect()"><div class="thirty_days"></div></a>
             	<a onclick="createSevenDayConnect()"><div class="seven_days"></div></a>
             </div>
             <div id="last_onehour" ></div>
@@ -331,8 +390,8 @@ function createSevenDayConnect() {
         	 <div class="threshold_file">
             <div class="sub_title">用户活动性 - 最后1小时</div>
             <div class="days_data">
-              <a href="#"><div class="thirty_days"></div></a>
-            	<a href="#"><div class="seven_days"></div></a>
+               <a onclick="createThirtyDayUser()"><div class="thirty_days"></div></a>
+            	<a onclick="createSevenDayUser()"><div class="seven_days"></div></a>
             </div>
             <div id="user_last_onehour" ></div>
           </div>
@@ -348,19 +407,11 @@ function createSevenDayConnect() {
       <tr>
       	<td colspan="2">
         	<div class="threshold_file">
-            	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<div class="sub_title">
                 	最少可用字节的表空间
                   <a class="show_table_space_a" href="#">显示所有表空间</a>
                 </div>
-                
-                <tr><td>名称</td><td>可用字节 (MB)</td><td> 	%可用</td></tr>
-                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
-                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
-                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
-                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
-                <tr><td>SYSTEM</td><td> 32,281.55</td><td>  98.52</td></tr>
-              </table>
+                <div id="table_space_overview"></div>
          	</div>
         </td>
       </tr>
@@ -382,8 +433,8 @@ function createSevenDayConnect() {
         	<div class="threshold_file">
             <div class="sub_title">击中率</div>
             <div class="days_data">
-              <a href="#"><div class="thirty_days"></div></a>
-            	<a href="#"><div class="seven_days"></div></a>
+               <a onclick="createThirtyDayHitRate()"><div class="thirty_days"></div></a>
+               <a onclick="createSevenDayHitRate()"><div class="seven_days"></div></a>
             </div>
             	<div class="hit_rate">
               	<div style="width:100%;">
@@ -395,7 +446,7 @@ function createSevenDayConnect() {
                   	<div class="hit_rate_c_m">
                     	<div class="hit_rate_c_m_m"></div>
                     </div>
-                    <div  class="hit_rate_c_m_b" >97%</div>
+                    <div  class="hit_rate_c_m_b" >${sgaStateModel.bufferHitRate}%</div>
                   </div>
                 </div>
                 <div class="hit_rate_c_r"></div>
@@ -414,7 +465,7 @@ function createSevenDayConnect() {
                   	<div class="hit_rate_c_m">
                     	<div class="hit_rate_c_m_m"></div>
                     </div>
-                    <div  class="hit_rate_c_m_b" >97%</div>
+                    <div  class="hit_rate_c_m_b" >${sgaStateModel.dictHitRate}%</div>
                   </div>
                 </div>
                 <div class="hit_rate_c_r"></div>
@@ -433,7 +484,7 @@ function createSevenDayConnect() {
                   	<div class="hit_rate_c_m">
                     	<div class="hit_rate_c_m_m"></div>
                     </div>
-                    <div  class="hit_rate_c_m_b" >97%</div>
+                    <div  class="hit_rate_c_m_b" >${sgaStateModel.libHitRate}%</div>
                   </div>
                 </div>
                 <div class="hit_rate_c_r"></div>
@@ -480,16 +531,16 @@ function createSevenDayConnect() {
              <img src="${ctx}/global/images/db/legend-red.png" /><span>已用空间</span></div>
             </div>
        </div>
-       <div class="threshold_file">
-            <div class="sub_title">表空间状态</div>
-            <div id="table_space_status"></div>
-          	<div class="tool_bar_top"></div>
-       </div>
-       <div class="threshold_file">
-            <div class="sub_title">数据文件的性能指标</div>
-            <div id="table_space_performance"></div>
-          	<div class="tool_bar_top"></div>
-       </div>
+       <%--<div class="threshold_file">--%>
+            <%--<div class="sub_title">表空间状态</div>--%>
+            <%--<div id="table_space_status"></div>--%>
+          	<%--<div class="tool_bar_top"></div>--%>
+       <%--</div>--%>
+       <%--<div class="threshold_file">--%>
+            <%--<div class="sub_title">数据文件的性能指标</div>--%>
+            <%--<div id="table_space_performance"></div>--%>
+          	<%--<div class="tool_bar_top"></div>--%>
+       <%--</div>--%>
     </div>
     <div id="sga">
     		<table width="100%" cellpadding="0" cellspacing="0">
@@ -498,8 +549,8 @@ function createSevenDayConnect() {
             	<div class="threshold_file">
                 <div class="sub_title">SGA的指标</div>
                 <div class="days_data">
-                  <a href="#"><div class="thirty_days"></div></a>
-                  <a href="#"><div class="seven_days"></div></a>
+                   <a onclick="createThirtyDayHitRate()"><div class="thirty_days"></div></a>
+                   <a onclick="createSevenDayHitRate()"><div class="seven_days"></div></a>
                 </div>
                 <div id="sga_target"></div>
               </div>
