@@ -91,15 +91,16 @@ $(function(){
 			}
 			});
 		$("#sevenday_grid").Grid({
-			url : "/monitor/os/historyAvailableGrid/7"+,
+			type : "post",
+			url : "/monitor/os/historyAvailableGrid/7/"+id,
 			dataType: "json",
 			height: 'auto',
 			colums:[
-				{id:'1',text:'选项',name:"methodName",width:'',index:'1',align:'',color:''},
-				{id:'2',text:'正常运行时间 %',name:"maxTime",width:'300',index:'1',align:'',color:''},
-				{id:'3',text:'总停机时间',name:"minTime",width:'',index:'1',align:'',color:''},
-				{id:'4',text:'平均修复时间',name:"avgTime",width:'',index:'1',align:'',color:''},
-				{id:'5',text:'平均故障时间',name:"status",width:'',index:'1',align:'',color:''}
+				{id:'1',text:'时间',name:"time",width:'',index:'1',align:'',color:''},
+				{id:'2',text:'正常运行时间 ',name:"normalRun",width:'300',index:'1',align:'',color:''},
+				{id:'3',text:'总停机时间',name:"crashTime",width:'',index:'1',align:'',color:''},
+				{id:'4',text:'平均修复时间',name:"aveRepairTime",width:'',index:'1',align:'',color:''},
+				{id:'5',text:'平均故障时间',name:"aveFaultTime",width:'',index:'1',align:'',color:''}
 			],
 			rowNum:10,
 			rowList:[10,20,30],
@@ -159,13 +160,13 @@ function createThirtyDayAvailableLinux() {
           <input id="osid" value="${os.osInfoId }" />
           <table class="base_info" width="100%" cellpadding="0" cellspacing="0">
             <tr><td>监视器名称</td><td id="monitorName">${os.name}</td></tr>
-            <tr><td>属性 </td><td>监视器可用性 </td></tr>
+            <tr><td>属性 </td><td>可用性 </td></tr>
             <tr><td>从  </td><td id="startTime"> ${beginDate}</td></tr>
             <tr><td>到 </td><td id="endTime"> ${currentDate}</td></tr>
            
             <tr><td colspan="2"> 
             	<div class="days_data">
-                  <a href="${ctx}/os/historyCPU/30/${os.osInfoId }"><div class="thirty_days"></div></a>
+                  <a href="${ctx}/os/historyAvaylable/30/${os.osInfoId }"><div class="thirty_days"></div></a>
                   <a><div class="seven_days_unable"></div></a>
                 </div></td></tr>
              <tr><td colspan="2"><div id="available" ></div></td></tr>

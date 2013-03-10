@@ -14,8 +14,48 @@ public class StatiDataModel {
 	
 	private String minAvgValue;
 	
+	private String normalRun;
+	
+	private String crashTime;
+	
+	private String aveRepairTime;
+	
+	private String aveFaultTime;
+	
 	private Date date;
 	
+	public String getNormalRun() {
+		return normalRun;
+	}
+
+	public void setNormalRun(String normalRun) {
+		this.normalRun = normalRun;
+	}
+
+	public String getCrashTime() {
+		return crashTime;
+	}
+
+	public void setCrashTime(String crashTime) {
+		this.crashTime = crashTime;
+	}
+
+	public String getAveRepairTime() {
+		return aveRepairTime;
+	}
+
+	public void setAveRepairTime(String aveRepairTime) {
+		this.aveRepairTime = aveRepairTime;
+	}
+
+	public String getAveFaultTime() {
+		return aveFaultTime;
+	}
+
+	public void setAveFaultTime(String aveFaultTime) {
+		this.aveFaultTime = aveFaultTime;
+	}
+
 	public String getMaxValue() {
 		return maxValue;
 	}

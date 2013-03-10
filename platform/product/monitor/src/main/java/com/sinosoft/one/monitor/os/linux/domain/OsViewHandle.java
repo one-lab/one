@@ -42,6 +42,9 @@ public class OsViewHandle {
 	private OsService osService;
 	@Autowired
 	private OsStatiService osStatiService;
+	@Autowired
+	private OsAvailableServcie osAvailableServcie;
+	
 	
 	/**
 	 * 构建多个操作系统的线
@@ -241,12 +244,73 @@ public class OsViewHandle {
 		return osGridModels;
 		
 	}
-	
-	public static void main(String[] args) {
-		Date date =new Date();
-		
-		Date dayPoint= new Date(date.getTime()-Long.valueOf(6*24*60*60*1000));
-		System.out.println(dayPoint);
+	/**
+	 * 可用性统计报表表格
+	 * @param osid
+	 * @param currentTime
+	 * @param timespan 时间段 1 7 30
+	 * @return
+	 */
+	public List<OsGridModel> creatAvailableHistoryGrid(String osid,String statitype, Date currentTime,int timespan ){
+		long span=0;
+		SimpleDateFormat simpleDateFormat;
+		if(timespan>1){
+			span=24;	
+			simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
+		}else{
+			
+			simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+		}
+		List<OsGridModel>osGridModels= new ArrayList<OsGridModel>();
+		Date dayPoint=OsTransUtil.getBeforeDate(currentTime, timespan+"");
+		List<StatiDataModel> osStatis=osAvailableServcie.getOsAvailablesHistoryByDate(osid, currentTime, timespan);
+		for (int i = 0; i < osStatis.size(); i++) {
+			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>(span*60*60*1000)){
+				Integer ptime=(Integer) BigDecimal.valueOf(osStatis.get(i).getDate().getTime()-dayPoint.getTime()).divide(BigDecimal.valueOf(Long.parseLong(span*60*60*1000+"")),0,BigDecimal.ROUND_UP).intValue();//空了几次
+				for (int j = 0; j < ptime; j++) {
+					OsGridModel osGridModel=new OsGridModel();
+					osGridModel.setNormalRun("未知");
+					osGridModel.setCrashTime("未知");
+					osGridModel.setAveRepairTime("未知");
+					osGridModel.setAveFaultTime("未知");
+					osGridModel.setTime(simpleDateFormat.format(dayPoint));
+					osGridModels.add(osGridModel);
+					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
+				}
+				OsGridModel osGridModel=new OsGridModel();
+				osGridModel.setNormalRun(osStatis.get(i).getNormalRun());
+				osGridModel.setCrashTime(osStatis.get(i).getCrashTime());
+				osGridModel.setAveRepairTime(osStatis.get(i).getAveRepairTime());
+				osGridModel.setAveFaultTime(osStatis.get(i).getAveFaultTime());
+				osGridModel.setTime(simpleDateFormat.format(dayPoint));
+				osGridModels.add(osGridModel);
+				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
+			}
+			else{
+				OsGridModel osGridModel=new OsGridModel();
+				osGridModel.setNormalRun(osStatis.get(i).getNormalRun());
+				osGridModel.setCrashTime(osStatis.get(i).getCrashTime());
+				osGridModel.setAveRepairTime(osStatis.get(i).getAveRepairTime());
+				osGridModel.setAveFaultTime(osStatis.get(i).getAveFaultTime());
+				osGridModel.setTime(simpleDateFormat.format(dayPoint));
+				osGridModels.add(osGridModel);//本次点
+				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
+			}
+		}
+		int mapsSize=osGridModels.size();
+		if(osGridModels.size()<timespan){//如果总的点小于平均时间段 补上空点
+			for (int i = 0; i < timespan-mapsSize; i++) {
+				OsGridModel osGridModel=new OsGridModel();
+				osGridModel.setNormalRun("未知");
+				osGridModel.setCrashTime("未知");
+				osGridModel.setAveRepairTime("未知");
+				osGridModel.setAveFaultTime("未知");
+				osGridModel.setTime(simpleDateFormat.format(dayPoint));
+				osGridModels.add(osGridModel);//本次点
+				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
+			}
+		}
+		return osGridModels;
 		
 	}
 }

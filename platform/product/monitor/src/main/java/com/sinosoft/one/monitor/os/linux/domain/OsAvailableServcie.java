@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.repository.OsAvailableRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsAvailabletempRepository;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
@@ -115,7 +117,6 @@ public class OsAvailableServcie {
 	 * timespan 时间1  7 30 等  天为单位
 	 */
 	public List<OsAvailable> getAvailablesByDate(String osid,Date curruntTime,int timespan){
-		int timesize;
 		if(timespan>1){
 			timespan=(timespan-1)*24;
 		}else{
@@ -123,12 +124,32 @@ public class OsAvailableServcie {
 		}
 		//取当天的24小时整时点
 		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
-		Date beginTime =new Date(curruntTime.getTime()-(timespan*24*60*60*1000));
+		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*24*60*60*1000)+"")));
 		System.out.println(curruntTime);
 		System.out.println(beginTime);
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osAvailableRepository.getOsAvailablesByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
 	}
+	
+	/**
+	 * 获取可用统计数据返回统计类型MODEL
+	 * timespan 时间1  7 30 等  天为单位
+	 */
+	public List<StatiDataModel> getOsAvailablesHistoryByDate(String osid,Date curruntTime,int timespan){
+		if(timespan>1){
+			timespan=(timespan-1)*24;
+		}else{
+			timespan=24;
+		}
+		//取当天的24小时整时点
+		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
+		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*24*60*60*1000)+"")));
+		System.out.println(curruntTime);
+		System.out.println(beginTime);
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osAvailableRepository.getOsAvailablesHistoryByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
+	}
+	
 	
 	/**
 	 * 删除可用性临时数据
