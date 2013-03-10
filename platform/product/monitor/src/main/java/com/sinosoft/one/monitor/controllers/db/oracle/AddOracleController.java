@@ -27,7 +27,12 @@ public class AddOracleController {
 		Date sysTime = new Date();
 		info.setSysTime(sysTime);
         System.out.println(info);
-        oracleInfoService.saveMonitor(info);
-		return Replys.simple().success() ;
+        try {
+			oracleInfoService.saveMonitor(info);
+			return Replys.simple().success() ;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Replys.simple().fail();
+		}
 	}
 }
