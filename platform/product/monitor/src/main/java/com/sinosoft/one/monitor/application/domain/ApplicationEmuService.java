@@ -99,12 +99,12 @@ public class ApplicationEmuService {
         return eumUrlAvaSta;
     }
 
-    public ApplicationAvailableInf getApplicationAvailableToday(String applicationId){
+    public ApplicationAvailableInf getApplicationAvailableToday(String applicationId) throws EumUrlsNotFoundException {
         Assert.hasText(applicationId);
 
         List<EumUrl> eumUrls = eumUrlRepository.findByApplication_Id(applicationId);
         if(eumUrls.isEmpty())
-            throw new IllegalArgumentException("application Id is "+applicationId+" not found any eumUrls!");
+            throw new EumUrlsNotFoundException("application Id is "+applicationId+" not found any eumUrls!");
         int  count = 0;
         int  avCount = 0;
         for(EumUrl eumUrl:eumUrls){

@@ -25,7 +25,7 @@ public class ApplicationEnhanceFactory {
     @Autowired
     private HealthStaService healthStaService;
 
-    public  ApplicationEnhance enhanceApplication(Application application) {
+    public  ApplicationEnhance enhanceApplication(Application application) throws EumUrlsNotFoundException {
         SeverityLevel health = healthStaService.healthStaForCurrent(application.getId(), 10);
         Trend available = applicationEmuService.getApplicationAvailableToday(application.getId()).getTrend();
         ApplicationEnhance applicationEnhance = new ApplicationEnhance(application, health, available);
