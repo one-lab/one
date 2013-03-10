@@ -186,7 +186,7 @@ public class OracleMonitorController {
 	 * 添加页面
 	 * @return
 	 */
-	@Get("add")
+	@Get("addUI")
 	public String addUI() {
 		return "oracleSave";
 	}
@@ -199,8 +199,15 @@ public class OracleMonitorController {
 	 */
 	@Post("add")
 	public Reply add(Info oracleInfo,Invocation inv) {
-		oracleInfo.setSysTime(new Date());
-		//oracleInfoService.saveMonitor(oracleInfo);
+		try {
+			oracleInfo.setSysTime(new Date());
+			oracleInfoService.saveMonitor(oracleInfo);
+			message.put("result", true);
+		} catch (Exception e) {
+			message.put("result", false);
+			message.put("type", "disconnect");
+			message.put("tip", "该数据库地址无法连接，请确认信息是否正确!");
+		}
 		return Replys.with(message).as(Json.class);
 	}
 	
@@ -225,17 +232,23 @@ public class OracleMonitorController {
 	 */
 	@Post("edit")
 	public Reply edit(Info oracleInfo,Invocation inv) {
-		Info info = oracleInfoService.getInfo(oracleInfo.getId());
-		info.setName(oracleInfo.getName());
-		info.setIpAddress(oracleInfo.getIpAddress());
-		info.setSubnetMask(oracleInfo.getSubnetMask());
-		info.setPort(oracleInfo.getPort());
-		info.setPullInterval(oracleInfo.getPullInterval());
-		info.setUsername(oracleInfo.getUsername());
-		info.setPassword(oracleInfo.getPassword());
-		info.setInstanceName(oracleInfo.getInstanceName());
-		oracleInfoService.editMonitor(info);
-		message.put("result", true);
+		try{
+			Info info = oracleInfoService.getInfo(oracleInfo.getId());
+			info.setName(oracleInfo.getName());
+			info.setIpAddress(oracleInfo.getIpAddress());
+			info.setSubnetMask(oracleInfo.getSubnetMask());
+			info.setPort(oracleInfo.getPort());
+			info.setPullInterval(oracleInfo.getPullInterval());
+			info.setUsername(oracleInfo.getUsername());
+			info.setPassword(oracleInfo.getPassword());
+			info.setInstanceName(oracleInfo.getInstanceName());
+			oracleInfoService.editMonitor(info);
+			message.put("result", true);
+		} catch (Exception e) {
+			message.put("result", false);
+			message.put("type", "disconnect");
+			message.put("tip", "该数据库地址无法连接，请确认信息是否正确!");
+		}
 		return Replys.with(message).as(Json.class);
 	}
 	
