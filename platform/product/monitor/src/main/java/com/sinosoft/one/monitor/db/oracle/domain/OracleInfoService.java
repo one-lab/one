@@ -13,7 +13,7 @@ public interface OracleInfoService {
     /**
      * 添加Oracle监视器
      */
-    void saveMonitor(Info info);
+    void saveMonitor(Info info) throws Exception;
 
     /**
      * 修改Oracle监视器

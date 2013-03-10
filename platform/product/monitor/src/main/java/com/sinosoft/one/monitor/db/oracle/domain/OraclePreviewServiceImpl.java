@@ -1,7 +1,9 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.db.oracle.model.*;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
+import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
@@ -9,6 +11,8 @@ import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +31,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
     private LasteventRepository lasteventRepository;
     @Autowired
     private DBUtil4Monitor dbUtil4Monitor;
+    @Autowired
+    private InfoRepository infoRepository;;
 
     @Override
     public EventInfoModel[] viewConnectInfo(String monitorId) {
@@ -83,6 +89,7 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
 
     @Override
     public OracleDetailModel viewDbDetail(String monitorId) {
+    	Info info = infoRepository.findOne(monitorId);
         OracleDetailModel oracleDetailModel = new OracleDetailModel();
         dbUtil4Monitor.changeConnection(monitorId);
         String sql = OracleMonitorSql.dbInfo;
@@ -92,9 +99,18 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
         String created = rsObj.get("CREATED");
         String openMode = rsObj.get("OPEN_MODE");
         String logMode = rsObj.get("LOG_MODE");
+        long connectTime =  dbUtil4Monitor.connectTime(info);
+        
+        String sql1 = OracleMonitorSql.activeCount;
+        List<Map<String, Object>> rsList1 = DBUtil.queryObjMaps(SqlObj
+                .newInstance(sql1));
+        int active =   ((BigDecimal)rsList1.get(0).get("active") ).intValue();
+        
         oracleDetailModel.setDbCreateTime(created);
         oracleDetailModel.setLogType(logMode);
         oracleDetailModel.setOpenType(openMode);
+        oracleDetailModel.setConnectTime(connectTime+"");
+        oracleDetailModel.setActiveCount(active+"");
         return oracleDetailModel;
     }
 }
