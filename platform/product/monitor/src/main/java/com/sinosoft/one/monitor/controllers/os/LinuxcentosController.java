@@ -142,7 +142,7 @@ public class LinuxcentosController {
 		Page page = new PageImpl(osRamViewModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id");
-		gridable.setCellStringField("name,utilzation,link,used,threshold");
+		gridable.setCellStringField("name,utilzation,used,link");
 		try {
 			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
 		} catch (Exception e) {
@@ -164,7 +164,7 @@ public class LinuxcentosController {
 		Page page = new PageImpl(osGridModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id");
-		gridable.setCellStringField("name,utilzation,link,threshold");
+		gridable.setCellStringField("name,utilzation,link");
 		try {
 			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
 		} catch (Exception e) {
@@ -195,7 +195,7 @@ public class LinuxcentosController {
 		Page page = new PageImpl(osGridModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id");
-		gridable.setCellStringField("name,value,stuts,link");
+		gridable.setCellStringField("name,value");
 		try {
 			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
 		} catch (Exception e) {

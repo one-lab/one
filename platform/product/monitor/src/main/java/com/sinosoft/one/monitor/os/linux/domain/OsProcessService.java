@@ -69,7 +69,7 @@ public class OsProcessService {
 	 */
 	public void savaAvailableSampleData(String osInfoId,Date sampleTime,int interCycleTime ,String Status){
 		//保存本次采样
-		osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status,interCycleTime);
+		OsAvailabletemp osAvailabletemp =osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status,interCycleTime);
 		//统计采样结果 今天
 		Calendar c  = Calendar.getInstance();
 		c.setTime( sampleTime);
@@ -79,7 +79,7 @@ public class OsProcessService {
 		//取当天的前24小时整时点
 		Date todayzeroTime= c.getTime();
 		//修改今天的统计表记录
-		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime);//保存新统计记录
+		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime,osAvailabletemp);//保存新统计记录
 		//删除24小时前的数据
 		Calendar c2  = Calendar.getInstance();
 		c2.setTime( sampleTime);
@@ -103,52 +103,31 @@ public class OsProcessService {
 	
 	
 
-	/**
-	 *  可用性的 定点任务调用方法
-	 *  每天保存上一天（上24/昨天）可用性采样数据到 可用性统计 表
-	 *  每天删除统计表中上一天可（上48/前天）用性采样数据
-	 *  时间段 00:00:00--(删除)--00:00:00--(保存)---00:00:00(当前点)
-	 * @param osInfoId
-	 * @param currentTime
-	 */
-	public  void saveStatiEveryDayAvailableStati(String osInfoId ,Date currentTime,int interCycleTime){
-		//当前天数
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-//		c.set(Calendar.DAY_OF_MONTH,  currentTime.getDay());
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		//取当天的前24小时整时点
-		Date d1 = c.getTime();
-		c.add(Calendar.HOUR_OF_DAY, -24);
-		//取当天的前48小时整时点
-		Date d2 = c.getTime();
-		//统计并保存 //保存为时间为昨天的日期
-		osDataMathService.statiAvailable(osInfoId, d1, d2, interCycleTime, d2);
-		//删除前天
-		OsAvailableServcie.deleteLTFHourAvailale(osInfoId, currentTime);
-	}
-	
-//	public static void main(String[] args) {
-//		Date date= new Date();
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
+//	/**
+//	 *  可用性的 定点任务调用方法
+//	 *  每天保存上一天（上24/昨天）可用性采样数据到 可用性统计 表
+//	 *  每天删除统计表中上一天可（上48/前天）用性采样数据
+//	 *  时间段 00:00:00--(删除)--00:00:00--(保存)---00:00:00(当前点)
+//	 * @param osInfoId
+//	 * @param currentTime
+//	 */
+//	public  void saveStatiEveryDayAvailableStati(String osInfoId ,Date currentTime,int interCycleTime){
+//		//当前天数
 //		Calendar c  = Calendar.getInstance();
-//		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(date)));
+//		c.setTime(currentTime);
+////		c.set(Calendar.DAY_OF_MONTH,  currentTime.getDay());
 //		c.set(Calendar.HOUR_OF_DAY,0);
 //		c.set(Calendar.MINUTE, 0);
 //		c.set(Calendar.SECOND, 0);
 //		//取当天的前24小时整时点
-//		Date todayzeroTime= c.getTime();
-//		System.out.println(todayzeroTime);
-//		
-//		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(date))-1);
-//		Date todayzeroTime1= c.getTime();
-//		System.out.println(todayzeroTime1);
-//		if(todayzeroTime.get>todayzeroTime1){
-//			
-//		}
-//}
-	
+//		Date d1 = c.getTime();
+//		c.add(Calendar.HOUR_OF_DAY, -24);
+//		//取当天的前48小时整时点
+//		Date d2 = c.getTime();
+//		//统计并保存 //保存为时间为昨天的日期
+//		osDataMathService.statiAvailable(osInfoId, d1, d2, interCycleTime, d2);
+//		//删除前天
+//		OsAvailableServcie.deleteLTFHourAvailale(osInfoId, currentTime);
+//	}
 	
 }
