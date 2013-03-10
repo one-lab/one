@@ -62,7 +62,7 @@ public class MethodManagerController {
         List<Method> methods=methodService.findAllMethodsOfUrl(url);
         Page page=new PageImpl(methods);
         Gridable<Method> gridable=new Gridable<Method>(page);
-        String cellString=new String("className,methodName,description,status,threshold,operation");
+        String cellString=new String("className,methodName,description,operation");
         gridable.setIdField("id");
         gridable.setCellStringField(cellString);
         try {

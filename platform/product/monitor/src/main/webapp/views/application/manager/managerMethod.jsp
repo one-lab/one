@@ -26,8 +26,8 @@ $(function(){
 			{id:'1',text:'全类名',name:"className",index:'1',align:''},
 			{id:'2',text:'方法名',name:"methodName",index:'1',align:''},
 			{id:'3',text:'名称',name:"description",index:'1',align:''},
-			{id:'4',text:'可用性',name:"status",index:'1',align:''},
-			{id:'5',text:'健康状态',name:"threshold",index:'1',align:''},
+			/*{id:'4',text:'可用性',name:"status",index:'1',align:''},
+			{id:'5',text:'健康状态',name:"threshold",index:'1',align:''},*/
 			{id:'5',text:'操作',name:"operation",index:'1',align:''}
 		],  
 		rowNum:9999,
