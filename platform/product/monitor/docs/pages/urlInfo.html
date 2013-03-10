@@ -28,6 +28,13 @@ $(function(){
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	//$(".up,.down").live("click",upClick);
 	//$(".cando,.cannot").live("click",canClick);
+	var barLength = [[10,90],[20,80],[30,70],[40,60],[50,50],[70,30]]
+	$(".bar .show_bar").each(function(i){
+			$(this).find("div").each(function(j){
+					$(this).css("width",barLength[i][j]+"%");
+				});
+		});
+	
 	
 	$("#list_table").Grid({
 		url : "urlInfo.json",
@@ -285,14 +292,32 @@ function createThirtyDayResponseTime() {
                   <td class="overview_table_head" style="font-size:15px; font-weight:bold;">过去6小时的可用性</td>
                 </tr>	
                 <tr>
-                	<td>
-                    <ul class="show_bar">
-                      <li class="ky"></li>
-                      <li class="wran"></li>
-                      <li class="bky"></li>
-                      <li class="wran"></li>
-                      <li class="bky"></li>
-                      <li class="ky"></li>
+                	<td >
+                    <ul class="bar">
+                      <li class="show_bar">
+                      		<div class="ky"></div>
+                          <div class="bky"></div>
+                      </li>
+                      <li class="show_bar">
+                      		<div class="ky"></div>
+                          <div class="bky"></div>
+                      </li>
+                      <li class="show_bar">
+                      		<div class="ky"></div>
+                          <div class="wran"></div>
+                      </li>
+                      <li class="show_bar">
+                      		<div class="ky"></div>
+                          <div class="bky"></div>
+                      </li>
+                      <li class="show_bar">
+                      		<div class="ky"></div>
+                          <div class="bky"></div>
+                      </li>
+                      <li class="show_bar">
+                      		<div class="ky"></div>
+                          <div class="bky"></div>
+                      </li>
                     </ul>
                    
                   </td>

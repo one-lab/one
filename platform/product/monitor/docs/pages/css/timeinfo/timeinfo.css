@@ -46,10 +46,11 @@
 .time_info_performance_table tr{margin-top:20px;height:30px;}
 .time_info_performance_table td{width:10%;padding-left:20px; vertical-align:middle; }
 .time_info_overview_table_head{ font-size:14px; font-weight:bold;}
-.ky,.bky,.wran,.tj,.wsj{width:98px;height:15px;}
+.ky,.bky,.wran,.tj,.wsj{height:15px;float:left;}
 .iky,.ibky,.iwran,.itj,.iwsj{width:11px;height:11px;border:1px solid #eee;}
 
-.show_bar{ margin-left:3px;height:15px;width:588px;border:1px solid #666;}
+.bar{ margin-left:3px;height:15px;width:588px;border:1px solid #666;}
+.bar .show_bar{width:98px;height:15px;float:left; }
 .show_time li{float:left;margin-right:65px;}
 .show_bar li {float:left;}
 .bar_table{width:630px;border:1px solid #eee;}
