@@ -10,12 +10,12 @@
                     <ul class="add_sub_menu" id="subNav">
                         <li class="action"><span class="sever">操作系统</span>
                             <ul class="list">
-                                <li><a href="systemMonitor.html"> Linux(2)</a></li>
+                                <li><a href="${ctx}/os/toSystemMonitor"> Linux</a></li>
                             </ul>
                         </li>
                         <li class="action"><span class="system">应用系统</span>
                             <ul class="list">
-                                <li><a href="performance.html">在线查询</a></li>
+                                <li><a href="${ctx}/application/manager/appmanager/applist/1">在线查询</a></li>
                             </ul>
                         </li>
                         <li class="action" style="border:none"><span>数据库</span>
