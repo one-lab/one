@@ -64,7 +64,7 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 	 * @param monitorId 监视器ID
 	 * @return 分页告警信息
 	 */
-	@SQL("select * from ge_monitor_alarm where monitor_id = ?2 and create_time between ?3 and ?4 order by create_time desc")
+	@SQL("select * from ge_monitor_alarm where monitor_id = ?2 order by create_time desc")
 	Page<Alarm> selectAlarmsByMonitorId(Pageable pageable, String monitorId);
 
 	/**

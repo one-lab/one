@@ -3,21 +3,21 @@ package com.sinosoft.one.monitor.os.linux.domain;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.jhlabs.composite.HueComposite;
-import com.sinosoft.one.monitor.os.linux.model.Os;
-import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 
+/**
+ * 统计报表的图形处理
+ * @author Administrator
+ * chenxiongxi
+ */
 @Component
 public class OsStatiViewHandle {
 	/**
@@ -39,7 +39,6 @@ public class OsStatiViewHandle {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 		Map<String, Object> m=new HashMap<String, Object>();
-		Date date=new Date();//上次循环的时间变量
 		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
 		for (int i = 0; i < osStatis.size(); i++) {
 			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(timeSize*60*60*1000)){
@@ -53,18 +52,17 @@ public class OsStatiViewHandle {
 				}
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("x", simpleDateFormat.format(dayPoint));
-				map.put("y",Double.valueOf(osStatis.get(i).getMaxValue()));
+				map.put("y",BigDecimal.valueOf(Double.valueOf(osStatis.get(i).getMaxValue())).divide(BigDecimal.valueOf(1.0),2,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 				maps.add(map);//本次点
 				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
 			}
 			else{
 				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",Double.valueOf(osStatis.get(i).getMaxValue()));
+				map.put("y",BigDecimal.valueOf(Double.valueOf(osStatis.get(i).getMaxValue())).divide(BigDecimal.valueOf(1.0),2,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 				map.put("x", simpleDateFormat.format(dayPoint));
 				maps.add(map);//本次点
 				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(timeSize*60*60*1000+""));
 			}
-			date=osStatis.get(i).getDate();
 		}
 		int mapsSize=maps.size();
 		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
@@ -80,7 +78,7 @@ public class OsStatiViewHandle {
 	}
 	
 	/**
-	 *  最平均值的曲线
+	 *  平均值的曲线
 	 * @param os
 	 * @param currentTime
 	 * @param type
@@ -98,7 +96,6 @@ public class OsStatiViewHandle {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 		Map<String, Object> m=new HashMap<String, Object>();
-		Date date=new Date();//上次循环的时间变量
 		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
 		for (int i = 0; i < osStatis.size(); i++) {
 			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(timeSize*60*60*1000)){
@@ -118,18 +115,17 @@ public class OsStatiViewHandle {
 				}
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("x", simpleDateFormat.format(dayPoint));
-				map.put("y",Double.valueOf(osStatis.get(i).getAvgValue()));
+				map.put("y",BigDecimal.valueOf(Double.valueOf(osStatis.get(i).getAvgValue())).divide(BigDecimal.valueOf(1.0),2,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 				maps.add(map);//本次点
 				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
 			}
 			else{
 				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",Double.valueOf(osStatis.get(i).getAvgValue()));
+				map.put("y",BigDecimal.valueOf(Double.valueOf(osStatis.get(i).getAvgValue())).divide(BigDecimal.valueOf(1.0),2,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 				map.put("x", simpleDateFormat.format(dayPoint));
 				maps.add(map);//本次点
 				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
 			}
-			date=osStatis.get(i).getDate();
 		}
 		int mapsSize=maps.size();
 		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
@@ -163,7 +159,6 @@ public class OsStatiViewHandle {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 		Map<String, Object> m=new HashMap<String, Object>();
-		Date date=new Date();//上次循环的时间变量
 		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
 		for (int i = 0; i < osStatis.size(); i++) {
 			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(timeSize*60*60*1000)){
@@ -182,20 +177,18 @@ public class OsStatiViewHandle {
 					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
 				}
 				Map<String, Object> map=new HashMap<String, Object>();
-				
 				map.put("x", simpleDateFormat.format(dayPoint));
-				map.put("y",Double.valueOf(osStatis.get(i).getMinValue()));
+				map.put("y",BigDecimal.valueOf(Double.valueOf(osStatis.get(i).getMinValue())).divide(BigDecimal.valueOf(1.0),2,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 				maps.add(map);//本次点
 				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
 			}
 			else{
 				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",Double.valueOf(osStatis.get(i).getMinValue()));
+				map.put("y",BigDecimal.valueOf(Double.valueOf(osStatis.get(i).getMinValue())).divide(BigDecimal.valueOf(1.0),2,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 				map.put("x", simpleDateFormat.format(dayPoint));
 				maps.add(map);//本次点
 				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
 			}
-			date=osStatis.get(i).getDate();
 		}
 		int mapsSize=maps.size();
 		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
