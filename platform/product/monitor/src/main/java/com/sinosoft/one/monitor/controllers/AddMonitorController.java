@@ -41,6 +41,18 @@ public class AddMonitorController {
         return "addSystem";
     }
 
+    @Get("addoracle")
+    @Post("errorcreate")
+    public String addOracle(Invocation inv){
+        return "addOracle";
+    }
+
+    @Get("addos")
+    @Post("errorcreate")
+    public String addOs(Invocation inv){
+        return "addLinux";
+    }
+
     /**
      * 新增一个应用.
      */

@@ -101,7 +101,7 @@
             <tr>
                 <td>
                     <div class="add_monitor">
-                        <h2 class="title2"><b>新建监视器类型　</b>
+                        <%--<h2 class="title2"><b>新建监视器类型　</b>
                             <select name="" class="diySelect" onchange="top.location=this.value;">
                                 <optgroup label="应用服务器">
                                     <option selected="selected" value="addSystem.html">应用系统　　</option>
@@ -113,7 +113,8 @@
                                     <option value="addLinux.html">Linux</option>
                                 </optgroup>
                             </select>
-                        </h2>
+                        </h2>--%>
+                        <%@include file="/WEB-INF/layouts/selectMonitorType.jsp"%>
                         <form:form id="addSystem" action="${ctx}/addmonitor/addapp" method="post"
                                    class="form-horizontal" onsubmit="return isValid(this);">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0"

@@ -6,12 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>新建监视器</title>
-<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+<%@include file="/WEB-INF/layouts/base.jsp"%>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -83,77 +78,13 @@ function save(){
 <body>
 <div id="layout_top">
 	<div class="header">
-    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-    	<div class="menu_box">
-        	<ul class="nav" id="nav">
-            	<li><a href="index.html">首页</a></li>
-                <li class="has_sub">
-                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                	<ul class="add_sub_menu" id="subNav">
-                    	<li class="action"><span class="sever">操作系统</span>
-                        	<ul class="list">
-                            	<li><a href="systemMonitor.html"> Linux(2)</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                        	<ul class="list">
-                                <li><a href="performance.html">在线查询</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                        	<ul class="list">
-                            	<li><a href="oracleMonitor.html">oracle</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
-                    
-                </li>
-                <li><a href="performance.html">应用性能</a></li>
-                <li><a href="BusinessSimulation.html">业务仿真</a></li>
-                <li><a href="alertList.html">告警</a></li>
-                <li><a href="userManager.html">用户管理</a></li>  
-            </ul>
-        </div>
-        <ul class="add_menu" id="menu">
-        	<li><a href="addMonitorList.html">新建监视器</a></li>
-            <li class="has_sub">
-            	<a href="javascript:viod(0)"><span>阈值配置文件</span></a>
-            	<ul class="add_sub_menu">
-                    <li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a></li>
-                    <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
-                </ul>
-            </li>            
-            <li><a href="deployMonitor.html">配置监视器</a></li>
-            <li class="has_sub">
-            	<a href="javascript:viod(0)"><span>动作</span></a>
-            	<ul class="add_sub_menu">
-                	<li class="title"><a href="showMotion.html">显示动作</a></li>
-                    <li class="action">创建新动作</li>
-                    <li><a class="sms" href="message.html">短信动作</a></li>
-                    <li><a class="email" href="mail.html">邮件动作</a></li>
-                </ul>
-            </li>
-            <li><a href="setEmergency.html">配置告警</a></li>
-        </ul>
+        <%@include file="/WEB-INF/layouts/menu.jsp"%>
     </div>
 </div>
 <div id="layout_center">
 	<div class="main">
     	<div class="add_monitor">
-       	  <h2 class="title2"><b>新建监视器类型　</b>
-          	<select name="" class="diySelect" onchange="top.location=this.value;">
-            	<optgroup label="应用服务器">
-            		<option value="addSystem.html">应用系统</option>
-                </optgroup>
-                <optgroup label="数据库">
-            		<option selected="selected" value="addOracle.html">Oracle</option>
-                </optgroup>
-                <optgroup label="操作系统">
-            		<option value="addLinux.html">Linux</option>
-                </optgroup>
-            </select>
-          </h2>
+            <%@include file="/WEB-INF/layouts/selectMonitorType.jsp"%>
           <form>
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>
