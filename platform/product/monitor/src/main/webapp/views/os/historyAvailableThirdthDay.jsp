@@ -28,72 +28,86 @@ $(function(){
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
-	
-	$("#sevenday_grid").Grid({
-		url : "SevenDayAvailable.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'选项',name:"methodName",width:'',index:'1',align:'',color:''},
-			{id:'2',text:'正常运行时间 %',name:"maxTime",width:'300',index:'1',align:'',color:''},
-			{id:'3',text:'总停机时间',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'平均修复时间',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'平均故障间隔时间',name:"status",width:'',index:'1',align:'',color:''}
-		],
-		rowNum:10,
-		rowList:[10,20,30],
-		pager : false,
-		number:false,
-		multiselect:false,
-	});
 });
 $(function(){
+	var id=$("#osid").val()
 	var chart;
+	var normalTime;
+	var errorTime;
 	$(document).ready(function(){
-			
-        chart4 = new Highcharts.Chart({
-            chart: {
-                renderTo: 'available',
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-								height:260
-            },
-            title: {
-                text: ''
-            },
-						credits: { 
-							text: '',
-							href: ''
-						},
-            tooltip: {
-                formatter: function() {
-                    return '<b>'+ this.point.name +'</b>: '+ this.percentage +'%';
-                }
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-												formatter: function() {
-                            return this.percentage +' %';
-                        }
-                    },
-                    showInLegend: true
-                }
-            },
-            series: [{
-                type: 'pie',
-                name: 'Browser share',
-                data: [
-                    
-                    ['正常运行时间',113]
-                ]
-            }],
-						colors: ['#5cff5c'] 
-        });
+		$.ajax({
+			type : "post",
+			url : "/monitor/os/historyAvailablePie/30/"+id,
+			dataType : "json",
+			cache : false,
+			success : function(data){
+			var normalTime = data.usable;
+			var errorTime = data.unusable;
+			alert(errorTime);
+			alert(normalTime);
+			   new Highcharts.Chart({
+		            chart: {
+		                renderTo: 'available',
+		                plotBackgroundColor: null,
+		                plotBorderWidth: null,
+		                plotShadow: false,
+										height:260
+		            },
+		            title: {
+		                text: ''
+		            },
+								credits: { 
+									text: '',
+									href: ''
+								},
+		            tooltip: {
+		                formatter: function() {
+		                    return '<b>'+ this.point.name +'</b>: '+ this.percentage +'%';
+		                }
+		            },
+		            plotOptions: {
+		                pie: {
+		                    allowPointSelect: true,
+		                    cursor: 'pointer',
+		                    dataLabels: {
+		                        enabled: true,
+														formatter: function() {
+		                            return this.percentage +' %';
+		                        }
+		                    },
+		                    showInLegend: true
+		                }
+		            },
+		            series: [{
+		                type: 'pie',
+		                name: 'Browser share',
+		                data: [
+		                    
+		                    ['正常运行时间',normalTime],['故障时间',errorTime]
+		                ]
+		            }],
+								colors: ['#5cff5c'] 
+		        });
+			}
+			});
+		$("#sevenday_grid").Grid({
+			type : "post",
+			url : "/monitor/os/historyAvailableGrid/30/"+id,
+			dataType: "json",
+			height: 'auto',
+			colums:[
+				{id:'1',text:'时间',name:"time",width:'',index:'1',align:'',color:''},
+				{id:'2',text:'正常运行时间 %',name:"normalRun",width:'300',index:'1',align:'',color:''},
+				{id:'3',text:'总停机时间',name:"crashTime",width:'',index:'1',align:'',color:''},
+				{id:'4',text:'平均修复时间',name:"aveRepairTime",width:'',index:'1',align:'',color:''},
+				{id:'5',text:'平均故障时间',name:"aveFaultTime",width:'',index:'1',align:'',color:''}
+			],
+			rowNum:30,
+			rowList:[10,20,30],
+			pager : false,
+			number:false,
+			multiselect:false,
+		});
 		})	
 })
 function navHover(){
@@ -142,17 +156,17 @@ function createSevenDayAvailable() {
 <div id="layout_center">
   <div class="main" style="padding-bottom:60px;">
      <div class="threshold_file">
-          <div class="sub_title">针对linux的30天的可用性报表 </div>
-          
+          <div class="sub_title">最近30天的可用性 </div>
+          <input id="osid" value="${os.osInfoId }" />
           <table class="base_info" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td>监视器名称</td><td>linux</td></tr>
-            <tr><td>属性 </td><td>用户数 </td></tr>
-            <tr><td>从  </td><td> 	2013-2-26 上午11:00 </td></tr>
-            <tr><td>到 </td><td> 	2013-3-28 下午6:22</td></tr>
+            <tr><td>监视器名称</td><td>${os.name}</td></tr>
+            <tr><td>属性 </td><td>可用性 </td></tr>
+            <tr><td>从  </td><td>  ${beginDate} </td></tr>
+            <tr><td>到 </td><td> ${currentDate}</td></tr>
            
             <tr><td colspan="2"> 
             	<div class="days_data">
-                  <a href="sevenDayAvailableLinux.jsp"><div class="seven_days"></div></a>
+                  <a href="${ctx}/os/historyAvaylable/7/${os.osInfoId }"><div class="seven_days"></div></a>
                   <a><div class="seven_days_unable"></div></a>
                 </div></td></tr>
              <tr><td colspan="2"><div id="available" ></div></td></tr>

@@ -1,5 +1,7 @@
 package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 
+import java.util.Date;
+
 public class OsGridModel {
 
 	
@@ -25,17 +27,48 @@ public class OsGridModel {
 	
 	private String averageValue;
 	
-	private Long normalRun;
+	private String normalRun;
 	
-	private Long crashTime;
+	private String crashTime;
 	
-	private Long aveRepairTime;
+	private String aveRepairTime;
 	
-	private Long aveFaultTime;
+	private String aveFaultTime;
 
-	
 	public String getName() {
 		return name;
+	}
+
+	public String getNormalRun() {
+		return normalRun;
+	}
+
+	public void setNormalRun(String normalRun) {
+		this.normalRun = normalRun;
+	}
+
+	public String getCrashTime() {
+		return crashTime;
+	}
+
+	public void setCrashTime(String crashTime) {
+		this.crashTime = crashTime;
+	}
+
+	public String getAveRepairTime() {
+		return aveRepairTime;
+	}
+
+	public void setAveRepairTime(String aveRepairTime) {
+		this.aveRepairTime = aveRepairTime;
+	}
+
+	public String getAveFaultTime() {
+		return aveFaultTime;
+	}
+
+	public void setAveFaultTime(String aveFaultTime) {
+		this.aveFaultTime = aveFaultTime;
 	}
 
 	public void setName(String name) {
@@ -123,37 +156,5 @@ public class OsGridModel {
 		this.time = time;
 	}
 
-	public Long getNormalRun() {
-		return normalRun;
-	}
-
-	public void setNormalRun(Long normalRun) {
-		this.normalRun = normalRun;
-	}
-
-	public Long getCrashTime() {
-		return crashTime;
-	}
-
-	public void setCrashTime(Long crashTime) {
-		this.crashTime = crashTime;
-	}
-
-	public Long getAveRepairTime() {
-		return aveRepairTime;
-	}
-
-	public void setAveRepairTime(Long aveRepairTime) {
-		this.aveRepairTime = aveRepairTime;
-	}
-
-	public Long getAveFaultTime() {
-		return aveFaultTime;
-	}
-
-	public void setAveFaultTime(Long aveFaultTime) {
-		this.aveFaultTime = aveFaultTime;
-	}
-	
 	
 }
