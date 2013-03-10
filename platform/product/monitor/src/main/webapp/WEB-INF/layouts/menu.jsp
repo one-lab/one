@@ -28,7 +28,6 @@
 
                 </li>
                 <li><a href="performance.html">应用性能</a></li>
-                <li><a href="BusinessSimulation.html">业务仿真</a></li>
                 <li><a href="${ctx}/alarm/manager/alarmmanager/list">告警</a></li>
                 <li><a href="userManager.html">用户管理</a></li>
             </ul>

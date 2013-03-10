@@ -68,13 +68,13 @@ function hideNav(e){
                 <td width="33%" class="center">
                	  <h3 class="title3">数据库</h3>
                 	<ul>
-                    	<li><a href="addOracle.html">Oracle</a></li>
+                    	<li><a href="${ctx}/addmonitor/addoracle">Oracle</a></li>
                     </ul>
                 </td>
                 <td width="33%">
                	  <h3 class="title3">操作系统</h3>
                 	<ul>
-                    	<li><a href="addLinux.html">Linux</a></li>
+                    	<li><a href="${ctx}/addmonitor/addos">Linux</a></li>
                     </ul>
                 </td>
               </tr>
