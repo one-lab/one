@@ -67,7 +67,8 @@ public class UrlManagerController {
         List<Url> urls=urlService.findAllUrlsOfBizScenario(bizScenario);
         Page page=new PageImpl(urls);
         Gridable<BizScenario> gridable=new Gridable<BizScenario>(page);
-        String cellString=new String("url,description,status,threshold,operation");
+        /*String cellString=new String("url,description,status,threshold,operation");*/
+        String cellString=new String("url,description,operation");
         gridable.setIdField("id");
         gridable.setCellStringField(cellString);
         try {

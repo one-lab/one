@@ -34,7 +34,7 @@
             </ul>
         </div>
         <ul class="add_menu" id="menu">
-            <li><a href="addMonitorList.html">新建监视器</a></li>
+            <li><a href="${ctx}/addmonitor/list">新建监视器</a></li>
             <li class="has_sub">
                 <a href="javascript:viod(0)"><span>阈值配置文件</span></a>
                 <ul class="add_sub_menu">
