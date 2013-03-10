@@ -8,6 +8,7 @@ import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailPie
 import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
 import com.sinosoft.one.monitor.common.HealthStaForMonitor;
 import com.sinosoft.one.monitor.common.HealthStaCache;
+import com.sinosoft.one.monitor.common.HealthStaService;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ApplicationDetailService {
 	@Autowired
 	private HealthStaCache healthStaCache;
 	@Autowired
-	private ApplicationEmuService applicationEmuService;
+	private HealthStaService healthStaService;
 
 
 	/**
@@ -52,22 +53,25 @@ public class ApplicationDetailService {
 		// 获得可用性
 
 		// 获得健康度
-		Pageable pageable = new PageRequest(0, 1, Sort.Direction.DESC, "create_time");
-		Page<Alarm> alarmPage = alarmRepository.selectAlarmsByMonitorId(pageable, applicationId, startDate, endDate);
-		Iterator<Alarm> alarmIterator = alarmPage.iterator();
-		Alarm alarm = null;
-		if(alarmIterator.hasNext()) {
-			alarm = alarmPage.iterator().next();
+		int criticalCount = alarmRepository.countCriticalByMonitorId(applicationId, startDate, endDate);
+		if(criticalCount > 0) {
+			applicationDetailAlarmViewModel.setSeverityLevel(SeverityLevel.CRITICAL);
+		} else {
+			int warningCount = alarmRepository.countWarningByMonitorId(applicationId, startDate, endDate);
+			if(warningCount > 0) {
+				applicationDetailAlarmViewModel.setSeverityLevel(SeverityLevel.WARNING);
+			} else {
+				applicationDetailAlarmViewModel.setSeverityLevel(SeverityLevel.INFO);
+			}
 		}
-		applicationDetailAlarmViewModel.setSeverityLevel(alarm == null ? SeverityLevel.INFO : alarm.getSeverity());
 
-		pageable = new PageRequest(0, 10, Sort.Direction.DESC, "create_time");
-		alarmPage = alarmRepository.selectCriticalAlarmsByMonitorId(pageable, applicationId, startDate, endDate);
-		alarmIterator = alarmPage.iterator();
+		Pageable pageable = new PageRequest(0, 10, Sort.Direction.DESC, "create_time");
+		Page<Alarm> alarmPage = alarmRepository.selectCriticalAlarmsByMonitorId(pageable, applicationId, startDate, endDate);
+		Iterator<Alarm> alarmIterator = alarmPage.iterator();
 		while (alarmIterator.hasNext()) {
 			applicationDetailAlarmViewModel.addAlarmInfo(alarmIterator.next().getMessage());
 		}
-		int criticalCount = alarmRepository.countCriticalByMonitorId(applicationId, startDate, endDate);
+
 		applicationDetailAlarmViewModel.setCriticalCount(criticalCount);
 		return applicationDetailAlarmViewModel;
 	}
@@ -101,6 +105,7 @@ public class ApplicationDetailService {
 		List<UrlResponseTime> urlResponseTimes = urlResponseTimeRepository.selectUrlResponseTimesForMonitorUrl(applicationId, startDate, endDate);
 		for(UrlResponseTime urlResponseTime : urlResponseTimes) {
 			urlResponseTime.setHealthBar(healthStaCache.getHealthBar(applicationId, urlResponseTime.getUrlId()));
+			urlResponseTime.setUrlHref("<a href='javascript:void(0);' onclick=\"urlDetail('" + applicationId + "', '" + urlResponseTime.getUrlId() + "'\">" + urlResponseTime.getUrl() + "</a>");
 		}
 		return urlResponseTimes;
 	}

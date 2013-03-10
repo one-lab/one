@@ -39,4 +39,8 @@ public class TimeQuantumAvailableInfo {
     public void setTimeQuantum(String timeQuantum) {
         this.timeQuantum = timeQuantum;
     }
+
+	public int getFailCount() {
+		return count - avaCount;
+	}
 }

@@ -83,7 +83,7 @@ public class HealthStaService {
 		Date endDate = localDateTime.toDate();
 		Date startDate = localDateTime.minusMinutes(5).toDate();
 		List<Alarm> alarms = alarmRepository.findAlarmByMonitorId(moinitorId, startDate, endDate);
-		if(alarms == null || alarms.size() > 0) {
+		if(alarms == null || alarms.size() == 0) {
 			return SeverityLevel.UNKNOW;
 		}
 		Alarm alarm = alarms.get(0);
@@ -99,9 +99,9 @@ public class HealthStaService {
 	public SeverityLevel healthStaForCurrent(String moinitorId, ResourceType subResourceType, String subResourceId, int minutes) {
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Date endDate = localDateTime.toDate();
-		Date startDate = localDateTime.minusMinutes(5).toDate();
+		Date startDate = localDateTime.minusMinutes(minutes).toDate();
 		List<Alarm> alarms = alarmRepository.findAlarmByMonitorId(moinitorId, subResourceType.name(), subResourceId, startDate, endDate);
-		if(alarms == null || alarms.size() > 0) {
+		if(alarms == null || alarms.size() == 0) {
 			return SeverityLevel.UNKNOW;
 		}
 		Alarm alarm = alarms.get(0);

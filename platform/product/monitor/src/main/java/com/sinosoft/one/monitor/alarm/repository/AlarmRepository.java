@@ -80,6 +80,43 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 	int countCriticalByMonitorId(String monitorId, Date startDate, Date endDate);
 
 	/**
+	 * 根据监视器ID、开始结束时间分页查询警告告警信息数量
+	 * @param monitorId 监视器ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return 分页严重告警信息
+	 */
+	@SQL("select count(1) from ge_monitor_alarm where monitor_id = ?1 and severity='WARNING' and create_time between ?2 and ?3")
+	int countWarningByMonitorId(String monitorId, Date startDate, Date endDate);
+
+	/**
+	 * 根据监视器ID、开始结束时间分页查询严重告警信息数量
+	 * @param monitorId 监视器ID
+	 * @param subResourceType 子资源类型
+	 * @param subResourceId 子资源ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return 分页严重告警信息
+	 */
+	@SQL("select count(1) from ge_monitor_alarm where monitor_id = ?1 " +
+			"and sub_resource_type=?2 and sub_resource_id=?3 and severity='CRITICAL' and create_time between ?4 and ?5")
+	int countCriticalBySubReousrce(String monitorId, String subResourceType, String subResourceId, Date startDate, Date endDate);
+
+	/**
+	 * 根据监视器ID、开始结束时间分页查询警告告警信息数量
+	 * @param monitorId 监视器ID
+	 * @param subResourceType 子资源类型
+	 * @param subResourceId 子资源ID
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return 分页严重告警信息
+	 */
+	@SQL("select count(1) from ge_monitor_alarm where monitor_id = ?1 " +
+			"and sub_resource_type=?2 and sub_resource_id=?3 and severity='WARNING' and create_time between ?4 and ?5")
+	int countWarningBySubReousrce(String monitorId, String subResourceType, String subResourceId, Date startDate, Date endDate);
+
+
+	/**
 	 * 根据时间查询健康度小时统计数量
 	 * @param monitorId 监视器ID
 	 * @param startDate 开始时间
