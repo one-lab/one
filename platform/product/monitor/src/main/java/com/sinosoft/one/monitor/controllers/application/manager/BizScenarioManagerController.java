@@ -7,6 +7,7 @@ import com.sinosoft.one.monitor.application.model.BizScenarioGrade;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -123,9 +124,9 @@ public class BizScenarioManagerController {
         bizScenario.setBizScenarioGrade(BizScenarioGrade.parseDisplayName(bizScenario.getBizScenarioGrade()).getValue());
         bizScenario.setStatus(String.valueOf(1));
         //获得当前用户
-       /* bizScenario.setCreatorId(CurrentUserUtil.getCurrentUser().getId());*/
+        bizScenario.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
         //开发阶段，用户Id固定值
-        bizScenario.setCreatorId("4028921a3cfb99be013cfb9ccf650000");
+        /*bizScenario.setCreatorId("4028921a3cfb99be013cfb9ccf650000");*/
         bizScenario.setCreateTime(new Date());
         bizScenarioService.saveBizScenario(bizScenario);
         //资源表存入新建业务场景的信息
@@ -159,9 +160,9 @@ public class BizScenarioManagerController {
                                     @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
         inv.getRequest().setAttribute("appId",appId);
         //获得当前用户id
-        /*bizScenario.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
+        String modifierId=CurrentUserUtil.getCurrentUser().getId();
         //开发阶段固定用户id
-        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        /*String modifierId="4028921a3cfb99be013cfb9ccf650000";*/
         String bizScenarioGrade=BizScenarioGrade.parseDisplayName(bizScenario.getBizScenarioGrade()).getValue();
         bizScenarioService.updateBizScenarioWithModifyInfo(bizScenarioId,bizScenario.getName(),bizScenarioGrade,modifierId);
         //业务场景列表页面

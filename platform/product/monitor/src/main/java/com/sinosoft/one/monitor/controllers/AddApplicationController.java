@@ -5,6 +5,7 @@ import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
@@ -41,9 +42,9 @@ public class AddApplicationController {
     @Post("add")
     public String saveApplication(@Validation(errorPath = "a:errorcreate") Application application, Invocation inv) {
         //获得当前用户
+        application.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
         //测试时固定CreatorId
-        /*application.setCreatorId(CurrentUserUtil.getCurrentUser().getId());*/
-        application.setCreatorId("4028921a3cfb99be013cfb9ccf650000");
+        /*application.setCreatorId("4028921a3cfb99be013cfb9ccf650000");*/
         application.setCreateTime(new Date());
         application.setStatus(String.valueOf('1'));
         applicationService.saveApplication(application);

@@ -8,6 +8,7 @@ import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationIndexViewModel;
+import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -71,9 +72,9 @@ public class ApplicationManagerController {
     @Post("add")
     public String saveApplication(@Validation(errorPath = "a:errorcreate") Application application, Invocation inv) {
         //获得当前用户
+        application.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
         //测试时固定CreatorId
-        /*application.setCreatorId(CurrentUserUtil.getCurrentUser().getId());*/
-        application.setCreatorId("4028921a3cfb99be013cfb9ccf650000");
+        /*application.setCreatorId("4028921a3cfb99be013cfb9ccf650000");*/
         application.setCreateTime(new Date());
         application.setStatus(String.valueOf('1'));
         applicationService.saveApplication(application);
@@ -108,9 +109,7 @@ public class ApplicationManagerController {
     @Post("update/{appId}")
     public String updateApplication(@Validation(errorPath = "a:errorupdateapp") Application application, @Param("appId") String appId, Invocation inv) {
         //获得当前用户id
-        /*application.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
-        //开发阶段固定用户id
-        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        String modifierId=CurrentUserUtil.getCurrentUser().getId();
         //更新时间使用sysdate
         applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
                 application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());

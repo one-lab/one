@@ -9,6 +9,7 @@ import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -124,8 +125,9 @@ public class UrlManagerController {
         url.setBizScenario(bizScenario);
         url.setStatus(String.valueOf(1));
         //保存当前创建url的用户
+        url.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
         //开发阶段固定用户id
-        url.setCreatorId("4028921a3cfba342013cfba4623e0000");
+        /*url.setCreatorId("4028921a3cfba342013cfba4623e0000");*/
         url.setCreateTime(new Date());
         urlService.saveUrl(url);
         //向EUM_URL表中插入记录（url的application信息）
@@ -174,7 +176,7 @@ public class UrlManagerController {
             }
         }
         //如果勾选的已经存在的url，只需更新url所属的业务场景
-        //@todo 此处需要优化，否则或许会判断所有的url是否被勾选（应该只得到被勾选的就行）
+        // 此处需要优化，否则或许会判断所有的url是否被勾选（应该只得到被勾选的就行）
         if (urlIds != null) {
             for (String urlId : urlIds) {
                 if (!StringUtils.isBlank(urlId)) {
@@ -203,9 +205,7 @@ public class UrlManagerController {
     @Post("update/{bizScenarioId}/{urlId}")
     public String updateUrl(@Validation(errorPath = "a:errorupdateurl") Url url, @Param("bizScenarioId") String bizScenarioId,
                             @Param("urlId") String urlId, Invocation inv) {
-        /*url.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
-        //开发阶段固定用户id
-        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        String modifierId=CurrentUserUtil.getCurrentUser().getId();
         urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
         //Url列表页面
         return "managerUrl";
