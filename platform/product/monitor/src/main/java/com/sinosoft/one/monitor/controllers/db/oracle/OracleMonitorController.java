@@ -60,21 +60,31 @@ public class OracleMonitorController {
 	@Get("avaInfoList/{avaInfoStyle}")
     public String avaInfoList(@Param("avaInfoStyle")int avaInfoStyle, Invocation inv){
 		StaTimeEnum avaStyle = null;
+		String dateStyle = "";
 		switch (avaInfoStyle) {
 		case 1: //24小时内
+			dateStyle = "HH:mm";
 			avaStyle = StaTimeEnum.LAST_24HOUR;
 			break;
 		case 30: //30天统计信息
+			dateStyle = "yyyy-MM-dd HH:mm";
 			avaStyle = StaTimeEnum.LAST_30DAY;
 			break;
 		default: //默认返回24小时
+			dateStyle = "HH:mm";
 			avaStyle = StaTimeEnum.LAST_24HOUR;
 			break;
 		}
 		/* 查询可用性历史纪录信息*/
         List<OracleAvaInfoModel> oracleAvaInfoList = oracleBatchInfoService.avaInfoList(avaStyle);
         inv.addModel("oracleAvaInfoList",oracleAvaInfoList);
+        List<String> dateList = new ArrayList<String>();
+        for(String[] strs : oracleAvaInfoList.get(0).getGraphInfo()) {
+        	SimpleDateFormat sdf = new SimpleDateFormat(dateStyle);
+        	dateList.add(sdf.format(new Date(Long.valueOf(strs[1]))));
+        }
         inv.addModel("avaInfoStyle", avaInfoStyle);
+        inv.addModel("dateList", dateList);
         return "oracleAvaInfo";
     }
 	
