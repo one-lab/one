@@ -15,8 +15,8 @@ import java.util.Date;
 * 应用系统预警信息表
  */
 @Entity
-@Table(name="GE_MONITOR_ALARM"
-)
+@Table(name="GE_MONITOR_ALARM")
+//todo 需要将monitorId调整为resourceId
 public class Alarm  implements java.io.Serializable {
 
     /**

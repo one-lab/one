@@ -39,8 +39,6 @@ public class Resource implements java.io.Serializable {
     }
    
     @Id 
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid",strategy = "uuid")
     @Column(name="resource_id", unique=true, length=32)
     public String getResourceId() {
     return this.resourceId;
