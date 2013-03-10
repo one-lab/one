@@ -30,11 +30,20 @@ public class OracleInfoModel {
     /**
      * 监控类型
      */
-    public static final String  MONITOR_TYPE  = "Oracle服务器";
+    public String  monitorType  = "Oracle服务器";
+
+    public String getMonitorType() {
+        return monitorType;
+    }
+
+    public void setMonitorType(String monitorType) {
+        this.monitorType = monitorType;
+    }
+
     /**
      * Oracle版本
      */
-    private  String version;
+    private String version;
     /**
      * Oracle启动时间
      */

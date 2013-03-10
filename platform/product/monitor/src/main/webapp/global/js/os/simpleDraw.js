@@ -17,10 +17,13 @@ function creatSimpleChart(url, renderTo, text) {
 							if (i == 0) {
 								categories.push(data[name][j].x);
 							}
-							if (data[name][j].y==-1) {
+							if (data[name][j].y=="-1") {
 								y.data.push(null);
+							} 
+							if(data[name][j].y!="-1"){
+								y.data.push(data[name][j].y);
 							}
-							y.data.push(data[name][j].y);
+							
 							j += 1;
 						}
 						series.push(y);

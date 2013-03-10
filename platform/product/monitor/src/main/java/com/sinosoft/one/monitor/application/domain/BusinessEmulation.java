@@ -3,6 +3,9 @@ package com.sinosoft.one.monitor.application.domain;
 import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaStaRepository;
+import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AttributeName;
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
 import com.sinosoft.one.monitor.utils.ResponseUtil;
 import com.sinosoft.one.util.thread.ThreadUtils;
@@ -49,6 +52,9 @@ public class BusinessEmulation {
     @Autowired
     private ApplicationEmuService applicationEmuService;
 
+	@Autowired
+	private AlarmMessageBuilder alarmMessageBuilder;
+
 
 
     @PostConstruct
@@ -72,6 +78,13 @@ public class BusinessEmulation {
 
     @Transactional(readOnly = false)
     private void recordEnum(EumUrl url, boolean result, BigDecimal interval){
+	    if(!result) {
+		    alarmMessageBuilder.newMessageBase(url.getApplication().getId())
+				    .addAlarmAttribute(AttributeName.Availability, "0")
+		            .subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
+		            .subResourceId(url.getUrlId()).alarm();
+	    }
+
         //记录当天的统计信息
         applicationEmuService.saveEnumUrlAvailableStatistics(url.getId(),result,interval);
         //记录至今天访问明细

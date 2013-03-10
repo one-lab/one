@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.db.oracle.domain.StaTimeEnum;
 import com.sinosoft.one.monitor.db.oracle.domain.TimeGranularityEnum;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
@@ -20,6 +21,9 @@ import com.sinosoft.one.monitor.os.linux.model.OsShell;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsHealthModel;
 import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsShellRepository;
+import com.sinosoft.one.monitor.resources.domain.ResourcesService;
+import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 /**
  * 数据库操作类
@@ -36,6 +40,9 @@ public class OsService {
 	
 	@Autowired
 	private AlarmRepository alarmRepository;
+	
+	@Autowired
+	private ResourcesService resourcesService; 
 	/**
 	 * 读取操作系统基本信息
 	 * @return
@@ -74,6 +81,7 @@ public class OsService {
 		if(os!=null){
 			 throw new Exception();
 		}
+		
 		Os newos =new Os();
 		newos.setName(name);
 		newos.setType(type);
@@ -81,6 +89,11 @@ public class OsService {
 		newos.setSubnetMask(subnetMask);
 		newos.setIntercycleTime(interCycle);
 		osRepository.save(newos);
+		Resource resource =new Resource();
+		resource.setResourceId(os.getOsInfoId());
+		resource.setResourceName(name);
+		resource.setResourceType(ResourceType.OS.name());
+		resourcesService.saveResource(resource);
 	}
 	
 	/**
@@ -121,6 +134,17 @@ public class OsService {
 		return (List<Os>) osRepository.findAll();
 	}
 	
+	public void deleteOs(String id){
+		osRepository.delete(id);
+	}
+	/**
+	 * 健康状况
+	 * @param oss
+	 * @param beingTime
+	 * @param endTime
+	 * @param staTimeEnum
+	 * @return
+	 */
 	 public List<OsHealthModel> healthInfoList(List<Os> oss,Date beingTime,Date endTime ,StaTimeEnum staTimeEnum) {
 		List<OsHealthModel> oracleHealthInfoModelList = new ArrayList<OsHealthModel>();
 		for (Os os : oss) {
@@ -155,7 +179,7 @@ public class OsService {
 	            pullDateMapList(dateMapList, startTime, currTime, TimeGranularityEnum.HOUR);
 	            for (Long[] dateMap : dateMapList) {
 	                String[] healthyPint = new String[2];
-	                String healthyFlag = "1";
+	                String healthyFlag = "2";
 	                StringBuilder info = new StringBuilder();
 	                long start = dateMap[0];
 	                long end = dateMap[1];
@@ -190,7 +214,7 @@ public class OsService {
 	            pullDateMapList(dateMapList, startTime, currTime, TimeGranularityEnum.DAY);
 	            for (Long[] dateMap : dateMapList) {
 	                String[] healthyPint = new String[2];
-	                String healthyFlag = "1";
+	                String healthyFlag = "2";
 	                StringBuilder info = new StringBuilder();
 	                long start = dateMap[0];
 	                long end = dateMap[1];

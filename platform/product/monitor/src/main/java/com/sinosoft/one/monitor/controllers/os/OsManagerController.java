@@ -11,12 +11,15 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sinosoft.one.monitor.db.oracle.domain.StaTimeEnum;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
+import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsHealthModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -75,44 +78,87 @@ public class OsManagerController {
 		}
 		return "";
 	}
+	
+	@Post("systemMonitorTable/{timespan}")
+	public String systemMonitorTable(@Param("timespan") String timespan,
+			Invocation inv) {
+		if ("24".equals(timespan)) {
 
-	/**
-	 * 可用性页面
-	 * @param inv
-	 * @return
-	 */
-	@Get("toSystemMonitor")
-	public String toSystemMonitor(Invocation inv) {
-		Date date=new Date();
-		Map<String, Object> Modelmap =  osViewDataHandleService.getAvailableViewData(date);
-		List<String> timeList= new ArrayList<String>();
-		Date time=(Date) Modelmap.get("beginTime");
-		System.out.println(time);
-		SimpleDateFormat simpleDateFormat =new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Calendar c  = Calendar.getInstance();
-		for (int i = 0; i < 12; i++) {
-			if(i==0){
-				c.set(Calendar.HOUR_OF_DAY,time.getHours());
-				c.set(Calendar.MINUTE, 0);
-				c.set(Calendar.SECOND, 0);
-				timeList.add(simpleDateFormat.format(c.getTime()));
-			}else{
-				c.set(Calendar.HOUR_OF_DAY,time.getHours()+2);
-				c.set(Calendar.MINUTE, 0);
-				c.set(Calendar.SECOND, 0);
-				 
-				System.out.println(simpleDateFormat.format(c.getTime()));
-				timeList.add(simpleDateFormat.format(c.getTime()));
-				time=c.getTime();
+			// 0 hong 1 zheng 2wushuju
+			Date date=new Date();
+			Map<String, Object> Modelmap =  osViewDataHandleService.getAvailableViewData(date);
+			List<String> timeList= new ArrayList<String>();
+			Date time=(Date) Modelmap.get("beginTime");
+			System.out.println(time);
+			SimpleDateFormat simpleDateFormat =new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
+			Calendar c  = Calendar.getInstance();
+			for (int i = 0; i < 12; i++) {
+				if(i==0){
+					c.set(Calendar.HOUR_OF_DAY,time.getHours());
+					c.set(Calendar.MINUTE, 0);
+					c.set(Calendar.SECOND, 0);
+					timeList.add(simpleDateFormat.format(c.getTime()));
+				}else{
+					c.set(Calendar.HOUR_OF_DAY,time.getHours()+2);
+					c.set(Calendar.MINUTE, 0);
+					c.set(Calendar.SECOND, 0);
+					 
+					System.out.println(simpleDateFormat.format(c.getTime()));
+					timeList.add(simpleDateFormat.format(c.getTime()));
+					time=c.getTime();
+				}
 			}
+			System.out.println(Modelmap.get("beginTime"));
+			List<Map<String, Object>> maplist= (List<Map<String, Object>>) Modelmap.get("mapList");
+			inv.addModel("maplist",maplist);
+			inv.addModel("timeList",timeList);
+			
+			return "systemMonitorTable";
+			//30天的逻辑
+		}else if("30".equals(timespan)){
+			return "systemMonitorTable";
 		}
-		System.out.println(Modelmap.get("beginTime"));
-		List<Map<String, Object>> maplist= (List<Map<String, Object>>) Modelmap.get("mapList");
-		inv.addModel("maplist",maplist);
-		inv.addModel("timeList",timeList);
+		return null;
 		
-		return "systemMonitor";
+		
 	}
+//	/**
+//	 * 可用性页面
+//	 * @param inv
+//	 * @return
+//	 */
+//	@Get("toSystemMonitor")
+//	public String toSystemMonitor(Invocation inv) {
+//		Date date=new Date();
+//		Map<String, Object> Modelmap =  osViewDataHandleService.getAvailableViewData(date);
+//		List<String> timeList= new ArrayList<String>();
+//		Date time=(Date) Modelmap.get("beginTime");
+//		System.out.println(time);
+//		SimpleDateFormat simpleDateFormat =new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
+//		Calendar c  = Calendar.getInstance();
+//		for (int i = 0; i < 12; i++) {
+//			if(i==0){
+//				c.set(Calendar.HOUR_OF_DAY,time.getHours());
+//				c.set(Calendar.MINUTE, 0);
+//				c.set(Calendar.SECOND, 0);
+//				timeList.add(simpleDateFormat.format(c.getTime()));
+//			}else{
+//				c.set(Calendar.HOUR_OF_DAY,time.getHours()+2);
+//				c.set(Calendar.MINUTE, 0);
+//				c.set(Calendar.SECOND, 0);
+//				 
+//				System.out.println(simpleDateFormat.format(c.getTime()));
+//				timeList.add(simpleDateFormat.format(c.getTime()));
+//				time=c.getTime();
+//			}
+//		}
+//		System.out.println(Modelmap.get("beginTime"));
+//		List<Map<String, Object>> maplist= (List<Map<String, Object>>) Modelmap.get("mapList");
+//		inv.addModel("maplist",maplist);
+//		inv.addModel("timeList",timeList);
+//		
+//		return "systemMonitor";
+//	}
 	
 	/**
 	 * 可用性条块
@@ -120,53 +166,56 @@ public class OsManagerController {
 	 * @return
 	 */
 	@Get("healthList/{timespan}")
-	public Reply healthList(@Param("timespan") String timespan) {
-		if (timespan.equals("24hours")) {
-			
-		// 1 zhengc 2jingg 3yanz 4weiz
-		Map<String, List<Map<String, Object>>> map = new HashMap<String, List<Map<String, Object>>>();
-		Map<String, Object> rowsMap = new HashMap<String, Object>();
-		rowsMap.put("id", "1");
-		List<String> list = new ArrayList<String>();
-		String[] strs = new String[24];
-		for (int i = 0; i < strs.length; i++) {
-			strs[i] = "1";
-			if (i == 4) {
-				strs[i] = "1";
-			}
-			if (i == 10) {
-				strs[i] = "2";
-			}
-			if (i == 15) {
-				strs[i] = "3";
-			}
-			if (i == 20) {
-				strs[i] = "4";
-			}
-			
+	public Reply healthList(@Param("timespan") int timespan, Invocation inv) {
+		List<Os> oss=osService.getAllOs();
+		String contextPath = inv.getServletContext().getContextPath();
+		StaTimeEnum healthStyle = null;
+		switch (timespan) {
+		case 1: //24小时内
+			healthStyle = StaTimeEnum.LAST_24HOUR;
+			break;
+		case 30: //30天统计信息
+			healthStyle = StaTimeEnum.LAST_30DAY;
+			break;
+		default: //默认返回24小时
+			healthStyle = StaTimeEnum.LAST_24HOUR;
+			break;
 		}
-		list.add("<a href='Linuxcentos.html'>Linux2</a>");
-		for (String str : strs) {
-			if (str.equals("1")) {
-				list.add("<span class='normal'></span>");
+		Date date=new Date();
+		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+		List<OsHealthModel> osHealthModels = osService.healthInfoList(oss, healthStyle.getTime(healthStyle, date), date, healthStyle);
+		/* 设置名称信息格式化*/
+		String messageFormat0 = "<a href={0}>{1}</a>";
+		/* 设置状态信息格式*/
+		String messageFormat1 = "<span class={0}>{1}</span>";
+		for(OsHealthModel osHealthModel : osHealthModels) {
+			Map<String, Object> row = new HashMap<String, Object>();
+			row.put("id", osHealthModel.getMonitorID());
+			List<String> cell = new ArrayList<String>();
+			/* 构建数据库监控详细信息地址*/
+			String url = contextPath + "/db/oracle/home/viewInfo/"+ osHealthModel.getMonitorID();
+			cell.add(MessageFormat.format(messageFormat0, url,osHealthModel.getMonitorName()));
+			for(int i=0; i<osHealthModel.getGraphInfo().size(); i++) {
+				String[] values = osHealthModel.getGraphInfo().get(i);
+				String cssClass = "";
+				if("1".equals(values[0])) { //正常
+					cssClass = "normal";
+				} else if("2".equals(values[0])) { //警告
+					cssClass = "warn";
+				} else if("3".equals(values[0])) { //严重
+					cssClass = "critical";
+				}  else { //未知
+					cssClass = "";
+				}
+				String value = MessageFormat.format(messageFormat1, cssClass, values[1]);
+				cell.add(value);
 			}
-			if (str.equals("2")) {
-				list.add("<span class='warn'></span>");
-			}
-			if (str.equals("3")) {
-				list.add("<span class='critical'></span>");
-			}
-			if (str.equals("4")) {
-				list.add("<span class='normal'></span>");
-			}
+			row.put("cell", cell);
+			rows.add(row);
 		}
-		rowsMap.put("cell", list);
-		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
-		maps.add(rowsMap);
-		map.put("rows", maps);
-		return Replys.with(map).as(Json.class);
-	}
-		return null;
+		Map<String, Object> grid = new HashMap<String, Object>();
+		grid.put("rows", rows);
+		return Replys.with(grid).as(Json.class);
 	}
 	
 	
@@ -196,7 +245,7 @@ public class OsManagerController {
 	 * 数据库列表视图
 	 * @return
 	 */
-	public Reply thresholdList(Invocation inv) {
+	public Reply systemList(Invocation inv) {
 		/* 获取项目根路径*/
 		String contextPath = inv.getServletContext().getContextPath();
 		/* 封装表格行数据信息List->rows*/

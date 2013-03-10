@@ -31,7 +31,7 @@ public final class DBUtil extends ConnUtil {
      */
     public static void reStart(String DRIVER,String URL,String USER,String PASSWORD){
         ConnUtil.clearPool();
-        DBDriver.start( DRIVER, URL, USER, PASSWORD, 1000);
+        DBDriver.start( DRIVER, URL, USER, PASSWORD, 500);
     }
 	private static Connection getConn() {
 		

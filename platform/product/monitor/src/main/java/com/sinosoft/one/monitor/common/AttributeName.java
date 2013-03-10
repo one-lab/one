@@ -12,6 +12,7 @@ public enum AttributeName {
 	Availability,
 	Health,
 	CPUUtilization,
+	DiskUtilization,
 	PhysicalMemoryUtilization,
 	SwapMemoryUtilization,
 	ActiveConnection,

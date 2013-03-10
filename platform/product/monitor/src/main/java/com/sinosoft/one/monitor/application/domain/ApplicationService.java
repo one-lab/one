@@ -139,7 +139,7 @@ public class ApplicationService {
 			applicationIndexViewModel.setApplicationName(application.getApplicationName());
 			applicationIndexViewModel.setApplicationCnName(application.getCnName());
 
-			Date startDate = DateUtil.getRecentHourDate(recentHour - 1);
+			Date startDate = DateUtil.getRecentHourDate(recentHour);
 			Date endDate = Calendar.getInstance().getTime();
 			// 计算健康度
 			generateHealthBar(application.getId(), startDate, endDate, applicationIndexViewModel);
@@ -221,6 +221,9 @@ public class ApplicationService {
 			} else {
 				minute += 60;
 			}
+		}
+		if(minute == 0) {
+			minute = 1;
 		}
 		BigDecimal rpmBigDecimal = BigDecimal.valueOf(rpm);
 		BigDecimal minuteBigDecimal = BigDecimal.valueOf(minute);
