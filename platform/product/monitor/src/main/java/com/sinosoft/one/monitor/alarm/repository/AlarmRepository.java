@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface AlarmRepository extends PagingAndSortingRepository<Alarm, String> {
 
-    @SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3 and  resourcetype  order by create_time desc")
+    @SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3  order by create_time desc")
     List<Alarm> findAlarmByMonitorId(String monitorId, Date startTime, Date endTime);
 
 	@SQL("select * from ge_monitor_alarm where monitor_id = ?1 and sub_resource_type=?2 " +
