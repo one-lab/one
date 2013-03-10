@@ -119,7 +119,8 @@ public class AlarmManagerController {
         List<Alarm> newAlarms=new ArrayList<Alarm>();
         if(dbAlarms!=null&&dbAlarms.size()>0){
             String statusStart="<div class='";
-            String statusEnd="' onclick='viewRelevance()'></div>";
+            /*String statusEnd="' onclick='viewRelevance()'></div>";*/
+            String statusEnd="'</div>";
             String messageNameStart="<a href='javascript:void(0)' onclick='alarmDetailInfo(this)'>";
             String messageNameEnd="</a>";
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

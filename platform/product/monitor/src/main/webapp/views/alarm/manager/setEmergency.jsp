@@ -16,10 +16,18 @@
         });
 
         function setHealthOrAvailable(monitorType,monitorId,attributeType,attributeId){
-            if(null!=attributeType&&""!=attributeType){
-                setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeType);
-            }else if(null!=attributeId&&""!=attributeId) {
-                setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeId);
+            var _monitorTypeSelected=$("#monitorType").val();
+            var _monitorNameSelected=$("#monitorName").val();
+            if(''==_monitorTypeSelected){
+                alert("请选择监视器类型！")
+            }else if('choice'==_monitorNameSelected){
+                alert("请选择监视器名字！")
+            }else{
+                if(null!=attributeType&&""!=attributeType){
+                    setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeType);
+                }else if(null!=attributeId&&""!=attributeId) {
+                    setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeId);
+                }
             }
         }
 
@@ -113,6 +121,7 @@
             var _monitorType=monitorType;
             var _monitorId=monitorId;
             var _attribute=attribute;
+            alert("这里发送两次");
             var temWin = $("body").window({
                 "id":"window",
                 "title":'配置告警',
@@ -449,7 +458,7 @@
                 <tr>
                     <td width="33%"> 选择监视器类型</td>
                     <td><select id="monitorType" name="monitorType"  class="diySelect" style="width:200px">
-                        <option value="选择一个监视器类型">--选择一个监视器类型--</option>
+                        <option value="">--选择一个监视器类型--</option>
                         <option value="APPLICATION">应用系统</option>
                         <option value="DB">数据库</option>
                         <option value="OS">操作系统</option>
