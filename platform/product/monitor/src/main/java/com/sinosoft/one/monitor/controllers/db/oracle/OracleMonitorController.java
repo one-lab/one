@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +21,7 @@ import com.sinosoft.one.monitor.db.oracle.model.OracleAvaInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.StaGraphModel;
+import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -60,21 +60,31 @@ public class OracleMonitorController {
 	@Get("avaInfoList/{avaInfoStyle}")
     public String avaInfoList(@Param("avaInfoStyle")int avaInfoStyle, Invocation inv){
 		StaTimeEnum avaStyle = null;
+		String dateStyle = "";
 		switch (avaInfoStyle) {
 		case 1: //24小时内
+			dateStyle = "HH:mm";
 			avaStyle = StaTimeEnum.LAST_24HOUR;
 			break;
 		case 30: //30天统计信息
+			dateStyle = "yyyy-MM-dd HH:mm";
 			avaStyle = StaTimeEnum.LAST_30DAY;
 			break;
 		default: //默认返回24小时
+			dateStyle = "HH:mm";
 			avaStyle = StaTimeEnum.LAST_24HOUR;
 			break;
 		}
 		/* 查询可用性历史纪录信息*/
         List<OracleAvaInfoModel> oracleAvaInfoList = oracleBatchInfoService.avaInfoList(avaStyle);
         inv.addModel("oracleAvaInfoList",oracleAvaInfoList);
+        List<String> dateList = new ArrayList<String>();
+        for(String[] strs : oracleAvaInfoList.get(0).getGraphInfo()) {
+        	SimpleDateFormat sdf = new SimpleDateFormat(dateStyle);
+        	dateList.add(sdf.format(new Date(Long.valueOf(strs[1]))));
+        }
         inv.addModel("avaInfoStyle", avaInfoStyle);
+        inv.addModel("dateList", dateList);
         return "oracleAvaInfo";
     }
 	
@@ -140,17 +150,13 @@ public class OracleMonitorController {
 		}
 		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
 		List<OracleHealthInfoModel> oracleHealthInfos = oracleBatchInfoService.healthInfoList(healthStyle);
-		/* 设置名称信息格式化*/
-		String messageFormat0 = "<a href={0}>{1}</a>";
-		/* 设置状态信息格式*/
-		String messageFormat1 = "<span class={0}>{1}</span>";
 		for(OracleHealthInfoModel oracleHealthInfo : oracleHealthInfos) {
 			Map<String, Object> row = new HashMap<String, Object>();
 			row.put("id", oracleHealthInfo.getMonitorID());
 			List<String> cell = new ArrayList<String>();
 			/* 构建数据库监控详细信息地址*/
 			String url = contextPath + "/db/oracle/home/viewInfo/"+ oracleHealthInfo.getMonitorID();
-			cell.add(MessageFormat.format(messageFormat0, url,oracleHealthInfo.getMonitorName()));
+			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, url,oracleHealthInfo.getMonitorName()));
 			for(int i=0; i<oracleHealthInfo.getGraphInfo().size(); i++) {
 				String[] values = oracleHealthInfo.getGraphInfo().get(i);
 				String cssClass = "";
@@ -163,8 +169,7 @@ public class OracleMonitorController {
 				}  else { //未知
 					cssClass = "";
 				}
-				String value = MessageFormat.format(messageFormat1, cssClass, values[1]);
-				cell.add(value);
+				cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_SPAN,  cssClass, values[1]));
 			}
 			row.put("cell", cell);
 			rows.add(row);
@@ -275,11 +280,6 @@ public class OracleMonitorController {
 		String contextPath = inv.getServletContext().getContextPath();
 		/* 封装表格行数据信息List->rows*/
 		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
-		/* 初始化每列数据格式*/
-		String messageFormat0 = "<a href={0}>{1}</a>"; //数据库名
-		String messageFormat1 = "<div class={0}></div>"; //可用性-usability
-		String messageFormat2 = "<div class={0}></div>"; //健康状况-healthy
-		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
 		/* 查询数据库健康列表数据*/
 		List<OracleStaBaseInfoModel> oracleStaBaseInfos = oracleBatchInfoService.listStaBaseInfo();
 		/* 循环构建表格行数据*/
@@ -297,10 +297,10 @@ public class OracleMonitorController {
 			/* 构建修改连接+对应数据库MonitorID*/
 			String editUrl = contextPath + "/db/oracle/editUI/" + oracleStaBaseInfo.getMonitorID();
 			/* 格式化表格数据信息*/
-			cell.add(MessageFormat.format(messageFormat0, url, oracleStaBaseInfo.getMonitorName()));
-			cell.add(MessageFormat.format(messageFormat1, usabilityClass));
-			cell.add(MessageFormat.format(messageFormat2, healthyClass));
-			cell.add(MessageFormat.format(messageFormat3, editUrl));
+			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, url, oracleStaBaseInfo.getMonitorName()));
+			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, usabilityClass));
+			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, healthyClass));
+			cell.add(MessageUtils.formateMessage(MessageUtils.HANDLER_FORMAT, editUrl));
 			row.put("cell", cell);
 			rows.add(row);
 		}

@@ -69,4 +69,8 @@ public interface OracleMonitorSql {
      * 用户数查询:avtiveCount
      */
     public static final String activeCount = "select count(distinct terminal) \"active\" from v$session";
+    /**
+     * 获取操作系统名称：
+     */
+    public static final String osName = "select platform_name \"platform_name\"  from v$database";
 }

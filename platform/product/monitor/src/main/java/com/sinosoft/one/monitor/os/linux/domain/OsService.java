@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.mysema.query.types.Ops;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
@@ -18,9 +17,7 @@ import com.sinosoft.one.monitor.db.oracle.domain.TimeGranularityEnum;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.os.linux.model.Os;
-import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsShell;
-import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsHealthModel;
 import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsShellRepository;
@@ -44,8 +41,6 @@ public class OsService {
 	@Autowired
 	private AlarmRepository alarmRepository;
 	
-	@Autowired
-	private OsAvailableServcie osAvailableServcie;
 	@Autowired
 	private ResourcesService resourcesService; 
 	/**
@@ -86,6 +81,7 @@ public class OsService {
 		if(os!=null){
 			 throw new Exception();
 		}
+		
 		Os newos =new Os();
 		newos.setName(name);
 		newos.setType(type);
@@ -98,25 +94,6 @@ public class OsService {
 		resource.setResourceName(name);
 		resource.setResourceType(ResourceType.OS.name());
 		resourcesService.saveResource(resource);
-	}
-	
-	/**
-	 * 修改操作系统基本信息
-	 * @return
-	 * @throws Exception 
-	 */
-	public void modifeOsBasic(String osInfoId,String name,String type,String ipAddr,String subnetMask,int interCycle) throws Exception{
-		Os newos=osRepository.findOne(osInfoId);
-		if(newos==null){
-			throw new Exception();
-		}
-		
-		newos.setName(name);
-		newos.setType(type);
-		newos.setIpAddr(ipAddr);
-		newos.setSubnetMask(subnetMask);
-		newos.setIntercycleTime(interCycle);
-		osRepository.save(newos);
 	}
 	
 	/**
@@ -157,59 +134,8 @@ public class OsService {
 		return (List<Os>) osRepository.findAll();
 	}
 	
-	/**
-	 * 删除操作系统
-	 * @param id
-	 */
 	public void deleteOs(String id){
 		osRepository.delete(id);
-	}
-	
-	/**
-	 * 获取基本信息 当前可用性和 健康状况
-	 * @param oss
-	 * @param currentTime
-	 * @return
-	 */
-	public List<OsBaseInfoModel> getBasicInfo(List<Os> oss ,Date currentTime){
-		List<OsBaseInfoModel>osBaseInfoModels=new ArrayList<OsBaseInfoModel>();
-		for (Os os : oss) {
-			Date begintime=new Date(currentTime.getTime()-os.getIntercycleTime()*60*1000);
-			OsBaseInfoModel osBaseInfoModel=new OsBaseInfoModel();
-			OsAvailabletemp osAvailabletemp=osAvailableServcie.getNealyAvailable(os.getOsInfoId(), currentTime, os.getIntercycleTime());
-			String[] healthyPint = new String[2];
-			 StringBuilder msg = new StringBuilder();
-			if(osAvailabletemp!=null){
-	            String healthyFlag = "2";
-				osBaseInfoModel.setUsability("1");
-				 List<Alarm> alarmList = alarmRepository.findAlarmByMonitorId(os.getOsInfoId(), begintime, currentTime);
-	             for (Alarm alarm : alarmList) {
-	                 if (alarm.getSeverity() != null) {
-	                     msg.append(alarm.getMessage()).append("\n");
-	                     if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
-	                         healthyFlag = "1";
-	                     } else if (alarm.getSeverity().equals(SeverityLevel.WARNING)) {
-	                         healthyFlag = "2";
-	                     } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
-	                         healthyFlag = "3";
-	                     } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
-	                         healthyFlag = "4";
-	                     }
-	                 }
-	             }
-	             healthyPint[0] = healthyFlag;
-	             healthyPint[1] = msg.toString();
-			}else {
-				 healthyPint[0] = "3";
-				 healthyPint[1] = msg.append(os.getName()).append("为停止").toString();
-				osBaseInfoModel.setUsability("0");
-			}
-			osBaseInfoModel.setHealthy(healthyPint);
-			osBaseInfoModel.setMonitorID(os.getOsInfoId());
-			osBaseInfoModel.setMonitorName(os.getName());
-			osBaseInfoModels.add(osBaseInfoModel);
-		}
-		return osBaseInfoModels;
 	}
 	/**
 	 * 健康状况
@@ -355,5 +281,5 @@ public class OsService {
 			dateMap[1] = start;
 			dateMapList.add(dateMap);
 		}
-	}
+}
 }

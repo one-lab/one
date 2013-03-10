@@ -16,29 +16,17 @@
                    </c:forEach>
                </tr>
            </table>
-       </td>
+       </td><!--
        <td>${oracleAvaInfo.avaRate}</td>
-   </tr>
+   --></tr>
    </c:forEach>
   <tr class="last_row">
     <td>&nbsp;</td>
     <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="time_bar">
       <tr>
-      	<c:if test="${avaInfoStyle==1 }">
-        <td>01:00</td>
-        <td>02:00</td>
-        <td>03:00</td>
-        <td>04:00</td>
-        <td>05:00</td>
-        <td>06:00</td>
-        <td>07:00</td>
-        <td>08:00</td>
-        <td>09:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-      	</c:if>
-      	<c:if test="${avaInfoStyle==30 }"></c:if>
+      	<c:forEach items="${dateList }" var="d">
+        <td>${d }</td>
+      	</c:forEach>
       </tr>
     </table></td>
     <td>&nbsp;</td>

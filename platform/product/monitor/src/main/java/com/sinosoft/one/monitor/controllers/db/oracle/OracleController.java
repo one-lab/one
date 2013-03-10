@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.controllers.db.oracle;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.db.oracle.domain.OracleAvaService;
 import com.sinosoft.one.monitor.db.oracle.domain.OracleInfoService;
 import com.sinosoft.one.monitor.db.oracle.domain.OraclePreviewService;
@@ -30,6 +32,7 @@ import com.sinosoft.one.monitor.db.oracle.model.OracleSGAModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleTableSpaceModel;
 import com.sinosoft.one.monitor.db.oracle.model.Point;
 import com.sinosoft.one.monitor.db.oracle.model.SGAStateModel;
+import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -72,12 +75,6 @@ public class OracleController {
 
         OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
         
-        EventInfoModel[] eventInfoModels = oraclePreviewService.viewConnectInfo(monitorId);
-//        EventInfoModel eventInfoModel = new EventInfoModel();
-//        if(eventInfoModel!=null&&eventInfoModels.length>0){
-//        	eventInfoModel = eventInfoModels[eventInfoModels.length-1];
-//        }
-//        inv.addModel(value)
         inv.addModel("oracleDetailModel", oracleDetailModel);
 		inv.addModel("oracleInfoModel", oracleInfoModel);
         inv.addModel("sgaStateModel", sgaStateModel);

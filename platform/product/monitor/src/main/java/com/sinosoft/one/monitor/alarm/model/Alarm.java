@@ -219,22 +219,6 @@ public class Alarm  implements java.io.Serializable {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
-
-	public boolean isSameAlarmInfo(Alarm alarm) {
-		if (this == alarm) return true;
-		if (alarm == null) return false;
-
-		if (alarmSource != alarm.alarmSource) return false;
-		if (attributeId != null ? !attributeId.equals(alarm.attributeId) : alarm.attributeId != null) return false;
-		if (monitorId != null ? !monitorId.equals(alarm.monitorId) : alarm.monitorId != null) return false;
-		if (monitorType != null ? !monitorType.equals(alarm.monitorType) : alarm.monitorType != null) return false;
-		if (severity != alarm.severity) return false;
-		if (subResourceId != null ? !subResourceId.equals(alarm.subResourceId) : alarm.subResourceId != null)
-			return false;
-		if (subResourceType != alarm.subResourceType) return false;
-
-		return true;
-	}
 }
 
 

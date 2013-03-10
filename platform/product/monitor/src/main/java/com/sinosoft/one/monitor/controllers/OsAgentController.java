@@ -2,7 +2,6 @@ package com.sinosoft.one.monitor.controllers;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -133,15 +132,15 @@ public class OsAgentController {
 				String respondTime = getValue("respondTime", osAgentInfo);
 				System.out.println("响应时间"+respondTime);
 				
+				
 //				oos.writeObject("继续监控");
 				//采样时间
-				Calendar c=Calendar.getInstance();
-				c.set(Calendar.SECOND, 0);
-				c.set(Calendar.MILLISECOND, 0);
+				Date sampleTime=new Date();
+				System.out.println(sampleTime.toLocaleString()+"1111111111111111111111");
 				//保存采样数据
-				osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, c.getTime());
+				osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, sampleTime);
 				//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
-				osProcessService.savaAvailableSampleData(os.getOsInfoId(),  c.getTime(), os.getIntercycleTime(), "1");
+				osProcessService.savaAvailableSampleData(os.getOsInfoId(), sampleTime, os.getIntercycleTime(), "1");
 				
 				requestInfo.put("interCycle", os.getIntercycleTime());//返回轮询时间
 			}else {

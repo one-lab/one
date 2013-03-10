@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <div id="layout_top">
     <div class="header">
-        <p class="user">您好,系统管理员 <span>|</span> <a href="${ctx}/login">退出系统</a></p>
+        <p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
         <div class="menu_box">
             <ul class="nav" id="nav">
                 <li><a href="${ctx }/index">首页</a></li>
@@ -10,12 +10,12 @@
                     <ul class="add_sub_menu" id="subNav">
                         <li class="action"><span class="sever">操作系统</span>
                             <ul class="list">
-                                <li><a href="${ctx}/os/toSystemMonitor"> Linux</a></li>
+                                <li><a href="systemMonitor.html"> Linux(2)</a></li>
                             </ul>
                         </li>
                         <li class="action"><span class="system">应用系统</span>
                             <ul class="list">
-                                <li><a href="${ctx}/application/manager/appmanager/applist/1">在线查询</a></li>
+                                <li><a href="performance.html">在线查询</a></li>
                             </ul>
                         </li>
                         <li class="action" style="border:none"><span>数据库</span>
@@ -29,7 +29,7 @@
                 </li>
                 <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a></li>
                 <li><a href="${ctx}/alarm/manager/alarmmanager/list">告警</a></li>
-                <li><a href="${ctx}/account/user/list">用户管理</a></li>
+                <li><a href="userManager.html">用户管理</a></li>
             </ul>
         </div>
         <ul class="add_menu" id="menu">
