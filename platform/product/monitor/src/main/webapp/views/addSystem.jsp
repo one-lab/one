@@ -7,12 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://www.springframework.org/schema/beans">
 <head>
     <title>新建监视器</title>
-    <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css"/>
-    <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-    <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-    <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+    <%@include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
         $(function () {
             $("body").layout({
@@ -58,6 +53,9 @@
         }
         /*校验数据*/
         function isValid(form) {
+            String.prototype.trim = function(){
+                return this.replace(/(^\s*|\s*$)/g,'');
+            }
             var appName="^[A-Za-z]+$";
             if (!form.applicationName.value.match(appName)) {
                 alert("显示名称必须是英文！");
@@ -72,12 +70,16 @@
                 alert("主机IP地址必须是数字和\".\"的组合！");
                 return false;
             }
-            var appPort="^[0-9.]+$";
+            var appPort="^[0-9]+$";
             if(!form.applicationPort.value.match(appPort)||form.applicationPort.value.length>5){
                 alert("端口必须是5位以内的数字！");
                 return false;
+            }            
+            if(form.interval.value.trim()==""){
+                alert("轮询间隔不能为空或者空格！");
+                return false;
             }
-            var appInterval="^[0-9.]+$";
+            var appInterval="^[0-9]+$";
             if(!form.interval.value.match(appInterval)||form.interval.value.length>10){
                 alert("轮询间隔必须是10位以内的数字！");
                 return false;
@@ -90,56 +92,7 @@
 <body>
 <div id="layout_top">
     <div class="header">
-        <p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-
-        <div class="menu_box">
-            <ul class="nav" id="nav">
-                <li><a href="index.html">首页</a></li>
-                <li class="has_sub">
-                    <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                    <ul class="add_sub_menu" id="subNav">
-                        <li class="action"><span class="sever">操作系统</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">操作系统1</a></li>
-                                <li><a href="javascript:viod(0)">操作系统2</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">在线投保</a></li>
-                                <li><a href="javascript:viod(0)">在线查询</a></li>
-                                <li><a href="javascript:viod(0)">应急处置</a></li>
-                                <li><a href="javascript:viod(0)">人员角色管理</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">SQL DBA</a></li>
-                                <li><a href="javascript:viod(0)">SQL SYS</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
-
-                </li>
-                <li><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
-                <li><a href="javascript:viod(0)">业务仿真</a></li>
-                <li><a href="javascript:viod(0)">告警</a></li>
-            </ul>
-        </div>
-        <ul class="add_menu" id="menu">
-            <li><a href="addMonitorList.html">新建监视器</a></li>
-            <li><a href="javascript:viod(0)">配置监视器</a></li>
-            <li class="has_sub">
-                <a href="javascript:viod(0)"><span>预警对象管理</span></a>
-                <ul class="add_sub_menu">
-                    <li class="title"><a href="javascript:viod(0)">显示动作</a></li>
-                    <li class="action">创建新动作</li>
-                    <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
-                    <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
-                </ul>
-            </li>
-        </ul>
+        <%@include file="/WEB-INF/layouts/menu.jsp"%>
     </div>
 </div>
 <div id="layout_center">
@@ -193,7 +146,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>轮询间隔<span class="mandatory"></span></td>
+                        <td>轮询间隔（分钟）<span class="mandatory">*</span></td>
                         <td><input id="interval" name="interval" value="${application.interval}" type="text" class="formtext" size="10"/>
                             <msg:errorMsg property="interval" type="message"/>
                         </td>
