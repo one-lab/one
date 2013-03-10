@@ -15,7 +15,11 @@ import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
-
+/**
+ * 
+ * @author Administrator
+ *	TODO 时间延迟精确
+ */
 @Component
 public class OsProcessService {
 	@Autowired
@@ -44,6 +48,7 @@ public class OsProcessService {
 	 * @param respondTime 采集的响应信息字符串
 	 * @param sampleTime 采集时间
 	 */
+	
 	public void saveSampleData(String osInfoId,String cpuInfo,String ramInfo,String diskInfo,String respondTime ,Date sampleTime){
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
@@ -54,20 +59,24 @@ public class OsProcessService {
 		MessageBase messageBase = alarmMessageBuilder.newMessageBase(osInfoId);
 		OsCpu osCpu=OsTransUtil.getCpuInfo(cpuInfo);
 		osCpuService.saveCpu(osInfoId,osCpu ,sampleTime);//保存CPU采样
+		//cpu告警
 		messageBase.addAlarmAttribute(AttributeName.CPUUtilization, osCpu.getUtiliZation());
 		
 		List<OsDisk> osDisks=OsTransUtil.getDiskInfo(diskInfo);
 		osDiskService.saveDisk(osInfoId,osDisks, sampleTime);//保存磁盘采样
+		//磁盘告警
 		for(OsDisk osDisk : osDisks){
 			messageBase.addAlarmAttribute(AttributeName.DiskUtilization, osDisk.getUsedUtiliZation());
 		}
 		
  		OsRam osRam=OsTransUtil.getRamInfo(ramInfo);
 		osRamService.saveRam(osInfoId,osRam , sampleTime);//保存内存采样
+		//内存告警
 		messageBase.addAlarmAttribute(AttributeName.PhysicalMemoryUtilization, osRam.getMemUtiliZation());
 		messageBase.addAlarmAttribute(AttributeName.SwapMemoryUtilization, osRam.getSwapUtiliZation());
 		
 		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存响应时间采样
+		//响应时间告警
 		messageBase.addAlarmAttribute(AttributeName.ResponseTime, respondTime);
 		
 		messageBase.alarm();
@@ -95,7 +104,12 @@ public class OsProcessService {
 	 */
 	public void savaAvailableSampleData(String osInfoId,Date sampleTime,int interCycleTime ,String Status){
 		//保存本次采样
+		
 		OsAvailabletemp osAvailabletemp =osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status,interCycleTime);
+		//可用性告警
+		MessageBase messageBase = alarmMessageBuilder.newMessageBase(osInfoId);
+		messageBase.addAlarmAttribute(AttributeName.Availability, osAvailabletemp.getStatus());
+		messageBase.alarm();
 		//统计采样结果 今天
 		Calendar c  = Calendar.getInstance();
 		c.setTime( sampleTime);
