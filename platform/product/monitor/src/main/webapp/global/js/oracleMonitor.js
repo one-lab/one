@@ -1,3 +1,6 @@
+/**
+ * 健康状态操控板-最近24小时 列样式
+ */
 var day1ColumnStyle = 
 	[  
 		{id:'0',text:'名称',name:"appellation",index:'1',align:'',width:'100'},
@@ -26,6 +29,9 @@ var day1ColumnStyle =
 		{id:'23',text:'23',name:"hour23",index:'1',align:''},
 		{id:'24',text:'24',name:"hour24",index:'1',align:''}
 	];
+/**
+ * 健康状态操控板-最近30天 列样式
+ */
 var day30ColumnStyle = 
 	[  
 		{id:'0',text:'名称',name:"appellation",index:'1',align:'',width:'100'},
@@ -60,6 +66,10 @@ var day30ColumnStyle =
 		{id:'29',text:'29',name:"day29",index:'1',align:''},
 		{id:'30',text:'30',name:"day30",index:'1',align:''}
 	];
+
+/**
+ * 数据库列表视图-列样式
+ */
 var thresholdColumnStyle = 
 	[  
 		{id:'1',text:'名称',name:"appellation",index:'1',align:''},
@@ -70,23 +80,40 @@ var thresholdColumnStyle =
 
 
 /**
+ * 可用性历史纪录- oracle
+ * avaInfoStyle的onchange事件
+ */
+function avaInfoList() {
+	/* 可用性显示范围:1->最近24小时；30->最近30天*/
+	var avaInfoStyle = $("#avaInfoStyle").val();
+	$.ajax({
+		type:"get",
+		dataType: "html",
+		url : rootPath+"/db/oracle/avaInfoList/"+avaInfoStyle,  
+		success:function(msg) {
+			$("#avaInfoList").html(msg);
+		}
+	});
+}
+
+/**
  * 健康状态操控板
  */
 function healthList() {
 	var healthListStyle = $("#healthListStyle").val();
 	var columnStyle;
 	switch (healthListStyle) {
-	case '1':
+	case '1': //最近24小时
 		columnStyle=day1ColumnStyle;
 		break;
-	case '30':
+	case '30': //最近30天
 		columnStyle=day30ColumnStyle;
 		break;
-	default:
+	default: //默认返回24小时
 		columnStyle=day1ColumnStyle;
-		break;
+	break;
 	}
-
+	
 	$("#healthList").html("");
 	$("#healthList").Grid({
 		url : rootPath+"/db/oracle/healthList/"+healthListStyle,  
@@ -185,41 +212,41 @@ function viewRelevance(){
 
 function buildHighchart(_highChart) {
 	new Highcharts.Chart({
-	    chart: {
-	        renderTo: _highChart.renderId,
-	        type: 'line',
-	        marginRight: 50,
-	        marginBottom: 75,
+		chart: {
+		    renderTo: _highChart.renderId,
+		    type: 'line',
+		    marginRight: 50,
+		    marginBottom: 75,
 			height:200
-	    },
-	    title: {
-	        text: ' ',
-	        x: -20 //center
-	    },
-	    xAxis: {
-	        categories: _highChart.categories
-	    },
-	    yAxis: {
-	        title: {
-	            text: '%'
+		},
+		title: {
+		    text: ' ',
+		    x: -20 //center
+		},
+		xAxis: {
+		    categories: _highChart.categories
+		},
+		yAxis: {
+		    title: {
+		        text: '%'
 	        },
 	        plotLines: false
-			},
-			plotOptions:{
-				series: {
-	                marker: {
-	                    radius: 0
-	                }
-	            }
-			},
-	  credits: { 
-	    text: '',
-	    href: ''
-	  },
-	    tooltip: false,
-	    legend: {
+		},
+		plotOptions:{
+			series: {
+                marker: {
+                    radius: 0
+                }
+            }
+		},
+		credits: { 
+		    text: '',
+		    href: ''
+		},
+		tooltip: false,
+		legend: {
 			enabled :true
-	    },
-	    series: _highChart.series
+		},
+		series: _highChart.series
 	});
 }

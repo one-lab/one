@@ -90,45 +90,45 @@ function save(){
             </select>
           </h2>
           <form id="oracleInfoForm" action="" method="post">
-          	  <input name="oracleInfo.id" type="hidden" value="${oracleInfo.id}"/>
+          	  <input name="id" type="hidden" value="${oracleInfo.id}"/>
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>
                 <td colspan="2" class="group_name">基本信息</td>
               </tr>
               <tr>
                 <td width="25%">显示名称<span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.name" value="${oracleInfo.name}" type="text" class="formtext" /><span class="prompt">该名称已存在</span></td>
+                <td><input name="name" value="${oracleInfo.name}" type="text" class="formtext" /><span class="prompt">该名称已存在</span></td>
               </tr>
               <tr>
                 <td>数据库地址<span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.ipAddress" value="${oracleInfo.ipAddress}" type="text" class="formtext" size="30" /></td>
+                <td><input name="ipAddress" value="${oracleInfo.ipAddress}" type="text" class="formtext" size="30" /></td>
               </tr>
               <tr>
                 <td>子网掩码<span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.subnetMask" value="${oracleInfo.subnetMask}" type="text" class="formtext" size="30" /></td>
+                <td><input name="subnetMask" value="${oracleInfo.subnetMask}" type="text" class="formtext" size="30" /></td>
               </tr>
               <tr>
                 <td>端口<span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.port" value="${oracleInfo.port}" type="text" class="formtext" size="8" /></td>
+                <td><input name="port" value="${oracleInfo.port}" type="text" class="formtext" size="8" /></td>
               </tr>
               <tr>
                 <td>执行频率<span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.pullInterval" value="${oracleInfo.pullInterval}" type="text" class="formtext" size="8" /> 分</td>
+                <td><input name="pullInterval" value="${oracleInfo.pullInterval}" type="text" class="formtext" size="8" /> 分</td>
               </tr>
               <tr>
                 <td colspan="2" class="group_name">用户信息</td>
               </tr>
               <tr>
                 <td>用户名<span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.username" value="${oracleInfo.username}" type="text" class="formtext" /></td>
+                <td><input name="username" value="${oracleInfo.username}" type="text" class="formtext" /></td>
               </tr>
               <tr>
                 <td>密码<span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.password" value="${oracleInfo.password}" type="password" class="formtext" /></td>
+                <td><input name="password" value="${oracleInfo.password}" type="password" class="formtext" /></td>
               </tr>
               <tr>
                 <td>Instance名(服务名) <span class="mandatory">*</span></td>
-                <td><input name="oracleInfo.instanceName" value="${oracleInfo.instanceName}" type="text" class="formtext" value="orcl" /></td>
+                <td><input name="instanceName" value="${oracleInfo.instanceName}" type="text" class="formtext" value="orcl" /></td>
               </tr>
               <tr>
                 <td class="group_name">&nbsp;</td>

@@ -18,6 +18,7 @@ import com.sinosoft.one.monitor.db.oracle.model.Highchart;
 import com.sinosoft.one.monitor.db.oracle.model.HighchartSerie;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
+import com.sinosoft.one.monitor.db.oracle.model.OracleAvaInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.StaGraphModel;
@@ -31,7 +32,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 
 /**
- * 
+ * oracle - 批量配置视图Controller
  * @author bao
  *
  */
@@ -44,6 +45,33 @@ public class OracleMonitorController {
 	
 	/* 返回前台ajax请求数据信息*/
 	private Map<String, Object> message = new HashMap<String, Object>();
+	
+	/**
+	 * oracle - 批量配置视图
+	 * 包含：可用性、性能、列表视图
+	 * @param inv
+	 * @return
+	 */
+	@Get("avaInfoList/{avaInfoStyle}")
+    public String avaInfoList(@Param("avaInfoStyle")int avaInfoStyle, Invocation inv){
+		StaTimeEnum avaStyle = null;
+		switch (avaInfoStyle) {
+		case 1: //24小时内
+			avaStyle = StaTimeEnum.LAST_24HOUR;
+			break;
+		case 30: //30天统计信息
+			avaStyle = StaTimeEnum.LAST_30DAY;
+			break;
+		default: //默认返回24小时
+			avaStyle = StaTimeEnum.LAST_24HOUR;
+			break;
+		}
+		/* 查询可用性历史纪录信息*/
+        List<OracleAvaInfoModel> oracleAvaInfoList = oracleBatchInfoService.avaInfoList(avaStyle);
+        inv.addModel("oracleAvaInfoList",oracleAvaInfoList);
+        inv.addModel("avaInfoStyle", avaInfoStyle);
+        return "oracleAvaInfo";
+    }
 	
 	/**
 	 * 性能信息
@@ -91,7 +119,8 @@ public class OracleMonitorController {
 	 * @return
 	 */
 	@Get("healthList/{healthType}")
-	public Reply healthList(@Param("healthType")int healthType) {
+	public Reply healthList(@Param("healthType")int healthType, Invocation inv) {
+		String contextPath = inv.getServletContext().getContextPath();
 		StaTimeEnum healthStyle = null;
 		switch (healthType) {
 		case 1: //24小时内
@@ -106,13 +135,17 @@ public class OracleMonitorController {
 		}
 		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
 		List<OracleHealthInfoModel> oracleHealthInfos = oracleBatchInfoService.healthInfoList(healthStyle);
+		/* 设置名称信息格式化*/
 		String messageFormat0 = "<a href={0}>{1}</a>";
+		/* 设置状态信息格式*/
 		String messageFormat1 = "<span class={0}>{1}</span>";
 		for(OracleHealthInfoModel oracleHealthInfo : oracleHealthInfos) {
 			Map<String, Object> row = new HashMap<String, Object>();
 			row.put("id", oracleHealthInfo.getMonitorID());
 			List<String> cell = new ArrayList<String>();
-			cell.add(MessageFormat.format(messageFormat0, "",oracleHealthInfo.getMonitorName()));
+			/* 构建数据库监控详细信息地址*/
+			String url = contextPath + "/db/oracle/home/viewInfo/"+ oracleHealthInfo.getMonitorID();
+			cell.add(MessageFormat.format(messageFormat0, url,oracleHealthInfo.getMonitorName()));
 			for(int i=0; i<oracleHealthInfo.getGraphInfo().size(); i++) {
 				String[] values = oracleHealthInfo.getGraphInfo().get(i);
 				String cssClass = "";
@@ -196,6 +229,7 @@ public class OracleMonitorController {
 		info.setUsername(oracleInfo.getUsername());
 		info.setPassword(oracleInfo.getPassword());
 		info.setInstanceName(oracleInfo.getInstanceName());
+		oracleInfoService.editMonitor(info);
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}
@@ -225,8 +259,8 @@ public class OracleMonitorController {
 		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
 		/* 初始化每列数据格式*/
 		String messageFormat0 = "<a href={0}>{1}</a>"; //数据库名
-		String messageFormat1 = "<div class={0} onclick='viewRelevance()'></div>"; //可用性-usability
-		String messageFormat2 = "<div class={0} onclick='viewRelevance()'></div>"; //健康状况-healthy
+		String messageFormat1 = "<div class={0}></div>"; //可用性-usability
+		String messageFormat2 = "<div class={0}></div>"; //健康状况-healthy
 		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
 		/* 查询数据库健康列表数据*/
 		List<OracleStaBaseInfoModel> oracleStaBaseInfos = oracleBatchInfoService.listStaBaseInfo();

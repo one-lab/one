@@ -16,19 +16,8 @@ $(function(){
 		bottom:{bottomHeight:30}
 	});
 	
-	$("#thresholdList").Grid({
-		url : rootPath+"/db/oracle/thresholdList",  
-		dataType: "json",
-		colDisplay: false,  
-		clickSelect: true,
-		draggable:false,
-		height: 'auto',  
-		colums: thresholdColumnStyle,  
-		rowNum:9999,
-		pager : false,
-		number:false,  
-		multiselect: true  
-	});
+	$("#avaInfoStyle").bind("change", {}, avaInfoList);
+	$("#avaInfoStyle").trigger("change");
 	
 	$.ajax({
 		type:"get",
@@ -43,6 +32,20 @@ $(function(){
 	
 	$("#healthListStyle").bind("change", {}, healthList);
 	$("#healthListStyle").trigger("change");
+	
+	$("#thresholdList").Grid({
+		url : rootPath+"/db/oracle/thresholdList",  
+		dataType: "json",
+		colDisplay: false,  
+		clickSelect: true,
+		draggable:false,
+		height: 'auto',  
+		colums: thresholdColumnStyle,  
+		rowNum:9999,
+		pager : false,
+		number:false,  
+		multiselect: true  
+	});
 	
 	$("#tabs").tabs({closeTab:false});
 	$("#myDesk").height($("#layout_center").height());
@@ -98,106 +101,12 @@ function hideNav(e){
             <div><br />
             	<div class="threshold_file availability">
                   <h2 class="title2"><b>可用性历史纪录- oracle　</b>
-                  	<select name="" class="diySelect">
-                            <option value="">最近24小时</option>
-                            <option value="">最近30天</option>
+                  	<select id="avaInfoStyle" name="" class="diySelect">
+                            <option value="1">最近24小时</option>
+                            <option value="30">最近30天</option>
                     </select>
                   </h2>
-                  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="my_table">
-                      <tr>
-                        <th width="20%">名称</th>
-                        <th width="75%" style="text-align:center">可用性</th>
-                        <th>可用性%</th>
-                      </tr>
-                      <c:forEach items="${oracleAvaInfoList }" var="oracleAvaInfo">
-                      <tr>
-                        <td>
-                        	<a href="oracle.html">${oracleAvaInfo。monitorName }</a>
-                        </td>
-                        <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="green_bar">
-                          <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td class="not_available">&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                          </tr>
-                        </table></td>
-                        <td>100</td>
-                      </tr>
-                      </c:forEach>
-                      <tr class="last_row">
-                        <td>&nbsp;</td>
-                        <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="ruler_bar">
-                          <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                          </tr>
-                        </table></td>
-                        <td>&nbsp;</td>
-                      </tr>
-                      <tr class="last_row">
-                        <td>&nbsp;</td>
-                        <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="time_bar">
-                          <tr>
-                            <td>01:00</td>
-                            <td>02:00</td>
-                            <td>03:00</td>
-                            <td>04:00</td>
-                            <td>05:00</td>
-                            <td>06:00</td>
-                            <td>07:00</td>
-                            <td>08:00</td>
-                            <td>09:00</td>
-                            <td>10:00</td>
-                            <td>11:00</td>
-                            <td>12:00</td>
-                          </tr>
-                        </table></td>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </table>
+                  <div id="avaInfoList"></div>
                     <div class="explain">
                     	<ul>
                         	<li><span class="ex_no"></span>不可用</li>
@@ -221,12 +130,12 @@ function hideNav(e){
                         <td width="50%"><div id="exchange_utilization"></div></td>
                       </tr>
                       <tr>
-                        <td class="group_name"><h3><strong>活动的远程连接数</strong></h3></td>
                         <td class="group_name"><h3><strong>活动的用户连接数</strong></h3></td>
+                        <td class="group_name"><!-- <h3><strong>活动的远程连接数</strong></h3> --></td>
                       </tr>
                       <tr>
-                        <td><div id="CPU_utilization"></div></td>
                         <td><div id="reply_utilization"></div></td>
+                        <td><!-- div id="CPU_utilization"></div --></td>
                       </tr>
                       <tr>
                         <td>&nbsp;</td>
