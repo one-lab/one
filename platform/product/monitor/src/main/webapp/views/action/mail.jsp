@@ -5,13 +5,13 @@
 <html>
 <head>
 <title>创建新的邮件动作</title>
-<link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/bussiness.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/static/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
+<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/bussiness.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -96,6 +96,7 @@ function rowsTogle(){
                 <td width="20%">消息<span class="mandatory">*</span></td>
                 <td colspan="2"><textarea class="formtext"   style="height:150px; width:270px" name="content">${mail.content}</textarea></td>
               </tr>
+              <!--
                <tr>
                 <td width="20%">经由</td>
                 <td colspan="2"><input type="radio" value="1" name="mailFormat"/>&nbsp;&nbsp;&nbsp;纯文本&nbsp;&nbsp;&nbsp;<input type="radio"  value="2"  name="mailFormat"/>&nbsp;&nbsp;&nbsp;HTML<input type="radio" name="mailFormat" checked="checked" value="3"/>&nbsp;&nbsp;&nbsp;两者</td>
@@ -114,6 +115,7 @@ function rowsTogle(){
                   <option selected="selected">--选择工作时间--</option>
                 </select>&nbsp;&nbsp;<a class="message-time" href="#">添加新的工作时间</a></td>
               </tr>
+              -->
               <tr>
                 <td class="group_name">&nbsp;</td>
                 <td colspan="2" class="group_name">
