@@ -15,11 +15,13 @@
 <script language="javascript" src="js/sinosoft.grid.js"></script>  
 <script language="javascript" src="js/sinosoft.layout.js"></script>
 <script language="javascript" src="js/highcharts.src.js"></script>
-<script language="javascript" src="js/timeinfo/timeinfo.js"></script>
 <script language="javascript" src="js/sinosoft.window.js"></script>
 <script language="javascript" src="js/sinosoft.tabs.js"></script>
+<script language="javascript" src="js/timeinfo/timeinfo.js"></script>
 <script type="text/javascript">
 $(function(){
+
+	
 	$("body").layout({
 		top:{topHeight:100}
 	});
@@ -31,12 +33,14 @@ $(function(){
 	var barLength = [[10,90],[20,80],[30,70],[40,60],[50,50],[70,30]]
 	$(".bar .show_bar").each(function(i){
 			$(this).find("div").each(function(j){
-					$(this).css("width",barLength[i][j]+"%");
+					$(this).css("width",barLength[i][j]+"%")
 				});
 		});
 	
+	var autoWidth = $("#layout_center").width()-40;
+	$("#event_log_grid,#list_table").width(autoWidth)
 	
-	$("#list_table").Grid({
+		$("#list_table").Grid({
 		url : "urlInfo.json",
 		dataType: "json",
 		height: 'auto',
@@ -52,8 +56,7 @@ $(function(){
 		pager : true,
 		number:false,
 		multiselect:false
-	});
-					
+	});				
 	$("#event_log_grid").Grid({
 		url : "eventLog.json",
 		dataType: "json",
