@@ -19,7 +19,10 @@ function refresheSGA(msg) {
              text:''
          },
          xAxis:{
-             categories: msg.categories
+             categories: msg.categories,
+             labels: { 
+            	 step:3
+			 } 
          },
          yAxis:{
              title:{
@@ -220,7 +223,7 @@ function refreshPie1(_data){
 function getForm1() {
 
     $.ajax({
-        url:"/monitor/db/oracle/home/viewConnect/4028921b3d3fba36013d3fbb061c0000",
+        url:"/monitor/db/oracle/home/viewConnect/"+monitorId,
         dataType:"json",
         cache:false,
         success:function (_data) {
@@ -234,7 +237,7 @@ function getForm1() {
 function getForm2() {
 
     $.ajax({
-        url:"/monitor/db/oracle/home/viewSGA/4028921b3d3fba36013d3fbb061c0000",
+        url:"/monitor/db/oracle/home/viewSGA/"+monitorId,
         dataType:"json",
         cache:false,
         success:function (_data) {
@@ -247,7 +250,7 @@ function getForm2() {
 function getAvaPie(){
 	
 	$.ajax({
-        url:"/monitor/db/oracle/home/viewAva/4028921b3d3fba36013d3fbb061c0000",
+        url:"/monitor/db/oracle/home/viewAva/"+monitorId,
         dataType:"json",
         cache:false,
         success:function (_data) {
@@ -259,7 +262,7 @@ function getAvaPie(){
 function getSGA(){
 	
 	$.ajax({
-        url:"/monitor/db/oracle/home/viewSGAGraph/4028921b3d3fba36013d3fbb061c0000",
+        url:"/monitor/db/oracle/home/viewSGAGraph/"+monitorId,
         dataType:"json",
         cache:false,
         success:function (_data) {

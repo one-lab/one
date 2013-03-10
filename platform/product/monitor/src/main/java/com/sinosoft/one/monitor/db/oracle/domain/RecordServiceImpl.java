@@ -11,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.db.oracle.model.Ava;
 import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
 import com.sinosoft.one.monitor.db.oracle.model.EventSta;
@@ -25,7 +27,6 @@ import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
-import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableCountsGroupByInterval;
 import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableInf;
 import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableStatistics;
 import com.sinosoft.one.monitor.utils.DateUtil;
@@ -45,6 +46,8 @@ public class RecordServiceImpl implements RecordService {
 	private LasteventRepository lasteventRepository;
 	@Autowired
     private DBUtil4Monitor dbUtil4Monitor;
+	@Autowired
+	private AlarmMessageBuilder alarmMessageBuilder;
 	private static Date lastDate = new Date(0);
 	private static Date avaLastDate = new Date(0);
 
@@ -71,12 +74,20 @@ public class RecordServiceImpl implements RecordService {
 		lastevent.setActiveCount(active);
         double libHitRatio = ((BigDecimal)rsList3.get(0).get("libHitRatio") ).doubleValue();
 		lastevent.setBufferLibHitRate(libHitRatio);
-		lastevent.setConnectTime(dbUtil4Monitor.connectTime(info));
+		long connectionTime = dbUtil4Monitor.connectTime(info);
+		lastevent.setConnectTime(connectionTime);
         double dictRatio = ((BigDecimal)rsList2.get(0).get( "dictRatio") ).doubleValue();
 		lastevent.setDickHitRate(dictRatio);
 		lastevent.setDatabaseId(info.getId());
 		lastevent.setRecordTime(date);
 		lasteventRepository.save(lastevent);
+		
+		alarmMessageBuilder.newMessageBase(info.getId())
+		.addAlarmAttribute(AttributeName.BufferHitRatio, hitRatio + "")
+		.addAlarmAttribute(AttributeName.ResponseTime,  connectionTime + "")
+		.addAlarmAttribute(AttributeName.ActiveConnection,  active + "").alarm();
+
+		
 		Calendar calender = DateUtil.getCalender();
 		calender.setTime(date);
 		Calendar newCalender = DateUtil.getCalender();
@@ -197,6 +208,8 @@ public class RecordServiceImpl implements RecordService {
 			ava.setState("1");
 		} else {
 			ava.setState("0");
+			alarmMessageBuilder.newMessageBase(info.getId())
+			.addAlarmAttribute(AttributeName.Availability,  "0").alarm();
 		}
 		dbUtil4Monitor.closeConnection(conn);
 		ava.setRecordTime(date);
