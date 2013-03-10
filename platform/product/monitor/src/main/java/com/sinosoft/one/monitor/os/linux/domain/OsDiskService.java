@@ -30,8 +30,7 @@ public class OsDiskService {
 	 * 保存磁盘采集数据
 	 * @param disk
 	 */
-	public boolean saveDisk(String osInfoId, String diskInfo ,Date sampleTime){
-		List<OsDisk> osDisks=OsTransUtil.getDiskInfo(diskInfo);
+	public boolean saveDisk(String osInfoId, List<OsDisk> osDisks,Date sampleTime){
 		Os os=new Os();
 		for (OsDisk osDisk : osDisks) {
 			os.setOsInfoId(osInfoId);

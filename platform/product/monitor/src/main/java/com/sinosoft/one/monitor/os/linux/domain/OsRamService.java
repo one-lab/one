@@ -30,8 +30,7 @@ public class OsRamService {
 	/**
 	 * 保存内存采集数据
 	 */
-	public boolean saveRam(String osInfoId,String ramInfo  ,Date sampleTime){
-		OsRam osRam=OsTransUtil.getRamInfo(ramInfo);
+	public boolean saveRam(String osInfoId,OsRam osRam  ,Date sampleTime){
 		Os os=new Os();
 		os.setOsInfoId(osInfoId);
 		osRam.setOs(os);
