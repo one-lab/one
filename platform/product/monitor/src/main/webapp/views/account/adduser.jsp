@@ -4,13 +4,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>新建用户</title>
-<link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/static/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
+<title>用户管理</title>
+<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -59,7 +59,7 @@ function save(){
 <div id="layout_center">
 	<div class="main">
     	<div class="add_monitor user_manager">
-       	  <h2 class="title2"><strong class="right"><a href="userManager.html">返回用户列表</a></strong><b>创建新用户　</b>
+       	  <h2 class="title2"><strong class="right"><a href="${ctx}/account/user/list">返回用户列表</a></strong><b>用户信息</b>
           </h2>
           <form action="${ctx}/account/user/save" method="post">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
@@ -101,7 +101,7 @@ function save(){
               <tr>
                 <td class="group_name">&nbsp;</td>
                 <td class="group_name">
-                	<input type="submit" class="buttons" value="确定添加" />　
+                	<input type="submit" class="buttons" value="确定" />　
                     <input type="reset" class="buttons" value="重 置" />　
                     <input type="button" class="buttons" value="取 消" onclick="window.history.back()" />
                 </td>
