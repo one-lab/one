@@ -10,6 +10,7 @@ public enum AlarmSource {
 	LOG,
 	EXCEPTION,
 	URLRESPONSETIME,
+	EUMURL,
 	OS,
 	DB
 }

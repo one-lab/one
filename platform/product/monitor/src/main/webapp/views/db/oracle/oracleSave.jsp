@@ -16,7 +16,8 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
-	if(editFlag) {$("#monitor_select").attr({"disabled":true})};
+	$("#monitorType option[id='oracle_option']").attr({"selected":"selected"});
+	if(editFlag) {$("#monitorType").attr({"disabled":true})};
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
@@ -55,7 +56,7 @@ function save(){
 	} else {
 		action = action + "add";
 	}
-	console.log($("#oracleInfoForm").serialize());
+	console.log(action);
 	$.ajax({
 		url: action,
 		type: "post",
@@ -64,6 +65,10 @@ function save(){
 		success: function(msg) {
 			if(msg.result) {
 				msgSuccess("系统消息", "操作成功，监视器已保存！");
+			} else {
+				if(msg.type=='disconnect') {
+					msgFailed("系统消息", msg.tip);
+				}
 			}
 		}
 	});
@@ -76,19 +81,7 @@ function save(){
 <div id="layout_center">
 	<div class="main">
     	<div class="add_monitor">
-       	  <h2 class="title2"><b>监视器类型　</b>
-          	<select name="" id="monitor_select" class="diySelect" onchange="top.location=this.value;">
-                <optgroup label="应用服务器">
-            		<option value="addSystem.html">应用系统</option>
-                </optgroup>
-                <optgroup label="数据库">
-            		<option selected="selected" value="addOracle.html">Oracle</option>
-                </optgroup>
-                <optgroup label="操作系统">
-            		<option value="addLinux.html">Linux</option>
-                </optgroup>
-            </select>
-          </h2>
+       	  <%@include file="/WEB-INF/layouts/selectMonitorType.jsp"%>
           <form id="oracleInfoForm" action="" method="post">
           	  <input name="id" type="hidden" value="${oracleInfo.id}"/>
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
