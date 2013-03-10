@@ -4,17 +4,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <title>查看预警配置文件</title>
-<link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/static/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/static/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
+<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
 
 <script type="text/javascript">
 $(function(){
@@ -24,7 +24,7 @@ $(function(){
 	});
 	$("#thresholdList").Grid({
 		type : "post",
-		url : "${ctx}/threshold/threshold/data",  
+		url : "${ctx}/threshold/data",
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
@@ -84,16 +84,15 @@ function delRow(e){
 	var id = rows.attr('id');
 	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
 		rows.remove();
-		delThreshold("${ctx}/threshold/threshold/delete/"+id.replace("row_",""));
+		delThreshold("${ctx}/threshold/delete/"+id.replace("row_",""));
 	});
 }
 
 function updRow(e){
-	alert(111);
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
 	rows.remove();
-	location.href="${ctx}/threshold/threshold/update/"+id.replace("row_","");
+	location.href="${ctx}/threshold/update/"+id.replace("row_","");
 }
 function batchDel(){
 	var $g = $("#thresholdList div.grid_view > table");
@@ -106,7 +105,7 @@ function batchDel(){
 				checks.push(rows.attr('id').replace("row_",""));
 				rows.remove();
 			});
-			var delUrl = "${ctx}/threshold/threshold/batchDelete/"+checks;
+			var delUrl = "${ctx}/threshold/batchDelete/"+checks;
 			delThreshold(delUrl);
 		});
 	}else{
@@ -123,7 +122,7 @@ function delThreshold(url){
 		},
 		error:function(){
 			msgSuccess("系统消息", "操作失败，配置未被删除！");
-			location.href="${ctx}/threshold/threshold/list";
+			location.href="${ctx}/threshold/list";
 		}
 	});
 }
