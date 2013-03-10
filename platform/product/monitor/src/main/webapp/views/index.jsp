@@ -29,8 +29,8 @@ $(function(){
 	//thresholdList emergencyList systemList oracleList
 	var gridList = new Array();
 	
-	//gridList.push({"renderId":"thresholdList","url":"columStyle", "":columStyle1});
-	//gridList.push({"renderId":"emergencyList","url":"columStyle", "":columStyle2});
+	gridList.push({"renderId":"thresholdList","url":rootPath+"/applicationList", "columStyle":columStyle1});
+	gridList.push({"renderId":"emergencyList","url":rootPath+"/alarmList", "columStyle":columStyle2});
 	gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList", "columStyle":columStyle1});
 	gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList", "columStyle":columStyle1});
 	

@@ -73,6 +73,6 @@ public class AddMonitorController {
         //RESOURCES表中保存应用信息
         resourcesService.saveResource(resource);
         //页面所在路径application/manager/@应用性能页面
-        return "r:application/manager/appmanager/appperformance";
+        return "r:application/manager/appmanager/applist/1";
     }
 }

@@ -12,6 +12,9 @@
 <link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+var monitorId = "${monitorId}";
+</script>
 <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
@@ -32,7 +35,7 @@ $(function(){
 	$("#nav,#menu").delegate('li', 'click', navClick);
 
 	$("#table_space_detail").Grid({
-		url : ctx+"/db/oracle/home/viewTableSpace/4028921b3d3fba36013d3fbb061c0000",
+		url : ctx+"/db/oracle/home/viewTableSpace/${monitorId}",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -52,7 +55,7 @@ $(function(){
 		multiselect:true
 	});
     $("#table_space_overview").Grid({
-        url : ctx+"/db/oracle/home/viewTableSpaceOverPreview/4028921b3d3fba36013d3fbb061c0000",
+        url : ctx+"/db/oracle/home/viewTableSpaceOverPreview/${monitorId}",
         dataType: "json",
         height: 'auto',
         colums:[
@@ -114,7 +117,7 @@ $(function(){
 //	});
 
 		$("#sga_detail").Grid({
-		url :  ctx+"/db/oracle/home/viewSGADetail/4028921b3d3fba36013d3fbb061c0000",
+		url :  ctx+"/db/oracle/home/viewSGADetail/${monitorId}",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -130,7 +133,7 @@ $(function(){
 	});
 
 	$("#sga_status").Grid({
-		url : ctx+"/db/oracle/home/viewSGAStatus/4028921b3d3fba36013d3fbb061c0000",
+		url : ctx+"/db/oracle/home/viewSGAStatus/${monitorId}",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -197,7 +200,7 @@ function createSevenDayConnect() {
 	var temWin = $("body").window({
 			"id":"testOne9",
 			"title":"7天可用",
-			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/1/1/1",
+			"url":ctx+"/db/oracle/sta/view/${monitorId}/1/1/1",
 			"hasIFrame":true,
 			"width":850,
 			"height":440,
@@ -217,7 +220,7 @@ function createThirtyDayConnect() {
 	var temWin = $("body").window({
 			"id":"testOne8",
 			"title":"30天可用",
-			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/1/1/2",
+			"url":ctx+"/db/oracle/sta/view/${monitorId}/1/1/2",
 			"hasIFrame":true,
 			"width":850,
 			"height":440,
@@ -237,7 +240,7 @@ function createSevenDayUser() {
 	var temWin = $("body").window({
 			"id":"testOne11",
 			"title":"7天可用  ",
-			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/2/2/1",
+			"url":ctx+"/db/oracle/sta/view/${monitorId}/2/2/1",
 			"hasIFrame":true,
 			"width":850,
 			"height":440,
@@ -257,7 +260,7 @@ function createThirtyDayUser() {
 	var temWin = $("body").window({
 			"id":"testOne10",
 			"title":"30天可用  ",
-			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/2/2/2",
+			"url":ctx+"/db/oracle/sta/view/${monitorId}/2/2/2",
 			"hasIFrame":true,
 			"width":850,
 			"height":440,
@@ -277,7 +280,7 @@ function createSevenDayHitRate() {
 	var temWin = $("body").window({
 			"id":"testOne7",
 			"title":"7天可用",
-			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/3/3/1",
+			"url":ctx+"/db/oracle/sta/view/${monitorId}/3/3/1",
 			"hasIFrame":true,
 			"width":850,
 			"height":440,
@@ -297,7 +300,7 @@ function createThirtyDayHitRate() {
 	var temWin = $("body").window({
 			"id":"testOne6",
 			"title":"30天可用性",
-			"url":ctx+"/db/oracle/sta/view/4028921b3d3fba36013d3fbb061c0000/3/3/2",
+			"url":ctx+"/db/oracle/sta/view/${monitorId}/3/3/2",
 			"hasIFrame":true,
 			"width":850,
 			"height":440,
@@ -358,10 +361,10 @@ function createThirtyDayHitRate() {
         <td style="vertical-align:top">
           <div class="threshold_file">
             <div class="sub_title">今日可用性</div>
-            <div class="days_data">
+            <div class="days_data"><!--
               <a href="#"><div class="thirty_days"></div></a>
             	<a href="#"><div class="seven_days"></div></a>
-            </div>
+            --></div>
             <div id="day_available" ></div>
              <a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
           </div>
@@ -503,7 +506,7 @@ function createThirtyDayHitRate() {
         </td>
         
       </tr>
-      <tr>
+      <!--<tr>
       	<td colspan="2">
         	<div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
@@ -519,7 +522,7 @@ function createThirtyDayHitRate() {
          	</div>
         </td>
       </tr>
-  	</table>
+  	--></table>
     </div>
     
     <div id="table_space" >
@@ -557,14 +560,14 @@ function createThirtyDayHitRate() {
             </td>
           </tr>
           <tr>
-          	<td width="50%">
+          	<td width="50%" style="vertical-align:top; ">
             	<div style=' border:1px solid #dfe9f2;'>
                 <div class="sub_title">SGA明细</div>
                 <div id="sga_detail"></div>
                 <a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
               </div>
             </td>
-            <td width="50%">
+            <td width="50%"  style="vertical-align:top; ">
             	<div style=' border:1px solid #dfe9f2;'>
                 <div class="sub_title">SGA状态</div>
                 <div id="sga_status"></div>

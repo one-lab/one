@@ -71,9 +71,17 @@ public class OracleController {
         SGAStateModel sgaStateModel =  oracleSGAService.viewSGAStateInfo(monitorId);
 
         OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
+        
+        EventInfoModel[] eventInfoModels = oraclePreviewService.viewConnectInfo(monitorId);
+//        EventInfoModel eventInfoModel = new EventInfoModel();
+//        if(eventInfoModel!=null&&eventInfoModels.length>0){
+//        	eventInfoModel = eventInfoModels[eventInfoModels.length-1];
+//        }
+//        inv.addModel(value)
         inv.addModel("oracleDetailModel", oracleDetailModel);
 		inv.addModel("oracleInfoModel", oracleInfoModel);
         inv.addModel("sgaStateModel", sgaStateModel);
+        inv.addModel("monitorId", monitorId);
 		return "oracle";
 	}
 
