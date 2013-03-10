@@ -38,7 +38,8 @@ $(function(){
 		});
 	
 	var autoWidth = $("#layout_center").width()-40;
-	$("#event_log_grid,#list_table").width(autoWidth)
+	$("#event_log_grid").width(autoWidth)
+	$("#list_table").width(autoWidth-15)
 	
 		$("#list_table").Grid({
 		url : "urlInfo.json",
