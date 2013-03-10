@@ -4,6 +4,7 @@ import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaStaRepository;
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
@@ -80,6 +81,7 @@ public class BusinessEmulation {
     private void recordEnum(EumUrl url, boolean result, BigDecimal interval){
 	    if(!result) {
 		    alarmMessageBuilder.newMessageBase(url.getApplication().getId())
+				    .alarmSource(AlarmSource.EUMURL)
 				    .addAlarmAttribute(AttributeName.Availability, "0")
 		            .subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
 		            .subResourceId(url.getUrlId()).alarm();
