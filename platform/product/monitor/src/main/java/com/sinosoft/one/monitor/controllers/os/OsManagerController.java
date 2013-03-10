@@ -252,8 +252,6 @@ public class OsManagerController {
 	 */
 	@Get("editUI/{monitorId}")
 	public String editUI(@Param("monitorId")String monitorId,Invocation inv) {
-		Info oracleInfo = oracleInfoService.getInfo(monitorId);
-		inv.addModel("oracleInfo", oracleInfo);
 		return "oracleSave";
 	}
 	
@@ -265,16 +263,6 @@ public class OsManagerController {
 	 */
 	@Post("edit")
 	public Reply edit(Info oracleInfo,Invocation inv) {
-		Info info = oracleInfoService.getInfo(oracleInfo.getId());
-		info.setName(oracleInfo.getName());
-		info.setIpAddress(oracleInfo.getIpAddress());
-		info.setSubnetMask(oracleInfo.getSubnetMask());
-		info.setPort(oracleInfo.getPort());
-		info.setPullInterval(oracleInfo.getPullInterval());
-		info.setUsername(oracleInfo.getUsername());
-		info.setPassword(oracleInfo.getPassword());
-		info.setInstanceName(oracleInfo.getInstanceName());
-		oracleInfoService.editMonitor(info);
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}
