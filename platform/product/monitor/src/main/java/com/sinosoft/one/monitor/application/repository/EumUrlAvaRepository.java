@@ -30,7 +30,7 @@ public interface EumUrlAvaRepository extends PagingAndSortingRepository<EumUrlAv
      @SQL("SELECT count(1) from GE_MONITOR_EUM_URL_AVA where eum_url_id=?1 and STATE = ?2")
      public int countByEmuIdAndStatus(String eumUrlId,String status);
 
-     @SQL("select to_char(a.record_time, 'yyyy-MM-dd HH24') as timeQuantum, state, count(1) as count" +
+     @SQL("select to_char(a.record_time, 'yyyy-MM-dd HH24') as timeQuantum, state as status, count(1) as count" +
              "  from ge_monitor_eum_url_ava a" +
              "  where a.eum_url_id=?1 and a.record_time between ?2 and ?3 " +
              " group by to_char(a.record_time, 'yyyy-MM-dd HH24'), state")
