@@ -12,6 +12,7 @@ import com.sinosoft.one.monitor.common.Trend;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,11 +21,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.sound.midi.SysexMessage;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 仿真URL服务对象
@@ -100,12 +99,12 @@ public class ApplicationEmuService {
         return eumUrlAvaSta;
     }
 
-    public ApplicationAvailableInf getApplicationAvailableToday(String applicationId){
+    public ApplicationAvailableInf getApplicationAvailableToday(String applicationId) throws EumUrlsNotFoundException {
         Assert.hasText(applicationId);
 
         List<EumUrl> eumUrls = eumUrlRepository.findByApplication_Id(applicationId);
         if(eumUrls.isEmpty())
-            throw new IllegalArgumentException("application Id is "+applicationId+" not found any eumUrls!");
+            throw new EumUrlsNotFoundException("application Id is "+applicationId+" not found any eumUrls!");
         int  count = 0;
         int  avCount = 0;
         for(EumUrl eumUrl:eumUrls){
@@ -115,7 +114,6 @@ public class ApplicationEmuService {
         }
         return new  ApplicationAvailableInf(calTrend(eumUrls),count,avCount);
     }
-
 
 
 
@@ -191,10 +189,9 @@ public class ApplicationEmuService {
 
     void deleteEnumUrlAvaData(String eumUrlId){
         EumUrlAva eumAvaLast = getTodayLatestEumUrlAva(eumUrlId);
-        DateTime today = DateTime.now();
         if(eumAvaLast!=null){
-            DateTime prevDate = new DateTime(eumAvaLast.getRecordTime());
-            if(prevDate.getDayOfYear()<  today.getDayOfYear()){
+            LocalDate prevDate = new LocalDate(eumAvaLast.getRecordTime());
+            if(prevDate.compareTo(LocalDate.now())<0){
                 eumUrlAvaRepository.deleteAll();
             }
         }
@@ -252,4 +249,5 @@ public class ApplicationEmuService {
 
         eumUrlAvaStaRepository.save(eumUrlAvaSta);
     }
+
 }
