@@ -130,7 +130,7 @@
     </div>
     <div class="tableheadingbborder" style="width:49%; height:280px">
       <div class="head-cpu">今天的可用性</div>
-      <div class="cpu-img"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this,"sevenDayAvailableLinux.jsp")'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow(this,"thirdthDayAvailableLinux.jsp")'></a></div>
+      <div class="cpu-img"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this,"historyAvaylable/7")'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow(this,"historyAvaylable/30")'></a></div>
       <div id="container" style="width: 300px; height: 240px; margin: 0 auto"></div>
       <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg">&nbsp;</a><a class="bodytext-img" href="setEmergency.html">警告配置</a></b></div>
     </div>
@@ -143,7 +143,7 @@
               <tbody>
                 <tr>
                   <td width="60%" class="bodytextbold">&nbsp;&nbsp;应答时间&nbsp;&nbsp;<a class="bodytextbold1"></a></td>
-                  <td width="30%" align="right"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this,"sevenDayResponseTime.jsp")'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow(this,"thirtyDayResponseTime.jsp")'></a></td>
+                  <td width="30%" align="right"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this,"historyRespond/7")'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow(this,"historyRespond/30")'></a></td>
                 </tr>
                 <tr>
                   <td align="center" class="textResponseTime" colspan="1"> 0 毫秒 </td>
@@ -208,10 +208,10 @@
                   <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
                       <tbody>
                         <tr>
-                          <td id="diskUtilzation1" height="28" align="center" title="磁盘利用率-12%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindow(this,"historyDISK/7")'><div id="diskUtilzation" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
+                          <td id="diskUtilzation1" height="28" align="center" title="磁盘利用率-12%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindow(this,"historyDisk/7")'><div id="diskUtilzation" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
                         </tr>
                         <tr>
-                          <td  align="center" class="bodytextbold"><a id="diskUtilzation2"  onclick='viewWindow(this,"historyDISK/7")' class="staticlinks"  href="javascript:void(0)">磁盘使用率-12</a> %</td>
+                          <td  align="center" class="bodytextbold"><a id="diskUtilzation2"  onclick='viewWindow(this,"historyDisk/7")' class="staticlinks"  href="javascript:void(0)">磁盘使用率-12</a> %</td>
                         </tr>
                       </tbody>
                     </table>
@@ -256,8 +256,8 @@
             <h2 class="title3">磁盘空间明细</h2>
             <div id="cipan_space_detail" style="width:100%"></div>
           	<div class="tool_bar_top">
-              <img  src="${ctx }/global/images/legend-green.png" /><span>空闲%</span>
-             <img  src="${ctx }/global/images/legend-red.png" /><span>已用%</span>
+            <%--   <img  src="${ctx }/global/images/legend-green.png" /><span>空闲%</span>
+             <img  src="${ctx }/global/images/legend-red.png" /><span>已用%</span> --%>
             </div>
 </div>
 </div>

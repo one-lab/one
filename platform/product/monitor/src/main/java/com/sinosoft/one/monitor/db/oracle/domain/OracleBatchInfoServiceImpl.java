@@ -50,7 +50,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         Date now = new Date();
         Date timeStart =  StaTimeEnum.getTime(staTimeEnum,now);
         double total = 0;
-        double during =  now.getTime()-timeStart.getTime();
+        double during =  (now.getTime()-timeStart.getTime())/100;
         for (Info info : infoList) {
             OracleAvaInfoModel oracleAvaInfoModel = new OracleAvaInfoModel();
             AvaSta avaSta = avaStaRepository.findAvaSta(info.getId());

@@ -1,5 +1,11 @@
 package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 
+
+/**
+ * 表格建立对象
+ * @author Administrator
+ *
+ */
 public class OsGridModel {
 
 	
@@ -13,14 +19,63 @@ public class OsGridModel {
 	
 	private String used;
 	
-	private String threshold;
-
 	private String value;
 	
 	private String stuts;
 	
+	private String time;
+	
+	private String minValue;
+	
+	private String maxValue;
+	
+	private String averageValue;
+	
+	private String normalRun;
+	
+	private String crashTime;
+	
+	private String aveRepairTime;
+	
+	private String aveFaultTime;
+
+	
+	
+	
 	public String getName() {
 		return name;
+	}
+
+	public String getNormalRun() {
+		return normalRun;
+	}
+
+	public void setNormalRun(String normalRun) {
+		this.normalRun = normalRun;
+	}
+
+	public String getCrashTime() {
+		return crashTime;
+	}
+
+	public void setCrashTime(String crashTime) {
+		this.crashTime = crashTime;
+	}
+
+	public String getAveRepairTime() {
+		return aveRepairTime;
+	}
+
+	public void setAveRepairTime(String aveRepairTime) {
+		this.aveRepairTime = aveRepairTime;
+	}
+
+	public String getAveFaultTime() {
+		return aveFaultTime;
+	}
+
+	public void setAveFaultTime(String aveFaultTime) {
+		this.aveFaultTime = aveFaultTime;
 	}
 
 	public void setName(String name) {
@@ -51,13 +106,6 @@ public class OsGridModel {
 		this.used = used;
 	}
 
-	public String getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(String threshold) {
-		this.threshold = threshold;
-	}
 
 	public String getId() {
 		return id;
@@ -82,5 +130,38 @@ public class OsGridModel {
 	public void setStuts(String stuts) {
 		this.stuts = stuts;
 	}
+
+	public String getMinValue() {
+		return minValue;
+	}
+
+	public void setMinValue(String minValue) {
+		this.minValue = minValue;
+	}
+
+	public String getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(String maxValue) {
+		this.maxValue = maxValue;
+	}
+
+	public String getAverageValue() {
+		return averageValue;
+	}
+
+	public void setAverageValue(String averageValue) {
+		this.averageValue = averageValue;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
 	
 }

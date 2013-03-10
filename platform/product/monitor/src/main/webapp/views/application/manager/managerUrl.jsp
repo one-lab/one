@@ -7,17 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>管理URL</title>
-<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/manageBusScene/manageBusScene.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+    <%@include file="/WEB-INF/layouts/base.jsp"%>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -156,68 +146,55 @@ function batchDel(){
 <body>
 <div id="layout_top">
 	<div class="header">
-    	<p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-    	<div class="menu_box">
-        	<ul class="nav" id="nav">
-            	<li><a href="index.html">首页</a></li>
-                <li class="has_sub">
-                	<a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                	<ul class="add_sub_menu" id="subNav">
-                    	<li class="action"><span class="sever">操作系统</span>
-                        	<ul class="list">
-                            	<li><a href="javascript:viod(0)">操作系统1</a></li>
-                                <li><a href="javascript:viod(0)">操作系统2</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                        	<ul class="list">
-                            	<li><a href="javascript:viod(0)">在线投保</a></li>
-                                <li><a href="javascript:viod(0)">在线查询</a></li>
-                                <li><a href="javascript:viod(0)">应急处置</a></li>
-                                <li><a href="javascript:viod(0)">人员角色管理</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                        	<ul class="list">
-                            	<li><a href="javascript:viod(0)">SQL DBA</a></li>
-                                <li><a href="javascript:viod(0)">SQL SYS</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
-                    
-                </li>
-                <li><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
-                <li><a href="javascript:viod(0)">业务仿真</a></li>
-                <li><a href="javascript:viod(0)">告警</a></li>
-            </ul>
-        </div>
-        <ul class="add_menu" id="menu">
-        	<li><a href="addMonitorList.html">新建监视器</a></li>
-            <li><a href="javascript:viod(0)">配置监视器</a></li>
-            <li class="has_sub">
-            	<a href="javascript:viod(0)"><span>预警对象管理</span></a>
-            	<ul class="add_sub_menu">
-                	<li class="title"><a href="javascript:viod(0)">显示动作</a></li>
-                    <li class="action">创建新动作</li>
-                    <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
-                    <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
-                </ul>
-            </li>
-        </ul>
+        <%@include file="/WEB-INF/layouts/menu.jsp"%>
     </div>
 </div>
 <div id="layout_center">
-	<div class="main">
-    	<div class="threshold_file">
-       	  <h2 class="title2"><b>业务场景名:${bizScenarioName}</b></h2>
-          <div class="tool_bar_top">
-          	<a href="${ctx}/application/manager/urlmanager/createurl/${bizScenarioId}" class="add_bus_scene" >添加url</a>
-          	<a href="javascript:void(0);" class="batch_del" onclick="urlBatchDel()">批量删除</a>
-          </div>
-          <div id="thresholdList"></div>
-          <div class="tool_bar"></div>
-        </div>
+    <div class="main">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="vertical-align:top">
+                    <div class="threshold_file">
+                        <h2 class="title2"><b>业务场景名:${bizScenarioName}</b></h2>
+
+                        <div class="tool_bar_top">
+                            <a href="${ctx}/application/manager/urlmanager/createurl/${bizScenarioId}"
+                               class="add_bus_scene">添加url</a>
+                            <a href="javascript:void(0);" class="batch_del" onclick="urlBatchDel()">批量删除</a>
+                        </div>
+                        <div id="thresholdList"></div>
+                        <div class="tool_bar"></div>
+                    </div>
+                </td>
+                <td width="15">&nbsp;</td>
+                <td width="33%" style="vertical-align:top">
+                    <div class="conf_box help">
+                        <div class="conf_title">
+                            <div class="conf_title_r"></div>
+                            <div class="conf_title_l"></div>
+                            <span>帮助信息</span></div>
+                        <div class="conf_cont_box">
+                            <div class="conf_cont">
+                                <ul>
+                                    <li class="first"><b>新建应用系统监视器</b><br/>
+                                        创建系统监视器后可根据业务需求配置业务场景。
+                                    </li>
+                                    <li class="first"><b>管理业务场景</b><br/>
+                                        点击“管理业务场景”,可以增加新业务场景或管理已有业务场景。
+                                    </li>
+                                    <li class="first"><b>管理URL</b><br/>
+                                        点击“管理URL”,对应业务场景将URL按流程顺序进行添加与监控配置。
+                                    </li>
+                                    <li class="the_set"><b>管理方法</b><br/>
+                                        点击“管理方法”,对URL中所执行的方法按顺序进行添加与监控配置
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 <div id="layout_bottom">

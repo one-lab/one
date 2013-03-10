@@ -7,12 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://www.springframework.org/schema/beans">
 <head>
     <title>新建监视器</title>
-    <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css"/>
-    <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-    <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-    <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+    <%@include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
         $(function () {
             $("body").layout({
@@ -58,6 +53,9 @@
         }
         /*校验数据*/
         function isValid(form) {
+            String.prototype.trim = function(){
+                return this.replace(/(^\s*|\s*$)/g,'');
+            }
             var appName="^[A-Za-z]+$";
             if (!form.applicationName.value.match(appName)) {
                 alert("显示名称必须是英文！");
@@ -72,12 +70,16 @@
                 alert("主机IP地址必须是数字和\".\"的组合！");
                 return false;
             }
-            var appPort="^[0-9.]+$";
+            var appPort="^[0-9]+$";
             if(!form.applicationPort.value.match(appPort)||form.applicationPort.value.length>5){
                 alert("端口必须是5位以内的数字！");
                 return false;
+            }            
+            if(form.interval.value.trim()==""){
+                alert("轮询间隔不能为空或者空格！");
+                return false;
             }
-            var appInterval="^[0-9.]+$";
+            var appInterval="^[0-9]+$";
             if(!form.interval.value.match(appInterval)||form.interval.value.length>10){
                 alert("轮询间隔必须是10位以内的数字！");
                 return false;
@@ -90,126 +92,112 @@
 <body>
 <div id="layout_top">
     <div class="header">
-        <p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-
-        <div class="menu_box">
-            <ul class="nav" id="nav">
-                <li><a href="index.html">首页</a></li>
-                <li class="has_sub">
-                    <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-                    <ul class="add_sub_menu" id="subNav">
-                        <li class="action"><span class="sever">操作系统</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">操作系统1</a></li>
-                                <li><a href="javascript:viod(0)">操作系统2</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">在线投保</a></li>
-                                <li><a href="javascript:viod(0)">在线查询</a></li>
-                                <li><a href="javascript:viod(0)">应急处置</a></li>
-                                <li><a href="javascript:viod(0)">人员角色管理</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                            <ul class="list">
-                                <li><a href="javascript:viod(0)">SQL DBA</a></li>
-                                <li><a href="javascript:viod(0)">SQL SYS</a></li>
-                            </ul>
-                        </li>
-                        <li class="clear"></li>
-                    </ul>
-
-                </li>
-                <li><a href="${ctx}/application/manager/appmanager/applist">应用性能</a></li>
-                <li><a href="javascript:viod(0)">业务仿真</a></li>
-                <li><a href="javascript:viod(0)">告警</a></li>
-            </ul>
-        </div>
-        <ul class="add_menu" id="menu">
-            <li><a href="addMonitorList.html">新建监视器</a></li>
-            <li><a href="javascript:viod(0)">配置监视器</a></li>
-            <li class="has_sub">
-                <a href="javascript:viod(0)"><span>预警对象管理</span></a>
-                <ul class="add_sub_menu">
-                    <li class="title"><a href="javascript:viod(0)">显示动作</a></li>
-                    <li class="action">创建新动作</li>
-                    <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
-                    <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
-                </ul>
-            </li>
-        </ul>
+        <%@include file="/WEB-INF/layouts/menu.jsp"%>
     </div>
 </div>
 <div id="layout_center">
     <div class="main">
-        <div class="add_monitor">
-            <h2 class="title2"><b>新建监视器类型　</b>
-                <select name="" class="diySelect" onchange="top.location=this.value;">
-                    <optgroup label="应用服务器">
-                        <option selected="selected" value="addSystem.html">应用系统　　</option>
-                    </optgroup>
-                    <optgroup label="数据库">
-                        <option value="addOracle.html">Oracle</option>
-                    </optgroup>
-                    <optgroup label="操作系统">
-                        <option value="addLinux.html">Linux</option>
-                    </optgroup>
-                </select>
-            </h2>
-            <form:form id="addSystem" action="${ctx}/addapplication/add" method="post"
-                  class="form-horizontal" onsubmit="return isValid(this);">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
-                    <tr>
-                        <td colspan="2" class="group_name">基本信息</td>
-                    </tr>
-                    <tr>
-                        <td width="25%">显示名称<span class="mandatory">*</span></td>
-                        <td><input id="applicationName" name="applicationName" value="${application.applicationName}" type="text" class="required"/>
-                            <msg:errorMsg property="applicationName" type="message"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="25%">中文名称<span class="mandatory">*</span></td>
-                        <td><input id="cnName" name="cnName" value="${application.cnName}" type="text" class="formtext"/>
-                            <msg:errorMsg property="cnName" type="message"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>主机IP地址<span class="mandatory">*</span></td>
-                        <td><input id="applicationIp" name="applicationIp" value="${application.applicationIp}" type="text" class="formtext" size="30"/>
-                            <msg:errorMsg property="applicationIp" type="message"/>
-                        </td>
-                    </tr>
-                    <!--<tr>
-                      <td>子网掩码<span class="mandatory">*</span></td>
-                      <td><input name="input3" type="text" class="formtext" value="255.255.255.0" size="30" /></td>
-                    </tr>-->
-                    <tr>
-                        <td>端口<span class="mandatory">*</span></td>
-                        <td><input id="applicationPort" name="applicationPort" value="${application.applicationPort}" type="text" class="formtext" size="8"/>
-                            <msg:errorMsg property="applicationPort" type="message"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>轮询间隔<span class="mandatory"></span></td>
-                        <td><input id="interval" name="interval" value="${application.interval}" type="text" class="formtext" size="10"/>
-                            <msg:errorMsg property="interval" type="message"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="group_name">&nbsp;</td>
-                        <td class="group_name">
-                            <!--<input type="button" class="buttons" value="确定添加" onclick="save()" />　-->
-                            <input id="submit" type="submit" class="buttons" value="确定添加"/>　
-                            <input type="reset" class="buttons" value="重 置"/>　
-                            <input type="button" class="buttons" value="取 消" onclick="window.history.back()"/>
-                        </td>
-                    </tr>
-                </table>
-            </form:form>
-        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>
+                    <div class="add_monitor">
+                        <h2 class="title2"><b>新建监视器类型　</b>
+                            <select name="" class="diySelect" onchange="top.location=this.value;">
+                                <optgroup label="应用服务器">
+                                    <option selected="selected" value="addSystem.html">应用系统　　</option>
+                                </optgroup>
+                                <optgroup label="数据库">
+                                    <option value="addOracle.html">Oracle</option>
+                                </optgroup>
+                                <optgroup label="操作系统">
+                                    <option value="addLinux.html">Linux</option>
+                                </optgroup>
+                            </select>
+                        </h2>
+                        <form:form id="addSystem" action="${ctx}/addapplication/add" method="post"
+                                   class="form-horizontal" onsubmit="return isValid(this);">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                   class="add_monitor_box add_form">
+                                <tr>
+                                    <td colspan="2" class="group_name">基本信息</td>
+                                </tr>
+                                <tr>
+                                    <td width="25%">显示名称<span class="mandatory">*</span></td>
+                                    <td><input id="applicationName" name="applicationName"
+                                               value="${application.applicationName}" type="text" class="required"/>
+                                        <msg:errorMsg property="applicationName" type="message"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="25%">中文名称<span class="mandatory">*</span></td>
+                                    <td><input id="cnName" name="cnName" value="${application.cnName}" type="text"
+                                               class="formtext"/>
+                                        <msg:errorMsg property="cnName" type="message"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>主机IP地址<span class="mandatory">*</span></td>
+                                    <td><input id="applicationIp" name="applicationIp"
+                                               value="${application.applicationIp}" type="text" class="formtext"
+                                               size="30"/>
+                                        <msg:errorMsg property="applicationIp" type="message"/>
+                                    </td>
+                                </tr>
+                                <!--<tr>
+                                  <td>子网掩码<span class="mandatory">*</span></td>
+                                  <td><input name="input3" type="text" class="formtext" value="255.255.255.0" size="30" /></td>
+                                </tr>-->
+                                <tr>
+                                    <td>端口<span class="mandatory">*</span></td>
+                                    <td><input id="applicationPort" name="applicationPort"
+                                               value="${application.applicationPort}" type="text" class="formtext"
+                                               size="8"/>
+                                        <msg:errorMsg property="applicationPort" type="message"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>轮询间隔（分钟）<span class="mandatory">*</span></td>
+                                    <td><input id="interval" name="interval" value="${application.interval}" type="text"
+                                               class="formtext" size="10"/>
+                                        <msg:errorMsg property="interval" type="message"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="group_name">&nbsp;</td>
+                                    <td class="group_name">
+                                        <!--<input type="button" class="buttons" value="确定添加" onclick="save()" />　-->
+                                        <input id="submit" type="submit" class="buttons" value="确定添加"/>　
+                                        <input type="reset" class="buttons" value="重 置"/>　
+                                        <input type="button" class="buttons" value="取 消"
+                                               onclick="window.history.back()"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form:form>
+                    </div>
+                </td>
+                <td width="15">&nbsp;</td>
+                <td width="33%" style="vertical-align:top">
+                    <div class="conf_box help">
+                        <div class="conf_title">
+                            <div class="conf_title_r"></div>
+                            <div class="conf_title_l"></div>
+                            <span>帮助信息</span>
+                        </div>
+                        <div class="conf_cont_box">
+                            <div class="conf_cont">
+                                <ul>
+                                    <li class="first the_set"><b>新建应用系统监视器</b><br/>创建系统监视器后可根据业务需求配置业务场景。</li>
+                                    <li><b>管理业务场景</b><br/>点击“管理业务场景”,可以增加新业务场景或管理已有业务场景。</li>
+                                    <li><b>管理URL</b><br/>点击“管理URL”,对应业务场景将URL按流程顺序进行添加与监控配置。</li>
+                                    <li><b>管理方法</b><br/>点击“管理方法”,对URL中所执行的方法按顺序进行添加与监控配置</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 <div id="layout_bottom">

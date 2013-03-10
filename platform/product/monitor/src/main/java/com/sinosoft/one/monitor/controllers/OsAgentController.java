@@ -154,7 +154,4 @@ public class OsAgentController {
 	public String getValue(String key, Map<String, String[]> osInfo) {
 		return osInfo.get(key)[0];
 	}
-//	public static void main(String[] args) {
-//		System.out.println(new Date());
-//	}
 }

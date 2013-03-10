@@ -4,7 +4,7 @@
         <p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
         <div class="menu_box">
             <ul class="nav" id="nav">
-                <li><a href="index.html">首页</a></li>
+                <li><a href="${ctx }/index">首页</a></li>
                 <li class="has_sub">
                     <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
                     <ul class="add_sub_menu" id="subNav">
@@ -20,7 +20,7 @@
                         </li>
                         <li class="action" style="border:none"><span>数据库</span>
                             <ul class="list">
-                                <li><a href="oracleMonitor.html">oracle</a></li>
+                                <li><a href="${ctx }/db/oracle/oracleMonitor">oracle</a></li>
                             </ul>
                         </li>
                         <li class="clear"></li>

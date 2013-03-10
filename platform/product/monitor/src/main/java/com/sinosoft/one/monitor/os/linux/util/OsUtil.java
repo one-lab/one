@@ -119,30 +119,18 @@ public class OsUtil {
 	 */
 	public static String RSPOND_STATIF_FLAG="PH";
 	
+	/**
+	 * 统计表中 平均值列名
+	 */
+	public static String  STATI_CLOUN_NAME_AVG="AVERAGE_VALUE";
 	
 	/**
-	 * 物理内存统计一天标记
+	 * 统计表中最小值列名
 	 */
-	public static String RAM_STATIF_FLAG_D="RD";
+	public static String  STATI_CLOUN_NAME_MAX="MAX_VALUE";
 	
 	/**
-	 * 交换内存统计一天标记
+	 * 统计表中 最大值列名
 	 */
-	public static String SWAP_STATIF_FLAG_D="SD";
-	
-	/**
-	 * CPU统计一天标记
-	 */
-	public static String CPU_STATIF_FLAG_D="CD";
-	
-	/**
-	 * 磁盘统计一天标记
-	 */
-	public static String DISK_STATIF_FLAG_D="DD";
-	
-	/**
-	 * 响应时间统计一天标记
-	 */
-	public static String RSPOND_STATIF_FLAG_D="PD";
-	
+	public static String  STATI_CLOUN_NAME_MIN="MIN_VALUE";
 }

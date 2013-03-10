@@ -1,55 +1,30 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>查看预警配置文件</title>
-<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/style.css" rel="stylesheet"
-	type="text/css" />
-<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet"
-	type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet"
-	type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet"
-	type="text/css" />
-<link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet"
-	type="text/css" />
-<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
-<script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
-<script language="javascript" src="${ctx}/global/js/os/HighchartsTest.js"></script>
+<%@ include file="/WEB-INF/layouts/base.jsp" %>
+<link href="${ctx }/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx }/global/js/sinosoft.tabs.js"></script>
+<script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>
+<script language="javascript" src="${ctx }/global/js/os/systemMonitor.js"></script>
 <script type="text/javascript">
 $(function(){
+
 	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
+		top : {
+			topHeight : 100
+		},
+		bottom : {
+			bottomHeight : 30
+		}
 	});
-	$("#thresholdList").Grid({
-		url : " ",  
-		dataType: "json",
-		colDisplay: false,  
-		clickSelect: true,
-		draggable:false,
-		height: "auto",  
-		colums:[  
-			{id:'1',text:'名称',name:"appellation",index:'1',align:''},
-			{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
-			{id:'3',text:'健康状态',name:"appellation",index:'1',align:''}
-		],  
-		rowNum:9999,
-		pager : false,
-		number:false,  
-		multiselect: true  
-	});
-	$("#healthList").Grid({
+	
+
+	getForm();
+	
+	/*$("#healthList").Grid({
 		url : " ",  
 		dataType: "json",
 		colDisplay: false,  
@@ -85,161 +60,18 @@ $(function(){
 		pager : false,
 		number:false,  
 		multiselect: false  
-	});
+	});*/
 	
-	
-	$("#tabs").tabs({closeTab:false});
+	$("#tabs").tabs({closeTab : false});
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
-	
 });
-function navHover(){
-	$(this).toggleClass("hover")
-}
-function navClick(){
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if($(this).hasClass('has_sub')){
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if($(this).parent().attr("id") == "menu"){
-			isAdd = true;
-		};
-		subMav.slideDown('fast',function(){
-			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-			return false;
-		});		
-	};
-}
-function hideNav(e){
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast',function(){
-		if(isAdd){
-			subMenu.parent().removeClass('seleck');
-		};
-	});	
-	$(document).unbind();
-}
-function delRow(e){
-	var rows = $(e).parent().parent();
-	var id = rows.attr('id');
-	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-		msgSuccess("系统消息", "操作成功，配置已删除！");
-		alert(id);
-		rows.remove();
-	});
-}
-function batchDel(){
-	var $g = $("#thresholdList div.grid_view > table");
-	var selecteds = $("td.multiple :checked",$g);
-	if(selecteds.length > 0){
-		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-			var checks = [];
-			selecteds.each(function(){
-				var rows = $(this).parent().parent();
-				checks.push(rows.attr('id'));
-				rows.remove();
-			});
-			alert(checks);
-			msgSuccess("系统消息", "操作成功，配置已删除！");
-		});
-	}else{
-		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
-	};
-}
-function viewRelevance(){
-	var temWin = $("body").window({
-		"id":"window",   
-        "title":'根本原因分析',  
-		"url":"basicReaon.html",   
-        "hasIFrame":true,
-		"width": 740,
-		"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]
-	});
-}
 </script>
 </head>
 
 <body>
-	<div id="layout_top">
-		<div class="header">
-			<p class="user">
-				您好,系统管理员 <span>|</span> <a href="#">退出系统</a>
-			</p>
-			<div class="menu_box">
-				<ul class="nav" id="nav">
-					<li><a href="index.jsp">首页</a>
-					</li>
-					<li class="has_sub seleck"><a href="javascript:viod(0)">监视器</a><span
-						class="show_sub_anv"></span>
-						<ul class="add_sub_menu" id="subNav">
-							<li class="action"><span class="sever">操作系统</span>
-								<ul class="list">
-									<li><a href="systemMonitor.html"> Linux(2)</a>
-									</li>
-								</ul></li>
-							<li class="action"><span class="system">应用系统</span>
-								<ul class="list">
-									<li><a href="performance.html">在线查询</a>
-									</li>
-								</ul></li>
-							<li class="action" style="border: none"><span>数据库</span>
-								<ul class="list">
-									<li><a href="oracleMonitor.html">oracle</a>
-									</li>
-								</ul></li>
-							<li class="clear"></li>
-						</ul></li>
-					<li><a href="performance.html">应用性能</a>
-					</li>
-					<li><a href="BusinessSimulation.html">业务仿真</a>
-					</li>
-					<li><a href="alertList.html">告警</a>
-					</li>
-					<li><a href="userManager.html">用户管理</a>
-					</li>
-				</ul>
-			</div>
-			<ul class="add_menu" id="menu">
-				<li><a href="addMonitorList.html">新建监视器</a>
-				</li>
-				<li class="has_sub"><a href="javascript:viod(0)"><span>阈值配置文件</span>
-				</a>
-					<ul class="add_sub_menu">
-						<li><a class="addThreshold" href="addThreshold.html">新建阈值文件</a>
-						</li>
-						<li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a>
-						</li>
-					</ul></li>
-				<li><a href="deployMonitor.html">配置监视器</a>
-				</li>
-				<li class="has_sub"><a href="javascript:viod(0)"><span>动作</span>
-				</a>
-					<ul class="add_sub_menu">
-						<li class="title"><a href="showMotion.html">显示动作</a>
-						</li>
-						<li class="action">创建新动作</li>
-						<li><a class="sms" href="message.html">短信动作</a>
-						</li>
-						<li><a class="email" href="mail.html">邮件动作</a>
-						</li>
-					</ul></li>
-				<li><a href="setEmergency.html">配置告警</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+<%@include file="/WEB-INF/layouts/menu.jsp" %>
 	<div id="layout_center">
 		<div class="main">
 			<ul class="crumbs">
@@ -263,112 +95,7 @@ function viewRelevance(){
 								<option value="">最近30天</option>
 							</select>
 						</h2>
-						<table width="100%" border="0" cellspacing="0" cellpadding="0"
-							class="my_table">
-							<tr>
-								<th width="20%">名称</th>
-								<th width="75%" style="text-align: center">可用性</th>
-								<th>可用性%</th>
-							</tr>
-							<%-- <c:forEach items="${map }" var="entry">
-								<tr>
-									<td><a href="Linuxcentos.html">${entry.key}</a></td>
-									<td><table width="100%" border="0" cellspacing="0"
-											cellpadding="0" class="green_bar">
-											<tr>
-												<c:forEach items="${entry.value }" var="model">
-													<c:if test="${model.status == '0'}">
-														<td class="not_available" width="${model.percentage }%"></td>
-													</c:if>
-													<c:if test="${model.status == '2' }">
-														<td class="not_available" width="${model.percentage }%"></td>
-													</c:if>
-													<c:if test="${model.status == '1' }">
-														<td width="${model.percentage }%"></td>
-													</c:if>
-												</c:forEach>
-											</tr>
-										</table>
-									</td>
-									<td>100</td>
-								</tr>
-
-							</c:forEach> --%>
-							<c:forEach items="${maplist }" var="list">
-								
-								<tr>
-									<td><a href="${ctx}/os/linuxcentos/${list.id}">${list.name}</a></td>
-									<td><table width="100%" border="0" cellspacing="0"
-											cellpadding="0" class="green_bar">
-											<tr>
-												<c:forEach items="${list.list}" var="model">
-											  	
-													<c:if test="${model.status == '0'}">
-														<td class="not_available" width="${model.percentage }%"></td>
-													</c:if>
-													<c:if test="${model.status == '2' }">
-														<td class="not_available" width="${model.percentage }%"></td>
-													</c:if>
-													<c:if test="${model.status == '1' }">
-														<td width="${model.percentage }%"></td>
-													</c:if>  
-												</c:forEach>
-											</tr>
-										</table>
-									</td>
-									<td>100</td>
-								</tr>
-								
-								 
-							</c:forEach> 
-							<tr class="last_row">
-								<td>&nbsp;</td>
-								<td><table width="100%" border="0" cellspacing="0"
-										cellpadding="0" class="ruler_bar">
-										<tr>
-											<td>&nbsp</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-											<td>&nbsp;</td>
-										</tr>
-									</table>
-								</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr class="last_row">
-								<td>&nbsp;</td>
-								<td><table width="100%" border="0" cellspacing="0"
-										cellpadding="0" class="time_bar">
-										<tr>
-											<c:forEach items="${timeList }" var="time">
-												<td>${time}</td>
-											</c:forEach> 
-										</tr>
-									</table>
-								</td>
-								<td>&nbsp;</td>
-							</tr>
-						</table>
+						<div id="systemMonitorTable"></div>
 						<div class="explain">
 							<ul>
 								<li><span class="ex_no"></span>不可用</li>

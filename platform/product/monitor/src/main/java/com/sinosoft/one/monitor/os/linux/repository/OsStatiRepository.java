@@ -8,6 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 
 public interface OsStatiRepository extends PagingAndSortingRepository<OsStati, String> {
 
@@ -23,17 +24,15 @@ public interface OsStatiRepository extends PagingAndSortingRepository<OsStati, S
 	@Query("from OsStati o where o.recordTime between to_date(?3,?5) and to_date(?4,?5) and o.type= ?2 and o.osid= ?1 ORDER by o.recordTime")
 	public  List<OsStati> findStatiByTimeSpan(String osInfoId,String type,String begin ,String end, String dateFromat);
 	
+	
 
-	//时间段内的最大值
-	@SQL("select Max(MAX_VALUE) from GE_MONITOR_OS_STATI where RECORD_TIME = to_date(?3,?4) and TYPE= ?2 and OSID= ?1 ")
-	public String findStatiMaxByTimeSpan(String osInfoId,String type,String day , String dateFromat);
+	//时间段内的最大最小品均值
+	@SQL("select Max(AVERAGE_VALUE) \"maxAvgValue\" ,Min(AVERAGE_VALUE) \"minAvgValue\", avg(AVERAGE_VALUE) \"avgValue\"  from GE_MONITOR_OS_STATI where RECORD_TIME between to_date(?3,?5) and to_date(?4,?5) and TYPE= ?2 and OSID= ?1 ")
+	public StatiDataModel  findStatiMaxMinAvgByTimeSpan(String osInfoId,String type,String begin ,String end, String dateFromat);
 	
-	//时间段内的所有某类型记录
-	@SQL("select Min(MIN_VALUE) from GE_MONITOR_OS_STATI where RECORD_TIME = to_date(?3,?4) and TYPE= ?2 and OSID= ?1 ")
-	public String findStatiMinByTimeSpan(String osInfoId,String type,String begin , String dateFromat);
 	
-	//时间段内的所有某类型记录
-	@SQL("select SUM(AVERAGE_VALUE)/COUNT(*) from GE_MONITOR_OS_STATI where RECORD_TIME = to_date(?3,?4) and TYPE= ?2 and OSID= ?1 ")
-	public String findStatiAveByTimeSpan(String osInfoId,String type,String begin , String dateFromat);
+	//时间段内的所有统计记录
+	@SQL("select max(max_value) \"maxValue\" ,min(min_value) \"minValue\" ,avg(AVERAGE_VALUE) \"avgValue\" ,max(AVERAGE_VALUE) \"maxAvgValue\" ,min(AVERAGE_VALUE) \"minAvgValue\" ,to_date(to_char(o.record_time,'yyyy-MM-dd'),'yyyy-MM-dd') \"date\" from GE_MONITOR_OS_STATI o where  o.OSID= ?1 and o.TYPE =?2 and  RECORD_TIME BETWEEN to_date(?3,?5) and to_date(?4 ,?5) group by to_char(o.record_time,'yyyy-MM-dd') order by to_char(o.record_time,'yyyy-MM-dd')")
+	public List<StatiDataModel> findStatiValue(String osInfoId,String type,String begin ,String end, String dateFromat);
 }
 

@@ -35,7 +35,7 @@ public class OsDataMathServiceTest extends AbstractJUnit4SpringContextTests{
 		c2.set(Calendar.SECOND, 0);
 		Date targetTime=c2.getTime();
 		System.out.println(targetTime);
-		osDataMathService.statiAvailable("402892163d208194013d208198790000", currentTime, targetTime, 5, currentTime);
+		//osDataMathService.statiAvailable("402892163d208194013d208198790000", currentTime, targetTime, 5, currentTime);
 	}
 	@Test
 	public void testMath(){
@@ -48,6 +48,6 @@ public class OsDataMathServiceTest extends AbstractJUnit4SpringContextTests{
 		//取当天的前24小时整时点
 		Date todayzeroTime= c.getTime();
 		//修改今天的统计表记录
-		osDataMathService.statiAvailable("402892163d208194013d208198790000", sampleTime, todayzeroTime, 5, todayzeroTime);//保存新统计记录
+		//osDataMathService.statiAvailable("402892163d208194013d208198790000", sampleTime, todayzeroTime, 5, todayzeroTime);//保存新统计记录
 	}
 }
