@@ -41,7 +41,6 @@
                     <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
                 </ul>
             </li>
-            <li><a href="deployMonitor.html">配置监视器</a></li>
             <li class="has_sub">
                 <a href="javascript:viod(0)"><span>动作</span></a>
                 <ul class="add_sub_menu">
