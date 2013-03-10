@@ -6,7 +6,7 @@
 <title>monitor监控系统</title>
 <%@ include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
-var columStyle = 
+var columStyle1 = 
 	[  
 		{id:'1',text:'名称',name:"appellation",index:'1',align:''},
 		{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
@@ -14,15 +14,42 @@ var columStyle =
 	];
 var columStyle2 = 
 	[  
-		{id:'1',text:'名称',name:"appellation",index:'1',align:''},
-		{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
-		{id:'3',text:'健康状态',name:"appellation",index:'1',align:''}
+		{id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
+		{id:'2',text:'消息',name:"appellation",index:'1',align:''},
+		{id:'3',text:'名称',name:"appellation",index:'1',align:''},
+		{id:'4',text:'类型',name:"appellation",index:'1',align:''},
+		{id:'5',text:'时间',name:"appellation",index:'1',align:''}
 	];
 $(function(){
 	$("body").layout({
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
+	
+	//thresholdList emergencyList systemList oracleList
+	var gridList = new Array();
+	
+	//gridList.push({"renderId":"thresholdList","url":"columStyle", "":columStyle1});
+	//gridList.push({"renderId":"emergencyList","url":"columStyle", "":columStyle2});
+	gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList", "columStyle":columStyle1});
+	gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList", "columStyle":columStyle1});
+	
+	$(gridList).each(function(i, d){
+		$("#"+d.renderId).Grid({
+			url : d.url,  
+			dataType: "json",
+			colDisplay: false,  
+			clickSelect: true,
+			draggable:false,
+			height: "auto",  
+			colums: d.columStyle,  
+			rowNum:9999,
+			pager : false,
+			number:false,  
+			multiselect: false  
+		});
+	});
+	
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
