@@ -21,18 +21,19 @@ $(function(){
 		colDisplay: false,  
 		clickSelect: true,
 		draggable:false,
-		height: "auto",  
+		height: "auto",
+        sorts:false,
 		colums:[  
 			{id:'1',text:'URL地址',name:"url",index:'1',align:''},
 			{id:'2',text:'名称',name:"description",index:'1',align:''},
-			{id:'3',text:'可用性',name:"status",index:'1',align:''},
-			{id:'4',text:'健康状态',name:"threshold",index:'1',align:''},
+			/*{id:'3',text:'可用性',name:"status",index:'1',align:''},
+			{id:'4',text:'健康状态',name:"threshold",index:'1',align:''},*/
 			{id:'5',text:'操作',name:"operation",index:'1',align:''}
 		],  
 		rowNum:9999,
 		pager : false,
 		number:false,  
-		multiselect: true  
+		multiselect: true
 	});
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);

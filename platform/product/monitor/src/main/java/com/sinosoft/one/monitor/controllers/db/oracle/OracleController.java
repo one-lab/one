@@ -1,12 +1,10 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +21,8 @@ import com.sinosoft.one.monitor.db.oracle.domain.StaTimeEnum;
 import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
 import com.sinosoft.one.monitor.db.oracle.model.EventInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.GridModel;
+import com.sinosoft.one.monitor.db.oracle.model.Highchart;
+import com.sinosoft.one.monitor.db.oracle.model.HighchartSerie;
 import com.sinosoft.one.monitor.db.oracle.model.OracleDetailModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleSGAHitRateModel;
@@ -34,6 +34,9 @@ import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.instruction.reply.Reply;
+import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -49,28 +52,43 @@ import com.sinosoft.one.uiutil.UIUtil;
 public class OracleController {
 
 	@Autowired
-	private OracleInfoService oracleInfoServiceImpl;
+	private OracleInfoService oracleInfoService;
 	@Autowired
-	private OracleAvaService oracleAvaServiceImpl;
+	private OracleAvaService oracleAvaService;
 	@Autowired
-	private OraclePreviewService oraclePreviewServiceImpl;
+	private OraclePreviewService oraclePreviewService;
 	@Autowired
-	private OracleSGAService oracleSGAServiceImpl;
+	private OracleSGAService oracleSGAService;
 	@Autowired
-	private OracleTableSpaceService oracleTableSpaceServiceImpl;
+	private OracleTableSpaceService oracleTableSpaceService;
 	
 	// 展现oracle基本信息
-	public String viewInfo(String monitorId, Invocation inv) {
+	@Get("viewInfo/{monitorId}")
+	public String viewInfo(@Param("monitorId")String monitorId, Invocation inv) {
 
-		OracleInfoModel oracleInfoModel = oracleInfoServiceImpl
+		OracleInfoModel oracleInfoModel = oracleInfoService
 				.getMonitorInfo(monitorId);
+        SGAStateModel sgaStateModel =  oracleSGAService.viewSGAStateInfo(monitorId);
+
+        OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
+        
+        EventInfoModel[] eventInfoModels = oraclePreviewService.viewConnectInfo(monitorId);
+//        EventInfoModel eventInfoModel = new EventInfoModel();
+//        if(eventInfoModel!=null&&eventInfoModels.length>0){
+//        	eventInfoModel = eventInfoModels[eventInfoModels.length-1];
+//        }
+//        inv.addModel(value)
+        inv.addModel("oracleDetailModel", oracleDetailModel);
 		inv.addModel("oracleInfoModel", oracleInfoModel);
+        inv.addModel("sgaStateModel", sgaStateModel);
+        inv.addModel("monitorId", monitorId);
 		return "oracle";
 	}
 
 	// 可用性饼状图所用数据
-	public String viewAva(String monitorId) {
-		AvaSta avaSta = oracleAvaServiceImpl.findAvaSta(monitorId,
+	@Get("viewAva/{monitorId}")
+	public String viewAva(@Param("monitorId")String monitorId) {
+		AvaSta avaSta = oracleAvaService.findAvaSta(monitorId,
 				StaTimeEnum.TODAY);
 		long normalRuntime = avaSta.getNormalRuntime();
 		long powerOffTime = avaSta.getTotalPoweroffTime();
@@ -78,26 +96,17 @@ public class OracleController {
 		Double usePercent = normalRuntime
 				/ (normalRuntime + powerOffTime / 1.0) * 100;
 		int usePercents = usePercent.intValue();
-		String json = "";
-		JSONArray data = new JSONArray();
-		JSONObject jo = new JSONObject();
-		jo.put("name", "不可用");
-		jo.put("y", 100 - usePercents);
-		jo.put("sliced", false);
-		jo.put("select", false);
-		JSONArray state = new JSONArray();
-		state.add("可用");
-		state.add(usePercents);
-		data.add(jo);
-		data.add(state);
-		return "@" + json;
+		int unUsedPercents = 100 - usePercents;
+		JSONArray  y = new JSONArray();
+		y.add(unUsedPercents);
+		//System.out.println(y.toJSONString());
+		return "@"+y.toJSONString();
 	}
-    ///monitor/db/oracle/sevenDayConn/viewConnect/
+	
     @Get("viewConnect/{monitorId}")
 	// 用户连接数和连接时间所用数据
 	public String viewConnectAndActive(@Param("monitorId")String monitorId) {
-        //System.out.println("==============================================");
-		EventInfoModel[] eventInfoModel = oraclePreviewServiceImpl
+		EventInfoModel[] eventInfoModel = oraclePreviewService
 				.viewConnectInfo(monitorId);
 		EventInfoModel connectEvent = eventInfoModel[0];
 		EventInfoModel activeCount = eventInfoModel[1];
@@ -123,7 +132,14 @@ public class OracleController {
 			categories.add(sdf.format(connectPoints.get(i).getxAxis()));
 			connectData.add(connectPoints.get(i).getyAxis());
 		}
-
+		/*
+		 * labels: { 
+									  	:3
+										} 
+		 */
+		JSONObject jos = new JSONObject();
+		jos.put("step", 4);
+		xAxis.put("labels", jos);
 		xAxis.put("categories", categories);
 		surr.put("data", connectData);
 		connectSeries.add(surr);
@@ -141,78 +157,14 @@ public class OracleController {
 		result.put("connectSeries", connectSeries);
 		result.put("activeSeries", activeSeries);
 		json = result.toJSONString();
-        //System.out.println("==============================================");
-
-        System.out.println(json);
-        //System.out.println("==============================================");
-
         return "@" + json;
 	}
     
-/*    @Get("testSGA")
-    public Reply testSGA() {
-    	*//**
-    	 * series:[
-            {
-                type:'pie',
-                name:'Browser share',
-                data:[
-                    {
-                        name:'缓存存储器大小',
-                        y:392,
-                        sliced:false,
-                        selected:false
-                    },
-                    ['共享池大小', 113],
-                    ['重做日志缓冲器大小', 199],
-                    ['库存存储器大小', 199],
-                    ['数据字典存储器大小', 299],
-                    ['sql区域大小', 399],
-                    ['固定区域大小', 499],
-                    ['重做日志缓冲器大小', 699]
-                ]
-            }
-        ]
-    	 *//*
-    	List<Object> chart = new ArrayList<Object>();
-    	Map<String, Object> map = new HashMap<String, Object>();
-    	map.put("name", "缓存存储器大小");
-    	map.put("y", "392");
-    	map.put("sliced", false);
-    	map.put("selected", false);
-    	List<Object> l1 = new ArrayList<Object>();
-    	l1.add("共享池大小");
-    	l1.add(113);
-    	List<Object> l2 = new ArrayList<Object>();
-    	l2.add("重做日志缓冲器大小");
-    	l2.add(113);
-    	List<Object> l3 = new ArrayList<Object>();
-    	l3.add("库存存储器大小");
-    	List<Object> l4 = new ArrayList<Object>();
-    	l3.add("库存存储器大小");
-    	List<Object> l5 = new ArrayList<Object>();
-    	l3.add("库存存储器大小");
-    	List<Object> l6 = new ArrayList<Object>();
-    	l3.add("库存存储器大小");
-    	List<Object> l7 = new ArrayList<Object>();
-    	l3.add("库存存储器大小");
-    	l3.add(113);
-    	chart.add(map);
-    	chart.add(l1);
-    	chart.add(l2);
-    	chart.add(l3);
-    	return Replys.with(chart).as(Json.class);
-    }*/
 	// sga饼状图所用数据
-    
     @Get("viewSGA/{monitorId}")
 	public String viewSGA(@Param("monitorId")String monitorId) {
-    	System.out.println(monitorId);
-    	System.out.println("==============================================");
-    	System.out.println("==============================================");
-    	System.out.println("==============================================");
     	
-		OracleSGAModel oracleSGAModel = oracleSGAServiceImpl.viewSGAInfo(monitorId);
+		OracleSGAModel oracleSGAModel = oracleSGAService.viewSGAInfo(monitorId);
 		BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize());;
 		BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize());
 		BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize());
@@ -233,19 +185,17 @@ public class OracleController {
 
 	// 表空间所用数据
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void viewTableSpace(String monitorId,Invocation inv) throws Exception {
+	@Get("viewTableSpace/{monitorId}")
+	public void viewTableSpace(@Param("monitorId")String monitorId,Invocation inv) throws Exception {
 
-		List<OracleTableSpaceModel> oracleTableSpaceModelList = oracleTableSpaceServiceImpl.listTableSpaceInfo(monitorId);
+		List<OracleTableSpaceModel> oracleTableSpaceModelList = oracleTableSpaceService.listTableSpaceInfo(monitorId);
 		for(int i=0;i<oracleTableSpaceModelList.size();i++){
 			oracleTableSpaceModelList.get(i).setId(i+"");
 			String str = "<div class='bg_bar'><div class='red_bar' style='width:10%'></div></div>";
 			String [] strs= str.split("10%");
-			//System.out.println(strs[0]);
-			//System.out.println(strs[1]);
 			StringBuilder sb = new StringBuilder();
-			sb.append(strs[0]).append(oracleTableSpaceModelList.get(i).getUsedRate()).append(strs[1]);
+			sb.append(strs[0]).append(oracleTableSpaceModelList.get(i).getUsedRate()).append("%").append(strs[1]);
 			oracleTableSpaceModelList.get(i).setStatusBar(sb.toString());
-			//System.out.println(sb);
 		}
 		Page page = new PageImpl(oracleTableSpaceModelList);
 		Gridable<OracleTableSpaceModel> gridable = new Gridable<OracleTableSpaceModel>(page);
@@ -259,55 +209,43 @@ public class OracleController {
 			throw new Exception("json数据转换出错!", e);
 		}
 	}
+    // 表空间所用数据
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Get("viewTableSpaceOverPreview/{monitorId}")
+    public void viewTableSpaceOverPreview(@Param("monitorId")String monitorId,Invocation inv) throws Exception {
 
+        List<OracleTableSpaceModel> oracleTableSpaceModelList = oracleTableSpaceService.listTableSpaceInfo(monitorId);
+        for(int i=0;i<oracleTableSpaceModelList.size();i++){
+            oracleTableSpaceModelList.get(i).setId(i+"");
+            String str = "<div class='bg_bar'><div class='red_bar' style='width:10%'></div></div>";
+            String [] strs= str.split("10%");
+            StringBuilder sb = new StringBuilder();
+            sb.append(strs[0]).append(oracleTableSpaceModelList.get(i).getUsedRate()).append("%").append(strs[1]);
+            oracleTableSpaceModelList.get(i).setStatusBar(sb.toString());
+        }
+        Page page = new PageImpl(oracleTableSpaceModelList);
+        Gridable<OracleTableSpaceModel> gridable = new Gridable<OracleTableSpaceModel>(page);
+        String cellString = new String(
+                "tableSpaceName,unused,unusedRate");
+        gridable.setIdField("id");
+        gridable.setCellStringField(cellString);
+        try {
+            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+        } catch (Exception e) {
+            throw new Exception("json数据转换出错!", e);
+        }
+    }
 	// 数据库详细所用数据
 	public void viewOracleDetail(String monitorId,Invocation inv) {
-		OracleDetailModel oracleDetailModel = oraclePreviewServiceImpl.viewDbDetail(monitorId);
+		OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
 		inv.addModel("oracleDetailModel", oracleDetailModel);
 	}
 	
-	//SGA曲线图所用数据（缓冲区命中率，库命中率，数据字典命中率）
-	public String viewSGAGraph(String monitorId){
-		EventInfoModel eventInfoModel = oracleSGAServiceImpl.viewHitRateStaInfo(monitorId);
-		List<OracleSGAHitRateModel> sgaHitRateModels = eventInfoModel.getSgaHitRateModels();
-		//x轴代表时间点
-		JSONObject xAxis = new JSONObject();
-		JSONArray categories = new JSONArray();
-		//y轴
-		JSONArray series = new JSONArray();
-		JSONObject bufferHitRate = new JSONObject();
-		bufferHitRate.put("name", "缓冲区击中率");
-		JSONArray bufferHitRateDate  = new JSONArray();
-		JSONObject dictHitRate = new JSONObject();
-		dictHitRate.put("name","数据字典击中率" );
-		JSONArray dictHitRateDate  = new JSONArray();
-		JSONObject libHitRate = new JSONObject();
-		libHitRate.put("name", "缓存击中率");
-		JSONArray libHitRateDate  = new JSONArray();
-		for(int i=0;i<sgaHitRateModels.size();i++){
-			categories.add(sgaHitRateModels.get(i).getRecordTime());
-			bufferHitRateDate.add(sgaHitRateModels.get(i).getBufferHitRate());
-			dictHitRateDate.add(sgaHitRateModels.get(i).getDictHitRate());
-			libHitRateDate.add(sgaHitRateModels.get(i).getLibHitRate());
-		}
-		bufferHitRate.put("data",bufferHitRateDate );
-		dictHitRate.put("data", dictHitRateDate);
-		libHitRate.put("data",libHitRateDate );
-		series.add(bufferHitRate);
-		series.add(dictHitRate);
-		series.add(libHitRate);
-		xAxis.put("categories", categories);
-		JSONObject result = new JSONObject();
-		result.put("x轴", xAxis);
-		result.put("y轴", series);
-		String json = "";
-		json = result.toJSONString();
-		return "@"+json;
-	}
 	//sga详细信息数据
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void viewSGADetail(String monitorId,Invocation inv) throws Exception{
-		OracleSGAModel oracleSGAModel = oracleSGAServiceImpl.viewSGAInfo(monitorId);
+	@Get("viewSGADetail/{monitorId}")
+	public void viewSGADetail(@Param("monitorId")String monitorId,Invocation inv) throws Exception{
+		OracleSGAModel oracleSGAModel = oracleSGAService.viewSGAInfo(monitorId);
 		String threshold = "<a onclick='viewRelevanceSGADetail(this)'><div class='threshold_icon'></div></a>";
 		GridModel bufferCacheSize = new GridModel();
 		bufferCacheSize.setId("1");
@@ -321,7 +259,8 @@ public class OracleController {
 		sharePoolSize.setThreshold(threshold);
 		GridModel  redoLogCacheSize = new GridModel();
 		redoLogCacheSize.setId("3");
-		redoLogCacheSize.setValue("RedoLog缓冲区");
+		redoLogCacheSize.setValue(oracleSGAModel.getRedoLogCacheSize());
+		redoLogCacheSize.setAttribute("RedoLog缓冲区");
 		redoLogCacheSize.setThreshold(threshold);
 		GridModel libCacheSize = new GridModel();
 		libCacheSize.setId("4");
@@ -341,7 +280,8 @@ public class OracleController {
 		GridModel fixedSGASize = new GridModel();
 		fixedSGASize.setId("7");
 		fixedSGASize.setAttribute("固有区大小");
-		fixedSGASize.setAttribute(oracleSGAModel.getFixedSGASize());
+		fixedSGASize.setValue(oracleSGAModel.getFixedSGASize());
+		fixedSGASize.setThreshold(threshold);
 		GridModel javaPoolSize = new GridModel();
 		javaPoolSize.setId("8");
 		javaPoolSize.setAttribute("Java池大小");
@@ -379,12 +319,15 @@ public class OracleController {
 	
 	//sga状态数据
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void viewSGSStatus(String monitorId,Invocation inv) throws Exception{
-		SGAStateModel sgaStateModel = oracleSGAServiceImpl.viewSGAStateInfo(monitorId);
+	@Get("viewSGAStatus/{monitorId}")
+	public void viewSGAStatus(@Param("monitorId")String monitorId,Invocation inv) throws Exception{
+		
+		SGAStateModel sgaStateModel = oracleSGAService.viewSGAStateInfo(monitorId);
 		String threshold = "<a onclick='viewRelevanceSGAStatus(this)'><div class='threshold_icon'></div></a>";
 		GridModel bufferHitRate = new GridModel();
 		bufferHitRate.setId("1");
 		bufferHitRate.setAttribute("缓冲区命中率");
+	
 		bufferHitRate.setValue(sgaStateModel.getBufferHitRate());
 		bufferHitRate.setThreshold(threshold);
 		GridModel dictHitRate = new GridModel();
@@ -419,6 +362,32 @@ public class OracleController {
 		} catch (Exception e) {
 			throw new Exception("json数据转换出错!", e);
 		}
+	}
+	//SGA曲线图所用数据（缓冲区命中率，库命中率，数据字典命中率）
+	@Get("viewSGAGraph/{monitorId}")
+	public Reply viewSGAGraph(@Param("monitorId")String monitorId) {
+		Highchart highchart = new Highchart("sga_target");
+		EventInfoModel eventInfoModel = oracleSGAService.viewHitRateStaInfo(monitorId);
+		List<OracleSGAHitRateModel> sgaHitRateModels = eventInfoModel.getSgaHitRateModels();
+		HighchartSerie highchartSerie1 = new HighchartSerie("缓冲区命中率");
+		HighchartSerie highchartSerie2 = new HighchartSerie("数据字典命中率");
+		HighchartSerie highchartSerie3 = new HighchartSerie("缓存库命中率");
+		for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
+			highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate()));
+			highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate()));
+			highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate()));
+			highchart.addCategory(oracleSGAHitRate.getRecordTime());
+		}
+		highchart.addSerie(highchartSerie1);
+		highchart.addSerie(highchartSerie2);
+		highchart.addSerie(highchartSerie3);
+		return Replys.with(highchart).as(Json.class);
+	}
+	
+	private BigDecimal bigdecimalUtils(String target,int length,RoundingMode rm){
+		BigDecimal bd = new BigDecimal(target);
+		bd.setScale(length, rm.CEILING);
+		return bd;
 	}
 	
 }

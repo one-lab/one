@@ -1,19 +1,25 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
-import com.sinosoft.one.monitor.db.oracle.model.*;
-import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
-import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
-import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
-import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
-import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.sinosoft.one.monitor.db.oracle.model.EventInfoModel;
+import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
+import com.sinosoft.one.monitor.db.oracle.model.OracleSGAHitRateModel;
+import com.sinosoft.one.monitor.db.oracle.model.OracleSGAModel;
+import com.sinosoft.one.monitor.db.oracle.model.SGAStateModel;
+import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
+import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
+import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
+import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
+import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
 
 /**
  * User: Chunliang.Han
@@ -66,14 +72,18 @@ public class OracleSGAServiceImpl implements OracleSGAService {
         String sql2 = OracleMonitorSql.dictionaryRatio;
         String sql3 = OracleMonitorSql.libraryRatio;
         String sql4 = OracleMonitorSql.sgaFreeMemory;
-        List<Map<String, String>> rsList1 = DBUtil.queryStrMaps(SqlObj.newInstance(sql1));
-        List<Map<String, String>> rsList2 = DBUtil.queryStrMaps(SqlObj.newInstance(sql2));
-        List<Map<String, String>> rsList3 = DBUtil.queryStrMaps(SqlObj.newInstance(sql3));
-        List<Map<String, String>> rsList4 = DBUtil.queryStrMaps(SqlObj.newInstance(sql4));
-        sgaStateModel.setBufferHitRate(rsList1.get(0).get("Hit Ratio"));
-        sgaStateModel.setDictHitRate(rsList2.get(0).get("dictRatio"));
-        sgaStateModel.setLibHitRate(rsList3.get(0).get("libHitRatio"));
-        sgaStateModel.setUnusedCache(rsList4.get(0).get("free memory"));
+        List<Map<String, Object>> rsList1 = DBUtil.queryObjMaps(SqlObj.newInstance(sql1));
+        List<Map<String, Object>> rsList2 = DBUtil.queryObjMaps(SqlObj.newInstance(sql2));
+        List<Map<String, Object>> rsList3 = DBUtil.queryObjMaps(SqlObj.newInstance(sql3));
+        List<Map<String, Object>> rsList4 = DBUtil.queryObjMaps(SqlObj.newInstance(sql4));
+        String rate1 = ((BigDecimal)rsList1.get(0).get("Hit Ratio")).movePointRight(2).toString().substring(0,2);
+        String rate2 = ((BigDecimal)rsList2.get(0).get("dictRatio")).movePointRight(2).toString().substring(0,2);
+        String rate3 = ((BigDecimal)rsList3.get(0).get("libHitRatio")).movePointRight(2).toString().substring(0,2);
+        String rate4 = ((BigDecimal)rsList4.get(0).get("free memory")).movePointRight(2).toString().substring(0,2);
+        sgaStateModel.setBufferHitRate(rate1);
+        sgaStateModel.setDictHitRate(rate2);
+        sgaStateModel.setLibHitRate(rate3);
+        sgaStateModel.setUnusedCache(rate4);
         return sgaStateModel;
     }
 

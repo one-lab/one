@@ -200,7 +200,7 @@ public class OsViewHandle {
 		Date dayPoint=OsTransUtil.getBeforeDate(currentTime, timespan+"");
 		List<StatiDataModel> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime);
 		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>(span*60*60*1000)){
+			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(span*60*60*1000)){
 				Integer ptime=(Integer) BigDecimal.valueOf(osStatis.get(i).getDate().getTime()-dayPoint.getTime()).divide(BigDecimal.valueOf(Long.parseLong(span*60*60*1000+"")),0,BigDecimal.ROUND_UP).intValue();//空了几次
 				for (int j = 0; j < ptime; j++) {
 					OsGridModel osGridModel=new OsGridModel();

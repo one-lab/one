@@ -22,24 +22,41 @@ import java.util.Date;
  * Time: 下午4:31
  * To change this template use File | Settings | File Templates.
  */
-@Path("addapplication")
-public class AddApplicationController {
+@Path("addmonitor")
+public class AddMonitorController {
 
     @Autowired
     ApplicationService applicationService;
     @Autowired
     ResourcesService resourcesService;
 
-    @Get("add")
+    @Get("list")
+    public String getAddMonitorList(Invocation inv){
+        return "addMonitorList";
+    }
+
+    @Get("addapp")
     @Post("errorcreate")
     public String addApplication(Invocation inv){
         return "addSystem";
     }
 
+    @Get("addoracle")
+    @Post("errorcreate")
+    public String addOracle(Invocation inv){
+        return "addOracle";
+    }
+
+    @Get("addos")
+    @Post("errorcreate")
+    public String addOs(Invocation inv){
+        return "addLinux";
+    }
+
     /**
      * 新增一个应用.
      */
-    @Post("add")
+    @Post("addapp")
     public String saveApplication(@Validation(errorPath = "a:errorcreate") Application application, Invocation inv) {
         //获得当前用户
         application.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
@@ -56,6 +73,6 @@ public class AddApplicationController {
         //RESOURCES表中保存应用信息
         resourcesService.saveResource(resource);
         //页面所在路径application/manager/@应用性能页面
-        return "r:application/manager/appmanager/appperformance";
+        return "r:application/manager/appmanager/applist/1";
     }
 }

@@ -1,6 +1,9 @@
 package com.sinosoft.one.monitor.db.oracle.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 
 /**
  * User: Chunliang.Han
@@ -16,18 +19,18 @@ public class OracleHealthInfoModel {
      * 监视器ID
      */
     private String monitorID;
-    /**
-     * 统计总时间数(24小时)
-     */
-    private static final int ONE_DAY = 24;
-    /**
-     * 统计总时间数(30天)
-     */
-    private static final int THIRTY_DAY = 30;
+    
     /**
      * 总统计时间数
      */
     private int totalTime;
+    
+    
+    /**
+     * 健康状态
+     */
+    private List<SeverityLevel> healths = new ArrayList<SeverityLevel>();
+    
     /**
      * 图信息
      */
@@ -64,4 +67,12 @@ public class OracleHealthInfoModel {
     public void setGraphInfo(List<String[]> graphInfo) {
         this.graphInfo = graphInfo;
     }
+
+	public List<SeverityLevel> getHealths() {
+		return healths;
+	}
+
+	public void addHealth(SeverityLevel health) {
+		this.healths.add(health);
+	}
 }

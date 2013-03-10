@@ -29,8 +29,7 @@ public class OsCpuService {
 	 * 保存CPU采集数据
 	 * @param cpu
 	 */
-	public boolean saveCpu(String osInfoId,String cpuinfo ,Date sampleTime){
-		OsCpu osCpu=OsTransUtil.getCpuInfo(cpuinfo);
+	public boolean saveCpu(String osInfoId,OsCpu osCpu ,Date sampleTime){
 		Os os =new Os();
 		os.setOsInfoId(osInfoId);
 		osCpu.setOs(os);

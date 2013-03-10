@@ -5,6 +5,8 @@ import com.sinosoft.one.monitor.application.model.MethodResponseTime;
 import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import com.sinosoft.one.monitor.application.model.UrlTraceLog;
 import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlCountViewModel;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlHealthAvaViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlInfoViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.UrlTraceLogViewModel;
 import com.sinosoft.one.monitor.application.repository.MethodResponseTimeRepository;
@@ -15,6 +17,7 @@ import com.sinosoft.one.monitor.common.HealthStaService;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.common.Trend;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,13 +53,28 @@ public class ApplicationUrlService {
 	private UrlTraceLogRepository urlTraceLogRepository;
 	@Autowired
 	private MethodResponseTimeRepository methodResponseTimeRepository;
+	@Autowired
+	private AlarmRepository alarmRepository;
 
 	public ApplicationUrlInfoViewModel generateUrlInfoViewModel(String applicationId, String urlId) {
 		// 获得健康度
-		LocalDateTime localDateTime = LocalDateTime.now();
+		SeverityLevel severityLevel  = SeverityLevel.UNKNOW;
+		Date startDate = LocalDate.now().toDate();
+		Date endDate = LocalDateTime.now().toDate();
+		int criticalCount = alarmRepository.countCriticalBySubReousrce(applicationId, ResourceType.APPLICATION_SCENARIO_URL.name(),
+				urlId, startDate, endDate);
+		if(criticalCount > 0) {
+			severityLevel = SeverityLevel.CRITICAL;
+		} else {
+			int warningCount = alarmRepository.countWarningBySubReousrce(applicationId,  ResourceType.APPLICATION_SCENARIO_URL.name(),
+					urlId, startDate, endDate);
+			if(warningCount > 0) {
+				severityLevel = SeverityLevel.WARNING;
+			} else {
+				severityLevel = SeverityLevel.INFO;
+			}
+		}
 
-		SeverityLevel severityLevel  = healthStaService.healthStaForCurrent(applicationId, ResourceType.APPLICATION_SCENARIO_URL,
-				urlId, 10);
 		// 获得可用性信息
 		UrlAvailableInf urlAvailableInf = applicationEmuService.getUrlAvailableToday(urlId);
 
@@ -72,27 +91,63 @@ public class ApplicationUrlService {
 		return applicationUrlInfoViewModel;
 	}
 
-	public void generateUrlHealthAndAvaStaViewModel(String applicationId, String urlId) {
+	public ApplicationUrlHealthAvaViewModel generateUrlHealthAndAvaStaViewModel(String applicationId, String urlId) {
+		ApplicationUrlHealthAvaViewModel applicationUrlHealthAvaViewModel = new ApplicationUrlHealthAvaViewModel();
 		// 获得最近6小时健康度
 		LocalDateTime localDateTime = LocalDateTime.now();
 
+		List<String> times = new ArrayList<String>();
+		for(int i=6; i>=1; i++) {
+			applicationUrlHealthAvaViewModel.addTime(localDateTime.minusHours(i).toString("HH") + ":00");
+		}
 		Map<Integer, SeverityLevel> severityLevelMap = healthStaService.healthStaForHours(applicationId, ResourceType.APPLICATION_SCENARIO_URL.name(),
-				urlId, 5);
+				urlId, 6);
+		for(Integer key : severityLevelMap.keySet()) {
+			String tempTime = key > 10 ? key + ":00" : "0" + key + ":00";
+			applicationUrlHealthAvaViewModel.addUrlHealth(tempTime, severityLevelMap.get(key).name());
+		}
 		// 获得可用性信息
 		List<TimeQuantumAvailableInfo> timeQuantumAvailableInfoList = applicationEmuService.findAvailableStatisticsByUrlId(urlId);
 
+		for(TimeQuantumAvailableInfo timeQuantumAvailableInfo : timeQuantumAvailableInfoList) {
+			String tempTime = timeQuantumAvailableInfo.getTimeQuantum();
+			tempTime = tempTime.substring(tempTime.indexOf(" ") + 1) + ":00";
+			applicationUrlHealthAvaViewModel.addUrlAva(tempTime, evalPercent(timeQuantumAvailableInfo.getAvaCount(), timeQuantumAvailableInfo.getCount())
+					+ ":" + evalPercent(timeQuantumAvailableInfo.getFailCount(), timeQuantumAvailableInfo.getCount()));
+		}
+
+		return applicationUrlHealthAvaViewModel;
 	}
 
-	public void generateUrlCountStaViewModel(String applicationId, String urlId) {
+	private BigDecimal evalPercent(int count, int totalCount) {
+		if(totalCount == 0) return BigDecimal.ZERO;
+		return BigDecimal.valueOf(count).divide(BigDecimal.valueOf(totalCount), 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+	}
+
+	public ApplicationUrlCountViewModel generateUrlCountStaViewModel(String applicationId, String urlId) {
+		ApplicationUrlCountViewModel applicationUrlCountViewModel = new ApplicationUrlCountViewModel();
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Date endDate = localDateTime.toDate();
-		Date startDate = localDateTime.minusHours(5).toDate();
+		Date startDate = localDateTime.minusHours(6).toDate();
+		List<String> times = new ArrayList<String>();
+		for(int i=6; i>=1; i++) {
+			applicationUrlCountViewModel.addTime(localDateTime.minusHours(i).toString("HH") + ":00");
+		}
 
 		// 获得最近6小时响应时间
 		List<UrlResponseTime> urlResponseTimes = urlResponseTimeRepository.selectUrlResponseTimes(applicationId, urlId, startDate, endDate);
-
+		for(UrlResponseTime urlResponseTime : urlResponseTimes) {
+			String tempTime = DateFormatUtils.format(urlResponseTime.getRecordTime(), "HH:00");
+			applicationUrlCountViewModel.addUrlResponseTime(tempTime, urlResponseTime.getAvgResponseTime());
+		}
 		// 获得最近6小时访问数量
 		List<UrlVisitsSta> urlVisitsStas = urlVisitsStaRepository.selectUrlVisitsSta(applicationId, urlId, startDate, endDate);
+		for(UrlVisitsSta urlVisitsSta : urlVisitsStas) {
+			String tempTime = DateFormatUtils.format(urlVisitsSta.getRecordTime(), "HH:00");
+			applicationUrlCountViewModel.addUrlVisitNumber(tempTime, urlVisitsSta.getVisitNumber());
+		}
+
+		return applicationUrlCountViewModel;
 	}
 
 	public Page<UrlTraceLogViewModel> queryUrlTraceLogs(Pageable pageable, String urlId) {

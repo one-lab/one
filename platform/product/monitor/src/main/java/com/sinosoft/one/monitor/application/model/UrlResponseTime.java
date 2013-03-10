@@ -66,6 +66,11 @@ public class UrlResponseTime {
 	 */
 	private String healthBar;
 
+	/**
+	 * 为了前台页面显示的新增的连接
+	 */
+	private String urlHref;
+
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
@@ -178,6 +183,15 @@ public class UrlResponseTime {
 
 	public void setHealthBar(String healthBar) {
 		this.healthBar = healthBar;
+	}
+
+	@Transient
+	public String getUrlHref() {
+		return urlHref;
+	}
+
+	public void setUrlHref(String urlHref) {
+		this.urlHref = urlHref;
 	}
 
 	public void increaseTotalCount() {

@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.db.oracle.domain;
 
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.model.OracleInfoModel;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
@@ -11,6 +12,8 @@ import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
+import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,10 +41,13 @@ public class OracleInfoServiceImpl implements OracleInfoService {
     private AvaRepository avaRepository;
     @Autowired
     private AlarmRepository alarmRepository;
+    @Autowired
+    private ResourcesRepository resourcesRepository;
 
     @Override
     @Transactional
     public void saveMonitor(Info info) {
+
         //插入version,startTime;
         String ip = info.getIpAddress();
         String port = info.getPort();
@@ -60,7 +66,12 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         String startTime = rsObj.get("STARTUPTIME");
         info.setOracleVersion(version);
         info.setStartTime(startTime);
-        infoRepository.save(info);
+        info = infoRepository.save(info);
+        Resource resource = new Resource();
+        resource.setResourceName(info.getName());
+        resource.setResourceId(info.getId());
+        resource.setResourceType(ResourceType.DB.cnName());
+        resourcesRepository.save(resource);
     }
 
     @Override

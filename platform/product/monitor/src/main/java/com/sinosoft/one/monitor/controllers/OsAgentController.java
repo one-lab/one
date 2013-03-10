@@ -10,6 +10,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.data.jade.parsers.sqljep.function.Hash;
+import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableServcie;
 import com.sinosoft.one.monitor.os.linux.domain.OsProcessService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
@@ -46,6 +48,9 @@ public class OsAgentController {
 	
 	@Autowired
 	private OsProcessService osProcessService;
+	
+	@Autowired
+	private AlarmMessageBuilder alarmMessageBuilder;
 
 
 	/**
@@ -126,6 +131,8 @@ public class OsAgentController {
 				System.out.println("收集返回的磁盘："+diskInfo);
 				String respondTime = getValue("respondTime", osAgentInfo);
 				System.out.println("响应时间"+respondTime);
+				
+				
 //				oos.writeObject("继续监控");
 				//采样时间
 				Date sampleTime=new Date();

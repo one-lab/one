@@ -27,14 +27,13 @@
                     </ul>
 
                 </li>
-                <li><a href="performance.html">应用性能</a></li>
-                <li><a href="BusinessSimulation.html">业务仿真</a></li>
+                <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a></li>
                 <li><a href="${ctx}/alarm/manager/alarmmanager/list">告警</a></li>
                 <li><a href="${ctx}/account/user/list">用户管理</a></li>
             </ul>
         </div>
         <ul class="add_menu" id="menu">
-            <li><a href="addMonitorList.html">新建监视器</a></li>
+            <li><a href="${ctx}/addmonitor/list">新建监视器</a></li>
             <li class="has_sub">
                 <a href="javascript:viod(0)"><span>阈值配置文件</span></a>
                 <ul class="add_sub_menu">
@@ -42,7 +41,6 @@
                     <li><a class="thresholdFile" href="thresholdFile.html">查看阈值配置文件</a></li>
                 </ul>
             </li>
-            <li><a href="deployMonitor.html">配置监视器</a></li>
             <li class="has_sub">
                 <a href="javascript:viod(0)"><span>动作</span></a>
                 <ul class="add_sub_menu">

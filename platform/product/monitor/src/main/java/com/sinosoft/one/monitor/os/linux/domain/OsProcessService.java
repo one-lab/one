@@ -2,11 +2,19 @@ package com.sinosoft.one.monitor.os.linux.domain;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AttributeName;
+import com.sinosoft.one.monitor.common.MessageBase;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
+import com.sinosoft.one.monitor.os.linux.model.OsCpu;
+import com.sinosoft.one.monitor.os.linux.model.OsDisk;
+import com.sinosoft.one.monitor.os.linux.model.OsRam;
+import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 
 @Component
 public class OsProcessService {
@@ -26,6 +34,8 @@ public class OsProcessService {
 	private OsAvailableServcie osAvailableServcie;
 	@Autowired
 	private OsStatiService osStatiService;
+	@Autowired
+	private AlarmMessageBuilder alarmMessageBuilder;
 	/**
 	 * 保存采样信息  //并更新统计记录
 	 * @param cpuInfo 采集的CPU信息字符串
@@ -41,10 +51,26 @@ public class OsProcessService {
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
-		osCpuService.saveCpu(osInfoId,cpuInfo ,sampleTime);//保存CPU采样
-		osDiskService.saveDisk(osInfoId,diskInfo, sampleTime);//保存磁盘采样
-		osRamService.saveRam(osInfoId,ramInfo , sampleTime);//保存内存采样
+		MessageBase messageBase = alarmMessageBuilder.newMessageBase(osInfoId);
+		OsCpu osCpu=OsTransUtil.getCpuInfo(cpuInfo);
+		osCpuService.saveCpu(osInfoId,osCpu ,sampleTime);//保存CPU采样
+		messageBase.addAlarmAttribute(AttributeName.CPUUtilization, osCpu.getUtiliZation());
+		
+		List<OsDisk> osDisks=OsTransUtil.getDiskInfo(diskInfo);
+		osDiskService.saveDisk(osInfoId,osDisks, sampleTime);//保存磁盘采样
+		for(OsDisk osDisk : osDisks){
+			messageBase.addAlarmAttribute(AttributeName.DiskUtilization, osDisk.getUsedUtiliZation());
+		}
+		
+ 		OsRam osRam=OsTransUtil.getRamInfo(ramInfo);
+		osRamService.saveRam(osInfoId,osRam , sampleTime);//保存内存采样
+		messageBase.addAlarmAttribute(AttributeName.PhysicalMemoryUtilization, osRam.getMemUtiliZation());
+		messageBase.addAlarmAttribute(AttributeName.SwapMemoryUtilization, osRam.getSwapUtiliZation());
+		
 		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存响应时间采样
+		messageBase.addAlarmAttribute(AttributeName.ResponseTime, respondTime);
+		
+		messageBase.alarm();
 		//更新统计记录
 		osDataMathService.statiOneHourRam(osInfoId, sampleTime,hourPoint);//更新内存统计
 		osDataMathService.statiOneHourCpu(osInfoId, sampleTime,hourPoint);//更新CPU统计
