@@ -189,27 +189,6 @@ function batchDel(){
 	};
 }
 
-function viewRelevance(){
-	var temWin = $("body").window({
-		"id":"window",   
-        "title":'根本原因分析',  
-		"url":"basicReaon.html",   
-        "hasIFrame":true,
-		"width": 740,
-		"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]
-	});
-}
-
 function buildHighchart(_highChart) {
 	new Highcharts.Chart({
 		chart: {

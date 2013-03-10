@@ -26,6 +26,24 @@
 			var id= $("#osid").val();
 			alert(id);
 			creatSimpleChart('${ctx}/os/historyMemStatiLine/7/'+id, 'last_sevenday', '内存利用率%');
+		
+			$("#sevenday_grid").Grid({
+				type : "post",
+				url :  '/monitor/os/historyMemStatiGrid/7/'+id,
+				dataType: "json",
+				height: 'auto',
+				colums:[
+					{id:'1',text:'时间',name:"time",width:'300',index:'1',align:'',color:''},
+					{id:'2',text:'最小值  ',name:"minValue",width:'',index:'1',align:'',color:''},
+					{id:'3',text:'最大值 ',name:"maxValue",width:'',index:'1',align:'',color:''},
+					{id:'4',text:'平均值 ',name:"averageValue",width:'',index:'1',align:'',color:''}
+				],
+				rowNum:10,
+				rowList:[10,20,30],
+				pager : false,
+				number:false,
+				multiselect:true,
+			});
 		})
 $(function(){
 	$("body").layout({
@@ -36,22 +54,7 @@ $(function(){
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
-	$("#sevenday_grid").Grid({
-		url : "historyMemory.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'时间',name:"time",width:'300',index:'1',align:'',color:''},
-			{id:'2',text:'最小值  ',name:"minValue",width:'',index:'1',align:'',color:''},
-			{id:'3',text:'最大值 ',name:"maxValue",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'平均值 ',name:"averageValue",width:'',index:'1',align:'',color:''}
-		],
-		rowNum:10,
-		rowList:[10,20,30],
-		pager : false,
-		number:false,
-		multiselect:true,
-	});
+	
 });
 
 function navHover(){
@@ -91,7 +94,7 @@ function hideNav(e){
 					<div class="sub_title">
 						最近7天的物理内存利用率
 					</div>
-
+					<input id="osid" value="${os.osInfoId }" />
 					<table class="base_info" width="100%" cellpadding="0"
 						cellspacing="0">
 						<tr>
@@ -99,7 +102,7 @@ function hideNav(e){
 								监视器名称
 							</td>
 							<td>
-								oracle
+								${os.name}
 							</td>
 						</tr>
 						<tr>
@@ -115,7 +118,7 @@ function hideNav(e){
 								从
 							</td>
 							<td>
-								2013-2-26 上午11:00
+								${beginDate}
 							</td>
 						</tr>
 						<tr>
@@ -123,14 +126,14 @@ function hideNav(e){
 								到
 							</td>
 							<td>
-								2013-3-1 下午6:22
+								${currentDate}
 							</td>
 						</tr>
 
 						<tr>
 							<td colspan="2">
 								<div class="days_data">
-									<a href="historyMemoryThirtyDay.jsp"><div
+									<a href="${ctx }/os/historyMem/30/${os.osInfoId}"><div
 											class="thirty_days"></div>
 									</a>
 									<a href="#"><div class="seven_days_unable"></div>
@@ -150,25 +153,22 @@ function hideNav(e){
 										物理内存利用率(%) :
 									</div>
 									<div>
-										1
+										最大平均值:
+									</div>
+									<div>
+										${MaxAgv }
 									</div>
 									<div>
 										最小平均值
 									</div>
 									<div>
-										2
-									</div>
-									<div>
-										最大平均值:
-									</div>
-									<div>
-										23
+										${MinAgv}
 									</div>
 									<div>
 										平均:
 									</div>
 									<div>
-										13.489
+										${Agv }
 									</div>
 								</div>
 							</td>

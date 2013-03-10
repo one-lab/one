@@ -17,6 +17,9 @@ function creatSimpleChart(url, renderTo, text) {
 							if (i == 0) {
 								categories.push(data[name][j].x);
 							}
+							if (data[name][j].y==-1) {
+								y.data.push(null);
+							}
 							y.data.push(data[name][j].y);
 							j += 1;
 						}

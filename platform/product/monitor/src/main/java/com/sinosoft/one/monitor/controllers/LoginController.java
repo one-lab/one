@@ -32,22 +32,22 @@ public class LoginController {
         return "login";
     }
 
-    @Get("/loginCheck")
+
+    @Get("/loginsuccess")
     public String loginCheck(Invocation inv) {
         Subject currentUser = SecurityUtils.getSubject();
         Account checkuser = (Account) currentUser.getPrincipals().getPrimaryPrincipal();
 
         if (checkuser != null) {
             if (String.valueOf(0).equals(checkuser.getStatus())) {
-                return "lock";
+                return "login";
             }
             inv.getRequest().getSession().setAttribute("loginUserName", checkuser.getLoginName());
-            return "r:account/user/list";
+            return "index";
         } else {
             inv.addFlash("message", "用户名或者密码不对");
-            return "r:/login";
+            return "login";
         }
-
     }
 
     @Get("/logout")

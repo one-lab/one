@@ -88,6 +88,8 @@ public class ApplicationService {
         return  applicationRepository.findByStatus("1");
     }
 
+
+
     /**
      * 查询所有的应用.
      */

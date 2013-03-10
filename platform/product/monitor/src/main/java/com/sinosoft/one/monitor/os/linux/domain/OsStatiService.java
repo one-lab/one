@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.repository.OsStatiRepository;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 
@@ -71,35 +72,20 @@ public class OsStatiService {
 	 * @param timepoint时间点
 	 * @return
 	 */
-	public List<OsStati> findStatiByTimeSpan(String osid,String type,Date begin ,Date end ,int timespan){
-		int timeSize=0;
-		if(timespan>1){
-			timeSize=24;
-		}else{
-			timeSize=1;
-		}
-		long aveTime =(end.getTime()-begin.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
+	public List<StatiDataModel> findStatiByTimeSpan(String osid,String type,Date begin ,Date end ){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
-		List<OsStati> osStatis=new ArrayList<OsStati>();
-		for (int i = 0; i <aveTime; i++) {
-			String max=osStatiRepository.findStatiMaxByTimeSpan(osid, type, simpleDateFormat.format(begin), OsUtil.DATEFORMATE_YEAR_MON_DAY);
-			String min=osStatiRepository.findStatiMinByTimeSpan(osid, type, simpleDateFormat.format(begin), OsUtil.DATEFORMATE_YEAR_MON_DAY);
-			String ave=osStatiRepository.findStatiAveByTimeSpan(osid, type, simpleDateFormat.format(begin), OsUtil.DATEFORMATE_YEAR_MON_DAY);
-			OsStati osStati=new OsStati();
-			if(max==null)
-				max="-1.0";
-			if(min==null)
-				min="-1.0";
-			if(ave==null)
-				ave="-1.0";
-			osStati.setMaxValue(BigDecimal.valueOf(Double.valueOf(max)).divide(BigDecimal.valueOf(1),2,BigDecimal.ROUND_HALF_UP).toString());
-			osStati.setMinValue(BigDecimal.valueOf(Double.valueOf(min)).divide(BigDecimal.valueOf(1),2,BigDecimal.ROUND_HALF_UP).toString());
-			osStati.setAverageValue(BigDecimal.valueOf(Double.valueOf(ave)).divide(BigDecimal.valueOf(1),2,BigDecimal.ROUND_HALF_UP).toString());
-			osStati.setRecordTime(begin);
-			begin=new Date(begin.getTime()+timeSize*60*60*1000);
-			osStatis.add(osStati);
-		}
-		
-		return osStatis;
+		return osStatiRepository.findStatiValue(osid, type, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.DATEFORMATE_YEAR_MON_DAY);
 	}
+	
+	/**
+	 * 查询统计表一个时间段的 某列 最大 最小品均 统计结果记录
+	 * @param osid
+	 * @param timepoint时间点
+	 * @return
+	 */
+	public StatiDataModel findStatiMxMinAvgByTimeSpan(String osid,String type,Date begin ,Date end ,String cloun){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
+		return osStatiRepository.findStatiMaxMinAvgByTimeSpan(osid, type, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.DATEFORMATE_YEAR_MON_DAY);
+	}
+	
 }

@@ -13,6 +13,7 @@ public enum ResourceType {
 	APPLICATION_EUM_URL("业务仿真URL"),
 	OS("操作系统"),
 	DB("数据库"),
+    ALL("所有"),
 	NONE("");
 
 	private String _cnName;

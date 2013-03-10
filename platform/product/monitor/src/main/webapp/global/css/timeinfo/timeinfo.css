@@ -30,7 +30,7 @@
 .time_info_text{height:44px; background:url(../../images/timeinfo/conf-bg-tile.png); font-size:18px; font-weight:bold; white-space:pre;}
 .time_info_text div{ text-align:center;}
 .time_info_overview{width:100%;text-align:left;}
-.time_info_overview table{padding:10px 0;}
+.time_info_overview table{padding:0 10px;}
 .time_info_overview_table{margin-top:20px;}
 .time_info_overview_table table{border:1px solid #eee;}
 .serious,.warning,.normal,.unknow {width:20px;height:10px;margin-right:5px;}
@@ -46,10 +46,11 @@
 .time_info_performance_table tr{margin-top:20px;height:30px;}
 .time_info_performance_table td{width:10%;padding-left:20px; vertical-align:middle; }
 .time_info_overview_table_head{ font-size:14px; font-weight:bold;}
-.ky,.bky,.wran,.tj,.wsj{width:98px;height:15px;}
+.ky,.bky,.wran,.tj,.wsj{height:15px;float:left;}
 .iky,.ibky,.iwran,.itj,.iwsj{width:11px;height:11px;border:1px solid #eee;}
 
-.show_bar{ margin-left:3px;height:15px;width:588px;border:1px solid #666;}
+.bar{ margin-left:3px;height:15px;width:588px;border:1px solid #666;}
+.bar .show_bar{width:98px;height:15px;float:left; }
 .show_time li{float:left;margin-right:65px;}
 .show_bar li {float:left;}
 .bar_table{width:630px;border:1px solid #eee;}
@@ -57,7 +58,7 @@
 .show_mark li div{float:left;margin:0 10px;}
 .tool_bar_top{ text-align:left;}
 .column_chart{margin:20px 0;}
-
+.column_chart .threshold_file{float:left;margin: 0 10px 20px 0;}
 #type_list_head{font-size:16px;padding:2px 20px; text-align:left; font-weight:bold;height:25px; background:url(../../images/timeinfo/bg_tableheader.gif) repeat-x;}
 
 .red_status{width:14px;height:14px;}

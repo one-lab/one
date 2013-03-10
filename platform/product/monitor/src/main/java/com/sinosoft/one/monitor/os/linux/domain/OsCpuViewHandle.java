@@ -30,19 +30,19 @@ public class OsCpuViewHandle {
 	private static Map<String,String> map=new HashMap<String, String>();
 	static{
 		 map.put("runQueue", "运行队列");
-		 map.put("Link", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
+//		 map.put("Link", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 		 map.put("blockProcess", "阻塞进程");
-		 map.put("blockProcessLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
+//		 map.put("blockProcessLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 		 map.put("userTime", "用户时间(%)");
-		 map.put("userTimeLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
+//		 map.put("userTimeLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 		 map.put("sysTime", "系统时间(%)");
-		 map.put("sysTimeLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
+//		 map.put("sysTimeLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 		 map.put("ioWait", "I/O等待(%)");
-		 map.put("ioWaitLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
+//		 map.put("ioWaitLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 		 map.put("cpuIdle", "空闲时间(%) ");
-		 map.put("cpuIdleLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
+//		 map.put("cpuIdleLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 		 map.put("interRupt", "中断/秒");
-		 map.put("interRuptLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
+//		 map.put("interRuptLink", "<a href='javascript:void(0)' onclick='viewWindow(this)' class='img-7'></a>");
 	}
 	
 	/**
@@ -53,15 +53,15 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 */
 	public Map<String,List<Map<String, Object>>> creatCpuLineData(List<Os>Oss,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date havePoint= c.getTime();//有值的点
-		long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
 		Map<String,List<Map<String, Object>>> osCpuUiliZation =new HashMap<String,List<Map<String, Object>>>();
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date date=new Date();
 		for (Os os : Oss) {
+			Calendar c  = Calendar.getInstance();
+			c.setTime(currentTime);
+			c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
+			Date havePoint= c.getTime();//有值的点
+			long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
+			SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
+			Date date=new Date();
 			List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 			Map<String, Object> m=new HashMap<String, Object>();
 			OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
@@ -485,8 +485,6 @@ public class OsCpuViewHandle {
 		}
 		return maps;
 	}
-	
-	
 	/**
 	 * 构建当前Cpu的grid
 	 * @param osId
@@ -501,16 +499,13 @@ public class OsCpuViewHandle {
 			OsGridModel osRamViewModel=new OsGridModel();
 			osRamViewModel.setName("CPU使用率");
 			osRamViewModel.setUtilzation("未知");
-			osRamViewModel.setLink("<a href='#' class='img-7'></a>");
-			osRamViewModel.setUsed("0");
-			osRamViewModel.setThreshold("0");
+			osRamViewModel.setLink("<a href='#'onclick='viewWindow(this,\"historyCPU/7\")' class='img-7'></a>");
 			osSwapViewModels.add(osRamViewModel);
 		}else{
 			OsGridModel osRamViewModel=new OsGridModel();
 			osRamViewModel.setName("CPU使用率");
 			osRamViewModel.setUtilzation(osCpu.getUtiliZation());
-			osRamViewModel.setLink("<a href='#' class='img-7'></a>");
-			osRamViewModel.setThreshold("0");
+			osRamViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
 			osSwapViewModels.add(osRamViewModel);
 			
 		}
@@ -540,13 +535,12 @@ public class OsCpuViewHandle {
 					osGridModel.setName(map.get(field.getName()));
 					if(field.get(osCpu)==null){
 						osGridModel.setValue("未知");
-						osGridModel.setStuts("<a  class='img-unknow'></a>");
+//						osGridModel.setStuts("<a  class='img-unknow'></a>");
 					}else{
-						osGridModel.setStuts("<a  class='img-unknow'></a>");
 						osGridModel.setValue(field.get(osCpu).toString());
+//						osGridModel.setStuts("<a  class='img-unknow'></a>");
 					}
-					osGridModel.setLink(map.get("Link"));
-					
+//					osGridModel.setLink(map.get("Link"));
 					osSwapViewModels.add(osGridModel);
 				}
 		} catch (Exception e) {

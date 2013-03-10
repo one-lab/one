@@ -11,10 +11,14 @@ import org.springframework.stereotype.Component;
 import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailable;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.repository.OsAvailableRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsAvailabletempRepository;
+import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
+import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableCountsGroupByInterval;
 
 /**
  * 可用性的数据库操作
@@ -33,7 +37,7 @@ public class OsAvailableServcie {
 	 * 保存可用性统计表数据 //每天00点保存
 	 * @param ava
 	 */
-	public void saveAvailable(String osId,long nomorRun,long crashtime,long aveRepair,long aveFault ,Date timeSpan){
+	public void saveAvailable(String osId,long nomorRun,long crashtime,long aveRepair,long aveFault ,Date timeSpan, int stopCount){
 		OsAvailable osAvailable =new OsAvailable();
 		Os os=new Os();
 		os.setOsInfoId(osId);
@@ -43,6 +47,7 @@ public class OsAvailableServcie {
 		osAvailable.setCrashTime(crashtime);
 		osAvailable.setTimeSpan(timeSpan);
 		osAvailable.setNormalRun(nomorRun);
+		osAvailable.setStopCount(stopCount);
 		osAvailableRepository.save(osAvailable);
 	}
 	
@@ -83,7 +88,7 @@ public class OsAvailableServcie {
 	 * 保存可用性临时数据//每个采样点保存
 	 * @param ava
 	 */
-	public void saveAvailableTemp(String osId,Date time,String Status,int intercycleTime){
+	public OsAvailabletemp saveAvailableTemp(String osId,Date time,String Status,int intercycleTime){
 		OsAvailabletemp osAvailabletemp=new OsAvailabletemp();
 		Os os=new Os();
 		os.setOsInfoId(osId);
@@ -91,7 +96,7 @@ public class OsAvailableServcie {
 		osAvailabletemp.setSampleDate(time);
 		osAvailabletemp.setStatus(Status);	
 		osAvailabletemp.setIntercycleTime(intercycleTime);
-		osAvailabletempRepository.save(osAvailabletemp);
+		return osAvailabletempRepository.save(osAvailabletemp);
 	}
 	
 	/**
@@ -112,19 +117,40 @@ public class OsAvailableServcie {
 	 * timespan 时间1  7 30 等  天为单位
 	 */
 	public List<OsAvailable> getAvailablesByDate(String osid,Date curruntTime,int timespan){
+		if(timespan>1){
+			timespan=(timespan-1)*24;
+		}else{
+			timespan=24;
+		}
 		//取当天的24小时整时点
-		Calendar c  = Calendar.getInstance();
-		c.setTime(curruntTime);
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		curruntTime=c.getTime();
-		Date beginTime =new Date(curruntTime.getTime()-((timespan-1)*24*60*60*1000));
+		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
+		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*24*60*60*1000)+"")));
 		System.out.println(curruntTime);
 		System.out.println(beginTime);
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osAvailableRepository.getOsAvailablesByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
 	}
+	
+	/**
+	 * 获取可用统计数据返回统计类型MODEL
+	 * timespan 时间1  7 30 等  天为单位
+	 */
+	public List<StatiDataModel> getOsAvailablesHistoryByDate(String osid,Date curruntTime,int timespan){
+		if(timespan>1){
+			timespan=(timespan-1)*24;
+		}else{
+			timespan=24;
+		}
+		//取当天的24小时整时点
+		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
+		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*60*60*1000)+"")));
+		System.out.println(curruntTime);
+		System.out.println(beginTime);
+		
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osAvailableRepository.getOsAvailablesHistoryByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
+	}
+	
 	
 	/**
 	 * 删除可用性临时数据
@@ -212,12 +238,12 @@ public class OsAvailableServcie {
 		deleteAvailableTemp(osInfoId, d2,d1);
 	}
 	
-//	/**
-//	 * 获取临时表统计轮询时间改变的计算
-//	 */
-//	public List<AvailableDetail> findGroupByInterCycleTime(String osinfoID,Date todaytime){
-//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-//		return osAvailabletempRepository.findGroupByInterCycleTime(osinfoID, simpleDateFormat.format(todaytime),OsUtil.ORCL_DATEFORMATE);
-//	}
+	/**
+	 * 获取临时表统计轮询时间改变的计算
+	 */
+	public List<AvailableCountsGroupByInterval> findGroupByInterCycleTime(String osinfoID,Date todaytime){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osAvailabletempRepository.findGroupByInterCycleTime(osinfoID, simpleDateFormat.format(todaytime),OsUtil.ORCL_DATEFORMATE);
+	}
 	
 }

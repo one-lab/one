@@ -21,18 +21,19 @@ $(function(){
 		colDisplay: false,  
 		clickSelect: true,
 		draggable:false,
-		height: "auto",  
+		height: "auto",
+        sorts:false,
 		colums:[  
 			{id:'1',text:'URL地址',name:"url",index:'1',align:''},
 			{id:'2',text:'名称',name:"description",index:'1',align:''},
-			{id:'3',text:'可用性',name:"status",index:'1',align:''},
-			{id:'4',text:'健康状态',name:"threshold",index:'1',align:''},
+			/*{id:'3',text:'可用性',name:"status",index:'1',align:''},
+			{id:'4',text:'健康状态',name:"threshold",index:'1',align:''},*/
 			{id:'5',text:'操作',name:"operation",index:'1',align:''}
 		],  
 		rowNum:9999,
 		pager : false,
 		number:false,  
-		multiselect: true  
+		multiselect: true
 	});
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
@@ -150,16 +151,51 @@ function batchDel(){
     </div>
 </div>
 <div id="layout_center">
-	<div class="main">
-    	<div class="threshold_file">
-       	  <h2 class="title2"><b>业务场景名:${bizScenarioName}</b></h2>
-          <div class="tool_bar_top">
-          	<a href="${ctx}/application/manager/urlmanager/createurl/${bizScenarioId}" class="add_bus_scene" >添加url</a>
-          	<a href="javascript:void(0);" class="batch_del" onclick="urlBatchDel()">批量删除</a>
-          </div>
-          <div id="thresholdList"></div>
-          <div class="tool_bar"></div>
-        </div>
+    <div class="main">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="vertical-align:top">
+                    <div class="threshold_file">
+                        <h2 class="title2"><b>业务场景名:${bizScenarioName}</b></h2>
+
+                        <div class="tool_bar_top">
+                            <a href="${ctx}/application/manager/urlmanager/createurl/${bizScenarioId}"
+                               class="add_bus_scene">添加url</a>
+                            <a href="javascript:void(0);" class="batch_del" onclick="urlBatchDel()">批量删除</a>
+                        </div>
+                        <div id="thresholdList"></div>
+                        <div class="tool_bar"></div>
+                    </div>
+                </td>
+                <td width="15">&nbsp;</td>
+                <td width="33%" style="vertical-align:top">
+                    <div class="conf_box help">
+                        <div class="conf_title">
+                            <div class="conf_title_r"></div>
+                            <div class="conf_title_l"></div>
+                            <span>帮助信息</span></div>
+                        <div class="conf_cont_box">
+                            <div class="conf_cont">
+                                <ul>
+                                    <li class="first"><b>新建应用系统监视器</b><br/>
+                                        创建系统监视器后可根据业务需求配置业务场景。
+                                    </li>
+                                    <li class="first"><b>管理业务场景</b><br/>
+                                        点击“管理业务场景”,可以增加新业务场景或管理已有业务场景。
+                                    </li>
+                                    <li class="first"><b>管理URL</b><br/>
+                                        点击“管理URL”,对应业务场景将URL按流程顺序进行添加与监控配置。
+                                    </li>
+                                    <li class="the_set"><b>管理方法</b><br/>
+                                        点击“管理方法”,对URL中所执行的方法按顺序进行添加与监控配置
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 <div id="layout_bottom">

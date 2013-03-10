@@ -3,6 +3,8 @@ package com.sinosoft.one.monitor.os.linux.util;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
@@ -63,8 +65,8 @@ public class OsTransUtil {
 		String[] diskInfos = diskInfo.split(",");
 		String[] elements = null;
 		List<OsDisk> osDisks = new ArrayList<OsDisk>();
-		long totalCount=0;
-		long UsedCount=0;
+		long totalCount = 0;
+		long UsedCount = 0;
 		String totalUtiliZation;
 		for (int i = 0; i < diskInfos.length; i++) {
 			String line = diskInfos[i];
@@ -72,10 +74,10 @@ public class OsTransUtil {
 			if (i == 0) {
 				continue;
 			}
-			totalCount+=Long.parseLong(elements[1].trim());
-			UsedCount+=Long.parseLong(elements[2].trim());
+			totalCount += Long.parseLong(elements[1].trim());
+			UsedCount += Long.parseLong(elements[2].trim());
 		}
-		totalUtiliZation=countUtilZation(totalCount+"", UsedCount+"");
+		totalUtiliZation = countUtilZation(totalCount + "", UsedCount + "");
 		for (int i = 0; i < diskInfos.length; i++) {
 			String line = diskInfos[i];
 			elements = line.split("-");
@@ -95,27 +97,29 @@ public class OsTransUtil {
 			osDisk.setMountPoint(elements[5].trim());
 			osDisk.setTotalUtiliZation(totalUtiliZation);
 			osDisks.add(osDisk);
-			
+
 		}
 		return osDisks;
 	}
 
 	public static String countUtilZation(String total, String used) {
-//		double tota = new Double(total);
-//		double use = new Double(used);
-		Long totalNumber=Long.valueOf(total);
-		if(totalNumber==0){
-			totalNumber=Long.valueOf("1");
+		// double tota = new Double(total);
+		// double use = new Double(used);
+		Long totalNumber = Long.valueOf(total);
+		if (totalNumber == 0) {
+			totalNumber = Long.valueOf("1");
 		}
-		BigDecimal bigDecimal=BigDecimal.valueOf(Long.valueOf(used)).divide(BigDecimal.valueOf(Long.valueOf(totalNumber)),4,BigDecimal.ROUND_HALF_UP);
+		BigDecimal bigDecimal = BigDecimal.valueOf(Long.valueOf(used)).divide(
+				BigDecimal.valueOf(Long.valueOf(totalNumber)), 4,
+				BigDecimal.ROUND_HALF_UP);
 		DecimalFormat df = new DecimalFormat("##.00%");
-//		String utilZation = df.format(use / tota);
-		String utilZation =df.format(bigDecimal.doubleValue());
+		// String utilZation = df.format(use / tota);
+		String utilZation = df.format(bigDecimal.doubleValue());
 		utilZation = utilZation.substring(0, utilZation.indexOf("%"));
 		if (utilZation.startsWith(".")) {
 			utilZation = "0" + utilZation;
 		}
-		utilZation=utilZation.substring(0,utilZation.length()-1);
+		utilZation = utilZation.substring(0, utilZation.length() - 1);
 		return utilZation.toString();
 	}
 
@@ -141,22 +145,24 @@ public class OsTransUtil {
 		if (hours == 0) {
 			return minutes + "分" + seconds + "秒";
 		}
-		if(minutes==0){
+		if (minutes == 0) {
 			return seconds + "秒";
 		}
 		return hours + "小时" + minutes + "分" + seconds + "秒";
 	}
-	public static void main(String[] args) {
-		double a = 2.2;
-		int b= 2;
-		System.out.println(countUtilZation("98", "33"));
-	}
-	
+
+//	public static void main(String[] args) {
+//		double a = 2.2;
+//		int b = 2;
+//		System.out.println(countUtilZation("98", "33"));
+//	}
+
 	public static String countAve(Object dividend, int divisor) {
 		Object ave = null;
 		if (dividend.getClass().equals(Double.class)) {
 			Double d = (Double) dividend;
-			ave = new BigDecimal(d).divide(new BigDecimal(divisor),2,BigDecimal.ROUND_HALF_UP).doubleValue();
+			ave = new BigDecimal(d).divide(new BigDecimal(divisor), 2,
+					BigDecimal.ROUND_HALF_UP).doubleValue();
 		}
 		if (dividend.getClass().equals(Long.class)) {
 			Long d = (Long) dividend;
@@ -166,4 +172,57 @@ public class OsTransUtil {
 		return ave.toString();
 	}
 
+	/*
+	 * 前几天获取整点
+	 */
+	public static Date getBeforeDate(Date currentDate,String timespan) {
+		long span;
+		Date beginDate = new Date();
+		Calendar c = Calendar.getInstance();
+		if (Integer.valueOf(timespan) > 1) {
+			span = (Integer.valueOf(timespan) - 1) * 24;
+			beginDate = new Date(currentDate.getTime() - span * 60 * 60 * 1000);
+			c.setTime(beginDate);
+			c.set(Calendar.HOUR_OF_DAY, 0);
+			c.set(Calendar.MINUTE, 0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+			beginDate = c.getTime();
+		} else {
+			span = (Integer.valueOf(timespan) * 24);
+			beginDate = new Date(currentDate.getTime() - span * 60 * 60 * 1000);
+			c.setTime(beginDate);
+			c.set(Calendar.HOUR_OF_DAY, 0);
+			c.set(Calendar.MINUTE, 0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+			beginDate = c.getTime();
+		}
+		return beginDate;
+	}
+	
+	/*
+	 * 当前时间的当天整点
+	 */
+	public static Date getDayPointByDate(Date currentDate) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(currentDate);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTime();
+	}
+	
+	/*
+	 * 当前时间小时整点
+	 */
+	public static Date getHourPointByDate(Date currentDate) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(currentDate);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTime();
+	}
 }

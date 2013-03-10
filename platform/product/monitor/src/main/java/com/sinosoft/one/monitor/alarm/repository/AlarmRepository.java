@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface AlarmRepository extends PagingAndSortingRepository<Alarm, String> {
 
-    @SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3 order by create_time desc")
+    @SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3  order by create_time desc")
     List<Alarm> findAlarmByMonitorId(String monitorId, Date startTime, Date endTime);
 
 	@SQL("select * from ge_monitor_alarm where monitor_id = ?1 and sub_resource_type=?2 " +
@@ -195,5 +195,7 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     //查询指定类型的告警信息
     @SQL("select * from GE_MONITOR_ALARM a #if(:givenType!=''){ where a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
     List<Alarm> findAlarmsWithGivenType(@Param("givenType") String givenType);
+
+
 }
 
