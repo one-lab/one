@@ -49,8 +49,9 @@ public class AddApplicationController {
         applicationService.saveApplication(application);
         String resourceName=application.getCnName()+"["+application.getApplicationName()+"]";
         Resource resource=new Resource();
+        resource.setResourceId(application.getId());
         resource.setResourceName(resourceName);
-        resource.setResourceType(ResourceType.APPLICATION.cnName());
+        resource.setResourceType(ResourceType.APPLICATION.name());
         //RESOURCES表中保存应用信息
         resourcesService.saveResource(resource);
         //页面所在路径application/manager/@应用性能页面

@@ -6,6 +6,9 @@ import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.EumUrl;
 import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
+import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.monitor.resources.domain.ResourcesService;
+import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -36,6 +39,8 @@ public class UrlManagerController {
     UrlService urlService;
     @Autowired
     BizScenarioService bizScenarioService;
+    @Autowired
+    ResourcesService resourcesService;
     @Autowired
     EumUrlRepository eumUrlRepository;
 
@@ -104,6 +109,10 @@ public class UrlManagerController {
                     //向EUM_URL表中插入记录（url的application信息）
                     eumUrl.setRecordTime(new Date());
                     eumUrlRepository.save(eumUrl);
+                    if(null!=resourcesService.getResource(url.getId())){
+                        return "managerUrl";
+                    }
+                    saveResourceWithUrl(url);
                     return "managerUrl";
                 }
             }
@@ -122,9 +131,18 @@ public class UrlManagerController {
         //向EUM_URL表中插入记录（url的application信息）
         eumUrl.setRecordTime(new Date());
         eumUrlRepository.save(eumUrl);
+        saveResourceWithUrl(url);
         return "managerUrl";
     }
 
+    private void saveResourceWithUrl(Url url){
+        //资源表存入新建业务场景的信息
+        Resource resource=new Resource();
+        resource.setResourceId(url.getId());
+        resource.setResourceName(url.getDescription());
+        resource.setResourceType(ResourceType.APPLICATION_SCENARIO_URL.name());
+        resourcesService.saveResource(resource);
+    }
     /**
      * 新增一个URL(其中id是所属的业务场景的id).
      */

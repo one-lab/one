@@ -1,9 +1,12 @@
 package com.sinosoft.one.monitor.controllers.alarm.manager;
 
+import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
+import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -38,6 +41,12 @@ public class AlarmManagerController {
     AlarmRepository alarmRepository;
     @Autowired
     ApplicationRepository applicationRepository;
+    @Autowired
+    AlarmService alarmService;
+    @Autowired
+    OsRepository osRepository;
+    @Autowired
+    InfoRepository infoRepository;
 
     @Get("list")
     public String getAlarmList(Invocation inv){
@@ -110,7 +119,8 @@ public class AlarmManagerController {
         }else if(ResourceType.DB.name().equals(givenType)){
             givenType=ResourceType.DB.name();
         }
-        List<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType);
+        /*List<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType);*/
+        List<Alarm> allAlarmsWithGivenTimeAndType=alarmService.queryCurrentDayAlarms(givenTime,givenType);
         getAlarmListWithGivenCondition(allAlarmsWithGivenTimeAndType,inv);
     }
 
@@ -143,7 +153,13 @@ public class AlarmManagerController {
                     alarm.setMessage(messageNameStart+messageNameEnd);
                 }
                 //拼接应用中文名
-                alarm.setAppName(applicationRepository.findOne(alarm.getMonitorId()).getCnName());
+                if(ResourceType.APPLICATION.name().equals(alarm.getMonitorType())){
+                    alarm.setAppName(applicationRepository.findOne(alarm.getMonitorId()).getCnName());
+                }else if(ResourceType.OS.name().equals(alarm.getMonitorType())){
+                    alarm.setAppName(osRepository.findOne(alarm.getMonitorId()).getName());
+                }else if(ResourceType.DB.name().equals(alarm.getMonitorType())){
+                    alarm.setAppName(infoRepository.findOne(alarm.getMonitorId()).getName());
+                }
                 //获得类型对应的中文名
                 alarm.setMonitorType(ResourceType.valueOf(alarm.getMonitorType()).cnName());
                 //格式化时间，供页面显示
