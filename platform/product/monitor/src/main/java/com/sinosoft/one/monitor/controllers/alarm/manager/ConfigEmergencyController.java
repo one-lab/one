@@ -84,7 +84,6 @@ public class ConfigEmergencyController {
     public Reply getMonitorNames(@Param("resourceType") String resourceType, Invocation inv) throws Exception {
         JSONArray jsonArray = new JSONArray();
         String jsonMonitorNames="";
-        //@todo 使用枚举类型判断
         if (ResourceType.APPLICATION.name().equals(resourceType)) {
             List<Application> applications = applicationService.findAllApplicationNames();
             if (applications != null) {
@@ -191,44 +190,18 @@ public class ConfigEmergencyController {
         }
     }
 
-    /*public String getResourceEnumString(String resourceName){
-        String dbResourceType="";
-        ResourceType[] resourceTypes=ResourceType.values();
-        for (ResourceType newResourceType:resourceTypes){
-            if (newResourceType.cnName().equals(resourceName)){
-                dbResourceType=newResourceType.name();
-                break;
-            }
-        }
-        return dbResourceType;
-    }*/
-
-    //获得监视器名称，属性名称
-    /*@Get("health/{resourceType}/{monitorId}/{attributeName}")
-    public String setHealthForm(@Param("resourceType") String resourceType,@Param("monitorId") String monitorId,
-                                @Param("attributeName") String attributeName,Invocation inv){
-        //获得监视器名称（也就是应用中文名）
-        inv.addModel("monitorName",applicationService.findApplication(monitorId).getCnName());
-        //写回应用id
-        inv.getRequest().setAttribute("monitorId",monitorId);
-        *//*inv.addModel("monitorId",monitorId);*//*
-        String attributeId= attributeCache.getAttributeId(getResourceEnumString(resourceType),attributeName);
-        //写回属性id
-        inv.getRequest().setAttribute("attributeId",attributeId);
-        *//*inv.addModel("attributeId",attributeId);*//*
-        //获得属性名字
-        inv.addModel("attributeName",attributeRepository.findOne(attributeId).getAttributeCn());
-        inv.getRequest().setAttribute("resourceType",resourceType);
-        //返回配置告警--健康度页面
-        return "setHealth";
-    }*/
-
     //获得监视器名称，属性名称
     @Get("sub/{resourceType}/{monitorId}/{attribute}")
     public String setHealthOrAvailableForm(@Param("resourceType") String resourceType,@Param("monitorId") String monitorId,
                                 @Param("attribute") String attribute,Invocation inv){
         //获得监视器名称（也就是应用中文名）
-        inv.addModel("monitorName",applicationService.findApplication(monitorId).getCnName());
+        if(ResourceType.APPLICATION.name().equals(resourceType)){
+            inv.addModel("monitorName",applicationService.findApplication(monitorId).getCnName());
+        }else if(ResourceType.OS.name().equals(resourceType)){
+            inv.addModel("monitorName",osRepository.findOne(monitorId).getName());
+        }else if(ResourceType.DB.name().equals(resourceType)){
+            inv.addModel("monitorName",infoRepository.findOne(monitorId).getName());
+        }
         //写回应用id
         inv.getRequest().setAttribute("monitorId",monitorId);
         /*inv.addModel("monitorId",monitorId);*/
@@ -423,25 +396,6 @@ public class ConfigEmergencyController {
     public String setAvailableForm(Invocation inv){
         return "setAvailable";
     }
-    //获得监视器名称，属性名称
-    /*@Get("available/{resourceType}/{monitorId}/{attributeName}")
-    public String setAvailableForm(@Param("resourceType") String resourceType,@Param("monitorId") String monitorId,
-                                @Param("attributeName") String attributeName,Invocation inv){
-        //获得监视器名称（也就是应用中文名）
-        inv.addModel("monitorName",applicationService.findApplication(monitorId).getCnName());
-        //写回应用id
-        inv.getRequest().setAttribute("monitorId",monitorId);
-        *//*inv.addModel("monitorId",monitorId);*//*
-        String attributeId= attributeCache.getAttributeId(getResourceEnumString(resourceType),attributeName);
-        //写回属性id
-        inv.getRequest().setAttribute("attributeId",attributeId);
-        *//*inv.addModel("attributeId",attributeId);*//*
-        //获得属性名字
-        inv.addModel("attributeName",attributeRepository.findOne(attributeId).getAttributeCn());
-        inv.getRequest().setAttribute("resourceType",resourceType);
-        //返回配置告警--可用性页面
-        return "setAvailable";
-    }*/
 
     @Post("threshold/{monitorId}/{attributeId}")
     public Reply getAllThresholds(@Param("monitorId") String monitorId, @Param("attributeId") String attributeId, Invocation inv) {

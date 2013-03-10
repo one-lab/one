@@ -84,7 +84,7 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
         <property name="loginUrl" value="/login" />
-        <property name="successUrl" value="/loginCheck" />
+        <property name="successUrl" value="/loginsuccess" />
         <property name="filters">
             <map>
                 <entry key="loginfilter" value-ref="loginFilter"/>
@@ -102,7 +102,7 @@
                 /static/** = anon
                 /WEB-INFO/crypto/** = anon
                 /WEB-INFO/layouts/** = anon
-                
+                /global/** = anon
                 /** = loginfilter
             </value>
         </property>

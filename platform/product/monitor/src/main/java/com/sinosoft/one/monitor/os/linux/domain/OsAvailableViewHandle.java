@@ -28,21 +28,23 @@ public class OsAvailableViewHandle {
 	long chufayuliang;//除法余量计算
 	int listSize=0;
 	/**
-	 *获取可用性视图数据 
+	 *获取可用性视图绿条数据  24小时
 	 *以0 和1 之间为状态切换 计算停机和未停机时间 
 	 */
 	public Map<String, Object> getAvailableViewData(Date currentTime ){
 		List<Os> oss = osService.getAllOs();
 		Map<String, Object> map=new HashMap<String, Object>();
 		List<Map<String, Object>>mapList=new ArrayList<Map<String, Object>>();
-		Calendar c  = Calendar.getInstance();//获取当前时间的小时数 取整时点
-		c.setTime(currentTime);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.add(Calendar.HOUR_OF_DAY, -24);
-		Date lastFFtime = c.getTime();//前24小时的整点
-		Date endrecordTime =new Date();
+		Date lastFFtime = new Date();//前24小时的整点
+		Date endrecordTime = new Date();;
 		for (Os os : oss) {
+			Calendar c  = Calendar.getInstance();//获取当前时间的小时数 取整时点
+			c.setTime(currentTime);
+			c.set(Calendar.MINUTE, 0);
+			c.set(Calendar.SECOND, 0);
+			c.add(Calendar.HOUR_OF_DAY, -24);
+			lastFFtime = c.getTime();//前24小时的整点
+			endrecordTime =new Date();
 			List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getFFHourAvailale(os.getOsInfoId(), currentTime);
 			Map<String, Object> oneOsinfomap=new HashMap<String, Object>();
 			List<OsAvailableLineModel> osAvailableViewModels=new ArrayList<OsAvailableLineModel>();

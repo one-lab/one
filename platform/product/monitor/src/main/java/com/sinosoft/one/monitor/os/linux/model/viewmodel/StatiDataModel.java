@@ -2,6 +2,11 @@ package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 
 import java.util.Date;
 
+/**
+ * 数据查询接收对象
+ * @author Administrator
+ *
+ */
 public class StatiDataModel {
 	
 	private String maxValue;

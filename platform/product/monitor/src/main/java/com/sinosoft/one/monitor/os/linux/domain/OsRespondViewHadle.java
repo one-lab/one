@@ -29,17 +29,16 @@ public class OsRespondViewHadle {
 	 * @param timespan
 	 */
 	public Map<String,List<Map<String, Object>>> creatRespondLineData(List<Os>Oss,Date currentTime,int interCycle,int timespan){
-		//获取当前时间的1小时
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date beforOneHourTime= c.getTime();
-		long aveTime =(currentTime.getTime()-beforOneHourTime.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
 		Map<String,List<Map<String, Object>>> osCpuUiliZation =new HashMap<String,List<Map<String, Object>>>();
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date havePoint=beforOneHourTime; //有值的点
-		Date date=new Date();
 		for (Os os : Oss) {
+			//获取当前时间的1小时
+			Calendar c  = Calendar.getInstance();
+			c.setTime(currentTime);
+			c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
+			Date beforOneHourTime= c.getTime();
+			long aveTime =(currentTime.getTime()-beforOneHourTime.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
+			SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
+			Date havePoint=beforOneHourTime; //有值的点
 			List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 			Map<String, Object> m=new HashMap<String, Object>();
 			OsRespondtime osRespondtime= osRespondTimeService.findNealyResponTime(os.getOsInfoId(), havePoint ,interCycle);
@@ -81,7 +80,6 @@ public class OsRespondViewHadle {
 						map.put("x", simpleDateFormat.format(havePoint));
 						maps.add(map);
 					}
-					date=OsRespondtime.get(i).getSampleDate();
 					
 				}
 				int mapsSize=maps.size();

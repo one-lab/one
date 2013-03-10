@@ -17,7 +17,6 @@ import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
-import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsAvailableLineModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -75,40 +74,6 @@ public class OsManagerController {
 			e.printStackTrace();
 		}
 		return "";
-	}
-	
-	@Post("systemMonitorTable/{timespan}")
-	public String systemMonitorTable(@Param("timespan") String timespan,
-			Invocation inv) {
-		if ("24hours".equals(timespan)) {
-
-			// 0 hong 1 zheng 2wushuju
-			OsAvailableLineModel model1 = new OsAvailableLineModel();
-			model1.setIndex(1);
-			model1.setPercentage("33%");
-			model1.setStatus("2");
-			OsAvailableLineModel model2 = new OsAvailableLineModel();
-			model2.setIndex(2);
-			model2.setPercentage("33%");
-			model2.setStatus("1");
-			OsAvailableLineModel model3 = new OsAvailableLineModel();
-			model3.setIndex(3);
-			model3.setPercentage("34%");
-			model3.setStatus("0");
-			List<OsAvailableLineModel> list = new ArrayList<OsAvailableLineModel>();
-			list.add(model1);
-			list.add(model2);
-			list.add(model3);
-			Map<String, List<OsAvailableLineModel>> map = new HashMap<String, List<OsAvailableLineModel>>();
-			map.put("linux1", list);
-			map.put("linux2", list);
-			map.put("linux3", list);
-			System.out.println("mapSize" + map.size());
-
-			inv.addModel("map", map);
-			return "systemMonitorTable";
-		}
-		return null;
 	}
 
 	/**
@@ -231,7 +196,7 @@ public class OsManagerController {
 	 * 数据库列表视图
 	 * @return
 	 */
-	public Reply systemList(Invocation inv) {
+	public Reply thresholdList(Invocation inv) {
 		/* 获取项目根路径*/
 		String contextPath = inv.getServletContext().getContextPath();
 		/* 封装表格行数据信息List->rows*/
@@ -310,8 +275,44 @@ public class OsManagerController {
 	 */
 	@Get("remove")
 	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
-		//delete......
+		//oracleInfoService.deleteMonitor(monitorId);
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}
+	
+	
+	/**
+	 * 健康状态列表
+	 * @return
+	 */
+//	public Reply healthList(Invocation inv) {
+//		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+//		List<OracleHealthInfoModel> oracleHealthInfoModels = OracleBatchInfoService.healthInfoList(StaTimeEnum.LAST_24HOUR);
+//		String messageFormat0 = "<a href='{0}'>{1}</a>";
+//		String messageFormat1 = "<span class={0}>{1}</span>";
+//		for(OracleHealthInfoModel oracleHealthInfoModel : oracleHealthInfoModels) {
+//			Map<String, Object> row = new HashMap<String, Object>();
+//			row.put("id", oracleHealthInfoModel.getMonitorID());
+//			List<String> cell = new ArrayList<String>();
+//			cell.add(MessageFormat.format(messageFormat0, "",oracleHealthInfoModel.getMonitorName()));
+//			for(int i=0; i<oracleHealthInfoModel.getGraphInfo().size(); i++) {
+//				String[] values = oracleHealthInfoModel.getGraphInfo().get(i);
+//				String cssClass = "";
+//				if("1".equals(values[0])) {
+//					cssClass = "normal";
+//				} else if("2".equals(values[0])) {
+//					cssClass = "warn";
+//				} else {
+//					cssClass = "";
+//				}
+//				String value = MessageFormat.format(messageFormat1, cssClass, values[1]);
+//				cell.add(value);
+//			}
+//			row.put("cell", cell);
+//			rows.add(row);
+//		}
+//		Map<String, Object> grid = new HashMap<String, Object>();
+//		grid.put("rows", rows);
+//		return Replys.with(grid).as(Json.class);
+//	}
 }
