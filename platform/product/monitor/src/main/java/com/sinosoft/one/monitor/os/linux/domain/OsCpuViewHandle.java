@@ -53,15 +53,15 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 */
 	public Map<String,List<Map<String, Object>>> creatCpuLineData(List<Os>Oss,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date havePoint= c.getTime();//有值的点
-		long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
 		Map<String,List<Map<String, Object>>> osCpuUiliZation =new HashMap<String,List<Map<String, Object>>>();
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date date=new Date();
 		for (Os os : Oss) {
+			Calendar c  = Calendar.getInstance();
+			c.setTime(currentTime);
+			c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
+			Date havePoint= c.getTime();//有值的点
+			long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
+			SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
+			Date date=new Date();
 			List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 			Map<String, Object> m=new HashMap<String, Object>();
 			OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
@@ -485,8 +485,6 @@ public class OsCpuViewHandle {
 		}
 		return maps;
 	}
-	
-	
 	/**
 	 * 构建当前Cpu的grid
 	 * @param osId

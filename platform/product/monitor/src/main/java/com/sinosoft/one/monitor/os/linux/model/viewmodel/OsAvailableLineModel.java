@@ -3,7 +3,7 @@ package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 import java.util.List;
 
 /**
- * 可用性传输对象
+ * 可用性图形传输对象
  * @author Administrator
  *
  */

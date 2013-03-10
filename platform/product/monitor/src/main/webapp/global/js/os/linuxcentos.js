@@ -437,7 +437,7 @@ function refresh() {
 			align : '',
 			color : ''
 		} ],
-		rowNum : 10,
+		rowNum : 30,
 		number : false,
 		sorts : false,
 		colDisplay : false,
@@ -484,29 +484,22 @@ function refresh() {
 	});
 
 	$("#cipan_space_detail").Grid({
-		url : "linux-cipan.json",
+		type : "post",
+		url : "/monitor/os/gridDiskGrid/"+osid,
 		dataType : "json",
 		height : 'auto',
 		colums : [ {
 			id : '1',
 			text : '磁盘',
-			name : "methodName",
+			name : "diskPath",
 			width : '',
 			index : '1',
 			align : '',
 			color : ''
-		}, {
-			id : '1',
-			text : '',
-			name : "methodName",
-			width : '300',
-			index : '1',
-			align : '',
-			color : ''
-		}, {
+		} , {
 			id : '2',
 			text : '磁盘总空间',
-			name : "maxTime",
+			name : "total",
 			width : '',
 			index : '1',
 			align : '',
@@ -514,15 +507,15 @@ function refresh() {
 		}, {
 			id : '3',
 			text : '已用%',
-			name : "minTime",
+			name : "usedUtiliZation",
 			width : '',
 			index : '1',
 			align : '',
 			color : ''
 		}, {
 			id : '4',
-			text : '已用 (MB) ',
-			name : "avgTime",
+			text : '已用 (kb) ',
+			name : "used",
 			width : '',
 			index : '1',
 			align : '',
@@ -530,45 +523,21 @@ function refresh() {
 		}, {
 			id : '5',
 			text : '空闲% ',
-			name : "status",
+			name : "freeUtiliZation",
 			width : '',
 			index : '1',
 			align : '',
 			color : ''
 		}, {
 			id : '6',
-			text : '空间(MB) ',
-			name : "status",
+			text : '空间(kb) ',
+			name : "free",
 			width : '',
 			index : '1',
 			align : '',
 			color : ''
-		}, {
-			id : '7',
-			text : ' ',
-			name : "status",
-			width : '',
-			index : '1',
-			align : '',
-			color : ''
-		}, {
-			id : '8',
-			text : ' ',
-			name : "status",
-			width : '',
-			index : '1',
-			align : '',
-			color : ''
-		}, {
-			id : '9',
-			text : '配置告警 ',
-			name : "status",
-			width : '',
-			index : '1',
-			align : '',
-			color : ''
-		} ],
-		rowNum : 10,
+		}  ],
+		rowNum : 20,
 		rowList : [ 10, 20, 30 ],
 		pager : false,
 		number : false,

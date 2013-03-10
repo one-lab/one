@@ -143,9 +143,10 @@ public class OsAvailableServcie {
 		}
 		//取当天的24小时整时点
 		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
-		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*24*60*60*1000)+"")));
+		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*60*60*1000)+"")));
 		System.out.println(curruntTime);
 		System.out.println(beginTime);
+		
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osAvailableRepository.getOsAvailablesHistoryByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
 	}

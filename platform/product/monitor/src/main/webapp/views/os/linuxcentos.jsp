@@ -256,8 +256,8 @@
             <h2 class="title3">磁盘空间明细</h2>
             <div id="cipan_space_detail" style="width:100%"></div>
           	<div class="tool_bar_top">
-              <img  src="${ctx }/global/images/legend-green.png" /><span>空闲%</span>
-             <img  src="${ctx }/global/images/legend-red.png" /><span>已用%</span>
+            <%--   <img  src="${ctx }/global/images/legend-green.png" /><span>空闲%</span>
+             <img  src="${ctx }/global/images/legend-red.png" /><span>已用%</span> --%>
             </div>
 </div>
 </div>

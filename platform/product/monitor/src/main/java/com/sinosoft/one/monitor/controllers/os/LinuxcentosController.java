@@ -1,7 +1,6 @@
 package com.sinosoft.one.monitor.controllers.os;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,14 +14,14 @@ import org.springframework.data.domain.PageImpl;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableServcie;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsCpuViewHandle;
+import com.sinosoft.one.monitor.os.linux.domain.OsDiskViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsProcessService;
 import com.sinosoft.one.monitor.os.linux.domain.OsRamViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsRespondTimeService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
-import com.sinosoft.one.monitor.os.linux.model.OsCpu;
-import com.sinosoft.one.monitor.os.linux.model.OsRam;
+import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
@@ -61,6 +60,9 @@ public class LinuxcentosController {
 	
 	@Autowired
 	private OsCpuViewHandle osCpuViewHandle;
+	
+	@Autowired
+	private OsDiskViewHandle osDiskViewHandle;
 	@Post("osInfo/{osId}")
 	public Reply osInfo(@Param("osId") String osId ) {
 		System.out.println(osId);
@@ -203,7 +205,24 @@ public class LinuxcentosController {
 		}
 	}
 	
-
-	
+	/**
+	 * 概览页面磁盘
+	 * @param osId
+	 * @param inv
+	 */
+	@Post("gridDiskGrid/{osId}")
+	public void gridDisk(@Param("osId") String osId ,Invocation inv ){
+		Date currentTime=new Date();
+		List<OsDisk> osGridModels=osDiskViewHandle.creatCpuResolveView(osId, currentTime);
+		Page page = new PageImpl(osGridModels);
+		Gridable<OsDisk> gridable = new Gridable<OsDisk>(page);
+		gridable.setIdField("id");
+		gridable.setCellStringField("diskPath,total,usedUtiliZation,used,freeUtiliZation,free");
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }

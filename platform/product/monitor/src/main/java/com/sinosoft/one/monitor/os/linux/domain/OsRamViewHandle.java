@@ -35,16 +35,16 @@ public class OsRamViewHandle {
 	 * @param timespan
 	 */
 	public Map<String,List<Map<String, Object>>> creatRamLineData(List<Os>Oss,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date beforOneHourTime= c.getTime();
-		long aveTime =(currentTime.getTime()-beforOneHourTime.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
 		Map<String,List<Map<String, Object>>> osCpuUiliZation =new HashMap<String,List<Map<String, Object>>>();
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date havePoint=beforOneHourTime; //有值的点
-		Date date=new Date();
 		for (Os os : Oss) {
+			Calendar c  = Calendar.getInstance();
+			c.setTime(currentTime);
+			c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
+			Date beforOneHourTime= c.getTime();
+			long aveTime =(currentTime.getTime()-beforOneHourTime.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
+			SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
+			Date havePoint=beforOneHourTime; //有值的点
+			Date date=new Date();
 			List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 			Map<String, Object> m=new HashMap<String, Object>();
 			OsRam osRam= osRamService.findNealyRam(os.getOsInfoId(), havePoint ,interCycle);
@@ -114,16 +114,16 @@ public class OsRamViewHandle {
 	 * @param timespan
 	 */
 	public Map<String,List<Map<String, Object>>> creatSwapLineData(List<Os>Oss,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date beforOneHourTime= c.getTime();
-		long aveTime =(currentTime.getTime()-beforOneHourTime.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
 		Map<String,List<Map<String, Object>>> osCpuUiliZation =new HashMap<String,List<Map<String, Object>>>();
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date havePoint=beforOneHourTime; //有值的点
-		Date date=new Date();
 		for (Os os : Oss) {
+			Calendar c  = Calendar.getInstance();
+			c.setTime(currentTime);
+			c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
+			Date beforOneHourTime= c.getTime();
+			long aveTime =(currentTime.getTime()-beforOneHourTime.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
+			
+			SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
+			Date havePoint=beforOneHourTime; //有值的点
 			List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
 			Map<String, Object> m=new HashMap<String, Object>();
 			OsRam osRam= osRamService.findNealyRam(os.getOsInfoId(), havePoint ,interCycle);
@@ -165,8 +165,6 @@ public class OsRamViewHandle {
 						map.put("x", simpleDateFormat.format(havePoint));
 						maps.add(map);//本次的点
 					}
-					date=osRams.get(i).getSampleDate();
-					
 				}
 				int mapsSize=maps.size();
 				if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点

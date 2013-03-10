@@ -1,7 +1,11 @@
 package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 
-import java.util.Date;
 
+/**
+ * 表格建立对象
+ * @author Administrator
+ *
+ */
 public class OsGridModel {
 
 	
@@ -35,6 +39,9 @@ public class OsGridModel {
 	
 	private String aveFaultTime;
 
+	
+	
+	
 	public String getName() {
 		return name;
 	}
