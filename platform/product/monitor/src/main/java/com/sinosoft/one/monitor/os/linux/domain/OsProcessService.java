@@ -50,12 +50,8 @@ public class OsProcessService {
 	 */
 	
 	public void saveSampleData(String osInfoId,String cpuInfo,String ramInfo,String diskInfo,String respondTime ,Date sampleTime){
-		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
-		c.setTime(sampleTime);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		Date hourPoint=c.getTime();
+		Date hourPoint=OsTransUtil.getHourPointByDate(sampleTime);
 		MessageBase messageBase = alarmMessageBuilder.newMessageBase(osInfoId);
 		OsCpu osCpu=OsTransUtil.getCpuInfo(cpuInfo);
 		osCpuService.saveCpu(osInfoId,osCpu ,sampleTime);//保存CPU采样
@@ -111,13 +107,8 @@ public class OsProcessService {
 		messageBase.addAlarmAttribute(AttributeName.Availability, osAvailabletemp.getStatus());
 		messageBase.alarm();
 		//统计采样结果 今天
-		Calendar c  = Calendar.getInstance();
-		c.setTime( sampleTime);
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
 		//取当天的前24小时整时点
-		Date todayzeroTime= c.getTime();
+		Date todayzeroTime= OsTransUtil.getDayPointByDate(sampleTime);
 		//修改今天的统计表记录
 		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime,osAvailabletemp);//保存新统计记录
 		//删除24小时前的数据

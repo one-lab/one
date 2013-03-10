@@ -267,7 +267,8 @@ public class OsManagerController {
 	 */
 	@Get("editUI/{monitorId}")
 	public String editUI(@Param("monitorId")String monitorId,Invocation inv) {
-		return "oracleSave";
+		inv.addModel("os", osService.getOsBasicById(monitorId));
+		return "modifeLinux";
 	}
 	
 	/**
@@ -283,6 +284,23 @@ public class OsManagerController {
 	}
 	
 	/**
+	 * 编辑操作
+	 * @param oracleInfo
+	 * @param inv
+	 * @return
+	 */
+	@Post("edit")
+	public String edit(@Param("os") Os os,Invocation inv) {
+		try {
+			osService.modifeOsBasic(os.getOsInfoId(),os.getName(), os.getType(), os.getIpAddr(), os.getSubnetMask(), os.getIntercycleTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		message.put("result", true);
+		return "";
+	}
+	
+	/**
 	 * 删除操作(包含删除一个和批量删除操作)
 	 * @param monitorId
 	 * @param inv
@@ -290,11 +308,13 @@ public class OsManagerController {
 	 */
 	@Get("remove")
 	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
-		//oracleInfoService.deleteMonitor(monitorId);
+		//delete......
+		for (String monitorId : monitorIds) {
+			osService.deleteOsBasic(monitorId);
+		}
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}
-	
 	
 	/**
 	 * 健康状态列表
