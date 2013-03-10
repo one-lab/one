@@ -18,7 +18,7 @@ public class UrlTraceLogViewModel {
 	private String state;
 	private String operateStr = "";
 	private String severity;
-	private String excpetionId;
+	private String exceptionId;
 
 	public String getId() {
 		return id;
@@ -84,13 +84,13 @@ public class UrlTraceLogViewModel {
 		}
 	}
 
-	public String getExcpetionId() {
-		return excpetionId;
+	public String getExceptionId() {
+		return exceptionId;
 	}
 
-	public void setExcpetionId(String excpetionId) {
-		this.excpetionId = excpetionId;
-		if(!SeverityLevel.CRITICAL.name().equals(this.state) && excpetionId != null) {
+	public void setExceptionId(String exceptionId) {
+		this.exceptionId = exceptionId;
+		if(!SeverityLevel.CRITICAL.name().equals(this.state) && exceptionId != null) {
 			this.state = SeverityLevel.CRITICAL.name();
 		}
 	}

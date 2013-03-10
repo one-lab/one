@@ -47,9 +47,9 @@ public class ApplicationUrlCountViewModel {
 
 	public String toJsonString() {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("times", JSON.toJSONString(times));
-		jsonObject.put("urlResponseTimes", JSON.toJSONString(urlResponseTimeMap));
-		jsonObject.put("urlVisitNumbers", JSON.toJSONString(urlVisitNumberMap));
+		jsonObject.put("times", times);
+		jsonObject.put("urlResponseTimes", urlResponseTimeMap);
+		jsonObject.put("urlVisitNumbers", urlVisitNumberMap);
 		return jsonObject.toJSONString();
 	}
 }

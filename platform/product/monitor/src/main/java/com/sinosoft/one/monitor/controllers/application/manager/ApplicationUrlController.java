@@ -50,7 +50,9 @@ public class ApplicationUrlController {
 	@Get("/tracelog/${urlId}")
 	public void queryUrlTraceLogs(@Param("urlId") String urlId,
 	                                     Invocation invocation) throws Exception {
-		Pageable pageable = new PageRequest(0, 10);
+		int pageNo = Integer.parseInt(invocation.getParameter("pageNo"));
+		int rowNum = Integer.parseInt(invocation.getParameter("rowNum"));
+		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		Page<UrlTraceLogViewModel> urlTraceLogList = applicationUrlService.queryUrlTraceLogs(pageable, urlId);
 		Gridable<UrlTraceLogViewModel> gridable = new Gridable<UrlTraceLogViewModel>(urlTraceLogList);
 		String cellString = "userIp,userId,recordTime,state,operateStr";
@@ -64,7 +66,7 @@ public class ApplicationUrlController {
 	                 Invocation invocation) {
 		ApplicationUrlInfoViewModel applicationUrlInfoViewModel = applicationUrlService.generateUrlInfoViewModel(applicationId, urlId);
 		invocation.addModel("urlInfo", applicationUrlInfoViewModel);
-		return "urlInfo";
+		return "urlDetail";
 	}
 
 	@Get("/healthava/${applicationId}/${urlId}")
