@@ -4,6 +4,7 @@ import com.sinosoft.one.monitor.application.domain.MethodService;
 import com.sinosoft.one.monitor.application.domain.UrlService;
 import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
+import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -94,9 +95,9 @@ public class MethodManagerController {
         Url url = urlService.findUrl(urlId);
         List<Method> methods = methodService.findAllMethod();
         //获得当前用户id
-        /*String creatorId = CurrentUserUtil.getCurrentUser().getId();*/
+        String creatorId = CurrentUserUtil.getCurrentUser().getId();
         //开发阶段固定用户id
-        String creatorId = "4028921a3cfba342013cfba4623e0000";
+        /*String creatorId = "4028921a3cfba342013cfba4623e0000";*/
         String methodAndClassName=findClassAndMethodName(method);
         if(methods.size()>0){
             for(Method dbMethod:methods){
@@ -162,7 +163,7 @@ public class MethodManagerController {
             }
         }
         //如果是勾选的已经存在的method，只需更新method所属的Url
-        //@todo 此处需要优化，否则或许会判断所有的method是否被勾选（应该只得到被勾选的就行）
+        // 此处需要优化，否则或许会判断所有的method是否被勾选（应该只得到被勾选的就行）
         if (methodIds != null) {
             for (String methodId : methodIds) {
                 if (!StringUtils.isBlank(methodId)) {
@@ -195,9 +196,7 @@ public class MethodManagerController {
         //将urlId写回，managerMethod页面发送ajax请求时会用到
         inv.getRequest().setAttribute("urlId",urlId);
         //获得当前用户
-        /*method.setModifierId(CurrentUserUtil.getCurrentUser().getId());*/
-        //开发阶段固定用户id
-        String modifierId="4028921a3cfb99be013cfb9ccf650000";
+        String modifierId=CurrentUserUtil.getCurrentUser().getId();
         methodService.updateMethodWithModifyInfo(methodId,method.getClassName(),method.getMethodName(),method.getDescription(),modifierId);
         return "managerMethod";
     }
