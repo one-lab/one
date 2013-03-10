@@ -1,46 +1,44 @@
 package com.sinosoft.one.monitor.application.domain;
 
+import java.util.Date;
+
 /**
- * 不可用统计
- * User: ChengQi
+ * 时间端可用性状态统计
+ * User: cq
  * Date: 13-3-8
  * Time: PM4:33
- * To change this template use File | Settings | File Templates.
  */
 public class TimeQuantumAvailableStatistics {
 
     private int count;
 
-    private int available;
+    private String status;
 
     private String timeQuantum;
 
-	private String status;
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public TimeQuantumAvailableStatistics(int count, int available, String timeQuantum, String status) {
-        this.count = count;
-        this.available = available;
-        this.timeQuantum = timeQuantum;
-		this.status = status;
-    }
 
     public int getCount(){
         return this.count;
     }
 
-    public int getAvailable(){
-        return this.available;
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    public String getTimeQuantum(){
-        return this.timeQuantum;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTimeQuantum() {
+        return timeQuantum;
+    }
+
+    public void setTimeQuantum(String timeQuantum) {
+        this.timeQuantum = timeQuantum;
     }
 }
