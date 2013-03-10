@@ -25,9 +25,20 @@ public class ApplicationEnhanceFactory {
     @Autowired
     private HealthStaService healthStaService;
 
-    public  ApplicationEnhance enhanceApplication(Application application) throws EumUrlsNotFoundException {
+
+    /**
+     * TODO 如果当前application获取不到任何的URL，就认为application可用的做法有待商酌
+     * @param application
+     * @return
+     */
+    public  ApplicationEnhance enhanceApplication(Application application) {
         SeverityLevel health = healthStaService.healthStaForCurrent(application.getId(), 10);
-        Trend available = applicationEmuService.getApplicationAvailableToday(application.getId()).getTrend();
+        Trend available = null;
+        try {
+            available = applicationEmuService.getApplicationAvailableToday(application.getId()).getTrend();
+        } catch (EumUrlsNotFoundException e) {
+            available = Trend.SAME;
+        }
         ApplicationEnhance applicationEnhance = new ApplicationEnhance(application, health, available);
         return applicationEnhance;
     }
