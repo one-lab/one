@@ -86,7 +86,6 @@ public class OsService {
 		if(os!=null){
 			 throw new Exception();
 		}
-		
 		Os newos =new Os();
 		newos.setName(name);
 		newos.setType(type);
@@ -99,6 +98,25 @@ public class OsService {
 		resource.setResourceName(name);
 		resource.setResourceType(ResourceType.OS.name());
 		resourcesService.saveResource(resource);
+	}
+	
+	/**
+	 * 修改操作系统基本信息
+	 * @return
+	 * @throws Exception 
+	 */
+	public void modifeOsBasic(String osInfoId,String name,String type,String ipAddr,String subnetMask,int interCycle) throws Exception{
+		Os newos=osRepository.findOne(osInfoId);
+		if(newos==null){
+			throw new Exception();
+		}
+		
+		newos.setName(name);
+		newos.setType(type);
+		newos.setIpAddr(ipAddr);
+		newos.setSubnetMask(subnetMask);
+		newos.setIntercycleTime(interCycle);
+		osRepository.save(newos);
 	}
 	
 	/**
@@ -158,7 +176,7 @@ public class OsService {
 		for (Os os : oss) {
 			Date begintime=new Date(currentTime.getTime()-os.getIntercycleTime()*60*1000);
 			OsBaseInfoModel osBaseInfoModel=new OsBaseInfoModel();
-			OsAvailabletemp osAvailabletemp=osAvailableServcie.getLastAvailable(os.getOsInfoId(), currentTime);
+			OsAvailabletemp osAvailabletemp=osAvailableServcie.getNealyAvailable(os.getOsInfoId(), currentTime, os.getIntercycleTime());
 			String[] healthyPint = new String[2];
 			 StringBuilder msg = new StringBuilder();
 			if(osAvailabletemp!=null){
