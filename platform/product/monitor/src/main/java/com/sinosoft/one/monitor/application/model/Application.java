@@ -16,10 +16,11 @@ import java.util.List;
 /**
  * Application.
  * 存储需要监控的应用系统信息
+ * TODO 是否需要考虑将1)EUMURL去除,，2)需要提炼出Resource的概念
  */
+
 @Entity
-@Table(name = "GE_MONITOR_APPLICATION"
-)
+@Table(name = "GE_MONITOR_APPLICATION")
 public class Application implements java.io.Serializable {
 
     /**
