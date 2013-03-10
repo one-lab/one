@@ -1,8 +1,6 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.db.oracle.domain.OracleAvaService;
 import com.sinosoft.one.monitor.db.oracle.domain.OracleInfoService;
 import com.sinosoft.one.monitor.db.oracle.domain.OraclePreviewService;
@@ -32,7 +29,6 @@ import com.sinosoft.one.monitor.db.oracle.model.OracleSGAModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleTableSpaceModel;
 import com.sinosoft.one.monitor.db.oracle.model.Point;
 import com.sinosoft.one.monitor.db.oracle.model.SGAStateModel;
-import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -370,9 +366,9 @@ public class OracleController {
 		HighchartSerie highchartSerie2 = new HighchartSerie("数据字典命中率");
 		HighchartSerie highchartSerie3 = new HighchartSerie("缓存库命中率");
 		for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
-			highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate()));
-			highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate()));
-			highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate()));
+			highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100);
+			highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate())*100);
+			highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate())*100);
 			highchart.addCategory(oracleSGAHitRate.getRecordTime());
 		}
 		highchart.addSerie(highchartSerie1);
@@ -380,11 +376,5 @@ public class OracleController {
 		highchart.addSerie(highchartSerie3);
 		return Replys.with(highchart).as(Json.class);
 	}
-	
-	private BigDecimal bigdecimalUtils(String target,int length,RoundingMode rm){
-		BigDecimal bd = new BigDecimal(target);
-		bd.setScale(length, rm.CEILING);
-		return bd;
-	}
-	
+
 }
