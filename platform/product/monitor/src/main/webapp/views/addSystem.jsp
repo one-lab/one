@@ -114,7 +114,7 @@
                                 </optgroup>
                             </select>
                         </h2>
-                        <form:form id="addSystem" action="${ctx}/addapplication/add" method="post"
+                        <form:form id="addSystem" action="${ctx}/addmonitor/addapp" method="post"
                                    class="form-horizontal" onsubmit="return isValid(this);">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0"
                                    class="add_monitor_box add_form">

@@ -93,7 +93,7 @@ public class AvailableCalculate {
                 failureCountNeedAdd = true;
             }
             //第一条数据即为空
-            else if(previousInf == null)
+            else if(previousInf == null||oldFalseCount == 0)
                 failureCountNeedAdd = true;
         }
 
