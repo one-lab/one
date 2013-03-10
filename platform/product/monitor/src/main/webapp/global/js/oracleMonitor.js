@@ -196,18 +196,22 @@ function buildHighchart(_highChart) {
 		    type: 'line',
 		    marginRight: 50,
 		    marginBottom: 75,
-			height:200
+			height:200,
+            width:650
 		},
 		title: {
 		    text: ' ',
 		    x: -20 //center
 		},
 		xAxis: {
-		    categories: _highChart.categories
+		    categories: _highChart.categories,
+		    labels: { 
+           	 step:16
+			 } 
 		},
 		yAxis: {
 		    title: {
-		        text: '%'
+		        text: ''
 	        },
 	        plotLines: false
 		},

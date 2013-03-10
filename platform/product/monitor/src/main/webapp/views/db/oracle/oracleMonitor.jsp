@@ -111,7 +111,7 @@ function hideNav(e){
                     	<ul>
                         	<li><span class="ex_no"></span>不可用</li>
                             <li><span class="ex_is"></span>可用</li>
-                            <li><span class="ex_xp"></span>预警</li>
+                            <li><span class="ex_xp"></span>未知</li>
                         </ul>
                     	查看监视器/业务组最近24小时或30天的可用性状态
                     </div>
@@ -122,7 +122,7 @@ function hideNav(e){
                 <div class="threshold_file">
                 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="my_table">
                       <tr>
-                        <td class="group_name"><h3><strong>已用的内存</strong></h3></td>
+                        <td class="group_name"><h3><strong>缓冲区击中率</strong></h3></td>
                         <td class="group_name"><h3><strong>连接时间</strong></h3></td>
                       </tr>
                       <tr>
