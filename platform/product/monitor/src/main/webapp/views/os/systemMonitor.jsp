@@ -90,9 +90,9 @@ $(function(){
 					<br />
 					<div class="threshold_file availability">
 						<h2 class="title2">
-							<b>可用性历史纪录- Linux </b> <select name="" class="diySelect">
-								<option value="">最近24小时</option>
-								<option value="">最近30天</option>
+							<b>可用性历史纪录- Linux </b> <select name="" class="diySelect" onchange="availableChange(this)">
+								<option value="24">最近24小时</option>
+								<option value="30">最近30天</option>
 							</select>
 						</h2>
 						<div id="systemMonitorTable"></div>
@@ -142,9 +142,9 @@ $(function(){
 						</table>
 						<div class="threshold_file availability">
 							<h2 class="title2">
-								<b> 健康状态操控板</b> <select name="select" class="diySelect">
-									<option value="">最近24小时</option>
-									<option value="">最近30天</option>
+								<b> 健康状态操控板</b> <select name="select" class="diySelect" onchange="healthChange(this)">
+									<option value="24">最近24小时</option>
+									<option value="30">最近30天</option>
 								</select>
 							</h2>
 							<div id="healthList"></div>

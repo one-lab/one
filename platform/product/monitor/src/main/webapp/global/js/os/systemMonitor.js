@@ -78,7 +78,7 @@ var day30ColumnStyle =
 	];
 
 function getForm() {
-	 systemMonitorTable("/monitor/os/systemMonitorTable/24hours");
+	 systemMonitorTable("/monitor/os/systemMonitorTable/24");
 	$.ajax({
 		type : "post",
 		url : "/monitor/os/performanceList",
@@ -97,7 +97,11 @@ function getForm() {
 							y.name = name;
 						}
 						categories.push(data[formName][name][i].x);
-						y.data.push(data[formName][name][i].y);
+						if (data[formName][name][i].y==-1) {
+							y.data.push(null);
+						}else{
+							y.data.push(data[formName][name][i].y);
+						}
 						i += 1;
 					}
 					series.push(y);
@@ -148,7 +152,7 @@ function getForm() {
 			}
 		}
 	});
-	healthGrid("/monitor/os/healthList/24hours");
+	healthGrid("/monitor/os/healthList/24");
 
 	$("#thresholdList").Grid({
 		url :  rootPath + "/os/systemList",  
@@ -166,6 +170,13 @@ function getForm() {
 }
 
 function healthGrid(url) {
+	var columnStyle;
+	if(url=="/monitor/os/healthList/24"){
+		columnStyle=day1ColumnStyle;
+	}
+	if(url=="/monitor/os/healthList/30"){
+		columnStyle=day30ColumnStyle;
+	}
 	$("#healthList").empty();
 	$("#healthList").Grid({
 		url : url,
@@ -174,7 +185,7 @@ function healthGrid(url) {
 		clickSelect : true,
 		draggable : false,
 		height : 'auto',
-		colums : day1ColumnStyle,
+		colums : columnStyle,
 		rowNum : 9999,
 		pager : false,
 		number : false,
@@ -194,22 +205,24 @@ function systemMonitorTable(url) {
 }
 
 function healthChange(ele) {
-	if ($(ele).val() == '24hours') {
-		healthGrid("/monitor/os/healthList/24hours");
+	if ($(ele).val() == '24') {
+		alert(24);
+		healthGrid("/monitor/os/healthList/24");
 	}
-	if ($(ele).val() == '30days') {
-		healthGrid("/monitor/os/healthList/30days");
+	if ($(ele).val() == '30') {
+		alert(30);
+		healthGrid("/monitor/os/healthList/30");
 	}
 }
 //点击可用性下拉
 function availableChange(ele) {
-	if ($(ele).val() == '24hours') {
+	if ($(ele).val() == '24') {
 		alert(24)
-		systemMonitorTable("/monitor/os/systemMonitorTable/24hours");
+		systemMonitorTable("/monitor/os/systemMonitorTable/24");
 	}
-	if ($(ele).val() == '30days') {
+	if ($(ele).val() == '30') {
 		alert(30)
-		availableList("/monitor/os/systemMonitorTable/30days");
+		availableList("/monitor/os/systemMonitorTable/30");
 	}
 }
 function navHover() {

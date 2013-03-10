@@ -60,6 +60,7 @@ public class OsDataMathService {
 	public void statiAvailable(String osInfoId,Date currentTime,Date targetTime,int interCycleTime ,Date timeSpan, OsAvailabletemp osAvailabletemp ){
 		int stopCount=0;//停机次数
 		OsAvailable osAvailable=osAvailableServcie.getAvailable(osInfoId, timeSpan);
+		OsAvailabletemp lastAvailableTemp=osAvailableServcie.getLastAvailable(osInfoId, currentTime);
 		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
 		//可用性停机及次数LIST
 		List<AvailableCountsGroupByInterval> availableCountsGroupByIntervals=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
@@ -78,19 +79,13 @@ public class OsDataMathService {
 		}
 		AvailableStatistics availableStatistics;
 		if(osAvailable==null){//当天开始的统计
-			if(osAvailabletemp.getSampleDate().getTime()-timeSpan.getTime()>osAvailabletemp.getIntercycleTime()*60*1000){
-				availableStatistics=new AvailableStatistics(Long.valueOf(0), (osAvailabletemp.getSampleDate().getTime()-timeSpan.getTime())/60/60/1000, 1);
-			}else{
-				availableStatistics=new AvailableStatistics((osAvailabletemp.getSampleDate().getTime()-timeSpan.getTime())/60/60/1000, Long.valueOf(0), 0);
-			}
-		
+			availableStatistics=new AvailableStatistics(Long.valueOf(0),Long.valueOf(0), 0);
 			//本次采样的信息
-			AvailableInf availableInf =new AvailableInf(osAvailabletemp.getSampleDate(),true , osAvailabletemp.getIntercycleTime());
-			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, false, availableInf);
+			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, true, null);
 			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);
 			osAvailableServcie.saveAvailable(osInfoId,availableCalculate.getAliveTime().longValue(),availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),availableCalculate.getTimeBetweenFailures().longValue(), timeSpan,availableCalculate.getStopTime().intValue());
 		}else{
-			AvailableInf availableInf =new AvailableInf(osAvailabletemp.getSampleDate(),true , osAvailabletemp.getIntercycleTime());
+			AvailableInf availableInf =new AvailableInf(lastAvailableTemp.getSampleDate(),true , lastAvailableTemp.getIntercycleTime());
 			availableStatistics= new AvailableStatistics(osAvailable.getNormalRun(), osAvailable.getCrashTime(), osAvailable.getStopCount()); 
 			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, true, availableInf);
 			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);

@@ -18,6 +18,7 @@
 <script language="javascript" src="${ctx}/global/js/exporting.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
+<script language="javascript" src="${ctx}/global/js/os/simpleDraw.js"></script>
 		<script type="text/javascript">
 		$(function(){
 			var id= $("#osid").val();
@@ -90,7 +91,7 @@ function hideNav(e){
 		<div id="layout_center">
 			<div class="main" style="margin-bottom: 60px;">
 				<div class="threshold_file">
-
+			
 					<div class="sub_title">
 						最近7天的CPU利用率
 					</div>
