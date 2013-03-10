@@ -3,28 +3,45 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>monitor监控系统</title>
-		<link href="${ctx}/global/css/base.css" rel="stylesheet"
-			type="text/css" />
-		<link href="${ctx}/global/css/style.css" rel="stylesheet"
-			type="text/css" />
-		<link href="${ctx}/global/css/oracle.css" rel="stylesheet"
-			type="text/css" />
-		<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet"
-			type="text/css" />
-		<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-		<script language="javascript"
-			src="${ctx}/global/js/sinosoft.layout.js"></script>
-		<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-		<script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
-		<script language="javascript" src="${ctx}/global/js/os/simpleDraw.js"></script>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>monitor监控系统</title>
+<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>  
+<script language="javascript" src="${ctx}/global/js/highcharts.js"></script>
+<script language="javascript" src="${ctx}/global/js/exporting.js"></script>
+<script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
 		<script type="text/javascript">
 		$(function(){
 			var id= $("#osid").val();
 			alert(id);
 			creatSimpleChart('${ctx}/os/historyCPUStatiLine/7/'+id, 'last_sevenday', 'CPU利用率%');
+			$("#sevenday_grid").Grid({
+				type : "post",
+				url :  '/monitor/os/historyCPUStatiGrid/7/'+id,
+				dataType: "json",
+				height: 'auto',
+				colums:[
+					{id:'1',text:'时间',name:"time",width:'300',index:'1',align:'',color:''},
+					{id:'2',text:'最小值  ',name:"minValue",width:'',index:'1',align:'',color:''},
+					{id:'3',text:'最大值 ',name:"maxValue",width:'',index:'1',align:'',color:''},
+					{id:'4',text:'平均值 ',name:"averageValue",width:'',index:'1',align:'',color:''}
+				],
+				rowNum:10,
+				rowList:[10,20,30],
+				pager : false,
+				number:false,
+				multiselect:true,
+			});
+		
+		
 		})
 $(function(){
 	alert(${id});
@@ -36,22 +53,7 @@ $(function(){
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
-	$("#sevenday_grid").Grid({
-		url : "historyCPU.json",
-		dataType: "json",
-		height: 'auto',
-		colums:[
-			{id:'1',text:'时间',name:"time",width:'300',index:'1',align:'',color:''},
-			{id:'2',text:'最小值  ',name:"minValue",width:'',index:'1',align:'',color:''},
-			{id:'3',text:'最大值 ',name:"maxValue",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'平均值 ',name:"averageValue",width:'',index:'1',align:'',color:''}
-		],
-		rowNum:10,
-		rowList:[10,20,30],
-		pager : false,
-		number:false,
-		multiselect:true,
-	});
+	
 });
 
 function navHover(){
@@ -108,7 +110,7 @@ function hideNav(e){
 								属性
 							</td>
 							<td>
-								CPU利用率
+								CPU利用率%
 							</td>
 						</tr>
 						<tr>
@@ -131,7 +133,7 @@ function hideNav(e){
 						<tr>
 							<td colspan="2">
 								<div class="days_data">
-									<a href=""><div class="thirty_days"></div>
+									<a href="${ctx}/os/historyCPU/30/${os.osInfoId }"><div class="thirty_days"></div>
 									</a>
 									<a href="#"><div class="seven_days_unable"></div>
 									</a>
@@ -151,25 +153,22 @@ function hideNav(e){
 										CPU利用率(%) :
 									</div>
 									<div>
-										1
+										最大平均值:
+									</div>
+									<div>
+										${MaxAgv }
 									</div>
 									<div>
 										最小平均值
 									</div>
 									<div>
-										2
-									</div>
-									<div>
-										最大平均值:
-									</div>
-									<div>
-										23
+										${MinAgv}
 									</div>
 									<div>
 										平均:
 									</div>
 									<div>
-										13.489
+										${Agv }
 									</div>
 								</div>
 							</td>

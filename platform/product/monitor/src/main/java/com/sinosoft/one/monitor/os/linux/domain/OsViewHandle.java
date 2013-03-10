@@ -1,5 +1,8 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +17,10 @@ import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
+import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 
 @Component
 public class OsViewHandle {
@@ -141,31 +147,24 @@ public class OsViewHandle {
 	}
 	
 	/**
-	 * CPU统计报表曲线
+	 * 统计报表曲线
 	 * @param osid
 	 * @param currentTime
 	 * @param timespan 时间段 1 7 30
 	 * @return
 	 */
 	public Map<String,List<Map<String, Object>>> creatStatiLine(String osid,String statitype, Date currentTime,int timespan ){
-		int span;
+		long span;
 		if(timespan>1){
 			span=(timespan-1)*24;
 		}else{
 			span=(timespan*24);
 		}
 		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
-		Os os =osService.getOsBasicById(osid);
-		Calendar c  = Calendar.getInstance();
-		////获取天时间 取整时点
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		currentTime=c.getTime();
 		Date dayPoint= new Date(currentTime.getTime()-Long.valueOf(span*60*60*1000));
-		
-		List<OsStati> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime, timespan);
+		dayPoint=OsTransUtil.getDayPointByDate(dayPoint);//天整点
+		List<StatiDataModel> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime);
+		currentTime=OsTransUtil.getDayPointByDate(currentTime);//获取当天整点
 		List<Map<String, Object>> cpuMaxmaps=osStatiViewHandle.creatCpuMaxStatiLine( osStatis, currentTime, dayPoint, timespan);
 		List<Map<String, Object>> cpuMinmaps=osStatiViewHandle.creatCpuMinStatiLine( osStatis, currentTime, dayPoint, timespan);
 		List<Map<String, Object>> cpuAvemaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis, currentTime, dayPoint, timespan);
@@ -176,4 +175,78 @@ public class OsViewHandle {
 		
 	}
 	
+	
+	/**
+	 * 统计报表表格
+	 * @param osid
+	 * @param currentTime
+	 * @param timespan 时间段 1 7 30
+	 * @return
+	 */
+	public List<OsGridModel> creatStatiGrid(String osid,String statitype, Date currentTime,int timespan ){
+		long span=0;
+		SimpleDateFormat simpleDateFormat;
+		if(timespan>1){
+			span=24;	
+			simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
+		}else{
+			
+			simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
+		}
+		List<OsGridModel>osGridModels= new ArrayList<OsGridModel>();
+		Date dayPoint=OsTransUtil.getBeforeDate(currentTime, timespan+"");
+		List<StatiDataModel> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime);
+		for (int i = 0; i < osStatis.size(); i++) {
+			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>(span*60*60*1000)){
+				Integer ptime=(Integer) BigDecimal.valueOf(osStatis.get(i).getDate().getTime()-dayPoint.getTime()).divide(BigDecimal.valueOf(Long.parseLong(span*60*60*1000+"")),0,BigDecimal.ROUND_UP).intValue();//空了几次
+				for (int j = 0; j < ptime; j++) {
+					OsGridModel osGridModel=new OsGridModel();
+					osGridModel.setMaxValue("未知");
+					osGridModel.setMinValue("未知");
+					osGridModel.setAverageValue("未知");
+					osGridModel.setTime(simpleDateFormat.format(dayPoint));
+					osGridModels.add(osGridModel);
+					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
+				}
+				OsGridModel osGridModel=new OsGridModel();
+				osGridModel.setMaxValue(osStatis.get(i).getMaxValue());
+				osGridModel.setMinValue(osStatis.get(i).getMinValue());
+				osGridModel.setAverageValue(osStatis.get(i).getAvgValue());
+				osGridModel.setTime(simpleDateFormat.format(dayPoint));
+				osGridModels.add(osGridModel);
+				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
+			}
+			else{
+				OsGridModel osGridModel=new OsGridModel();
+				osGridModel.setMaxValue(osStatis.get(i).getMaxValue());
+				osGridModel.setMinValue(osStatis.get(i).getMinValue());
+				osGridModel.setAverageValue(osStatis.get(i).getAvgValue());
+				osGridModel.setTime(simpleDateFormat.format(dayPoint));
+				osGridModels.add(osGridModel);//本次点
+				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
+			}
+		}
+		int mapsSize=osGridModels.size();
+		if(osGridModels.size()<timespan){//如果总的点小于平均时间段 补上空点
+			for (int i = 0; i < timespan-mapsSize; i++) {
+				OsGridModel osGridModel=new OsGridModel();
+				osGridModel.setMaxValue("未知");
+				osGridModel.setMinValue("未知");
+				osGridModel.setAverageValue("未知");
+				osGridModel.setTime(simpleDateFormat.format(dayPoint));
+				osGridModels.add(osGridModel);//本次点
+				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
+			}
+		}
+		return osGridModels;
+		
+	}
+	
+	public static void main(String[] args) {
+		Date date =new Date();
+		
+		Date dayPoint= new Date(date.getTime()-Long.valueOf(6*24*60*60*1000));
+		System.out.println(dayPoint);
+		
+	}
 }

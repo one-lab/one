@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,8 +105,65 @@ public class OsManagerController {
 		List<Map<String, Object>> maplist= (List<Map<String, Object>>) Modelmap.get("mapList");
 		inv.addModel("maplist",maplist);
 		inv.addModel("timeList",timeList);
+		
 		return "systemMonitor";
 	}
+	
+	/**
+	 * 可用性条块
+	 * @param timespan
+	 * @return
+	 */
+	@Get("healthList/{timespan}")
+	public Reply healthList(@Param("timespan") String timespan) {
+		if (timespan.equals("24hours")) {
+			
+		// 1 zhengc 2jingg 3yanz 4weiz
+		Map<String, List<Map<String, Object>>> map = new HashMap<String, List<Map<String, Object>>>();
+		Map<String, Object> rowsMap = new HashMap<String, Object>();
+		rowsMap.put("id", "1");
+		List<String> list = new ArrayList<String>();
+		String[] strs = new String[24];
+		for (int i = 0; i < strs.length; i++) {
+			strs[i] = "1";
+			if (i == 4) {
+				strs[i] = "1";
+			}
+			if (i == 10) {
+				strs[i] = "2";
+			}
+			if (i == 15) {
+				strs[i] = "3";
+			}
+			if (i == 20) {
+				strs[i] = "4";
+			}
+			
+		}
+		list.add("<a href='Linuxcentos.html'>Linux2</a>");
+		for (String str : strs) {
+			if (str.equals("1")) {
+				list.add("<span class='normal'></span>");
+			}
+			if (str.equals("2")) {
+				list.add("<span class='warn'></span>");
+			}
+			if (str.equals("3")) {
+				list.add("<span class='critical'></span>");
+			}
+			if (str.equals("4")) {
+				list.add("<span class='normal'></span>");
+			}
+		}
+		rowsMap.put("cell", list);
+		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+		maps.add(rowsMap);
+		map.put("rows", maps);
+		return Replys.with(map).as(Json.class);
+	}
+		return null;
+	}
+	
 	
 	/**
 	 * 单个操作系统主页面
@@ -134,10 +192,10 @@ public class OsManagerController {
 		return Replys.with(viewMap).as(Json.class);
 	}
 	
-//	/**
-//	 * 健康状态列表
-//	 * @return
-//	 */
+	/**
+	 * 健康状态列表
+	 * @return
+	 */
 //	public Reply healthList(Invocation inv) {
 //		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
 //		List<OracleHealthInfoModel> oracleHealthInfoModels = OracleBatchInfoService.healthInfoList(StaTimeEnum.LAST_24HOUR);

@@ -7,10 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
+import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
+import com.sinosoft.one.monitor.os.linux.domain.OsStatiService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
+import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -20,6 +27,9 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+import com.sinosoft.one.uiutil.Gridable;
+import com.sinosoft.one.uiutil.UIType;
+import com.sinosoft.one.uiutil.UIUtil;
 
 @Path
 public class HistoryViewController {
@@ -30,6 +40,11 @@ public class HistoryViewController {
 	@Autowired
 	private OsViewHandle osViewHandle;
 	
+	@Autowired
+	private OsStatiService osStatiService;
+	
+	@Autowired
+	private OsAvailableViewHandle osAvailableViewHandle;
 //	@Get("historyCPUSevenDay/{osId}")
 //	public String historyCPUSevenDay(@Param("osId") String osId,Invocation inv){
 //		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
@@ -41,13 +56,17 @@ public class HistoryViewController {
 //		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
 //		return "historyCPUSevenDay";
 //	}
-	//CPU天数报表的统计
+	//CPU天数统计报表
 	@Get("historyCPU/{timespan}/{osId}")
-	public String historyCPUSevenDay(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+	public String historyCPU(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		Os os=osService.getOsBasicById(osId);
 		Date currentDate=new Date();
-		Date beginDate=new Date(currentDate.getTime()-6*24*60*60*1000);
+		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
+		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.CPU_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
+		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
+		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
+		inv.addModel("Agv",statiDataModel.getAvgValue());
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -56,13 +75,17 @@ public class HistoryViewController {
 		}
 		return "historyCPUThirtyDay";
 	}
-	//DISK天数报表的统计
-	@Get("historyDISK/{timespan}/{osId}")
-	public String historyDiskSevenDay(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+	//DISK天数统计报表
+	@Get("historyDisk/{timespan}/{osId}")
+	public String historyDisk(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		Os os=osService.getOsBasicById(osId);
 		Date currentDate=new Date();
-		Date beginDate=new Date(currentDate.getTime()-6*24*60*60*1000);
+		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
+		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.DISK_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
+		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
+		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
+		inv.addModel("Agv",statiDataModel.getAvgValue());
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -72,13 +95,17 @@ public class HistoryViewController {
 		return "historyDiskThirtyDay";
 	}
 	
-	//MEM天数报表的统计
+	//内存天数统计报表
 	@Get("historyMem/{timespan}/{osId}")
-	public String historyRamSevenDay(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+	public String historyRam(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		Os os=osService.getOsBasicById(osId);
 		Date currentDate=new Date();
-		Date beginDate=new Date(currentDate.getTime()-6*24*60*60*1000);
+		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
+		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RAM_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
+		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
+		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
+		inv.addModel("Agv",statiDataModel.getAvgValue());
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -87,12 +114,80 @@ public class HistoryViewController {
 		}
 		return "historyMemoryThirtyDay";
 	}
+	//响应时间天数统计报表
+	@Get("historyRespond/{timespan}/{osId}")
+	public String historyRespond(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
+		Os os=osService.getOsBasicById(osId);
+		Date currentDate=new Date();
+		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
+		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RSPOND_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
+		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
+		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
+		inv.addModel("Agv",statiDataModel.getAvgValue());
+		inv.addModel("os", os);
+		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
+		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
+		if (timespan.toString().equals("7")) {
+			return "historyRespSevenDay";
+		}
+		return "historyRespThirtyDay";
+	}
+	//可用性报表
+	@Get("historyAvaylable/{timespan}/{osId}")
+	public String historyAvailable(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
+		Os os=osService.getOsBasicById(osId);
+		Date currentDate=new Date();
+		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
+		inv.addModel("os", os);
+		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
+		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
+		if (timespan.toString().equals("7")) {
+			return "historyAvailableSevenDay";
+		}
+		return "historyAvailableThirdthDay";
+	}
+	
+	/**
+	 * 可用性图饼
+	 * @param osId
+	 * @return
+	 */
+	@Post("historyAvailablePie/{timespan}/{osId}")
+	public Reply getUsability(@Param("osId") String osId ) {
+		Map<String, Double> map = new HashMap<String, Double>();
+		Date currentTime=new Date();
+		map = osAvailableViewHandle.creatAvailablePie(osId, currentTime, 1);
+		return Replys.with(map).as(Json.class);
+	}
+	
+	@Post("historyAvailableGrid/{timespan}/{osId}")
+	public void historyAvailableGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+		Date currentDate=new Date();
+		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osRamViewModels);
+		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
+		gridable.setIdField("id"); 
+		gridable.setCellStringField("time,minValue,maxValue,averageValue");
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
+	/**
+	 * CPU报表窗口曲线
+	 * @param osId
+	 * @param timespan
+	 * @return
+	 */
 	@Post("historyCPUStatiLine/{timespan}/{osId}")
 	public Reply historyCPUSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
-		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.CPU_STATIF_FLAG_D, currentDate, Integer.valueOf(timespan));
+		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
 		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
 		viewMap.put("CPU利用率最大值%", map.get("max"));
 		viewMap.put("CPU利用率最小值%", map.get("min"));
@@ -100,9 +195,35 @@ public class HistoryViewController {
 		return Replys.with(viewMap).as(Json.class);
 	}
 	
+	/**
+	 * CPU报表窗口表格
+	 * @param osId
+	 * @param timespan
+	 * @return
+	 */
+	@Post("historyCPUStatiGrid/{timespan}/{osId}")
+	public void historyCPUSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+		Date currentDate=new Date();
+		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osRamViewModels);
+		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
+		gridable.setIdField("id"); 
+		gridable.setCellStringField("time,minValue,maxValue,averageValue");
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
+	/**
+	 * 磁盘利用率窗口曲线
+	 * @param osId
+	 * @param timespan
+	 * @return
+	 */
 	@Post("historyDiskStatiLine/{timespan}/{osId}")
-	public Reply historyDiksSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
+	public Reply historyDiskSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
 		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.DISK_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
 		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
@@ -111,7 +232,26 @@ public class HistoryViewController {
 		viewMap.put("磁盘利用率最平均值%", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
 	}
-	
+	@Post("historyDiskStatiGrid/{timespan}/{osId}")
+	public void historyDiskSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+		Date currentDate=new Date();
+		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.DISK_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osRamViewModels);
+		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
+		gridable.setIdField("id"); 
+		gridable.setCellStringField("time,minValue,maxValue,averageValue");
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 内存利用率窗口曲线
+	 * @param osId
+	 * @param timespan
+	 * @return
+	 */
 	@Post("historyMemStatiLine/{timespan}/{osId}")
 	public Reply historyMemSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
@@ -121,5 +261,50 @@ public class HistoryViewController {
 		viewMap.put("内存利用率最小值%", map.get("min"));
 		viewMap.put("内存利用率最平均值%", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
+	}
+	@Post("historyMemStatiGrid/{timespan}/{osId}")
+	public void historyMemSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+		Date currentDate=new Date();
+		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osRamViewModels);
+		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
+		gridable.setIdField("id"); 
+		gridable.setCellStringField("time,minValue,maxValue,averageValue");
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 响应时间窗口曲线
+	 * @param osId
+	 * @param timespan
+	 * @return
+	 */
+	@Post("historyRepStatiLine/{timespan}/{osId}")
+	public Reply historyRepSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
+		Date currentDate=new Date();
+		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.RSPOND_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		viewMap.put("响应时间最大值%", map.get("max"));
+		viewMap.put("响应时间最小值%", map.get("min"));
+		viewMap.put("响应时间平均值%", map.get("ave"));
+		return Replys.with(viewMap).as(Json.class);
+	}
+	
+	@Post("historyRepStatiGrid/{timespan}/{osId}")
+	public void historyRepSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
+		Date currentDate=new Date();
+		List<OsGridModel> osRamViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Page page = new PageImpl(osRamViewModels);
+		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
+		gridable.setIdField("id"); 
+		gridable.setCellStringField("time,minValue,maxValue,averageValue");
+		try {
+			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

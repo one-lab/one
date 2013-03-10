@@ -49,7 +49,7 @@ public class OsRamViewHandle {
 			Map<String, Object> m=new HashMap<String, Object>();
 			OsRam osRam= osRamService.findNealyRam(os.getOsInfoId(), havePoint ,interCycle);
 			if (osRam!=null) {
-				m.put("y",Integer.valueOf(osRam.getMemUtiliZation()));
+				m.put("y",Double.valueOf(osRam.getMemUtiliZation()));
 			}else {
 				m.put("y",-1);
 			}
@@ -62,7 +62,7 @@ public class OsRamViewHandle {
 					for (int j = 0; j < ptime; j++) {//计算与上次中间相差了几个是加段 添加几个空点
 						Map<String, Object> map=new HashMap<String, Object>();
 						Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-						map.put("y",-1);
+						map.put("y",-1.0);
 						map.put("x", simpleDateFormat.format(nullpoint));
 						maps.add(map);
 						havePoint=nullpoint;
@@ -70,19 +70,19 @@ public class OsRamViewHandle {
 					Map<String, Object> map=new HashMap<String, Object>();
 					havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
 					map.put("x", simpleDateFormat.format(havePoint));
-					map.put("y", Integer.valueOf(osRams.get(i).getMemUtiliZation()));
+					map.put("y", Double.valueOf(osRams.get(i).getMemUtiliZation()));
 					maps.add(map);//本次的点
 					}else{
 						if(osRams.get(i).getSampleDate().getTime()<havePoint.getTime()&&maps.size()>1 ){//如果小于上次时间
 							Map<String, Object> map=new HashMap<String, Object>();
-							map.put("y", Integer.valueOf(osRams.get(i).getMemUtiliZation()));
+							map.put("y", Double.valueOf(osRams.get(i).getMemUtiliZation()));
 							map.put("x", simpleDateFormat.format(havePoint));
 							maps.set(maps.size()-1, map);//覆盖上次的点
 							continue;
 						} 
 						Map<String, Object> map=new HashMap<String, Object>();
 						havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-						map.put("y", Integer.valueOf(osRams.get(i).getMemUtiliZation()));
+						map.put("y", Double.valueOf(osRams.get(i).getMemUtiliZation()));
 						map.put("x", simpleDateFormat.format(havePoint));
 						maps.add(map);
 					}
@@ -128,8 +128,8 @@ public class OsRamViewHandle {
 			Map<String, Object> m=new HashMap<String, Object>();
 			OsRam osRam= osRamService.findNealyRam(os.getOsInfoId(), havePoint ,interCycle);
 			if (osRam!=null) {
-				m.put("y",Integer.valueOf(osRam.getMemUtiliZation()));
-			}else {
+				m.put("y",Double.valueOf(osRam.getMemUtiliZation()));
+			}else { 
 				m.put("y",-1);
 			}
 			m.put("x", simpleDateFormat.format(havePoint));
@@ -141,7 +141,7 @@ public class OsRamViewHandle {
 					for (int j = 0; j < ptime; j++) {//计算与上次中间相差了几个是加段 添加几个空点
 						Map<String, Object> map=new HashMap<String, Object>();
 						Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-						map.put("y",-1);
+						map.put("y",-1.0);
 						map.put("x", simpleDateFormat.format(nullpoint));
 						maps.add(map);
 						havePoint=nullpoint;
@@ -149,19 +149,19 @@ public class OsRamViewHandle {
 					Map<String, Object> map=new HashMap<String, Object>();
 					havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
 					map.put("x", simpleDateFormat.format(havePoint));
-					map.put("y",Integer.valueOf(osRams.get(i).getSwapUtiliZation()));
+					map.put("y",Double.valueOf(osRams.get(i).getSwapUtiliZation()));
 					maps.add(map);//当前这个点的值
 					}else{
 						if(osRams.get(i).getSampleDate().getTime()<havePoint.getTime()&&maps.size()>1){//如果小于上次时间
 							Map<String, Object> map=new HashMap<String, Object>();
-							map.put("y",Integer.valueOf(osRams.get(i).getSwapUtiliZation()));
+							map.put("y",Double.valueOf(osRams.get(i).getSwapUtiliZation()));
 							map.put("x", simpleDateFormat.format(havePoint));
 							maps.set(maps.size()-1, map);//覆盖上次的点
 							continue;
 						} 
 						Map<String, Object> map=new HashMap<String, Object>();
 						havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-						map.put("y",Integer.valueOf(osRams.get(i).getSwapUtiliZation()));
+						map.put("y",Double.valueOf(osRams.get(i).getSwapUtiliZation()));
 						map.put("x", simpleDateFormat.format(havePoint));
 						maps.add(map);//本次的点
 					}
@@ -173,7 +173,7 @@ public class OsRamViewHandle {
 					for (int i = 0; i < aveTime-mapsSize+1; i++) {
 						Map<String, Object> map=new HashMap<String, Object>();
 						havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-						map.put("y",-1);
+						map.put("y",-1.0);
 						map.put("x", simpleDateFormat.format(havePoint));
 						maps.add(map);
 					}
@@ -203,9 +203,9 @@ public class OsRamViewHandle {
 		Map<String, Object> m=new HashMap<String, Object>();
 		OsRam osRam=osRamService.findNealyRam(os.getOsInfoId(), havePoint ,interCycle);
 		if (osRam!=null) {
-			m.put("y",Integer.valueOf(osRam.getMemUtiliZation()));
+			m.put("y",Double.valueOf(osRam.getMemUtiliZation()));
 		}else {
-			m.put("y",-1);
+			m.put("y",-1.0);
 		}
 		m.put("x", simpleDateFormat.format(havePoint));
 		maps.add(m);//第一次取之前5分钟内最大的值
@@ -216,7 +216,7 @@ public class OsRamViewHandle {
 				for (int j = 0; j < ptime; j++) {
 					Map<String, Object> map=new HashMap<String, Object>();
 					Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-					map.put("y",-1);
+					map.put("y",-1.0);
 					map.put("x", simpleDateFormat.format(nullpoint));
 					maps.add(map);
 					havePoint=nullpoint;
@@ -224,19 +224,19 @@ public class OsRamViewHandle {
 				Map<String, Object> map=new HashMap<String, Object>();
 				havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
 				map.put("x", simpleDateFormat.format(havePoint));
-				map.put("y",Integer.valueOf(osRams.get(i).getMemUtiliZation()));
+				map.put("y",Double.valueOf(osRams.get(i).getMemUtiliZation()));
 				maps.add(map);
 			}else{
 				if(osRams.get(i).getSampleDate().getTime()<date.getTime()&&maps.size()>1){
 					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",Integer.valueOf(osRams.get(i).getMemUtiliZation()));
+					map.put("y",Double.valueOf(osRams.get(i).getMemUtiliZation()));
 					map.put("x", simpleDateFormat.format(havePoint));
 					maps.set(maps.size()-1, map);//覆盖上次的点
 					continue;
 				} 
 				Map<String, Object> map=new HashMap<String, Object>();
 				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",Integer.valueOf(osRams.get(i).getMemUtiliZation()));
+				map.put("y",Double.valueOf(osRams.get(i).getMemUtiliZation()));
 				map.put("x", simpleDateFormat.format(havePoint));
 				maps.add(map);
 			}
@@ -248,7 +248,7 @@ public class OsRamViewHandle {
 			for (int i = 0; i < aveTime-mapsSize+1; i++) {
 				Map<String, Object> map=new HashMap<String, Object>();
 				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",-1);
+				map.put("y",-1.0);
 				map.put("x", simpleDateFormat.format(havePoint));
 				maps.add(map);
 			}
@@ -342,33 +342,28 @@ public class OsRamViewHandle {
 		if(osRam==null){
 			OsGridModel osRamViewModel=new OsGridModel();
 			osRamViewModel.setName("物理内存利用率");
-			osRamViewModel.setUtilzation("0");
-			osRamViewModel.setLink("<a href='#' class='img-7'></a>");
-			osRamViewModel.setUsed("0");
-			osRamViewModel.setThreshold("0");
+			osRamViewModel.setUtilzation("未知");
+			osRamViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
+			osRamViewModel.setUsed("未知");
 			osSwapViewModels.add(osRamViewModel);
 			OsGridModel osSwapViewModel=new OsGridModel();
 			osSwapViewModel.setName("交换内存利用率");
-			osSwapViewModel.setUtilzation("0");
-			osSwapViewModel.setLink("<a href='#' class='img-7'></a>");
-			osSwapViewModel.setUsed("0");
-			osSwapViewModel.setThreshold("0");
+			osRamViewModel.setUtilzation("未知");
+			osSwapViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
+			osSwapViewModel.setUsed("未知");
 			osSwapViewModels.add(osSwapViewModel);
 		}else{
 			OsGridModel osRamViewModel=new OsGridModel();
 			osRamViewModel.setName("物理内存利用率");
-			osRamViewModel.setUtilzation(osRam.getMemUtiliZation());
-			osRamViewModel.setLink("<a href='#' class='img-7'></a>");
+			osRamViewModel.setUtilzation(osRam.getMemUtiliZation()); 
+			osRamViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
 			osRamViewModel.setUsed(OsTransUtil.countUtilZation("1024", osRam.getMemUsed()));
-			osRamViewModel.setThreshold("0");
 			osSwapViewModels.add(osRamViewModel);
 			OsGridModel osSwapViewModel=new OsGridModel();
 			osSwapViewModel.setName("交换内存利用率");
 			osSwapViewModel.setUtilzation(osRam.getSwapUtiliZation());
-			osSwapViewModel.setLink("<a href='#' class='img-7'></a>");
+			osSwapViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
 			osSwapViewModel.setUsed(OsTransUtil.countUtilZation("1024", osRam.getSwapUsed()));
-			osSwapViewModel.setThreshold("0");
-			
 			osSwapViewModels.add(osSwapViewModel);
 		}
 		return osSwapViewModels;
