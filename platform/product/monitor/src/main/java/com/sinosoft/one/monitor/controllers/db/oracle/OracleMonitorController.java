@@ -279,10 +279,12 @@ public class OracleMonitorController {
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
 			String[] healthy = oracleStaBaseInfo.getHealthy();
 			String healthyClass = "1".equals(healthy[0]) ? "fine" : "poor";
+			/* 构建数据库监控详细信息地址*/
+			String url = contextPath + "/db/oracle/home/viewInfo/"+ oracleStaBaseInfo.getMonitorID();
 			/* 构建修改连接+对应数据库MonitorID*/
 			String editUrl = contextPath + "/db/oracle/editUI/" + oracleStaBaseInfo.getMonitorID();
 			/* 格式化表格数据信息*/
-			cell.add(MessageFormat.format(messageFormat0, "", oracleStaBaseInfo.getMonitorName()));
+			cell.add(MessageFormat.format(messageFormat0, url, oracleStaBaseInfo.getMonitorName()));
 			cell.add(MessageFormat.format(messageFormat1, usabilityClass));
 			cell.add(MessageFormat.format(messageFormat2, healthyClass));
 			cell.add(MessageFormat.format(messageFormat3, editUrl));

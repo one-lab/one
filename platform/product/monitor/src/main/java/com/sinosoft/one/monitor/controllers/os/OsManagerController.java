@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.controllers.os;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,8 +11,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sinosoft.one.monitor.db.oracle.model.Info;
+import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
-import com.sinosoft.one.monitor.os.linux.domain.OsProcessService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
@@ -27,6 +29,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.mvc.web.validation.annotation.Validation;
 
 @Path
+@SuppressWarnings({"deprecation", "unchecked"})
 public class OsManagerController {
 	@Autowired
 	private OsService osService;
@@ -34,11 +37,14 @@ public class OsManagerController {
 	@Autowired
 	private OsAvailableViewHandle osViewDataHandleService;
 	
-	@Autowired
-	private OsProcessService osProcessService;
+	/*@Autowired
+	private OsProcessService osProcessService;*/
 	
 	@Autowired
 	private OsViewHandle osLineViewHandle; 
+	
+	/* 返回前台ajax请求数据信息*/
+	private Map<String, Object> message = new HashMap<String, Object>();
 	
 	
 	/**
@@ -65,7 +71,6 @@ public class OsManagerController {
 			osService.saveOsBasic(os.getName(), os.getType(), os.getIpAddr(),
 					os.getSubnetMask(), 5);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
@@ -177,11 +182,6 @@ public class OsManagerController {
 		return "linuxcentos";
 	}
 	
-//	@Post("performanceList")
-//	public Reply performanceList() {
-		
-//		return Replys.with(viewMap).as(Json.class);
-//	}
 	/**
 	 * 性能页面
 	 */
@@ -191,6 +191,107 @@ public class OsManagerController {
 		System.out.println(Replys.with(viewMap).as(Json.class).toString());
 		return Replys.with(viewMap).as(Json.class);
 	}
+	
+	/**
+	 * 数据库列表视图
+	 * @return
+	 */
+	public Reply thresholdList(Invocation inv) {
+		/* 获取项目根路径*/
+		String contextPath = inv.getServletContext().getContextPath();
+		/* 封装表格行数据信息List->rows*/
+		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+		/* 初始化每列数据格式*/
+		String messageFormat0 = "<a href={0}>{1}</a>"; //数据库名
+		String messageFormat1 = "<div class={0}></div>"; //可用性-usability
+		String messageFormat2 = "<div class={0}></div>"; //健康状况-healthy
+		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
+		/* 查询数据库健康列表数据*/
+		
+		List<OracleStaBaseInfoModel> oracleStaBaseInfos = new ArrayList<OracleStaBaseInfoModel>();
+		/**
+		 * 测试用的假数据，service写好后修改上面返回list集合即可
+		 */
+		OracleStaBaseInfoModel staBaseInfo = new OracleStaBaseInfoModel();
+		staBaseInfo.setMonitorID("test_linux");
+		staBaseInfo.setMonitorName("test_linux");
+		staBaseInfo.setUsability("1");
+		staBaseInfo.setHealthy(new String[]{"1", ""});
+		oracleStaBaseInfos.add(staBaseInfo);
+		
+		/* 循环构建表格行数据*/
+		for(OracleStaBaseInfoModel oracleStaBaseInfo : oracleStaBaseInfos) {
+			Map<String, Object> row = new HashMap<String, Object>();
+			row.put("id", oracleStaBaseInfo.getMonitorID());
+			List<String> cell = new ArrayList<String>();
+			/* 可用性 1-可用sys_up ；0-不可用 sys_down*/
+			String usabilityClass = "1".equals(oracleStaBaseInfo.getUsability()) ? "sys_up" : "sys_down";
+			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
+			String[] healthy = oracleStaBaseInfo.getHealthy();
+			String healthyClass = "1".equals(healthy[0]) ? "fine" : "poor";
+			/* 构建修改连接+对应数据库MonitorID*/
+			String editUrl = contextPath + "/os/editUI/" + oracleStaBaseInfo.getMonitorID();
+			/* 格式化表格数据信息*/
+			cell.add(MessageFormat.format(messageFormat0, "", oracleStaBaseInfo.getMonitorName()));
+			cell.add(MessageFormat.format(messageFormat1, usabilityClass));
+			cell.add(MessageFormat.format(messageFormat2, healthyClass));
+			cell.add(MessageFormat.format(messageFormat3, editUrl));
+			row.put("cell", cell);
+			rows.add(row);
+		}
+		Map<String, Object> grid = new HashMap<String, Object>();
+		grid.put("rows", rows);
+		return Replys.with(grid).as(Json.class);
+	}
+	
+	/**
+	 * 编辑页面
+	 * @param monitorId
+	 * @param inv
+	 * @return
+	 */
+	@Get("editUI/{monitorId}")
+	public String editUI(@Param("monitorId")String monitorId,Invocation inv) {
+		Info oracleInfo = oracleInfoService.getInfo(monitorId);
+		inv.addModel("oracleInfo", oracleInfo);
+		return "oracleSave";
+	}
+	
+	/**
+	 * 编辑操作
+	 * @param oracleInfo
+	 * @param inv
+	 * @return
+	 */
+	@Post("edit")
+	public Reply edit(Info oracleInfo,Invocation inv) {
+		Info info = oracleInfoService.getInfo(oracleInfo.getId());
+		info.setName(oracleInfo.getName());
+		info.setIpAddress(oracleInfo.getIpAddress());
+		info.setSubnetMask(oracleInfo.getSubnetMask());
+		info.setPort(oracleInfo.getPort());
+		info.setPullInterval(oracleInfo.getPullInterval());
+		info.setUsername(oracleInfo.getUsername());
+		info.setPassword(oracleInfo.getPassword());
+		info.setInstanceName(oracleInfo.getInstanceName());
+		oracleInfoService.editMonitor(info);
+		message.put("result", true);
+		return Replys.with(message).as(Json.class);
+	}
+	
+	/**
+	 * 删除操作(包含删除一个和批量删除操作)
+	 * @param monitorId
+	 * @param inv
+	 * @return
+	 */
+	@Get("remove")
+	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
+		//oracleInfoService.deleteMonitor(monitorId);
+		message.put("result", true);
+		return Replys.with(message).as(Json.class);
+	}
+	
 	
 	/**
 	 * 健康状态列表

@@ -5,7 +5,7 @@
   <c:forEach items="${oracleAvaInfoList}" var="oracleAvaInfo">
    <tr>
        <td>
-           <a href="oracle.html">${oracleAvaInfo.monitorName}</a>
+           <a href="${ctx }/db/oracle/home/viewInfo/${oracleAvaInfo.monitorID}">${oracleAvaInfo.monitorName}</a>
        </td>
        <td>
            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="green_bar">
