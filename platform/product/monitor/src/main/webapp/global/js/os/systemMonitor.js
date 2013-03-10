@@ -174,7 +174,7 @@ function healthGrid(url) {
 		clickSelect : true,
 		draggable : false,
 		height : 'auto',
-		colums : ,
+		colums : day1ColumnStyle,
 		rowNum : 9999,
 		pager : false,
 		number : false,
