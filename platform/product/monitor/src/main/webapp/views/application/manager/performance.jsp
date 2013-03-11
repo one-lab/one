@@ -128,7 +128,7 @@
                                                 <td class="body">
                                                     <span>${applicationIndexViewModel.avgResponseTime} 毫秒</span></td>
                                                 <td class="body"><span>${applicationIndexViewModel.rpm} rpm</span></td>
-                                                <td class="body"><a
+                                                <td class="body" style="width: 22%"><a
                                                         href="${ctx}/application/manager/bsmanager/list/${applicationIndexViewModel.applicationId}">管理业务场景</a>
                                                     &nbsp;<a
                                                             href="${ctx}/application/manager/appmanager/update/${applicationIndexViewModel.applicationId}">编辑</a>
