@@ -19,7 +19,7 @@ function refresheSGA(msg) {
              text:''
          },
          xAxis:{
-             categories: msg.categories,
+             categories: msg.categories
          },
          yAxis:{
              title:{
