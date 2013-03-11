@@ -3,6 +3,8 @@ package com.sinosoft.one.monitor.db.oracle.domain;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.model.OracleInfoModel;
 
+import java.util.List;
+
 /**
  * User: Chunliang.Han
  * Date: 13-2-27
@@ -22,8 +24,9 @@ public interface OracleInfoService {
 
     /**
      * 删除Oracle监视器
+     * @param monitorId
      */
-    void deleteMonitor(String monitorId);
+    void deleteMonitor(List<String> monitorId);
     
     Info getInfo(String monitorId);
 

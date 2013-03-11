@@ -265,7 +265,8 @@ public class OracleMonitorController {
 	 */
 	@Get("remove")
 	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
-		//oracleInfoService.deleteMonitor(monitorId);
+
+		oracleInfoService.deleteMonitor(monitorIds);
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}

@@ -15,7 +15,10 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
-	
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center");
+		$("#main").width(center.width() - 31).height(center.height() - 30);
+	}
 	$("#avaInfoStyle").bind("change", {}, avaInfoList);
 	$("#avaInfoStyle").trigger("change");
 	
@@ -86,7 +89,7 @@ function hideNav(e){
 <body>
 <%@include file="/WEB-INF/layouts/menu.jsp" %>
 <div id="layout_center">
-	<div class="main">
+	<div class="main" id="main">
     	<ul class="crumbs">
         	<li><a href="#">监视器</a> ></li>
             <li><b> oracle - 批量配置视图 (总计 3 监视器)</b></li>
