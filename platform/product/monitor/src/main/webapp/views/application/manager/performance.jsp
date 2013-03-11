@@ -131,9 +131,9 @@
                                                 <td class="body"><a
                                                         href="${ctx}/application/manager/bsmanager/list/${applicationIndexViewModel.applicationId}">管理业务场景</a>
                                                     &nbsp;<a
-                                                            href="update/${applicationIndexViewModel.applicationId}">编辑</a>
+                                                            href="${ctx}/application/manager/appmanager/update/${applicationIndexViewModel.applicationId}">编辑</a>
                                                     &nbsp;<a
-                                                            href="delete/${applicationIndexViewModel.applicationId}">删除</a>
+                                                            href="${ctx}/application/manager/appmanager/delete/${applicationIndexViewModel.applicationId}">删除</a>
                                                         <%--<a href="javascript:void(0), onclick=delRow(${application.id})">删除</a>--%>
                                                 </td>
                                                     <%--href="${ctx}/application/manager/bsmanager/bizscenariolist/${application.id}">管理业务场景</a--%>

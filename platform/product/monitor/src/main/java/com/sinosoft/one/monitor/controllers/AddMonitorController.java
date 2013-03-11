@@ -30,6 +30,8 @@ public class AddMonitorController {
     ApplicationService applicationService;
     @Autowired
     ResourcesService resourcesService;
+    @Autowired
+    BusinessEmulation businessEmulation;
 
     @Get("list")
     public String getAddMonitorList(Invocation inv){
@@ -73,7 +75,6 @@ public class AddMonitorController {
         resource.setResourceType(ResourceType.APPLICATION.name());
         //RESOURCES表中保存应用信息
         resourcesService.saveResource(resource);
-        BusinessEmulation businessEmulation=new BusinessEmulation();
         businessEmulation.restart();
         //页面所在路径application/manager/@应用性能页面
         return "r:application/manager/appmanager/applist/1";

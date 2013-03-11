@@ -186,6 +186,10 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1 order by CREATE_TIME desc")
     List<Alarm> findByMonitorId(String monitorId);
 
+    //获得当前监视器的历史告警信息
+    @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1 order by CREATE_TIME desc")
+    Page<Alarm> findByMonitorId(String monitorId,Pageable pageable);
+
     //批量删除告警信息
     @SQL("delete GE_MONITOR_ALARM a where a.ID in (?1)")
     void batchDeleteAlarms(String[] alarmIds);
@@ -196,14 +200,21 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
             "#if(:givenType!=''){ and a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
     List<Alarm> findAlarmsWithGivenTimeAndType(@Param("givenTime") String givenTime,@Param("givenType") String givenType);
 
+    //查询24小时内的告警信息
+    @SQL("select * from GE_MONITOR_ALARM a #if(:givenTime=='24') { where (a.CREATE_TIME between (select sysdate - interval '24' hour from dual) and  sysdate)}" +
+            "#if(:givenTime=='30'){ where (a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate)}" +
+            "#if(:givenType!=''){ and a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
+    Page<Alarm> findAlarmsWithGivenTimeAndType(@Param("givenTime") String givenTime,@Param("givenType") String givenType,Pageable pageable);
+
     //查询指定时间的告警信息
-    @SQL("select * from GE_MONITOR_ALARM a #if(:givenTime=='24') { where a.CREATE_TIME between (select sysdate - interval '24' hour from dual) and  sysdate}" +
-            "#if(:givenTime=='30'){ where a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate} order by a.CREATE_TIME desc")
-    List<Alarm> findAlarmsWithGivenTime(@Param("givenTime") String givenTime);
+    @SQL("select * from GE_MONITOR_ALARM a #if(?1=='24') { where a.CREATE_TIME between (select sysdate - interval '24' hour from dual) and  sysdate}" +
+            "#if(?1=='30'){ where a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate} order by a.CREATE_TIME desc")
+    /*Page<Alarm> findAlarmsWithGivenTime(@Param("givenTime") String givenTime,Pageable pageable);*/
+    Page<Alarm> findAlarmsWithGivenTime(String givenTime,Pageable pageable);
 
     //查询指定类型的告警信息
     @SQL("select * from GE_MONITOR_ALARM a #if(:givenType!=''){ where a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
-    List<Alarm> findAlarmsWithGivenType(@Param("givenType") String givenType);
+    Page<Alarm> findAlarmsWithGivenType(@Param("givenType") String givenType,Pageable pageable);
 
 
 }

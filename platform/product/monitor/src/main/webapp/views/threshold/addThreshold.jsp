@@ -36,7 +36,7 @@ function rowsTogle(){
 	<div class="main">
     	<div class="add_monitor">
        	  <h2 class="title2"><b>创建新的阈值配置文件　</b></h2>
-          <form action="${ctx}/threshold/threshold/save" method="post">
+          <form action="${ctx}/threshold/save" method="post">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form threshold" id="threshold">
               <input type="hidden" name="id" value="${threshold.id }">	
               <tr>
@@ -44,7 +44,7 @@ function rowsTogle(){
                 <td colspan="2"><input type="text" class="formtext" size="38" name="name"  value="${ threshold.name}"/></td>
               </tr>
               <tr>
-                <td><img src="${ctx}/static/images/icon_critical.gif" alt="严重重要度" class="m_b"/> <b>严重重要度:</b></td>
+                <td><img src="${ctx}/global/images/icon_critical.gif" alt="严重重要度" class="m_b"/> <b>严重重要度:</b></td>
                 <td colspan="2"> 被监控的值是
                	  <select name="criticalThresholdCondition" class="diySelect" style="font-family:Arial, Helvetica, sans-serif;width:60px">
                          <option value="LT"   ${threshold.warningThresholdCondition eq "LT"  ? "selected='selected'" : ''}>&lt;</option>
@@ -73,7 +73,7 @@ function rowsTogle(){
                 </td>
               </tr>
               <tr class="hideRows">
-                <td><img src="${ctx}/static/images/icon_warning.gif" alt="严重重要度" class="m_b"/> <b>警告重要度:</b></td>
+                <td><img src="${ctx}/global/images/icon_warning.gif" alt="严重重要度" class="m_b"/> <b>警告重要度:</b></td>
                 <td>被监控的值是</td>
                 <td><select name="warningThresholdCondition" class="diySelect" style="font-family:Arial, Helvetica, sans-serif;width:60px">
                    		  <option value="LT"   ${threshold.warningThresholdCondition eq "LT"  ? "selected='selected'" : ''}>&lt;</option>
@@ -95,7 +95,7 @@ function rowsTogle(){
                 <td colspan="3"><hr class="hr" /></td>
               </tr>
               <tr class="hideRows">
-                <td><img src="${ctx}/static/images/icon_clear.gif" alt="严重重要度" class="m_b"/> <b>正常重要度:</b></td>
+                <td><img src="${ctx}/global/images/icon_clear.gif" alt="严重重要度" class="m_b"/> <b>正常重要度:</b></td>
                 <td>被监控的值是                  </td>
                 <td><select name="infoThresholdCondition" class="diySelect" style="font-family:Arial, Helvetica, sans-serif;width:60px">
                     <option value="LT"   ${threshold.warningThresholdCondition eq "LT"  ? "selected='selected'" : ''}>&lt;</option>

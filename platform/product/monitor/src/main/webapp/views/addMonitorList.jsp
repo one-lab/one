@@ -68,7 +68,7 @@ function hideNav(e){
                 <td width="33%" class="center">
                	  <h3 class="title3">数据库</h3>
                 	<ul>
-                    	<li><a href="${ctx}/addmonitor/addoracle">Oracle</a></li>
+                    	<li><a href="${ctx}/db/oracle/addUI">Oracle</a></li>
                     </ul>
                 </td>
                 <td width="33%">
