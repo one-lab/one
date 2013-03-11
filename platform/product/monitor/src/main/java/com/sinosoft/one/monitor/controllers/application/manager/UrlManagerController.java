@@ -221,6 +221,7 @@ public class UrlManagerController {
                             @Param("urlId") String urlId, Invocation inv) {
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
+        businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //Url列表页面
         return "managerUrl";
     }
@@ -238,8 +239,8 @@ public class UrlManagerController {
         urlService.deleteUrlAndMethod(urlId);
         //删除GE_MONITOR_URL的记录
         urlService.deleteUrl(urlId);
-        /*//删除Resources表中的记录
-        resourcesRepository.deleteByResourceId(urlId);*/
+        //删除Resources表中的记录
+        resourcesRepository.delete(resourcesRepository.findByResourceId(urlId));
         // 删除eumUrl表中的记录
         eumUrlRepository.delete(eumUrlRepository.findByUrlId(urlId));
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
@@ -262,16 +263,18 @@ public class UrlManagerController {
         //删除GE_MONITOR_URL的记录
         urlService.batchDeleteUrl(urlIds);
         //删除Resource表中的记录
-        /*List<Resource> dbResources=resourcesRepository.findAllResourcesWithUrlIds(urlIds);
-        for(Resource resource:dbResources){
+        List<Resource> dbResources=resourcesRepository.findAllResourcesWithUrlIds(urlIds);
+        resourcesRepository.delete(dbResources);
+        /*for(Resource resource:dbResources){
             resourcesRepository.delete(resource);
-        }
+        }*/
         //删除EumUrl表中的记录
         List<EumUrl> dbEumUrls=eumUrlRepository.findAllEumUrlsWithUrlIds(urlIds);
-        for(EumUrl eumUrl:dbEumUrls){
+        eumUrlRepository.delete(dbEumUrls);
+        /*for(EumUrl eumUrl:dbEumUrls){
             eumUrlRepository.delete(eumUrl);
-        }
-        businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());*/
+        }*/
+        businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "managerUrl";
     }

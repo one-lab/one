@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface ResourcesRepository extends PagingAndSortingRepository<Resource, String> {
 
+    Resource findByResourceId(String resourceId);
+
     @SQL("select * from GE_MONITOR_RESOURCES a where a.RESOURCE_ID in (?1)")
     List<Resource> findAllResourcesWithUrlIds(String[] urlIds);
 }
