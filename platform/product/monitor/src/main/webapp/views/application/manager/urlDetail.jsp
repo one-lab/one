@@ -164,29 +164,12 @@
                             <div id="list_table"></div>
                         </div>
                     </div>
-                    <div class="stuats_mark">
-                        <ul>
-                            <li><div class="red_status"></div><div>严重</div></li>
-                            <li><div class="yellow_status"></div><div>警告</div></li>
-                            <li><div class="green_status"></div><div>正常</div></li>
-                        </ul>
-                    </div>
                 </div>
-
-
-
 
                 <div class="event_log">
                     <div class="threshold_file">
                         <div class="tool_bar_top">事件日志</div>
                         <div id="event_log_grid"></div>
-                    </div>
-                    <div class="stuats_mark">
-                        <ul>
-                            <li><div class="red_status"></div><div>严重</div></li>
-                            <li><div class="yellow_status"></div><div>警告</div></li>
-                            <li><div class="green_status"></div><div>正常</div></li>
-                        </ul>
                     </div>
                 </div>
 

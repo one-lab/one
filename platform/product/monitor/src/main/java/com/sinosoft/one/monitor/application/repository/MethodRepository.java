@@ -12,7 +12,7 @@ public interface MethodRepository extends PagingAndSortingRepository<Method, Str
 
     Method findByMethodName(String methodName);
 
-    @SQL("select * from GE_MONITOR_METHOD a where a.ID in (select b.METHOD_ID from GE_MONITOR_URL_METHOD b right join GE_MONITOR_URL c on b.URL_ID=?1)")
+    @SQL("select * from GE_MONITOR_METHOD a where a.ID in (select m.METHOD_ID from GE_MONITOR_URL_METHOD m where m.url_id=?1)")
     List<Method> selectMethodsOfUrlById(@Param("urlId") String urlId);
 
     /*@SQL("update GE_MONITOR_METHOD set CLASS_NAME=:className,METHOD_NAME=:methodName,DESCRIPTION=:description,MODIFIER_ID=:modifierId,MODIFY_TIME=sysdate where id=:methodId")

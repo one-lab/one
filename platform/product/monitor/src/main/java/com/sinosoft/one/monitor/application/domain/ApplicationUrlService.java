@@ -1,18 +1,12 @@
 package com.sinosoft.one.monitor.application.domain;
 
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.application.model.MethodResponseTime;
-import com.sinosoft.one.monitor.application.model.UrlResponseTime;
-import com.sinosoft.one.monitor.application.model.UrlTraceLog;
-import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
+import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlCountViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlHealthAvaViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlInfoViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.UrlTraceLogViewModel;
-import com.sinosoft.one.monitor.application.repository.MethodResponseTimeRepository;
-import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
-import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
-import com.sinosoft.one.monitor.application.repository.UrlVisitsStaRepository;
+import com.sinosoft.one.monitor.application.repository.*;
 import com.sinosoft.one.monitor.common.HealthStaService;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.common.Trend;
@@ -55,6 +49,8 @@ public class ApplicationUrlService {
 	private MethodResponseTimeRepository methodResponseTimeRepository;
 	@Autowired
 	private AlarmRepository alarmRepository;
+	@Autowired
+	private MethodRepository methodRepository;
 
 	public ApplicationUrlInfoViewModel generateUrlInfoViewModel(String applicationId, String urlId) {
 		// 获得健康度
@@ -156,10 +152,26 @@ public class ApplicationUrlService {
 		return urlTraceLogRepository.selectUrlTraceLogs(pageable, urlId, startDate, endDate);
 	}
 
-	public List<MethodResponseTime> queryMethodResponseTimes(String applicationId, String urlId) {
+	public List<MethodResponseTime> queryMethodResponseTimes(String urlId) {
 		Date startDate = LocalDate.now().toDate();
 		Date endDate = LocalDateTime.now().toDate();
 
-		return methodResponseTimeRepository.selectMethodResponseTimes(applicationId, urlId, startDate, endDate);
+		List<Method> methods = methodRepository.selectMethodsOfUrlById(urlId);
+		List<MethodResponseTime> methodResponseTimes = new ArrayList<MethodResponseTime>();
+		for(Method method : methods) {
+			MethodResponseTime methodResponseTime = methodResponseTimeRepository.selectMethodResponseTimes(urlId, method.getId(), startDate, endDate);
+			if(methodResponseTime == null) {
+				methodResponseTime = new MethodResponseTime();
+				methodResponseTime.setMaxResponseTime(0l);
+				methodResponseTime.setTotalCount(0);
+				methodResponseTime.setMinResponseTime(0l);
+			}
+			methodResponseTime.setAvgResponseTime(methodResponseTime.getAvgResponseTime());
+			methodResponseTime.setUrlId(urlId);
+			methodResponseTime.setMethodId(method.getId());
+			methodResponseTime.setMethodName(method.getFullName());
+			methodResponseTimes.add(methodResponseTime);
+		}
+		return methodResponseTimes;
 	}
 }
