@@ -6,9 +6,7 @@ import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.model.OracleInfoModel;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
-import com.sinosoft.one.monitor.db.oracle.repository.AvaRepository;
-import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
-import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
+import com.sinosoft.one.monitor.db.oracle.repository.*;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
@@ -38,7 +36,11 @@ public class OracleInfoServiceImpl implements OracleInfoService {
     @Autowired
     private LasteventRepository lasteventRepository;
     @Autowired
+    private EventStaRepository eventStaRepository;
+    @Autowired
     private AvaRepository avaRepository;
+    @Autowired
+    private AvaStaRepository avaStaRepository;
     @Autowired
     private AlarmRepository alarmRepository;
     @Autowired
@@ -89,8 +91,14 @@ public class OracleInfoServiceImpl implements OracleInfoService {
 
     @Override
     @Transactional
-    public void deleteMonitor(String monitorId) {
-        infoRepository.delete(monitorId);
+    public void deleteMonitor(List<String> monitorId) {
+//        resourcesRepository
+//        lasteventRepository
+//        eventStaRepository
+//        avaRepository
+//        avaStaRepository
+//        alarmRepository
+//        infoRepository.deleteByIds(monitorId);
     }
 
     @Override
