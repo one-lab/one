@@ -37,7 +37,7 @@
                 ],
                 rowNum:10,
                 rowList:[10, 20, 30],
-                pager:true,
+                pager:false,
                 number:false,
                 multiselect:false
             });
