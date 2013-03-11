@@ -131,13 +131,13 @@ function batchDel(){
                         /*selecteds.each(function(){
                             $(this).parent().parent().remove();
                         });*/
-                        alert("删除成功");
+                        msgSuccess("系统消息", "删除成功！");
                         /*调用ajax，重新获得告警信息列表*/
                         getAlarmListOfGivenTimeAndType();
                     }
                 },
                 error:function(){
-                    alert("删除失败");
+                    msgSuccess("系统消息", "删除失败！");
                 }
             });
 		});

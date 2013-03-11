@@ -19,9 +19,9 @@
             var _monitorTypeSelected=$("#monitorType").val();
             var _monitorNameSelected=$("#monitorName").val();
             if(''==_monitorTypeSelected){
-                alert("请选择监视器类型！")
+                msgSuccess("系统消息", "请选择监视器类型！");
             }else if('choice'==_monitorNameSelected){
-                alert("请选择监视器名字！")
+                msgSuccess("系统消息", "请选择监视器名字！");
             }else{
                 if(null!=attributeType&&""!=attributeType){
                     setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeType);
@@ -177,10 +177,10 @@
                                     getNewGrid(_resourceTypeAfterUpdate,_monitorIdAfterUpdate);
                             },
                             error:function(){
-                             alert("保存失败");
+                                msgSuccess("系统消息", "保存失败！");
                              }
                         });
-                        msgSuccess("系统消息", "操作成功，配置已保存！");
+                        /*msgSuccess("系统消息", "操作成功，配置已保存！");*/
                         temWin.closeWin();
                     }
                 },
@@ -209,14 +209,14 @@
                                 async:false,
                                 success : function(dataFromJson) {
                                     if(dataFromJson != null){
-                                        alert("删除成功！");
+                                        msgSuccess("系统消息", "删除成功！");
                                         var _resourceTypeAfterUpdate=dataFromJson[0].resourceTypeAfterUpdate;
                                         var _monitorIdAfterUpdate=dataFromJson[0].monitorIdAfterUpdate;
                                         getNewGrid(_resourceTypeAfterUpdate,_monitorIdAfterUpdate);
                                     }
                                 },
                                 error:function(){
-                                 alert("删除失败");
+                                    msgSuccess("系统消息", "删除失败！");
                                  }
                             });
                             temWin.closeWin();

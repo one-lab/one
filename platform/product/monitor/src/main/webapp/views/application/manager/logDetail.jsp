@@ -14,7 +14,7 @@
     <link href="${ctx}/global/css/logDetail/logDetail.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         var ctx = "${ctx}"; //"4028927e3d333c27013d333d15c00001"4028921c3d4d3220013d4edcdaee00be//
-        var logId = "4028921c3d4d3220013d4edcdaee00be";//"${logId}";
+        var logId = "${logId}";
     </script>
     <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
     <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>

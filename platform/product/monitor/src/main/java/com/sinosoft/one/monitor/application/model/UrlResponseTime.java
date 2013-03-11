@@ -4,6 +4,8 @@ package com.sinosoft.one.monitor.application.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
@@ -130,7 +132,8 @@ public class UrlResponseTime {
 
 	@Transient
 	 public Long getAvgResponseTime() {
-		return avgResponseTime;
+		return BigDecimal.valueOf(totalResponseTime)
+				.divide(BigDecimal.valueOf(totalCount == 0 ? 1 : totalCount), 0, RoundingMode.HALF_UP).longValue();
 	}
 
 	public void setAvgResponseTime(Long avgResponseTime) {

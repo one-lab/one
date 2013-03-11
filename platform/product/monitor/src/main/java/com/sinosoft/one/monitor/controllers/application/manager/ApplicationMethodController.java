@@ -29,8 +29,9 @@ public class ApplicationMethodController {
     @Autowired
     LogDetailService logDetailService;
 
-    @Get("ViewLogDetail")
-    public String ViewLogDetail(Invocation inv){
+    @Get("viewLogDetail/${urlTraceLogId}")
+    public String ViewLogDetail(@Param("urlTraceLogId") String urlTraceLogId, Invocation inv){
+		inv.addModel("logId", urlTraceLogId);
         return "logDetail";
     }
 

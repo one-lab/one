@@ -21,7 +21,7 @@ public final class NotificationConfiguration {
 	private final static NotificationConfiguration INSTANCE = new NotificationConfiguration();
 	public final static String NOTIFICATION_INFO_FILENAME = "notification.info";
 	private final static String NOTIFICATION_PROPERTIES_FILENAME = "notification.properties";
-	private final static String MONITOR_APPLICATION_INIT_URL = "/application/manager/appmanager/match/";
+	private final static String MONITOR_APPLICATION_INIT_URL = "/application/manager/appmanager/match";
 
 	private NotificationConfiguration() {
 		init();
