@@ -4,23 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <title>查看预警配置文件</title>
-<link href="${ctx }/static/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/static/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/static/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/static/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/static/css/bussiness.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx }/static/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx }/static/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx }/static/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx }/static/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx }/static/js/sinosoft.message.js"></script>
+<link href="${ctx }/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/global/css/bussiness.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx }/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx }/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx }/global/js/sinosoft.grid.js"></script>
+<script language="javascript" src="${ctx }/global/js/sinosoft.window.js"></script>
+<script language="javascript" src="${ctx }/global/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
+
 	$("#thresholdList").Grid({
 		type:"post",
 		url : "${ctx}/action/email/data",  
@@ -46,70 +43,43 @@ $(function(){
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
 });
-$(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
-	$("#thresholdList2").Grid({
-		type:"post",
-		url : "",  
-		dataType: "json",
-		colDisplay: false,  
-		clickSelect: true,
-		draggable:false,
-		colums:[  
-			{id:'1',text:'名称',name:"name",index:'1',align:''},
-			{id:'2',text:'发件人',name:"fromAddress",index:'1',align:''},
-			{id:'3',text:'到',name:"toAddress",index:'1',align:''},
-			{id:'4',text:'主题',name:"subject",index:'1',align:''},
-			{id:'5',text:'一直运行',name:"content",index:'1',align:''},
-			{id:'6',text:'操作',name:"operation",index:'1',align:''}
-
-		],  
-		rowNum:9999,
-		pager : false,
-		number:false,  
-		multiselect: false  
-	});
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
-});
+//$(function(){
+//	$("body").layout({
+//		top:{topHeight:100},
+//		bottom:{bottomHeight:30}
+//	});
+//	$("#thresholdList2").Grid({
+//		type:"post",
+//		url : "",
+//		dataType: "json",
+//		colDisplay: false,
+//		clickSelect: true,
+//		draggable:false,
+//		colums:[
+//			{id:'1',text:'名称',name:"name",index:'1',align:''},
+//			{id:'2',text:'发件人',name:"fromAddress",index:'1',align:''},
+//			{id:'3',text:'到',name:"toAddress",index:'1',align:''},
+//			{id:'4',text:'主题',name:"subject",index:'1',align:''},
+//			{id:'5',text:'一直运行',name:"content",index:'1',align:''},
+//			{id:'6',text:'操作',name:"operation",index:'1',align:''}
+//
+//		],
+//		rowNum:9999,
+//		pager : false,
+//		number:false,
+//		multiselect: false
+//	});
+//	$("#myDesk").height($("#layout_center").height());
+//	$("#nav").delegate('li', 'mouseover mouseout', navHover);
+//	$("#nav,#menu").delegate('li', 'click', navClick);
+//});
 
 function updRow(e){
-	alert(111);
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
 	location.href="${ctx}/action/email/update/"+id.replace("row_","");
 }
-function navHover(){
-	$(this).toggleClass("hover")
-}
-function navClick(){
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if($(this).hasClass('has_sub')){
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if($(this).parent().attr("id") == "menu"){
-			isAdd = true;
-		};
-		subMav.slideDown('fast',function(){
-			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-			return false;
-		});		
-	};
-}
-function hideNav(e){
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast',function(){
-		if(isAdd){
-			subMenu.parent().removeClass('seleck');
-		};
-	});	
-	$(document).unbind();
-}
+
 function delRow(e){
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
@@ -194,13 +164,13 @@ function eidRow(e){
           <div class="tool_bar"></div>
         </div>
     </div>
-    	<div class="main">
-    	<div class="threshold_filed">
-       	  <h2 class="title3"><b>短信动作　</b></h2>
-          <div id="thresholdList2"></div>
-          <div class="tool_bar"></div>
-        </div>
-    </div>
+    	<%--<div class="main">--%>
+    	<%--<div class="threshold_filed">--%>
+       	  <%--<h2 class="title3"><b>短信动作　</b></h2>--%>
+          <%--<div id="thresholdList2"></div>--%>
+          <%--<div class="tool_bar"></div>--%>
+        <%--</div>--%>
+    <%--</div>--%>
 </div>
 <div id="layout_bottom">
 	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
