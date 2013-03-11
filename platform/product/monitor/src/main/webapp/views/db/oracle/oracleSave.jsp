@@ -10,9 +10,7 @@
     <script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>
     <script language="javascript" src="${ctx }/global/js/oracleMonitor.js"></script>
     <script type="text/javascript">
-        alert(1);
         var editFlag = '${!empty oracleInfo.id}'=='true';
-        alert(editFlag);
         $(function(){
             $("body").layout({
                 top:{topHeight:100},
@@ -52,7 +50,6 @@
             $(document).unbind();
         }
         function saveOracleMonitor(){
-            alert("dddd");
             var action = rootPath+ "/db/oracle/";
             if(editFlag) {
                 action = action + "edit";
