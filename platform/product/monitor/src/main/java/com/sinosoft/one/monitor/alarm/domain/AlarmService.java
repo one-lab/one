@@ -2,7 +2,6 @@ package com.sinosoft.one.monitor.alarm.domain;
 
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.utils.DateUtil;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -75,7 +73,18 @@ public class AlarmService {
     public List<Alarm> queryLatestAlarmsRowsFifty(){
         Sort desc = new Sort(Sort.Direction.DESC,"createTime");
         PageRequest pageRequest = new PageRequest(0,50,desc);
-        List<Alarm>  alarms =   alarmRepository.findAll(pageRequest).getContent();
+        List<Alarm>  alarms = alarmRepository.findAll(pageRequest).getContent();
+        return  fillAlarm(alarms);
+    }
+
+    /**
+     * 获取10条记录，按记录时间排序
+     * @return
+     */
+    public List<Alarm> queryLatestAlarmsByPageNo(int currentPage){
+        Sort desc = new Sort(Sort.Direction.DESC,"createTime");
+        Pageable pageable = new PageRequest(currentPage,10,desc);
+        List<Alarm>  alarms =   alarmRepository.findAll(pageable).getContent();
         return  fillAlarm(alarms);
     }
 }

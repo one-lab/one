@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.controllers.application.manager;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.sinosoft.one.monitor.application.domain.ApplicationService;
+import com.sinosoft.one.monitor.application.domain.BusinessEmulation;
 import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.Method;
@@ -22,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,19 +68,19 @@ public class ApplicationManagerController {
 
     /**
      * 新增一个应用.
-     */
+     *//*
     @Post("add")
     public String saveApplication(@Validation(errorPath = "a:errorcreate") Application application, Invocation inv) {
         //获得当前用户
         application.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
         //测试时固定CreatorId
-        /*application.setCreatorId("4028921a3cfb99be013cfb9ccf650000");*/
+        *//*application.setCreatorId("4028921a3cfb99be013cfb9ccf650000");*//*
         application.setCreateTime(new Date());
         application.setStatus(String.valueOf('1'));
         applicationService.saveApplication(application);
         //页面所在路径application/manager/@应用性能页面
         return "a:/appperformance";
-    }
+    }*/
 
     /**
      * 应用性能.
@@ -113,6 +113,8 @@ public class ApplicationManagerController {
         //更新时间使用sysdate
         applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
                 application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());
+        BusinessEmulation businessEmulation=new BusinessEmulation();
+        businessEmulation.restart();
         //应用列表页面
         return "r:/application/manager/appmanager/applist";
     }
@@ -123,6 +125,8 @@ public class ApplicationManagerController {
     @Get("delete/{id}")
     public String deleteApplication(@Param("id") String id, Invocation inv) {
         applicationService.deleteApplication(id);
+        BusinessEmulation businessEmulation=new BusinessEmulation();
+        businessEmulation.restart();
         //应用列表页面
         return "r:/application/manager/appmanager/applist";
     }

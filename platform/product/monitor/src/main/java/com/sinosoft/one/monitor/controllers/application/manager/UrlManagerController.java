@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.controllers.application.manager;
 
 import com.sinosoft.one.monitor.application.domain.BizScenarioService;
+import com.sinosoft.one.monitor.application.domain.BusinessEmulation;
 import com.sinosoft.one.monitor.application.domain.UrlService;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.EumUrl;
@@ -100,6 +101,7 @@ public class UrlManagerController {
         BizScenario bizScenario = bizScenarioService.findBizScenario(bizScenarioId);
         List<Url> urls=urlService.findAllUrl();
         EumUrl eumUrl=new EumUrl();
+        eumUrl.setUrlId(url.getId());
         eumUrl.setUrl(url.getUrl());
         eumUrl.setApplication(bizScenario.getApplication());
         if(urls.size()>0){
@@ -111,6 +113,8 @@ public class UrlManagerController {
                     //向EUM_URL表中插入记录（url的application信息）
                     eumUrl.setRecordTime(new Date());
                     eumUrlRepository.save(eumUrl);
+                    BusinessEmulation businessEmulation=new BusinessEmulation();
+                    businessEmulation.restart();
                     if(null!=resourcesService.getResource(url.getId())){
                         return "managerUrl";
                     }
@@ -208,6 +212,8 @@ public class UrlManagerController {
                             @Param("urlId") String urlId, Invocation inv) {
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
+        BusinessEmulation businessEmulation=new BusinessEmulation();
+        businessEmulation.restart();
         //Url列表页面
         return "managerUrl";
     }
@@ -225,6 +231,8 @@ public class UrlManagerController {
         urlService.deleteUrlAndMethod(urlId);
         //删除GE_MONITOR_URL的记录
         urlService.deleteUrl(urlId);
+        BusinessEmulation businessEmulation=new BusinessEmulation();
+        businessEmulation.restart();
         //url列表页面
         return "managerUrl";
     }
@@ -243,6 +251,8 @@ public class UrlManagerController {
         urlService.batchDeleteUrlAndMethod(urlIds);
         //删除GE_MONITOR_URL的记录
         urlService.batchDeleteUrl(urlIds);
+        BusinessEmulation businessEmulation=new BusinessEmulation();
+        businessEmulation.restart();
         //url列表页面
         return "managerUrl";
     }
