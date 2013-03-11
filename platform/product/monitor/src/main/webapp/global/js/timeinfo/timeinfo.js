@@ -7,14 +7,14 @@ $(document).ready(function() {
     });
 
     $("#list_table").Grid({
-        url : ctx + "/application/manager/url/tracelog/" + urlId,
+        url : ctx + "/application/manager/url/methodresponsetime/" + applicationId + "/" + urlId,
         dataType: "json",
         height: 'auto',
         colums:[
             {id:'1',text:'方法名称',name:"methodName",width:'400',index:'1',align:'center',color:''},
-            {id:'2',text:'最大响应时间',name:"maxTime",width:'',index:'1',align:'center',color:''},
-            {id:'3',text:'最小响应时间',name:"minTime",width:'',index:'1',align:'center',color:''},
-            {id:'4',text:'平均响应时间',name:"avgTime",width:'',index:'1',align:'center',color:''}
+            {id:'2',text:'最大响应时间(ms)',name:"maxTime",width:'',index:'1',align:'center',color:''},
+            {id:'3',text:'最小响应时间(ms)',name:"minTime",width:'',index:'1',align:'center',color:''},
+            {id:'4',text:'平均响应时间(ms)',name:"avgTime",width:'',index:'1',align:'center',color:''}
         ],
         rowNum:10,
         rowList:[10,20,30],
@@ -24,7 +24,7 @@ $(document).ready(function() {
     });
 
     $("#event_log_grid").Grid({
-        url : ctx + "/application/manager/url/methodresponsetime/" + applicationId + "/" + urlId,
+        url : ctx + "/application/manager/url/tracelog/" + urlId,
         dataType: "json",
         height: 'auto',
         colums:[
@@ -128,10 +128,15 @@ function initUrlCountSta() {
 
             for(var i= 0, len=times.length; i<len; i++) {
                 var time = times[i];
-                responseTimeArray.push(urlResponseTimes[time]);
-                visitNumberArray.push(urlVisitNumbers[time]);
-            }
+                var responseTime = urlResponseTimes[time];
+                responseTime = (responseTime) ? responseTime : 0;
 
+                responseTimeArray.push(responseTime);
+
+                var visitNumber = urlVisitNumbers[time];
+                visitNumber = (visitNumber) ? visitNumber : 0;
+                visitNumberArray.push(visitNumber);
+            }
             createResponseTimeChart(times, responseTimeArray);
             createVisitNumberChart(times, visitNumberArray);
 
@@ -143,7 +148,7 @@ function initUrlCountSta() {
     });
 }
 
-function createResponseTimeChart(times, data) {
+function createVisitNumberChart(times, data) {
     responseTimeChart = new Highcharts.Chart({
         chart: {
             renderTo: 'time_times',
@@ -166,7 +171,9 @@ function createResponseTimeChart(times, data) {
                 value: 0,
                 width: 1,
                 color: '#808080'
-            }]
+            }],
+            min : 0,
+            tickInterval:100
         },
         plotOptions:{
             line:{              // 数据点的点击事件
@@ -198,7 +205,7 @@ function createResponseTimeChart(times, data) {
     });
 }
 
-function createVisitNumberChart(times, data) {
+function createResponseTimeChart(times, data) {
     visitNumberChart = new Highcharts.Chart({
         chart: {
             renderTo: 'time_response_time',
@@ -207,7 +214,7 @@ function createVisitNumberChart(times, data) {
             marginBottom: 25
         },
         title: {
-            text: 'URL响应时',
+            text: 'URL响应时间',
             x: -20 //center
         },
         xAxis: {
@@ -221,7 +228,9 @@ function createVisitNumberChart(times, data) {
                 value: 0,
                 width: 1,
                 color: '#808080'
-            }]
+            }],
+            min : 0,
+            tickInterval:100
         },
         plotOptions:{
             line:{              // 数据点的点击事件
@@ -251,4 +260,8 @@ function createVisitNumberChart(times, data) {
             data: data
         }]
     });
+}
+
+function operateDetail(id) {
+    location.href = ctx + "/application/manager/method/appmethod/viewLogDetail/";
 }

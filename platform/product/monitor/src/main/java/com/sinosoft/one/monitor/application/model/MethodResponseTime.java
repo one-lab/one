@@ -25,8 +25,11 @@ public class MethodResponseTime {
 	private Long totalResponseTime = 0l;
 	private Integer totalCount = 0;
 
+	private long avgResponseTime = 0l;
+
 	private Date recordTime;
 	private String applicationId;
+	private String methodId;
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
@@ -77,8 +80,12 @@ public class MethodResponseTime {
 
 	@Transient
 	public long getAvgResponseTime() {
-		return BigDecimal.valueOf(totalCount)
-				.divide(BigDecimal.valueOf(totalCount), 0, RoundingMode.HALF_UP).longValue();
+		return BigDecimal.valueOf(totalResponseTime)
+				.divide(BigDecimal.valueOf(totalCount == 0 ? 1 : totalCount), 0, RoundingMode.HALF_UP).longValue();
+	}
+
+	public void setAvgResponseTime(long avgResponseTime) {
+		this.avgResponseTime = avgResponseTime;
 	}
 
 	@Column(name = "RECORD_TIME")
@@ -115,6 +122,15 @@ public class MethodResponseTime {
 
 	public void setTotalCount(Integer totalCount) {
 		this.totalCount = totalCount;
+	}
+
+	@Column(name = "METHOD_ID")
+	public String getMethodId() {
+		return methodId;
+	}
+
+	public void setMethodId(String methodId) {
+		this.methodId = methodId;
 	}
 
 	public void increaseTotalCount() {
