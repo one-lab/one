@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.common;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import org.joda.time.DateTimeFieldType;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,8 @@ public class HealthStaService {
 	 * @return 健康度Map
 	 */
 	public Map<Integer, SeverityLevel> healthStaForHours(String monitorId, String subResourceType, String subResourceId, int hours) {
-		LocalDateTime localDateTime = LocalDateTime.now();
+		LocalDateTime localDateTime = LocalDateTime.now().withField(DateTimeFieldType.minuteOfHour(), 0)
+				.withField(DateTimeFieldType.secondOfMinute(), 0).withField(DateTimeFieldType.millisOfSecond(), 0);
 		Date startDate =  localDateTime.minusHours(hours).toDate();
 		Date endDate = localDateTime.toDate();
 		List<HealthStaForTime> healthStaForTimeList = alarmRepository.selectHealthStaForHour(monitorId, startDate, endDate);

@@ -26,6 +26,20 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
             "right join GE_MONITOR_BIZ_SCENARIO c on b.BIZ_SCENARIO_ID in (?1))")
     List<Url> selectAllUrlsWithBizScenarioIds(List<String> bizScenarioIds);
 
+	@SQL("select distinct u.*\n" +
+			"  from ge_monitor_application       a,\n" +
+			"       ge_monitor_biz_scenario      bs,\n" +
+			"       ge_monitor_biz_scenario_url  bsu,\n" +
+			"       ge_monitor_url               u\n" +
+			" where a.id = bs.application_id\n" +
+			"   and bs.id = bsu.biz_scenario_id\n" +
+			"   and bsu.url_id = u.id\n" +
+			"   and a.id = ?1\n" +
+			"   and a.status = '1'\n" +
+			"   and bs.status = '1'\n" +
+			"   and u.status = '1'")
+	List<Url> selectAllUrlsWithApplicationId(String applicationId);
+
     @SQL("select * from GE_MONITOR_METHOD a where a.id in (select b.METHOD_ID from GE_MONITOR_URL_METHOD b " +
             "right join GE_MONITOR_URL c on b.URL_ID=:urlId)")
     List<Method> selectAllMethodsWithUrlId(@Param("urlId") String urlId);
