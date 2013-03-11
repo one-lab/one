@@ -43,8 +43,6 @@ $(function(){
 			success : function(data){
 			var normalTime = data.usable;
 			var errorTime = data.unusable;
-			alert(errorTime);
-			alert(normalTime);
 			   new Highcharts.Chart({
 		            chart: {
 		                renderTo: 'available',

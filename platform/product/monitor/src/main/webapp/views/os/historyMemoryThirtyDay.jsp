@@ -18,8 +18,7 @@
 		<script type="text/javascript">
 		$(function(){
 			var id= $("#osid").val();
-			alert(id);
-			creatSimpleChart('${ctx}/os/historyMemStatiLine/7/'+id, 'last_sevenday', '内存利用率%');
+			creatSimpleChart('${ctx}/os/historyMemStatiLine/30/'+id, 'last_sevenday', '内存利用率%');
 		
 			$("#sevenday_grid").Grid({
 				type : "post",

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.monitor.db.oracle.domain.StaTimeEnum;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
-import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;

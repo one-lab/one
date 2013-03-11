@@ -21,7 +21,6 @@
 <script type="text/javascript">
 	$(function() {
 		var id = $("#osid").val();
-		alert(id);
 		creatSimpleChart('${ctx}/os/historyDiskStatiLine/30/' + id,
 				'last_sevenday', '总的磁盘利用率%');
 

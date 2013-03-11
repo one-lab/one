@@ -24,7 +24,6 @@
 		
 		$(function(){
 			var id= $("#osid").val();
-			alert(id);
 			creatSimpleChart('${ctx}/os/historyMemStatiLine/7/'+id, 'last_sevenday', '内存利用率%');
 		
 			$("#sevenday_grid").Grid({

@@ -596,8 +596,6 @@ function hideNav(e) {
 	$(document).unbind();
 }
 function viewWindow(e, url) {
-	alert(url);
-	alert(osid);
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
 	var name = rows.children("td").eq(1).text();

@@ -210,22 +210,18 @@ function systemMonitorTable(url) {
 
 function healthChange(ele) {
 	if ($(ele).val() == '24') {
-		alert(24);
 		healthGrid("/monitor/os/healthList/24");
 	}
 	if ($(ele).val() == '30') {
-		alert(30);
 		healthGrid("/monitor/os/healthList/30");
 	}
 }
 //点击可用性下拉
 function availableChange(ele) {
 	if ($(ele).val() == '24') {
-		alert(24)
 		systemMonitorTable("/monitor/os/systemMonitorTable/24");
 	}
 	if ($(ele).val() == '30') {
-		alert(30)
 		availableList("/monitor/os/systemMonitorTable/30");
 	}
 }
