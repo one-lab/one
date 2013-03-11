@@ -81,7 +81,7 @@ public class BusinessEmulation {
     private void recordEnum(EumUrl url, boolean result, BigDecimal interval){
 	    if(!result) {
 		    alarmMessageBuilder.newMessageBase(url.getApplication().getId())
-				    .alarmSource(AlarmSource.EUMURL)
+				    .alarmSource(AlarmSource.EUM)
 				    .addAlarmAttribute(AttributeName.Availability, "0")
 		            .subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
 		            .subResourceId(url.getUrlId()).alarm();

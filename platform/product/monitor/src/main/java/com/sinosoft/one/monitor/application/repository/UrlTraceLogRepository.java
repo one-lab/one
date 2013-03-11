@@ -11,7 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Date;
 
 public interface UrlTraceLogRepository extends PagingAndSortingRepository<UrlTraceLog, String> {
-	@SQL("select l.id, l.user_id, l.record_time, a.severity, i.id from ge_monitor_url_trace_log l, ge_monitor_alarm a, ge_monitor_exception_info i\n" +
+	@SQL("select l.id, l.user_id, l.record_time, a.severity, i.id as exceptionId from ge_monitor_url_trace_log l, ge_monitor_alarm a, ge_monitor_exception_info i\n" +
 			"where l.alarm_id=a.id(+) and l.id=i.url_trace_log_id(+) and l.url_id=?2 AND l.record_time BETWEEN ?3 AND ?4 ORDER BY l.record_time DESC")
 	Page<UrlTraceLogViewModel> selectUrlTraceLogs(Pageable pageable, String urlId, Date startDate, Date endDate);
 }

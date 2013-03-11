@@ -43,10 +43,11 @@ public class OracleInfoServiceImpl implements OracleInfoService {
     private AlarmRepository alarmRepository;
     @Autowired
     private ResourcesRepository resourcesRepository;
-
+    @Autowired
+    private DBUtil4Monitor dbUtil4Monitor ;
     @Override
     @Transactional
-    public void saveMonitor(Info info) {
+    public void saveMonitor(Info info) throws Exception{
 
         //插入version,startTime;
         String ip = info.getIpAddress();
@@ -141,8 +142,14 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         Long nextExecTime = lastExecTime.getTime() + pullIntervalMillis;
         oracleInfoModel.setNextExecTime(sdf.format(nextExecTime));
         oracleInfoModel.setMonitorName(info.getName());
+        
+        dbUtil4Monitor.changeConnection(monitorId);
+        String sql = OracleMonitorSql.osName;
+        List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
+        Map<String, String> rsObj = rsList.get(0);
+        String platformName = rsObj.get("platform_name");
         //*操作系统信息，暂时不获取
-        //oracleInfoModel.setOs();
+        oracleInfoModel.setOs(platformName);
         oracleInfoModel.setPort(info.getPort());
         //执行SQL语句查询
         oracleInfoModel.setStartTime(info.getStartTime());

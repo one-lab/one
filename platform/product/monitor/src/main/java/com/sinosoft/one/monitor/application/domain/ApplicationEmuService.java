@@ -36,6 +36,8 @@ import com.sinosoft.one.monitor.utils.AvailableCalculate;
 @Service
 public class ApplicationEmuService {
 
+
+
     @Autowired
     private EumUrlRepository eumUrlRepository;
 
@@ -221,15 +223,12 @@ public class ApplicationEmuService {
     }
 
 
-
-
-
     public void saveEnumUrlAvailableStatistics(String eumUrlId,boolean result,BigDecimal interval) {
         Assert.hasText(eumUrlId);
         Assert.notNull(interval);
         EumUrlAvaSta eumUrlAvaSta = getTodayEumUrlStatistics(eumUrlId);
-        List<AvailableCalculate.AvailableCountsGroupByInterval> avaCount = eumUrlAvaRepository.countsGroupByIntervalAndRecordTimeAfterParamDate(eumUrlId,"1",LocalDate.now().toDate());
-        List<AvailableCalculate.AvailableCountsGroupByInterval> unAvaCount = eumUrlAvaRepository.countsGroupByIntervalAndRecordTimeAfterParamDate(eumUrlId,"0",LocalDate.now().toDate());
+        List<AvailableCalculate.AvailableCountsGroupByInterval> avaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"1");
+        List<AvailableCalculate.AvailableCountsGroupByInterval> unAvaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"0");
 
         EumUrlAva eumAvaLast = getTodayLatestEumUrlAva(eumUrlId);
 

@@ -82,30 +82,7 @@
                                         <tr>
                                             <td >
                                                 <ul class="bar" id="availabilityBar">
-                                                    <li class="show_bar">
-                                                        <div class="ky"></div>
-                                                        <div class="bky"></div>
-                                                    </li>
-                                                    <li class="show_bar">
-                                                        <div class="ky"></div>
-                                                        <div class="bky"></div>
-                                                    </li>
-                                                    <li class="show_bar">
-                                                        <div class="ky"></div>
-                                                        <div class="wran"></div>
-                                                    </li>
-                                                    <li class="show_bar">
-                                                        <div class="ky"></div>
-                                                        <div class="bky"></div>
-                                                    </li>
-                                                    <li class="show_bar">
-                                                        <div class="ky"></div>
-                                                        <div class="bky"></div>
-                                                    </li>
-                                                    <li class="show_bar">
-                                                        <div class="ky"></div>
-                                                        <div class="bky"></div>
-                                                    </li>
+
                                                 </ul>
 
                                             </td>
@@ -113,18 +90,13 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <img  src="images/timeinfo/ruler.jpg" />
+                                                <img  src="${ctx}/global/images/timeinfo/ruler.jpg" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <ul class="show_time" id="availabilityTime">
-                                                    <li>00:00</li>
-                                                    <li>01:00</li>
-                                                    <li>02:00</li>
-                                                    <li>03:00</li>
-                                                    <li>04:00</li>
-                                                    <li>05:00</li>
+
                                                 </ul>
                                             </td>
                                         </tr>
@@ -147,20 +119,10 @@
                                             <td colspan="6" style="font-size:15px; font-weight:bold;">过去6小时的健康性</td>
                                         </tr>
                                         <tr class="show_mark_time" id="healthTime">
-                                            <td><b>00:00</b></td>
-                                            <td><b>01:00</b></td>
-                                            <td><b>02:00</b></td>
-                                            <td><b>03:00</b></td>
-                                            <td><b>04:00</b></td>
-                                            <td><b>05:00</b></td>
+
                                         </tr>
                                         <tr id="healthBar">
-                                            <td ><div class="unknow mark_show"></div></td>
-                                            <td><a href="#"><div class="normal mark_show"></div></a></td>
-                                            <td><a href="#"><div class="warning mark_show"></div></a></td>
-                                            <td><a href="#"><div class="serious mark_show"></div></a></td>
-                                            <td><a href="#"><div class="normal mark_show"></div></a></td>
-                                            <td><a href="#"><div class="normal mark_show"></div></a></td>
+
                                         </tr>
                                         <tr>
                                             <td colspan="6" class="mark_info">

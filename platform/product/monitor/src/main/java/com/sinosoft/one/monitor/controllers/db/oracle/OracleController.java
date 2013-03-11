@@ -1,7 +1,6 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,12 +71,6 @@ public class OracleController {
 
         OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
         
-        EventInfoModel[] eventInfoModels = oraclePreviewService.viewConnectInfo(monitorId);
-//        EventInfoModel eventInfoModel = new EventInfoModel();
-//        if(eventInfoModel!=null&&eventInfoModels.length>0){
-//        	eventInfoModel = eventInfoModels[eventInfoModels.length-1];
-//        }
-//        inv.addModel(value)
         inv.addModel("oracleDetailModel", oracleDetailModel);
 		inv.addModel("oracleInfoModel", oracleInfoModel);
         inv.addModel("sgaStateModel", sgaStateModel);
@@ -373,9 +366,9 @@ public class OracleController {
 		HighchartSerie highchartSerie2 = new HighchartSerie("数据字典命中率");
 		HighchartSerie highchartSerie3 = new HighchartSerie("缓存库命中率");
 		for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
-			highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate()));
-			highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate()));
-			highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate()));
+			highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100);
+			highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate())*100);
+			highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate())*100);
 			highchart.addCategory(oracleSGAHitRate.getRecordTime());
 		}
 		highchart.addSerie(highchartSerie1);
@@ -383,11 +376,5 @@ public class OracleController {
 		highchart.addSerie(highchartSerie3);
 		return Replys.with(highchart).as(Json.class);
 	}
-	
-	private BigDecimal bigdecimalUtils(String target,int length,RoundingMode rm){
-		BigDecimal bd = new BigDecimal(target);
-		bd.setScale(length, rm.CEILING);
-		return bd;
-	}
-	
+
 }

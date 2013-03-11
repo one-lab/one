@@ -96,8 +96,7 @@ public class ApplicationUrlService {
 		// 获得最近6小时健康度
 		LocalDateTime localDateTime = LocalDateTime.now();
 
-		List<String> times = new ArrayList<String>();
-		for(int i=6; i>=1; i++) {
+		for(int i=6; i>=1; i--) {
 			applicationUrlHealthAvaViewModel.addTime(localDateTime.minusHours(i).toString("HH") + ":00");
 		}
 		Map<Integer, SeverityLevel> severityLevelMap = healthStaService.healthStaForHours(applicationId, ResourceType.APPLICATION_SCENARIO_URL.name(),
@@ -129,8 +128,8 @@ public class ApplicationUrlService {
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Date endDate = localDateTime.toDate();
 		Date startDate = localDateTime.minusHours(6).toDate();
-		List<String> times = new ArrayList<String>();
-		for(int i=6; i>=1; i++) {
+
+		for(int i=6; i>=1; i--) {
 			applicationUrlCountViewModel.addTime(localDateTime.minusHours(i).toString("HH") + ":00");
 		}
 

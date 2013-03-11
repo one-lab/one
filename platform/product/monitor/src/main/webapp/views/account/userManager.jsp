@@ -3,17 +3,17 @@
 <c:set var="ctx" value="<%=request.getContextPath()%>"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<title>用户管理</title>
-<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+<title>查看预警配置文件</title>
+<link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx}/static/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/static/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/static/js/sinosoft.grid.js"></script>
+<script language="javascript" src="${ctx}/static/js/sinosoft.window.js"></script>
+<script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
