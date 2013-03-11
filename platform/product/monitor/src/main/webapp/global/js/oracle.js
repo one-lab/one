@@ -20,9 +20,6 @@ function refresheSGA(msg) {
          },
          xAxis:{
              categories: msg.categories,
-             labels: { 
-            	 step:3
-			 } 
          },
          yAxis:{
              title:{
@@ -71,7 +68,7 @@ function refreshChart2(_xAxis, _series, _rederTo, _yName,_text,_unit) {
             text:_text  ,
             x:-20 
         },
-        xAxis:_xAxis,
+        xAxis:_xAxis ,
         yAxis:{
             title:{
                 text:_yName
@@ -132,7 +129,7 @@ function refreshSgaPie(_data) {
         },
         tooltip:{
             formatter:function () {
-                return '<b>' + this.point.name + '</b>: ' + this.y.toFixed(6) + 'MB';
+                return '<b>' + this.point.name + '</b>: ' + this.y + 'MB';
             }
         },
         plotOptions:{
@@ -142,7 +139,7 @@ function refreshSgaPie(_data) {
                 dataLabels:{
                     enabled:true,
                     formatter:function () {
-                        return this.y.toFixed(6) + ' MB';
+                        return this.y + ' MB';
                     }
                 },
                 showInLegend:true
