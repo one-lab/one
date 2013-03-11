@@ -196,89 +196,9 @@ function refresh() {
 
 		}
 	});
-	// cpu及内存使用率图表（完成）
-	$.ajax({
-		type : "post",
-		url : "/monitor/os/getCpuAndRam/" + osid,
-		dataType : "json",
-		cache : false,
-		success : function(data) {
-			var series = [];
-			for ( var name in data) {
-				var categories = [];
-				var i = 0, x = [], y = {
-					data : []
-				};
-				while (i < data[name].length) {
-					if (i == 0) {
-						if (name == "CPU") {
-							y.name = 'CPU利用率';
-						}
-						if (name == "MEM") {
-							y.name = '物理内存利用率';
-
-						}
-						if (name == "SWAP") {
-							y.name = '交换内存利用率';
-
-						}
-					}
-					categories.push(data[name][i].x);
-					if (data[name][i].y == -1) {
-						data[name][i].y = null;
-					}
-					y.data.push(data[name][i].y);
-					i += 1;
-				}
-				series.push(y);
-			}
-
-			var options = {
-				chart : {
-					renderTo : 'CPU_line',
-					type : 'line',
-					height : 300
-				},
-				title : {
-					text : ''
-				},
-				subtitle : {
-					text : ''
-				},
-				xAxis : {
-					categories : categories
-				},
-				yAxis : {
-					title : {
-						text : '值%'
-					}
-
-				},
-				tooltip : {
-					formatter : function() {
-						return '<b>' + this.series.name + '</b><br/>' + this.x
-								+ ': ' + this.y;
-					}
-				},
-				plotOptions : {
-					line : {
-						dataLabels : {
-							enabled : true
-						},
-						marker : {
-							enabled : false
-						}
-					}
-				},
-				credits : {
-					text : '',
-					href : ''
-				},
-				series : series
-			}
-			new Highcharts.Chart(options);
-		}
-	});
+	creatSimpleChart("/monitor/os/getCpuAndRam/" + osid, 'CPU_line', 'CPU内存利用率%');
+	creatSimpleChart("/monitor/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%');
+	
 	// 分解cpu利用率图表（完成）
 	$.ajax({
 		type : "post",

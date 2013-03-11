@@ -94,7 +94,7 @@
                     </tr>
                     <tr>
                         <td width="25%">显示名称<span class="mandatory">*</span></td>
-                        <td><input name="os.name" type="text" class="formtext"
+                        <td><input id="name"  name="os.name" type="text" class="formtext"
                                    value="${os.name }"/></td>
                     </tr>
                     <tr>
@@ -109,8 +109,8 @@
                     </tr>
                     <tr>
                         <td>OS类型<span class="mandatory">*</span></td>
-                        <td><select name="os.type" class="diySelect" style="width: 100px">
-                            <option value="addLinux.html">Linux</option>
+                        <td><select id="type" name="os.type" class="diySelect" style="width: 100px">
+                            <option >Linux</option>
                         </select></td>
                     </tr>
                     <tr>

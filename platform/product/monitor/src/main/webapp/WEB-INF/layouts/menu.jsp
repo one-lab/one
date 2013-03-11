@@ -10,7 +10,7 @@
                     <ul class="add_sub_menu" id="subNav">
                         <li class="action"><span class="sever">操作系统</span>
                             <ul class="list">
-                                <li><a href="systemMonitor.html"> Linux(2)</a></li>
+                                <li><a href="${ctx }/os/toSystemMonitor">Linux</a></li>
                             </ul>
                         </li>
                         <li class="action"><span class="system">应用系统</span>

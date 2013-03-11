@@ -9,15 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sinosoft.one.data.jade.parsers.sqljep.function.ToNumber;
+import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
-import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 @Component
 public class OsCpuViewHandle {
@@ -52,77 +53,19 @@ public class OsCpuViewHandle {
 	 * @param interCycle
 	 * @param timespan
 	 */
-	public Map<String,List<Map<String, Object>>> creatCpuLineData(List<Os>Oss,Date currentTime,int interCycle,int timespan){
-		Map<String,List<Map<String, Object>>> osCpuUiliZation =new HashMap<String,List<Map<String, Object>>>();
+	public Map<String,List<List<?>>> creatCpuLineData(List<Os>Oss,Date currentTime,int interCycle,int timespan){
+		Map<String,List<List<?>>> osCpuUiliZation =new HashMap<String,List<List<?>>>();
 		for (Os os : Oss) {
-			Calendar c  = Calendar.getInstance();
-			c.setTime(currentTime);
-			c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-			Date havePoint= c.getTime();//有值的点
-			long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
-			SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-			Date date=new Date();
-			List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-			Map<String, Object> m=new HashMap<String, Object>();
-//			OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
-//			if (osCpu!=null) {
-//				m.put("y",Double.valueOf(osCpu.getUtiliZation()));
-//			}else {
-//				m.put("y",-1);
-//			}
-//			m.put("x", simpleDateFormat.format(havePoint));
-//			maps.add(m);//第一次取之前5分钟内最大的值
-			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
-//			for (int i = 0; i < osCpus.size(); i++) {
-//				if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
-//					int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
-//					for (int j = 0; j < ptime; j++) {
-//						Map<String, Object> map=new HashMap<String, Object>();
-//						Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-//						map.put("y",-1);
-//						map.put("x", simpleDateFormat.format(nullpoint));
-//						maps.add(map);//当前这个点的值
-//						havePoint=nullpoint;
-//					}
-//					Map<String, Object> map=new HashMap<String, Object>();
-//					havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-//					map.put("x", simpleDateFormat.format(havePoint));
-//					map.put("y",Double.valueOf(osCpus.get(i).getUtiliZation()));
-//					maps.add(map);
-//				}else{
-//					if(osCpus.get(i).getSampleDate().getTime()<date.getTime()&&maps.size()>1){
-//						Map<String, Object> map=new HashMap<String, Object>();
-//						map.put("y",Double.valueOf(osCpus.get(i).getUtiliZation()));
-//						map.put("x", simpleDateFormat.format(havePoint));
-//						maps.set(maps.size()-1, map);//覆盖上次的点
-//						continue;
-//					} 
-//					Map<String, Object> map=new HashMap<String, Object>();
-//					havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-//					map.put("y",Double.valueOf(osCpus.get(i).getUtiliZation()));
-//					map.put("x", simpleDateFormat.format(havePoint));
-//					maps.add(map);//本次的点
-//				}
-//				date=osCpus.get(i).getSampleDate();
-//				
-//			}
-//			int mapsSize=maps.size();
-//			if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-//				for (int i = 0; i < aveTime-mapsSize+1; i++) {
-//					Map<String, Object> map=new HashMap<String, Object>();
-//					havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-//					map.put("y",-1);
-//					map.put("x", simpleDateFormat.format(havePoint));
-//					maps.add(map);
-//				}
-//			}
-			for (int i = 0; i < osCpus.size(); i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",Double.valueOf(osCpus.get(i).getUtiliZation()));
-				map.put("x", simpleDateFormat.format(osCpus.get(i).getSampleDate()));
-				maps.add(map);//当前这个点的值
+			List<List<?>> data=new ArrayList<List<?>>();
+			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+			for (OsCpu osCpu:osCpus) {
+				 DateTime date= new DateTime(osCpu.getSampleDate());
+				 System.out.println("-------------------="+date.toString());
+				Long time = date.getMillis();
+				Double utiliZation = Double.parseDouble(osCpu.getUtiliZation());
+				data.add(Lists.newArrayList(time,utiliZation));
 			}
-			osCpuUiliZation.put(os.getName(), maps);
+			osCpuUiliZation.put(os.getName(), data);
 		}
 		return osCpuUiliZation;
 	}
@@ -135,69 +78,17 @@ public class OsCpuViewHandle {
 	 * @param timespan 小时数 
 	 * @return
 	 */
-	public List<Map<String, Object>> creatOneCpuUsedLineData(Os os,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date havePoint= c.getTime();//有值的点
-		long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date date=new Date();
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
-		if (osCpu!=null) {
-			m.put("y",Double.valueOf(osCpu.getUtiliZation()));
-		}else {
-			m.put("y",-1);
-		}
-		m.put("x", simpleDateFormat.format(havePoint));
-		maps.add(m);//第一次取之前5分钟内最大的值
-		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
-		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
-				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(nullpoint));
-					maps.add(map);
-					havePoint=nullpoint;
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-				map.put("x", simpleDateFormat.format(havePoint));
-				map.put("y",Double.valueOf(osCpus.get(i).getUtiliZation()));
-				maps.add(map);
-			}else{
-				if(osCpus.get(i).getSampleDate().getTime()<date.getTime()&&maps.size()>1){
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",Double.valueOf(osCpus.get(i).getUtiliZation()));
-					map.put("x", simpleDateFormat.format(havePoint));
-					maps.set(maps.size()-1, map);//覆盖上次的点
-					continue;
-				} 
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",Double.valueOf(osCpus.get(i).getUtiliZation()));
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);
+	public List<List<?>>  creatOneCpuUsedLineData(Os os,Date currentTime,int interCycle,int timespan){
+			List<List<?>> data=new ArrayList<List<?>>();
+			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+			for (OsCpu osCpu:osCpus) {
+				 DateTime date= new DateTime(osCpu.getSampleDate());
+				Long time = date.getMillis();
+				Double utiliZation = Double.parseDouble(osCpu.getUtiliZation());
+				data.add(Lists.newArrayList(time,utiliZation));
 			}
-			date=osCpus.get(i).getSampleDate();
-			
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize+1; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);
-			}
-		}
-		return maps;
+			 
+		return data;
 	}
 	
 	/**
@@ -208,69 +99,15 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<Map<String, Object>> creatOneCpuUserTimeLine(Os os,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date havePoint= c.getTime();//有值的点
-		long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date date=new Date();
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
-		if (osCpu!=null) {
-			m.put("y",Double.valueOf(osCpu.getUserTime()));
-		}else {
-			m.put("y",-1);
+	public List<List<?>> creatOneCpuUserTimeLine(Os os,Date currentTime,int interCycle,int timespan ,List<OsCpu> osCpus){
+		List<List<?>> data=new ArrayList<List<?>>();
+		for (OsCpu osCpu:osCpus) {
+			 DateTime date= new DateTime(osCpu.getSampleDate());
+			Long time = date.getMillis();
+			Double userTime = Double.parseDouble(osCpu.getUserTime());
+			data.add(Lists.newArrayList(time,userTime));
 		}
-		m.put("x", simpleDateFormat.format(havePoint));
-		maps.add(m);//第一次取之前5分钟内最大的值
-		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
-		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
-				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(nullpoint));
-					maps.add(map);
-					havePoint=nullpoint;
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-				map.put("x", simpleDateFormat.format(havePoint));
-				map.put("y",Double.valueOf(osCpus.get(i).getUserTime()));
-				maps.add(map);//本次点
-			}else{
-				if(osCpus.get(i).getSampleDate().getTime()<date.getTime()&&maps.size()>1){
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",Double.valueOf(osCpus.get(i).getUserTime()));
-					map.put("x", simpleDateFormat.format(havePoint));
-					maps.set(maps.size()-1, map);//覆盖上次的点
-					continue;
-				} 
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",Double.valueOf(osCpus.get(i).getUserTime()));
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);//本次点
-			}
-			date=osCpus.get(i).getSampleDate();
-			
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize+1; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);
-			}
-		}
-		return maps;
+		return data;
 	}
 	
 	/**
@@ -281,69 +118,15 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<Map<String, Object>> creatOneCpuSysTimeLine(Os os,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date havePoint= c.getTime();//有值的点
-		long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date date=new Date();
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
-		if (osCpu!=null) {
-			m.put("y",Double.valueOf(osCpu.getSysTime()));
-		}else {
-			m.put("y",-1);
+	public List<List<?>> creatOneCpuSysTimeLine(Os os,Date currentTime,int interCycle,int timespan, List<OsCpu> osCpus){
+		List<List<?>> data=new ArrayList<List<?>>();
+		for (OsCpu osCpu:osCpus) {
+			 DateTime date= new DateTime(osCpu.getSampleDate());
+			Long time = date.getMillis();
+			Double sysTime = Double.parseDouble(osCpu.getSysTime());
+			data.add(Lists.newArrayList(time,sysTime));
 		}
-		m.put("x", simpleDateFormat.format(havePoint));
-		maps.add(m);//第一次取之前5分钟内最大的值
-		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
-		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
-				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(nullpoint));
-					maps.add(map);
-					havePoint=nullpoint;
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-				map.put("x", simpleDateFormat.format(havePoint));
-				map.put("y",Double.valueOf(osCpus.get(i).getSysTime()));
-				maps.add(map);//本次点
-			}else{
-				if(osCpus.get(i).getSampleDate().getTime()<date.getTime()&&maps.size()>1){
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",Double.valueOf(osCpus.get(i).getSysTime()));
-					map.put("x", simpleDateFormat.format(havePoint));
-					maps.set(maps.size()-1, map);//覆盖上次的点
-					continue;
-				} 
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",Double.valueOf(osCpus.get(i).getSysTime()));
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);//本次点
-			}
-			date=osCpus.get(i).getSampleDate();
-			
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize+1; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);
-			}
-		}
-		return maps;
+		return data;
 	}
 	
 	/**
@@ -354,69 +137,15 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<Map<String, Object>> creatOneCpuIOLine(Os os,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date havePoint= c.getTime();//有值的点
-		long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date date=new Date();
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
-		if (osCpu!=null) {
-			m.put("y",Double.valueOf(osCpu.getIoWait()));
-		}else {
-			m.put("y",-1);
+	public List<List<?>> creatOneCpuIOLine(Os os,Date currentTime,int interCycle,int timespan,List<OsCpu> osCpus){
+		List<List<?>> data=new ArrayList<List<?>>();
+		for (OsCpu osCpu:osCpus) {
+			 DateTime date= new DateTime(osCpu.getSampleDate());
+			Long time = date.getMillis();
+			Double ioWait = Double.parseDouble(osCpu.getIoWait());
+			data.add(Lists.newArrayList(time,ioWait));
 		}
-		m.put("x", simpleDateFormat.format(havePoint));
-		maps.add(m);//第一次取之前5分钟内最大的值
-		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
-		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
-				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(nullpoint));
-					maps.add(map);
-					havePoint=nullpoint;
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-				map.put("x", simpleDateFormat.format(havePoint));
-				map.put("y",Double.valueOf(osCpus.get(i).getIoWait()));
-				maps.add(map);//本次点
-			}else{
-				if(osCpus.get(i).getSampleDate().getTime()<date.getTime()&&maps.size()>1){
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",Double.valueOf(osCpus.get(i).getIoWait()));
-					map.put("x", simpleDateFormat.format(havePoint));
-					maps.set(maps.size()-1, map);//覆盖上次的点
-					continue;
-				} 
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",Double.valueOf(osCpus.get(i).getIoWait()));
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);//本次点
-			}
-			date=osCpus.get(i).getSampleDate();
-			
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize+1; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);
-			}
-		}
-		return maps;
+		return data;
 	}
 	
 	/**
@@ -427,69 +156,15 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<Map<String, Object>> creatOneCpuIDLELine(Os os,Date currentTime,int interCycle,int timespan){
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		Date havePoint= c.getTime();//有值的点
-		long aveTime =(currentTime.getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+"");//平均时间段
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
-		Date date=new Date();
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), havePoint ,interCycle);
-		if (osCpu!=null) {
-			m.put("y",Double.valueOf(osCpu.getCpuIdle()));
-		}else {
-			m.put("y",-1);
+	public List<List<?>>  creatOneCpuIDLELine(Os os,Date currentTime,int interCycle,int timespan,List<OsCpu> osCpus){
+		List<List<?>> data=new ArrayList<List<?>>();
+		for (OsCpu osCpu:osCpus) {
+			 DateTime date= new DateTime(osCpu.getSampleDate());
+			Long time = date.getMillis();
+			Double cpuIdle = Double.parseDouble(osCpu.getCpuIdle());
+			data.add(Lists.newArrayList(time,cpuIdle));
 		}
-		m.put("x", simpleDateFormat.format(havePoint));
-		maps.add(m);//第一次取之前5分钟内最大的值
-		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), havePoint, currentTime);
-		for (int i = 0; i < osCpus.size(); i++) {
-			if(osCpus.get(i).getSampleDate().getTime()-havePoint.getTime()>interCycle*60*1000){
-				int ptime=(int) ((osCpus.get(i).getSampleDate().getTime()-havePoint.getTime())/Long.parseLong(interCycle*60*1000+""));//空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					Date nullpoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(nullpoint));
-					maps.add(map);
-					havePoint=nullpoint;
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date (havePoint.getTime()+(Long.parseLong(interCycle*60*1000+"")));
-				map.put("x", simpleDateFormat.format(havePoint));
-				map.put("y",Double.valueOf(osCpus.get(i).getCpuIdle()));
-				maps.add(map);//本次点
-			}else{
-				if(osCpus.get(i).getSampleDate().getTime()<date.getTime()&&maps.size()>1){
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",Double.valueOf(osCpus.get(i).getCpuIdle()));
-					map.put("x", simpleDateFormat.format(havePoint));
-					maps.set(maps.size()-1, map);//覆盖上次的点
-					continue;
-				} 
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",Double.valueOf(osCpus.get(i).getIoWait()));
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);//本次点
-			}
-			date=osCpus.get(i).getSampleDate();
-			
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize+1; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				havePoint=new Date(havePoint.getTime()+Long.parseLong(interCycle*60*1000+""));
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(havePoint));
-				maps.add(map);
-			}
-		}
-		return maps;
+		return data;
 	}
 	/**
 	 * 构建当前Cpu的grid
@@ -555,6 +230,11 @@ public class OsCpuViewHandle {
 		return osSwapViewModels;
 	}
 	
+	
+	public static void main(String[] args){
+		DateTime now =new DateTime(2013,3,11,17,50,04,DateTimeZone.UTC);
+		System.out.println(now.getMillis());
+	}
 	
 }
 	

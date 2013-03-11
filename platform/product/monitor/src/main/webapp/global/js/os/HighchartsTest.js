@@ -52,9 +52,14 @@ function getForm() {
 										plotLines : false
 									},
 									plotOptions : {
-										series : {
+										line : {
+											dataLabels : {
+												enabled : true
+											},
+											connectNulls : true,
+											enableMouseTracking : false,
 											marker : {
-												radius : 0
+												enabled : false
 											}
 										}
 									},

@@ -22,7 +22,7 @@
 	$(function() {
 		var id = $("#osid").val();
 		creatSimpleChart('${ctx}/os/historyDiskStatiLine/30/' + id,
-				'last_sevenday', '总的磁盘利用率%');
+				'last_sevenday', '总的磁盘利用率');
 
 		$("#sevenday_grid").Grid({
 			type : "post",
