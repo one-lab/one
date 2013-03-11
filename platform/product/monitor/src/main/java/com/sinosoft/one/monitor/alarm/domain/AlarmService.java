@@ -88,4 +88,11 @@ public class AlarmService {
 		}
 		return null;
     }
+
+    public Page<Alarm> queryLatestAlarmsByPageNo(int currentPageNumber) {
+        Sort desc = new Sort(Sort.Direction.DESC,"createTime");
+        Page<Alarm> pageRequest = (Page<Alarm>) new PageRequest(currentPageNumber,10,desc);
+        pageRequest = (Page<Alarm>) alarmRepository.findAll((Pageable) pageRequest);
+        return  pageRequest;
+    }
 }

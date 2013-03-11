@@ -231,6 +231,7 @@ public class UrlManagerController {
         urlService.deleteUrlAndMethod(urlId);
         //删除GE_MONITOR_URL的记录
         urlService.deleteUrl(urlId);
+        eumUrlRepository.delete(eumUrlRepository.findByUrlId(urlId));
         BusinessEmulation businessEmulation=new BusinessEmulation();
         businessEmulation.restart();
         //url列表页面
@@ -251,6 +252,10 @@ public class UrlManagerController {
         urlService.batchDeleteUrlAndMethod(urlIds);
         //删除GE_MONITOR_URL的记录
         urlService.batchDeleteUrl(urlIds);
+        List<EumUrl> dbEumUrls=eumUrlRepository.findAllEumUrlsWithUrlIds(urlIds);
+        for(EumUrl eumUrl:dbEumUrls){
+            eumUrlRepository.delete(eumUrl);
+        }
         BusinessEmulation businessEmulation=new BusinessEmulation();
         businessEmulation.restart();
         //url列表页面
