@@ -94,7 +94,7 @@
                     </tr>
                     <tr>
                         <td width="25%">显示名称<span class="mandatory">*</span></td>
-                        <td><input name="name" value="${oracleInfo.name}" type="text" class="formtext" /><span class="prompt">该名称已存在</span></td>
+                        <td><input name="name" value="${oracleInfo.name}" type="text" class="formtext" /></td>
                     </tr>
                     <tr>
                         <td>数据库地址<span class="mandatory">*</span></td>

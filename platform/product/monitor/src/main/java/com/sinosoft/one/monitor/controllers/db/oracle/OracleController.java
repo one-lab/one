@@ -132,9 +132,9 @@ public class OracleController {
 									  	:3
 										} 
 		 */
-		/*JSONObject jos = new JSONObject();
-		jos.put("step", 4);
-		xAxis.put("labels", jos);*/
+		JSONObject jos = new JSONObject();
+		jos.put("step", 2);
+		xAxis.put("labels", jos);
 		xAxis.put("categories", categories);
 		surr.put("data", connectData);
 		connectSeries.add(surr);
