@@ -48,9 +48,9 @@ $(function(){
 			{id:'3',text:'总空间大小(MB) ',name:"minTime",width:'',index:'1',align:'',color:''},
 			{id:'4',text:'总块数',name:"avgTime",width:'',index:'1',align:'',color:''},
 			{id:'5',text:'已使用(MB) ',name:"status",width:'',index:'1',align:'',color:''},
-            {id:'6',text:'已用百分比 ',name:"status",width:'',index:'1',align:'',color:''},
-            {id:'7',text:'未使用 ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'8',text:'可用百分比',name:"status",width:'',index:'1',align:'',color:''}
+            {id:'6',text:'已用百分比(%) ',name:"status",width:'',index:'1',align:'',color:''},
+            {id:'7',text:'未使用(MB) ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'8',text:'可用百分比(%)',name:"status",width:'',index:'1',align:'',color:''}
 		],
 		rowNum:10,
 		rowList:[10,20,30],
@@ -64,8 +64,8 @@ $(function(){
         height: 'auto',
         colums:[
             {id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
-            {id:'7',text:'未使用 ',name:"status",width:'',index:'1',align:'',color:''},
-            {id:'8',text:'可用百分比',name:"status",width:'',index:'1',align:'',color:''}
+            {id:'7',text:'未使用(MB) ',name:"status",width:'',index:'1',align:'',color:''},
+            {id:'8',text:'可用百分比(%)',name:"status",width:'',index:'1',align:'',color:''}
         ],
         rowNum:10,
         rowList:[10,20,30],
@@ -380,6 +380,7 @@ function createThirtyDayHitRate() {
             <div class="days_data">
                <a onclick="createThirtyDayUser()"><div class="thirty_days"></div></a>
             	<a onclick="createSevenDayUser()"><div class="seven_days"></div></a>
+            	<div style="clear:both"></div>
             </div>
             <div id="user_last_onehour" ></div>
           </div>

@@ -115,7 +115,7 @@ public class ApplicationManagerController {
         //更新时间使用sysdate
         applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
                 application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());
-        businessEmulation.restart();
+        businessEmulation.restart(appId);
         //应用列表页面
         return "r:/application/manager/appmanager/applist/1";
     }
@@ -126,7 +126,7 @@ public class ApplicationManagerController {
     @Get("delete/{id}")
     public String deleteApplication(@Param("id") String id, Invocation inv) {
         applicationService.deleteApplication(id);
-        businessEmulation.restart();
+        businessEmulation.restart(id);
         //应用列表页面
         return "r:/application/manager/appmanager/applist/1";
     }

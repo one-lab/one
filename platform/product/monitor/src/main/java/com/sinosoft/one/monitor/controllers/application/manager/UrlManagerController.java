@@ -10,6 +10,7 @@ import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.utils.CurrentUserUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -47,6 +48,8 @@ public class UrlManagerController {
     EumUrlRepository eumUrlRepository;
     @Autowired
     BusinessEmulation businessEmulation;
+    @Autowired
+    ResourcesRepository resourcesRepository;
 
     /**
      * 管理url页面.
@@ -103,7 +106,6 @@ public class UrlManagerController {
         BizScenario bizScenario = bizScenarioService.findBizScenario(bizScenarioId);
         List<Url> urls=urlService.findAllUrl();
         EumUrl eumUrl=new EumUrl();
-        eumUrl.setUrlId(url.getId());
         eumUrl.setUrl(url.getUrl());
         eumUrl.setApplication(bizScenario.getApplication());
         if(urls.size()>0){
@@ -111,16 +113,19 @@ public class UrlManagerController {
                 //如果新增加的url是库中已经存在的，那么只需更新此url所属的业务场景即可
                 if (dbUrl.getUrl().equals(url.getUrl())) {
                     dbUrl.setBizScenario(bizScenario);
-                    urlService.saveUrl(dbUrl);
+                    //已经关联的中间表，不用再保存URL
+                    /*urlService.saveUrl(dbUrl);*/
                     //向EUM_URL表中插入记录（url的application信息）
+                    eumUrl.setUrlId(dbUrl.getId());
                     eumUrl.setRecordTime(new Date());
                     eumUrlRepository.save(eumUrl);
-                    if(null!=resourcesService.getResource(url.getId())){
-                        businessEmulation.restart();
+                    //资源表中已经有当前的URL，那么不需要再保存
+                    if(null!=resourcesService.getResource(dbUrl.getId())){
+                        businessEmulation.restart(bizScenario.getApplication().getId());
                         return "managerUrl";
                     }
-                    saveResourceWithUrl(url);
-                    businessEmulation.restart();
+                    saveResourceWithUrl(dbUrl);
+                    businessEmulation.restart(bizScenario.getApplication().getId());
                     return "managerUrl";
                 }
             }
@@ -138,10 +143,11 @@ public class UrlManagerController {
         url.setCreateTime(new Date());
         urlService.saveUrl(url);
         //向EUM_URL表中插入记录（url的application信息）
+        eumUrl.setUrlId(url.getId());
         eumUrl.setRecordTime(new Date());
         eumUrlRepository.save(eumUrl);
         saveResourceWithUrl(url);
-        businessEmulation.restart();
+        businessEmulation.restart(bizScenario.getApplication().getId());
         return "managerUrl";
     }
 
@@ -215,6 +221,7 @@ public class UrlManagerController {
                             @Param("urlId") String urlId, Invocation inv) {
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
+        businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //Url列表页面
         return "managerUrl";
     }
@@ -232,8 +239,11 @@ public class UrlManagerController {
         urlService.deleteUrlAndMethod(urlId);
         //删除GE_MONITOR_URL的记录
         urlService.deleteUrl(urlId);
+        //删除Resources表中的记录
+        resourcesRepository.delete(resourcesRepository.findByResourceId(urlId));
+        // 删除eumUrl表中的记录
         eumUrlRepository.delete(eumUrlRepository.findByUrlId(urlId));
-        businessEmulation.restart();
+        businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "managerUrl";
     }
@@ -252,11 +262,19 @@ public class UrlManagerController {
         urlService.batchDeleteUrlAndMethod(urlIds);
         //删除GE_MONITOR_URL的记录
         urlService.batchDeleteUrl(urlIds);
+        //删除Resource表中的记录
+        List<Resource> dbResources=resourcesRepository.findAllResourcesWithUrlIds(urlIds);
+        resourcesRepository.delete(dbResources);
+        /*for(Resource resource:dbResources){
+            resourcesRepository.delete(resource);
+        }*/
+        //删除EumUrl表中的记录
         List<EumUrl> dbEumUrls=eumUrlRepository.findAllEumUrlsWithUrlIds(urlIds);
-        for(EumUrl eumUrl:dbEumUrls){
+        eumUrlRepository.delete(dbEumUrls);
+        /*for(EumUrl eumUrl:dbEumUrls){
             eumUrlRepository.delete(eumUrl);
-        }
-        businessEmulation.restart();
+        }*/
+        businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "managerUrl";
     }
