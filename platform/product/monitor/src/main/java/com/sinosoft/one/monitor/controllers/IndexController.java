@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
@@ -67,7 +68,7 @@ public class IndexController {
 			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORM_A_SUBTITLE, url, title, subTitle));
 			cell.add(alarm.getAppName());
 			cell.add(alarm.getMonitorType());
-			cell.add(alarm.getRecordTime());
+			cell.add(DateFormatUtils.format(alarm.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
 			row.put("cell", cell);
 			rows.add(row);
 		}

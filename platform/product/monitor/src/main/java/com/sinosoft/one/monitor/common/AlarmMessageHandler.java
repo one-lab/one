@@ -12,6 +12,7 @@ import com.sinosoft.one.monitor.threshold.domain.ThresholdService;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -172,6 +173,15 @@ public class AlarmMessageHandler {
 		alarm.setCreateTime(new Date());
 		alarm.setSubResourceId(thresholdAlarmParams.subResourceId);
 		alarm.setSubResourceType(thresholdAlarmParams.subResourceType);
+
+		Alarm prevAlarm = alarmService.queryLatestAlarm(thresholdAlarmParams.resource.getResourceId());
+		if(alarm.isSameAlarmInfo(prevAlarm)) {
+			if(System.currentTimeMillis() - prevAlarm.getCreateTime().getTime() < 30 * 60 * 1000) {
+				return;
+			}
+		}
+
+		// 保存告警信息
 		alarmService.saveAlarm(alarm);
 		if(thresholdAlarmParams.subResourceType != ResourceType.NONE && StringUtils.isNotBlank(thresholdAlarmParams.subResourceId)) {
 			healthStaCache.increase(thresholdAlarmParams.resource.getResourceId(), thresholdAlarmParams.subResourceId, thresholdAlarmParams.severityLevel);

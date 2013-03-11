@@ -2,11 +2,13 @@ package com.sinosoft.one.monitor.alarm.domain;
 
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -77,5 +79,13 @@ public class AlarmService {
         PageRequest pageRequest = new PageRequest(0,50,desc);
         List<Alarm>  alarms =   alarmRepository.findAll(pageRequest).getContent();
         return  fillAlarm(alarms);
+    }
+
+	public Alarm queryLatestAlarm(String monitorId) {
+		Page<Alarm> alarmPage = alarmRepository.selectAlarmsByMonitorId(new PageRequest(0, 1), monitorId);
+		if(alarmPage.hasContent()) {
+			return alarmPage.iterator().next();
+		}
+		return null;
     }
 }
