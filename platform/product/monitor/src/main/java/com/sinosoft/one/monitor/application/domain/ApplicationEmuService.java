@@ -228,10 +228,10 @@ public class ApplicationEmuService {
     public void saveEnumUrlAvailableStatistics(String eumUrlId,boolean result,BigDecimal interval) {
         Assert.hasText(eumUrlId);
         Assert.notNull(interval);
-        EumUrlAvaSta eumUrlAvaSta = getTodayEumUrlStatistics(eumUrlId);
+        Date now = LocalDate.now().toDate();
+        EumUrlAvaSta eumUrlAvaSta = getEumUrlStatisticsByEnumIdAndDate(eumUrlId,now);
         List<AvailableCalculate.AvailableCountsGroupByInterval> avaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"1");
         List<AvailableCalculate.AvailableCountsGroupByInterval> unAvaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"0");
-
         EumUrlAva eumAvaLast = getTodayLatestEumUrlAva(eumUrlId);
 
         AvailableCalculate.AvailableCalculateParam availableCalculateParam =  new AvailableCalculate.AvailableCalculateParam(
@@ -248,7 +248,7 @@ public class ApplicationEmuService {
         eumUrlAvaSta.setFailureCount(avaResult.getFalseCount());
         eumUrlAvaSta.setAvgFailureTime(avaResult.getTimeBetweenFailures());
         eumUrlAvaSta.setNormalRuntime(avaResult.getAliveTime());
-        eumUrlAvaSta.setRecordTime(new Date());
+        eumUrlAvaSta.setRecordTime(now);
         eumUrlAvaSta.setEumUrlId(eumUrlId);
 
         eumUrlAvaStaRepository.save(eumUrlAvaSta);

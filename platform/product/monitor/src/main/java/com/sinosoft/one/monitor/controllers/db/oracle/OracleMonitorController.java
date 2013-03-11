@@ -259,13 +259,14 @@ public class OracleMonitorController {
 	
 	/**
 	 * 删除操作(包含删除一个和批量删除操作)
-	 * @param monitorId
+	 * @param monitorIds
 	 * @param inv
 	 * @return
 	 */
 	@Get("remove")
 	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
-		//oracleInfoService.deleteMonitor(monitorId);
+
+		oracleInfoService.deleteMonitor(monitorIds);
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}

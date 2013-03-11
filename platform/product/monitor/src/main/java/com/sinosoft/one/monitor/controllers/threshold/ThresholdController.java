@@ -20,7 +20,7 @@ import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
 
-@Path("threshold")
+@Path("")
 public class ThresholdController {
 
 	private ThresholdService thresholdService;
@@ -53,7 +53,7 @@ public class ThresholdController {
 	@Post("save")
 	public String save(Threshold entity) {
 		thresholdService.saveEntity(entity);
-		return "r:/threshold/threshold/list";
+		return "r:/threshold/list";
 	}
 	
 	@Get("update/{id}")

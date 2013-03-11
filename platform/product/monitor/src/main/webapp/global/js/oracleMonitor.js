@@ -190,6 +190,8 @@ function batchDel(){
 }
 
 function buildHighchart(_highChart) {
+	var xData = _highChart.categories;
+	//alert(xData.length)
 	new Highcharts.Chart({
 		chart: {
 		    renderTo: _highChart.renderId,
@@ -204,9 +206,9 @@ function buildHighchart(_highChart) {
 		    x: -20 //center
 		},
 		xAxis: {
-		    categories: _highChart.categories,
+		    categories: xData,
 		    labels: { 
-           	 step:6
+           	 step:15
 			 } 
 		},
 		yAxis: {

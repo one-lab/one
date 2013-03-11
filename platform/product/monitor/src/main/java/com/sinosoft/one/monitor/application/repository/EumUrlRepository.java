@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.application.repository;
 // Generated 2013-3-4 15:45:31 by One Data Tools 1.0.0
 
+import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.application.model.EumUrl;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -11,5 +12,8 @@ public interface EumUrlRepository extends PagingAndSortingRepository<EumUrl, Str
     List<EumUrl> findByApplication_Id(String applicationId);
 
     List<EumUrl> findByUrlId(String urlId);
+
+    @SQL("select * from GE_MONITOR_EUM_URL a where a.URL_ID in (?1)")
+    List<EumUrl> findAllEumUrlsWithUrlIds(String[] urlIds);
 }
 

@@ -16,6 +16,10 @@
                 top:{topHeight:100},
                 bottom:{bottomHeight:30}
             });
+            if($.browser.msie && ($.browser.version == "7.0")){
+        		var center = $("#layout_center");
+        		$("#main").width(center.width() - 31).height(center.height() - 30);
+        	}
             $("#myDesk").height($("#layout_center").height());
             $("#nav").delegate('li', 'mouseover mouseout', navHover);
             $("#nav,#menu").delegate('li', 'click', navClick);
@@ -35,7 +39,7 @@
                 rowList:[10, 20, 30],
                 pager:true,
                 number:false,
-                multiselect:true
+                multiselect:false
             });
         });
         $(
@@ -140,7 +144,7 @@
 
 <body>
 <div id="layout_center">
-    <div class="main" style="padding-bottom:60px;">
+    <div class="main" style="padding-bottom:60px;" id="main">
         <div class="threshold_file">
             <div class="sub_title">最近30天的缓存击中率 </div>
 

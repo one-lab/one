@@ -31,7 +31,7 @@ $(function(){
 			{id:'3',text:'消息',name:"message",index:'1',align:''}
 		],  
 		rowNum:10,
-		pager : false,
+		pager : true,
 		number:false,  
 		multiselect: false  
 	});
