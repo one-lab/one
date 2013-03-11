@@ -216,6 +216,7 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     @SQL("select * from GE_MONITOR_ALARM a #if(:givenType!=''){ where a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
     Page<Alarm> findAlarmsWithGivenType(@Param("givenType") String givenType,Pageable pageable);
 
-
+    @SQL("delete from GE_MONITOR_ALARM where monitor_id in (?1)")
+    void deleteByMonitorIds(List<String> monitorId);
 }
 

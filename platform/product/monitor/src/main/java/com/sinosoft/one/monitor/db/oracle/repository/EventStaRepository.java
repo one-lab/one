@@ -22,5 +22,8 @@ public interface EventStaRepository extends PagingAndSortingRepository<EventSta,
     
     @SQL("select t.* from Ge_Monitor_Oracle_Event_Sta t where t.event_type='3' and t.database_id = ?1 and t.event_record_time = ?2")
 	EventSta findHitRateSta(String monitorId, Date inserTime);
+
+    @SQL("delete from Ge_Monitor_Oracle_Event_Sta where database_id in (?1)")
+    void deleteByMonitorIds(List<String> monitorId);
 }
 

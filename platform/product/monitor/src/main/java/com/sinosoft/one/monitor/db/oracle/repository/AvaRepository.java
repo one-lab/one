@@ -22,5 +22,7 @@ public interface AvaRepository extends PagingAndSortingRepository<Ava, String> {
 	List<AvailableCountsGroupByInterval> findUnAvCount(Date inserTime);
     @SQL("delete from GE_MONITOR_ORACLE_AVA  where record_time < ?1")
 	void clear(Date timePoint);
+    @SQL("delete from GE_MONITOR_ORACLE_AVA  where DATABASE_ID in (?1)")
+    void deleteByMonitorIds(List<String> monitorId);
 }
 
