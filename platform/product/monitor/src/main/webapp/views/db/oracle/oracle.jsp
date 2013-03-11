@@ -331,7 +331,7 @@ function createThirtyDayHitRate() {
             <div class="sub_title">基本信息</div>
             <table class="base_info" width="100%" cellpadding="0" cellspacing="0" >
               <tr><td>名称</td><td>${oracleInfoModel.monitorName }</td></tr>
-              <tr><td>健康状况</td><td>${oracleInfoModel.health[2] }</td></tr>
+              <%--<tr><td>健康状况</td><td>${oracleInfoModel.health[2] }</td></tr>--%>
               <tr><td>类型</td><td>${oracleInfoModel.monitorType }</td></tr>
               <tr><td>Oracle版本</td><td>${oracleInfoModel.version }</td></tr>
               <tr><td>Oracle启动时间</td><td>${oracleInfoModel.startTime }</td></tr>
