@@ -49,38 +49,9 @@ $(function(){
 			multiselect: false  
 		});
 	});
-	
 	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
 });
-function navHover(){
-	$(this).toggleClass("hover")
-}
-function navClick(){
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if($(this).hasClass('has_sub')){
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if($(this).parent().attr("id") == "menu"){
-			isAdd = true;
-		};
-		subMav.slideDown('fast',function(){
-			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-			return false;
-		});		
-	};
-}
-function hideNav(e){
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast',function(){
-		if(isAdd){
-			subMenu.parent().removeClass('seleck');
-		};
-	});	
-	$(document).unbind();
-}
+
 </script>
 </head>
 

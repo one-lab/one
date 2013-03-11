@@ -196,25 +196,29 @@ function buildHighchart(_highChart) {
 		    type: 'line',
 		    marginRight: 50,
 		    marginBottom: 75,
-			height:200
+			height:200,
+            width:650
 		},
 		title: {
 		    text: ' ',
 		    x: -20 //center
 		},
 		xAxis: {
-		    categories: _highChart.categories
+		    categories: _highChart.categories,
+		    labels: { 
+           	 step:6
+			 } 
 		},
 		yAxis: {
 		    title: {
-		        text: '%'
+		        text: ''
 	        },
 	        plotLines: false
 		},
 		plotOptions:{
 			series: {
                 marker: {
-                    radius: 0
+                    radius: 3
                 }
             }
 		},
@@ -222,7 +226,13 @@ function buildHighchart(_highChart) {
 		    text: '',
 		    href: ''
 		},
-		tooltip: false,
+		tooltip:{
+            enabled:true,
+            formatter:function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    this.x + ': ' + this.y;
+            }
+        },
 		legend: {
 			enabled :true
 		},

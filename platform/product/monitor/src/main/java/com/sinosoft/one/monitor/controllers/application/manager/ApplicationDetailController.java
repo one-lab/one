@@ -41,7 +41,7 @@ public class ApplicationDetailController {
 	private ApplicationEmuService applicationEmuService;
 
 	@Get("/main/{applicationId}")
-	public String applicationDetail(@Param("applicationId") String applicationId, Portal portal, Invocation invocation) {
+	public String applicationDetail(@Param("applicationId") String applicationId, Pipe pipe, Invocation invocation) {
 		invocation.addModel("applicationId", applicationId);
 		ApplicationAvailableInf applicationAvailableInf = null;
 		try {
@@ -50,8 +50,8 @@ public class ApplicationDetailController {
 
 		}
 		invocation.addModel("applicationAvailableInf", applicationAvailableInf);
-		portal.addWindow("alarm", "/application/manager/detail/alarm/" + applicationId);
-		portal.addWindow("pie", "/application/manager/detail/pie/" + applicationId);
+		pipe.addWindow("alarm", "/application/manager/detail/alarm/" + applicationId);
+		pipe.addWindow("pie", "/application/manager/detail/pie/" + applicationId);
 		return "applicationDetail";
 	}
 
@@ -94,7 +94,7 @@ public class ApplicationDetailController {
 		List<UrlResponseTime> urlResponseTimeList = applicationDetailService.queryUrlResponseTimes(applicationId);
 		Page page = new PageImpl(urlResponseTimeList);
 		Gridable<UrlResponseTime> gridable = new Gridable<UrlResponseTime>(page);
-		String cellString = "url,minResponseTime,maxResponseTime,avgResponseTime,healthBar";
+		String cellString = "urlHref,minResponseTime,maxResponseTime,avgResponseTime,healthBar";
 		gridable.setIdField("urlId");
 		gridable.setCellStringField(cellString);
 		UIUtil.with(gridable).as(UIType.Json).render(response);

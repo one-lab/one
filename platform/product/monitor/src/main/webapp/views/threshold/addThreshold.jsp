@@ -4,51 +4,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>创建新的阈值配置文件</title>
-<link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/static/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>创建新的阈值配置文件</title>
+    <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+    <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+    <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+
 <script type="text/javascript">
-$(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
-});
-function navHover(){
-	$(this).toggleClass("hover")
-}
-function navClick(){
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if($(this).hasClass('has_sub')){
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if($(this).parent().attr("id") == "menu"){
-			isAdd = true;
-		};
-		subMav.slideDown('fast',function(){
-			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-			return false;
-		});		
-	};
-}
-function hideNav(e){
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast',function(){
-		if(isAdd){
-			subMenu.parent().removeClass('seleck');
-		};
-	});	
-	$(document).unbind();
-}
+
 function save(){
 	msgSuccess("系统消息", "操作成功，监视器已保存！");
 }

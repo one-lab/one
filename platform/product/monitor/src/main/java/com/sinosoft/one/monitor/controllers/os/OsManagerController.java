@@ -13,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.monitor.db.oracle.domain.StaTimeEnum;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
-import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
-import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsHealthModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
@@ -130,7 +128,6 @@ public class OsManagerController {
 	 */
 	@Get("toSystemMonitor")
 	public String toSystemMonitor(Invocation inv) {
-
 		return "systemMonitor";
 	}
 	
@@ -230,24 +227,32 @@ public class OsManagerController {
 		String messageFormat2 = "<div class={0}></div>"; //健康状况-healthy
 		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
 		/* 查询数据库健康列表数据*/
-		Date currentDate=new Date();
-		List<Os>oss=osService.getAllOs();
-		List<OsBaseInfoModel> osBaseInfoModels =osService.getBasicInfo(oss, currentDate);
+		
+		List<OracleStaBaseInfoModel> oracleStaBaseInfos = new ArrayList<OracleStaBaseInfoModel>();
+		/**
+		 * 测试用的假数据，service写好后修改上面返回list集合即可
+		 */
+		OracleStaBaseInfoModel staBaseInfo = new OracleStaBaseInfoModel();
+		staBaseInfo.setMonitorID("test_linux");
+		staBaseInfo.setMonitorName("test_linux");
+		staBaseInfo.setUsability("1");
+		staBaseInfo.setHealthy(new String[]{"1", ""});
+		oracleStaBaseInfos.add(staBaseInfo);
+		
 		/* 循环构建表格行数据*/
-		for(OsBaseInfoModel osBaseInfoModel : osBaseInfoModels) {
+		for(OracleStaBaseInfoModel oracleStaBaseInfo : oracleStaBaseInfos) {
 			Map<String, Object> row = new HashMap<String, Object>();
-			row.put("id", osBaseInfoModel.getMonitorID());
+			row.put("id", oracleStaBaseInfo.getMonitorID());
 			List<String> cell = new ArrayList<String>();
 			/* 可用性 1-可用sys_up ；0-不可用 sys_down*/
-			String usabilityClass = "1".equals(osBaseInfoModel.getUsability()) ? "sys_up" : "sys_down";
+			String usabilityClass = "1".equals(oracleStaBaseInfo.getUsability()) ? "sys_up" : "sys_down";
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
-			String[] healthy = osBaseInfoModel.getHealthy();
+			String[] healthy = oracleStaBaseInfo.getHealthy();
 			String healthyClass = "1".equals(healthy[0]) ? "fine" : "poor";
-			/* 构建修改连接+对操作系统MonitorID*/
-			String url = contextPath + "/os/linuxcentos/" + osBaseInfoModel.getMonitorID();
-			String editUrl = contextPath + "/os/editUI/" + osBaseInfoModel.getMonitorID();
+			/* 构建修改连接+对应数据库MonitorID*/
+			String editUrl = contextPath + "/os/editUI/" + oracleStaBaseInfo.getMonitorID();
 			/* 格式化表格数据信息*/
-			cell.add(MessageFormat.format(messageFormat0, url, osBaseInfoModel.getMonitorName()));
+			cell.add(MessageFormat.format(messageFormat0, "", oracleStaBaseInfo.getMonitorName()));
 			cell.add(MessageFormat.format(messageFormat1, usabilityClass));
 			cell.add(MessageFormat.format(messageFormat2, healthyClass));
 			cell.add(MessageFormat.format(messageFormat3, editUrl));

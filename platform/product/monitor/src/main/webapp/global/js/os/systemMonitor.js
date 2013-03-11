@@ -153,9 +153,14 @@ function getForm() {
 		}
 	});
 	healthGrid("/monitor/os/healthList/24");
-
+	osThresholdList(rootPath + "/os/systemList");
+	
+}
+//rootPath + "/os/systemList"
+function osThresholdList(url){
+	$("#thresholdList").empty();
 	$("#thresholdList").Grid({
-		url :  rootPath + "/os/systemList",  
+		url :  url,  
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
@@ -168,7 +173,6 @@ function getForm() {
 		multiselect: true  
 	});
 }
-
 function healthGrid(url) {
 	var columnStyle;
 	if(url=="/monitor/os/healthList/24"){
@@ -206,22 +210,18 @@ function systemMonitorTable(url) {
 
 function healthChange(ele) {
 	if ($(ele).val() == '24') {
-		alert(24);
 		healthGrid("/monitor/os/healthList/24");
 	}
 	if ($(ele).val() == '30') {
-		alert(30);
 		healthGrid("/monitor/os/healthList/30");
 	}
 }
 //点击可用性下拉
 function availableChange(ele) {
 	if ($(ele).val() == '24') {
-		alert(24)
 		systemMonitorTable("/monitor/os/systemMonitorTable/24");
 	}
 	if ($(ele).val() == '30') {
-		alert(30)
 		availableList("/monitor/os/systemMonitorTable/30");
 	}
 }
@@ -265,7 +265,7 @@ function delRow(e){
 	var rowId = rows.attr('id');
 	msgConfirm('系统消息','确定要删除该条记录吗？',function(){
 		$.ajax({
-			url: rootPath+"/os/remove",
+			url: rootPath+"/os/remove/",
 			type: "get",
 			dataType: "json",
 			data: {"monitorIds":rowId.split('_')[1]},

@@ -20,31 +20,18 @@ public interface UrlResponseTimeRepository extends PagingAndSortingRepository<Ur
 
 	/**
 	 * 查询URL响应时间
-	 * @param applicationId 应用ID
+	 * @param urlId 应用ID
 	 * @param startDate 开始时间
 	 * @param endDate 结束时间
 	 * @return URL响应时间列表
 	 */
-	@SQL("select u.id as url_Id, u.url, min(urt.min_response_time) as min_response_time," +
-			"       max(urt.max_response_time) as max_response_time," +
-			"       round(sum(urt.total_response_time)/sum(total_count), 0) as avg_response_time" +
-			"  from ge_monitor_application       a," +
-			"       ge_monitor_biz_scenario      bs," +
-			"       ge_monitor_biz_scenario_url  bsu," +
-			"       ge_monitor_url               u," +
-			"       ge_monitor_url_response_time urt" +
-			"  where a.id=bs.application_id" +
-			"  and   bs.id=bsu.biz_scenario_id" +
-			"  and   bsu.url_id=u.id" +
-			"  and   u.id=urt.url_id(+)" +
-			"  and   a.id=?1" +
-			"  and   a.status='1'" +
-			"  and   bs.status='1'" +
-			"  and   u.status='1'" +
-			"  and   urt.record_time >= ?2" +
-			"  and   urt.record_time < ?3" +
-			"  group by u.id, u.url")
-	List<UrlResponseTime> selectUrlResponseTimesForMonitorUrl(String applicationId, Date startDate, Date endDate);
+	@SQL("select min(urt.min_response_time) as min_response_time,\n" +
+			"       max(urt.max_response_time) as max_response_time,\n" +
+			"       round(sum(urt.total_response_time) / sum(total_count), 0) as avg_response_time\n" +
+			"  from ge_monitor_url_response_time urt\n" +
+			" where urt.url_id = ?1\n" +
+			"   and urt.record_time >= ?2 and urt.record_time < ?3 group by urt.url_id")
+	UrlResponseTime selectUrlResponseTimesForMonitorUrl(String urlId, Date startDate, Date endDate);
 
 	/**
 	 * 统计平均响应时间

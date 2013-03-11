@@ -22,7 +22,6 @@
 		<script type="text/javascript">
 		$(function(){
 			var id= $("#osid").val();
-			alert(id);
 			creatSimpleChart('${ctx}/os/historyCPUStatiLine/7/'+id, 'last_sevenday', 'CPU利用率%');
 			$("#sevenday_grid").Grid({
 				type : "post",
@@ -45,7 +44,6 @@
 		
 		})
 $(function(){
-	alert(${id});
 	$("body").layout({
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.db.oracle.model.Ava;
 import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
@@ -85,7 +86,7 @@ public class RecordServiceImpl implements RecordService {
 		alarmMessageBuilder.newMessageBase(info.getId())
 		.addAlarmAttribute(AttributeName.BufferHitRatio, hitRatio + "")
 		.addAlarmAttribute(AttributeName.ResponseTime,  connectionTime + "")
-		.addAlarmAttribute(AttributeName.ActiveConnection,  active + "").alarm();
+		.addAlarmAttribute(AttributeName.ActiveConnection,  active + "").alarmSource(AlarmSource.DB).alarm();
 
 		
 		Calendar calender = DateUtil.getCalender();
@@ -209,7 +210,7 @@ public class RecordServiceImpl implements RecordService {
 		} else {
 			ava.setState("0");
 			alarmMessageBuilder.newMessageBase(info.getId())
-			.addAlarmAttribute(AttributeName.Availability,  "0").alarm();
+			.addAlarmAttribute(AttributeName.Availability,  "0").alarmSource(AlarmSource.DB).alarm();
 		}
 		dbUtil4Monitor.closeConnection(conn);
 		ava.setRecordTime(date);

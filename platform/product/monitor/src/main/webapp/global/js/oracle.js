@@ -30,7 +30,7 @@ function refresheSGA(msg) {
              }
          },
          tooltip:{
-             enabled:false,
+             enabled:true,
              formatter:function () {
                  return '<b>' + this.series.name + '</b><br/>' +
                      this.x + ': ' + this.y;
@@ -41,9 +41,9 @@ function refresheSGA(msg) {
                  dataLabels:{
                      enabled:true
                  },
-                 enableMouseTracking:false,
+                 enableMouseTracking:true,
                  marker:{
-                     enabled:false
+                     enabled:true
                  }
              }
          },
@@ -64,7 +64,8 @@ function refreshChart2(_xAxis, _series, _rederTo, _yName,_text,_unit) {
             renderTo:_rederTo,
             type:'line',
             marginRight:130,
-            marginBottom:25
+            marginBottom:25,
+            width:650
         },
         title:{
             text:_text  ,

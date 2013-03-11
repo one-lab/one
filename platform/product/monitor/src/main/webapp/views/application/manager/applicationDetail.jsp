@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--<%@ taglib uri="http://mvc.one.sinosoft.com/tags/pipe" prefix="mvcpipe"%>--%>
+<%@ taglib uri="http://mvc.one.sinosoft.com/tags/pipe" prefix="mvcpipe"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -16,7 +16,7 @@
         var applicationId = "${applicationId}";
     </script>
     <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-    <%--<script language="javascript" src="${ctx}/global/js/mvc-pipe.js"></script>--%>
+    <script language="javascript" src="${ctx}/global/js/mvc-pipe.js"></script>
     <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
     <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
     <script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
@@ -69,8 +69,7 @@
 </div>
 </body>
 </html>
-<%--
 <mvcpipe:writes>
     <mvcpipe:write id = "alarmId" lazyLoad = "false" targetId="alarm" />
     <mvcpipe:write id = "pieId" lazyLoad = "false" targetId="pie" />
-</mvcpipe:writes>--%>
+</mvcpipe:writes>

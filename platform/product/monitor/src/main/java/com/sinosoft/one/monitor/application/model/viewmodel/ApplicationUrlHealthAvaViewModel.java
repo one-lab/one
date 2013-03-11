@@ -33,8 +33,8 @@ public class ApplicationUrlHealthAvaViewModel {
 	public String toJsonString() {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("times", times);
-		jsonObject.put("urlAvas", JSON.toJSONString(urlAvaViewModelMap));
-		jsonObject.put("urlHealths", JSON.toJSONString(urlHealthMap));
+		jsonObject.put("urlAvas", urlAvaViewModelMap);
+		jsonObject.put("urlHealths", urlHealthMap);
 		return jsonObject.toJSONString();
 	}
 }

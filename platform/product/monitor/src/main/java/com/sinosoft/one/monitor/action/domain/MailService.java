@@ -61,7 +61,7 @@ public class MailService {
 			try {
 				helper = new MimeMessageHelper(message, true, "utf-8");
 				helper.setFrom(mailAction.getFromAddress());
-				helper.setTo(mailAction.getToAddress());
+				helper.setTo(mailAction.getToAddress().split(","));
 				helper.setSubject(mailInfo.getTitle());
 				helper.setText(content, true);
 				messageList.add(message);
