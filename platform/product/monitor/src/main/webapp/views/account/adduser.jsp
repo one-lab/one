@@ -5,12 +5,12 @@
 <html>
 <head>
 <title>新建用户</title>
-<link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/static/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
+<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
