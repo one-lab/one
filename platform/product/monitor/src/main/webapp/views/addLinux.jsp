@@ -9,52 +9,7 @@
     <title>新建监视器</title>
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
-        $(function () {
-            $("body").layout({
-                top:{
-                    topHeight:100
-                },
-                bottom:{
-                    bottomHeight:30
-                }
-            });
-            $("#myDesk").height($("#layout_center").height());
-            $("#nav").delegate('li', 'mouseover mouseout', navHover);
-            $("#nav,#menu").delegate('li', 'click', navClick);
-        });
-        function navHover() {
-            $(this).toggleClass("hover")
-        }
-        function navClick() {
-            $(this).addClass("seleck").siblings().removeClass("seleck");
-            if ($(this).hasClass('has_sub')) {
-                var subMav = $(this).children("ul.add_sub_menu");
-                var isAdd = false;
-                if ($(this).parent().attr("id") == "menu") {
-                    isAdd = true;
-                }
-                ;
-                subMav.slideDown('fast', function () {
-                    $(document).bind('click', {
-                        dom:subMav,
-                        add:isAdd
-                    }, hideNav);
-                    return false;
-                });
-            }
-            ;
-        }
-        function hideNav(e) {
-            var subMenu = e.data.dom;
-            var isAdd = e.data.add;
-            subMenu.slideUp('fast', function () {
-                if (isAdd) {
-                    subMenu.parent().removeClass('seleck');
-                }
-                ;
-            });
-            $(document).unbind();
-        }
+
         function save() {
             var flag = false;
             $.ajax({
@@ -76,11 +31,7 @@
 </head>
 
 <body>
-<div id="layout_top">
-    <div class="header">
-        <%@include file="/WEB-INF/layouts/menu.jsp"%>
-    </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
     <div class="main">
         <div class="add_monitor">
