@@ -75,7 +75,7 @@ public class AddMonitorController {
         resource.setResourceType(ResourceType.APPLICATION.name());
         //RESOURCES表中保存应用信息
         resourcesService.saveResource(resource);
-        businessEmulation.restart();
+        businessEmulation.restart(application.getId());
         //页面所在路径application/manager/@应用性能页面
         return "r:application/manager/appmanager/applist/1";
     }
