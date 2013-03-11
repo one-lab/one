@@ -58,7 +58,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         String driver = OracleMonitorSql.DRIVER;
         //"jdbc:oracle:thin:@192.168.18.151:1521:orcl"
         String url = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + instanceName;
-        DBUtil4Monitor.openConnection(driver, url, username, password);
+        dbUtil4Monitor.openConnection(driver, url, username, password);
 
         String sql = OracleMonitorSql.versionAndStartUpTime;
         List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
@@ -71,7 +71,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         Resource resource = new Resource();
         resource.setResourceName(info.getName());
         resource.setResourceId(info.getId());
-        resource.setResourceType(ResourceType.DB.cnName());
+        resource.setResourceType(ResourceType.DB.name());
         resourcesRepository.save(resource);
     }
 
