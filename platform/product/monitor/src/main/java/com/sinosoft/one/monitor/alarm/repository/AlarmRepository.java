@@ -186,6 +186,10 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1 order by CREATE_TIME desc")
     List<Alarm> findByMonitorId(String monitorId);
 
+    //获得当前监视器的历史告警信息
+    @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1 order by CREATE_TIME desc")
+    Page<Alarm> findByMonitorId(String monitorId,Pageable pageable);
+
     //批量删除告警信息
     @SQL("delete GE_MONITOR_ALARM a where a.ID in (?1)")
     void batchDeleteAlarms(String[] alarmIds);

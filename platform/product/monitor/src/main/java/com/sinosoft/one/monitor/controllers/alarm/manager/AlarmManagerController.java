@@ -222,24 +222,33 @@ public class AlarmManagerController {
 
     //当前监视器的历史告警信息
     @Post("history/{monitorId}")
-    public void getHistoryAlarm(@Param("monitorId") String monitorId,Invocation inv) throws Exception {
-        List<Alarm> dbAlarms=alarmRepository.findByMonitorId(monitorId);
-        if(null!=dbAlarms&&dbAlarms.size()>0){
+    public void getPageOfHistoryAlarm(@Param("monitorId") String monitorId,Invocation inv) throws Exception {
+        int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
+        PageRequest pageRequest = new PageRequest(currentPageNumber,10);
+        Page<Alarm> dbAlarms=alarmRepository.findByMonitorId(monitorId,pageRequest);
+        if(null!=dbAlarms&&dbAlarms.getContent()!=null&&dbAlarms.getContent().size()>0){
             String statusStart="<div class='";
             String statusEnd="'></div>";
             String messageStart="<p class=\"magess\">";
             String messageEnd="</p>";
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             List<Alarm> tempAlarms=new ArrayList<Alarm>();
-            for(Alarm alarm:dbAlarms){
+            for(int i=0;i<dbAlarms.getContent().size();i++){
+                Alarm tempAlarm=dbAlarms.getContent().get(i);
+                tempAlarm.setStatus(statusStart+getStatusOfAlarm(tempAlarm.getSeverity())+statusEnd);
+                tempAlarm.setRecordTime(formatter.format(tempAlarm.getCreateTime()));
+                tempAlarm.setMessage(messageStart+tempAlarm.getMessage()+messageEnd);
+            }
+
+            /*for(Alarm alarm:dbAlarms){
                 //拼接页面显示的状态
                 alarm.setStatus(statusStart+getStatusOfAlarm(alarm.getSeverity())+statusEnd);
                 alarm.setRecordTime(formatter.format(alarm.getCreateTime()));
                 alarm.setMessage(messageStart+alarm.getMessage()+messageEnd);
                 tempAlarms.add(alarm);
             }
-            Page historyAlarmPage=new PageImpl(tempAlarms);
-            Gridable<Alarm> gridable=new Gridable<Alarm>(historyAlarmPage);
+            Page historyAlarmPage=new PageImpl(tempAlarms);*/
+            Gridable<Alarm> gridable=new Gridable<Alarm>(dbAlarms);
             gridable.setIdField("id");
             gridable.setCellStringField("status,recordTime,message");
             try {

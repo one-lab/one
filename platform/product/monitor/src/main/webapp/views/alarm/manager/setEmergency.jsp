@@ -281,7 +281,7 @@
                         <li><b>动作：</b>配置动作，当产生告警时配置动作将被执行。</li>
                     </ul>
                     <%--<p class="set_etc"><input type="button" id="Health" class="buttons" onclick="setHealthEmergency($('#monitorType').val(),$('#monitorName').val(),'Health','')" value="配置健康状态" /><span>动作</span></p>--%>
-                    <p class="set_etc"><input type="button" id="Health" class="buttons" onclick="setHealthOrAvailable($('#monitorType').val(),$('#monitorName').val(),'Health','')" value="配置健康状态" /><span>动作</span></p>
+                    <p class="set_etc"><input type="button" id="Health" class="buttons" onclick="setHealthOrAvailable($('#monitorType').val(),$('#monitorName').val(),'Health','')" value="配置健康状态" /><%--<span>动作</span>--%></p>
                 </div>
             </div>
         </div>
@@ -297,7 +297,7 @@
                         <li><b>动作：</b>配置动作，当产生告警时配置动作将被执行。</li>
                     </ul>
                     <%--<p class="set_etc"><input type="button" id="Availability" class="buttons" onclick="setAvailableEmergency($('#monitorType').val(),$('#monitorName').val(),'Availability','')" value="　配置可用性　" /><span class="is_set">动作</span></p>--%>
-                    <p class="set_etc"><input type="button" id="Availability" class="buttons" onclick="setHealthOrAvailable($('#monitorType').val(),$('#monitorName').val(),'Availability','')" value="　配置可用性　" /><span class="is_set">动作</span></p>
+                    <p class="set_etc"><input type="button" id="Availability" class="buttons" onclick="setHealthOrAvailable($('#monitorType').val(),$('#monitorName').val(),'Availability','')" value="　配置可用性　" /><%--<span>动作</span>--%></p>
                 </div>
             </div>
         </div>
