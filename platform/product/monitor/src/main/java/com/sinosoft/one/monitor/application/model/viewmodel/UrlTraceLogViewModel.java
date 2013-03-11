@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.application.model.viewmodel;
 
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Date;
 
@@ -15,10 +16,12 @@ public class UrlTraceLogViewModel {
 	private String userIp;
 	private String userId;
 	private Date recordTime;
-	private String state;
+	private String status;
 	private String operateStr = "";
 	private String severity;
 	private String exceptionId;
+	private String recordTimeStr;
+	private String statusStr = "";
 
 	public String getId() {
 		return id;
@@ -51,14 +54,15 @@ public class UrlTraceLogViewModel {
 
 	public void setRecordTime(Date recordTime) {
 		this.recordTime = recordTime;
+		recordTimeStr = DateFormatUtils.format(recordTime, "yyyy-MM-dd HH:mm:ss");
 	}
 
-	public String getState() {
-		return state;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getOperateStr() {
@@ -75,13 +79,28 @@ public class UrlTraceLogViewModel {
 
 	public void setSeverity(String severity) {
 		this.severity = severity;
-		if(this.state == null) {
+		if(this.status == null) {
 			if(severity == null || SeverityLevel.INFO.equals(severity)) {
-				this.state = SeverityLevel.INFO.name();
+				this.status = SeverityLevel.INFO.name();
 			} else {
-				this.state = severity;
+				this.status = severity;
 			}
 		}
+		statusStr = "<div class=\"" + evalStatusCss() + "\">&nbsp;</div>";
+	}
+
+	private String evalStatusCss() {
+		String statusCss = "";
+		if(SeverityLevel.INFO.name().equals(status)) {
+			statusCss = "green_status";
+		} else if(SeverityLevel.CRITICAL.name().equals(status)) {
+			statusCss = "red_status";
+		} else if(SeverityLevel.WARNING.name().equals(status)) {
+			statusCss = "yellow_status";
+		} else {
+			statusCss = "green_status";
+		}
+		return statusCss;
 	}
 
 	public String getExceptionId() {
@@ -90,8 +109,9 @@ public class UrlTraceLogViewModel {
 
 	public void setExceptionId(String exceptionId) {
 		this.exceptionId = exceptionId;
-		if(!SeverityLevel.CRITICAL.name().equals(this.state) && exceptionId != null) {
-			this.state = SeverityLevel.CRITICAL.name();
+		if(!SeverityLevel.CRITICAL.name().equals(this.status) && exceptionId != null) {
+			this.status = SeverityLevel.CRITICAL.name();
 		}
+		statusStr = "<div class=\"" + evalStatusCss() + "\">&nbsp;</div>";
 	}
 }

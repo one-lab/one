@@ -83,6 +83,7 @@ public class LogTraceAspect {
 	                        MethodTraceLog methodTraceLog = new MethodTraceLog();
 
 	                        methodTraceLog.setUrlTraceId(traceId);
+	                        methodTraceLog.setMethodId(logMethod.getId());
 	                        methodTraceLog.setBeginTime(new Timestamp(begin));
 	                        methodTraceLog.setEndTime(new Timestamp(end));
 	                        methodTraceLog.setConsumeTime(time);

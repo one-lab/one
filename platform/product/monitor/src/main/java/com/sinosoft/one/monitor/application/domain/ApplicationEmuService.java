@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,10 +128,11 @@ public class ApplicationEmuService {
 
     public UrlAvailableInf getUrlAvailableToday(String urlId){
         EumUrl eumUrl = getEumUrlByUrlId(urlId);
-        Interval interval = new Interval(new DateTime(getTodayFirstEumUrlAva(eumUrl.getId()).getRecordTime()), DateTime.now());
+	    EumUrlAva eumUrlAva = getTodayFirstEumUrlAva(eumUrl.getId());
+        Interval interval = new Interval(new DateTime(eumUrlAva == null ? LocalDate.now().toDate(): eumUrlAva.getRecordTime()), DateTime.now());
 
-        int seconds = interval.toPeriod().getSeconds();
-	    EumUrlAva eumUrlAva = getEumUrlAvaTodayAndLatestAndUnavailable(eumUrl.getId());
+	    int seconds = interval.toPeriod().getSeconds();
+	    eumUrlAva = getEumUrlAvaTodayAndLatestAndUnavailable(eumUrl.getId());
         return new UrlAvailableInf(urlAvaTrendByUrlId(urlId),
                 eumUrlAvaRepository.countByEmuId(eumUrl.getId()),
                 eumUrlAvaRepository.countByEmuIdAndStatus(eumUrl.getId(),"1"),

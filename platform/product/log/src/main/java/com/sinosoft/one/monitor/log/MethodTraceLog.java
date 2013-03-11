@@ -52,6 +52,10 @@ public class MethodTraceLog {
 	 * 记录时间
 	 */
     private Date recordTime;
+	/**
+	 * 方法ID
+ 	 */
+	private String methodId;
 
     public MethodTraceLog() {
 
@@ -139,6 +143,14 @@ public class MethodTraceLog {
     public String getFullMethodName() {
         return getClassName() + "." + getMethodName();
     }
+
+	public String getMethodId() {
+		return methodId;
+	}
+
+	public void setMethodId(String methodId) {
+		this.methodId = methodId;
+	}
 
 	@Override
     public String toString() {

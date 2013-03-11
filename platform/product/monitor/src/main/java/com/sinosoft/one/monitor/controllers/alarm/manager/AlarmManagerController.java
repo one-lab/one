@@ -71,8 +71,8 @@ public class AlarmManagerController {
     public void getAlarmListWithNoChoice(Invocation inv) throws Exception {
         Integer currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
         /*List<Alarm> allAlarms= (List<Alarm>) alarmRepository.findAllAlarms();*/
-        List<Alarm> allAlarms= alarmService.queryLatestAlarmsByPageNo(currentPageNumber);
-        getAlarmListWithGivenCondition(allAlarms, inv);
+//        List<Alarm> allAlarms= alarmService.queryLatestAlarmsByPageNo(currentPageNumber);
+//        getAlarmListWithGivenCondition(allAlarms, inv);
     }
 
     //只选择时间,或者只选择类型的ajax请求
