@@ -233,16 +233,7 @@ public class UrlManagerController {
     public String deleteUrl(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, Invocation inv) {
         //写回bizScenarioId，返回url列表页面时用到
         inv.getRequest().setAttribute("bizScenarioId",bizScenarioId);
-        //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
-        urlService.deleteBizScenarioAndUrl(bizScenarioId,urlId);
-        //先删除中间表GE_MONITOR_URL_METHOD的记录
-        urlService.deleteUrlAndMethod(urlId);
-        //删除GE_MONITOR_URL的记录
-        urlService.deleteUrl(urlId);
-        //删除Resources表中的记录
-        resourcesRepository.delete(resourcesRepository.findByResourceId(urlId));
-        // 删除eumUrl表中的记录
-        eumUrlRepository.delete(eumUrlRepository.findByUrlId(urlId));
+	    urlService.deleteUrl(bizScenarioId, urlId);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "managerUrl";

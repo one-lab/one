@@ -36,8 +36,10 @@
 <div id="layout_center">
     <div class="time_info_all" id="main">
         <ul class="crumbs">
-            <li><a href="#">管理</a> ></li>
-            <li><b>配置告警</b></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a> ></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用列表</a> ></li>
+            <li><a href="${ctx}/application/manager/detail/main/${applicationId}">应用透视</a> ></li>
+            <li><b>URL透视</b></li>
         </ul>
         <div class="time_info_top">
             <div class="time_info_content">

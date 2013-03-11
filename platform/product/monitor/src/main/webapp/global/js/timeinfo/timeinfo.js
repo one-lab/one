@@ -263,5 +263,5 @@ function createResponseTimeChart(times, data) {
 }
 
 function operateDetail(id) {
-    location.href = ctx + "/application/manager/method/appmethod/viewLogDetail/";
+    location.href = ctx + "/application/manager/appmethod/viewLogDetail/" + applicationId + "/" + urlId + "/" + id;
 }

@@ -175,8 +175,10 @@ public class ApplicationService {
 			}
 		}
 		int totalCount = criticalCount + warningCount + normalCount;
-		totalCount = totalCount == 0 ? 1 : totalCount;
-		normalCount = normalCount == 0 ? 1 : normalCount;
+		if(totalCount == 0) {
+			totalCount = 1;
+			normalCount = 1;
+		}
 		BigDecimal totalBigDecimal = BigDecimal.valueOf(totalCount);
 		BigDecimal hundredBigDecimal = BigDecimal.valueOf(100);
 		applicationIndexViewModel.setGreenBarLength(BigDecimal.valueOf(normalCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue());
