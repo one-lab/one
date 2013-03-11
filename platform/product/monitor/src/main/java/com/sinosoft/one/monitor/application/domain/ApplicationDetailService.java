@@ -2,9 +2,11 @@ package com.sinosoft.one.monitor.application.domain;
 
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailAlarmViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailPieViewModel;
+import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
 import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
 import com.sinosoft.one.monitor.common.HealthStaForMonitor;
 import com.sinosoft.one.monitor.common.HealthStaCache;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +40,7 @@ public class ApplicationDetailService {
 	@Autowired
 	private HealthStaCache healthStaCache;
 	@Autowired
-	private HealthStaService healthStaService;
+	private ApplicationRepository applicationRepository;
 
 
 	/**
@@ -50,8 +53,6 @@ public class ApplicationDetailService {
 		Date endDate = new Date();
 
 		ApplicationDetailAlarmViewModel applicationDetailAlarmViewModel = new ApplicationDetailAlarmViewModel();
-		// 获得可用性
-
 		// 获得健康度
 		int criticalCount = alarmRepository.countCriticalByMonitorId(applicationId, startDate, endDate);
 		if(criticalCount > 0) {
@@ -102,10 +103,18 @@ public class ApplicationDetailService {
 	public List<UrlResponseTime> queryUrlResponseTimes(String applicationId) {
 		Date startDate = DateUtil.getTodayBeginDate();
 		Date endDate = new Date();
-		List<UrlResponseTime> urlResponseTimes = urlResponseTimeRepository.selectUrlResponseTimesForMonitorUrl(applicationId, startDate, endDate);
+		List<Url> urls = applicationRepository.selectAllUrlsWithApplicationId(applicationId);
+		List<UrlResponseTime> urlResponseTimes = new ArrayList<UrlResponseTime>();
+		for(Url url : urls) {
+			UrlResponseTime urlResponseTime = urlResponseTimeRepository.selectUrlResponseTimesForMonitorUrl(applicationId, startDate, endDate);
+			urlResponseTime = urlResponseTime == null ? new UrlResponseTime() : urlResponseTime;
+			urlResponseTime.setUrlId(url.getId());
+			urlResponseTime.setUrl(url.getUrl());
+			urlResponseTimes.add(urlResponseTime);
+		}
 		for(UrlResponseTime urlResponseTime : urlResponseTimes) {
 			urlResponseTime.setHealthBar(healthStaCache.getHealthBar(applicationId, urlResponseTime.getUrlId()));
-			urlResponseTime.setUrlHref("<a href='javascript:void(0);' onclick=\"urlDetail('" + applicationId + "', '" + urlResponseTime.getUrlId() + "'\">" + urlResponseTime.getUrl() + "</a>");
+			urlResponseTime.setUrlHref("<a href='javascript:void(0);' onclick=\"urlDetail('" + applicationId + "', '" + urlResponseTime.getUrlId() + "')\">" + urlResponseTime.getUrl() + "</a>");
 		}
 		return urlResponseTimes;
 	}

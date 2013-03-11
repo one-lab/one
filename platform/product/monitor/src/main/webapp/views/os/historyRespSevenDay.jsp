@@ -18,11 +18,11 @@
 <script type="text/javascript">
 $(function(){
 	var id= $("#osid").val();
-	alert(id);
 	creatSimpleChart('${ctx}/os/historyRepStatiLine/7/'+id, 'last_sevenday', '响应时间 毫秒');
 })
 
 $(function(){
+	var id= $("#osid").val();
 	$("body").layout({
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
@@ -32,17 +32,17 @@ $(function(){
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
 	$("#sevenday_grid").Grid({
-		url : "sevenDayResponseTime.json",
+		type : "POST",
+		url : "${ctx}/os/historyRepStatiGrid/7/"+id,
 		dataType: "json",
 		height: 'auto',
 		colums:[
 			{id:'1',text:'日期',name:"methodName",width:'',index:'1',align:'',color:''},
-			{id:'2',text:'时间',name:"maxTime",width:'300',index:'1',align:'',color:''},
-			{id:'3',text:'最小值  ',name:"minTime",width:'',index:'1',align:'',color:''},
-			{id:'4',text:'最大值 ',name:"avgTime",width:'',index:'1',align:'',color:''},
-			{id:'5',text:'平均值 ',name:"status",width:'',index:'1',align:'',color:''}
+			{id:'2',text:'最小值',name:"maxTime",width:'',index:'1',align:'',color:''},
+			{id:'3',text:'最大值  ',name:"minTime",width:'',index:'1',align:'',color:''},
+			{id:'4',text:'平均值 ',name:"avgTime",width:'300',index:'1',align:'',color:''},
 		],
-		rowNum:10,
+		rowNum:99,
 		rowList:[10,20,30],
 		pager : false,
 		number:false,

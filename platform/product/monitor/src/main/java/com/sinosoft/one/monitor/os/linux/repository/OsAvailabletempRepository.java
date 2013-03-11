@@ -32,10 +32,6 @@ public interface OsAvailabletempRepository extends PagingAndSortingRepository<Os
 	@Query("from OsAvailabletemp o where o.sampleDate=(select max(sampleDate) from OsAvailabletemp where sampleDate<to_date(?2,?3)) and o.os.osInfoId = ?1")
 	public OsAvailabletemp findLastAvailable(String osid,String currentTime,String dateFormat );
 
-	//获取最后一个在轮询点内的
-	@Query("from OsAvailabletemp o where o.sampleDate=(select max(sampleDate) from OsAvailabletemp where sampleDate>to_date(?2,?3)) and o.os.osInfoId = ?1")
-	public OsAvailabletemp findNealyAvailable(String osid,String lastRecordTime,String dateFormat );
-	
 	//小于目标时间删除
 	@SQL("delete from GE_MONITOR_OS_AVAILABLETEMP o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
 	public void deleteTempByLessThanTime(String osid,Date date);

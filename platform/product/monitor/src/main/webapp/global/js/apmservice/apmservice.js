@@ -1,101 +1,38 @@
-$(function () {
-
-    var chart;
-    var chart2;
-    $(document).ready(function () {
-        chart = new Highcharts.Chart({
-            chart:{
-                renderTo:'pie_availability',
-                plotBackgroundColor:null,
-                plotBorderWidth:null,
-                plotShadow:false
-            },
-            title:{
-                text:''
-            },
-            credits:{
-                text:'',
-                href:''
-            },
-            tooltip:{
-                formatter:function () {
-                    return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
-                }
-            },
-            plotOptions:{
-                pie:{
-                    allowPointSelect:true,
-                    cursor:'pointer',
-                    dataLabels:{
-                        enabled:false
-                    },
-                    showInLegend:true
-                }
-            },
-            series:[
-                {
-                    type:'pie',
-                    name:'Browser share',
-                    data:[
-                        {
-                            name:'预警',
-                            y:65,
-                            sliced:false,
-                            selected:false
-                        },
-                        ['正常', 35]
-                    ]
-                }
-            ],
-            colors:['#Ff4f4f', '#5cff5c']
-        });
-
-
-        chart2 = new Highcharts.Chart({
-            chart:{
-                renderTo:'pie_health',
-                plotBackgroundColor:null,
-                plotBorderWidth:null,
-                plotShadow:false
-            },
-            title:{
-                text:''
-            },
-            credits:{
-                text:'',
-                href:''
-            },
-            tooltip:{
-                formatter:function () {
-                    return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
-                }
-            },
-            plotOptions:{
-                pie:{
-                    allowPointSelect:true,
-                    cursor:'pointer',
-                    dataLabels:{
-                        enabled:false
-                    },
-                    showInLegend:true
-                }
-            },
-            series:[
-                {
-                    type:'pie',
-                    name:'Browser share',
-                    data:[
-                        {
-                            name:'预警',
-                            y:45,
-                            sliced:false,
-                            selected:false
-                        },
-                        ['正常', 55]
-                    ]
-                }
-            ],
-            colors:['#Ff4f4f', '#5cff5c']
-        });
+$(document).ready(function() {
+    $("body").layout({
+        top:{topHeight:100}
     });
-})	
+
+    $(".show_all_error").live("click",showAllError);
+    $(".hide_some_error").live("click",hideSomeError);
+
+    $("#grid_info_table").Grid({
+        url : ctx + "/application/manager/detail/urls/" + applicationId,
+        dataType: "json",
+        height: 'auto',
+        colums:[
+            {id:'1',text:'url地址',name:"methodName",width:'',index:'1',align:'',color:''},
+            {id:'2',text:'最小响应时间(ms)',name:"minTime",width:'',index:'1',align:'',color:''},
+            {id:'3',text:'最大响应时间(ms)',name:"maxTime",width:'',index:'1',align:'',color:''},
+            {id:'4',text:'平均响应时间(ms)',name:"avgTime",width:'',index:'1',align:'',color:''},
+            {id:'5',text:'健康度',name:"healthBar",width:'',index:'1',align:'',color:''}
+        ],
+        rowNum:99,
+        rowList:[10,20,30],
+        pager : false,
+        number:false,
+        multiselect:false
+    });
+
+    function showAllError(){
+        $(this).hide();
+        $(this).siblings("p").css("overflow","auto");
+        $(".hide_some_error").show();
+    }
+    function hideSomeError(){
+        $(this).hide();
+        $(".show_all_error").show();
+        $(this).siblings("p").css("overflow","hidden");
+    }
+
+});

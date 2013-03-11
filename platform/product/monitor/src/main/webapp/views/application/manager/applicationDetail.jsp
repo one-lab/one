@@ -23,7 +23,7 @@
     <script language="javascript" src="${ctx}/global/js/apmservice/apmservice.js"></script>
     <script type="text/javascript">
         function urlDetail(applicationId, urlId) {
-            location.href = "${ctx}/application/manager/url/main/" + applicationId + "/"
+            location.href = "${ctx}/application/manager/url/main/" + applicationId + "/" + urlId;
         }
     </script>
 

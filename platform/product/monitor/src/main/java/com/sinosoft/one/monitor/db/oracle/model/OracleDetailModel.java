@@ -13,6 +13,14 @@ Open模式 	READ WRITE
 Log模式 	NOARCHIVELOG
  */
 public class OracleDetailModel {
+	/**
+	 * 连接时间
+	 */
+	private String connectTime;
+	/**
+	 * 用户数
+	 */
+	private String activeCount;
     /**
      *  数据库创建时间
      */
@@ -25,7 +33,18 @@ public class OracleDetailModel {
      * Log模式
      */
     private String logType;
-
+public String getActiveCount() {
+	return activeCount;
+}
+public String getConnectTime() {
+	return connectTime;
+}
+public void setActiveCount(String activeCount) {
+	this.activeCount = activeCount;
+}
+public void setConnectTime(String connectTime) {
+	this.connectTime = connectTime;
+}
     public String getDbCreateTime() {
         return dbCreateTime;
     }

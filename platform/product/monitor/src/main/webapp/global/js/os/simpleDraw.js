@@ -1,4 +1,5 @@
 function creatSimpleChart(url, renderTo, text) {
+	alert(url);
 	$.ajax({
 				type : "post",
 				url : url,
@@ -63,6 +64,7 @@ function creatSimpleChart(url, renderTo, text) {
 										dataLabels : {
 											enabled : true
 										},
+										connectNulls : true,
 										enableMouseTracking : false,
 										marker : {
 											enabled : false
@@ -78,9 +80,6 @@ function creatSimpleChart(url, renderTo, text) {
 							});
 				}
 			});
-}
-function creatSimpleGrid() {
-	
 }
 
 

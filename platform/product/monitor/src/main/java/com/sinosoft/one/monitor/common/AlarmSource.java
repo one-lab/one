@@ -9,8 +9,8 @@ package com.sinosoft.one.monitor.common;
 public enum AlarmSource {
 	LOG,
 	EXCEPTION,
+	EUM,
 	URLRESPONSETIME,
-	EUMURL,
 	OS,
 	DB
 }

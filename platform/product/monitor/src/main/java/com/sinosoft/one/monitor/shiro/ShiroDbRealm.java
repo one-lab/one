@@ -32,7 +32,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
             AuthenticationToken authcToken) throws AuthenticationException {
         LoginToken token = (LoginToken) authcToken;
         Account account = accountService.findUserByLoginName(token.getLoginName());
-        if (account != null&&"1".equals(account.getStatus())) {
+        if (account != null) {
             if (account.getPassword() != null && !"".equals(account.getPassword().toString())) {
                 return new SimpleAuthenticationInfo(account, account.getPassword(), getName());
             } else {

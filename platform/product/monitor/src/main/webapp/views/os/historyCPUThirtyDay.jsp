@@ -23,7 +23,6 @@
 		<script type="text/javascript">
 		$(function(){
 			var id= $("#osid").val();
-			alert(id);
 			creatSimpleChart('${ctx}/os/historyCPUStatiLine/30/'+id, 'last_Thirtyday', 'CPU利用率%');
 		
 			$("#sevenday_grid").Grid({

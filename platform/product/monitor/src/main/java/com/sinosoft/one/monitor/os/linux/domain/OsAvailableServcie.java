@@ -179,16 +179,6 @@ public class OsAvailableServcie {
 	}
 	
 	/**
-	 * 获取最后一个轮询点内的记录
-	 */
-	public OsAvailabletemp getNealyAvailable(String osInfoId,Date currentTime ,int interCycle){
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		Calendar c=Calendar.getInstance();
-		c.set(Calendar.MINUTE, 0);
-		Date date=new Date(c.getTime().getTime()-Long.valueOf(interCycle*60*1000));
-		return osAvailabletempRepository.findLastAvailable(osInfoId, simpleDateFormat.format(date), OsUtil.ORCL_DATEFORMATE);
-	}
-	/**
 	 * 获取前24时中保存的可用性状态  最近24小时 数据
 	 * 保存到统计表
 	 */

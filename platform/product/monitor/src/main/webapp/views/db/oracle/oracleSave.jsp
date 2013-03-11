@@ -64,7 +64,11 @@ function save(){
 		data: $("#oracleInfoForm").serialize(),
 		success: function(msg) {
 			if(msg.result) {
-				msgSuccess("系统消息", "操作成功，监视器已保存！");
+				msgSuccess("系统消息", "操作成功，监视器已保存！", function() {
+					if(editFlag) {
+						window.location = rootPath + "/db/oracle/oracleMonitor";
+					}
+				});
 			} else {
 				if(msg.type=='disconnect') {
 					msgFailed("系统消息", msg.tip);

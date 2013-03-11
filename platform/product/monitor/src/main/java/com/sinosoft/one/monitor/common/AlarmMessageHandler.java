@@ -161,6 +161,7 @@ public class AlarmMessageHandler {
 			allAttributeActions.addAll(thresholdAlarmParams.healthAttributeActions);
 		}
 
+		// 保存告警信息
 		Alarm alarm = new Alarm(thresholdAlarmParams.alarmId);
 		Attribute attribute = attributeCache.getAttribute(thresholdAlarmParams.resource.getResourceType(), AttributeName.Health.name());
 		alarm.setAttributeId(attribute.getId());
@@ -175,7 +176,7 @@ public class AlarmMessageHandler {
 
 		Alarm prevAlarm = alarmService.queryLatestAlarm(thresholdAlarmParams.resource.getResourceId());
 		if(alarm.isSameAlarmInfo(prevAlarm)) {
-			if(System.currentTimeMillis() - prevAlarm.getCreateTime().getTime() < 10 * 60 * 1000) {
+			if(System.currentTimeMillis() - prevAlarm.getCreateTime().getTime() < 30 * 60 * 1000) {
 				return;
 			}
 		}

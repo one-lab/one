@@ -5,58 +5,6 @@ $(document).ready(function() {
     $("body").layout({
         top:{topHeight:100}
     });
-    chart = new Highcharts.Chart({
-        chart: {
-            renderTo: 'time_times',
-            type: 'line',
-            marginRight: 130,
-            marginBottom: 25
-        },
-        title: {
-            text: 'URL访问次数',
-            x: -20 //center
-        },
-        xAxis: {
-            categories: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00','06:00']
-        },
-        yAxis: {
-            title: {
-                text: '访问次数'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        plotOptions:{
-            line:{              // 数据点的点击事件
-                events:{
-                        click: function(event){
-                                alert('The bar was clicked, and you can add any other functions.');
-                        }
-                }
-            }
-        },
-        credits: {
-          text: '',
-          href: ''
-        },
-        tooltip: {
-            formatter: function() {
-                    return '<b>'+ this.series.name +'</b><br/>'+
-                    + this.y +'次';
-            }
-        },
-        legend: {
-                    enabled :false
-
-        },
-        series: [{
-            name: '访问次数',
-            data: [4,7,9,0,7,1,9]
-        }]
-    });
 
     $("#list_table").Grid({
         url : ctx + "/application/manager/url/tracelog/" + urlId,
@@ -104,6 +52,7 @@ function initUrlHealthAndAva() {
         url : ctx + "/application/manager/url/healthava/" + applicationId + "/" + urlId,
         type : "GET",
         dataType : "json",
+        async : false,
         success : function(data) {
             var times = data.times;
             var urlHealths = data.urlHealths;
@@ -150,7 +99,7 @@ function initUrlHealthAndAva() {
                 if(avaCount == 0 && failCount == 0) {
                     failCount = 100;
                 }
-                availabilityBar.append("<div class=\"ky\" style=\"width:" + avaCount + "%\"></div><div class=\"bky\" style=\"width:" + failCount + "%\"></div>");
+                availabilityBar.append("<li class=\"show_bar\"><div class=\"ky\" style=\"width:" + avaCount + "%\"></div><div class=\"bky\" style=\"width:" + failCount + "%\"></div></li>");
                 availabilityTime.append(" <li>" + time + "</li>");
             }
 
@@ -168,6 +117,7 @@ function initUrlCountSta() {
         url : ctx + "/application/manager/url/urlcountsta/" + applicationId + "/" + urlId,
         type : "GET",
         dataType : "json",
+        async : false,
         success : function(data) {
             var times = data.times;
             var urlResponseTimes = data.urlResponseTimes;

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.monitor.db.oracle.domain.StaTimeEnum;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
-import com.sinosoft.one.monitor.db.oracle.model.OracleHealthInfoModel;
 import com.sinosoft.one.monitor.db.oracle.model.OracleStaBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
@@ -250,12 +249,10 @@ public class OsManagerController {
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
 			String[] healthy = oracleStaBaseInfo.getHealthy();
 			String healthyClass = "1".equals(healthy[0]) ? "fine" : "poor";
-			/* */
-			String url = contextPath + "/os/linuxcentos/402892163d208194013d208198790000";
 			/* 构建修改连接+对应数据库MonitorID*/
 			String editUrl = contextPath + "/os/editUI/" + oracleStaBaseInfo.getMonitorID();
 			/* 格式化表格数据信息*/
-			cell.add(MessageFormat.format(messageFormat0, url, oracleStaBaseInfo.getMonitorName()));
+			cell.add(MessageFormat.format(messageFormat0, "", oracleStaBaseInfo.getMonitorName()));
 			cell.add(MessageFormat.format(messageFormat1, usabilityClass));
 			cell.add(MessageFormat.format(messageFormat2, healthyClass));
 			cell.add(MessageFormat.format(messageFormat3, editUrl));
@@ -275,8 +272,7 @@ public class OsManagerController {
 	 */
 	@Get("editUI/{monitorId}")
 	public String editUI(@Param("monitorId")String monitorId,Invocation inv) {
-		inv.addModel("os", osService.getOsBasicById(monitorId));
-		return "modifeLinux";
+		return "oracleSave";
 	}
 	
 	/**
@@ -292,23 +288,6 @@ public class OsManagerController {
 	}
 	
 	/**
-	 * 编辑操作
-	 * @param oracleInfo
-	 * @param inv
-	 * @return
-	 */
-	@Post("edit")
-	public String edit(@Param("os") Os os,Invocation inv) {
-		try {
-			osService.modifeOsBasic(os.getOsInfoId(),os.getName(), os.getType(), os.getIpAddr(), os.getSubnetMask(), os.getIntercycleTime());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		message.put("result", true);
-		return "";
-	}
-	
-	/**
 	 * 删除操作(包含删除一个和批量删除操作)
 	 * @param monitorId
 	 * @param inv
@@ -316,13 +295,11 @@ public class OsManagerController {
 	 */
 	@Get("remove")
 	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
-		//delete......
-		for (String monitorId : monitorIds) {
-			osService.deleteOsBasic(monitorId);
-		}
+		//oracleInfoService.deleteMonitor(monitorId);
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}
+	
 	
 	/**
 	 * 健康状态列表
