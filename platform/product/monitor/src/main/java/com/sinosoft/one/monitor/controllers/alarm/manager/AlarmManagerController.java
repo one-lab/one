@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,45 +71,48 @@ public class AlarmManagerController {
     @Post("alarm")
     public void getAlarmListWithNoChoice(Invocation inv) throws Exception {
         int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
-        /*List<Alarm> allAlarms= (List<Alarm>) alarmRepository.findAllAlarms();*/
         Page<Alarm> allAlarms= alarmService.queryLatestAlarmsByPageNo(currentPageNumber);
         getAlarmListWithGivenCondition(allAlarms, inv);
     }
 
     //只选择时间,或者只选择类型的ajax请求
-    /*@Post("onecondition/{givenTimeOrType}")
+    @Post("onecondition/{givenTimeOrType}")
     public void getAlarmListWithGivenTimeOrType(@Param("givenTimeOrType")String givenTimeOrType,Invocation inv) throws Exception {
-        List<Alarm> timeOrTypeAlarms=new ArrayList<Alarm>();
+        int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
+        PageRequest pageRequest = new PageRequest(currentPageNumber,10);
+        Page<Alarm> timeOrTypeAlarms = null;
         String givenTime="";
         String givenType="";
         if(!StringUtils.isBlank(givenTimeOrType)){
             if("twentyFourHours".equals(givenTimeOrType)){
                 givenTime=String.valueOf(24);
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime);
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime,pageRequest);
             }else if("thirtyDays".equals(givenTimeOrType)){
                 givenTime=String.valueOf(30);
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime);
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime,pageRequest);
             }else if(ResourceType.APPLICATION.name().equals(givenTimeOrType)){
                 givenType=ResourceType.APPLICATION.name();
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType);
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType,pageRequest);
             }else if(ResourceType.OS.name().equals(givenTimeOrType)){
                 givenType=ResourceType.OS.name();
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType);
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType,pageRequest);
             }else if(ResourceType.DB.name().equals(givenTimeOrType)){
                 givenType=ResourceType.DB.name();
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType);
+                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType,pageRequest);
             }
 
             getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
         }else {
-            timeOrTypeAlarms= (List<Alarm>) alarmRepository.findAll();
+            timeOrTypeAlarms= alarmService.queryLatestAlarmsByPageNo(currentPageNumber);
             getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
         }
-    }*/
+    }
 
     //时间和类型都选择的ajax请求
-    /*@Post("twocondition/{givenTime}/{givenType}")
+    @Post("twocondition/{givenTime}/{givenType}")
     public void getAlarmListWithGivenTimeAndType(@Param("givenTime")String givenTime, @Param("givenType") String givenType,Invocation inv) throws Exception {
+        int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
+        PageRequest pageRequest = new PageRequest(currentPageNumber,10);
         if("twentyFourHours".equals(givenTime)){
             givenTime=String.valueOf(24);
         }else if("thirtyDays".equals(givenTime)){
@@ -120,10 +125,9 @@ public class AlarmManagerController {
         }else if(ResourceType.DB.name().equals(givenType)){
             givenType=ResourceType.DB.name();
         }
-        *//*List<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType);*//*
-        List<Alarm> allAlarmsWithGivenTimeAndType=alarmService.queryCurrentDayAlarms(givenTime,givenType);
+        Page<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType,pageRequest);
         getAlarmListWithGivenCondition(allAlarmsWithGivenTimeAndType,inv);
-    }*/
+    }
 
     //各种条件组个统一调用这个方法，获得告警列表
     private void getAlarmListWithGivenCondition(Page<Alarm> pageAlarms,Invocation inv) throws Exception {
@@ -136,36 +140,36 @@ public class AlarmManagerController {
                 String messageNameStart="<a href='javascript:void(0)' onclick='alarmDetailInfo(this)'>";
                 String messageNameEnd="</a>";
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            if(dbAlarms.iterator().hasNext()){
+            for(int i=0;i<pageAlarms.getContent().size();i++){
+                Alarm tempAlarm=pageAlarms.getContent().get(i);
                 String statusMiddle="";
-                Alarm tempAlarm=new Alarm();
-                String tempStatusMiddle=getStatusOfAlarm(dbAlarms.iterator().next().getSeverity());
+                String tempStatusMiddle=getStatusOfAlarm(tempAlarm.getSeverity());
                 if(!StringUtils.isBlank(tempStatusMiddle)){
                     //设置状态
                     statusMiddle=tempStatusMiddle;
                 }
                 //拼接状态字符串
-                dbAlarms.iterator().next().setStatus(statusStart+statusMiddle+statusEnd);
+                tempAlarm.setStatus(statusStart+statusMiddle+statusEnd);
                 //得到告警标题
-                String allMessage=dbAlarms.iterator().next().getMessage();
+                String allMessage=tempAlarm.getMessage();
                 if(!StringUtils.isBlank(allMessage)){
                     String[] messageArray=allMessage.split("<br>");
-                    dbAlarms.iterator().next().setMessage(messageNameStart+messageArray[0]+messageNameEnd);
+                    tempAlarm.setMessage(messageNameStart+messageArray[0]+messageNameEnd);
                 }else {
-                    dbAlarms.iterator().next().setMessage(messageNameStart+messageNameEnd);
+                    tempAlarm.setMessage(messageNameStart+messageNameEnd);
                 }
                 //拼接应用中文名
-                if(ResourceType.APPLICATION.name().equals(dbAlarms.iterator().next().getMonitorType())){
-                    dbAlarms.iterator().next().setAppName(applicationRepository.findOne(dbAlarms.iterator().next().getMonitorId()).getCnName());
-                }else if(ResourceType.OS.name().equals(dbAlarms.iterator().next().getMonitorType())){
-                    dbAlarms.iterator().next().setAppName(osRepository.findOne(dbAlarms.iterator().next().getMonitorId()).getName());
-                }else if(ResourceType.DB.name().equals(dbAlarms.iterator().next().getMonitorType())){
-                    dbAlarms.iterator().next().setAppName(infoRepository.findOne(dbAlarms.iterator().next().getMonitorId()).getName());
+                if(ResourceType.APPLICATION.name().equals(tempAlarm.getMonitorType())){
+                    tempAlarm.setAppName(applicationRepository.findOne(tempAlarm.getMonitorId()).getCnName());
+                }else if(ResourceType.OS.name().equals(tempAlarm.getMonitorType())){
+                    tempAlarm.setAppName(osRepository.findOne(tempAlarm.getMonitorId()).getName());
+                }else if(ResourceType.DB.name().equals(tempAlarm.getMonitorType())){
+                    tempAlarm.setAppName(infoRepository.findOne(tempAlarm.getMonitorId()).getName());
                 }
                 //获得类型对应的中文名
-                dbAlarms.iterator().next().setMonitorType(ResourceType.valueOf(dbAlarms.iterator().next().getMonitorType()).cnName());
+                tempAlarm.setMonitorType(ResourceType.valueOf(tempAlarm.getMonitorType()).cnName());
                 //格式化时间，供页面显示
-                dbAlarms.iterator().next().setRecordTime(formatter.format(dbAlarms.iterator().next().getCreateTime()));
+                tempAlarm.setRecordTime(formatter.format(tempAlarm.getCreateTime()));
             }
                 getJsonDataOfAlarms(pageAlarms,inv);
                 return;

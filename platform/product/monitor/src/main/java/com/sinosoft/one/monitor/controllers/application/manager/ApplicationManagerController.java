@@ -39,6 +39,8 @@ public class ApplicationManagerController {
 
     @Autowired
     ApplicationService applicationService;
+    @Autowired
+    BusinessEmulation businessEmulation;
 
     /**
      * 获得所有的应用.
@@ -113,10 +115,9 @@ public class ApplicationManagerController {
         //更新时间使用sysdate
         applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
                 application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());
-        BusinessEmulation businessEmulation=new BusinessEmulation();
         businessEmulation.restart();
         //应用列表页面
-        return "r:/application/manager/appmanager/applist";
+        return "r:/application/manager/appmanager/applist/1";
     }
 
     /**
@@ -125,10 +126,9 @@ public class ApplicationManagerController {
     @Get("delete/{id}")
     public String deleteApplication(@Param("id") String id, Invocation inv) {
         applicationService.deleteApplication(id);
-        BusinessEmulation businessEmulation=new BusinessEmulation();
         businessEmulation.restart();
         //应用列表页面
-        return "r:/application/manager/appmanager/applist";
+        return "r:/application/manager/appmanager/applist/1";
     }
 
     /**

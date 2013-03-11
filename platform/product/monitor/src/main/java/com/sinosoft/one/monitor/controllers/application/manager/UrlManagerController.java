@@ -45,6 +45,8 @@ public class UrlManagerController {
     ResourcesService resourcesService;
     @Autowired
     EumUrlRepository eumUrlRepository;
+    @Autowired
+    BusinessEmulation businessEmulation;
 
     /**
      * 管理url页面.
@@ -113,12 +115,12 @@ public class UrlManagerController {
                     //向EUM_URL表中插入记录（url的application信息）
                     eumUrl.setRecordTime(new Date());
                     eumUrlRepository.save(eumUrl);
-                    BusinessEmulation businessEmulation=new BusinessEmulation();
-                    businessEmulation.restart();
                     if(null!=resourcesService.getResource(url.getId())){
+                        businessEmulation.restart();
                         return "managerUrl";
                     }
                     saveResourceWithUrl(url);
+                    businessEmulation.restart();
                     return "managerUrl";
                 }
             }
@@ -139,6 +141,7 @@ public class UrlManagerController {
         eumUrl.setRecordTime(new Date());
         eumUrlRepository.save(eumUrl);
         saveResourceWithUrl(url);
+        businessEmulation.restart();
         return "managerUrl";
     }
 
@@ -212,8 +215,6 @@ public class UrlManagerController {
                             @Param("urlId") String urlId, Invocation inv) {
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
-        BusinessEmulation businessEmulation=new BusinessEmulation();
-        businessEmulation.restart();
         //Url列表页面
         return "managerUrl";
     }
@@ -232,7 +233,6 @@ public class UrlManagerController {
         //删除GE_MONITOR_URL的记录
         urlService.deleteUrl(urlId);
         eumUrlRepository.delete(eumUrlRepository.findByUrlId(urlId));
-        BusinessEmulation businessEmulation=new BusinessEmulation();
         businessEmulation.restart();
         //url列表页面
         return "managerUrl";
@@ -256,7 +256,6 @@ public class UrlManagerController {
         for(EumUrl eumUrl:dbEumUrls){
             eumUrlRepository.delete(eumUrl);
         }
-        BusinessEmulation businessEmulation=new BusinessEmulation();
         businessEmulation.restart();
         //url列表页面
         return "managerUrl";
