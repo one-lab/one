@@ -30,7 +30,7 @@ function refresheSGA(msg) {
              }
          },
          tooltip:{
-             enabled:false,
+             enabled:true,
              formatter:function () {
                  return '<b>' + this.series.name + '</b><br/>' +
                      this.x + ': ' + this.y;
@@ -41,9 +41,9 @@ function refresheSGA(msg) {
                  dataLabels:{
                      enabled:true
                  },
-                 enableMouseTracking:false,
+                 enableMouseTracking:true,
                  marker:{
-                     enabled:false
+                     enabled:true
                  }
              }
          },
