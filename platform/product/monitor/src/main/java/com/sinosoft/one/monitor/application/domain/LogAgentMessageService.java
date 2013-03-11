@@ -65,25 +65,25 @@ public class LogAgentMessageService implements AgentMessageService {
 		urlVisitsStaRepository.save(urlVisitsSta);
 
 		// 处理方法响应时间统计
-		handleMethodReponseTime(applicationId, urlTraceLog.getUrlId(), urlTraceLog.getMethodTraceLogList());
+		handleMethodResponseTime(applicationId, urlTraceLog.getUrlId(), urlTraceLog.getMethodTraceLogList());
 	}
 
-	private void handleMethodReponseTime(String applicationId, String urlId, List<MethodTraceLog> methodTraceLogList) {
-		List<String> methodNames = new ArrayList<String>();
+	private void handleMethodResponseTime(String applicationId, String urlId, List<MethodTraceLog> methodTraceLogList) {
+		List<String> methodIds = new ArrayList<String>();
 		Map<String, MethodTraceLog> methodMap = new HashMap<String, MethodTraceLog>();
 		for(MethodTraceLog methodTraceLog : methodTraceLogList) {
-			methodNames.add(methodTraceLog.getFullMethodName());
-			methodMap.put(methodTraceLog.getFullMethodName(), methodTraceLog);
+			methodIds.add(methodTraceLog.getMethodId());
+			methodMap.put(methodTraceLog.getMethodId(), methodTraceLog);
 		}
 		List<MethodResponseTime> methodResponseTimes = methodResponseTimeRepository.selectMethodResponseTimes(applicationId,
-				urlId, methodNames, LocalDateTime.now().toString("yyyy-MM-dd HH"));
+				urlId, methodIds, LocalDateTime.now().toString("yyyy-MM-dd HH"));
 
 		List<MethodResponseTime> toUpdateMethodResponseTimes = new ArrayList<MethodResponseTime>();
 		Date currentDate = new Date();
 		if(methodResponseTimes != null && methodResponseTimes.size() > 0) {
 
 			for(MethodResponseTime methodResponseTime : methodResponseTimes) {
-				MethodTraceLog methodTraceLog = methodMap.get(methodResponseTime.getMethodName());
+				MethodTraceLog methodTraceLog = methodMap.get(methodResponseTime.getMethodId());
 				if(methodTraceLog != null) {
 					long responseTime = methodTraceLog.getConsumeTime();
 					if(methodResponseTime.getMinResponseTime() > responseTime) {
@@ -91,9 +91,11 @@ public class LogAgentMessageService implements AgentMessageService {
 					} else if(methodResponseTime.getMaxResponseTime() < responseTime) {
 						methodResponseTime.setMaxResponseTime(responseTime);
 					}
+
 					methodResponseTime.addTotalResponseTime(responseTime);
 					methodResponseTime.setApplicationId(applicationId);
 					methodResponseTime.setUrlId(urlId);
+					methodResponseTime.setMethodId(methodTraceLog.getMethodId());
 					methodResponseTime.setRecordTime(currentDate);
 					methodResponseTime.increaseTotalCount();
 					toUpdateMethodResponseTimes.add(methodResponseTime);
@@ -105,6 +107,7 @@ public class LogAgentMessageService implements AgentMessageService {
 				MethodResponseTime methodResponseTime = new MethodResponseTime();
 				methodResponseTime.setApplicationId(applicationId);
 				methodResponseTime.setUrlId(urlId);
+				methodResponseTime.setMethodId(methodTraceLog.getMethodId());
 				methodResponseTime.setRecordTime(currentDate);
 				methodResponseTime.setMethodName(methodTraceLog.getFullMethodName());
 				methodResponseTime.setMinResponseTime(responseTime);

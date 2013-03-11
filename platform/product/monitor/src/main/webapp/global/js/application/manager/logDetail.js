@@ -107,6 +107,6 @@ function getExceptionInfo(){
 }
 
 function getParam(methodId){
-    window.location.href = ctx+"/application/manager/appmethod/getMethodDetail/"+methodId;
+    window.location.href = ctx+"/application/manager/appmethod/getMethodDetail/" + applicationId + "/" + urlId + "/" + logId + "/" + methodId;
         //ctx+"/views/application/manager/methodDetail.jsp?methodId=" + methodId;
 }

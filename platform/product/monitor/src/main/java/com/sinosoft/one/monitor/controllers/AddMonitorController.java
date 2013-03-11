@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.controllers;
 
 import com.sinosoft.one.monitor.application.domain.ApplicationService;
+import com.sinosoft.one.monitor.application.domain.BusinessEmulation;
 import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
@@ -29,6 +30,8 @@ public class AddMonitorController {
     ApplicationService applicationService;
     @Autowired
     ResourcesService resourcesService;
+    @Autowired
+    BusinessEmulation businessEmulation;
 
     @Get("list")
     public String getAddMonitorList(Invocation inv){
@@ -72,6 +75,7 @@ public class AddMonitorController {
         resource.setResourceType(ResourceType.APPLICATION.name());
         //RESOURCES表中保存应用信息
         resourcesService.saveResource(resource);
+        businessEmulation.restart(application.getId());
         //页面所在路径application/manager/@应用性能页面
         return "r:application/manager/appmanager/applist/1";
     }

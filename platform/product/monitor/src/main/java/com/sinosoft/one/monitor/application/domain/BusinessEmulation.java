@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.application.domain;
 
+import com.google.common.collect.MapMaker;
 import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaStaRepository;
@@ -23,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 业务仿真
@@ -56,6 +54,8 @@ public class BusinessEmulation {
 	@Autowired
 	private AlarmMessageBuilder alarmMessageBuilder;
 
+    private static ConcurrentMap<String, Investigation> holders = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
+
 
 
     @PostConstruct
@@ -64,17 +64,21 @@ public class BusinessEmulation {
       logger.info("{}:,  {}",BusinessEmulation.class.toString(),applications.size());
       for(Application application:applications){
           application.setEnumUrls(applicationEmuService.findEumUrlByApplicationId(application.getId()));
-          long interval = DEFAULT_INTERVAL;
-          if(application.getInterval()!=null){
-              interval =   interval(application.getInterval().longValue());
-          }
+
           if(application.getEnumUrls().isEmpty())
               continue;
-          //延时时间按照
-          executorService.scheduleAtFixedRate(new Investigation(application), interval,
-                  interval , TimeUnit.SECONDS);
-
+          eum(application);
       }
+    }
+
+    private void eum(Application application){
+        Investigation investigation =  new Investigation(application);
+        long  interval =interval(application.getInterval());
+        //延时时间按照
+        ScheduledFuture<?>  scheduledFuture = executorService.scheduleAtFixedRate(new Investigation(application), interval,
+                interval , TimeUnit.SECONDS);
+        investigation.setScheduledFuture(scheduledFuture);
+        holders.put(application.getId(),investigation);
     }
 
     @Transactional(readOnly = false)
@@ -97,13 +101,18 @@ public class BusinessEmulation {
     /**
      * reStart allApplication emulation
      */
-    public void restart(){
-        executorService.shutdown();
-        init();
+    public void restart(String applicationId){
+        if(holders.get(applicationId)!=null){
+            holders.get(applicationId).stop();
+            eum(applicationService.findApplication(applicationId));
+        }
     }
 
-    private long interval(long interval){
-       return (interval == 0?DEFAULT_INTERVAL:interval)*60;
+    private long interval(BigDecimal interval){
+        if(interval==null)
+            return DEFAULT_INTERVAL;
+
+       return (interval.equals(BigDecimal.ZERO)?DEFAULT_INTERVAL:interval.longValue())*60;
     }
 
     private class Investigation implements Runnable {
@@ -111,6 +120,8 @@ public class BusinessEmulation {
         private Logger loggerInv = LoggerFactory.getLogger(Investigation.class);
 
         private final Application application;
+
+        private ScheduledFuture<?>  scheduledFuture;
 
         private final List<EumUrl> urls ;
 
@@ -134,6 +145,11 @@ public class BusinessEmulation {
             }
         }
 
+
+        public void stop(){
+            this.scheduledFuture.cancel(true);
+        }
+
         String createHttpUrl(String url) {
             StringBuilder str = new  StringBuilder();
             if(url.contains("http://")||url.contains("https://")){
@@ -153,6 +169,9 @@ public class BusinessEmulation {
             return str.toString();
         }
 
+        public void setScheduledFuture(ScheduledFuture<?> scheduledFuture) {
+            this.scheduledFuture = scheduledFuture;
+        }
     }
 
 

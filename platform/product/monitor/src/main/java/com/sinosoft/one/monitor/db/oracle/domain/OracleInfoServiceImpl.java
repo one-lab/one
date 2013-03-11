@@ -6,9 +6,7 @@ import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.model.OracleInfoModel;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
-import com.sinosoft.one.monitor.db.oracle.repository.AvaRepository;
-import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
-import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
+import com.sinosoft.one.monitor.db.oracle.repository.*;
 import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
@@ -38,7 +36,11 @@ public class OracleInfoServiceImpl implements OracleInfoService {
     @Autowired
     private LasteventRepository lasteventRepository;
     @Autowired
+    private EventStaRepository eventStaRepository;
+    @Autowired
     private AvaRepository avaRepository;
+    @Autowired
+    private AvaStaRepository avaStaRepository;
     @Autowired
     private AlarmRepository alarmRepository;
     @Autowired
@@ -58,7 +60,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         String driver = OracleMonitorSql.DRIVER;
         //"jdbc:oracle:thin:@192.168.18.151:1521:orcl"
         String url = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + instanceName;
-        DBUtil4Monitor.openConnection(driver, url, username, password);
+        dbUtil4Monitor.openConnection(driver, url, username, password);
 
         String sql = OracleMonitorSql.versionAndStartUpTime;
         List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
@@ -71,7 +73,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         Resource resource = new Resource();
         resource.setResourceName(info.getName());
         resource.setResourceId(info.getId());
-        resource.setResourceType(ResourceType.DB.cnName());
+        resource.setResourceType(ResourceType.DB.name());
         resourcesRepository.save(resource);
     }
 
@@ -89,8 +91,15 @@ public class OracleInfoServiceImpl implements OracleInfoService {
 
     @Override
     @Transactional
-    public void deleteMonitor(String monitorId) {
-        infoRepository.delete(monitorId);
+    public void deleteMonitor(List<String> monitorId) {
+
+        lasteventRepository.deleteByMonitorIds(monitorId);
+        eventStaRepository.deleteByMonitorIds(monitorId);
+        avaRepository.deleteByMonitorIds(monitorId);
+        avaStaRepository.deleteByMonitorIds(monitorId);
+        resourcesRepository.deleteByMoitorIds(monitorId);
+        alarmRepository.deleteByMonitorIds(monitorId);
+        infoRepository.deleteByIds(monitorId);
     }
 
     @Override

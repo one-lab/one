@@ -58,9 +58,9 @@ public class MethodTraceLog {
 	 */
     private Timestamp recordTime;
 	/**
-	 * 用户ID
+	 * 方法ID
 	 */
-	private String userId;
+	private String methodId;
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
@@ -159,6 +159,15 @@ public class MethodTraceLog {
         return getClassName() + "." + getMethodName();
     }
 
+	@Column(name = "METHOD_ID")
+	public String getMethodId() {
+		return methodId;
+	}
+
+	public void setMethodId(String methodId) {
+		this.methodId = methodId;
+	}
+
 	@Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -172,7 +181,7 @@ public class MethodTraceLog {
             .append("endTime", endTime)
             .append("consumeTime", consumeTime)
             .append("recordTime", recordTime)
-            .append("userId", userId)
+            .append("methodId", methodId)
             .build();
     }
 }

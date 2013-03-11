@@ -10,11 +10,15 @@ import java.util.List;
 
 
 public interface LasteventRepository extends PagingAndSortingRepository<Lastevent, String> {
-    @SQL("select t.record_time from ge_monitor_oracle_lastevent t where rownum=1 order by t.record_time desc")
+    @SQL("select t.record_time from \n" +
+            "(select * from ge_monitor_oracle_lastevent order by record_time desc) t\n" +
+            "where rownum=1")
     Date findLastExecTime();
     @SQL("select t1.* from ge_monitor_oracle_lastevent t1 WHERE record_time between ?2 AND ?3 order by record_time")
     List<Lastevent> findLastEventList(String monitorId, Date start, Date end);
     @SQL("delete from GE_MONITOR_ORACLE_LASTEVENT  where record_time < ?1")
 	void clear(Date timePoint);
+    @SQL("delete from GE_MONITOR_ORACLE_LASTEVENT  where DATABASE_ID in (?1)")
+    void deleteByMonitorIds(List<String> monitorId);
 }
 

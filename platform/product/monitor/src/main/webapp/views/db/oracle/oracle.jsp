@@ -30,6 +30,10 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center");
+		$("#main").width(center.width() - 31).height(center.height() - 30);
+	}
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
@@ -44,15 +48,15 @@ $(function(){
 			{id:'3',text:'总空间大小(MB) ',name:"minTime",width:'',index:'1',align:'',color:''},
 			{id:'4',text:'总块数',name:"avgTime",width:'',index:'1',align:'',color:''},
 			{id:'5',text:'已使用(MB) ',name:"status",width:'',index:'1',align:'',color:''},
-            {id:'6',text:'已用百分比 ',name:"status",width:'',index:'1',align:'',color:''},
-            {id:'7',text:'未使用 ',name:"status",width:'',index:'1',align:'',color:''},
-			{id:'8',text:'可用百分比',name:"status",width:'',index:'1',align:'',color:''}
+            {id:'6',text:'已用百分比(%) ',name:"status",width:'',index:'1',align:'',color:''},
+            {id:'7',text:'未使用(MB) ',name:"status",width:'',index:'1',align:'',color:''},
+			{id:'8',text:'可用百分比(%)',name:"status",width:'',index:'1',align:'',color:''}
 		],
 		rowNum:10,
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true
+		multiselect:false
 	});
     $("#table_space_overview").Grid({
         url : ctx+"/db/oracle/home/viewTableSpaceOverPreview/${monitorId}",
@@ -60,14 +64,14 @@ $(function(){
         height: 'auto',
         colums:[
             {id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
-            {id:'7',text:'未使用 ',name:"status",width:'',index:'1',align:'',color:''},
-            {id:'8',text:'可用百分比',name:"status",width:'',index:'1',align:'',color:''}
+            {id:'7',text:'未使用(MB) ',name:"status",width:'',index:'1',align:'',color:''},
+            {id:'8',text:'可用百分比(%)',name:"status",width:'',index:'1',align:'',color:''}
         ],
         rowNum:10,
         rowList:[10,20,30],
         pager : false,
         number:false,
-        multiselect:true
+        multiselect:false
     });
 
 
@@ -145,7 +149,7 @@ $(function(){
 		rowList:[10,20,30],
 		pager : false,
 		number:false,
-		multiselect:true
+		multiselect:false
 	});
 	$("#tabs").tabs({closeTab:false});
 });
@@ -176,30 +180,11 @@ function hideNav(e){
 	});
 	$(document).unbind();
 }
-function createSevenDayUser() {
-	var temWin = $("body").window({
-			"id":"testOne11",
-			"title":"7天可用",
-			"url":"",
-			"hasIFrame":true,
-			"width":850,
-			"height":440,
-		"diyButton":[{
-			"id": "btOne",
-			"btClass": "buttons",
-			"value": "关闭",
-			"onclickEvent" : "selectLear",
-			"btFun": function() {
-					temWin.closeWin();
-				}
-			}
-		]
-	});
-}
+
 function createSevenDayConnect() {
 	var temWin = $("body").window({
 			"id":"testOne9",
-			"title":"7天可用",
+			"title":"连接时间 ",
 			"url":ctx+"/db/oracle/sta/view/${monitorId}/1/1/1",
 			"hasIFrame":true,
 			"width":850,
@@ -219,7 +204,7 @@ function createSevenDayConnect() {
 function createThirtyDayConnect() {
 	var temWin = $("body").window({
 			"id":"testOne8",
-			"title":"30天可用",
+			"title":"连接时间 ",
 			"url":ctx+"/db/oracle/sta/view/${monitorId}/1/1/2",
 			"hasIFrame":true,
 			"width":850,
@@ -239,7 +224,7 @@ function createThirtyDayConnect() {
 function createSevenDayUser() {
 	var temWin = $("body").window({
 			"id":"testOne11",
-			"title":"7天可用  ",
+			"title":"用户数   ",
 			"url":ctx+"/db/oracle/sta/view/${monitorId}/2/2/1",
 			"hasIFrame":true,
 			"width":850,
@@ -259,7 +244,7 @@ function createSevenDayUser() {
 function createThirtyDayUser() {
 	var temWin = $("body").window({
 			"id":"testOne10",
-			"title":"30天可用  ",
+			"title":"用户数   ",
 			"url":ctx+"/db/oracle/sta/view/${monitorId}/2/2/2",
 			"hasIFrame":true,
 			"width":850,
@@ -279,7 +264,7 @@ function createThirtyDayUser() {
 function createSevenDayHitRate() {
 	var temWin = $("body").window({
 			"id":"testOne7",
-			"title":"7天可用",
+			"title":"缓冲器击中率 ",
 			"url":ctx+"/db/oracle/sta/view/${monitorId}/3/3/1",
 			"hasIFrame":true,
 			"width":850,
@@ -299,7 +284,7 @@ function createSevenDayHitRate() {
 function createThirtyDayHitRate() {
 	var temWin = $("body").window({
 			"id":"testOne6",
-			"title":"30天可用性",
+			"title":"缓冲器击中率",
 			"url":ctx+"/db/oracle/sta/view/${monitorId}/3/3/2",
 			"hasIFrame":true,
 			"width":850,
@@ -323,7 +308,7 @@ function createThirtyDayHitRate() {
 <body>
 <%@include file="/WEB-INF/layouts/menu.jsp" %>
 <div id="layout_center">
-	<div class="main">
+	<div class="main" id="main">
   <ul class="crumbs">
       <li><a href="#">管理</a> </li>
       <li><b>配置告警</b></li>
@@ -346,7 +331,7 @@ function createThirtyDayHitRate() {
             <div class="sub_title">基本信息</div>
             <table class="base_info" width="100%" cellpadding="0" cellspacing="0" >
               <tr><td>名称</td><td>${oracleInfoModel.monitorName }</td></tr>
-              <tr><td>健康状况</td><td>${oracleInfoModel.health[2] }</td></tr>
+              <%--<tr><td>健康状况</td><td>${oracleInfoModel.health[2] }</td></tr>--%>
               <tr><td>类型</td><td>${oracleInfoModel.monitorType }</td></tr>
               <tr><td>Oracle版本</td><td>${oracleInfoModel.version }</td></tr>
               <tr><td>Oracle启动时间</td><td>${oracleInfoModel.startTime }</td></tr>
@@ -366,8 +351,8 @@ function createThirtyDayHitRate() {
             	<a href="#"><div class="seven_days"></div></a>
             --></div>
             <div id="day_available" ></div>
-             <a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
-          </div>
+             <!--<a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
+          --></div>
         </td>
       </tr>
       <tr>
@@ -383,9 +368,9 @@ function createThirtyDayHitRate() {
           <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>${oracleDetailModel.connectTime }ms</td><td></td></tr>
+                <tr><td>连接时间</td><td>${oracleDetailModel.connectTime }ms</td><td></td></tr><!--
                 <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
-              </table>
+              --></table>
          	</div>
          
       	</td>
@@ -395,15 +380,16 @@ function createThirtyDayHitRate() {
             <div class="days_data">
                <a onclick="createThirtyDayUser()"><div class="thirty_days"></div></a>
             	<a onclick="createSevenDayUser()"><div class="seven_days"></div></a>
+            	<div style="clear:both"></div>
             </div>
             <div id="user_last_onehour" ></div>
           </div>
            <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
               	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>用户数</td><td>${oracleDetailModel.activeCount }</td><td></td></tr>
+                <tr><td>用户数</td><td>${oracleDetailModel.activeCount }</td><td></td></tr><!--
                   <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
-              </table>
+              --></table>
          	</div>
         </td>
       </tr>
@@ -563,16 +549,16 @@ function createThirtyDayHitRate() {
           	<td width="50%" style="vertical-align:top; ">
             	<div style=' border:1px solid #dfe9f2;'>
                 <div class="sub_title">SGA明细</div>
-                <div id="sga_detail"></div>
+                <div id="sga_detail"></div><!--
                 <a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
-              </div>
+              --></div>
             </td>
             <td width="50%"  style="vertical-align:top; ">
             	<div style=' border:1px solid #dfe9f2;'>
                 <div class="sub_title">SGA状态</div>
-                <div id="sga_status"></div>
+                <div id="sga_status"></div><!--
                 <a href="#" ><div class="tool_bar_bottom"><div class="warn_set">警告配置</div></div></a>
-              </div>
+              --></div>
             </td>
           </tr>
         </table>

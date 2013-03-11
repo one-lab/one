@@ -14,7 +14,9 @@
     <link href="${ctx}/global/css/logDetail/logDetail.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         var ctx = "${ctx}"; //"4028927e3d333c27013d333d15c00001"4028921c3d4d3220013d4edcdaee00be//
-        var logId = "4028921c3d4d3220013d4edcdaee00be";//"${logId}";
+        var applicationId = "${applicationId}";
+        var urlId = "${urlId}";
+        var logId = "${logId}";
     </script>
     <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
     <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
@@ -27,8 +29,11 @@
 <div id="layout_center">
     <div class="log_detail" >
         <ul class="crumbs">
-            <li><a href="#">管理</a> ></li>
-            <li><b>配置告警</b></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a> ></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用列表</a> ></li>
+            <li><a href="${ctx}/application/manager/detail/main/${applicationId}">应用透视</a> ></li>
+            <li><a href="${ctx}/application/manager/url/main/${applicationId}/${urlId}">URL透视</a> ></li>
+            <li><b>事件日志透视</b></li>
         </ul>
         <div style="width:49%;float:left;">
             <div id="log_detail_grid" >

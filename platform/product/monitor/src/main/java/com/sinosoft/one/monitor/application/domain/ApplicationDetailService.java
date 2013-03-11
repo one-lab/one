@@ -106,7 +106,7 @@ public class ApplicationDetailService {
 		List<Url> urls = applicationRepository.selectAllUrlsWithApplicationId(applicationId);
 		List<UrlResponseTime> urlResponseTimes = new ArrayList<UrlResponseTime>();
 		for(Url url : urls) {
-			UrlResponseTime urlResponseTime = urlResponseTimeRepository.selectUrlResponseTimesForMonitorUrl(applicationId, startDate, endDate);
+			UrlResponseTime urlResponseTime = urlResponseTimeRepository.selectUrlResponseTimesForMonitorUrl(url.getId(), startDate, endDate);
 			urlResponseTime = urlResponseTime == null ? new UrlResponseTime() : urlResponseTime;
 			urlResponseTime.setUrlId(url.getId());
 			urlResponseTime.setUrl(url.getUrl());

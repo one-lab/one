@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +125,7 @@ public class OracleController {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		for (int i = 0; i < connectPoints.size(); i++) {
 			categories.add(sdf.format(connectPoints.get(i).getxAxis()));
-			connectData.add(connectPoints.get(i).getyAxis());
+			connectData.add(connectPoints.get(i).getyAxis()*100);
 		}
 		/*
 		 * labels: { 
@@ -131,7 +133,7 @@ public class OracleController {
 										} 
 		 */
 		JSONObject jos = new JSONObject();
-		jos.put("step", 4);
+		jos.put("step", 2);
 		xAxis.put("labels", jos);
 		xAxis.put("categories", categories);
 		surr.put("data", connectData);
@@ -158,13 +160,20 @@ public class OracleController {
 	public String viewSGA(@Param("monitorId")String monitorId) {
     	
 		OracleSGAModel oracleSGAModel = oracleSGAService.viewSGAInfo(monitorId);
-		BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize());;
-		BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize());
-		BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize());
-		BigDecimal libCacheSize =  new BigDecimal(oracleSGAModel.getLibCacheSize());
-		BigDecimal dictSize =  new BigDecimal(oracleSGAModel.getDictSize());
-		BigDecimal sqlAreaSize =  new BigDecimal(oracleSGAModel.getSqlAreaSize());
-		BigDecimal fixedSGASize = new BigDecimal( oracleSGAModel.getFixedSGASize());
+		BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize(),MathContext.DECIMAL32);
+		bufferCacheSize = bufferCacheSize.setScale(2,RoundingMode.CEILING);
+		BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize(),MathContext.DECIMAL32);
+		sharePoolSize =sharePoolSize.setScale(2,RoundingMode.CEILING);
+		BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize(),MathContext.DECIMAL32);
+		redoLogCacheSize = redoLogCacheSize.setScale(2,RoundingMode.CEILING);
+		BigDecimal libCacheSize =  new BigDecimal(oracleSGAModel.getLibCacheSize(),MathContext.DECIMAL32);
+		libCacheSize = libCacheSize.setScale(2,RoundingMode.CEILING);
+		BigDecimal dictSize =  new BigDecimal(oracleSGAModel.getDictSize(),MathContext.DECIMAL32);
+		dictSize = dictSize.setScale(6,RoundingMode.CEILING);
+		BigDecimal sqlAreaSize =  new BigDecimal(oracleSGAModel.getSqlAreaSize(),MathContext.DECIMAL32);
+		sqlAreaSize = sqlAreaSize.setScale(2,RoundingMode.CEILING);
+		BigDecimal fixedSGASize = new BigDecimal( oracleSGAModel.getFixedSGASize(),MathContext.DECIMAL32);
+		fixedSGASize= fixedSGASize.setScale(2,RoundingMode.CEILING);
 		JSONArray data = new JSONArray();
 		data.add(bufferCacheSize);
 		data.add(sharePoolSize);
@@ -243,47 +252,48 @@ public class OracleController {
 		GridModel bufferCacheSize = new GridModel();
 		bufferCacheSize.setId("1");
 		bufferCacheSize.setAttribute("缓冲区大小");
-		bufferCacheSize.setValue(oracleSGAModel.getBufferCacheSize());
+		bufferCacheSize.setValue(oracleSGAModel.getBufferCacheSize()+"M");
 		bufferCacheSize.setThreshold(threshold);
 		GridModel sharePoolSize = new GridModel();
 		sharePoolSize.setId("2");
 		sharePoolSize.setAttribute("共享池大小");
-		sharePoolSize.setValue(oracleSGAModel.getSharePoolSize());
+		sharePoolSize.setValue(oracleSGAModel.getSharePoolSize()+"M");
 		sharePoolSize.setThreshold(threshold);
 		GridModel  redoLogCacheSize = new GridModel();
+		String redolog = parseDoubleStringToString(oracleSGAModel.getRedoLogCacheSize());
 		redoLogCacheSize.setId("3");
-		redoLogCacheSize.setValue(oracleSGAModel.getRedoLogCacheSize());
+		redoLogCacheSize.setValue(redolog+"M");
 		redoLogCacheSize.setAttribute("RedoLog缓冲区");
 		redoLogCacheSize.setThreshold(threshold);
 		GridModel libCacheSize = new GridModel();
 		libCacheSize.setId("4");
 		libCacheSize.setAttribute("库缓存的大小");
-		libCacheSize.setValue(oracleSGAModel.getLibCacheSize());
+		libCacheSize.setValue(parseDoubleStringToString(oracleSGAModel.getLibCacheSize())+"M");
 		libCacheSize.setThreshold(threshold);
 		GridModel dictSize = new GridModel();
 		dictSize.setId("5");
 		dictSize.setAttribute("数据字典缓存大小");
-		dictSize.setValue(oracleSGAModel.getDictSize());
+		dictSize.setValue(parseDoubleStringToString(oracleSGAModel.getDictSize())+"M");
 		dictSize.setThreshold(threshold);
 		GridModel sqlAreaSize = new GridModel();
 		sqlAreaSize.setId("6");
 		sqlAreaSize.setAttribute("SQL区大小");
-		sqlAreaSize.setValue(oracleSGAModel.getSqlAreaSize());
+		sqlAreaSize.setValue(parseDoubleStringToString(oracleSGAModel.getSqlAreaSize())+"M");
 		sqlAreaSize.setThreshold(threshold);
 		GridModel fixedSGASize = new GridModel();
 		fixedSGASize.setId("7");
 		fixedSGASize.setAttribute("固有区大小");
-		fixedSGASize.setValue(oracleSGAModel.getFixedSGASize());
+		fixedSGASize.setValue(parseDoubleStringToString(oracleSGAModel.getFixedSGASize())+"M");
 		fixedSGASize.setThreshold(threshold);
 		GridModel javaPoolSize = new GridModel();
 		javaPoolSize.setId("8");
 		javaPoolSize.setAttribute("Java池大小");
-		javaPoolSize.setValue(oracleSGAModel.getJavaPoolSize());
+		javaPoolSize.setValue(parseDoubleStringToString(oracleSGAModel.getJavaPoolSize())+"M");
 		javaPoolSize.setThreshold(threshold);
 		GridModel largePoolSize= new GridModel();
 		largePoolSize.setId("9");
 		largePoolSize.setAttribute("Large池大小");
-		largePoolSize.setValue(oracleSGAModel.getLargePoolSize());
+		largePoolSize.setValue(parseDoubleStringToString(oracleSGAModel.getLargePoolSize())+"M");
 		largePoolSize.setThreshold(threshold);
 		
 		List<GridModel> gridModels = new ArrayList<GridModel>();
@@ -309,7 +319,18 @@ public class OracleController {
 		}
 		
 	}
-	
+	private String  parseDoubleStringToString(String number){
+			String rs = number;
+			String[] rsArr = rs.trim().split("\\.");
+			if(rsArr.length>1){
+				if(rsArr[0].equals("")){
+					rs = "0."+rsArr[1].substring(0,5);
+				}else{
+					rs = rsArr[0]+"."+rsArr[1].substring(0,1);
+				}
+			}
+			return rs;
+	}
 	//sga状态数据
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Get("viewSGAStatus/{monitorId}")
@@ -321,23 +342,23 @@ public class OracleController {
 		bufferHitRate.setId("1");
 		bufferHitRate.setAttribute("缓冲区命中率");
 	
-		bufferHitRate.setValue(sgaStateModel.getBufferHitRate());
+		bufferHitRate.setValue(sgaStateModel.getBufferHitRate()+"%");
 		bufferHitRate.setThreshold(threshold);
 		GridModel dictHitRate = new GridModel();
 		dictHitRate.setId("2");
 		dictHitRate.setAttribute("数据字典命中率");
-		dictHitRate.setValue(sgaStateModel.getDictHitRate());
+		dictHitRate.setValue(sgaStateModel.getDictHitRate()+"%");
 		dictHitRate.setThreshold(threshold);
 		GridModel libHitRate = new GridModel();
 		libHitRate.setId("3");
 		libHitRate.setAttribute("缓存库命中率");
-		libHitRate.setValue(sgaStateModel.getLibHitRate());
+		libHitRate.setValue(sgaStateModel.getLibHitRate()+"%");
 		libHitRate.setThreshold(threshold);
 		GridModel unusedCache = new GridModel();
 		unusedCache.setThreshold(threshold);
 		unusedCache.setId("4");
 		unusedCache.setAttribute("可用内存");
-		unusedCache.setValue(sgaStateModel.getUnusedCache());
+		unusedCache.setValue(sgaStateModel.getUnusedCache()+"M");
 		
 		List<GridModel> gridModels = new ArrayList<GridModel>();
 		gridModels.add(bufferHitRate);

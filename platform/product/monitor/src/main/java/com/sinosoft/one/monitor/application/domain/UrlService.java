@@ -2,7 +2,9 @@ package com.sinosoft.one.monitor.application.domain;
 
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.Url;
+import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
 import com.sinosoft.one.monitor.application.repository.UrlRepository;
+import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -23,8 +25,13 @@ import java.util.List;
 public class UrlService {
 
     @Autowired
-    UrlRepository urlRepository;
+    private UrlRepository urlRepository;
 
+	@Autowired
+	private ResourcesRepository resourcesRepository;
+
+	@Autowired
+	private EumUrlRepository eumUrlRepository;
     /**
      * 新增一个URL.
      */
@@ -45,7 +52,17 @@ public class UrlService {
      * 删除一个URL，通过URL的id.
      */
     @Transactional(readOnly = false)
-    public void deleteUrl(String id) {
+    public void deleteUrl(String bizScenarioId, String id) {
+	    //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
+	    urlRepository.deleteBizScenarioAndUrl(bizScenarioId,id);
+	    //先删除中间表GE_MONITOR_URL_METHOD的记录
+	    urlRepository.deleteUrlAndMethod(id);
+	    //删除GE_MONITOR_URL的记录
+	    urlRepository.delete(id);
+	    //删除Resources表中的记录
+	    resourcesRepository.delete(resourcesRepository.findByResourceId(id));
+	    // 删除eumUrl表中的记录
+	    eumUrlRepository.delete(eumUrlRepository.findByUrlId(id));
         urlRepository.delete(id);
     }
 

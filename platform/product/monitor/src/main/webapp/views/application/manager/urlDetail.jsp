@@ -36,8 +36,10 @@
 <div id="layout_center">
     <div class="time_info_all" id="main">
         <ul class="crumbs">
-            <li><a href="#">管理</a> ></li>
-            <li><b>配置告警</b></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a> ></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用列表</a> ></li>
+            <li><a href="${ctx}/application/manager/detail/main/${applicationId}">应用透视</a> ></li>
+            <li><b>URL透视</b></li>
         </ul>
         <div class="time_info_top">
             <div class="time_info_content">
@@ -164,29 +166,12 @@
                             <div id="list_table"></div>
                         </div>
                     </div>
-                    <div class="stuats_mark">
-                        <ul>
-                            <li><div class="red_status"></div><div>严重</div></li>
-                            <li><div class="yellow_status"></div><div>警告</div></li>
-                            <li><div class="green_status"></div><div>正常</div></li>
-                        </ul>
-                    </div>
                 </div>
-
-
-
 
                 <div class="event_log">
                     <div class="threshold_file">
                         <div class="tool_bar_top">事件日志</div>
                         <div id="event_log_grid"></div>
-                    </div>
-                    <div class="stuats_mark">
-                        <ul>
-                            <li><div class="red_status"></div><div>严重</div></li>
-                            <li><div class="yellow_status"></div><div>警告</div></li>
-                            <li><div class="green_status"></div><div>正常</div></li>
-                        </ul>
                     </div>
                 </div>
 
