@@ -206,7 +206,7 @@ function buildHighchart(_highChart) {
 		xAxis: {
 		    categories: _highChart.categories,
 		    labels: { 
-           	 step:16
+           	 step:6
 			 } 
 		},
 		yAxis: {
@@ -218,7 +218,7 @@ function buildHighchart(_highChart) {
 		plotOptions:{
 			series: {
                 marker: {
-                    radius: 0
+                    radius: 3
                 }
             }
 		},
@@ -226,7 +226,13 @@ function buildHighchart(_highChart) {
 		    text: '',
 		    href: ''
 		},
-		tooltip: false,
+		tooltip:{
+            enabled:true,
+            formatter:function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    this.x + ': ' + this.y;
+            }
+        },
 		legend: {
 			enabled :true
 		},
