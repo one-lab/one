@@ -231,7 +231,7 @@ public class Alarm  implements java.io.Serializable {
 		if (severity != alarm.severity) return false;
 		
 		if (subResourceType != alarm.subResourceType) return false;
-		if (!AlarmSource.EUM.name().equals(alarmSource)) {
+		if (AlarmSource.EUM != alarmSource) {
 			if (subResourceId != null ? !subResourceId.equals(alarm.subResourceId) : alarm.subResourceId != null)
 				return false;
 		}
