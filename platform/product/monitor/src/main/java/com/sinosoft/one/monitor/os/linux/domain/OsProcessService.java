@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
+import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.MessageBase;
 import com.sinosoft.one.monitor.os.linux.model.Os;
@@ -69,7 +70,7 @@ public class OsProcessService {
 		osRespondTimeService.saveRespondTime(osInfoId,respondTime , sampleTime);//保存响应时间采样
 		messageBase.addAlarmAttribute(AttributeName.ResponseTime, respondTime);
 		
-		messageBase.alarm();
+		messageBase.alarmSource(AlarmSource.OS).alarm();
 		//更新统计记录
 		osDataMathService.statiOneHourRam(osInfoId, sampleTime,hourPoint);//更新内存统计
 		osDataMathService.statiOneHourCpu(osInfoId, sampleTime,hourPoint);//更新CPU统计
