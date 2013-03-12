@@ -210,8 +210,6 @@ public class MethodManagerController {
      */
     @Get("delete/{urlId}/{methodId}")
     public String deleteMethod(@Param("urlId") String urlId, @Param("methodId") String methodId, Invocation inv) {
-        //写回urlId，返回method列表页面时用到
-        inv.getRequest().setAttribute("urlId",urlId);
         //先删除中间表GE_MONITOR_URL_METHOD的记录
         methodService.deleteUrlAndMethod(urlId,methodId);
         //删除GE_MONITOR_METHOD的记录
@@ -225,8 +223,6 @@ public class MethodManagerController {
      */
     @Post("batchdelete/{urlId}")
     public String batchDeleteMethod(@Param("urlId") String urlId, Invocation inv) {
-        //写回urlId，返回method列表页面时用到
-        inv.getRequest().setAttribute("urlId",urlId);
         String[] methodIds=inv.getRequest().getParameterValues("methodIds[]");
         //先删除中间表GE_MONITOR_URL_METHOD的记录
         methodService.batchDeleteUrlAndMethod(urlId,methodIds);
