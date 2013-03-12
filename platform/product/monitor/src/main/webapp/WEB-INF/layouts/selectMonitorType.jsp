@@ -5,12 +5,17 @@
             <option selected="selected" value="${ctx}/addmonitor/addapp">应用系统　　</option>
         </optgroup>
         <optgroup label="数据库">
+            <%--@todo 在这里改成新建数据库页面的url--%>
+            <option value="${ctx}/addmonitor/addapp">Oracle</option>
             <option value="${ctx}/addmonitor/addoracle">Oracle</option>
         </optgroup>
         <optgroup label="操作系统">
+            <%--@todo 在这里改成新建操作系统页面的url--%>
+            <option value="${ctx}/addmonitor/addapp">Linux</option>
             <option value="${ctx}/addmonitor/addos">Linux</option>
         </optgroup>
     </select>
+</h2>
 </h2>
 <script type="text/javascript">
     var _val =   location.href.substring( location.href.lastIndexOf("/")+1);

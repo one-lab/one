@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
@@ -27,6 +28,7 @@ import java.util.Map;
  * Date: 13-3-1
  * Time: 下午8:30
  */
+@Component
 public class MailService {
 	private JavaMailSender mailSender;
 	private String template;

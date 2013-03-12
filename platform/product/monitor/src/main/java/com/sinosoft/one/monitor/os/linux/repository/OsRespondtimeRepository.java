@@ -35,8 +35,8 @@ public interface OsRespondtimeRepository extends PagingAndSortingRepository<OsRe
 	
 	
 	//获取当前时间前最后一次响应时间(不定在轮询点内)
-	@SQL("select MAX(RESPOND_TIME) from GE_MONITOR_OS_RESPONDTIME where SAMPLE_DATE < to_date(?2,?3) ")
-	public String findLastResponTime(String osid,String currentTime,String dateFormat );
+	@SQL("select RESPOND_TIME from GE_MONITOR_OS_RESPONDTIME where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4)")
+	public String findLastResponTime(String osid,String biganTime,String currentTime,String dateFormat );
 
 }
 

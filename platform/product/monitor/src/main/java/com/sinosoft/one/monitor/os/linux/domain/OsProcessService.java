@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
 import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.MessageBase;
+import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
@@ -92,8 +93,13 @@ public class OsProcessService {
 	 * @param Status
 	 */
 	public void savaAvailableSampleData(String osInfoId,Date sampleTime,int interCycleTime ,String Status){
-		//保存本次采样
-		OsAvailabletemp osAvailabletemp =osAvailableServcie.saveAvailableTemp(osInfoId, sampleTime, Status,interCycleTime);
+		OsAvailabletemp osAvailabletemp=new OsAvailabletemp();
+		Os os=new Os();
+		os.setOsInfoId(osInfoId);
+		osAvailabletemp.setOs(os);
+		osAvailabletemp.setSampleDate(sampleTime);
+		osAvailabletemp.setStatus(Status);	
+		osAvailabletemp.setIntercycleTime(interCycleTime);
 		//统计采样结果 今天
 		Calendar c  = Calendar.getInstance();
 		c.setTime( sampleTime);
@@ -104,6 +110,8 @@ public class OsProcessService {
 		Date todayzeroTime= c.getTime();
 		//修改今天的统计表记录
 		osDataMathService.statiAvailable(osInfoId, sampleTime, todayzeroTime, interCycleTime, todayzeroTime,osAvailabletemp);//保存新统计记录
+		//保存本次采样
+		osAvailableServcie.saveAvailableTemp(osAvailabletemp);
 		//删除24小时前的数据
 		Calendar c2  = Calendar.getInstance();
 		c2.setTime( sampleTime);
