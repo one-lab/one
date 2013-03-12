@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sinosoft.one.monitor.db.oracle.domain.OracleMonitorTask;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.monitor.db.oracle.domain.OracleBatchInfoService;
@@ -42,7 +43,8 @@ public class OracleMonitorController {
 	private OracleBatchInfoService oracleBatchInfoService;
 	@Autowired
 	private OracleInfoService oracleInfoService;
-	
+    @Autowired
+    private OracleMonitorTask oracleMonitorTask;
 	/* 返回前台ajax请求数据信息*/
 	private Map<String, Object> message = new HashMap<String, Object>();
 	
@@ -219,6 +221,7 @@ public class OracleMonitorController {
 		try {
 			oracleInfo.setSysTime(new Date());
 			oracleInfoService.saveMonitor(oracleInfo);
+            oracleMonitorTask.addTask(oracleInfo);
 			message.put("result", true);
 		} catch (Exception e) {
 			message.put("result", false);
@@ -260,6 +263,7 @@ public class OracleMonitorController {
 			info.setPassword(oracleInfo.getPassword());
 			info.setInstanceName(oracleInfo.getInstanceName());
 			oracleInfoService.editMonitor(info);
+            oracleMonitorTask.updateTask(info);
 			message.put("result", true);
 		} catch (Exception e) {
 			message.put("result", false);
