@@ -85,17 +85,24 @@ public class OracleController {
 	public String viewAva(@Param("monitorId")String monitorId) {
 		AvaSta avaSta = oracleAvaService.findAvaSta(monitorId,
 				StaTimeEnum.TODAY);
-		long normalRuntime = avaSta.getNormalRuntime();
-		long powerOffTime = avaSta.getTotalPoweroffTime();
-		// 如何保留两位小数
-		Double usePercent = normalRuntime
-				/ (normalRuntime + powerOffTime / 1.0) * 100;
-		int usePercents = usePercent.intValue();
-		int unUsedPercents = 100 - usePercents;
-		JSONArray  y = new JSONArray();
-		y.add(unUsedPercents);
-		//System.out.println(y.toJSONString());
-		return "@"+y.toJSONString();
+        if(avaSta!=null){
+            long normalRuntime = avaSta.getNormalRuntime();
+            long powerOffTime = avaSta.getTotalPoweroffTime();
+            // 如何保留两位小数
+            Double usePercent = normalRuntime
+                    / (normalRuntime + powerOffTime / 1.0) * 100;
+            int usePercents = usePercent.intValue();
+            int unUsedPercents = 100 - usePercents;
+            JSONArray  y = new JSONArray();
+            y.add(unUsedPercents);
+            //System.out.println(y.toJSONString());
+            return "@"+y.toJSONString();
+        }  else {
+            JSONArray  y = new JSONArray();
+            y.add(0);
+            //System.out.println(y.toJSONString());
+            return "@"+y.toJSONString();
+        }
 	}
 	
     @Get("viewConnect/{monitorId}")
@@ -386,12 +393,14 @@ public class OracleController {
 		HighchartSerie highchartSerie1 = new HighchartSerie("缓冲区命中率");
 		HighchartSerie highchartSerie2 = new HighchartSerie("数据字典命中率");
 		HighchartSerie highchartSerie3 = new HighchartSerie("缓存库命中率");
-		for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
-			highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100);
-			highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate())*100);
-			highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate())*100);
-			highchart.addCategory(oracleSGAHitRate.getRecordTime());
-		}
+        if(sgaHitRateModels!=null){
+            for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
+                highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100);
+                highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate())*100);
+                highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate())*100);
+                highchart.addCategory(oracleSGAHitRate.getRecordTime());
+            }
+        }
 		highchart.addSerie(highchartSerie1);
 		highchart.addSerie(highchartSerie2);
 		highchart.addSerie(highchartSerie3);
