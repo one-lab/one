@@ -241,7 +241,7 @@ public class OracleMonitorController {
 	public String editUI(@Param("monitorId")String monitorId,Invocation inv) {
 		Info oracleInfo = oracleInfoService.getInfo(monitorId);
 		inv.addModel("oracleInfo", oracleInfo);
-		return "oracleSave";
+		return "/views/addOracle.jsp";
 	}
 	
 	/**
@@ -283,6 +283,10 @@ public class OracleMonitorController {
 	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
 
 		oracleInfoService.deleteMonitor(monitorIds);
+        for(int i=0;i<monitorIds.size();i++){
+            Info info = new Info(monitorIds.get(i));
+            oracleMonitorTask.deleteTask(info);
+        }
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}
