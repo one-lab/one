@@ -106,19 +106,19 @@
                     </tr>
                     <tr>
                         <td>全类名<span class="mandatory">*</span></td>
-                        <td><input id="className" name="className" type="text" value="${method.className}" class="formtext" size="100" />
+                        <td><input id="className" name="className" type="text" value="${method.className}" class="formtext" />
                             <msg:errorMsg property="className" type="message"/>
                         </td>
                     </tr>
                     <tr>
                         <td>方法名<span class="mandatory">*</span></td>
-                        <td><input id="methodName" name="methodName" type="text" value="${method.methodName}" class="formtext" size="100" />
+                        <td><input id="methodName" name="methodName" type="text" value="${method.methodName}" class="formtext" />
                             <msg:errorMsg property="methodName" type="message"/>
                         </td>
                     </tr>
                     <tr>
                         <td width="25%">方法描述<span class="mandatory"></span></td>
-                        <td><input name="description" type="text" value="${method.description}" class="formtext" size="100" /></td>
+                        <td><textarea name="description" value="${method.description}" class="formtext" style="height: 60px;width: 220px" ></textarea></td>
                     </tr>
                         <%--<tr>
                             <td width="25%">方法阈值<span class="mandatory"></span></td>

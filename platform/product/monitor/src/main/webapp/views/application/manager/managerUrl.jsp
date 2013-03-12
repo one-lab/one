@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>管理URL</title>
     <%@include file="/WEB-INF/layouts/base.jsp"%>
+    <link href="${ctx}/global/css/manageBusScene/manageBusScene.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 $(function(){
 	$("body").layout({

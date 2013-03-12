@@ -221,6 +221,8 @@ public class UrlManagerController {
                             @Param("urlId") String urlId, Invocation inv) {
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
+        //更新GE_MONITOR_EUM_URL表中的URL地址
+        eumUrlRepository.updateEumUrlsWithUrlId(url.getUrl(),url.getId());
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //Url列表页面
         return "managerUrl";

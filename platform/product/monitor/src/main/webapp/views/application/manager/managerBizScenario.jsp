@@ -6,7 +6,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>管理业务场景</title>
+
     <%@include file="/WEB-INF/layouts/base.jsp"%>
+    <link href="${ctx}/global/css/manageBusScene/manageBusScene.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 $(function(){
 	$("body").layout({

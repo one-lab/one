@@ -14,6 +14,7 @@ import com.sinosoft.one.mvc.web.validation.annotation.Validation;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -114,6 +115,9 @@ public class MethodManagerController {
         //当前Method所属的Url
         method.setUrl(url);
         method.setStatus(String.valueOf(1));
+        if(StringUtils.isBlank(method.getDescription())){
+            method.setDescription("-");
+        }
         //保存当前创建method的用户
         method.setCreatorId(creatorId);
         method.setCreateTime(new Date());
