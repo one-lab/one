@@ -127,10 +127,10 @@ public class OsProcessService {
 	 * @param osInfoId
 	 * @return
 	 */
-	public Date getLastSampleTime(String osInfoId ,Date currentTime){
+	public OsAvailabletemp getLastSampleTime(String osInfoId ,Date currentTime){
 		//获取最后一次可用性记录
  		OsAvailabletemp osAvailabletemp=OsAvailableServcie.getLastAvailable(osInfoId, currentTime);
-		return osAvailabletemp.getSampleDate();
+		return osAvailabletemp;
 	}
 	
 	
