@@ -113,7 +113,7 @@ public class Alarm  implements java.io.Serializable {
     this.message = message;
     }
     
-    @Column(name="alarm_from", length=20)
+    @Column(name="alarm_source", length=20)
     @Enumerated(value = EnumType.STRING)
     public AlarmSource getAlarmSource() {
     return this.alarmSource;

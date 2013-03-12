@@ -233,7 +233,7 @@ function createResponseTimeChart(times, data) {
                 color: '#808080'
             }],
             min : 0,
-            tickInterval:100
+            tickInterval:1000
         },
         plotOptions:{
             line:{              // 数据点的点击事件
