@@ -56,7 +56,7 @@
                 return this.replace(/(^\s*|\s*$)/g,'');
             }
             if (form.className.value==null||form.className.value.trim()=="") {
-                alert("全类名不能为空或者空格！");
+                msgAlert('系统消息','全类名不能为空或者空格！')
                 return false;
             }
             /*var cName="^[A-Za-z0-9.]+$";
@@ -65,11 +65,11 @@
                 return false;
             }*/
             if (form.className.value.length>500) {
-                alert("全类名长度不能超过500！");
+                msgAlert('系统消息','全类名长度不能超过500！')
                 return false;
             }
             if (form.methodName.value==null||form.methodName.value.trim()=="") {
-                alert("方法名不能为空或者空格！");
+                msgAlert('系统消息','方法名不能为空或者空格！')
                 return false;
             }
             /*var mName="^[A-Za-z0-9(),]+$";
@@ -78,7 +78,7 @@
                 return false;
             }*/
             if (form.methodName.value.length>100) {
-                alert("方法名长度不能超过300！");
+                msgAlert('系统消息','方法名长度不能超过300！')
                 return false;
             }
             return true;

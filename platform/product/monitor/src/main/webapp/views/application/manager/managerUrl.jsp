@@ -68,25 +68,26 @@ function hideNav(e){
 	$(document).unbind();
 }
 function delRow(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    /*id前面多了“rows”*/
-    var urlId=id.substr(4,32);
-    /*删除url操作*/
-    window.location.href="${ctx}/application/manager/urlmanager/delete/${bizScenarioId}/"+urlId;
+    msgConfirm('系统消息','确定要删除当前的URL吗？',function(){
+        var rows = $(e).parent().parent();
+        var id = rows.attr('id');
+        /*id前面多了“rows”*/
+        var urlId=id.substr(4,32);
+        /*删除url操作*/
+        window.location.href="${ctx}/application/manager/urlmanager/delete/${bizScenarioId}/"+urlId;
+    });
 }
 function urlBatchDel(){
     var $g = $("#thresholdList div.grid_view > table");
     var selecteds = $("td.multiple :checked",$g);
     if(selecteds.length > 0){
-        msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+        msgConfirm('系统消息','确定要删除这些URL吗？',function(){
             var _urlIds = [];
             selecteds.each(function(){
                 var rows = $(this).parent().parent();
                 /*id前面多了“rows”*/
                 _urlIds.push(rows.attr('id').substr(4,32));
             });
-            alert(_urlIds);
             $.ajax({
                 type:"post",
                 url:"${ctx}/application/manager/urlmanager/batchdelete/${bizScenarioId}",
@@ -96,16 +97,16 @@ function urlBatchDel(){
                         selecteds.each(function(){
                             $(this).parent().parent().remove();
                         });
-                        alert("删除成功");
+                        msgSuccess('系统消息','删除成功！')
                     }
                 },
                 error:function(){
-                    alert("删除失败");
+                    msgAlert('系统消息','删除失败！')
                 }
             });
         });
     }else{
-        msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
+        msgAlert('系统消息','没有选中的URL！<br />请选择要删除的URL后，继续操作。')
     };
 }
 function managerMethod(e){

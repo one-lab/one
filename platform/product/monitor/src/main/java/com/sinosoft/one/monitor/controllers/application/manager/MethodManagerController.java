@@ -199,6 +199,9 @@ public class MethodManagerController {
                                @Param("urlId") String urlId, @Param("methodId") String methodId,Invocation inv) {
         //将urlId写回，managerMethod页面发送ajax请求时会用到
         inv.getRequest().setAttribute("urlId",urlId);
+        if(StringUtils.isBlank(method.getDescription())){
+            method.setDescription("-");
+        }
         //获得当前用户
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         methodService.updateMethodWithModifyInfo(methodId,method.getClassName(),method.getMethodName(),method.getDescription(),modifierId);

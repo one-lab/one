@@ -114,7 +114,7 @@ function batchDel(){
 	var $g = $("#thresholdList div.grid_view > table");
 	var selecteds = $("td.multiple :checked",$g);
 	if(selecteds.length > 0){
-		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+		msgConfirm('系统消息','确定要删除选择的告警信息吗？',function(){
 			var _alarmIds = [];
 			selecteds.each(function(){
 				var rows = $(this).parent().parent();
@@ -137,7 +137,7 @@ function batchDel(){
                     }
                 },
                 error:function(){
-                    msgSuccess("系统消息", "删除失败！");
+                    msgAlert("系统消息", "删除失败！");
                 }
             });
 		});
