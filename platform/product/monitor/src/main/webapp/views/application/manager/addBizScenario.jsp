@@ -53,12 +53,12 @@ function save(){
 /*校验数据*/
 function isValid(form) {
     if (form.name.value==null||form.name.value=="") {
-        alert("场景名称不能为空！");
+        msgAlert('系统消息','场景名称不能为空！')
         return false;
     }
     var bsGrade=form.bizScenarioGrade.value;
     if(bsGrade!="高"&&bsGrade!="中"&&bsGrade!="低"){
-        alert("必须选择场景级别！");
+        msgAlert('系统消息','必须选择场景级别！')
         return false;
     }
     return true;
@@ -102,6 +102,7 @@ function isValid(form) {
                 <td>级别<span class="mandatory">*</span></td>
                 <td>
                 	<select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect" >
+                    <option value="">选择级别</option>
                     <option>高</option>
                     <option>中</option>
                     <option>低</option>

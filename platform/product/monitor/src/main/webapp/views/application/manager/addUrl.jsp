@@ -61,19 +61,19 @@ function isValid(form) {
         return this.replace(/(^\s*|\s*$)/g,'');
     }
     if (form.url.value==null||form.url.value.trim()=="") {
-        alert("URL地址不能为空或者空格！");
+        msgAlert('系统消息','URL地址不能为空或者空格！')
         return false;
     }
     if (form.url.value.length>500) {
-        alert("URL地址长度不能超过500！");
+        msgAlert('系统消息','URL地址长度不能超过500！')
         return false;
     }
     if (form.description.value==null||form.description.value.trim()=="") {
-        alert("URL描述不能为空或者空格！");
+        msgAlert('系统消息','URL描述不能为空或者空格！')
         return false;
     }
     if (form.description.value.length>300) {
-        alert("URL描述长度不能超过300！");
+        msgAlert('系统消息','URL描述长度不能超过300！')
         return false;
     }
     return true;
