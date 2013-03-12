@@ -70,7 +70,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             }
             oracleAvaInfoModel.setAvaRate(avaRate + "");
             if(staTimeEnum==StaTimeEnum.LAST_24HOUR){
-                List<Ava> avaList0 = avaRepository.find24Day(timeStart);
+                List<Ava> avaList0 = avaRepository.find24Day(timeStart,info.getId());
                 List<Ava> avaList = caculate(avaList0,timeStart.getTime(),now.getTime());
                 List<String[]> parts = new ArrayList<String[]>();
                 for (int i = 0; i < avaList.size() - 1; i++) {
@@ -88,6 +88,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             }
             oracleAvaInfoModelList.add(oracleAvaInfoModel);
         }
+
         return oracleAvaInfoModelList;
     }
     private List<Ava> caculate(List<Ava> avaList,long startTime,long endTime){
@@ -374,7 +375,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             oracleStaBaseInfoModel.setMonitorID(info.getId());
             oracleStaBaseInfoModel.setMonitorName(info.getName());
             //查询数据库得到当前是否可连接
-            String state = avaRepository.findState();
+            String state = avaRepository.findState(info.getId());
             oracleStaBaseInfoModel.setUsability(state);
             //获取5分钟前到现在报警信息
             Date endTime = new Date();

@@ -108,7 +108,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         OracleInfoModel oracleInfoModel = new OracleInfoModel();
         Info info = infoRepository.findOne(monitorId);
-        String state = avaRepository.findState();
+        String state = avaRepository.findState(info.getId());
         //*健康状况与预警相关 ，暂时不做
         Date endTime = new Date();
         Calendar calendar = Calendar.getInstance();
