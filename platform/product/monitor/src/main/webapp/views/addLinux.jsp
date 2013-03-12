@@ -95,7 +95,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="group_name">&nbsp;222222222222222</td>
+                        <td class="group_name">&nbsp;</td>
                         <td class="group_name"><input type="button" class="buttons"
                                                       value="确定添加" onclick="savelinux()"/> <input type="reset"
                                                                                              class="buttons"

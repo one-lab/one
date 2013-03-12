@@ -163,4 +163,5 @@ padding-left:25px}
 .help li{padding-top:30px;background:url(../images/liu.gif) no-repeat center 4px;color:#555}
 .help .first{padding:0 0 30px;background-position:center bottom;margin-bottom:4px;}
 .help .the_set{padding:2px 4px;background:#fff;border:#f6a107 1px solid;color:#000}
-*+html #main{position:relative;overflow:hidden;overflow-y:auto;position:absolute}
+*+html #main{position:relative;overflow: hidden;overflow-y:auto;position:absolute}
+*+html #thresholdList{overflow: visible !important;}
