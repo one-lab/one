@@ -47,7 +47,7 @@ public class OracleStaServiceImpl implements OracleStaService {
 //                staInfoDetailModel.setError();
                 staInfoDetailModel.setEventName("连接时间 ms");
                 //表数据
-                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
+                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "",monitorId);
                 staInfoDetailModel.setRecordItems(eventStaList);
                 //点列
                 List<Point> points = new ArrayList<Point>();
@@ -88,7 +88,7 @@ public class OracleStaServiceImpl implements OracleStaService {
             case 2: {
                 staInfoDetailModel.setEventName("用户数");
                 //表数据
-                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
+                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "", monitorId);
                 staInfoDetailModel.setRecordItems(eventStaList);
                 //点列
                 List<Point> points = new ArrayList<Point>();
@@ -129,7 +129,7 @@ public class OracleStaServiceImpl implements OracleStaService {
             case 3: {
                 staInfoDetailModel.setEventName("缓冲区击中率");
                 //表数据
-                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "");
+                List<EventSta> eventStaList = eventStaRepository.findAllByTimeAndType(time, now, eventType + "", monitorId);
                 staInfoDetailModel.setRecordItems(eventStaList);
                 //点列
                 List<Point> points = new ArrayList<Point>();
