@@ -31,7 +31,7 @@ public class OsStatiViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatCpuMaxStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
+	public List<List<?>> creatCpuMaxStatiLine(List<StatiDataModel> osStatis){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (StatiDataModel statiDataModel:osStatis) {
 			 DateTime date= new DateTime(statiDataModel.getDate());
@@ -50,7 +50,7 @@ public class OsStatiViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatCpuAvaStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
+	public List<List<?>> creatCpuAvaStatiLine(List<StatiDataModel> osStatis){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (StatiDataModel statiDataModel:osStatis) {
 			 DateTime date= new DateTime(statiDataModel.getDate());
@@ -69,7 +69,7 @@ public class OsStatiViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatCpuMinStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
+	public List<List<?>> creatCpuMinStatiLine(List<StatiDataModel> osStatis){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (StatiDataModel statiDataModel:osStatis) {
 			 DateTime date= new DateTime(statiDataModel.getDate());

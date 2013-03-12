@@ -55,15 +55,21 @@ public class UrlService {
     public void deleteUrl(String bizScenarioId, String id) {
 	    //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
 	    urlRepository.deleteBizScenarioAndUrl(bizScenarioId,id);
-	    //先删除中间表GE_MONITOR_URL_METHOD的记录
-	    urlRepository.deleteUrlAndMethod(id);
-	    //删除GE_MONITOR_URL的记录
-	    urlRepository.delete(id);
-	    //删除Resources表中的记录
-	    resourcesRepository.delete(resourcesRepository.findByResourceId(id));
-	    // 删除eumUrl表中的记录
-	    eumUrlRepository.delete(eumUrlRepository.findByUrlId(id));
-        urlRepository.delete(id);
+        //如果当前url有关联的其它业务场景，那么不能删除
+        List<String> bizScenarioIds=urlRepository.selectUrlsWithUrlId(id);
+        if(null!=bizScenarioIds&&bizScenarioIds.size()>0){
+            return;
+            //如果当前url没有关联其它的业务场景，那么删除当前url
+        }else if(null==bizScenarioIds||bizScenarioIds.size()==0){
+            //先删除中间表GE_MONITOR_URL_METHOD的记录
+            urlRepository.deleteUrlAndMethod(id);
+            //删除Resources表中的记录
+            resourcesRepository.delete(resourcesRepository.findByResourceId(id));
+            // 删除eumUrl表中的记录
+            eumUrlRepository.delete(eumUrlRepository.findByUrlId(id));
+            //删除GE_MONITOR_URL的记录
+            urlRepository.delete(id);
+        }
     }
 
     /**

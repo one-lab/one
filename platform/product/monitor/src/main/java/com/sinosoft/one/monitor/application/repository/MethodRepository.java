@@ -3,7 +3,6 @@ package com.sinosoft.one.monitor.application.repository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.application.model.Method;
-import com.sinosoft.one.mvc.web.annotation.Param;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
@@ -13,16 +12,17 @@ public interface MethodRepository extends PagingAndSortingRepository<Method, Str
     Method findByMethodName(String methodName);
 
     @SQL("select * from GE_MONITOR_METHOD a where a.ID in (select m.METHOD_ID from GE_MONITOR_URL_METHOD m where m.url_id=?1)")
-    List<Method> selectMethodsOfUrlById(@Param("urlId") String urlId);
-
-    /*@SQL("update GE_MONITOR_METHOD set CLASS_NAME=:className,METHOD_NAME=:methodName,DESCRIPTION=:description,MODIFIER_ID=:modifierId,MODIFY_TIME=sysdate where id=:methodId")
-    void updateMethod(@Param("methodId") String methodId,@Param("className") String className, @Param("methodName") String methodName, @Param("description") String description, @Param("modifierId") String modifierId, @Param("modifyTime") Date modifyTime);*/
+    List<Method> selectMethodsOfUrlById(String urlId);
 
     @SQL("update GE_MONITOR_METHOD set CLASS_NAME=?2,METHOD_NAME=?3,DESCRIPTION=?4,MODIFIER_ID=?5,MODIFY_TIME=sysdate where id=?1")
-    void updateMethod(@Param("methodId") String methodId,@Param("className") String className, @Param("methodName") String methodName, @Param("description") String description, @Param("modifierId") String modifierId);
+    void updateMethod(String methodId, String className, String methodName, String description, String modifierId);
 
     @SQL("delete GE_MONITOR_URL_METHOD a where a.URL_ID=?1 and a.METHOD_ID=?2")
     void deleteUrlAndMethod(String urlId, String methodId);
+
+    //查询中间表GE_MONITOR_URL_METHOD中是否还有其它url与当前method关联
+    @SQL("select a.URL_ID from GE_MONITOR_URL_METHOD a where a.METHOD_ID=?1")
+    List<String> selectAllUrlIdsWithMethodId(String methodId);
 
     @SQL("delete GE_MONITOR_URL_METHOD a where a.URL_ID=?1 and a.METHOD_ID in (?2)")
     void batchDeleteUrlAndMethod(String urlId, String[] methodIds);

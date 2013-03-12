@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -161,20 +162,12 @@ public class OsViewHandle {
 	 * @return
 	 */
 	public Map<String,List<List<?>>> creatStatiLine(String osid,String statitype, Date currentTime,int timespan ){
-		long span;
-		if(timespan>1){
-			span=(timespan-1)*24;
-		}else{
-			span=(timespan*24);
-		}
 		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
-		Date dayPoint= new Date(currentTime.getTime()-Long.valueOf(span*60*60*1000));
-		dayPoint=OsTransUtil.getDayPointByDate(dayPoint);//天整点
+		Date dayPoint=OsTransUtil.getBeforeDate(currentTime, timespan+"");//取前timespan天的时间段整点
 		List<StatiDataModel> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime);
-		currentTime=OsTransUtil.getDayPointByDate(currentTime);//获取当天整点
-		List<List<?>> cpuMaxmaps=osStatiViewHandle.creatCpuMaxStatiLine( osStatis, currentTime, dayPoint, timespan);
-		List<List<?>> cpuMinmaps=osStatiViewHandle.creatCpuMinStatiLine( osStatis, currentTime, dayPoint, timespan);
-		List<List<?>> cpuAvemaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis, currentTime, dayPoint, timespan);
+		List<List<?>> cpuMaxmaps=osStatiViewHandle.creatCpuMaxStatiLine( osStatis);
+		List<List<?>> cpuMinmaps=osStatiViewHandle.creatCpuMinStatiLine( osStatis);
+		List<List<?>> cpuAvemaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis);
 		viewMap.put("max", cpuMaxmaps);
 		viewMap.put("min", cpuMinmaps);
 		viewMap.put("ave", cpuAvemaps);
@@ -191,10 +184,8 @@ public class OsViewHandle {
 	 * @return
 	 */
 	public List<OsGridModel> creatStatiGrid(String osid,String statitype, Date currentTime,int timespan ){
-		long span=0;
 		SimpleDateFormat simpleDateFormat;
 		if(timespan>1){
-			span=24;	
 			simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		}else{
 			
@@ -203,12 +194,13 @@ public class OsViewHandle {
 		List<OsGridModel>osGridModels= new ArrayList<OsGridModel>();
 		Date dayPoint=OsTransUtil.getBeforeDate(currentTime, timespan+"");
 		List<StatiDataModel> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime);
+		DecimalFormat dec = new DecimalFormat("0.##"); 
 		for (StatiDataModel statiDataModel : osStatis) {
 			OsGridModel osGridModel=new OsGridModel();
-			osGridModel.setMaxValue(statiDataModel.getMaxValue());
-			osGridModel.setMinValue(statiDataModel.getMinValue());
+			osGridModel.setMaxValue(dec.format(new BigDecimal(statiDataModel.getMaxValue()).setScale(2, BigDecimal.ROUND_HALF_UP)));
+			osGridModel.setMinValue(dec.format(new BigDecimal(statiDataModel.getMinValue()).setScale(2, BigDecimal.ROUND_HALF_UP)));
+			osGridModel.setAverageValue(dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP)));
 			osGridModel.setTime(simpleDateFormat.format(statiDataModel.getDate()));
-			osGridModel.setAverageValue(statiDataModel.getAvgValue());
 			osGridModels.add(osGridModel);
 		}
 		return osGridModels;

@@ -27,7 +27,6 @@ import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
-import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
@@ -66,7 +65,6 @@ public class LinuxcentosController {
 	private OsDiskViewHandle osDiskViewHandle;
 	@Post("osInfo/{osId}")
 	public Reply osInfo(@Param("osId") String osId ) {
-		System.out.println(osId);
 		Map<String, String> map = new HashMap<String, String>();
 		Date currentTime=new Date();
 		//获取操作系统基本信息】【
@@ -85,7 +83,6 @@ public class LinuxcentosController {
 		c.setTime(lastSampleTime);
 		c.set(Calendar.MINUTE, lastSampleTime.getMinutes()+os.getIntercycleTime());
 		Date nextSampleTime=c.getTime();
-		System.out.println(osId);
 		map.put("lastTime", simpleDateFormat.format(lastSampleTime));
 		map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
 		map.put("respondTime",responTime+"毫秒");

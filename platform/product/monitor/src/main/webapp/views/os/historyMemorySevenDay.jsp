@@ -93,7 +93,7 @@ function hideNav(e){
 					<div class="sub_title">
 						最近7天的物理内存利用率
 					</div>
-					<input id="osid" value="${os.osInfoId }" />
+					<input id="osid"  type="hidden" value="${os.osInfoId }" />
 					<table class="base_info" width="100%" cellpadding="0"
 						cellspacing="0">
 						<tr>

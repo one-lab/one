@@ -60,7 +60,6 @@ public class OsCpuViewHandle {
 			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
 			for (OsCpu osCpu:osCpus) {
 				 DateTime date= new DateTime(osCpu.getSampleDate());
-				 System.out.println("-------------------="+date.toString());
 				Long time = date.getMillis();
 				Double utiliZation = Double.parseDouble(osCpu.getUtiliZation());
 				data.add(Lists.newArrayList(time,utiliZation));
@@ -231,10 +230,10 @@ public class OsCpuViewHandle {
 	}
 	
 	
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		DateTime now =new DateTime(2013,3,11,17,50,04,DateTimeZone.UTC);
 		System.out.println(now.getMillis());
-	}
+	}*/
 	
 }
 	

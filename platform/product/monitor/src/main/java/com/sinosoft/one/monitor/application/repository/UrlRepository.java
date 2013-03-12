@@ -21,6 +21,9 @@ public interface UrlRepository extends PagingAndSortingRepository<Url, String> {
     @SQL("delete GE_MONITOR_BIZ_SCENARIO_URL a where a.BIZ_SCENARIO_ID=?1 and a.URL_ID=?2")
     void deleteBizScenarioAndUrl(String bizScenarioId,String urlId);
 
+    @SQL("select a.BIZ_SCENARIO_ID from GE_MONITOR_BIZ_SCENARIO_URL a where a.URL_ID=?1")
+    List<String> selectUrlsWithUrlId(String urlId);
+
     @SQL("delete GE_MONITOR_URL_METHOD a where a.URL_ID=?1")
     void deleteUrlAndMethod(String urlId);
 

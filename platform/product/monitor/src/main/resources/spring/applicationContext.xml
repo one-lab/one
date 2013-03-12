@@ -95,6 +95,8 @@
                 <!--anno：不拦截请求-->
                 /=anon
                 /services/**=anon
+                /recieveOsInfo**=anon	   <!--Linux响应客户端的请求连接 在OsAgentController中-->
+                /recieveOsResult**=anon    <!--Linux响应客户端的请求连接 在OsAgentController中-->
                 /application/manager/appmanager/match = anon
                 /application/agent/message = anon
                 <!--loginfilter：拦截请求-->

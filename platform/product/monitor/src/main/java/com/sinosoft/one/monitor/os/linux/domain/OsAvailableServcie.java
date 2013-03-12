@@ -117,16 +117,15 @@ public class OsAvailableServcie {
 	 * timespan 时间1  7 30 等  天为单位
 	 */
 	public List<OsAvailable> getAvailablesByDate(String osid,Date curruntTime,int timespan){
+		Date beginTime =new Date();
 		if(timespan>1){
-			timespan=(timespan-1)*24;
+//			timespan=(timespan-1)*24;
+			beginTime =OsTransUtil.getBeforeDate(curruntTime, timespan+"");
 		}else{
-			timespan=24;
+			beginTime =OsTransUtil.getDayPointByDate(curruntTime);
+//			timespan=24;
 		}
 		//取当天的24小时整时点
-		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
-		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*24*60*60*1000)+"")));
-		System.out.println(curruntTime);
-		System.out.println(beginTime);
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osAvailableRepository.getOsAvailablesByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
 	}
@@ -144,9 +143,6 @@ public class OsAvailableServcie {
 		//取当天的24小时整时点
 		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
 		Date beginTime =OsTransUtil.getBeforeDate(curruntTime, timespan+"");
-		System.out.println(curruntTime);
-		System.out.println(beginTime);
-		
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		return osAvailableRepository.getOsAvailablesHistoryByDate( osid,simpleDateFormat.format(beginTime), simpleDateFormat.format(curruntTime),OsUtil.ORCL_DATEFORMATE);
 	}

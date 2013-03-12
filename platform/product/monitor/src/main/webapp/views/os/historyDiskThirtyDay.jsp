@@ -125,7 +125,7 @@
 		<div class="main" style="margin-bottom: 60px;">
 			<div class="threshold_file">
 				<div class="sub_title">最近30天的磁盘利用率</div>
-				<input id="osid" value="${os.osInfoId }" />
+				<input id="osid" type="hidden" value="${os.osInfoId }" />
 				<table class="base_info" width="100%" cellpadding="0"
 					cellspacing="0">
 					<tr>

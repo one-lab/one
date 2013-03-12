@@ -56,7 +56,6 @@ public class OsManagerController {
 	@Post("isIpExists")
 	public Reply isIpExists(Invocation inv) {
 		String ip = inv.getParameter("ipAddr");
-		System.out.println(osService.checkOsByIp(ip));
 		if (osService.checkOsByIp(ip)) {
 			return Replys.with(true).as(Json.class);
 		} else
@@ -83,13 +82,11 @@ public class OsManagerController {
 	public String systemMonitorTable(@Param("timespan") String timespan,
 			Invocation inv) {
 		if ("24".equals(timespan)) {
-
 			// 0 hong 1 zheng 2wushuju
 			Date date=new Date();
 			Map<String, Object> Modelmap =  osViewDataHandleService.getAvailableViewData(date);
 			List<String> timeList= new ArrayList<String>();
 			Date time=(Date) Modelmap.get("beginTime");
-			System.out.println(time);
 			SimpleDateFormat simpleDateFormat =new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS_MINE);
 			Calendar c  = Calendar.getInstance();
 			for (int i = 0; i < 12; i++) {
@@ -103,16 +100,13 @@ public class OsManagerController {
 					c.set(Calendar.MINUTE, 0);
 					c.set(Calendar.SECOND, 0);
 					 
-					System.out.println(simpleDateFormat.format(c.getTime()));
 					timeList.add(simpleDateFormat.format(c.getTime()));
 					time=c.getTime();
 				}
 			}
-			System.out.println(Modelmap.get("beginTime"));
 			List<Map<String, Object>> maplist= (List<Map<String, Object>>) Modelmap.get("mapList");
 			inv.addModel("maplist",maplist);
 			inv.addModel("timeList",timeList);
-			
 			return "systemMonitorTable";
 			//30天的逻辑
 		}else if("30".equals(timespan)){
@@ -210,7 +204,6 @@ public class OsManagerController {
 	@Get("performanceList")
 	public Reply performanceList() {
 		Map<String, ?> viewMap=osLineViewHandle.createlineView(new Date(), 5, 1);
-		System.out.println(Replys.with(viewMap).as(Json.class).toString());
 		return Replys.with(viewMap).as(Json.class);
 	}
 	
@@ -227,7 +220,7 @@ public class OsManagerController {
 		String messageFormat0 = "<a href={0}>{1}</a>"; //数据库名
 		String messageFormat1 = "<div class={0}></div>"; //可用性-usability
 		String messageFormat2 = "<div class={0}></div>"; //健康状况-healthy
-//		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
+		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
 		/* 查询数据库健康列表数据*/
 		Date currentDate=new Date();
 		List<Os>oss=osService.getAllOs();
@@ -250,7 +243,7 @@ public class OsManagerController {
 			cell.add(MessageFormat.format(messageFormat0, url, osBaseInfoModel.getMonitorName()));
 			cell.add(MessageFormat.format(messageFormat1, usabilityClass));
 			cell.add(MessageFormat.format(messageFormat2, healthyClass));
-//			cell.add(MessageFormat.format(messageFormat3, editUrl));
+			cell.add(MessageFormat.format(messageFormat3, editUrl));
 			row.put("cell", cell);
 			rows.add(row);
 		}
