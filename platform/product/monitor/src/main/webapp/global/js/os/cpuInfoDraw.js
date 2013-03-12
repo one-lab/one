@@ -4,6 +4,7 @@ Highcharts.setOptions({
 	}
 });
 function creatSimpleChart2(url, renderTo, text) {
+	alert(1);
 	$.ajax({
 				type : "post",
 				url : url,

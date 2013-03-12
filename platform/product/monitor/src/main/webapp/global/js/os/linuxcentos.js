@@ -2,7 +2,6 @@ var osid;
 $(function() {
 	osid = $("#osid").val();
 	refresh();
-	setInterval(refresh, 1000 * 5 * 60);
 });
 
 function refresh() {
@@ -202,94 +201,6 @@ function refresh() {
 	creatSimpleChart("/monitor/os/getCpuAndRam/" + osid, 'CPU_line', 'CPU内存利用率%');
 	creatSimpleChart2("/monitor/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%');
 	
-	// 分解cpu利用率图表（完成）
-	$.ajax({
-		type : "post",
-		url : "/monitor/os/getCpuInfo/" + osid,
-		dataType : "json",
-		cache : false,
-		success : function(data) {
-			var series = [];
-			for ( var name in data) {
-				var categories = [];
-				var i = 0, x = [], y = {
-					data : []
-				};
-				while (i < data[name].length) {
-					if (i == 0) {
-						if (name == "userTime") {
-							y.name = '用户时间(%)';
-						}
-						if (name == "sysTime") {
-							y.name = '系统时间(%) ';
-
-						}
-						if (name == "io") {
-							y.name = 'I/O等待(%)';
-						}
-						if (name == "idle") {
-							y.name = '空闲时间(%) ';
-
-						}
-					}
-					categories.push(data[name][i].x);
-					if (data[name][i].y == -1) {
-						data[name][i].y = null;
-					}
-					y.data.push(data[name][i].y);
-					i += 1;
-				}
-				series.push(y);
-			}
-
-			var options = {
-				chart : {
-					renderTo : 'CPU_line2',
-					type : 'line',
-					height : 300
-				},
-				title : {
-					text : ''
-				},
-				subtitle : {
-					text : ''
-				},
-				xAxis : {
-					categories : categories
-				},
-				yAxis : {
-					title : {
-						text : '值%'
-					}
-
-				},
-				tooltip : {
-					enabled : false,
-					formatter : function() {
-						return '<b>' + this.series.name + '</b><br/>' + this.x
-								+ ': ' + this.y;
-					}
-				},
-				plotOptions : {
-					line : {
-						dataLabels : {
-							enabled : true
-						},
-						enableMouseTracking : false,
-						marker : {
-							enabled : false
-						}
-					}
-				},
-				credits : {
-					text : '',
-					href : ''
-				},
-				series : series
-			}
-			new Highcharts.Chart(options);
-		}
-	});
 	// 物理和交换内存利用率列表
 	$("#grid_Memory").Grid({
 		type : "post",
@@ -539,3 +450,6 @@ function viewWindow(e, url) {
 		} ]
 	});
 }
+$(function() {
+	setTimeout(refresh, 1000 * 5 * 60);
+});
