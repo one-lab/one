@@ -57,7 +57,6 @@ function isValid(form) {
         return false;
     }
     var bsGrade=form.bizScenarioGrade.value;
-    alert(bsGrade)
     if(bsGrade!="高"&&bsGrade!="中"&&bsGrade!="低"){
         msgAlert('系统消息','必须选择场景级别！')
         return false;
