@@ -40,7 +40,7 @@ public class LogTraceAspect {
 	 * @return
 	 * @throws Throwable
 	 */
-    @Around("execution(* com.sinosoft.one.mvc.test..*(..))")
+    @Around("execution(* com.sinosoft.one.demo.service..*(..))")
 	public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
 			throws Throwable {
 	    TraceModel traceModel = TraceUtils.getTraceModel();

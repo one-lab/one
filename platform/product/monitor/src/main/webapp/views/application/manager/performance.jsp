@@ -6,7 +6,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>performance性能</title>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>应用列表</title>
 
     <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
     <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
@@ -30,7 +33,7 @@
 <div id="layout_center">
     <div class="main">
         <ul class="crumbs">
-            <li><a href="">应用性能</a> ></li>
+            <li><a href="#">应用性能</a> ></li>
             <li><b>应用列表</b></li>
         </ul>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">

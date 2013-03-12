@@ -48,7 +48,7 @@ public class AccountController {
 		Gridable<Account>  gridable = new Gridable<Account> (page);
 //		名称 发件人 到 主题 一直运行 操作
 		String cellString = new String(
-				"loginName,name,status,phone,email,createTime,operation");
+				"loginName,name,status,phone,email,createTimeStr,operation");
 		gridable.setIdField("id");
 		gridable.setCellStringField(cellString);
 		try {
@@ -66,13 +66,13 @@ public class AccountController {
     }
 
     @Post("save")
-    public String save(Account account, Invocation inv) {
+    public Reply save(Account account, Invocation inv) {
         account.setCreateTime(new Date());
         if("".equals(account.getStatus())||account.getStatus()==null){
         	account.setStatus(String.valueOf(1));
         }
         accountService.saveAccount(account);
-        return "r:/account/user/list";
+        return Replys.simple().success();
     }
     
     @Get("update/{id}")

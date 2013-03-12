@@ -59,9 +59,9 @@ public class MailActionController {
 		return "mail";
 	}
 	@Post("save")
-	public String save(MailAction action) {
+	public Reply save(MailAction action) {
 		mailActionService.saveEntity(action);
-		return "r:/action/email/list";
+		return Replys.simple().success();
 	}
 
 	@Post("batchDelete/{ids}")
