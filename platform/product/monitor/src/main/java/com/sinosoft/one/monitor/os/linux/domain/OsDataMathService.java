@@ -143,7 +143,6 @@ public class OsDataMathService {
 			diskUtilZationCount+=Double.parseDouble(osDisk.getTotalUtiliZation());
 		}
 		String diskUitliZatiionAverage=OsTransUtil.countAve(diskUtilZationCount, osDisks.size());
-		System.out.println(diskUitliZatiionAverage);
 		String diskUitliZatiionMax=osDiskService.getMaxDiskUtilZation(osInfoId, hourPoint, currentTime);
 		String diskUitliZatiionMin=osDiskService.getMinDiskUtilZation(osInfoId, hourPoint, currentTime);
 		osStatiService.creatStatiOneHour(osInfoId, OsUtil.DISK_STATIF_FLAG, hourPoint, diskUitliZatiionMax, diskUitliZatiionMin, diskUitliZatiionAverage);
@@ -160,7 +159,6 @@ public class OsDataMathService {
 			respondTime+=Long.parseLong(osRespondtime.getRespondTime());
 		}
 		String respondTimeAverage=OsTransUtil.countAve(respondTime, osRespondtimes.size());
-		System.out.println(respondTimeAverage);
 		String respondTimeMax=osRespondTimeService.getMaxRespondTime(osInfoId, hourPoint, currentTime);
 		String respondTimeMin=osRespondTimeService.getMinRespondTime(osInfoId, hourPoint, currentTime);
 		osStatiService.creatStatiOneHour(osInfoId, OsUtil.RSPOND_STATIF_FLAG, hourPoint, respondTimeMax, respondTimeMin, respondTimeAverage);

@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.controllers.os;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,10 +54,11 @@ public class HistoryViewController {
 		Os os=osService.getOsBasicById(osId);
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
+		DecimalFormat dec = new DecimalFormat("0.##"); 
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.CPU_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -73,9 +75,10 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.DISK_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		DecimalFormat dec = new DecimalFormat("0.##"); 
+		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -93,9 +96,10 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RAM_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		DecimalFormat dec = new DecimalFormat("0.##"); 
+		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -112,9 +116,10 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RSPOND_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		DecimalFormat dec = new DecimalFormat("0.##"); 
+		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -170,8 +175,6 @@ public class HistoryViewController {
 			e.printStackTrace();
 		}
 	}
-	
-	
 	/**
 	 * CPU报表窗口曲线
 	 * @param osId
@@ -226,6 +229,9 @@ public class HistoryViewController {
 		viewMap.put("磁盘利用率最平均值%", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
 	}
+	/**
+	 * 磁盘利用率窗口表格
+	 */
 	@Post("historyDiskStatiGrid/{timespan}/{osId}")
 	public void historyDiskSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
@@ -256,6 +262,9 @@ public class HistoryViewController {
 		viewMap.put("内存利用率最平均值%", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
 	}
+	/**
+	 * 内存利用窗口表格
+	 */
 	@Post("historyMemStatiGrid/{timespan}/{osId}")
 	public void historyMemSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
@@ -281,16 +290,18 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Map<String,List<List<?>>> map=osViewHandle.creatStatiLine(osId, OsUtil.RSPOND_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
 		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
-		viewMap.put("响应时间最大值%", map.get("max"));
-		viewMap.put("响应时间最小值%", map.get("min"));
-		viewMap.put("响应时间平均值%", map.get("ave"));
+		viewMap.put("响应时间最大值", map.get("max"));
+		viewMap.put("响应时间最小值", map.get("min"));
+		viewMap.put("响应时间平均值", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
 	}
-	
+	/**
+	 * 响应时间窗口表格
+	 */
 	@Post("historyRepStatiGrid/{timespan}/{osId}")
 	public void historyRepSevenDayGrid(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
 		Date currentDate=new Date();
-		List<OsGridModel> osViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		List<OsGridModel> osViewModels=osViewHandle.creatStatiGrid(osId, OsUtil.RSPOND_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
 		Page page = new PageImpl(osViewModels);
 		Gridable<OsGridModel> gridable = new Gridable<OsGridModel>(page);
 		gridable.setIdField("id"); 

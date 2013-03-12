@@ -33,8 +33,6 @@ public class OsProcessService {
 	@Autowired
 	private OsAvailableServcie osAvailableServcie;
 	@Autowired
-	private OsStatiService osStatiService;
-	@Autowired
 	private AlarmMessageBuilder alarmMessageBuilder;
 	/**
 	 * 保存采样信息  //并更新统计记录

@@ -57,7 +57,7 @@
 							<b>可用性历史纪录- Linux </b> <select name="" class="diySelect"
 								onchange="availableChange(this)">
 								<option value="24">最近24小时</option>
-								<option value="30">最近30天</option>
+								<!-- <option value="30">最近30天</option> -->
 							</select>
 						</h2>
 						<div id="systemMonitorTable"></div>
