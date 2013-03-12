@@ -92,7 +92,6 @@ function getForm() {
 				for(var lineName in lineData){
 					var series = {};
 					series.name = lineName;
-					alert(lineName);
 					series.data = lineData[lineName];
 					seriesArr.push(series);
 				}
@@ -138,10 +137,6 @@ function getForm() {
 								enabled : false
 							}
 						}
-					},
-					credits : {
-						text : '',
-						href : ''
 					},
 					tooltip : {
 						enabled: false,
