@@ -136,7 +136,7 @@ public class OsRamViewHandle {
 			osSwapViewModels.add(osRamViewModel);
 			OsGridModel osSwapViewModel=new OsGridModel();
 			osSwapViewModel.setName("交换内存利用率");
-			osRamViewModel.setUtilzation("未知");
+			osSwapViewModel.setUtilzation("未知");
 			osSwapViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
 			osSwapViewModel.setUsed("未知");
 			osSwapViewModels.add(osSwapViewModel);

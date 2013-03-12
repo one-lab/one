@@ -76,6 +76,35 @@ public class Threshold  implements java.io.Serializable {
 	 */
 	private String conditionStr;
 
+
+	/**
+	 * 警告阈值条件符号.
+	 */
+	private String warningThresholdConditionStr;
+
+	/**
+	 * 严重阈值条件符号.
+	 */
+	private String criticalThresholdConditionStr;
+
+	/**
+	 * 正常阈值条件符号.
+	 */
+	private String infoThresholdConditionStr;
+
+	@Transient
+	public String getWarningThresholdConditionStr() {
+		return warningThresholdConditionStr;
+	}
+	@Transient
+	public String getCriticalThresholdConditionStr() {
+		return criticalThresholdConditionStr;
+	}
+	@Transient
+	public String getInfoThresholdConditionStr() {
+		return infoThresholdConditionStr;
+	}
+
 	private String operation="<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
 	public Threshold() {
 	}
@@ -129,7 +158,8 @@ public class Threshold  implements java.io.Serializable {
     }
 
     public void setCriticalThresholdCondition(String criticalThresholdCondition) {
-    this.criticalThresholdCondition = criticalThresholdCondition;
+        this.criticalThresholdCondition = criticalThresholdCondition;
+	    this.criticalThresholdConditionStr = ThresholdConditions.valueOf(criticalThresholdCondition).symbol();
     }
     
     @Column(name="critical_threshold_value", precision=22, scale=0)
@@ -156,7 +186,8 @@ public class Threshold  implements java.io.Serializable {
     }
 
     public void setWarningThresholdCondition(String warningThresholdCondition) {
-    this.warningThresholdCondition = warningThresholdCondition;
+        this.warningThresholdCondition = warningThresholdCondition;
+	    this.warningThresholdConditionStr = ThresholdConditions.valueOf(warningThresholdCondition).symbol();
     }
     
     @Column(name="warning_threshold_value", precision=22, scale=0)
@@ -183,7 +214,8 @@ public class Threshold  implements java.io.Serializable {
     }
 
     public void setInfoThresholdCondition(String infoThresholdCondition) {
-    this.infoThresholdCondition = infoThresholdCondition;
+        this.infoThresholdCondition = infoThresholdCondition;
+	    this.infoThresholdConditionStr = ThresholdConditions.valueOf(infoThresholdCondition).symbol();
     }
     
     @Column(name="info_threshold_value", precision=22, scale=0)

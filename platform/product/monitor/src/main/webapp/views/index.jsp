@@ -6,7 +6,7 @@
 <title>monitor监控系统</title>
 <%@ include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
-var columStyle1 = 
+var columStyle1 =
 	[  
 		{id:'1',text:'名称',name:"appellation",index:'1',align:''},
 		{id:'2',text:'可用性',name:"appellation",index:'1',align:''},
@@ -25,8 +25,13 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
-	
-	//thresholdList emergencyList systemList oracleList
+    if($.browser.msie && ($.browser.version == "7.0")){
+        var center = $("#layout_center");
+        $("#main").width(center.width() - 31).height(center.height() - 30);
+    }
+
+
+    //thresholdList emergencyList systemList oracleList
 	var gridList = new Array();
 	
 	gridList.push({"renderId":"thresholdList","url":rootPath+"/applicationList", "columStyle":columStyle1});
@@ -58,7 +63,7 @@ $(function(){
 <body>
 <%@include file="/WEB-INF/layouts/menu.jsp" %>
 <div id="layout_center">
-	<div class="main">
+	<div class="main" id="main">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 	      <tr>
 	        <td width="48%" rowspan="3" style="vertical-align:top">

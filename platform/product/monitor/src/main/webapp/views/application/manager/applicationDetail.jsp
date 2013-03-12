@@ -6,6 +6,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>无标题文档</title>
     <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
     <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
@@ -32,7 +35,7 @@
 <body>
 <%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
-    <div class="service_all">
+    <div class="service_all" id="main">
         <ul class="crumbs">
             <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a> ></li>
             <li><a href="${ctx}/application/manager/appmanager/applist/1">应用列表</a> ></li>

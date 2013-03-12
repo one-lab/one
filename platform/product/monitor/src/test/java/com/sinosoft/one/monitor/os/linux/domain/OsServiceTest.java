@@ -64,8 +64,8 @@ public class OsServiceTest extends AbstractJUnit4SpringContextTests {
 //						"Disp_SYS_Rate=`expr \"scale=3; $SYS_Rate/1\" |bc\n" +
 //								"echo $Disp_SYS_Rate%\n";
 		//磁盘脚本
-//		String DK="df -k | awk '{print  $1,\"-\",$2,\"-\",$3,\"-\",$4,\"-\",$5,\"-\",$6,\",\"}'";
-//		osService.saveShell("DK", DK);
+		String DK="df -k | awk '{print  $1,\"-\",$2,\"-\",$3,\"-\",$4,\"-\",$5,\"-\",$6,\",\"}'";
+		osService.saveShell("DK", DK);
 		String RM="top -b -n 1 | head -5 | tail -2 |awk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9}'";
 		osService.saveShell("RM", RM);
 		String CB="vmstat |tail -1|awk '{print $1,$2,$13,$14,$16,$15,$11}'";

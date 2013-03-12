@@ -20,6 +20,11 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
+    if($.browser.msie && ($.browser.version == "7.0")){
+        var center = $("#layout_center");
+        $("#main").width(center.width() - 31).height(center.height() - 30);
+    }
+
 	$("#thresholdList").Grid({
 		type : "post",
 		url : "${ctx}/account/user/data",  
@@ -59,7 +64,7 @@ function navHover(){
 function delRow(e){
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
-	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+	msgConfirm('系统消息','确定要删除该用户吗？',function(){
 		rows.remove();
 		delUser("${ctx}/account/user/delete/"+id.replace("row_",""));
 	});
@@ -68,7 +73,7 @@ function batchDel(){
 	var $g = $("#thresholdList div.grid_view > table");
 	var selecteds = $("td.multiple :checked",$g);
 	if(selecteds.length > 0){
-		msgConfirm('系统消息','确定要删除选中的配置文件吗？',function(){
+		msgConfirm('系统消息','确定要删除选中的用户吗？',function(){
 			var checks = [];
 			selecteds.each(function(){
 				var rows = $(this).parent().parent();
@@ -88,10 +93,10 @@ function delUser(url){
 		url : url,
 		dataType : "json",
 		success : function(data) {
-			msgSuccess("系统消息", "操作成功，配置已删除！");
+			msgSuccess("系统消息", "操作成功，用户已删除！");
 		},
 		error:function(){
-			msgSuccess("系统消息", "操作失败，配置未被删除！");
+			msgFailed("系统消息", "操作失败，用户未被删除！");
 			location.href="${ctx}/account/user/list";
 		}
 	});
@@ -125,7 +130,7 @@ function viewRelevance(e){
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
 	var name = rows.children("td").eq(1).text();
-	var title = "监视器使用阈值: " + name;
+	var title = "用户: " + name;
 	var temWin = $("body").window({
 		"id":"window",   
         "title":title,  
@@ -151,7 +156,7 @@ function viewRelevance(e){
 <body>
 <%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
-	<div class="main">
+	<div class="main" id="main">
     	<div class="threshold_file user_manager">
        	  <h2 class="title2"><strong class="right"><a href="${ctx}/account/user/create">创建新用户</a></strong><b>用户列表　</b></h2>
           <div class="tool_bar_top"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></div>

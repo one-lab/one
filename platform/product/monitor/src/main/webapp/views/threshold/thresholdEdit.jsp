@@ -5,6 +5,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Cache-Control" content="no-store" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>查看预警配置文件</title>
 <link href="${ctx}/static/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/static/css/style.css" rel="stylesheet" type="text/css" />
@@ -61,7 +64,6 @@ function shiftOut(e){
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
 	msgConfirm('系统消息','是否确定移出使用阈值？',function(){		
-		alert(id);
 		rows.remove();
 		msgSuccess("系统消息", "操作成功，使用阈值已移出！");
 	});
