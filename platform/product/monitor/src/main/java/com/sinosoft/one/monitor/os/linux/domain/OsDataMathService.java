@@ -1,8 +1,6 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 import com.sinosoft.one.monitor.os.linux.model.OsRespondtime;
-import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
@@ -83,10 +80,10 @@ public class OsDataMathService {
 			//本次采样的信息
 			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, true, null);
 			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);
-			osAvailableServcie.saveAvailable(osInfoId,availableCalculate.getAliveTime().longValue(),availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),availableCalculate.getTimeBetweenFailures().longValue(), timeSpan,availableCalculate.getStopTime().intValue());
+			osAvailableServcie.saveAvailable(osInfoId,availableCalculate.getAliveTime().longValue(),availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),availableCalculate.getTimeBetweenFailures().longValue(), timeSpan,availableCalculate.getFalseCount().intValue());
 		}else{
 			AvailableInf availableInf =new AvailableInf(lastAvailableTemp.getSampleDate(),true , lastAvailableTemp.getIntercycleTime());
-			availableStatistics= new AvailableStatistics(osAvailable.getNormalRun(), osAvailable.getCrashTime(), osAvailable.getStopCount()); 
+			availableStatistics= new AvailableStatistics(osAvailable.getNormalRun(), osAvailable.getCrashTime(), stopCount); 
 			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, true, availableInf);
 			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);
 			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),stopCount);

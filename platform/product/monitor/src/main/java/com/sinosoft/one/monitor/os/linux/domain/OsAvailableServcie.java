@@ -88,14 +88,7 @@ public class OsAvailableServcie {
 	 * 保存可用性临时数据//每个采样点保存
 	 * @param ava
 	 */
-	public OsAvailabletemp saveAvailableTemp(String osId,Date time,String Status,int intercycleTime){
-		OsAvailabletemp osAvailabletemp=new OsAvailabletemp();
-		Os os=new Os();
-		os.setOsInfoId(osId);
-		osAvailabletemp.setOs(os);
-		osAvailabletemp.setSampleDate(time);
-		osAvailabletemp.setStatus(Status);	
-		osAvailabletemp.setIntercycleTime(intercycleTime);
+	public OsAvailabletemp saveAvailableTemp(OsAvailabletemp osAvailabletemp){
 		return osAvailabletempRepository.save(osAvailabletemp);
 	}
 	
