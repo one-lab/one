@@ -367,8 +367,12 @@ function createThirtyDayHitRate() {
           </div>
           <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
-              	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>连接时间</td><td>${oracleDetailModel.connectTime }ms</td><td></td></tr><!--
+              	<tr><th>属性</th><th>值</th>
+                      <%--<th>阈值</th>--%>
+                  </tr>
+                <tr><td>连接时间</td><td>${oracleDetailModel.connectTime }ms</td>
+                    <%--<td></td>--%>
+                </tr><!--
                 <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
               --></table>
          	</div>
@@ -386,8 +390,12 @@ function createThirtyDayHitRate() {
           </div>
            <div class="threshold_file">
             	<table class="last_onehour_table" cellpadding="0" cellspacing="0">
-              	<tr><th>属性</th><th>值</th><th>阈值</th></tr>
-                <tr><td>用户数</td><td>${oracleDetailModel.activeCount }</td><td></td></tr><!--
+              	<tr><th>属性</th><th>值</th>
+                      <%--<th>阈值</th>--%>
+                  </tr>
+                <tr><td>用户数</td><td>${oracleDetailModel.activeCount }</td>
+                    <%--<td></td>--%>
+                </tr><!--
                   <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
               --></table>
          	</div>
