@@ -12,7 +12,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -53,6 +55,8 @@ public class Account  implements java.io.Serializable {
     /**
         */
     private Date createTime;
+
+	private String createTimeStr;
 
     private String operation="<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
     public Account() {
@@ -111,7 +115,7 @@ public class Account  implements java.io.Serializable {
     }
 
     public void setEmail(String email) {
-    this.email = email;
+    this.email = Strings.nullToEmpty(email);
     }
     
     @Column(name="PHONE", length=30)
@@ -120,7 +124,7 @@ public class Account  implements java.io.Serializable {
     }
 
     public void setPhone(String phone) {
-    this.phone = phone;
+    this.phone = Strings.nullToEmpty(phone);
     }
     
     @Column(name="STATUS", length=1)
@@ -138,7 +142,7 @@ public class Account  implements java.io.Serializable {
     }
 
     public void setName(String name) {
-    this.name = name;
+    this.name = Strings.nullToEmpty(name);
     }
     @Temporal(TemporalType.DATE)
     @Column(name="CREATE_TIME", length=7)
@@ -148,8 +152,13 @@ public class Account  implements java.io.Serializable {
 
     public void setCreateTime(Date createTime) {
     this.createTime = createTime;
+	    createTimeStr = DateFormatUtils.format(createTime, "yyyy-MM-dd HH:mm:ss");
     }
 
+	@Transient
+	public String getCreateTimeStr() {
+		return createTimeStr;
+	}
 
 	@Override
 	public String toString() {

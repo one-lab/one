@@ -15,6 +15,11 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
+
+    if($.browser.msie && ($.browser.version == "7.0")){
+        var center = $("#layout_center");
+        $("#main").width(center.width() - 31).height(center.height() - 30);
+    }
     getBizScenarioList();
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
@@ -149,16 +154,13 @@ function bizScenarioBatchDel(){
     </div>
 </div>
 <div id="layout_center">
-    <div class="main">
+    <div class="main" id="main">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td style="vertical-align:top">
                     <div class="threshold_file">
                         <h2 class="title2"><b>应用名称 : ${applicationName}</b></h2>
                         <div class="tool_bar_top">
-                            <a href="${ctx}/application/manager/bsmanager/createbizscenario/${appId}"
-                               class="add_bus_scene">添加业务场景</a>
-                            <a href="javascript:void(0);" class="batch_del" onclick="bizScenarioBatchDel()">批量删除</a>
                             <div style="float:right;">
                                 <span>级别</span>
                                 <select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect">
@@ -168,6 +170,10 @@ function bizScenarioBatchDel(){
                                     <option value="LOW">低</option>
                                 </select>
                             </div>
+                            <a href="${ctx}/application/manager/bsmanager/createbizscenario/${appId}"
+                               class="add_bus_scene">添加业务场景</a>
+                            <a href="javascript:void(0);" class="batch_del" onclick="bizScenarioBatchDel()">批量删除</a>
+
                         </div>
                         <div id="thresholdList"></div>
                         <div class="tool_bar"></div>

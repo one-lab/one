@@ -40,7 +40,7 @@ public class ThresholdController {
 		Page<Threshold> page = new PageImpl<Threshold>(thresholds);
 		Gridable<Threshold>  gridable = new Gridable<Threshold> (page);
 		String cellString = new String(
-				"name,criticalThresholdCondition,criticalThresholdValue,criticalThresholdMessage,warningThresholdCondition,warningThresholdValue,warningThresholdMessage,infoThresholdCondition,infoThresholdValue,infoThresholdMessage,operation");
+				"name,criticalThresholdConditionStr,criticalThresholdValue,criticalThresholdMessage,warningThresholdConditionStr,warningThresholdValue,warningThresholdMessage,infoThresholdConditionStr,infoThresholdValue,infoThresholdMessage,operation");
 		gridable.setIdField("id");
 		gridable.setCellStringField(cellString);
 		try {
@@ -51,9 +51,9 @@ public class ThresholdController {
 	}
 
 	@Post("save")
-	public String save(Threshold entity) {
+	public Reply save(Threshold entity) {
 		thresholdService.saveEntity(entity);
-		return "r:/threshold/list";
+		return Replys.simple().success();
 	}
 	
 	@Get("update/{id}")

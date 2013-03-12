@@ -6,7 +6,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>业务仿真</title>
+<meta http-equiv="Cache-Control" content="no-store" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+    <title>业务仿真</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/timeinfo/timeinfo.css" rel="stylesheet" type="text/css" />
@@ -143,18 +147,18 @@
                     <div class="column_chart">
                         <div class="threshold_file" style="height:400px;width:49%;">
                             <div class="sub_title">url访问次数</div>
-                            <div class="days_data">
+                           <%-- <div class="days_data">
                                 <a onclick="createThirtyURLTime(this);"><div class="thirty_days"></div></a>
                                 <a onclick="createSevenURLTime(this);"><div class="seven_days"></div></a>
-                            </div>
+                            </div>--%>
                             <div id="time_times" style="height:300px;"></div>
                         </div>
                         <div class="threshold_file" style="height:400px;width:49%;">
                             <div class="sub_title">url响应时间</div>
-                            <div class="days_data">
+                            <%--<div class="days_data">
                                 <a onclick="createThirtyDayResponseTime(this);"><div class="thirty_days"></div></a>
                                 <a onclick="createSevenDayResponseTime(this);"><div class="seven_days"></div></a>
-                            </div>
+                            </div>--%>
                             <div id="time_response_time" style="height:300px;width:98%">1</div>
                         </div>
 
