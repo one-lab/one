@@ -79,9 +79,21 @@ public class OracleMonitorController {
         List<OracleAvaInfoModel> oracleAvaInfoList = oracleBatchInfoService.avaInfoList(avaStyle);
         inv.addModel("oracleAvaInfoList",oracleAvaInfoList);
         List<String> dateList = new ArrayList<String>();
-        for(String[] strs : oracleAvaInfoList.get(0).getGraphInfo()) {
-        	SimpleDateFormat sdf = new SimpleDateFormat(dateStyle);
-        	dateList.add(sdf.format(new Date(Long.valueOf(strs[1]))));
+        //long startTime = 0L;
+        if(dateList!=null&&oracleAvaInfoList.size()>0){
+            long startTime = new Date().getTime();
+            if(oracleAvaInfoList.get(0).getGraphInfo()!=null
+                    &&oracleAvaInfoList.get(0).getGraphInfo().size()>0
+                    &&oracleAvaInfoList.get(0).getGraphInfo().get(0)!=null
+                    &&oracleAvaInfoList.get(0).getGraphInfo().get(0).length>0){
+                String time = oracleAvaInfoList.get(0).getGraphInfo().get(0)[0];
+                startTime = Long.valueOf(time);
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat(dateStyle);
+            for(int i=0;i<24;i++){
+                dateList.add(sdf.format(new Date(startTime)));
+                startTime += 3600*1000;
+            }
         }
         inv.addModel("avaInfoStyle", avaInfoStyle);
         inv.addModel("dateList", dateList);

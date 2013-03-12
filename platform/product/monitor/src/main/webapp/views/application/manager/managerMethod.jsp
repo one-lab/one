@@ -27,7 +27,7 @@ $(function(){
 		colums:[  
 			{id:'1',text:'全类名',name:"className",index:'1',align:''},
 			{id:'2',text:'方法名',name:"methodName",index:'1',align:''},
-			{id:'3',text:'名称',name:"description",index:'1',align:''},
+			{id:'3',text:'描述',name:"description",index:'1',align:''},
 			/*{id:'4',text:'可用性',name:"status",index:'1',align:''},
 			{id:'5',text:'健康状态',name:"threshold",index:'1',align:''},*/
 			{id:'5',text:'操作',name:"operation",index:'1',align:''}
@@ -69,12 +69,14 @@ function hideNav(e){
 	$(document).unbind();
 }
 function delRow(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    /*id前面多了“rows”*/
-    var methodId=id.substr(4,32);
-    /*删除method操作*/
-    window.location.href="${ctx}/application/manager/methodmanager/delete/${urlId}/"+methodId;
+    msgConfirm('系统消息','确定要删除当前的Method吗？',function(){
+        var rows = $(e).parent().parent();
+        var id = rows.attr('id');
+        /*id前面多了“rows”*/
+        var methodId=id.substr(4,32);
+        /*删除method操作*/
+        window.location.href="${ctx}/application/manager/methodmanager/delete/${urlId}/"+methodId;
+    });
 }
 function eidRow(e){
     var rows = $(e).parent().parent();
@@ -88,7 +90,7 @@ function batchDel(){
 	var $g = $("#thresholdList div.grid_view > table");
 	var selecteds = $("td.multiple :checked",$g);
 	if(selecteds.length > 0){
-		msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+		msgConfirm('系统消息','确定要删除这些Method吗？',function(){
 			var _methodIds = [];
 			selecteds.each(function(){
 				var rows = $(this).parent().parent();
@@ -104,16 +106,16 @@ function batchDel(){
                         selecteds.each(function(){
                             $(this).parent().parent().remove();
                         });
-                        alert("删除成功");
+                        msgSuccess('系统消息','删除成功！')
                     }
                 },
                 error:function(){
-                    alert("删除失败");
+                    msgAlert('系统消息','删除失败！')
                 }
             });
 		});
 	}else{
-		msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
+		msgAlert('系统消息','没有选中的Method！<br />请选择要删除的Method后，继续操作。')
 	};
 }
 </script>

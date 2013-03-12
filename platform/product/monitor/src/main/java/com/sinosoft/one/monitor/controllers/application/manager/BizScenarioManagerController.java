@@ -135,9 +135,7 @@ public class BizScenarioManagerController {
         resource.setResourceName(bizScenario.getName());
         resource.setResourceType(ResourceType.APPLICATION_SCENARIO.name());
         resourcesService.saveResource(resource);
-        //将应用appId写回页面，保存业务场景时提交这个appId
-        inv.addModel("appId", appId);
-        return "managerBizScenario";
+        return "r:/application/manager/bsmanager/list/"+appId;
     }
 
     /**
@@ -158,7 +156,6 @@ public class BizScenarioManagerController {
     @Post("update/{appId}/{bizScenarioId}")
     public String updateBizScenario(@Validation(errorPath = "a:errorupdatebizScenario") BizScenario bizScenario,@Param("appId") String appId,
                                     @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
-        inv.getRequest().setAttribute("appId",appId);
         //获得当前用户id
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         //开发阶段固定用户id
@@ -166,7 +163,7 @@ public class BizScenarioManagerController {
         String bizScenarioGrade=BizScenarioGrade.parseDisplayName(bizScenario.getBizScenarioGrade()).getValue();
         bizScenarioService.updateBizScenarioWithModifyInfo(bizScenarioId,bizScenario.getName(),bizScenarioGrade,modifierId);
         //业务场景列表页面
-        return "managerBizScenario";
+        return "r:/application/manager/bsmanager/list/"+appId;
     }
 
     /**
@@ -174,13 +171,12 @@ public class BizScenarioManagerController {
      */
     @Get("delete/{appId}/{bizScenarioId}")
     public String deleteBizScenario(@Param("appId") String appId, @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
-        inv.getRequest().setAttribute("appId",appId);
         //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
         bizScenarioService.deleteBizScenarioAndUrl(bizScenarioId);
         //删除GE_MONITOR_BIZ_SCENARIO的记录
         bizScenarioService.deleteBizScenario(bizScenarioId);
         //业务场景列表页面
-        return "managerBizScenario";
+        return "r:/application/manager/bsmanager/list/"+appId;
     }
 
     /**
@@ -188,13 +184,12 @@ public class BizScenarioManagerController {
      */
     @Post("batchdelete/{appId}")
     public String batchDeleteBizScenario(@Param("appId") String appId, Invocation inv) {
-        inv.getRequest().setAttribute("appId",appId);
         String[] bizScenarioIds=inv.getRequest().getParameterValues("bizScenarioIds[]");
         //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
         bizScenarioService.batchDeleteBizScenarioAndUrl(bizScenarioIds);
         //删除GE_MONITOR_BIZ_SCENARIO的记录
         bizScenarioService.batchDeleteBizScenario(bizScenarioIds);
         //业务场景列表页面
-        return "managerBizScenario";
+        return "r:/application/manager/bsmanager/list/"+appId;
     }
 }
