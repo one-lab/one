@@ -210,10 +210,11 @@ public class MethodManagerController {
      */
     @Get("delete/{urlId}/{methodId}")
     public String deleteMethod(@Param("urlId") String urlId, @Param("methodId") String methodId, Invocation inv) {
-        //先删除中间表GE_MONITOR_URL_METHOD的记录
+        methodService.deleteUrlAndMethod(urlId,methodId);
+        /*//先删除中间表GE_MONITOR_URL_METHOD的记录
         methodService.deleteUrlAndMethod(urlId,methodId);
         //删除GE_MONITOR_METHOD的记录
-        methodService.deleteMethod(methodId);
+        methodService.deleteMethod(methodId);*/
         //Method列表页面
         return "r:/application/manager/methodmanager/methodlist/"+urlId;
     }
@@ -224,10 +225,13 @@ public class MethodManagerController {
     @Post("batchdelete/{urlId}")
     public String batchDeleteMethod(@Param("urlId") String urlId, Invocation inv) {
         String[] methodIds=inv.getRequest().getParameterValues("methodIds[]");
-        //先删除中间表GE_MONITOR_URL_METHOD的记录
+        for(int i=0;i<methodIds.length;i++){
+            methodService.deleteUrlAndMethod(urlId,methodIds[i]);
+        }
+        /*//先删除中间表GE_MONITOR_URL_METHOD的记录
         methodService.batchDeleteUrlAndMethod(urlId,methodIds);
         //删除GE_MONITOR_METHOD的记录
-        methodService.batchDeleteMethod(methodIds);
+        methodService.batchDeleteMethod(methodIds);*/
         //Method列表页面
         return "r:/application/manager/methodmanager/methodlist/"+urlId;
     }

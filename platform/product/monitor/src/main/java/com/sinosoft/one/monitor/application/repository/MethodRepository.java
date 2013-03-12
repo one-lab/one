@@ -20,6 +20,10 @@ public interface MethodRepository extends PagingAndSortingRepository<Method, Str
     @SQL("delete GE_MONITOR_URL_METHOD a where a.URL_ID=?1 and a.METHOD_ID=?2")
     void deleteUrlAndMethod(String urlId, String methodId);
 
+    //查询中间表GE_MONITOR_URL_METHOD中是否还有其它url与当前method关联
+    @SQL("select a.URL_ID from GE_MONITOR_URL_METHOD a where a.METHOD_ID=?1")
+    List<String> selectAllUrlIdsWithMethodId(String methodId);
+
     @SQL("delete GE_MONITOR_URL_METHOD a where a.URL_ID=?1 and a.METHOD_ID in (?2)")
     void batchDeleteUrlAndMethod(String urlId, String[] methodIds);
 

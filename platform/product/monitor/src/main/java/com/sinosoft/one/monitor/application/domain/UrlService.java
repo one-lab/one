@@ -56,10 +56,11 @@ public class UrlService {
 	    //先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
 	    urlRepository.deleteBizScenarioAndUrl(bizScenarioId,id);
         //如果当前url有关联的其它业务场景，那么不能删除
-        if(null!=urlRepository.selectUrlsWithUrlId(id)&&urlRepository.selectUrlsWithUrlId(id).size()>0){
+        List<String> bizScenarioIds=urlRepository.selectUrlsWithUrlId(id);
+        if(null!=bizScenarioIds&&bizScenarioIds.size()>0){
             return;
             //如果当前url没有关联其它的业务场景，那么删除当前url
-        }else if(null==urlRepository.selectUrlsWithUrlId(id)||urlRepository.selectUrlsWithUrlId(id).size()==0){
+        }else if(null==bizScenarioIds||bizScenarioIds.size()==0){
             //先删除中间表GE_MONITOR_URL_METHOD的记录
             urlRepository.deleteUrlAndMethod(id);
             //删除Resources表中的记录

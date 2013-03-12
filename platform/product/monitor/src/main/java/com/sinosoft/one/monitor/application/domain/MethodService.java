@@ -106,7 +106,16 @@ public class MethodService {
      */
     @Transactional(readOnly = false)
     public void deleteUrlAndMethod(String urlId, String methodId) {
+        //先删除中间表GE_MONITOR_URL_METHOD中的数据
         methodRepository.deleteUrlAndMethod(urlId,methodId);
+        List<String> urlIds=methodRepository.selectAllUrlIdsWithMethodId(methodId);
+        //如果当前method与其它url关联，那么不能删除
+        if(null!=urlIds&&urlIds.size()>0){
+            return;
+            //如果当前method没有去其它url关联，那么删除
+        }else if(null==urlIds||urlIds.size()==0){
+            deleteMethod(methodId);
+        }
     }
 
     /**
