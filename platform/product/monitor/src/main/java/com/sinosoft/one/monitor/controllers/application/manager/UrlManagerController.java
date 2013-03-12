@@ -104,9 +104,7 @@ public class UrlManagerController {
                           @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
         BizScenario bizScenario = bizScenarioService.findBizScenario(bizScenarioId);
         List<Url> urls=urlService.findAllUrl();
-        EumUrl eumUrl=new EumUrl();
-        eumUrl.setUrl(url.getUrl());
-        eumUrl.setApplication(bizScenario.getApplication());
+
         if(urls.size()>0){
             for(Url dbUrl:urls){
                 //如果新增加的url是库中已经存在的，那么只需更新此url所属的业务场景即可
@@ -115,22 +113,27 @@ public class UrlManagerController {
                     //已经关联的中间表，不用再保存URL
                     /*urlService.saveUrl(dbUrl);*/
                     //向EUM_URL表中插入记录（url的application信息）
-                    eumUrl.setUrlId(dbUrl.getId());
+                    /*eumUrl.setUrlId(dbUrl.getId());
                     eumUrl.setRecordTime(new Date());
-                    eumUrlRepository.save(eumUrl);
+                    eumUrlRepository.save(eumUrl);*/
                     //资源表中已经有当前的URL，那么不需要再保存
-                    if(null!=resourcesService.getResource(dbUrl.getId())){
+                    urlService.saveUrl(dbUrl);
+                    /*if(null!=resourcesService.getResource(dbUrl.getId())){
                         businessEmulation.restart(bizScenario.getApplication().getId());
                         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
                     }
                     saveResourceWithUrl(dbUrl);
-                    businessEmulation.restart(bizScenario.getApplication().getId());
+                    businessEmulation.restart(bizScenario.getApplication().getId());*/
                     return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
                 }
             }
         }
+        urlService.saveUrlWithTransactional(url,bizScenario);
+        /*EumUrl eumUrl=new EumUrl();
+        eumUrl.setUrl(url.getUrl());
+        eumUrl.setApplication(bizScenario.getApplication());
         //获得当前用户id
-        /*String creatorId = CurrentUserUtil.getCurrentUser().getId();*/
+        *//*String creatorId = CurrentUserUtil.getCurrentUser().getId();*//*
         //如果新增加的url是库中没有的，那么入库
         //当前Url所属的业务场景
         url.setBizScenario(bizScenario);
@@ -138,14 +141,14 @@ public class UrlManagerController {
         //保存当前创建url的用户
         url.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
         //开发阶段固定用户id
-        /*url.setCreatorId("4028921a3cfba342013cfba4623e0000");*/
+        *//*url.setCreatorId("4028921a3cfba342013cfba4623e0000");*//*
         url.setCreateTime(new Date());
         urlService.saveUrl(url);
         //向EUM_URL表中插入记录（url的application信息）
         eumUrl.setUrlId(url.getId());
         eumUrl.setRecordTime(new Date());
         eumUrlRepository.save(eumUrl);
-        saveResourceWithUrl(url);
+        saveResourceWithUrl(url);*/
         businessEmulation.restart(bizScenario.getApplication().getId());
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }

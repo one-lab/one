@@ -4,6 +4,7 @@ import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 处理资源相关信息业务逻辑类.
@@ -38,6 +39,7 @@ public class ResourcesService {
 	 * 保存一个资源
 	 * @param resource 资源对象
 	 */
+    @Transactional(readOnly = false)
 	public void saveResource(Resource resource) {
 		resourcesRepository.save(resource);
 	}
