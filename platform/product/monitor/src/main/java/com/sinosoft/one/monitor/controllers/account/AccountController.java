@@ -48,7 +48,7 @@ public class AccountController {
 		Gridable<Account>  gridable = new Gridable<Account> (page);
 //		名称 发件人 到 主题 一直运行 操作
 		String cellString = new String(
-				"loginName,name,status,phone,email,createTimeStr,operation");
+				"loginName,name,statusStr,phone,email,createTimeStr,operation");
 		gridable.setIdField("id");
 		gridable.setCellStringField(cellString);
 		try {

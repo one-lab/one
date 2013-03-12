@@ -5,7 +5,10 @@ $(document).ready(function() {
     $("body").layout({
         top:{topHeight:100}
     });
-
+    if($.browser.msie && ($.browser.version == "7.0")){
+        var center = $("#layout_center");
+        $("#main").width(center.width() - 38).height(center.height() - 30);
+    }
     $("#list_table").Grid({
         url : ctx + "/application/manager/url/methodresponsetime/" + applicationId + "/" + urlId,
         dataType: "json",

@@ -47,6 +47,8 @@ public class Account  implements java.io.Serializable {
     /**
         */
     private String status;
+    
+    private String statusStr;
     /**
     * 用户名
 .
@@ -133,7 +135,12 @@ public class Account  implements java.io.Serializable {
     }
 
     public void setStatus(String status) {
-    this.status = status;
+	    this.status = status;
+	    if("1".equals(status)) {
+	    	this.statusStr =  "正常";
+	    } else if("0".equals(status)) {
+	    	this.statusStr = "锁定";
+	    }
     }
     
     @Column(name="NAME", length=50)
@@ -160,9 +167,15 @@ public class Account  implements java.io.Serializable {
 		return createTimeStr;
 	}
 
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Transient
+	public String getStatusStr() {
+		return statusStr;
 	}
 
 }

@@ -5,7 +5,7 @@ $(document).ready(function() {
 
     if($.browser.msie && ($.browser.version == "7.0")){
         var center = $("#layout_center");
-        $("#main").width(center.width() - 31).height(center.height() - 30);
+        $("#main").width(center.width() - 38).height(center.height() - 30);
     }
 
     $(".show_all_error").live("click",showAllError);
