@@ -130,10 +130,13 @@ public class OracleController {
 		// x轴和连接时间y轴添加值
 		List<Point> connectPoints = connectEvent.getPoints();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-		for (int i = 0; i < connectPoints.size(); i++) {
-			categories.add(sdf.format(connectPoints.get(i).getxAxis()));
-			connectData.add(connectPoints.get(i).getyAxis()*100);
-		}
+        if(connectPoints!=null){
+            for (int i = 0; i < connectPoints.size(); i++) {
+                categories.add(sdf.format(connectPoints.get(i).getxAxis()));
+                connectData.add(connectPoints.get(i).getyAxis()*100);
+            }
+        }
+
 		/*
 		 * labels: { 
 									  	:3
@@ -147,9 +150,11 @@ public class OracleController {
 		connectSeries.add(surr);
 		// 用户活动数y轴添加值
 		List<Point> activePoints = activeCount.getPoints();
-		for (int i = 0; i < activePoints.size(); i++) {
-			activeData.add(activePoints.get(i).getyAxis());
-		}
+        if(activePoints!=null){
+            for (int i = 0; i < activePoints.size(); i++) {
+                activeData.add(activePoints.get(i).getyAxis());
+            }
+        }
 		surr2.put("data", activeData);
 		activeSeries.add(surr2);
 
