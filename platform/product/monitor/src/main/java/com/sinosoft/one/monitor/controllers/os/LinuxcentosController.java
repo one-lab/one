@@ -21,6 +21,7 @@ import com.sinosoft.one.monitor.os.linux.domain.OsRespondTimeService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
@@ -76,16 +77,25 @@ public class LinuxcentosController {
 		map.put("osName", os.getIpAddr());
 		map.put("os", os.getType());
 		//获取最后一次 响应时间
-		String responTime= osRespondTimeService.findLastResponTime(osId, currentTime);
+		String responTime= osRespondTimeService.findLastResponTime(osId, currentTime,os.getIntercycleTime());
 		//获取最后一次轮询时间
-		Date lastSampleTime=osProcessService.getLastSampleTime(osId, currentTime);
-		Calendar c  = Calendar.getInstance();
-		c.setTime(lastSampleTime);
-		c.set(Calendar.MINUTE, lastSampleTime.getMinutes()+os.getIntercycleTime());
-		Date nextSampleTime=c.getTime();
-		map.put("lastTime", simpleDateFormat.format(lastSampleTime));
-		map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
-		map.put("respondTime",responTime+"毫秒");
+		OsAvailabletemp lastSampleTime=osProcessService.getLastSampleTime(osId, currentTime);
+		if(lastSampleTime==null){
+			map.put("lastTime", "未知");
+			map.put("nextTime", "未知"); 
+		}else{
+			Calendar c  = Calendar.getInstance();
+			c.setTime(lastSampleTime.getSampleDate());
+			c.set(Calendar.MINUTE, lastSampleTime.getSampleDate().getMinutes()+os.getIntercycleTime());
+			Date nextSampleTime=c.getTime();
+			map.put("lastTime", simpleDateFormat.format(lastSampleTime));
+			map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
+		}
+		if(responTime==null)
+			map.put("respondTime",0+"毫秒");
+		else{
+			map.put("respondTime",responTime+"毫秒");
+		}
 		return Replys.with(map).as(Json.class);
 	}
 

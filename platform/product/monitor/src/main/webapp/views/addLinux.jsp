@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -10,7 +11,26 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
 
-        function save() {
+        function savelinux() {
+        	var name=$("#name").val();
+        	if(name==null||name==""){
+      		  msgSuccess("系统消息", "名称不能为空");
+      			return false;  
+      		}
+        	if(!name.match("^[A-Za-z]+$")){
+        		msgSuccess("系统消息", "请输入英文");
+        		return false;  
+        	}
+        	var ip=$("#ipAddr").val();
+        	if(!ip.match("^[0-9.]+$")){
+      		  	msgSuccess("系统消息", "IP格式错误");
+      			return false;  
+      		}
+        	var intercycleTime=$("#intercycleTime").val();
+        	if(!intercycleTime.match("^[0-9]+$")){
+        		  msgSuccess("系统消息", "轮询时间必须为数字");
+        		  return false;  
+        	}
             var flag = false;
             $.ajax({
                 type:"Post",
@@ -70,14 +90,14 @@
                     </tr>
                     <tr>
                         <td>轮询间隔<span class="mandatory">*</span></td>
-                        <td><input name="input3" type="text" class="formtext" size="8"/>
+                        <td><input id='intercycleTime' name="os.intercycleTime" type="text" class="formtext" size="8"/>
                             分
                         </td>
                     </tr>
                     <tr>
-                        <td class="group_name">&nbsp;</td>
+                        <td class="group_name">&nbsp;222222222222222</td>
                         <td class="group_name"><input type="button" class="buttons"
-                                                      value="确定添加" onclick="save()"/> <input type="reset"
+                                                      value="确定添加" onclick="savelinux()"/> <input type="reset"
                                                                                              class="buttons"
                                                                                              value="重 置"/> <input
                                 type="button" class="buttons" value="取 消"

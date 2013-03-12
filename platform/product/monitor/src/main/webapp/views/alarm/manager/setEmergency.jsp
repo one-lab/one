@@ -8,7 +8,6 @@
     <title>配置告警</title>
     <%@ include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
-
         $(function(){
             $("#monitorType").bind("change",getMonitorNames);
             /*var _resourceType=$("#monitorType").val();
@@ -20,9 +19,9 @@
             var _monitorTypeSelected=$("#monitorType").val();
             var _monitorNameSelected=$("#monitorName").val();
             if(''==_monitorTypeSelected){
-                msgAlert("系统消息", "请选择监视器类型！");
+                msgSuccess("系统消息", "请选择监视器类型！");
             }else if('choice'==_monitorNameSelected){
-                msgAlert("系统消息", "请选择监视器名字！");
+                msgSuccess("系统消息", "请选择监视器名字！");
             }else{
                 if(null!=attributeType&&""!=attributeType){
                     setHealthOrAvailableEmergencyForm(monitorType,monitorId,attributeType);
@@ -57,10 +56,6 @@
                 top:{topHeight:100},
                 bottom:{bottomHeight:30}
             });
-            if($.browser.msie && ($.browser.version == "7.0")){
-                var center = $("#layout_center");
-                $("#main").width(center.width() - 31).height(center.height() - 30);
-            }
             $("#myDesk").height($("#layout_center").height());
             $("#nav").delegate('li', 'mouseover mouseout', navHover);
             $("#nav,#menu").delegate('li', 'click', navClick);
@@ -153,6 +148,7 @@
                         var _alarmIds=[];
                         var _normalList=$("#window_iframe").contents().find("#normalList option");
                         var _normalIds=[];
+                        //@todo 如何取得当前下拉列表数据的value（现在取得的是第一个）
                         var _attributeThresholdId=$("#window_iframe").contents().find("#attributeThreshold option:selected").val();
                         for(var i=0;i<_graveList.length;i++){
                             _garveIds.push(_graveList[i].value);
@@ -176,13 +172,12 @@
                                 THRESHOLDID:_attributeThresholdId
                             },
                             success : function(dataFromJson) {
-                                msgSuccess("系统消息", "保存成功！");
                                     var _resourceTypeAfterUpdate=dataFromJson[0].resourceTypeAfterUpdate;
                                     var _monitorIdAfterUpdate=dataFromJson[0].monitorIdAfterUpdate;
                                     getNewGrid(_resourceTypeAfterUpdate,_monitorIdAfterUpdate);
                             },
                             error:function(){
-                                msgAlert("系统消息", "保存失败！");
+                                msgSuccess("系统消息", "保存失败！");
                              }
                         });
                         /*msgSuccess("系统消息", "操作成功，配置已保存！");*/
@@ -204,34 +199,11 @@
                         "value": "删除配置",
                         "onclickEvent" : "selectLear",
                         "btFun": function() {
-                            msgConfirm('系统消息','确定要删除当前的配置吗？',function(){
-                                var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
-                                var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
-                                $.ajax({
-                                    type : "POST",
-                                    /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
-                                    url : "${ctx}/alarm/manager/configemergency/delete/"+_monitorId+"/"+_attributeId,
-                                    dataType : "json",
-                                    async:false,
-                                    success : function(dataFromJson) {
-                                        if(dataFromJson != null){
-                                            msgSuccess("系统消息", "删除成功！");
-                                            var _resourceTypeAfterUpdate=dataFromJson[0].resourceTypeAfterUpdate;
-                                            var _monitorIdAfterUpdate=dataFromJson[0].monitorIdAfterUpdate;
-                                            getNewGrid(_resourceTypeAfterUpdate,_monitorIdAfterUpdate);
-                                        }
-                                    },
-                                    error:function(){
-                                        msgAlert("系统消息", "删除失败！");
-                                    }
-                                });
-                                temWin.closeWin();
-                            });
-                            /*var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
+                            var _monitorId=$("#window_iframe").contents().find("#monitorId").val();
                             var _attributeId=$("#window_iframe").contents().find("#attributeId").val();
                             $.ajax({
                                 type : "POST",
-                                *//*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*//*
+                                /*url : "${ctx}/alarm/manager/configemergency/save/"+_monitorType+"/"+_monitorId+"/"+${attributeId},*/
                                 url : "${ctx}/alarm/manager/configemergency/delete/"+_monitorId+"/"+_attributeId,
                                 dataType : "json",
                                 async:false,
@@ -244,10 +216,10 @@
                                     }
                                 },
                                 error:function(){
-                                    msgAlert("系统消息", "删除失败！");
+                                    msgSuccess("系统消息", "删除失败！");
                                  }
                             });
-                            temWin.closeWin();*/
+                            temWin.closeWin();
                         }
                     }
                 ]
@@ -273,7 +245,7 @@
     </div>
 </div>
 <div id="layout_center">
-    <div class="main" id="main">
+    <div class="main">
         <ul class="crumbs">
             <li><a href="#">管理</a> ></li>
             <li><b>配置告警</b></li>

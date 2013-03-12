@@ -71,7 +71,7 @@ public class OsManagerController {
 	public String saveOs(@Validation(errorPath = "saveOs") @Param("os") Os os) {
 		try {
 			osService.saveOsBasic(os.getName(), os.getType(), os.getIpAddr(),
-					os.getSubnetMask(), 5);
+					os.getSubnetMask(),os.getIntercycleTime());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -278,7 +278,7 @@ public class OsManagerController {
 			e.printStackTrace();
 		}
 		message.put("result", true);
-		return "";
+		return "r:/os/toSystemMonitor";
 	}
 	
 	/**

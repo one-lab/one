@@ -92,7 +92,7 @@ function hideNav(e){
 	<div class="main" id="main">
     	<ul class="crumbs">
         	<li><a href="#">监视器</a> ></li>
-            <li><b> oracle - 批量配置视图 (总计 3 监视器)</b></li>
+            <li><b> oracle - 批量配置视图</b></li>
         </ul>
         <hr class="top_border" />
         <div id="tabs">

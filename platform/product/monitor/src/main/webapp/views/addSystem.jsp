@@ -20,30 +20,30 @@
             }
             var appName="^[A-Za-z]+$";
             if (!form.applicationName.value.match(appName)) {
-                msgAlert('系统消息','显示名称必须是英文！')
+                msgAlert("系统消息", "显示名称必须是英文！");
                 return false;
             }
             if (form.cnName.value==null||form.cnName.value=="") {
-                msgAlert('系统消息','中文名称不能为空！')
+                msgAlert("系统消息","中文名称不能为空！");
                 return false;
             }
             var appIp="^[0-9.]+$";
             if(!form.applicationIp.value.match(appIp)){
-                msgAlert('系统消息','主机IP地址必须是数字和\".\"的组合！')
+                msgAlert("系统消息","主机IP地址必须是数字和\".\"的组合！");
                 return false;
             }
             var appPort="^[0-9]+$";
             if(!form.applicationPort.value.match(appPort)||form.applicationPort.value.length>5){
-                msgAlert('系统消息','端口必须是5位以内的数字！')
+                msgAlert("系统消息","端口必须是5位以内的数字！");
                 return false;
             }            
             if(form.interval.value.trim()==""){
-                msgAlert('系统消息','轮询间隔不能为空或者空格！')
+                msgAlert("系统消息","轮询间隔不能为空或者空格！");
                 return false;
             }
             var appInterval="^[0-9]+$";
             if(!form.interval.value.match(appInterval)||form.interval.value.length>10){
-                msgAlert('系统消息','轮询间隔必须是10位以内的数字！')
+                msgAlert("系统消息","轮询间隔必须是10位以内的数字！");
                 return false;
             }
             return true;
@@ -87,7 +87,7 @@
                                 <tr>
                                     <td width="25%">显示名称<span class="mandatory">*</span></td>
                                     <td><input id="applicationName" name="applicationName"
-                                               value="${application.applicationName}" type="text" class="required"/>
+                                               value="${application.applicationName}" type="text" class="formtext required"/>
                                         <msg:errorMsg property="applicationName" type="message"/>
                                     </td>
                                 </tr>

@@ -66,6 +66,9 @@ public class StatiDataModel {
 	}
 
 	public void setMaxValue(String maxValue) {
+		if(maxValue==null){
+			this.maxValue="0";
+		}
 		this.maxValue = maxValue;
 	}
 
@@ -74,6 +77,9 @@ public class StatiDataModel {
 	}
 
 	public void setMinValue(String minValue) {
+		if(minValue==null){
+			this.minValue="0";
+		}
 		this.minValue = minValue;
 	}
 
@@ -82,6 +88,9 @@ public class StatiDataModel {
 	}
 
 	public void setAvgValue(String avgValue) {
+		if(avgValue==null){
+			this.avgValue="0";
+		}
 		this.avgValue = avgValue;
 	}
 
@@ -90,6 +99,9 @@ public class StatiDataModel {
 	}
 
 	public void setMaxAvgValue(String maxAvgValue) {
+		if(maxAvgValue==null){
+			this.maxAvgValue="0";
+		}
 		this.maxAvgValue = maxAvgValue;
 	}
 
@@ -98,6 +110,9 @@ public class StatiDataModel {
 	}
 
 	public void setMinAvgValue(String minAvgValue) {
+		if(minAvgValue==null){
+			this.minAvgValue="0";
+		}
 		this.minAvgValue = minAvgValue;
 	}
 

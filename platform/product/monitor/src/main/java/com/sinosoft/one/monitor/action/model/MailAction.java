@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.action.model;
 // Generated 2013-3-1 10:54:16 by One Data Tools 1.0.0
 
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -72,7 +73,7 @@ public class MailAction implements java.io.Serializable {
 
 
 	public void setOperation(String operation) {
-		this.operation = operation;
+		this.operation = Strings.nullToEmpty(operation);
 	}
 
 
@@ -101,7 +102,7 @@ public class MailAction implements java.io.Serializable {
 	}
 
 	public void setFromAddress(String fromAddress) {
-		this.fromAddress = fromAddress;
+		this.fromAddress = Strings.nullToEmpty(fromAddress);
 	}
 
 	@Column(name="TO_ADDRESS", length=250)
@@ -110,7 +111,7 @@ public class MailAction implements java.io.Serializable {
 	}
 
 	public void setToAddress(String toAddress) {
-		this.toAddress = toAddress;
+		this.toAddress = Strings.nullToEmpty(toAddress);
 	}
 
 	@Column(name="SUBJECT", length=100)
@@ -119,7 +120,7 @@ public class MailAction implements java.io.Serializable {
 	}
 
 	public void setSubject(String subject) {
-		this.subject = subject;
+		this.subject = Strings.nullToEmpty(subject);
 	}
 
 	@Column(name="CONTENT", length=3000)
@@ -128,7 +129,7 @@ public class MailAction implements java.io.Serializable {
 	}
 
 	public void setContent(String content) {
-		this.content = content;
+		this.content = Strings.nullToEmpty(content);
 	}
 
 	@Column(name="SMTP_SERVER", length=100)
@@ -164,7 +165,7 @@ public class MailAction implements java.io.Serializable {
 	}
 
 	public void setAppendMessage(String appendMessage) {
-		this.appendMessage = appendMessage;
+		this.appendMessage = Strings.nullToEmpty(appendMessage);
 	}
 
 	@Column(name="NAME", length=50)

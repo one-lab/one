@@ -56,9 +56,15 @@ public class HistoryViewController {
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		DecimalFormat dec = new DecimalFormat("0.##"); 
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.CPU_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		if(statiDataModel!=null){
+			inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		}else {
+			inv.addModel("MaxAgv","无数据" );
+			inv.addModel("MinAgv","无数据"  );
+			inv.addModel("Agv", "无数据" );
+		}
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -76,9 +82,15 @@ public class HistoryViewController {
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.DISK_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
 		DecimalFormat dec = new DecimalFormat("0.##"); 
-		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		if(statiDataModel!=null){
+			inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		}else {
+			inv.addModel("MaxAgv","无数据" );
+			inv.addModel("MinAgv","无数据"  );
+			inv.addModel("Agv", "无数据" );
+		}
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -97,9 +109,15 @@ public class HistoryViewController {
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RAM_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
 		DecimalFormat dec = new DecimalFormat("0.##"); 
-		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		if(statiDataModel!=null){
+			inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		}else {
+			inv.addModel("MaxAgv","无数据" );
+			inv.addModel("MinAgv","无数据"  );
+			inv.addModel("Agv", "无数据" );
+		}
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -117,9 +135,15 @@ public class HistoryViewController {
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RSPOND_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
 		DecimalFormat dec = new DecimalFormat("0.##"); 
+		if(statiDataModel!=null){	
 		inv.addModel("MaxAgv",dec.format(new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-		inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("MinAgv",dec.format(new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+			inv.addModel("Agv",dec.format(new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+		}else {
+			inv.addModel("MaxAgv","无数据" );
+			inv.addModel("MinAgv","无数据"  );
+			inv.addModel("Agv", "无数据" );
+		}
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));

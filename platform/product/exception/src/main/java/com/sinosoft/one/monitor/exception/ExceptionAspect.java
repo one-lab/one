@@ -21,7 +21,7 @@ public class ExceptionAspect {
      *
      * @param throwable
      */
-    @AfterThrowing(pointcut = "execution(* com.sinosoft.one.mvc.test..*(..))", throwing="throwable")
+    @AfterThrowing(pointcut = "execution(* com.sinosoft.one.demo.service..*(..))", throwing="throwable")
     public void exceptionCatch(Throwable throwable) {
 	    TraceModel traceModel = TraceUtils.getTraceModel();
 		if(!traceModel.hasException()) {

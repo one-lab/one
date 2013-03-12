@@ -78,7 +78,7 @@
                     xAxis:_data["xAxis"],
                     yAxis:{
                         title:{
-                            text:'连接时间'
+                            text:'连接时间ms'
                         }
 
 
