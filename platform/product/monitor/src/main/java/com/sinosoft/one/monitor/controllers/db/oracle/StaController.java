@@ -82,6 +82,7 @@ public class StaController {
 		.getBaseInfo(monitorId, eventType, en, new Date(),
 				sta, TimeGranularityEnum.DAY);
 		inv.addModel("osdm", oracleStaInfoDetailModel);
+        inv.addModel("monitorId", monitorId);
 		// viewTable(monitorId,inv);
 		// System.out.println("+++++++++++++++++++++++++++");
 		if(eventType == 1 && st == 1 ){
