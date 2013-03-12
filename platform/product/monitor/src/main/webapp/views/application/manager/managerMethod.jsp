@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>管理Method</title>
     <%@include file="/WEB-INF/layouts/base.jsp"%>
+    <link href="${ctx}/global/css/manageBusScene/manageBusScene.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 $(function(){
 	$("body").layout({
@@ -20,6 +21,7 @@ $(function(){
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
+        sorts:true,
 		draggable:false,
 		height: "auto",  
 		colums:[  
