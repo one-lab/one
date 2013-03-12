@@ -23,8 +23,7 @@
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 <script language="javascript" src="${ctx}/global/js/os/linuxcentos.js"></script>
-<script language="javascript" src="${ctx}/global/js/os/cpuRamDraw.js"></script>
-<script language="javascript" src="${ctx}/global/js/os/cpuInfoDraw.js"></script>
+<script language="javascript" src="${ctx}/global/js/os/higcharDraw.js"></script>
 </head>
 
 <body>
@@ -179,7 +178,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" border="0" class="linux-downhead">
       <tbody>
         <tr>
-          <td width="100%" height="29" class="tableheadingtrans">&nbsp;CPU及内存使用率 - 最近6小时<a name="Memory Utilization"></a></td>
+          <td width="100%" height="29" class="tableheadingtrans">&nbsp;CPU及内存使用率 - 最近3小时<a name="Memory Utilization"></a></td>
         </tr>
       </tbody>
     </table>
@@ -204,7 +203,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" border="0" class="linux-downhead">
       <tbody>
         <tr>
-          <td width="100%" height="29" class="tableheadingtrans">&nbsp;分解CPU利用率<a name="Memory Utilization"></a></td>
+          <td width="100%" height="29" class="tableheadingtrans">&nbsp;分解CPU利用率 - 最近3小时<a name="Memory Utilization"></a></td>
         </tr>
       </tbody>
     </table>
