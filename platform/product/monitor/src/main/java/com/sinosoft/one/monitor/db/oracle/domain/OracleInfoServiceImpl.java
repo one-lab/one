@@ -92,13 +92,14 @@ public class OracleInfoServiceImpl implements OracleInfoService {
     @Override
     @Transactional
     public void deleteMonitor(List<String> monitorId) {
-//        resourcesRepository
-//        lasteventRepository
-//        eventStaRepository
-//        avaRepository
-//        avaStaRepository
-//        alarmRepository
-//        infoRepository.deleteByIds(monitorId);
+
+        lasteventRepository.deleteByMonitorIds(monitorId);
+        eventStaRepository.deleteByMonitorIds(monitorId);
+        avaRepository.deleteByMonitorIds(monitorId);
+        avaStaRepository.deleteByMonitorIds(monitorId);
+        resourcesRepository.deleteByMoitorIds(monitorId);
+        alarmRepository.deleteByMonitorIds(monitorId);
+        infoRepository.deleteByIds(monitorId);
     }
 
     @Override

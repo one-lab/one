@@ -77,6 +77,7 @@ var day30ColumnStyle =
 		{id:'30',text:'30',name:"day30",index:'1',align:''}
 	];
 
+
 function getForm() {
 	 systemMonitorTable("/monitor/os/systemMonitorTable/24");
 	$.ajax({
@@ -86,25 +87,13 @@ function getForm() {
 		cache : false,
 		success : function(data) {
 			for (var formName in data) {
-				var series = [];
-				for (var name in data[formName]) {
-					var categories = [];
-					var i = 0, x = [], y = {
-						data : []
-					};
-					while (i < data[formName][name].length) {
-						if (i == 0) {
-							y.name = name;
-						}
-						categories.push(data[formName][name][i].x);
-						if (data[formName][name][i].y==-1) {
-							y.data.push(null);
-						}else{
-							y.data.push(data[formName][name][i].y);
-						}
-						i += 1;
-					}
-					series.push(y);
+				var seriesArr = [];
+				var lineData =  data[formName];
+				for(var lineName in lineData){
+					var series = {};
+					series.name = lineName;
+					series.data = lineData[lineName];
+					seriesArr.push(series);
 				}
 				new Highcharts.Chart({
 					chart : {
@@ -116,11 +105,20 @@ function getForm() {
 					},
 					title : {
 						text : ' ',
-					x : -20
+						x : -20
 					// center
 					},
 					xAxis : {
-						categories : categories
+					    type: 'datetime',
+			                dateTimeLabelFormats: { // don't display the dummy year
+			                    second: '%Y-%m-%d<br/>%H:%M:%S',
+			                    minute: '%Y-%m-%d<br/>%H:%M',
+			                    hour: '%Y-%m-%d<br/>%H:%M',
+			                    day: '%Y<br/>%m-%d',
+			                    week: '%Y<br/>%m-%d',
+			                    month: '%Y-%m',
+			                    year: '%Y'
+			           }
 					},
 					yAxis : {
 						title : {
@@ -129,25 +127,32 @@ function getForm() {
 						plotLines : false
 					},
 					plotOptions : {
-						series : {
+						line : {
+							dataLabels : {
+								enabled : true
+							},
+							connectNulls : true,
+							enableMouseTracking : true,
 							marker : {
-								radius : 0
+								enabled : false
 							}
 						}
 					},
 					credits : {
 						text : '',
-					href : ''
+						href : ''
 					},
 					tooltip : {
-						formatter : function() {
-							return this.y + "%";
-							}
-						},
-						legend : {
-							enabled : true
-						},
-						series : series
+						enabled: false,
+		                formatter: function() {
+		                    return '<b>'+ this.series.name +'</b><br/>'+
+		                        this.x +': '+ this.y ;
+		                }
+					},
+					legend : {
+						enabled : true
+					},
+					series : seriesArr
 				});
 			}
 		}

@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public interface InfoRepository extends PagingAndSortingRepository<Info, String> {
-    @SQL("delete from info where id in (?1)")
+    @SQL("delete from ge_monitor_oracle_info where id in (?1)")
     void deleteByIds(List<String> monitorId);
 }
 

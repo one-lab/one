@@ -27,6 +27,7 @@ import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
@@ -121,14 +122,24 @@ public class LinuxcentosController {
 	 * 概览页面CPU 与内存曲线
 	 * @param osId
 	 * @return
-	 */
+	 */ 
 	@Post("getCpuAndRam/{osId}")
 	public Reply getCpuAndRam(@Param("osId") String osId ) {
 		Date currentTime=new Date();
-		Map<String,List<Map<String, Object>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 5, 2);
+		Map<String,List<List<?>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 5, 2);
 		return Replys.with(oneOsCpuAndMem).as(Json.class);
 	}
-
+	/**
+	 * 概览页面CPU分解信息曲线  cpu利用率曲线（内存CPU表格下面的曲线）
+	 * @param osId
+	 * @return
+	 */
+	@Post("getCpuInfo/{osId}")
+	public Reply getCpuInfo(@Param("osId") String osId ) {
+		Date currentTime=new Date();
+		Map<String,List<List<?>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 2);
+		return Replys.with(lineMap).as(Json.class);
+	}
 
 
 	/**
@@ -174,17 +185,7 @@ public class LinuxcentosController {
 		}
 	}
 	
-	/**
-	 * 概览页面CPU分解信息曲线  cpu利用率曲线（内存CPU表格下面的曲线）
-	 * @param osId
-	 * @return
-	 */
-	@Post("getCpuInfo/{osId}")
-	public Reply getCpuInfo(@Param("osId") String osId ) {
-		Date currentTime=new Date();
-		Map<String, List<Map<String, Object>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 2);
-		return Replys.with(lineMap).as(Json.class);
-	}
+	
 	/**
 	 * 概览页面CPU分解grid 当前时间 io 中断等grid 最下面的分解CPU信息表格
 	 * @param osId

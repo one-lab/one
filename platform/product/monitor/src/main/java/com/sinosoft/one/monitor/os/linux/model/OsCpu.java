@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 /**
  * OsCpu.
@@ -90,6 +91,7 @@ public class OsCpu  implements java.io.Serializable {
     this.os = os;
     }
     @Column(name="SAMPLE_DATE")
+    @Temporal(TemporalType.TIMESTAMP) 
     public Date getSampleDate() {
     return this.sampleDate;
     }

@@ -18,6 +18,7 @@ import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsBaseInfoModel;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsHealthModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 import com.sinosoft.one.mvc.web.Invocation;
@@ -75,7 +76,7 @@ public class OsManagerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		return "r:/os/toSystemMonitor";
 	}
 	
 	@Post("systemMonitorTable/{timespan}")
@@ -206,14 +207,15 @@ public class OsManagerController {
 	 * 性能页面
 	 */
 	@Post("performanceList")
+	@Get("performanceList")
 	public Reply performanceList() {
-		Map<String, Map<String,List<Map<String, Object>>>> viewMap=osLineViewHandle.createlineView(new Date(), 5, 1);
+		Map<String, ?> viewMap=osLineViewHandle.createlineView(new Date(), 5, 1);
 		System.out.println(Replys.with(viewMap).as(Json.class).toString());
 		return Replys.with(viewMap).as(Json.class);
 	}
 	
 	/**
-	 * 数据库列表视图
+	 * 列表视图
 	 * @return
 	 */
 	public Reply systemList(Invocation inv) {
@@ -225,37 +227,30 @@ public class OsManagerController {
 		String messageFormat0 = "<a href={0}>{1}</a>"; //数据库名
 		String messageFormat1 = "<div class={0}></div>"; //可用性-usability
 		String messageFormat2 = "<div class={0}></div>"; //健康状况-healthy
-		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
+//		String messageFormat3 = "<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
 		/* 查询数据库健康列表数据*/
-		
-		List<OracleStaBaseInfoModel> oracleStaBaseInfos = new ArrayList<OracleStaBaseInfoModel>();
-		/**
-		 * 测试用的假数据，service写好后修改上面返回list集合即可
-		 */
-		OracleStaBaseInfoModel staBaseInfo = new OracleStaBaseInfoModel();
-		staBaseInfo.setMonitorID("test_linux");
-		staBaseInfo.setMonitorName("test_linux");
-		staBaseInfo.setUsability("1");
-		staBaseInfo.setHealthy(new String[]{"1", ""});
-		oracleStaBaseInfos.add(staBaseInfo);
+		Date currentDate=new Date();
+		List<Os>oss=osService.getAllOs();
+		List<OsBaseInfoModel> osBaseInfoModels =osService.getBasicInfo(oss, currentDate);
 		
 		/* 循环构建表格行数据*/
-		for(OracleStaBaseInfoModel oracleStaBaseInfo : oracleStaBaseInfos) {
+		for(OsBaseInfoModel osBaseInfoModel : osBaseInfoModels) {
 			Map<String, Object> row = new HashMap<String, Object>();
-			row.put("id", oracleStaBaseInfo.getMonitorID());
+			row.put("id", osBaseInfoModel.getMonitorID());
 			List<String> cell = new ArrayList<String>();
 			/* 可用性 1-可用sys_up ；0-不可用 sys_down*/
-			String usabilityClass = "1".equals(oracleStaBaseInfo.getUsability()) ? "sys_up" : "sys_down";
+			String usabilityClass = "1".equals(osBaseInfoModel.getUsability()) ? "sys_up" : "sys_down";
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
-			String[] healthy = oracleStaBaseInfo.getHealthy();
+			String[] healthy = osBaseInfoModel.getHealthy();
 			String healthyClass = "1".equals(healthy[0]) ? "fine" : "poor";
 			/* 构建修改连接+对应数据库MonitorID*/
-			String editUrl = contextPath + "/os/editUI/" + oracleStaBaseInfo.getMonitorID();
+			String url = contextPath + "/os/linuxcentos/" + osBaseInfoModel.getMonitorID();
+			String editUrl = contextPath + "/os/editUI/" + osBaseInfoModel.getMonitorID();
 			/* 格式化表格数据信息*/
-			cell.add(MessageFormat.format(messageFormat0, "", oracleStaBaseInfo.getMonitorName()));
+			cell.add(MessageFormat.format(messageFormat0, url, osBaseInfoModel.getMonitorName()));
 			cell.add(MessageFormat.format(messageFormat1, usabilityClass));
 			cell.add(MessageFormat.format(messageFormat2, healthyClass));
-			cell.add(MessageFormat.format(messageFormat3, editUrl));
+//			cell.add(MessageFormat.format(messageFormat3, editUrl));
 			row.put("cell", cell);
 			rows.add(row);
 		}
@@ -272,7 +267,8 @@ public class OsManagerController {
 	 */
 	@Get("editUI/{monitorId}")
 	public String editUI(@Param("monitorId")String monitorId,Invocation inv) {
-		return "oracleSave";
+		inv.addModel("os", osService.getOsBasicById(monitorId));
+		return "modifeLinux";
 	}
 	
 	/**
@@ -282,9 +278,14 @@ public class OsManagerController {
 	 * @return
 	 */
 	@Post("edit")
-	public Reply edit(Info oracleInfo,Invocation inv) {
+	public String edit(@Param("os") Os os,Invocation inv) {
+		try {
+			osService.modifeOsBasic(os.getOsInfoId(),os.getName(), os.getType(), os.getIpAddr(), os.getSubnetMask(), os.getIntercycleTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		message.put("result", true);
-		return Replys.with(message).as(Json.class);
+		return "";
 	}
 	
 	/**
@@ -295,44 +296,12 @@ public class OsManagerController {
 	 */
 	@Get("remove")
 	public Reply remove(@Param("monitorIds")List<String> monitorIds, Invocation inv) {
-		//oracleInfoService.deleteMonitor(monitorId);
+		//delete......
+		for (String monitorId : monitorIds) {
+			osService.deleteOsBasic(monitorId);
+		}
 		message.put("result", true);
 		return Replys.with(message).as(Json.class);
 	}
 	
-	
-	/**
-	 * 健康状态列表
-	 * @return
-	 */
-//	public Reply healthList(Invocation inv) {
-//		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
-//		List<OracleHealthInfoModel> oracleHealthInfoModels = OracleBatchInfoService.healthInfoList(StaTimeEnum.LAST_24HOUR);
-//		String messageFormat0 = "<a href='{0}'>{1}</a>";
-//		String messageFormat1 = "<span class={0}>{1}</span>";
-//		for(OracleHealthInfoModel oracleHealthInfoModel : oracleHealthInfoModels) {
-//			Map<String, Object> row = new HashMap<String, Object>();
-//			row.put("id", oracleHealthInfoModel.getMonitorID());
-//			List<String> cell = new ArrayList<String>();
-//			cell.add(MessageFormat.format(messageFormat0, "",oracleHealthInfoModel.getMonitorName()));
-//			for(int i=0; i<oracleHealthInfoModel.getGraphInfo().size(); i++) {
-//				String[] values = oracleHealthInfoModel.getGraphInfo().get(i);
-//				String cssClass = "";
-//				if("1".equals(values[0])) {
-//					cssClass = "normal";
-//				} else if("2".equals(values[0])) {
-//					cssClass = "warn";
-//				} else {
-//					cssClass = "";
-//				}
-//				String value = MessageFormat.format(messageFormat1, cssClass, values[1]);
-//				cell.add(value);
-//			}
-//			row.put("cell", cell);
-//			rows.add(row);
-//		}
-//		Map<String, Object> grid = new HashMap<String, Object>();
-//		grid.put("rows", rows);
-//		return Replys.with(grid).as(Json.class);
-//	}
 }

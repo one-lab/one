@@ -24,7 +24,7 @@
 		
 		$(function(){
 			var id= $("#osid").val();
-			creatSimpleChart('${ctx}/os/historyMemStatiLine/7/'+id, 'last_sevenday', '内存利用率%');
+			creatSimpleChart('${ctx}/os/historyMemStatiLine/7/'+id, 'last_sevenday', '内存利用率');
 		
 			$("#sevenday_grid").Grid({
 				type : "post",
@@ -37,7 +37,7 @@
 					{id:'3',text:'最大值 ',name:"maxValue",width:'',index:'1',align:'',color:''},
 					{id:'4',text:'平均值 ',name:"averageValue",width:'',index:'1',align:'',color:''}
 				],
-				rowNum:10,
+				rowNum:30,
 				rowList:[10,20,30],
 				pager : false,
 				number:false,

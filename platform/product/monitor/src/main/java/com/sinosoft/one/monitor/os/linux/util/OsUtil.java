@@ -4,11 +4,6 @@ package com.sinosoft.one.monitor.os.linux.util;
 public class OsUtil {
 	
 	/**
-	 * 可用性统计数据类型码
-	 */
-	public static String AVAILABLE="AVAILABLE";
-	
-	/**
 	 * 数据库日期格式
 	 */
 	public static String ORCL_DATEFORMATE="yyyy-MM-dd hh24:mi:ss";
@@ -118,6 +113,11 @@ public class OsUtil {
 	 * 响应时间统计1小时标记
 	 */
 	public static String RSPOND_STATIF_FLAG="PH";
+	
+	/**
+	 * 可用性统计数据类型码
+	 */
+	public static String AVAILABLE="AVAILABLE";
 	
 	/**
 	 * 统计表中 平均值列名

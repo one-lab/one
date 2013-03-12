@@ -36,7 +36,7 @@
         <ul class="crumbs">
             <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a> ></li>
             <li><a href="${ctx}/application/manager/appmanager/applist/1">应用列表</a> ></li>
-            <li><b>应用明细</b></li>
+            <li><b>应用透视</b></li>
         </ul>
         <table cellpadding="0" cellspacing="0" width="100%" >
             <tbody>

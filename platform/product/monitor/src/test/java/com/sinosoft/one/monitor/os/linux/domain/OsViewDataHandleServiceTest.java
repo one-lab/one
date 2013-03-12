@@ -3,7 +3,6 @@ package com.sinosoft.one.monitor.os.linux.domain;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.repository.OsStatiRepository;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
@@ -36,7 +34,7 @@ public class OsViewDataHandleServiceTest extends AbstractJUnit4SpringContextTest
 	private OsStatiRepository osStatiRepository;
 	@Test
 	public void createlineView(){
-		Map<String,  Map<String,List<Map<String, Object>>>> viewMap=osViewHandle.createlineView(new Date(), 5, 1);
+//		Map<String,  Map<String,List<Map<String, Object>>>> viewMap=osViewHandle.createlineView(new Date(), 5, 1);
 		System.out.println(1);
 	}
 	

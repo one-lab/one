@@ -23,59 +23,13 @@
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 <script language="javascript" src="${ctx}/global/js/os/linuxcentos.js"></script>
+<script language="javascript" src="${ctx}/global/js/os/simpleDraw.js"></script>
+<script type="text/javascript">
+</script>
 </head>
 
 <body>
-<div id="layout_top">
-  <div class="header">
-    <p class="user">您好,系统管理员 <span>|</span> <a href="#">退出系统</a></p>
-    <div class="menu_box">
-      <ul class="nav" id="nav">
-        <li><a href="index.html">首页</a></li>
-        <li class="has_sub"> <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
-          <ul class="add_sub_menu" id="subNav">
-            <li class="action"><span class="sever">操作系统</span>
-              <ul class="list">
-                <li><a href="javascript:viod(0)">操作系统1</a></li>
-                <li><a href="javascript:viod(0)">操作系统2</a></li>
-              </ul>
-            </li>
-            <li class="action"><span class="system">应用系统</span>
-              <ul class="list">
-                <li><a href="javascript:viod(0)">在线投保</a></li>
-                <li><a href="javascript:viod(0)">在线查询</a></li>
-                <li><a href="javascript:viod(0)">应急处置</a></li>
-                <li><a href="javascript:viod(0)">人员角色管理</a></li>
-              </ul>
-            </li>
-            <li class="action" style="border:none "><span>数据库</span>
-              <ul class="list">
-                <li><a href="javascript:viod(0)">SQL DBA</a></li>
-                <li><a href="javascript:viod(0)">SQL SYS</a></li>
-              </ul>
-            </li>
-            <li class="clear"></li>
-          </ul>
-        </li>
-        <li><a href="javascript:viod(0)">应用性能</a></li>
-        <li><a href="BusinessSimulation.html">业务仿真</a></li>
-        <li><a href="javascript:viod(0)">告警</a></li>
-      </ul>
-    </div>
-    <ul class="add_menu" id="menu">
-      <li><a href="javascript:viod(0)">新建监视器</a></li>
-      <li><a href="javascript:viod(0)">配置监视器</a></li>
-      <li class="has_sub"> <a href="javascript:viod(0)"><span>预警对象管理</span></a>
-        <ul class="add_sub_menu">
-          <li class="title"><a href="javascript:viod(0)">显示动作</a></li>
-          <li class="action">创建新动作</li>
-          <li><a class="sms" href="javascript:viod(0)">短信动作</a></li>
-          <li><a class="email" href="javascript:viod(0)">邮件动作</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
 <div class="main-linux">
       <ul class="crumbs">

@@ -29,8 +29,11 @@ public class ApplicationMethodController {
     @Autowired
     LogDetailService logDetailService;
 
-    @Get("viewLogDetail/${urlTraceLogId}")
-    public String ViewLogDetail(@Param("urlTraceLogId") String urlTraceLogId, Invocation inv){
+    @Get("viewLogDetail/${applicationId}/${urlId}/${urlTraceLogId}")
+    public String viewLogDetail(@Param("applicationId") String applicationId, @Param("urlId") String urlId,
+                                @Param("urlTraceLogId") String urlTraceLogId, Invocation inv){
+	    inv.addModel("applicationId", applicationId);
+	    inv.addModel("urlId", urlId);
 		inv.addModel("logId", urlTraceLogId);
         return "logDetail";
     }
@@ -56,8 +59,13 @@ public class ApplicationMethodController {
         return "@" + exceptionInfo;
     }
 
-    @Get("getMethodDetail/{methodId}")
-    public String getMethodDetail(@Param("methodId") String methodId, Invocation inv){
+    @Get("getMethodDetail/{applicationId}/{urlId}/{logId}/{methodId}")
+    public String getMethodDetail(@Param("applicationId") String applicationId ,
+                                  @Param("urlId") String urlId,
+                                  @Param("logId") String logId,
+                                  @Param("methodId") String methodId,
+                                  Invocation inv){
+
         MethodTraceLog methodTraceLog = logDetailService.getMethodDetail(methodId);
         String inParam = methodTraceLog.getInParam();
         String outParam = methodTraceLog.getOutParam();
@@ -72,6 +80,10 @@ public class ApplicationMethodController {
         } else {
             inv.addModel("outParam" , outParam);
         }
+
+	    inv.addModel("applicationId", applicationId);
+	    inv.addModel("urlId", urlId);
+	    inv.addModel("logId", logId);
 
         return "methodDetail";
     }

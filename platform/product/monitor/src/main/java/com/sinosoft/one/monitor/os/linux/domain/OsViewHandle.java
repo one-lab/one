@@ -53,13 +53,13 @@ public class OsViewHandle {
 	 * @param timespan 需要的时间段 如 1为1小时内
 	 * @return
 	 */
-	public Map<String, Map<String,List<Map<String, Object>>>>  createlineView(Date currentTime ,int interCycle ,int timespan){
+	public Map<String, Map<String,List<List<?>>>>  createlineView(Date currentTime ,int interCycle ,int timespan){
 		List<Os>oss=osService.getAllOs();
-		Map<String, Map<String,List<Map<String, Object>>>> viewMap=new HashMap<String, Map<String,List<Map<String, Object>>>>();
-		Map<String,List<Map<String, Object>>> cpuLineViewMaps=osCpuViewDataHandle.creatCpuLineData(oss, currentTime, interCycle, timespan);
-		Map<String,List<Map<String, Object>>> ramLineViewMaps=osRamViewHandle.creatRamLineData(oss, currentTime, interCycle, timespan);
-		Map<String,List<Map<String, Object>>> swapLineViewMaps=osRamViewHandle.creatSwapLineData(oss, currentTime, interCycle, timespan);
-		Map<String,List<Map<String, Object>>> respondLineViewMaps=osRespondViewHadle.creatRespondLineData(oss, currentTime, interCycle, timespan);
+		Map<String, Map<String,List<List<?>>>> viewMap=new HashMap<String, Map<String,List<List<?>>>>();
+		Map<String,List<List<?>>> cpuLineViewMaps=osCpuViewDataHandle.creatCpuLineData(oss, currentTime, interCycle, timespan);
+		Map<String,List<List<?>>> ramLineViewMaps=osRamViewHandle.creatRamLineData(oss, currentTime, interCycle, timespan);
+		Map<String,List<List<?>>> swapLineViewMaps=osRamViewHandle.creatSwapLineData(oss, currentTime, interCycle, timespan);
+		Map<String,List<List<?>>> respondLineViewMaps=osRespondViewHadle.creatRespondLineData(oss, currentTime, interCycle, timespan);
 		viewMap.put("chartMem", ramLineViewMaps);
 		viewMap.put("chartCpu", cpuLineViewMaps);
 		viewMap.put("chartSwap", swapLineViewMaps);
@@ -75,12 +75,12 @@ public class OsViewHandle {
 	 * @param timespan 需要的时间段 如 1为1小时内
 	 * @return
 	 */
-	public Map<String,List<Map<String, Object>>>  createOneOsCpuAndMemline(String osid,Date currentTime ,int interCycle ,int timespan){
+	public  Map<String,List<List<?>>>   createOneOsCpuAndMemline(String osid,Date currentTime ,int interCycle ,int timespan){
 		Os os =osService.getOsBasicById(osid);
-		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
-		List<Map<String, Object>> oneCpuLineViewMaps=osCpuViewDataHandle.creatOneCpuUsedLineData(os, currentTime, interCycle, timespan);
-		List<Map<String, Object>> oneRamLineViewMaps=osRamViewHandle.creatOneRamLineData(os, currentTime, interCycle, timespan);
-		List<Map<String, Object>> oneSwapLineViewMaps=osRamViewHandle.creatOneSwapLineData(os, currentTime, interCycle, timespan);
+		Map<String,List<List<?>>> viewMap=new   HashMap<String, List<List<?>>>();
+		List<List<?>> oneCpuLineViewMaps=osCpuViewDataHandle.creatOneCpuUsedLineData(os, currentTime, interCycle, timespan);
+		List<List<?>> oneRamLineViewMaps=osRamViewHandle.creatOneRamLineData(os, currentTime, interCycle, timespan);
+		List<List<?>> oneSwapLineViewMaps=osRamViewHandle.creatOneSwapLineData(os, currentTime, interCycle, timespan);
 		viewMap.put("CPU", oneCpuLineViewMaps);
 		viewMap.put("MEM", oneRamLineViewMaps);
 		viewMap.put("SWAP", oneSwapLineViewMaps);
@@ -95,13 +95,17 @@ public class OsViewHandle {
 	 * @param timespan 需要的时间段 如 1为1小时内
 	 * @return
 	 */
-	public Map<String,List<Map<String, Object>>>  createOneCpuResolveView(String osid,Date currentTime ,int interCycle ,int timespan){
+	public Map<String,List<List<?>>>  createOneCpuResolveView(String osid,Date currentTime ,int interCycle ,int timespan){
 		Os os =osService.getOsBasicById(osid);
-		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
-		List<Map<String, Object>> oneCpuUserTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuUserTimeLine(os, currentTime, interCycle, timespan);
-		List<Map<String, Object>> oneCpuSysTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuSysTimeLine(os, currentTime, interCycle, timespan);
-		List<Map<String, Object>> oneCpuIOLineViewMaps=osCpuViewDataHandle.creatOneCpuIOLine(os, currentTime, interCycle, timespan);
-		List<Map<String, Object>> OneCpuIDLELineViewMaps=osCpuViewDataHandle.creatOneCpuIDLELine(os, currentTime, interCycle, timespan);
+		Map<String,List<List<?>>> viewMap=new   HashMap<String, List<List<?>>>();
+		Calendar c  = Calendar.getInstance();
+		c.setTime(currentTime);
+		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
+		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), c.getTime(), currentTime);
+		List<List<?>> oneCpuUserTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuUserTimeLine(os, currentTime, interCycle, timespan,osCpus);
+		List<List<?>> oneCpuSysTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuSysTimeLine(os, currentTime, interCycle, timespan,osCpus);
+		List<List<?>> oneCpuIOLineViewMaps=osCpuViewDataHandle.creatOneCpuIOLine(os, currentTime, interCycle, timespan,osCpus);
+		List<List<?>> OneCpuIDLELineViewMaps=osCpuViewDataHandle.creatOneCpuIDLELine(os, currentTime, interCycle, timespan,osCpus);
 		viewMap.put("userTime", oneCpuUserTimeLineViewMaps);
 		viewMap.put("sysTime", oneCpuSysTimeLineViewMaps);
 		viewMap.put("io", oneCpuIOLineViewMaps);
@@ -156,21 +160,21 @@ public class OsViewHandle {
 	 * @param timespan 时间段 1 7 30
 	 * @return
 	 */
-	public Map<String,List<Map<String, Object>>> creatStatiLine(String osid,String statitype, Date currentTime,int timespan ){
+	public Map<String,List<List<?>>> creatStatiLine(String osid,String statitype, Date currentTime,int timespan ){
 		long span;
 		if(timespan>1){
 			span=(timespan-1)*24;
 		}else{
 			span=(timespan*24);
 		}
-		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		Date dayPoint= new Date(currentTime.getTime()-Long.valueOf(span*60*60*1000));
 		dayPoint=OsTransUtil.getDayPointByDate(dayPoint);//天整点
 		List<StatiDataModel> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime);
 		currentTime=OsTransUtil.getDayPointByDate(currentTime);//获取当天整点
-		List<Map<String, Object>> cpuMaxmaps=osStatiViewHandle.creatCpuMaxStatiLine( osStatis, currentTime, dayPoint, timespan);
-		List<Map<String, Object>> cpuMinmaps=osStatiViewHandle.creatCpuMinStatiLine( osStatis, currentTime, dayPoint, timespan);
-		List<Map<String, Object>> cpuAvemaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis, currentTime, dayPoint, timespan);
+		List<List<?>> cpuMaxmaps=osStatiViewHandle.creatCpuMaxStatiLine( osStatis, currentTime, dayPoint, timespan);
+		List<List<?>> cpuMinmaps=osStatiViewHandle.creatCpuMinStatiLine( osStatis, currentTime, dayPoint, timespan);
+		List<List<?>> cpuAvemaps=osStatiViewHandle.creatCpuAvaStatiLine( osStatis, currentTime, dayPoint, timespan);
 		viewMap.put("max", cpuMaxmaps);
 		viewMap.put("min", cpuMinmaps);
 		viewMap.put("ave", cpuAvemaps);
@@ -199,47 +203,13 @@ public class OsViewHandle {
 		List<OsGridModel>osGridModels= new ArrayList<OsGridModel>();
 		Date dayPoint=OsTransUtil.getBeforeDate(currentTime, timespan+"");
 		List<StatiDataModel> osStatis=osStatiService.findStatiByTimeSpan(osid, statitype, dayPoint, currentTime);
-		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(span*60*60*1000)){
-				Integer ptime=(Integer) BigDecimal.valueOf(osStatis.get(i).getDate().getTime()-dayPoint.getTime()).divide(BigDecimal.valueOf(Long.parseLong(span*60*60*1000+"")),0,BigDecimal.ROUND_UP).intValue();//空了几次
-				for (int j = 0; j < ptime; j++) {
-					OsGridModel osGridModel=new OsGridModel();
-					osGridModel.setMaxValue("未知");
-					osGridModel.setMinValue("未知");
-					osGridModel.setAverageValue("未知");
-					osGridModel.setTime(simpleDateFormat.format(dayPoint));
-					osGridModels.add(osGridModel);
-					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
-				}
-				OsGridModel osGridModel=new OsGridModel();
-				osGridModel.setMaxValue(osStatis.get(i).getMaxValue());
-				osGridModel.setMinValue(osStatis.get(i).getMinValue());
-				osGridModel.setAverageValue(osStatis.get(i).getAvgValue());
-				osGridModel.setTime(simpleDateFormat.format(dayPoint));
-				osGridModels.add(osGridModel);
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
-			}
-			else{
-				OsGridModel osGridModel=new OsGridModel();
-				osGridModel.setMaxValue(osStatis.get(i).getMaxValue());
-				osGridModel.setMinValue(osStatis.get(i).getMinValue());
-				osGridModel.setAverageValue(osStatis.get(i).getAvgValue());
-				osGridModel.setTime(simpleDateFormat.format(dayPoint));
-				osGridModels.add(osGridModel);//本次点
-				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
-			}
-		}
-		int mapsSize=osGridModels.size();
-		if(osGridModels.size()<timespan){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < timespan-mapsSize; i++) {
-				OsGridModel osGridModel=new OsGridModel();
-				osGridModel.setMaxValue("未知");
-				osGridModel.setMinValue("未知");
-				osGridModel.setAverageValue("未知");
-				osGridModel.setTime(simpleDateFormat.format(dayPoint));
-				osGridModels.add(osGridModel);//本次点
-				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
-			}
+		for (StatiDataModel statiDataModel : osStatis) {
+			OsGridModel osGridModel=new OsGridModel();
+			osGridModel.setMaxValue(statiDataModel.getMaxValue());
+			osGridModel.setMinValue(statiDataModel.getMinValue());
+			osGridModel.setTime(simpleDateFormat.format(statiDataModel.getDate()));
+			osGridModel.setAverageValue(statiDataModel.getAvgValue());
+			osGridModels.add(osGridModel);
 		}
 		return osGridModels;
 		
@@ -252,63 +222,24 @@ public class OsViewHandle {
 	 * @return
 	 */
 	public List<OsGridModel> creatAvailableHistoryGrid(String osid,String statitype, Date currentTime,int timespan ){
-		long span=0;
 		SimpleDateFormat simpleDateFormat;
 		if(timespan>1){
-			span=24;	
+			//按天统计时使用的格式化时间
 			simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
 		}else{
-			
+			//按小时统计时使用的格式化时间
 			simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_HOURS);
 		}
 		List<OsGridModel>osGridModels= new ArrayList<OsGridModel>();
-		Date dayPoint=OsTransUtil.getBeforeDate(currentTime, timespan+"");
 		List<StatiDataModel> osStatis=osAvailableServcie.getOsAvailablesHistoryByDate(osid, currentTime, timespan);
-		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>(span*60*60*1000)){
-				Integer ptime=(Integer) BigDecimal.valueOf(osStatis.get(i).getDate().getTime()-dayPoint.getTime()).divide(BigDecimal.valueOf(Long.parseLong(span*60*60*1000+"")),0,BigDecimal.ROUND_UP).intValue();//空了几次
-				for (int j = 0; j < ptime; j++) {
-					OsGridModel osGridModel=new OsGridModel();
-					osGridModel.setNormalRun("未知");
-					osGridModel.setCrashTime("未知");
-					osGridModel.setAveRepairTime("未知");
-					osGridModel.setAveFaultTime("未知");
-					osGridModel.setTime(simpleDateFormat.format(dayPoint));
-					osGridModels.add(osGridModel);
-					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
-				}
-				OsGridModel osGridModel=new OsGridModel();
-				osGridModel.setNormalRun(osStatis.get(i).getNormalRun());
-				osGridModel.setCrashTime(osStatis.get(i).getCrashTime());
-				osGridModel.setAveRepairTime(osStatis.get(i).getAveRepairTime());
-				osGridModel.setAveFaultTime(osStatis.get(i).getAveFaultTime());
-				osGridModel.setTime(simpleDateFormat.format(dayPoint));
-				osGridModels.add(osGridModel);
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(span*60*60*1000+"")));
-			}
-			else{
-				OsGridModel osGridModel=new OsGridModel();
-				osGridModel.setNormalRun(osStatis.get(i).getNormalRun());
-				osGridModel.setCrashTime(osStatis.get(i).getCrashTime());
-				osGridModel.setAveRepairTime(osStatis.get(i).getAveRepairTime());
-				osGridModel.setAveFaultTime(osStatis.get(i).getAveFaultTime());
-				osGridModel.setTime(simpleDateFormat.format(dayPoint));
-				osGridModels.add(osGridModel);//本次点
-				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
-			}
-		}
-		int mapsSize=osGridModels.size();
-		if(osGridModels.size()<timespan){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < timespan-mapsSize; i++) {
-				OsGridModel osGridModel=new OsGridModel();
-				osGridModel.setNormalRun("未知");
-				osGridModel.setCrashTime("未知");
-				osGridModel.setAveRepairTime("未知");
-				osGridModel.setAveFaultTime("未知");
-				osGridModel.setTime(simpleDateFormat.format(dayPoint));
-				osGridModels.add(osGridModel);//本次点
-				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(span*60*60*1000+""));
-			}
+		for (StatiDataModel statiDataModel : osStatis) {
+			OsGridModel osGridModel=new OsGridModel();
+			osGridModel.setNormalRun(statiDataModel.getNormalRun());
+			osGridModel.setCrashTime(statiDataModel.getCrashTime());
+			osGridModel.setAveRepairTime(statiDataModel.getAveRepairTime());
+			osGridModel.setAveFaultTime(statiDataModel.getAveFaultTime());
+			osGridModel.setTime(simpleDateFormat.format(statiDataModel.getDate()));
+			osGridModels.add(osGridModel);
 		}
 		return osGridModels;
 		

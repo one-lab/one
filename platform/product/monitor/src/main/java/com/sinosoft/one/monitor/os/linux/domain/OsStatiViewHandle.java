@@ -9,11 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
 import com.jhlabs.composite.HueComposite;
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
@@ -28,55 +31,15 @@ public class OsStatiViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<Map<String, Object>> creatCpuMaxStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
-		int timeSize =0;
-		if(timespan>1){
-			timespan=timespan*24;
-			timeSize=24;
-		}else {
-			timeSize=1;
+	public List<List<?>> creatCpuMaxStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
+		List<List<?>> data=new ArrayList<List<?>>();
+		for (StatiDataModel statiDataModel:osStatis) {
+			 DateTime date= new DateTime(statiDataModel.getDate());
+			Long time = date.getMillis();
+			Double cpuIdle = new BigDecimal(statiDataModel.getMaxValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			data.add(Lists.newArrayList(time,cpuIdle));
 		}
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		Date date=new Date();//上次循环的时间变量
-		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
-		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(timeSize*60*60*1000)){
-				Integer ptime=(Integer) BigDecimal.valueOf(osStatis.get(i).getDate().getTime()-dayPoint.getTime()).divide(BigDecimal.valueOf(Long.parseLong(timeSize*60*60*1000+"")),0,BigDecimal.ROUND_UP).intValue();//空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(dayPoint));
-					maps.add(map);
-					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("x", simpleDateFormat.format(dayPoint));
-				map.put("y",Double.valueOf(osStatis.get(i).getMaxValue()));
-				maps.add(map);//本次点
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-			}
-			else{
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",Double.valueOf(osStatis.get(i).getMaxValue()));
-				map.put("x", simpleDateFormat.format(dayPoint));
-				maps.add(map);//本次点
-				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(timeSize*60*60*1000+""));
-			}
-			date=osStatis.get(i).getDate();
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(dayPoint));
-				maps.add(map);
-				dayPoint=new Date(dayPoint.getTime()+Long.parseLong(timeSize*60*60*1000+""));
-			}
-		}
-		return maps;
+		return data;
 	}
 	
 	/**
@@ -87,61 +50,15 @@ public class OsStatiViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<Map<String, Object>> creatCpuAvaStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
-		int timeSize =0;
-		if(timespan>1){
-			timespan=timespan*24;
-			timeSize=24;
-		}else {
-			timeSize=1;
+	public List<List<?>> creatCpuAvaStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
+		List<List<?>> data=new ArrayList<List<?>>();
+		for (StatiDataModel statiDataModel:osStatis) {
+			 DateTime date= new DateTime(statiDataModel.getDate());
+			Long time = date.getMillis();
+			Double cpuIdle = new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			data.add(Lists.newArrayList(time,cpuIdle));
 		}
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		Date date=new Date();//上次循环的时间变量
-		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
-		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(timeSize*60*60*1000)){
-				Integer ptime = (Integer) BigDecimal
-				.valueOf(
-						osStatis.get(i).getDate().getTime()
-								- dayPoint.getTime())
-				.divide(BigDecimal.valueOf(Long.parseLong(timeSize * 60 * 60
-						* 1000 + "")), 0, BigDecimal.ROUND_UP)
-				.intValue();// 空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(dayPoint));
-					maps.add(map);
-					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("x", simpleDateFormat.format(dayPoint));
-				map.put("y",Double.valueOf(osStatis.get(i).getAvgValue()));
-				maps.add(map);//本次点
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-			}
-			else{
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",Double.valueOf(osStatis.get(i).getAvgValue()));
-				map.put("x", simpleDateFormat.format(dayPoint));
-				maps.add(map);//本次点
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-			}
-			date=osStatis.get(i).getDate();
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(dayPoint));
-				maps.add(map);
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-			}
-		}
-		return maps;
+		return data;
 	}
 	
 	/**
@@ -152,62 +69,15 @@ public class OsStatiViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<Map<String, Object>> creatCpuMinStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
-		int timeSize =0;
-		if(timespan>1){
-			timespan=timespan*24;
-			timeSize=24;
-		}else {
-			timeSize=1;
+	public List<List<?>> creatCpuMinStatiLine(List<StatiDataModel> osStatis,Date currentTime,Date dayPoint,int timespan){
+		List<List<?>> data=new ArrayList<List<?>>();
+		for (StatiDataModel statiDataModel:osStatis) {
+			 DateTime date= new DateTime(statiDataModel.getDate());
+			Long time = date.getMillis();
+			Double cpuIdle =  new BigDecimal(statiDataModel.getMinValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			data.add(Lists.newArrayList(time,cpuIdle));
 		}
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
-		List<Map<String, Object>>maps=new ArrayList<Map<String,Object>>();
-		Map<String, Object> m=new HashMap<String, Object>();
-		Date date=new Date();//上次循环的时间变量
-		long aveTime =(currentTime.getTime()-dayPoint.getTime())/Long.parseLong(timeSize*60*60*1000+"")+1;//平均时间段
-		for (int i = 0; i < osStatis.size(); i++) {
-			if(osStatis.get(i).getDate().getTime()-dayPoint.getTime()>=(timeSize*60*60*1000)){
-				Integer ptime = (Integer) BigDecimal
-						.valueOf(
-								osStatis.get(i).getDate().getTime()
-										- dayPoint.getTime())
-						.divide(BigDecimal.valueOf(Long.parseLong(timeSize * 60 * 60
-								* 1000 + "")), 0, BigDecimal.ROUND_UP)
-						.intValue();// 空了几次
-				for (int j = 0; j < ptime; j++) {
-					Map<String, Object> map=new HashMap<String, Object>();
-					map.put("y",-1);
-					map.put("x", simpleDateFormat.format(dayPoint));
-					maps.add(map);
-					dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-				}
-				Map<String, Object> map=new HashMap<String, Object>();
-				
-				map.put("x", simpleDateFormat.format(dayPoint));
-				map.put("y",Double.valueOf(osStatis.get(i).getMinValue()));
-				maps.add(map);//本次点
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-			}
-			else{
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",Double.valueOf(osStatis.get(i).getMinValue()));
-				map.put("x", simpleDateFormat.format(dayPoint));
-				maps.add(map);//本次点
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-			}
-			date=osStatis.get(i).getDate();
-		}
-		int mapsSize=maps.size();
-		if(maps.size()<aveTime){//如果总的点小于平均时间段 补上空点
-			for (int i = 0; i < aveTime-mapsSize; i++) {
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("y",-1);
-				map.put("x", simpleDateFormat.format(dayPoint));
-				maps.add(map);
-				dayPoint=new Date (dayPoint.getTime()+(Long.parseLong(timeSize*60*60*1000+"")));
-			}
-		}
-		return maps;
+		return data;
 	}
 	
 }

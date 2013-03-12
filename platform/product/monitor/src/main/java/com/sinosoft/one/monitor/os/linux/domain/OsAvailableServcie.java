@@ -143,7 +143,7 @@ public class OsAvailableServcie {
 		}
 		//取当天的24小时整时点
 		curruntTime=OsTransUtil.getDayPointByDate(curruntTime);
-		Date beginTime =new Date(curruntTime.getTime()-(Long.parseLong((timespan*60*60*1000)+"")));
+		Date beginTime =OsTransUtil.getBeforeDate(curruntTime, timespan+"");
 		System.out.println(curruntTime);
 		System.out.println(beginTime);
 		
@@ -178,6 +178,22 @@ public class OsAvailableServcie {
 		return osAvailabletempRepository.findLastAvailable(osInfoId, simpleDateFormat.format(currentTime), OsUtil.ORCL_DATEFORMATE);
 	}
 	
+	
+	/**
+	 * 
+	 * @param osInfoId
+	 * @param currentTime
+	 * @param interCycle
+	 * @return
+	 */
+	public OsAvailabletemp getNealyAvailable(String osInfoId,Date currentTime ,int interCycle){
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		Calendar c=Calendar.getInstance();
+		c.set(Calendar.MINUTE, 0);
+		Date date=new Date(c.getTime().getTime()-Long.valueOf(interCycle*60*1000));
+		return osAvailabletempRepository.findNealyAvailable(osInfoId, simpleDateFormat.format(date), OsUtil.ORCL_DATEFORMATE);
+	}
+	
 	/**
 	 * 获取前24时中保存的可用性状态  最近24小时 数据
 	 * 保存到统计表
@@ -193,30 +209,6 @@ public class OsAvailableServcie {
 		List<OsAvailabletemp> osAvailabletemps=getAvailableTemps(osInfoId, d1, currentTime);
 		return osAvailabletemps;
 	}
-	
-	
-//	/**
-//	 * 获取上一段24小时中保存的可用性临时数据
-//	 * @param osInfoId
-//	 * @param currentTime
-//	 */
-//	public List<OsAvailabletemp> getLTFHourAvailable(String osInfoId,Date currentTime){
-//		//当前天数
-//		SimpleDateFormat simpleDateFormat1=new SimpleDateFormat(OsUtil.DATEFORMATE_DAY);
-//		Calendar c  = Calendar.getInstance();
-//		c.set(Calendar.DAY_OF_MONTH, new Integer(simpleDateFormat1.format(currentTime)));
-//		c.set(Calendar.HOUR_OF_DAY,0);
-//		c.set(Calendar.MINUTE, 0);
-//		c.set(Calendar.SECOND, 0);
-//		c.add(Calendar.HOUR_OF_DAY, -24);
-//		//取当天的前24小时整时点
-//		Date d1 = c.getTime();
-//		c.add(Calendar.HOUR_OF_DAY, -24);
-//		//取当天的前48小时整时点
-//		Date d2 = c.getTime();
-//		SimpleDateFormat simpleDateFormat2=new SimpleDateFormat(OsUtil.DATEFORMATE);
-//		return getAvailableTemps(osInfoId, simpleDateFormat2.format(d2), simpleDateFormat2.format(d1), OsUtil.ORCL_DATEFORMATE);
-//	}
 	
 	
 	/**

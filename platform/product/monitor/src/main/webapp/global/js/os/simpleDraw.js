@@ -1,36 +1,25 @@
+Highcharts.setOptions({
+	global : {
+		useUTC : false
+	},
+});
 function creatSimpleChart(url, renderTo, text) {
-	alert(url);
 	$.ajax({
 				type : "post",
 				url : url,
 				dataType : "json",
 				cache : false,
 				success : function(data) {
-					var series = [], categories = [], i = 0;
+					var seriesArr = [];
 					for (var name in data) {
-						var j = 0, x = [], y = {
-							data : []
-						};
-						while (j < data[name].length) {
-							if (j == 0) {
-									y.name = name;
-							}
-							if (i == 0) {
-								categories.push(data[name][j].x);
-							}
-							if (data[name][j].y=="-1") {
-								y.data.push(null);
-							} 
-							if(data[name][j].y!="-1"){
-								y.data.push(data[name][j].y);
-							}
-							
-							j += 1;
-						}
-						series.push(y);
-						i += 1;
+						var series={};
+						series.name=name;
+						series.data=data[name];
+						seriesArr.push(series);
 					}
-					new Highcharts.Chart({
+				
+				new Highcharts.Chart({
+					
 								chart : {
 									renderTo : renderTo,
 									type : 'line',
@@ -43,7 +32,16 @@ function creatSimpleChart(url, renderTo, text) {
 									text : ''
 								},
 								xAxis : {
-									categories : categories
+									type: 'datetime',
+					                dateTimeLabelFormats: { // don't display the dummy year
+					                    second: '%Y-%m-%d<br/>%H:%M:%S',
+					                    minute: '%Y-%m-%d<br/>%H:%M',
+					                    hour: '%Y-%m-%d<br/>%H:%M',
+					                    day: '%Y<br/>%m-%d',
+					                    week: '%Y<br/>%m-%d',
+					                    month: '%Y-%m',
+					                    year: '%Y'
+					           }
 								},
 								yAxis : {
 									title : {
@@ -71,13 +69,15 @@ function creatSimpleChart(url, renderTo, text) {
 										}
 									}
 								},
+								
 								credits : {
 									text : '',
 									href : ''
 								},
-								series : series,
+								series : seriesArr,
 								colors : ['#00b200', '#0000b2', '#b200b2']
 							});
+				
 				}
 			});
 }

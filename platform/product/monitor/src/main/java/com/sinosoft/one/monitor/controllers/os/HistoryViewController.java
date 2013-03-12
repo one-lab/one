@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.controllers.os;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,17 +46,6 @@ public class HistoryViewController {
 	
 	@Autowired
 	private OsAvailableViewHandle osAvailableViewHandle;
-//	@Get("historyCPUSevenDay/{osId}")
-//	public String historyCPUSevenDay(@Param("osId") String osId,Invocation inv){
-//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
-//		Os os=osService.getOsBasicById(osId);
-//		Date currentDate=new Date();
-//		Date beginDate=new Date(currentDate.getTime()-7*24*60*60*1000);
-//		inv.addModel("os", os);
-//		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
-//		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
-//		return "historyCPUSevenDay";
-//	}
 	//CPU天数统计报表
 	@Get("historyCPU/{timespan}/{osId}")
 	public String historyCPU(@Param("osId") String osId,@Param("timespan") String timespan,Invocation inv){
@@ -64,9 +54,9 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.CPU_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
-		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
-		inv.addModel("Agv",statiDataModel.getAvgValue());
+		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -83,9 +73,9 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.DISK_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
-		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
-		inv.addModel("Agv",statiDataModel.getAvgValue());
+		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -103,9 +93,9 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RAM_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
-		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
-		inv.addModel("Agv",statiDataModel.getAvgValue());
+		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -122,9 +112,9 @@ public class HistoryViewController {
 		Date currentDate=new Date();
 		Date beginDate=OsTransUtil.getBeforeDate(currentDate, timespan);
 		StatiDataModel statiDataModel=osStatiService.findStatiMxMinAvgByTimeSpan(osId,OsUtil.RSPOND_STATIF_FLAG, beginDate, currentDate, OsUtil.STATI_CLOUN_NAME_AVG);
-		inv.addModel("MaxAgv",statiDataModel.getMaxAvgValue());
-		inv.addModel("MinAgv",statiDataModel.getMinAvgValue());
-		inv.addModel("Agv",statiDataModel.getAvgValue());
+		inv.addModel("MaxAgv",new BigDecimal(statiDataModel.getMaxAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("MinAgv",new BigDecimal(statiDataModel.getMinAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		inv.addModel("Agv",new BigDecimal(statiDataModel.getAvgValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		inv.addModel("os", os);
 		inv.addModel("beginDate", simpleDateFormat.format(beginDate));
 		inv.addModel("currentDate", simpleDateFormat.format(currentDate));
@@ -191,8 +181,8 @@ public class HistoryViewController {
 	@Post("historyCPUStatiLine/{timespan}/{osId}")
 	public Reply historyCPUSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
-		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		Map<String,List<List<?>>> map=osViewHandle.creatStatiLine(osId, OsUtil.CPU_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		viewMap.put("CPU利用率最大值%", map.get("max"));
 		viewMap.put("CPU利用率最小值%", map.get("min"));
 		viewMap.put("CPU利用率最平均值%", map.get("ave"));
@@ -229,8 +219,8 @@ public class HistoryViewController {
 	@Post("historyDiskStatiLine/{timespan}/{osId}")
 	public Reply historyDiskSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
-		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.DISK_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		Map<String,List<List<?>>> map=osViewHandle.creatStatiLine(osId, OsUtil.DISK_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		viewMap.put("磁盘利用率最大值%", map.get("max"));
 		viewMap.put("磁盘利用率最小值%", map.get("min"));
 		viewMap.put("磁盘利用率最平均值%", map.get("ave"));
@@ -259,8 +249,8 @@ public class HistoryViewController {
 	@Post("historyMemStatiLine/{timespan}/{osId}")
 	public Reply historyMemSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
-		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		Map<String,List<List<?>>> map=osViewHandle.creatStatiLine(osId, OsUtil.RAM_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		viewMap.put("内存利用率最大值%", map.get("max"));
 		viewMap.put("内存利用率最小值%", map.get("min"));
 		viewMap.put("内存利用率最平均值%", map.get("ave"));
@@ -289,8 +279,8 @@ public class HistoryViewController {
 	@Post("historyRepStatiLine/{timespan}/{osId}")
 	public Reply historyRepSevenDayLine(@Param("osId") String osId,@Param("timespan") String timespan){
 		Date currentDate=new Date();
-		Map<String,List<Map<String, Object>>> map=osViewHandle.creatStatiLine(osId, OsUtil.RSPOND_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
-		Map<String,List<Map<String, Object>>> viewMap=new  HashMap<String,List<Map<String, Object>>>();
+		Map<String,List<List<?>>> map=osViewHandle.creatStatiLine(osId, OsUtil.RSPOND_STATIF_FLAG, currentDate, Integer.valueOf(timespan));
+		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		viewMap.put("响应时间最大值%", map.get("max"));
 		viewMap.put("响应时间最小值%", map.get("min"));
 		viewMap.put("响应时间平均值%", map.get("ave"));

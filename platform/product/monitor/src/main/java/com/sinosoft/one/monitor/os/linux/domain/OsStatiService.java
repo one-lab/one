@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,7 @@ public class OsStatiService {
 		if(osStati==null)
 			osStati=new OsStati();
 		osStati.setOsid(osInfoId);
-		osStati.setRecordTime(hourPoint);
+		osStati.setRecordTime(new DateTime(hourPoint).plusHours(1).toDate());
 		osStati.setType(type);
 		osStati.setMaxValue(maxValue);
 		osStati.setMinValue(minValue);

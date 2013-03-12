@@ -11,6 +11,11 @@ import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
 
+/**
+ * 拆分采样信息字符生成对象
+ * @author Administrator
+ *
+ */
 public class OsTransUtil {
 	private static OsCpu osCpu = null;
 	private static OsRam osRam = null;
@@ -101,7 +106,13 @@ public class OsTransUtil {
 		}
 		return osDisks;
 	}
-
+	
+	/**
+	 * 计算利用率 保留两位小数入库
+	 * @param total
+	 * @param used
+	 * @return
+	 */
 	public static String countUtilZation(String total, String used) {
 		// double tota = new Double(total);
 		// double use = new Double(used);
@@ -125,7 +136,6 @@ public class OsTransUtil {
 
 	/**
 	 * long数字转换成日期
-	 * 
 	 * @param lang
 	 * @return
 	 */
@@ -156,7 +166,7 @@ public class OsTransUtil {
 //		int b = 2;
 //		System.out.println(countUtilZation("98", "33"));
 //	}
-
+	
 	public static String countAve(Object dividend, int divisor) {
 		Object ave = null;
 		if (dividend.getClass().equals(Double.class)) {

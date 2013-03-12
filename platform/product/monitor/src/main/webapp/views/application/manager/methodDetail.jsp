@@ -60,8 +60,12 @@
 <div id="layout_center">
     <div class="main">
         <ul class="crumbs">
-            <li><a href="#">管理</a> ></li>
-            <li><b>配置告警</b></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a> ></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用列表</a> ></li>
+            <li><a href="${ctx}/application/manager/detail/main/${applicationId}">应用透视</a> ></li>
+            <li><a href="${ctx}/application/manager/url/main/${applicationId}/${urlId}">URL透视</a> ></li>
+            <li><a href="${ctx}/application/manager/appmethod/viewLogDetail/${applicationId}/${urlId}/${logId}">事件日志透视</a> ></li>
+            <li><b>方法透视</b></li>
         </ul>
 
         <div class="conf_box">
