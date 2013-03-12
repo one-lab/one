@@ -214,7 +214,7 @@ public class OracleMonitorController {
 	 * @param inv
 	 * @return
 	 */
-	@Post("add")
+	@Post("save")
 	public Reply add(Info oracleInfo,Invocation inv) {
 		try {
 			oracleInfo.setSysTime(new Date());

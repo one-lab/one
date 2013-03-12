@@ -64,7 +64,10 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             AvaSta avaSta = avaStaRepository.findAvaSta(info.getId());
             oracleAvaInfoModel.setMonitorID(info.getId());
             oracleAvaInfoModel.setMonitorName(info.getName());
-            double avaRate = avaSta.getNormalRuntime() / ((avaSta.getNormalRuntime() + avaSta.getTotalPoweroffTime())/1.0);
+            double avaRate = 0;
+            if(avaSta != null){
+                avaRate = avaSta.getNormalRuntime() / ((avaSta.getNormalRuntime() + avaSta.getTotalPoweroffTime())/1.0);
+            }
             oracleAvaInfoModel.setAvaRate(avaRate + "");
             if(staTimeEnum==StaTimeEnum.LAST_24HOUR){
                 List<Ava> avaList0 = avaRepository.find24Day(timeStart);
@@ -80,8 +83,8 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                     part[1] = ava1.getState();
                     part[2] = ((time2-time1)/during)+"";
                     parts.add(part);
-                    oracleAvaInfoModel.setGraphInfo(parts);
                 }
+                oracleAvaInfoModel.setGraphInfo(parts);
             }
             oracleAvaInfoModelList.add(oracleAvaInfoModel);
         }
@@ -128,14 +131,21 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                 }
             }
         }
-        Ava ava = avaList.get(avaList.size()-1);
-        avas.add(ava);
-        long avaTime = ava.getRecordTime().getTime();
-        long interval = ava.getInterval()*60000;
-        if(avaTime+interval+60000<endTime){
+        if(avaList.size()>0){
+            Ava ava = avaList.get(avaList.size()-1);
+            avas.add(ava);
+            long avaTime = ava.getRecordTime().getTime();
+            long interval = ava.getInterval()*60000;
+            if(avaTime+interval+60000<endTime){
+                Ava newAva = new Ava();
+                newAva.setState("2");
+                newAva.setRecordTime(new Date(avaTime+interval));
+                avas.add(newAva);
+            }
+        }else{
             Ava newAva = new Ava();
             newAva.setState("2");
-            newAva.setRecordTime(new Date(avaTime+interval));
+            newAva.setRecordTime(new Date(startTime));
             avas.add(newAva);
         }
 //        for(int i=0;i<avaList.size()-1;i++){

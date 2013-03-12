@@ -54,7 +54,7 @@
             if(editFlag) {
                 action = action + "edit";
             } else {
-                action = action + "add";
+                action = action + "save";
             }
             console.log(action);
             $.ajax({
@@ -65,9 +65,9 @@
                 success: function(msg) {
                     if(msg.result) {
                         msgSuccess("系统消息", "操作成功，监视器已保存！", function() {
-                            if(editFlag) {
+                            //if(editFlag) {
                                 window.location = rootPath + "/db/oracle/oracleMonitor";
-                            }
+                            //}
                         });
                     } else {
                         if(msg.type=='disconnect') {
@@ -100,13 +100,17 @@
                         <td>数据库地址<span class="mandatory">*</span></td>
                         <td><input name="ipAddress" value="${oracleInfo.ipAddress}" type="text" class="formtext" size="30" /></td>
                     </tr>
-                    <tr>
-                        <td>子网掩码<span class="mandatory">*</span></td>
-                        <td><input name="subnetMask" value="${oracleInfo.subnetMask}" type="text" class="formtext" size="30" /></td>
-                    </tr>
+                    <%--<tr>--%>
+                        <%--<td>子网掩码<span class="mandatory">*</span></td>--%>
+                        <%--<td><input name="subnetMask" value="${oracleInfo.subnetMask}" type="text" class="formtext" size="30" /></td>--%>
+                    <%--</tr>--%>
                     <tr>
                         <td>端口<span class="mandatory">*</span></td>
                         <td><input name="port" value="${oracleInfo.port}" type="text" class="formtext" size="8" /></td>
+                    </tr>
+                    <tr>
+                        <td>Instance名(服务名) <span class="mandatory">*</span></td>
+                        <td><input name="instanceName" value="${oracleInfo.instanceName}" type="text" class="formtext" value="orcl" /></td>
                     </tr>
                     <tr>
                         <td>执行频率<span class="mandatory">*</span></td>
@@ -122,10 +126,6 @@
                     <tr>
                         <td>密码<span class="mandatory">*</span></td>
                         <td><input name="password" value="${oracleInfo.password}" type="password" class="formtext" /></td>
-                    </tr>
-                    <tr>
-                        <td>Instance名(服务名) <span class="mandatory">*</span></td>
-                        <td><input name="instanceName" value="${oracleInfo.instanceName}" type="text" class="formtext" value="orcl" /></td>
                     </tr>
                     <tr>
                         <td class="group_name">&nbsp;</td>
