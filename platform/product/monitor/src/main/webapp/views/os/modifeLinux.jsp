@@ -135,7 +135,7 @@
 	</tr>
 	<tr>
 		<td>轮询间隔<span class="mandatory">*</span></td>
-		<td><input name="input3" type="text" class="formtext" size="8" value="${os.intercycleTime }"/>
+		<td><input name="os.intercycleTime" type="text" class="formtext" size="8" value="${os.intercycleTime }"/>
 		分</td>
 	</tr>
 	<tr>
