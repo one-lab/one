@@ -211,8 +211,14 @@ public class AlarmManagerController {
     @Get("detail/{alarmId}")
     public String getAlarmDetail(@Param("alarmId") String alarmId,Invocation inv){
         Alarm dbAlarm=alarmRepository.findOne(alarmId);
+        if(ResourceType.APPLICATION.name().equals(dbAlarm.getMonitorType())){
+            inv.addModel("monitorName",applicationRepository.findOne(dbAlarm.getMonitorId()).getCnName());
+        }else if(ResourceType.OS.name().equals(dbAlarm.getMonitorType())){
+            inv.addModel("monitorName",osRepository.findOne(dbAlarm.getMonitorId()).getName());
+        }else if(ResourceType.DB.name().equals(dbAlarm.getMonitorType())){
+            inv.addModel("monitorName",infoRepository.findOne(dbAlarm.getMonitorId()).getName());
+        }
         inv.addModel("alarm",dbAlarm);
-        inv.addModel("monitorName",applicationRepository.findOne(dbAlarm.getMonitorId()).getCnName());
         inv.addModel("_cnName",dbAlarm.getSeverity().cnName());
         inv.addModel("alarmImage",getImageOfAlarm(dbAlarm.getSeverity()));
         //用以发送ajax，获得当前监视器的历史告警信息

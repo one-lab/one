@@ -25,11 +25,6 @@
 <script language="javascript" src="${ctx}/global/js/os/linuxcentos.js"></script>
 <script language="javascript" src="${ctx}/global/js/os/cpuRamDraw.js"></script>
 <script language="javascript" src="${ctx}/global/js/os/cpuInfoDraw.js"></script>
-<script type="text/javascript">
-
-
-
-</script>
 </head>
 
 <body>
@@ -190,10 +185,19 @@
     </table>
     <div id="CPU_line" style="height:230px"></div>
     <div class="grid-total">
-      <div id="grid_Memory" class="grid-Memory" style="width:50%;"> </div>
-      <div class="Memory1" style="width:50%"></div>
-      <div id="grid_cpu" class="grid_cpu" style="width:50%;"> </div>
-      <div class="cpu1" style="height:20px"></div>
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="49%" style="vertical-align:top">
+        	<div id="grid_Memory"></div>
+      	
+        </td>
+        <td width="2%">&nbsp;</td>
+        <td width="49%" style="vertical-align:top">
+        	<div id="grid_cpu"> </div>
+     	 
+        </td>
+      </tr>
+    </table>
     </div>
   </div>
   <div class="linux-bottom" style="width:99%; float:right; height:650px">
@@ -206,7 +210,7 @@
     </table>
     <div id="CPU_line2"></div>
     <div class="grid_cpudo" id="grid_cpudo" style="width:70%"> </div>
-    <div class="tool_bar2" style="width:70.2%"></div>
+    <div class="tool_bar2" id="grid_cpudo_tool" style="width:70%"></div>
   </div>
 </div>
 <div class="second">

@@ -1,5 +1,13 @@
 package com.sinosoft.one.monitor.common;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.sinosoft.one.monitor.action.domain.ActionService;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
@@ -11,14 +19,6 @@ import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.threshold.domain.ThresholdService;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 告警信息处理类.
@@ -84,14 +84,21 @@ public class AlarmMessageHandler {
 			//获取属性
 			Attribute attribute = attributeCache.getAttribute(thresholdAlarmParams.resource.getResourceType(), alarmAttribute.getAttributeName());
 			if(attribute == Attribute.EMPTY) {
-				return;
+				continue;
 			}
 
 			//获取阈值
 			Threshold threshold = thresholdService.queryThreshold(resourceId, attribute.getId());
+			
+			if(threshold == null) {
+				continue;
+			}
 			//获取严重级别
 			SeverityLevel severityLevel = threshold.evalSeverityLevel(alarmAttribute.getAttributeValue());
 
+			if(severityLevel == SeverityLevel.UNKNOW) {
+				continue;
+			}
 			if(thresholdAlarmParams.severityLevel == SeverityLevel.UNKNOW || severityLevel.ordinal() < thresholdAlarmParams.severityLevel.ordinal()) {
 				thresholdAlarmParams.severityLevel = severityLevel;
 			}

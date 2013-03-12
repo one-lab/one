@@ -111,7 +111,6 @@
                                                 <ul class="show_mark">
                                                     <li><div class="iky"></div>可用</li>
                                                     <li><div class="ibky"></div>不可用</li>
-                                                    <li><div class="iwran"></div>警告</li>
                                                 </ul>
                                             </td>
                                         </tr>
