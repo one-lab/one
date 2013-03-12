@@ -146,12 +146,16 @@ public class OracleInfoServiceImpl implements OracleInfoService {
 
         oracleInfoModel.setHostName(info.getIpAddress());
         Date lastExecTime = lasteventRepository.findLastExecTime();
-        oracleInfoModel.setLastExecTime(sdf.format(lastExecTime));
         Long pullIntervalMillis = info.getPullInterval() * 60 * 1000L;
-        Long nextExecTime = lastExecTime.getTime() + pullIntervalMillis;
-        oracleInfoModel.setNextExecTime(sdf.format(nextExecTime));
+        if(lastExecTime==null){
+            oracleInfoModel.setLastExecTime("");
+            oracleInfoModel.setNextExecTime(sdf.format(new Date(info.getSysTime().getTime()+pullIntervalMillis)));
+        }else{
+            oracleInfoModel.setLastExecTime(sdf.format(lastExecTime));
+            Long nextExecTime = lastExecTime.getTime() + pullIntervalMillis;
+            oracleInfoModel.setNextExecTime(sdf.format(nextExecTime));
+        }
         oracleInfoModel.setMonitorName(info.getName());
-        
         dbUtil4Monitor.changeConnection(monitorId);
         String sql = OracleMonitorSql.osName;
         List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));

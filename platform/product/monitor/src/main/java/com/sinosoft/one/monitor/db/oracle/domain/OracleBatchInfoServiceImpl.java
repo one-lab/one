@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.sinosoft.one.data.jade.parsers.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -57,8 +58,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         List<OracleAvaInfoModel> oracleAvaInfoModelList = new ArrayList<OracleAvaInfoModel>();
         Date now = new Date();
         Date timeStart =  StaTimeEnum.getTime(staTimeEnum,now);
-        double total = 0;
-        double during =  (now.getTime()-timeStart.getTime())/100;
+        long during =  (now.getTime()-timeStart.getTime())/100;
         for (Info info : infoList) {
             OracleAvaInfoModel oracleAvaInfoModel = new OracleAvaInfoModel();
             AvaSta avaSta = avaStaRepository.findAvaSta(info.getId());
@@ -67,93 +67,108 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             double avaRate = avaSta.getNormalRuntime() / ((avaSta.getNormalRuntime() + avaSta.getTotalPoweroffTime())/1.0);
             oracleAvaInfoModel.setAvaRate(avaRate + "");
             if(staTimeEnum==StaTimeEnum.LAST_24HOUR){
-                Sort sort1 = new Sort(new Sort.Order(Sort.Direction.ASC, "recordTime"));
-                List<Ava> avaList0 = (List<Ava>) avaRepository.findAll(sort1);
-                List<Ava> avaList = caculate(avaList0);
+                List<Ava> avaList0 = avaRepository.find24Day(timeStart);
+                List<Ava> avaList = caculate(avaList0,timeStart.getTime(),now.getTime());
                 List<String[]> parts = new ArrayList<String[]>();
                 for (int i = 0; i < avaList.size() - 1; i++) {
-                    Ava start = avaList.get(i);
-                    Ava end = avaList.get(i + 1);
-                    long startTime = timeStart.getTime();
-                    if(startTime-start.getRecordTime().getTime()>0){
-                        continue;
-                    }
                     String[] part = new String[3];
-                    long len = start.getRecordTime().getTime()-startTime-start.getInterval()*60000;
-                    if(i==0&&len>1000){
-                        part[0] = startTime+"";
-                        part[1] = "2";
-                        part[2] = ((start.getRecordTime().getTime()-startTime)/during)+"";
-                        parts.add(part);
-                        total += start.getRecordTime().getTime()-startTime;
-                        continue;
-                    }
-                    String[] part1 = new String[3];
-                    part1[0] = start.getRecordTime().getTime()+"";
-                    part1[1] = start.getState();
-                    part1[2] = ((end.getRecordTime().getTime()-start.getRecordTime().getTime())/during)+"";
-                    total += end.getRecordTime().getTime()-start.getRecordTime().getTime();
-                    parts.add(part1);
-                }
-                Ava ava = avaList.get(avaList.size()-1);
-                String[] part = new String[3];
-                part[0] = ava.getRecordTime().getTime()+"";
-                part[1] = ava.getState();
-                long lastTime = ava.getRecordTime().getTime()+ava.getInterval()*60000;
-                if(now.getTime()<=lastTime+1000){
-                    part[2] = ((now.getTime()-ava.getRecordTime().getTime())/during)+"";
-                    parts.add(part) ;
-                }else {
-                    part[2] = ava.getInterval()*60000/during+"";
+                    Ava ava1 = avaList.get(i);
+                    Ava ava2 = avaList.get(i + 1);
+                    long time1 = ava1.getRecordTime().getTime();
+                    long time2 = ava2.getRecordTime().getTime();
+                    part[0] = time1+"";
+                    part[1] = ava1.getState();
+                    part[2] = ((time2-time1)/during)+"";
                     parts.add(part);
-                    String[] part1 = new String[3];
-                    part1[0] = lastTime+"";
-                    part1[1] = "2";
-                    part1[2] = (now.getTime()-lastTime )/during +"";
-                    parts.add(part1) ;
+                    oracleAvaInfoModel.setGraphInfo(parts);
                 }
-                total = total+ now.getTime()-ava.getRecordTime().getTime();
-                oracleAvaInfoModel.setGraphInfo(parts);
-                oracleAvaInfoModelList.add(oracleAvaInfoModel);
             }
+            oracleAvaInfoModelList.add(oracleAvaInfoModel);
         }
-        double rate = total/during;
-        System.out.print(rate);
         return oracleAvaInfoModelList;
     }
-    private List<Ava> caculate(List<Ava> avaList){
+    private List<Ava> caculate(List<Ava> avaList,long startTime,long endTime){
         List<Ava> avas = new ArrayList<Ava>();
-        for(int i=0;i<avaList.size()-1;i++){
-            int j=i;
-            int flag = 0;
-            while(j+1<avaList.size()&&avaList.get(j).getState().equals(avaList.get(j+1).getState())){
-                long interval = avaList.get(j).getInterval()*60000;
-                long recordTime = avaList.get(j).getRecordTime().getTime();
-                long nextTime =  avaList.get(j+1).getRecordTime().getTime();
-                j++;
-                if(nextTime-recordTime>interval+1000){
-                    flag = 1;
-                    j--;
-                    break;
+        //遍历avaList去除状态相同项
+        for(int i=0;i<avaList.size();i++){
+            Ava caculateAva = new Ava();
+            if(avas.size()>0){
+                caculateAva = avas.get(avas.size()-1);
+            }else {
+                caculateAva.setState("-1");
+                caculateAva.setRecordTime(new Date(0));
+                caculateAva.setInterval(-1);
+            }
+            Ava ava = avaList.get(i);
+            long caculateTime = caculateAva.getRecordTime().getTime();
+            long avaTime = ava.getRecordTime().getTime();
+            long interval = caculateAva.getInterval()*60000;
+            //如果相邻的两个元素状态不相等，则插入新的记录
+            if(!StringUtil.equals(ava.getState(),caculateAva.getState())){
+                if(i==0){
+                    if(startTime+60000<avaTime){
+                        Ava newAva = new Ava();
+                        newAva.setState("2");
+                        newAva.setRecordTime(new Date(startTime));
+                        avas.add(newAva);
+                        avas.add(ava);
+                    }else{
+                        avas.add(ava);
+                    }
+                } else {
+                    if(caculateTime+interval+1000<avaTime){
+                        Ava newAva = new Ava();
+                        newAva.setState("2");
+                        newAva.setRecordTime(new Date(caculateTime+interval));
+                        avas.add(newAva);
+                        avas.add(ava);
+                    }else{
+                        avas.add(ava);
+                    }
                 }
             }
-            if(flag == 0){
-                Ava ava = new Ava();
-                ava.setState(avaList.get(i).getState());
-                ava.setRecordTime(avaList.get(i).getRecordTime());
-                avas.add(ava);
-            } else {
-                Ava ava = new Ava();
-                ava.setState(avaList.get(i).getState());
-                ava.setRecordTime(avaList.get(i).getRecordTime());
-                avas.add(ava);
-                Ava ava1 = new Ava();
-                ava1.setState("2");
-                ava1.setRecordTime(new Date(avaList.get(j).getRecordTime().getTime()+avaList.get(j).getInterval()*60000));
-                avas.add(ava1);
-            }
-            i = j;
         }
+        Ava ava = avaList.get(avaList.size()-1);
+        avas.add(ava);
+        long avaTime = ava.getRecordTime().getTime();
+        long interval = ava.getInterval()*60000;
+        if(avaTime+interval+60000<endTime){
+            Ava newAva = new Ava();
+            newAva.setState("2");
+            newAva.setRecordTime(new Date(avaTime+interval));
+            avas.add(newAva);
+        }
+//        for(int i=0;i<avaList.size()-1;i++){
+//            int j=i;
+//            int flag = 0;
+//            while(j+1<avaList.size()&&avaList.get(j).getState().equals(avaList.get(j+1).getState())){
+//                long interval = avaList.get(j).getInterval()*60000;
+//                long recordTime = avaList.get(j).getRecordTime().getTime();
+//                long nextTime =  avaList.get(j+1).getRecordTime().getTime();
+//                j++;
+//                if(nextTime-recordTime>interval+1000){
+//                    flag = 1;
+//                    j--;
+//                    break;
+//                }
+//            }
+//            if(flag == 0){
+//                Ava ava = new Ava();
+//                ava.setState(avaList.get(i).getState());
+//                ava.setRecordTime(avaList.get(i).getRecordTime());
+//                avas.add(ava);
+//            } else {
+//                Ava ava = new Ava();
+//                ava.setState(avaList.get(i).getState());
+//                ava.setRecordTime(avaList.get(i).getRecordTime());
+//                avas.add(ava);
+//                Ava ava1 = new Ava();
+//                ava1.setState("2");
+//                ava1.setRecordTime(new Date(avaList.get(j).getRecordTime().getTime()+avaList.get(j).getInterval()*60000));
+//                avas.add(ava1);
+//            }
+//            i = j;
+//        }
         return avas;
     }
     
