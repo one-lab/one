@@ -95,7 +95,7 @@ public class OsService {
 		newos.setIntercycleTime(interCycle);
 		osRepository.save(newos);
 		Resource resource =new Resource();
-		resource.setResourceId(os.getOsInfoId());
+		resource.setResourceId(newos.getOsInfoId());
 		resource.setResourceName(name);
 		resource.setResourceType(ResourceType.OS.name());
 		resourcesService.saveResource(resource);
