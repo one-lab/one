@@ -4,6 +4,8 @@ import com.sinosoft.one.monitor.common.Trend;
 
 import java.util.Date;
 
+import org.joda.time.Period;
+
 /**
  * URL可用性
  * User: ChengQi
@@ -19,7 +21,7 @@ public class UrlAvailableInf {
 
     private int availableCount;
 
-    private long runningTime;
+    private Period runningTime;
 
     private Date latestTime;
 
@@ -28,14 +30,14 @@ public class UrlAvailableInf {
      * @param trend 趋势
      * @param count 访问总数
      * @param availableCount 可用性总数
-     * @param runningTime  运行时间（S）
+     * @param period  运行时间（S）
      * @param latestTime  最后一次运行故障时间
      */
-    public UrlAvailableInf(Trend trend, int count, int availableCount, long runningTime, Date latestTime) {
+    public UrlAvailableInf(Trend trend, int count, int availableCount, Period period, Date latestTime) {
         this.trend = trend;
         this.count = count;
         this.availableCount = availableCount;
-        this.runningTime = runningTime;
+        this.runningTime = period;
         this.latestTime = latestTime;
     }
 
@@ -59,7 +61,7 @@ public class UrlAvailableInf {
         return availableCount;
     }
 
-    public long getRunningTime() {
+    public Period getRunningTime() {
         return runningTime;
     }
 

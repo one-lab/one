@@ -175,8 +175,7 @@ function createVisitNumberChart(times, data) {
                 width: 1,
                 color: '#808080'
             }],
-            min : 0,
-            tickInterval:100
+            min : 0
         },
         plotOptions:{
             line:{              // 数据点的点击事件
@@ -232,8 +231,7 @@ function createResponseTimeChart(times, data) {
                 width: 1,
                 color: '#808080'
             }],
-            min : 0,
-            tickInterval:1000
+            min : 0
         },
         plotOptions:{
             line:{              // 数据点的点击事件

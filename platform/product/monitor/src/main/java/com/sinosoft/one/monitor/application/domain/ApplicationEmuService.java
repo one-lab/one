@@ -131,12 +131,11 @@ public class ApplicationEmuService {
 	    EumUrlAva eumUrlAva = getTodayFirstEumUrlAva(eumUrl.getId());
         Interval interval = new Interval(new DateTime(eumUrlAva == null ? LocalDate.now().toDate(): eumUrlAva.getRecordTime()), DateTime.now());
 
-	    int seconds = interval.toPeriod().getSeconds();
 	    eumUrlAva = getEumUrlAvaTodayAndLatestAndUnavailable(eumUrl.getId());
         return new UrlAvailableInf(urlAvaTrendByUrlId(urlId),
                 eumUrlAvaRepository.countByEmuId(eumUrl.getId()),
                 eumUrlAvaRepository.countByEmuIdAndStatus(eumUrl.getId(),"1"),
-                seconds, eumUrlAva == null ? null : eumUrlAva.getRecordTime());
+                interval.toPeriod(), eumUrlAva == null ? null : eumUrlAva.getRecordTime());
 
     }
 
