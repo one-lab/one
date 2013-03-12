@@ -64,11 +64,11 @@ public class OsDataMathService {
 		long lastRecordTime = 0;//上次时间变量
 		for (int i = 0; i < osAvailabletemps.size(); i++) {
 			if(i==0){//判断第一次与查询时间起始时间targetTime 是否大于轮询时间
-				if(osAvailabletemps.get(i).getSampleDate().getTime()-targetTime.getTime()>osAvailabletemps.get(i).getIntercycleTime()*60*1000){
+				if(osAvailabletemps.get(i).getSampleDate().getTime()-targetTime.getTime()>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
 					stopCount=stopCount+1;
 				}
 			}else{
-				if(osAvailabletemps.get(i).getSampleDate().getTime()-lastRecordTime>osAvailabletemps.get(i).getIntercycleTime()*60*1000){
+				if(osAvailabletemps.get(i).getSampleDate().getTime()-lastRecordTime>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
 					stopCount=stopCount+1;
 				}
 			}
