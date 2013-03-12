@@ -61,6 +61,10 @@ function refresh() {
 						showInLegend : true
 					}
 				},
+				credits : {
+					text : '',
+					href : ''
+				},
 				series : [ {
 					type : 'pie',
 					name : 'Browser share',
@@ -174,6 +178,10 @@ function refresh() {
 							to : 100,
 							color : '#DF5353' // red
 						} ]
+					},
+					credits : {
+						text : '',
+						href : ''
 					},
 
 					series : [ {

@@ -1,12 +1,13 @@
-/*Highcharts.setOptions({
+Highcharts.setOptions({
 	global : {
 		useUTC : false
 	}
-});*/
+});
 function creatSimpleChart(url, renderTo, text) {
 	$.ajax({
 				type : "post",
 				url : url,
+				async:false,
 				dataType : "json",
 				cache : false,
 				success : function(data) {
@@ -68,6 +69,10 @@ function creatSimpleChart(url, renderTo, text) {
 											enabled : false
 										}
 									}
+								},
+								credits : {
+									text : '',
+									href : ''
 								},
 								
 								series : seriesArr,
