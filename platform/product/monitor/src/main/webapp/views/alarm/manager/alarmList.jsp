@@ -14,6 +14,10 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
+    if($.browser.msie && ($.browser.version == "7.0")){
+        var center = $("#layout_center");
+        $("#main").width(center.width() - 31).height(center.height() - 30);
+    }
     getAlarmListOfGivenTimeAndType();
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
@@ -175,7 +179,7 @@ function viewRelevance(){
     </div>
 </div>
 <div id="layout_center">
-	<div class="main">
+	<div class="main" id="main">
     	<div class="threshold_file alerts">
        	  <h2 class="title2">
           	<strong class="right">筛选表单：

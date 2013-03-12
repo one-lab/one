@@ -14,6 +14,10 @@ $(function(){
 		top:{topHeight:100},
 		bottom:{bottomHeight:30}
 	});
+    if($.browser.msie && ($.browser.version == "7.0")){
+        var center = $("#layout_center");
+        $("#main").width(center.width() - 31).height(center.height() - 30);
+    }
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
@@ -35,6 +39,8 @@ $(function(){
 		number:false,  
 		multiselect: false  
 	});
+
+
 });
 function navHover(){
 	$(this).toggleClass("hover")
@@ -73,7 +79,7 @@ function hideNav(e){
     </div>
 </div>
 <div id="layout_center">
-	<div class="main">
+	<div class="main" id="main">
     	<div class="add_monitor alertDef">
        	  <h2 class="title2"><strong class="right" onclick="window.history.back()"><a href="javascript:void(0);" onclick="${ctx}/alarm/manager/alarmmanager/list">返回告警</a></strong><b>告警明细　</b></h2>
           <form>
