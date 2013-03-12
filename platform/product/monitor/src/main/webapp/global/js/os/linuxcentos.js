@@ -10,7 +10,19 @@ function refresh() {
 	$("#grid_cpu").empty();
 	$("#grid_cpudo").empty();
 	$("#cipan_space_detail").empty();
-	// 基本信息 （完成）
+	
+	$("body").layout({
+		top : {
+			topHeight : 100
+		},
+		bottom : {
+			bottomHeight : 30
+		}
+	});
+	var autoWidth = $("#layout_center").width() - 100;
+	$("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
+	$("#cipan_space_detail").width(autoWidth + 65)
+	// 基本信息 （完成）	
 	$.ajax({
 		type : "post",
 		url : "/monitor/os/osInfo/" + osid,
@@ -280,14 +292,8 @@ function refresh() {
 	});
 
 	// 分解CPU利用率下面的列表
-	$("body").layout({
-		top : {
-			topHeight : 100
-		},
-		bottom : {
-			bottomHeight : 30
-		}
-	});
+	
+	
 	$("#grid_cpudo").Grid({
 		type : "post",
 		url : "/monitor/os/gridCpuResolve/" + osid,
@@ -383,18 +389,11 @@ function refresh() {
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
-
+	if($.browser.msie && ($.browser.version == "7.0")){
+		var center = $("#layout_center");
+		$("#main").width(center.width() - 31).height(center.height() - 30);
+	}
 }
-$(function() {
-	$("body").layout({
-		top : {
-			topHeight : 100
-		}
-	});
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
-});
 
 function navHover() {
 	$(this).toggleClass("hover")
