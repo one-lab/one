@@ -78,7 +78,7 @@
                     xAxis:_data["xAxis"],
                     yAxis:{
                         title:{
-                            text:'缓存击中率 '
+                            text:'缓存击中率% '
                         }
 
 
