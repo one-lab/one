@@ -1,9 +1,9 @@
-Highcharts.setOptions({
+/*Highcharts.setOptions({
 	global : {
 		useUTC : false
-	},
-});
-function creatSimpleChart(url, renderTo, text) {
+	}
+});*/
+function creatSimpleChart2(url, renderTo, text) {
 	$.ajax({
 				type : "post",
 				url : url,
@@ -41,7 +41,7 @@ function creatSimpleChart(url, renderTo, text) {
 					                    week: '%Y<br/>%m-%d',
 					                    month: '%Y-%m',
 					                    year: '%Y'
-					           }
+					                }
 								},
 								yAxis : {
 									title : {
@@ -70,10 +70,6 @@ function creatSimpleChart(url, renderTo, text) {
 									}
 								},
 								
-								credits : {
-									text : '',
-									href : ''
-								},
 								series : seriesArr,
 								colors : ['#00b200', '#0000b2', '#b200b2']
 							});

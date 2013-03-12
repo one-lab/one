@@ -121,11 +121,6 @@ function refresh() {
 					title : {
 						text : ''
 					},
-					credits : {
-						text : '',
-						href : ''
-					},
-
 					pane : {
 						startAngle : -150,
 						endAngle : 150,
@@ -197,7 +192,7 @@ function refresh() {
 		}
 	});
 	creatSimpleChart("/monitor/os/getCpuAndRam/" + osid, 'CPU_line', 'CPU内存利用率%');
-	creatSimpleChart("/monitor/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%');
+	creatSimpleChart2("/monitor/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%');
 	
 	// 分解cpu利用率图表（完成）
 	$.ajax({
@@ -309,7 +304,7 @@ function refresh() {
 			color : ''
 		}, {
 			id : '3',
-			text : 'MB',
+			text : 'KB',
 			name : "used",
 			index : '1',
 			align : '',
@@ -492,8 +487,7 @@ function navClick() {
 		var isAdd = false;
 		if ($(this).parent().attr("id") == "menu") {
 			isAdd = true;
-		}
-		;
+		};
 		subMav.slideDown('fast', function() {
 			$(document).bind('click', {
 				dom : subMav,
@@ -510,8 +504,7 @@ function hideNav(e) {
 	subMenu.slideUp('fast', function() {
 		if (isAdd) {
 			subMenu.parent().removeClass('seleck');
-		}
-		;
+		};
 	});
 	$(document).unbind();
 }

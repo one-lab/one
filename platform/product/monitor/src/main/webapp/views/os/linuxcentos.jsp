@@ -23,8 +23,12 @@
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 <script language="javascript" src="${ctx}/global/js/os/linuxcentos.js"></script>
-<script language="javascript" src="${ctx}/global/js/os/simpleDraw.js"></script>
+<script language="javascript" src="${ctx}/global/js/os/cpuRamDraw.js"></script>
+<script language="javascript" src="${ctx}/global/js/os/cpuInfoDraw.js"></script>
 <script type="text/javascript">
+
+
+
 </script>
 </head>
 
