@@ -85,8 +85,8 @@
                         </select></td>
                     </tr>
                     <tr>
-                        <td>端口<span class="mandatory">*</span></td>
-                        <td><input name="input2" type="text" class="formtext" size="8"/></td>
+                       <!--  <td>端口<span class="mandatory">*</span></td>
+                        <td><input name="input2" type="text" class="formtext" size="8"/></td> -->
                     </tr>
                     <tr>
                         <td>轮询间隔<span class="mandatory">*</span></td>
@@ -95,7 +95,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="group_name">&nbsp;222222222222222</td>
+                        <td class="group_name">&nbsp;</td>
                         <td class="group_name"><input type="button" class="buttons"
                                                       value="确定添加" onclick="savelinux()"/> <input type="reset"
                                                                                              class="buttons"

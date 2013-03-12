@@ -92,7 +92,6 @@ function getForm() {
 				for(var lineName in lineData){
 					var series = {};
 					series.name = lineName;
-					alert(lineName);
 					series.data = lineData[lineName];
 					seriesArr.push(series);
 				}
@@ -129,26 +128,21 @@ function getForm() {
 					},
 					plotOptions : {
 						line : {
-							dataLabels : {
-								enabled : true
-							},
 							connectNulls : true,
 							enableMouseTracking : true,
-							marker : {
-								enabled : false
-							}
-						}
-					},
-					credits : {
-						text : '',
-						href : ''
+						},
+						series: {
+	                        marker: {
+	                            radius: 3
+	                        }
+	                    }
 					},
 					tooltip : {
-						enabled: false,
-		                formatter: function() {
-		                    return '<b>'+ this.series.name +'</b><br/>'+
-		                        this.x +': '+ this.y ;
-		                }
+						enabled: true,
+						formatter: function() {
+	                        return '<b>'+ this.series.name +'</b><br/>'+
+	                        Highcharts.dateFormat('%H. %M', this.x) +': '+ this.y ;
+						}
 					},
 					legend : {
 						enabled : true

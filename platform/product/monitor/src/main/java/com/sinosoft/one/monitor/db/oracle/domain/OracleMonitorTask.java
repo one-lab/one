@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
+import com.google.common.collect.MapMaker;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * User: Chunliang.Han
@@ -31,7 +29,8 @@ public class OracleMonitorTask {
     /**
      * ScheduledFuture<?>缓存
      */
-    public  final Map<String, ScheduledFuture<?>> beeperHandleMap = new HashMap<String, ScheduledFuture<?>>();
+    private static ConcurrentMap<String, ScheduledFuture<?>> beeperHandleMap = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
+
     /**
      * 定义任务处理器，线程池的长度设定为100
      */
@@ -46,16 +45,22 @@ public class OracleMonitorTask {
         }
     }
     public  void addTask(Info info){
+        System.out.println("添加oracle监听服务。。。");
     	execute(scheduledExecutorService,info);
     }
     public  void updateTask(Info info){
+        System.out.println("修改oracle监听服务。。。");
     	deleteTask(info);
     	execute(scheduledExecutorService,info);
     }
     public  void deleteTask(Info info){
-    	ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
-    	beeperHandle.cancel(true);
-    	beeperHandleMap.remove(info.getId());
+        System.out.println("删除oracle监听服务。。。");
+        ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
+        if(beeperHandle!=null&&
+                (!beeperHandle.isCancelled()||!beeperHandle.isDone())){
+            beeperHandle.cancel(true);
+        }
+        beeperHandleMap.remove(info.getId());
     }
     private  void execute(ScheduledExecutorService scheduledExecutorService,Info info){
         int timeDuring = info.getPullInterval();

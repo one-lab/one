@@ -103,7 +103,7 @@
 .grid_view a:hover{ color:#444; text-decoration:underline}
 .bfb{ color:#444; text-decoration:underline}
 .grid-Memory{float:left; border-right:1px #dfe9f2 solid}
-.grid_cpu{float:right; border-left:1px #dfe9f2 solid; margin-top:-107px}
+.grid_cpu{float:right; border-left:1px #dfe9f2 solid; margin-top:-90px}
 .Memory{color:#444; background:url(../images/icon_associateaction.gif) no-repeat; padding-left:12px}
 .cpu{color:#444; background:url(../images/icon_associateaction.gif) no-repeat; padding-left:12px}
 .grid-total{ margin-top:115px}

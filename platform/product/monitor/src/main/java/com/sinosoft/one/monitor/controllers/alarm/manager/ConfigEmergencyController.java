@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.controllers.alarm.manager;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.monitor.action.repository.MailActionRepository;
 import com.sinosoft.one.monitor.application.domain.ApplicationService;
@@ -287,10 +288,13 @@ public class ConfigEmergencyController {
         }else if("".equals(attributeThresholdId)){
             //查询属性阈值表记录
             AttributeThreshold attributeThreshold=attributeThresholdRepository.findByResourceIdAndAttributeId(monitorId,attributeId);
-            if(null!=attributeThresholdId){
-                //删除上面查询的记录
-                attributeThresholdRepository.delete(attributeThreshold);
+            if(null!=attributeThreshold){
+                if(null!=attributeThresholdId){
+                    //删除上面查询的记录
+                    attributeThresholdRepository.delete(attributeThreshold);
+                }
             }
+
             //保存属性动作
             return saveAllAttributeActions(criticalIds,warningIds,infoIds,monitorId,attributeId);
         }else if(!StringUtils.isBlank(attributeThresholdId)){
@@ -372,6 +376,8 @@ public class ConfigEmergencyController {
             attributeActionRepository.delete(dbAttributeActions);
             //之后，保存当前属性新关联的动作
             for(AttributeAction attributeAction:attributeActions){
+                // TODO 到时候需要修改类型的设置
+                attributeAction.setActionType(ActionType.MAIL);
                 attributeActionRepository.save(attributeAction);
             }
             return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId));

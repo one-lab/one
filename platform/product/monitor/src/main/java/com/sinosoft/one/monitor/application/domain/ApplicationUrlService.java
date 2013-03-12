@@ -1,30 +1,39 @@
 package com.sinosoft.one.monitor.application.domain;
 
-import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.application.model.*;
-import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlCountViewModel;
-import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlHealthAvaViewModel;
-import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlInfoViewModel;
-import com.sinosoft.one.monitor.application.model.viewmodel.UrlTraceLogViewModel;
-import com.sinosoft.one.monitor.application.repository.*;
-import com.sinosoft.one.monitor.common.HealthStaService;
-import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.monitor.common.Trend;
-import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Period;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.application.model.Method;
+import com.sinosoft.one.monitor.application.model.MethodResponseTime;
+import com.sinosoft.one.monitor.application.model.UrlResponseTime;
+import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlCountViewModel;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlHealthAvaViewModel;
+import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlInfoViewModel;
+import com.sinosoft.one.monitor.application.model.viewmodel.UrlTraceLogViewModel;
+import com.sinosoft.one.monitor.application.repository.MethodRepository;
+import com.sinosoft.one.monitor.application.repository.MethodResponseTimeRepository;
+import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
+import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
+import com.sinosoft.one.monitor.application.repository.UrlVisitsStaRepository;
+import com.sinosoft.one.monitor.common.HealthStaService;
+import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.monitor.common.Trend;
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 
 /**
  * 应用URL服务类
@@ -83,7 +92,9 @@ public class ApplicationUrlService {
 		);
 		applicationUrlInfoViewModel.setLatestFailTime(urlAvailableInf.getLatestTime() == null ? "未知" :
 				LocalDateTime.fromDateFields(urlAvailableInf.getLatestTime()).toString("yyyy-MM-dd HH:mm:ss"));
-		applicationUrlInfoViewModel.setTodayRunningTime(urlAvailableInf.getRunningTime() + "");
+		Period runningTime = urlAvailableInf.getRunningTime();
+		applicationUrlInfoViewModel.setTodayRunningTime(runningTime.getHours() + "时" + runningTime.getMinutes() + "分" 
+					+ runningTime.getSeconds() + "秒" +runningTime.getMillis()+"毫秒");
 		return applicationUrlInfoViewModel;
 	}
 

@@ -85,17 +85,24 @@ public class OracleController {
 	public String viewAva(@Param("monitorId")String monitorId) {
 		AvaSta avaSta = oracleAvaService.findAvaSta(monitorId,
 				StaTimeEnum.TODAY);
-		long normalRuntime = avaSta.getNormalRuntime();
-		long powerOffTime = avaSta.getTotalPoweroffTime();
-		// 如何保留两位小数
-		Double usePercent = normalRuntime
-				/ (normalRuntime + powerOffTime / 1.0) * 100;
-		int usePercents = usePercent.intValue();
-		int unUsedPercents = 100 - usePercents;
-		JSONArray  y = new JSONArray();
-		y.add(unUsedPercents);
-		//System.out.println(y.toJSONString());
-		return "@"+y.toJSONString();
+        if(avaSta!=null){
+            long normalRuntime = avaSta.getNormalRuntime();
+            long powerOffTime = avaSta.getTotalPoweroffTime();
+            // 如何保留两位小数
+            Double usePercent = normalRuntime
+                    / (normalRuntime + powerOffTime / 1.0) * 100;
+            int usePercents = usePercent.intValue();
+            int unUsedPercents = 100 - usePercents;
+            JSONArray  y = new JSONArray();
+            y.add(unUsedPercents);
+            //System.out.println(y.toJSONString());
+            return "@"+y.toJSONString();
+        }  else {
+            JSONArray  y = new JSONArray();
+            y.add(0);
+            //System.out.println(y.toJSONString());
+            return "@"+y.toJSONString();
+        }
 	}
 	
     @Get("viewConnect/{monitorId}")
@@ -123,10 +130,13 @@ public class OracleController {
 		// x轴和连接时间y轴添加值
 		List<Point> connectPoints = connectEvent.getPoints();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-		for (int i = 0; i < connectPoints.size(); i++) {
-			categories.add(sdf.format(connectPoints.get(i).getxAxis()));
-			connectData.add(connectPoints.get(i).getyAxis()*100);
-		}
+        if(connectPoints!=null){
+            for (int i = 0; i < connectPoints.size(); i++) {
+                categories.add(sdf.format(connectPoints.get(i).getxAxis()));
+                connectData.add(connectPoints.get(i).getyAxis()*100);
+            }
+        }
+
 		/*
 		 * labels: { 
 									  	:3
@@ -140,9 +150,11 @@ public class OracleController {
 		connectSeries.add(surr);
 		// 用户活动数y轴添加值
 		List<Point> activePoints = activeCount.getPoints();
-		for (int i = 0; i < activePoints.size(); i++) {
-			activeData.add(activePoints.get(i).getyAxis());
-		}
+        if(activePoints!=null){
+            for (int i = 0; i < activePoints.size(); i++) {
+                activeData.add(activePoints.get(i).getyAxis());
+            }
+        }
 		surr2.put("data", activeData);
 		activeSeries.add(surr2);
 
@@ -386,12 +398,17 @@ public class OracleController {
 		HighchartSerie highchartSerie1 = new HighchartSerie("缓冲区命中率");
 		HighchartSerie highchartSerie2 = new HighchartSerie("数据字典命中率");
 		HighchartSerie highchartSerie3 = new HighchartSerie("缓存库命中率");
-		for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
-			highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100);
-			highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate())*100);
-			highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate())*100);
-			highchart.addCategory(oracleSGAHitRate.getRecordTime());
-		}
+        if(sgaHitRateModels!=null){
+            for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
+                Double buffer = Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100;
+                Double dict = Double.valueOf(oracleSGAHitRate.getDictHitRate())*100;
+                Double lib = Double.valueOf(oracleSGAHitRate.getLibHitRate())*100;
+                highchartSerie1.addData(Double.parseDouble(buffer.intValue()+""));
+                highchartSerie2.addData(Double.parseDouble(dict.intValue()+""));
+                highchartSerie3.addData(Double.parseDouble(lib.intValue()+""));
+                highchart.addCategory(oracleSGAHitRate.getRecordTime());
+            }
+        }
 		highchart.addSerie(highchartSerie1);
 		highchart.addSerie(highchartSerie2);
 		highchart.addSerie(highchartSerie3);

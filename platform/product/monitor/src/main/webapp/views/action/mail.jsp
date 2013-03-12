@@ -114,7 +114,7 @@
                     <tr>
                         <td width="20%">附加消息</td>
                         <td colspan="2"><textarea class="formtext" style="height:150px; width:270px"
-                                                  name="content">${mail.content}</textarea></td>
+                                                  name="appendMessage">${mail.appendMessage}</textarea></td>
                     </tr>
                     <!--
                      <tr>

@@ -3,12 +3,12 @@ package com.sinosoft.one.monitor.controllers.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sinosoft.one.monitor.action.model.MailAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import com.sinosoft.one.monitor.action.domain.MailActionService;
+import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -39,7 +39,7 @@ public class MailActionController {
 		Page<MailAction> page = new PageImpl<MailAction>(mailactions);
 		Gridable<MailAction>  gridable = new Gridable<MailAction> (page);
 		String cellString = new String(
-				"name,fromAddress,toAddress,subject,content,operation");
+				"name,fromAddress,toAddress,subject,appendMessage,operation");
 		gridable.setIdField("id");
 		gridable.setCellStringField(cellString);
 		try {

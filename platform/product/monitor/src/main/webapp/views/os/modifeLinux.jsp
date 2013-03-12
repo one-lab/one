@@ -64,7 +64,8 @@
 	}
 	function update() {
 		var flag = false;
-		$.ajax({
+		$('#addSystem').submit();
+		/* $.ajax({
 			type : "Post",
 			url : "/monitor/os/isIpExists",
 			data : "ipAddr=" + $("#ipAddr").val(),
@@ -73,11 +74,11 @@
 					$("#ipAddr").next().addClass("prompt").html("监视器已存在！");
 				} else {
 					msgSuccess("系统消息", "操作成功，监视器已保存！", function() {
-						$('#addSystem').submit();
+						
 					});
 				}
 			}
-		});
+		}); */
 	}
 </script>
 </head>
@@ -114,7 +115,7 @@
 	</tr>
 	<tr>
 		<td>主机名/IP地址<span class="mandatory">*</span></td>
-		<td><input id="ipAddr" name="os.ipAddr" type="text"
+		<td><input id="ipAddr" name="os.ipAddr" readonly="readonly" type="text"
 			class="formtext" value="${os.ipAddr }" /><span></span></td>
 	</tr>
 	<tr>
@@ -129,12 +130,12 @@
 		</select></td>
 	</tr>
 	<tr>
-		<td>端口<span class="mandatory">*</span></td>
-		<td><input name="input2" type="text" class="formtext" size="8" /></td>
+	<!-- 	<td>端口<span class="mandatory">*</span></td>
+		<td><input name="input2" type="text" class="formtext" size="8" /></td> -->
 	</tr>
 	<tr>
 		<td>轮询间隔<span class="mandatory">*</span></td>
-		<td><input name="input3" type="text" class="formtext" size="8" value="${os.intercycleTime }"/>
+		<td><input name="os.intercycleTime" type="text" class="formtext" size="8" value="${os.intercycleTime }"/>
 		分</td>
 	</tr>
 	<tr>

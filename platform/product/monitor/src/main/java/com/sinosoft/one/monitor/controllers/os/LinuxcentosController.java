@@ -21,6 +21,7 @@ import com.sinosoft.one.monitor.os.linux.domain.OsRespondTimeService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.domain.OsViewHandle;
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
@@ -78,13 +79,18 @@ public class LinuxcentosController {
 		//获取最后一次 响应时间
 		String responTime= osRespondTimeService.findLastResponTime(osId, currentTime,os.getIntercycleTime());
 		//获取最后一次轮询时间
-		Date lastSampleTime=osProcessService.getLastSampleTime(osId, currentTime);
-		Calendar c  = Calendar.getInstance();
-		c.setTime(lastSampleTime);
-		c.set(Calendar.MINUTE, lastSampleTime.getMinutes()+os.getIntercycleTime());
-		Date nextSampleTime=c.getTime();
-		map.put("lastTime", simpleDateFormat.format(lastSampleTime));
-		map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
+		OsAvailabletemp lastSampleTime=osProcessService.getLastSampleTime(osId, currentTime);
+		if(lastSampleTime==null){
+			map.put("lastTime", "未知");
+			map.put("nextTime", "未知"); 
+		}else{
+			Calendar c  = Calendar.getInstance();
+			c.setTime(lastSampleTime.getSampleDate());
+			c.set(Calendar.MINUTE, lastSampleTime.getSampleDate().getMinutes()+os.getIntercycleTime());
+			Date nextSampleTime=c.getTime();
+			map.put("lastTime", simpleDateFormat.format(lastSampleTime.getSampleDate()));
+			map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
+		}
 		if(responTime==null)
 			map.put("respondTime",0+"毫秒");
 		else{
@@ -127,7 +133,7 @@ public class LinuxcentosController {
 	@Post("getCpuAndRam/{osId}")
 	public Reply getCpuAndRam(@Param("osId") String osId ) {
 		Date currentTime=new Date();
-		Map<String,List<List<?>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 5, 2);
+		Map<String,List<List<?>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 5, 3);
 		return Replys.with(oneOsCpuAndMem).as(Json.class);
 	}
 	/**
@@ -138,7 +144,7 @@ public class LinuxcentosController {
 	@Post("getCpuInfo/{osId}")
 	public Reply getCpuInfo(@Param("osId") String osId ) {
 		Date currentTime=new Date();
-		Map<String,List<List<?>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 2);
+		Map<String,List<List<?>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 3);
 		return Replys.with(lineMap).as(Json.class);
 	}
 
