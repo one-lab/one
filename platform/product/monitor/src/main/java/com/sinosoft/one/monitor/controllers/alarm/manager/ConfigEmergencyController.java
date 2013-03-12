@@ -288,10 +288,13 @@ public class ConfigEmergencyController {
         }else if("".equals(attributeThresholdId)){
             //查询属性阈值表记录
             AttributeThreshold attributeThreshold=attributeThresholdRepository.findByResourceIdAndAttributeId(monitorId,attributeId);
-            if(null!=attributeThresholdId){
-                //删除上面查询的记录
-                attributeThresholdRepository.delete(attributeThreshold);
+            if(null!=attributeThreshold){
+                if(null!=attributeThresholdId){
+                    //删除上面查询的记录
+                    attributeThresholdRepository.delete(attributeThreshold);
+                }
             }
+
             //保存属性动作
             return saveAllAttributeActions(criticalIds,warningIds,infoIds,monitorId,attributeId);
         }else if(!StringUtils.isBlank(attributeThresholdId)){
