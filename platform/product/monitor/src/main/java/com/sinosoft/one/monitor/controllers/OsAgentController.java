@@ -9,10 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.data.jade.parsers.sqljep.function.Hash;
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.os.linux.domain.OsAvailableServcie;
 import com.sinosoft.one.monitor.os.linux.domain.OsProcessService;
 import com.sinosoft.one.monitor.os.linux.domain.OsService;
 import com.sinosoft.one.monitor.os.linux.model.Os;

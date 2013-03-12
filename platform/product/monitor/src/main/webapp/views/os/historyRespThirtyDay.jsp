@@ -80,7 +80,7 @@ function hideNav(e){
   <div class="main"  style="margin-bottom:60px;">
      <div class="threshold_file">
           <div class="sub_title">最近30天的响应时间</div>
-          <input id="osid" value="${os.osInfoId }" />
+          <input id="osid" type="hidden" value="${os.osInfoId }" />
           <table class="base_info" width="100%" cellpadding="0" cellspacing="0">
             <tr><td>监视器名称</td><td>${os.name}</td></tr>
             <tr><td>属性 </td><td> 应答时间 </td></tr>
