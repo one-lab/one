@@ -92,7 +92,7 @@ function hideNav(e){
 	<div class="main" id="main">
     	<ul class="crumbs">
         	<li><a href="#">监视器</a> ></li>
-            <li><b> oracle - 批量配置视图 (总计 3 监视器)</b></li>
+            <li><b> oracle - 批量配置视图</b></li>
         </ul>
         <hr class="top_border" />
         <div id="tabs">
@@ -106,7 +106,7 @@ function hideNav(e){
                   <h2 class="title2"><b>可用性历史纪录- oracle　</b>
                   	<select id="avaInfoStyle" name="" class="diySelect">
                             <option value="1">最近24小时</option>
-                            <option value="30">最近30天</option>
+                            <%--<option value="30">最近30天</option>--%>
                     </select>
                   </h2>
                   <div id="avaInfoList"></div>

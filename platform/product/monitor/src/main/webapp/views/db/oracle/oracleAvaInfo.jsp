@@ -12,7 +12,7 @@
            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="green_bar">
                <tr>
                    <c:forEach items="${oracleAvaInfo.graphInfo}" var="point">
-                    <td width="${point[2]}" class="${point[1]==0?'not_available':(point[1]==2?'xp_available':'')}">&nbsp;</td>
+                    <td width="${point[2]}%" class="${point[1]==0?'not_available':(point[1]==2?'xp_available':'')}">&nbsp;</td>
                    </c:forEach>
                </tr>
            </table>

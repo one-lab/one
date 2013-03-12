@@ -89,11 +89,14 @@ function hideNav(e){
 	$(document).unbind();
 }
 function delRow(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    /*编辑业务场景页面*/
-    var bizScenarioId=id.substr(4,32);
-    window.location.href="${ctx}/application/manager/bsmanager/delete/${appId}/"+bizScenarioId;
+    msgConfirm('系统消息','确定要删除当前的业务场景吗？',function(){
+        var rows = $(e).parent().parent();
+        var id = rows.attr('id');
+        /*编辑业务场景页面*/
+        var bizScenarioId=id.substr(4,32);
+        window.location.href="${ctx}/application/manager/bsmanager/delete/${appId}/"+bizScenarioId;
+    });
+
 }
 function managerUrl(e){
     var rows = $(e).parent().parent();
@@ -113,7 +116,7 @@ function bizScenarioBatchDel(){
     var $g = $("#thresholdList div.grid_view > table");
     var selecteds = $("td.multiple :checked",$g);
     if(selecteds.length > 0){
-        msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
+        msgConfirm('系统消息','确定要删除这些业务场景吗？',function(){
             var _bizScenarioIds = [];
             selecteds.each(function(){
                 var rows = $(this).parent().parent();
@@ -129,16 +132,16 @@ function bizScenarioBatchDel(){
                         selecteds.each(function(){
                             $(this).parent().parent().remove();
                         });
-                        alert("删除成功");
+                        msgSuccess('系统消息','删除成功！')
                     }
                 },
                 error:function(){
-                    alert("删除失败");
+                    msgAlert('系统消息','删除失败！')
                 }
             });
         });
     }else{
-        msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
+        msgAlert('系统消息','没有选中的业务场景！<br />请选择要删除的业务场景后，继续操作。')
     };
 }
 </script>
@@ -161,7 +164,7 @@ function bizScenarioBatchDel(){
                             <div style="float:right;">
                                 <span>级别</span>
                                 <select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect">
-                                    <option value="">选择类型</option>
+                                    <option value="">选择级别</option>
                                     <option value="HIGH">高</option>
                                     <option value="INTERMEDIATE">中</option>
                                     <option value="LOW">低</option>

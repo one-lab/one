@@ -11,6 +11,7 @@
 
     <script type="text/javascript">
         var ctx = '${ctx}';
+        var monitorId = "${monitorId}";
         $(function () {
             $("body").layout({
                 top:{topHeight:100},
@@ -25,7 +26,7 @@
             $("#nav,#menu").delegate('li', 'click', navClick);
 
             $("#sevenday_grid").Grid({
-                url:ctx + "/db/oracle/sta/viewTable/4028921b3d3fba36013d3fbb061c0000/3/3/1",
+                url:ctx + "/db/oracle/sta/viewTable/"+monitorId+"/3/3/1",
                 dataType:"json",
                 height:'auto',
                 colums:[
@@ -51,7 +52,7 @@
         function getSevenDayGraph() {
             var _data ;
             $.ajax({
-                url:ctx+"/db/oracle/sta/viewGrid/4028921b3d3fba36013d3fbb061c0000/3/3/1",
+                url:ctx+"/db/oracle/sta/viewGrid/"+monitorId+"/3/3/1",
                 dataType:"json",
                 cache:false,
                 async:false,
@@ -77,7 +78,7 @@
                     xAxis:_data["xAxis"],
                     yAxis:{
                         title:{
-                            text:'缓存击中率 '
+                            text:'缓存击中率% '
                         }
 
 

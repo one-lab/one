@@ -100,7 +100,7 @@
                   <td width="30%" align="right"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this,"historyRespond/7")'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow(this,"historyRespond/30")'></a></td>
                 </tr>
                 <tr>
-                  <td align="center" class="textResponseTime" colspan="1"> 0 毫秒 </td>
+                  <td id="respondTime" align="center" class="textResponseTime" colspan="1"> 0 毫秒 </td>
                   <td valign="bottom" align="right"><a class="bodytext-img" href="setEmergency.html">警告配置</a>&nbsp;</td>
                 </tr>
               </tbody>
@@ -128,10 +128,10 @@
                   <td width="100%" align="center" class="dashboard"><table width="99%" cellspacing="0" cellpadding="3" border="0">
                       <tbody >
                         <tr>
-                          <td id="cpuUtilzation1" height="28" align="center" title="CPU使用率-3 %" class="bodytext" colspan="1"><a href="#" class="speed"  onclick='viewWindow(this,"historyCPU/7")'><div id="cpuUtilzation" style="width: 200px; height: 140px; margin: 0 auto; "></div></a></td>
+                          <td id="cpuUtilzation1" height="28" align="center" title="" class="bodytext" colspan="1"><a href="#" class="speed"  onclick='viewWindow(this,"historyCPU/7")'><div id="cpuUtilzation" style="width: 200px; height: 140px; margin: 0 auto; "></div></a></td>
                         </tr>
                         <tr>
-                          <td  align="center" class="bodytextbold"><a id="cpuUtilzation2" class="staticlinks" onclick='viewWindow(this,"historyCPU/7")' href="javascript:void(0)">CPU使用率 - 3</a> % </td>
+                          <td  align="center" class="bodytextbold"><a id="cpuUtilzation2" class="staticlinks" onclick='viewWindow(this,"historyCPU/7")' href="javascript:void(0)">CPU使用率 - 未知</a> % </td>
                         </tr>
                       </tbody>
                     </table></td>
@@ -144,10 +144,10 @@
                   <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
                       <tbody>
                         <tr>
-                          <td id="ramUtilzation1" height="28" align="center" title="内存使用率-16 %" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindow(this,"historyMem/7")'><div id="ramUtilzation" style="width: 200px; height: 140px; margin: 0 auto"></div></a></td>
+                          <td id="ramUtilzation1" height="28" align="center" title="" class="bodytext" colspan="1"><a href="#" class="speed2" onclick='viewWindow(this,"historyMem/7")'><div id="ramUtilzation" style="width: 200px; height: 140px; margin: 0 auto"></div></a></td>
                         </tr>
                         <tr>
-                          <td  align="center" class="bodytextbold"><a id="ramUtilzation2" class="staticlinks" onclick='viewWindow(this,"historyMem/7")' href="javascript:void(0)">内存使用率-16</a> % </td>
+                          <td  align="center" class="bodytextbold"><a id="ramUtilzation2" class="staticlinks" onclick='viewWindow(this,"historyMem/7")' href="javascript:void(0)">内存使用率-未知</a> % </td>
                         </tr>
                       </tbody>
                     </table>
@@ -162,10 +162,10 @@
                   <td width="100%" align="center" class="dashboard"><table cellspacing="0" cellpadding="3" border="0">
                       <tbody>
                         <tr>
-                          <td id="diskUtilzation1" height="28" align="center" title="磁盘利用率-12%" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindow(this,"historyDisk/7")'><div id="diskUtilzation" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
+                          <td id="diskUtilzation1" height="28" align="center" title="" class="bodytext" colspan="1"><a href="#" class="speed3" onclick='viewWindow(this,"historyDisk/7")'><div id="diskUtilzation" style="width: 200px; height:140px; margin: 0 auto"></div></a></td>
                         </tr>
                         <tr>
-                          <td  align="center" class="bodytextbold"><a id="diskUtilzation2"  onclick='viewWindow(this,"historyDisk/7")' class="staticlinks"  href="javascript:void(0)">磁盘使用率-12</a> %</td>
+                          <td  align="center" class="bodytextbold"><a id="diskUtilzation2"  onclick='viewWindow(this,"historyDisk/7")' class="staticlinks"  href="javascript:void(0)">磁盘使用率-未知</a> %</td>
                         </tr>
                       </tbody>
                     </table>

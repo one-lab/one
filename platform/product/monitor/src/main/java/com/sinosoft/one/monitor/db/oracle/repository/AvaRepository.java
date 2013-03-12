@@ -4,6 +4,7 @@ package com.sinosoft.one.monitor.db.oracle.repository;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
@@ -14,7 +15,9 @@ import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableInf;
 
 public interface AvaRepository extends PagingAndSortingRepository<Ava, String> {
 
-    @SQL("select b.state from GE_MONITOR_ORACLE_AVA b where  rownum=1 order by b.record_time desc")
+    @SQL("select b.state from " +
+            "" +"(select * from GE_MONITOR_ORACLE_AVA order by record_time desc) b" +
+            "  where  rownum=1")
     String findState();
     @SQL("select count(a.interval) \"count\", a.interval \"interval\" from GE_MONITOR_ORACLE_AVA a where a.state='1' and a.record_time > ?1 group by a.interval")
 	List<AvailableCountsGroupByInterval> findAvCount(Date inserTime);
@@ -24,5 +27,7 @@ public interface AvaRepository extends PagingAndSortingRepository<Ava, String> {
 	void clear(Date timePoint);
     @SQL("delete from GE_MONITOR_ORACLE_AVA  where DATABASE_ID in (?1)")
     void deleteByMonitorIds(List<String> monitorId);
+    @SQL("select * from GE_MONITOR_ORACLE_AVA where record_time > ?1 order by record_time")
+    List<Ava> find24Day(Date timeStart);
 }
 

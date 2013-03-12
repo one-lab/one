@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +38,10 @@ public class StaController {
 	@Autowired
 	private OracleStaService oracleStaService;
 
+    private static final String CONNECT_TIME = "连接时间 ms";
+    private static final String ACTIVE_COUNT = "用户数";
+    private static final String HIT_RATE = "缓冲区命中率 %";
+
 	/*
 	 * 监视器名称 oracle 属性 连接时间 ms 从 2013-2-26 上午11:00 到 2013-3-1 下午6:22
 	 */
@@ -66,13 +71,13 @@ public class StaController {
 		}
 		switch (eventName) {
 		case 1:
-				en = "连接时间 ms";
+				en = CONNECT_TIME;
 			break;
 		case 2:
-				en = "用户数";
+				en = ACTIVE_COUNT;
 			break;
 		case 3:
-			en = "缓冲区命中率";
+			en = HIT_RATE;
 		break;
 		}
 		// System.out.println("+++++++++++++++++++++++++++++++++++++++");
@@ -81,7 +86,19 @@ public class StaController {
 		OracleStaInfoDetailModel oracleStaInfoDetailModel = oracleStaService
 		.getBaseInfo(monitorId, eventType, en, new Date(),
 				sta, TimeGranularityEnum.DAY);
+        if(en.equals(HIT_RATE)){
+            Double avg = oracleStaInfoDetailModel.getAvg();
+            Double max = oracleStaInfoDetailModel.getMaxAvg();
+            Double min = oracleStaInfoDetailModel.getMinAvg();
+            avg = avg*100;
+            max = max*100;
+            min = min*100;
+            oracleStaInfoDetailModel.setAvg(Double.parseDouble(avg.intValue()+""));
+            oracleStaInfoDetailModel.setMaxAvg(Double.parseDouble(max.intValue()+""));
+            oracleStaInfoDetailModel.setMinAvg(Double.parseDouble(min.intValue()+""));
+        }
 		inv.addModel("osdm", oracleStaInfoDetailModel);
+        inv.addModel("monitorId", monitorId);
 		// viewTable(monitorId,inv);
 		// System.out.println("+++++++++++++++++++++++++++");
 		if(eventType == 1 && st == 1 ){
@@ -119,13 +136,13 @@ public class StaController {
 		}
 		switch (eventName) {
 		case 1:
-				en = "连接时间 ms";
+				en = CONNECT_TIME;
 			break;
 		case 2:
-				en = "用户数";
+				en = ACTIVE_COUNT;
 			break;
 		case 3:
-			en = "缓冲区命中率";
+			en = HIT_RATE;
 		break;
 		}
 		
@@ -133,7 +150,22 @@ public class StaController {
 		.getBaseInfo(monitorId, eventType, en, new Date(),
 				sta, TimeGranularityEnum.DAY);
 		List<EventSta> eventStas = oracleStaInfoDetailModel.getRecordItems();
-
+        if(en.equals(HIT_RATE)){
+            for(EventSta eventSta:eventStas){
+                Double avg = eventSta.getAvg();
+                Double max = eventSta.getMax();
+                Double min = eventSta.getMin();
+                avg = avg*100;
+                max = max*100;
+                min = min*100;
+                int avgInt = avg.intValue();
+                int maxInt = avg.intValue();
+                int minInt = avg.intValue();
+                eventSta.setAvg(Double.parseDouble(avgInt+""));
+                eventSta.setMax(Double.parseDouble(maxInt+""));
+                eventSta.setMin(Double.parseDouble(minInt+""));
+            }
+        }
 		Page page = new PageImpl(eventStas);
 		Gridable<EventSta> gridable = new Gridable<EventSta>(page);
 		String cellString = new String("date,time,min,max,avg");
@@ -169,13 +201,13 @@ public class StaController {
 		}
 		switch (eventName) {
 		case 1:
-				en = "连接时间 ms";
+				en = CONNECT_TIME;
 			break;
 		case 2:
-				en = "用户数";
+				en = ACTIVE_COUNT;
 			break;
 		case 3:
-			en = "缓冲区命中率";
+			en = HIT_RATE;
 		break;
 		}
 		
@@ -196,6 +228,12 @@ public class StaController {
 			SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
 			String str = sdf.format(date);
 			categories.add(str);
+            if(en.equals(HIT_RATE)){
+                Double avg = eventStas.get(i).getAvg();
+                avg = avg*100;
+                int usePercents = avg.intValue();
+                eventStas.get(i).setAvg(Double.parseDouble(usePercents+""));
+            }
 			data.add(eventStas.get(i).getAvg());
 		}
 		xAxis.put("categories", categories);

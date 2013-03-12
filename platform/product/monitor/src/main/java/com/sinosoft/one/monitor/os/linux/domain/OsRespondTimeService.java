@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -82,8 +83,8 @@ public class OsRespondTimeService {
 	/**
 	 * 获取最后一次记 在轮询时间内的响应时间(不定在轮询点内)
 	 */
-	public String findLastResponTime(String osInfoId,Date currentTime ){
+	public String findLastResponTime(String osInfoId,Date currentTime ,int interCycleTime ){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		return osRespondtimeRepository.findLastResponTime(osInfoId, simpleDateFormat.format(currentTime), OsUtil.ORCL_DATEFORMATE);
+		return osRespondtimeRepository.findLastResponTime(osInfoId,simpleDateFormat.format(new DateTime(currentTime).minusMinutes(interCycleTime).toDate()), simpleDateFormat.format(currentTime), OsUtil.ORCL_DATEFORMATE);
 	}
 }

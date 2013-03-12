@@ -62,7 +62,7 @@
 		});
 		$(document).unbind();
 	}
-	function save() {
+	function update() {
 		var flag = false;
 		$.ajax({
 			type : "Post",
@@ -140,7 +140,7 @@
 	<tr>
 		<td class="group_name">&nbsp;</td>
 		<td class="group_name"><input type="button" class="buttons"
-			value="确定修改" onclick="save()" /> <input type="reset" class="buttons"
+			value="确定修改" onclick="update()" /> <input type="reset" class="buttons"
 			value="重 置" /> <input type="button" class="buttons" value="取 消"
 			onclick="window.history.back()" /></td>
 	</tr>

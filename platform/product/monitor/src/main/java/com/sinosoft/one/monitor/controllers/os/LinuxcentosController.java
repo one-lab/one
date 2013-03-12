@@ -76,7 +76,7 @@ public class LinuxcentosController {
 		map.put("osName", os.getIpAddr());
 		map.put("os", os.getType());
 		//获取最后一次 响应时间
-		String responTime= osRespondTimeService.findLastResponTime(osId, currentTime);
+		String responTime= osRespondTimeService.findLastResponTime(osId, currentTime,os.getIntercycleTime());
 		//获取最后一次轮询时间
 		Date lastSampleTime=osProcessService.getLastSampleTime(osId, currentTime);
 		Calendar c  = Calendar.getInstance();
@@ -85,7 +85,11 @@ public class LinuxcentosController {
 		Date nextSampleTime=c.getTime();
 		map.put("lastTime", simpleDateFormat.format(lastSampleTime));
 		map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
-		map.put("respondTime",responTime+"毫秒");
+		if(responTime==null)
+			map.put("respondTime",0+"毫秒");
+		else{
+			map.put("respondTime",responTime+"毫秒");
+		}
 		return Replys.with(map).as(Json.class);
 	}
 

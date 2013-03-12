@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.sinosoft.one.monitor.os.linux.model.OsStati;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.StatiDataModel;
 import com.sinosoft.one.monitor.os.linux.repository.OsStatiRepository;
+import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
 
 /**
@@ -34,11 +35,12 @@ public class OsStatiService {
 	 */
 	public OsStati  creatStatiOneHour(String osInfoId ,String type,Date hourPoint,String maxValue ,String minValue,String averageValue){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		hourPoint=new DateTime(hourPoint).plusHours(1).toDate();
 		OsStati osStati=osStatiRepository.getStatiThisTime(osInfoId, type, simpleDateFormat.format( hourPoint), OsUtil.ORCL_DATEFORMATE);
 		if(osStati==null)
 			osStati=new OsStati();
 		osStati.setOsid(osInfoId);
-		osStati.setRecordTime(new DateTime(hourPoint).plusHours(1).toDate());
+		osStati.setRecordTime(hourPoint);
 		osStati.setType(type);
 		osStati.setMaxValue(maxValue);
 		osStati.setMinValue(minValue);
@@ -74,8 +76,8 @@ public class OsStatiService {
 	 * @return
 	 */
 	public List<StatiDataModel> findStatiByTimeSpan(String osid,String type,Date begin ,Date end ){
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
-		return osStatiRepository.findStatiValue(osid, type, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.DATEFORMATE_YEAR_MON_DAY);
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osStatiRepository.findStatiValue(osid, type, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 	
 	/**
@@ -85,8 +87,8 @@ public class OsStatiService {
 	 * @return
 	 */
 	public StatiDataModel findStatiMxMinAvgByTimeSpan(String osid,String type,Date begin ,Date end ,String cloun){
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE_YEAR_MON_DAY);
-		return osStatiRepository.findStatiMaxMinAvgByTimeSpan(osid, type, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.DATEFORMATE_YEAR_MON_DAY);
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		return osStatiRepository.findStatiMaxMinAvgByTimeSpan(osid, type, simpleDateFormat.format(begin), simpleDateFormat.format(end), OsUtil.ORCL_DATEFORMATE);
 	}
 	
 }
