@@ -395,9 +395,12 @@ public class OracleController {
 		HighchartSerie highchartSerie3 = new HighchartSerie("缓存库命中率");
         if(sgaHitRateModels!=null){
             for(OracleSGAHitRateModel oracleSGAHitRate : sgaHitRateModels) {
-                highchartSerie1.addData(Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100);
-                highchartSerie2.addData(Double.valueOf(oracleSGAHitRate.getDictHitRate())*100);
-                highchartSerie3.addData(Double.valueOf(oracleSGAHitRate.getLibHitRate())*100);
+                Double buffer = Double.valueOf(oracleSGAHitRate.getBufferHitRate())*100;
+                Double dict = Double.valueOf(oracleSGAHitRate.getDictHitRate())*100;
+                Double lib = Double.valueOf(oracleSGAHitRate.getLibHitRate())*100;
+                highchartSerie1.addData(Double.parseDouble(buffer.intValue()+""));
+                highchartSerie2.addData(Double.parseDouble(dict.intValue()+""));
+                highchartSerie3.addData(Double.parseDouble(lib.intValue()+""));
                 highchart.addCategory(oracleSGAHitRate.getRecordTime());
             }
         }
