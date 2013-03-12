@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.controllers.alarm.manager;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.monitor.action.repository.MailActionRepository;
 import com.sinosoft.one.monitor.application.domain.ApplicationService;
@@ -372,6 +373,8 @@ public class ConfigEmergencyController {
             attributeActionRepository.delete(dbAttributeActions);
             //之后，保存当前属性新关联的动作
             for(AttributeAction attributeAction:attributeActions){
+                // TODO 到时候需要修改类型的设置
+                attributeAction.setActionType(ActionType.MAIL);
                 attributeActionRepository.save(attributeAction);
             }
             return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId));

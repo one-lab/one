@@ -31,7 +31,7 @@
 <body>
 <%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
-<div class="main-linux">
+<div class="main-linux" id="main">
       <ul class="crumbs">
       <li><a href="#">管理</a> ></li>
       <li><b>Linux</b></li>
@@ -57,7 +57,7 @@
           </tr>
           <tr>
             <td class="monitorinfoodd">系统健康状况</td>
-            <td class="monitorinfoeven"><img src="images/bussinessY.gif" />&nbsp;&nbsp;健康状态为正常  .&nbsp;没有出现严重的告警。 </td>
+            <td class="monitorinfoeven"><img src="${ctx}/global/images/bussinessY.gif" />&nbsp;&nbsp;健康状态为正常  .&nbsp;没有出现严重的告警。 </td>
           </tr>
           <tr>
             <td class="monitorinfoodd" >类型 </td>
@@ -86,7 +86,7 @@
       <div class="head-cpu">今天的可用性</div>
       <div class="cpu-img"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this,"historyAvaylable/7")'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow(this,"historyAvaylable/30")'></a></div>
       <div id="container" style="width: 300px; height: 240px; margin: 0 auto"></div>
-      <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg">&nbsp;</a><a class="bodytext-img" href="setEmergency.html">警告配置</a></b></div>
+      <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg">&nbsp;</a></b></div>
     </div>
   </div>
   <div class="know-time" style="width:49.5%; height:80px">
@@ -101,7 +101,7 @@
                 </tr>
                 <tr>
                   <td id="respondTime" align="center" class="textResponseTime" colspan="1"> 0 毫秒 </td>
-                  <td valign="bottom" align="right"><a class="bodytext-img" href="setEmergency.html">警告配置</a>&nbsp;</td>
+                  <td valign="bottom" align="right"></td>
                 </tr>
               </tbody>
             </table></td>
@@ -187,9 +187,9 @@
     <div id="CPU_line" style="height:230px"></div>
     <div class="grid-total">
       <div id="grid_Memory" class="grid-Memory" style="width:50%;"> </div>
-      <div class="Memory1" style="width:50%"><a class="Memory" href="setEmergency.html"> 警告配置 </a></div>
+      <div class="Memory1" style="width:50%"></div>
       <div id="grid_cpu" class="grid_cpu" style="width:50%;"> </div>
-      <div class="cpu1" style="height:20px"><a class="cpu" href="setEmergency.html"> 警告配置 </a></div>
+      <div class="cpu1" style="height:20px"></div>
     </div>
   </div>
   <div class="linux-bottom" style="width:99%; float:right; height:650px">
@@ -202,7 +202,7 @@
     </table>
     <div id="CPU_line2"></div>
     <div class="grid_cpudo" id="grid_cpudo" style="width:70%"> </div>
-    <div class="tool_bar2" style="width:70.2%"><a class="gaojin" href="setEmergency.html">告警配置</a></div>
+    <div class="tool_bar2" style="width:70.2%"></div>
   </div>
 </div>
 <div class="second">

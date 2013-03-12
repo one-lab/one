@@ -64,7 +64,9 @@
 	}
 	function update() {
 		var flag = false;
-		$.ajax({
+		alert(123);
+		$('#addSystem').submit();
+		/* $.ajax({
 			type : "Post",
 			url : "/monitor/os/isIpExists",
 			data : "ipAddr=" + $("#ipAddr").val(),
@@ -73,11 +75,11 @@
 					$("#ipAddr").next().addClass("prompt").html("监视器已存在！");
 				} else {
 					msgSuccess("系统消息", "操作成功，监视器已保存！", function() {
-						$('#addSystem').submit();
+						
 					});
 				}
 			}
-		});
+		}); */
 	}
 </script>
 </head>
