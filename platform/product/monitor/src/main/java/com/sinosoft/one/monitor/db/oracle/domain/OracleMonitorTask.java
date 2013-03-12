@@ -45,16 +45,22 @@ public class OracleMonitorTask {
         }
     }
     public  void addTask(Info info){
+        System.out.println("添加oracle监听服务。。。");
     	execute(scheduledExecutorService,info);
     }
     public  void updateTask(Info info){
+        System.out.println("修改oracle监听服务。。。");
     	deleteTask(info);
     	execute(scheduledExecutorService,info);
     }
     public  void deleteTask(Info info){
-    	ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
-    	beeperHandle.cancel(true);
-    	beeperHandleMap.remove(info.getId());
+        System.out.println("删除oracle监听服务。。。");
+        ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
+        if(beeperHandle!=null&&
+                (!beeperHandle.isCancelled()||!beeperHandle.isDone())){
+            beeperHandle.cancel(true);
+        }
+        beeperHandleMap.remove(info.getId());
     }
     private  void execute(ScheduledExecutorService scheduledExecutorService,Info info){
         int timeDuring = info.getPullInterval();

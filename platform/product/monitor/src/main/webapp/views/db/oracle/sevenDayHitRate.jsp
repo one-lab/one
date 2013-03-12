@@ -200,16 +200,16 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div class="buttom_mark">
-                            <div>阈值明细:</div>
-                            <div>2</div>
-                            <div>严重:</div>
-                            <div> > ${osdm.error } </div>
-                            <div>警告:</div>
-                            <div> > ${osdm.warn }</div>
-                            <div>正常:</div>
-                            <div> <= ${osdm.normal }</div>
-                        </div>
+                        <%--<div class="buttom_mark">--%>
+                            <%--<div>阈值明细:</div>--%>
+                            <%--<div>2</div>--%>
+                            <%--<div>严重:</div>--%>
+                            <%--<div> > ${osdm.error } </div>--%>
+                            <%--<div>警告:</div>--%>
+                            <%--<div> > ${osdm.warn }</div>--%>
+                            <%--<div>正常:</div>--%>
+                            <%--<div> <= ${osdm.normal }</div>--%>
+                        <%--</div>--%>
                     </td>
                 </tr>
             </table>
