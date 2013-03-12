@@ -118,7 +118,7 @@
                     </tr>
                     <tr>
                         <td width="25%">方法描述<span class="mandatory"></span></td>
-                        <td><textarea name="description" value="${method.description}" class="formtext" style="height: 60px;width: 220px" ></textarea></td>
+                        <td><textarea id="description" name="description" class="formtext" style="height: 60px;width: 220px" >${method.description}</textarea></td>
                     </tr>
                         <%--<tr>
                             <td width="25%">方法阈值<span class="mandatory"></span></td>

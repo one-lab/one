@@ -57,6 +57,7 @@ function isValid(form) {
         return false;
     }
     var bsGrade=form.bizScenarioGrade.value;
+    alert(bsGrade)
     if(bsGrade!="高"&&bsGrade!="中"&&bsGrade!="低"){
         msgAlert('系统消息','必须选择场景级别！')
         return false;
@@ -103,9 +104,9 @@ function isValid(form) {
                 <td>
                 	<select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect" >
                     <option value="">选择级别</option>
-                    <option>高</option>
-                    <option>中</option>
-                    <option>低</option>
+                    <option value="高">高</option>
+                    <option value="中">中</option>
+                    <option value="低">低</option>
                   </select>
                     <msg:errorMsg property="bizScenarioGrade" type="message"/>
                 </td>

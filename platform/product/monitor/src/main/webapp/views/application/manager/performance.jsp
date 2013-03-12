@@ -7,12 +7,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>performance性能</title>
-
-    <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-    <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
     <link href="${ctx}/global/css/performance/performance.css" rel="stylesheet" type="text/css" />
-    <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-    <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
+    <%@include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
         $(function(){
             $("body").layout({
@@ -22,7 +18,17 @@
         function changeRecentHour(obj) {
             location.href = "${ctx}/application/manager/appmanager/applist/" + $(obj).val();
         }
+        function appDel(appId){
+            alert("shanchu");
+            msgConfirm('系统消息','确定要删除当前的应用吗？',function(){
+                window.location.href="${ctx}/application/manager/appmanager/delete/"+appId;
+            });
+        }
     </script>
+    <style type="text/css">
+        a{text-decoration: underline}
+
+    </style>
 </head>
 
 <body>
@@ -128,15 +134,13 @@
                                                 <td class="body">
                                                     <span>${applicationIndexViewModel.avgResponseTime} 毫秒</span></td>
                                                 <td class="body"><span>${applicationIndexViewModel.rpm} rpm</span></td>
-                                                <td class="body" style="width: 22%"><a
-                                                        href="${ctx}/application/manager/bsmanager/list/${applicationIndexViewModel.applicationId}">管理业务场景</a>
-                                                    &nbsp;<a
-                                                            href="${ctx}/application/manager/appmanager/update/${applicationIndexViewModel.applicationId}">编辑</a>
-                                                    &nbsp;<a
-                                                            href="${ctx}/application/manager/appmanager/delete/${applicationIndexViewModel.applicationId}">删除</a>
-                                                        <%--<a href="javascript:void(0), onclick=delRow(${application.id})">删除</a>--%>
-                                                </td>
-                                                    <%--href="${ctx}/application/manager/bsmanager/bizscenariolist/${application.id}">管理业务场景</a--%>
+                                            <td class="body" style="width: 25%"><a
+                                                    href="${ctx}/application/manager/bsmanager/list/${applicationIndexViewModel.applicationId}">管理业务场景</a>
+                                                &nbsp;<a
+                                                        href="${ctx}/application/manager/appmanager/update/${applicationIndexViewModel.applicationId}">编辑</a>
+                                                &nbsp;<a
+                                                        href="javascript:void(0);" onclick="appDel('${applicationIndexViewModel.applicationId}');" >删除</a>
+                                            </td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
