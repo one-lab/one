@@ -133,7 +133,7 @@ public class LinuxcentosController {
 	@Post("getCpuAndRam/{osId}")
 	public Reply getCpuAndRam(@Param("osId") String osId ) {
 		Date currentTime=new Date();
-		Map<String,List<List<?>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 5, 2);
+		Map<String,List<List<?>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 5, 3);
 		return Replys.with(oneOsCpuAndMem).as(Json.class);
 	}
 	/**
@@ -144,7 +144,7 @@ public class LinuxcentosController {
 	@Post("getCpuInfo/{osId}")
 	public Reply getCpuInfo(@Param("osId") String osId ) {
 		Date currentTime=new Date();
-		Map<String,List<List<?>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 2);
+		Map<String,List<List<?>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 3);
 		return Replys.with(lineMap).as(Json.class);
 	}
 

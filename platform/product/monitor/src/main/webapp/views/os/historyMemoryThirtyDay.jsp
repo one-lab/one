@@ -14,7 +14,7 @@
 		<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
 		<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
 		<script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
-		<script language="javascript" src="${ctx}/global/js/os/simpleDraw.js"></script>
+		<script language="javascript" src="${ctx}/global/js/os/higcharDraw.js"></script>
 		<script type="text/javascript">
 		$(function(){
 			var id= $("#osid").val();

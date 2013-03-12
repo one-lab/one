@@ -128,22 +128,21 @@ function getForm() {
 					},
 					plotOptions : {
 						line : {
-							dataLabels : {
-								enabled : true
-							},
 							connectNulls : true,
 							enableMouseTracking : true,
-							marker : {
-								enabled : false
-							}
-						}
+						},
+						series: {
+	                        marker: {
+	                            radius: 3
+	                        }
+	                    }
 					},
 					tooltip : {
-						enabled: false,
-		                formatter: function() {
-		                    return '<b>'+ this.series.name +'</b><br/>'+
-		                        this.x +': '+ this.y ;
-		                }
+						enabled: true,
+						formatter: function() {
+	                        return '<b>'+ this.series.name +'</b><br/>'+
+	                        Highcharts.dateFormat('%H. %M', this.x) +': '+ this.y ;
+						}
 					},
 					legend : {
 						enabled : true

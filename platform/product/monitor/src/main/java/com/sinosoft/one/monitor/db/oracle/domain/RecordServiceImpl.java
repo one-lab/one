@@ -284,8 +284,8 @@ public class RecordServiceImpl implements RecordService {
     	}else if(StringUtils.equals(ava.getState(), "1")){
     		avaSta.setAvCount(++avCount);
     	}
-    	List<AvailableCalculate.AvailableCountsGroupByInterval> avCountList = avaRepository.findAvCount(inserTime);
-    	List<AvailableCalculate.AvailableCountsGroupByInterval> unAvCountList = avaRepository.findUnAvCount(inserTime);
+    	List<AvailableCalculate.AvailableCountsGroupByInterval> avCountList = avaRepository.findAvCount(inserTime,ava.getDatabaseId());
+    	List<AvailableCalculate.AvailableCountsGroupByInterval> unAvCountList = avaRepository.findUnAvCount(inserTime,ava.getDatabaseId());
     	
     	AvailableCalculate.AvailableCalculateParam avaCalParam = new AvailableCalculate.AvailableCalculateParam(
     			new AvailableStatistics(avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), falseCount),

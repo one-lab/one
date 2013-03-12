@@ -3,11 +3,11 @@ Highcharts.setOptions({
 		useUTC : false
 	}
 });
-function creatSimpleChart2(url, renderTo, text) {
-	alert(1);
+function creatSimpleChart(url, renderTo, text) {
 	$.ajax({
 				type : "post",
 				url : url,
+				async:false,
 				dataType : "json",
 				cache : false,
 				success : function(data) {
@@ -42,7 +42,13 @@ function creatSimpleChart2(url, renderTo, text) {
 					                    week: '%Y<br/>%m-%d',
 					                    month: '%Y-%m',
 					                    year: '%Y'
-					                }
+					                   
+					                },
+								 labels:{
+										rotation: -45,
+										align: 'right',
+										step:1
+										}
 								},
 								yAxis : {
 									title : {
@@ -51,23 +57,22 @@ function creatSimpleChart2(url, renderTo, text) {
 
 								},
 								tooltip : {
-									enabled : false,
-									formatter : function() {
-										return '<b>' + this.series.name
-												+ '</b><br/>' + this.x + ': '
-												+ this.y;
+									enabled : true,
+									formatter: function() {
+				                        return '<b>'+ this.series.name +'</b><br/>'+
+				                        Highcharts.dateFormat('%H. %M', this.x) +': '+ this.y ;
 									}
+
 								},
 								plotOptions : {
 									line : {
-										dataLabels : {
-											enabled : true
-										},
 										connectNulls : true,
-										enableMouseTracking : false,
-										marker : {
-											enabled : false
-										}
+										enableMouseTracking : true
+									},
+									series: {
+			                        	marker: {
+			                        		radius: 3
+			                        	}
 									}
 								},
 								credits : {
