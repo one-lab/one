@@ -107,7 +107,7 @@ public class MethodManagerController {
                 if (dbMethodAndClassName.equals(methodAndClassName)) {
                     dbMethod.setUrl(url);
                     methodService.saveMethod(dbMethod);
-                    return "managerMethod";
+                    return "r:/application/manager/methodmanager/methodlist/"+urlId;
                 }
             }
         }
@@ -122,7 +122,7 @@ public class MethodManagerController {
         method.setCreatorId(creatorId);
         method.setCreateTime(new Date());
         methodService.saveMethod(method);
-        return "managerMethod";
+        return "r:/application/manager/methodmanager/methodlist/"+urlId;
     }
 
     /**
@@ -202,7 +202,7 @@ public class MethodManagerController {
         //获得当前用户
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         methodService.updateMethodWithModifyInfo(methodId,method.getClassName(),method.getMethodName(),method.getDescription(),modifierId);
-        return "managerMethod";
+        return "r:/application/manager/methodmanager/methodlist/"+urlId;
     }
 
     /**
@@ -217,7 +217,7 @@ public class MethodManagerController {
         //删除GE_MONITOR_METHOD的记录
         methodService.deleteMethod(methodId);
         //Method列表页面
-        return "managerMethod";
+        return "r:/application/manager/methodmanager/methodlist/"+urlId;
     }
 
     /**
@@ -233,6 +233,6 @@ public class MethodManagerController {
         //删除GE_MONITOR_METHOD的记录
         methodService.batchDeleteMethod(methodIds);
         //Method列表页面
-        return "managerMethod";
+        return "r:/application/manager/methodmanager/methodlist/"+urlId;
     }
 }

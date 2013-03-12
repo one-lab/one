@@ -102,7 +102,6 @@ public class UrlManagerController {
     @Post("addurl/{bizScenarioId}")
     public String saveUrl(@Validation(errorPath = "a:errorcreateurl") Url url,
                           @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
-        inv.getRequest().setAttribute("bizScenarioId",bizScenarioId);
         BizScenario bizScenario = bizScenarioService.findBizScenario(bizScenarioId);
         List<Url> urls=urlService.findAllUrl();
         EumUrl eumUrl=new EumUrl();
@@ -122,11 +121,11 @@ public class UrlManagerController {
                     //资源表中已经有当前的URL，那么不需要再保存
                     if(null!=resourcesService.getResource(dbUrl.getId())){
                         businessEmulation.restart(bizScenario.getApplication().getId());
-                        return "managerUrl";
+                        return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
                     }
                     saveResourceWithUrl(dbUrl);
                     businessEmulation.restart(bizScenario.getApplication().getId());
-                    return "managerUrl";
+                    return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
                 }
             }
         }
@@ -148,7 +147,7 @@ public class UrlManagerController {
         eumUrlRepository.save(eumUrl);
         saveResourceWithUrl(url);
         businessEmulation.restart(bizScenario.getApplication().getId());
-        return "managerUrl";
+        return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
 
     private void saveResourceWithUrl(Url url){
@@ -225,7 +224,7 @@ public class UrlManagerController {
         eumUrlRepository.updateEumUrlsWithUrlId(url.getUrl(),url.getId());
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //Url列表页面
-        return "managerUrl";
+        return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
 
     /**
@@ -233,12 +232,10 @@ public class UrlManagerController {
      */
     @Get("delete/{bizScenarioId}/{urlId}")
     public String deleteUrl(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, Invocation inv) {
-        //写回bizScenarioId，返回url列表页面时用到
-        inv.getRequest().setAttribute("bizScenarioId",bizScenarioId);
 	    urlService.deleteUrl(bizScenarioId, urlId);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
-        return "managerUrl";
+        return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
 
     /**
@@ -269,6 +266,6 @@ public class UrlManagerController {
         }*/
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
-        return "managerUrl";
+        return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
 }
