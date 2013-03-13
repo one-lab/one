@@ -85,8 +85,8 @@
                         </select></td>
                     </tr>
                     <tr>
-                        <td>端口<span class="mandatory">*</span></td>
-                        <td><input name="input2" type="text" class="formtext" size="8"/></td>
+                       <!--  <td>端口<span class="mandatory">*</span></td>
+                        <td><input name="input2" type="text" class="formtext" size="8"/></td> -->
                     </tr>
                     <tr>
                         <td>轮询间隔<span class="mandatory">*</span></td>

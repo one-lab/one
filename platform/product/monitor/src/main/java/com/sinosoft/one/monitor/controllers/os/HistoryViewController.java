@@ -212,7 +212,7 @@ public class HistoryViewController {
 		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		viewMap.put("CPU利用率最大值%", map.get("max"));
 		viewMap.put("CPU利用率最小值%", map.get("min"));
-		viewMap.put("CPU利用率最平均值%", map.get("ave"));
+		viewMap.put("CPU利用率平均值%", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
 	}
 	
@@ -250,7 +250,7 @@ public class HistoryViewController {
 		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		viewMap.put("磁盘利用率最大值%", map.get("max"));
 		viewMap.put("磁盘利用率最小值%", map.get("min"));
-		viewMap.put("磁盘利用率最平均值%", map.get("ave"));
+		viewMap.put("磁盘利用率平均值%", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
 	}
 	/**
@@ -283,7 +283,7 @@ public class HistoryViewController {
 		Map<String,List<List<?>>> viewMap=new  HashMap<String,List<List<?>>>();
 		viewMap.put("内存利用率最大值%", map.get("max"));
 		viewMap.put("内存利用率最小值%", map.get("min"));
-		viewMap.put("内存利用率最平均值%", map.get("ave"));
+		viewMap.put("内存利用率平均值%", map.get("ave"));
 		return Replys.with(viewMap).as(Json.class);
 	}
 	/**

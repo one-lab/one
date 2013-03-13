@@ -63,7 +63,7 @@
 .grid_head .multiple .chex{height:28px;line-height:28px;}
 .grid_head .needle{position:absolute;width:8px;height:22px;cursor:col-resize;background:#000;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity:0;opacity:0;left:-999px}
 .gird_head_column span.number{padding:0 3px;}
-.grid_view .loading span{color:#444;background:#fff url(../images/loading/spinner.gif) no-repeat 2px center;padding-left:22px}
+.grid_view .loading span{color:#444;background:#fff url(../images/window/spinner.gif) no-repeat 2px center;padding-left:22px}
 .grid_view .loading{text-align:center}
 .head_box{width:9999999px;}
 .grid_head .number,.grid_view td.number{width:30px;}

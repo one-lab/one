@@ -155,7 +155,7 @@ function createThirtyDayAvailableLinux() {
   <div class="main" style="padding-bottom:60px">
      <div class="threshold_file">
           <div class="sub_title">最近7天的可用性  </div>
-          <input id="osid" value="${os.osInfoId }" />
+          <input id="osid" type="hidden" value="${os.osInfoId }" />
           <table class="base_info" width="100%" cellpadding="0" cellspacing="0">
             <tr><td>监视器名称</td><td id="monitorName">${os.name}</td></tr>
             <tr><td>属性 </td><td>可用性 </td></tr>

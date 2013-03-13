@@ -7,7 +7,7 @@
 	<tr>
 		<th width="20%">名称</th>
 		<th width="75%" style="text-align: center">可用性</th>
-		<th>可用性%</th>
+		<th></th>
 	</tr>
 	<%-- <c:forEach items="${map }" var="entry">
 								<tr>
@@ -54,7 +54,7 @@
 						</c:forEach>
 					</tr>
 				</table></td>
-			<td>100</td>
+			<td></td>
 		</tr>
 
 
