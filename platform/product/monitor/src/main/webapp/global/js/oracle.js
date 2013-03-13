@@ -206,15 +206,16 @@ function refreshPie1(_data){
             name: 'Browser share',
             data: [
                 {
-	                name: '预警',
+	                name: '可用',
 	                y: _data[0],
 	                sliced: false,
 	                selected: false
                 },
-                ['正常',100-_data[0]]
+                ['不可用',_data[1]],
+                ['未知',_data[2]]
            ]
         }],
-		colors: ['#Ff4f4f', '#5cff5c'] 
+		colors: [ '#5cff5c','#Ff4f4f','#FFFF00']
     });
 }
 

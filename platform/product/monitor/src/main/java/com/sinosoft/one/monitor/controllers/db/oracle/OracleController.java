@@ -66,11 +66,12 @@ public class OracleController {
 	// 展现oracle基本信息
 	@Get("viewInfo/{monitorId}")
 	public String viewInfo(@Param("monitorId")String monitorId, Invocation inv) {
-
+        //oracle主页面-基本信息
 		OracleInfoModel oracleInfoModel = oracleInfoService
 				.getMonitorInfo(monitorId);
+        //oracle主页面-SGA-SGA状态
         SGAStateModel sgaStateModel =  oracleSGAService.viewSGAStateInfo(monitorId);
-
+        //oracle主页面-数据库明细,连接时间和用户数也包含在内
         OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
         
         inv.addModel("oracleDetailModel", oracleDetailModel);
@@ -88,13 +89,18 @@ public class OracleController {
         if(avaSta!=null){
             long normalRuntime = avaSta.getNormalRuntime();
             long powerOffTime = avaSta.getTotalPoweroffTime();
+            long unKnowTime = avaSta.getUnknowTime();
             // 如何保留两位小数
             Double usePercent = normalRuntime
-                    / (normalRuntime + powerOffTime / 1.0) * 100;
+                    / (unKnowTime + normalRuntime + powerOffTime / 1.0) * 100;
+            Double unUsedPercent = powerOffTime  / (unKnowTime + normalRuntime + powerOffTime / 1.0) * 100;
             int usePercents = usePercent.intValue();
-            int unUsedPercents = 100 - usePercents;
+            int unUsedPercents = unUsedPercent.intValue();
+            int unknowPercents = 100-usePercents-unUsedPercents;
             JSONArray  y = new JSONArray();
+            y.add(usePercents);
             y.add(unUsedPercents);
+            y.add(unknowPercents);
             //System.out.println(y.toJSONString());
             return "@"+y.toJSONString();
         }  else {
@@ -106,7 +112,7 @@ public class OracleController {
 	}
 	
     @Get("viewConnect/{monitorId}")
-	// 用户连接数和连接时间所用数据
+	// 用户连接数和连接时间所用数据（图形所用数据）
 	public String viewConnectAndActive(@Param("monitorId")String monitorId) {
 		EventInfoModel[] eventInfoModel = oraclePreviewService
 				.viewConnectInfo(monitorId);
@@ -223,7 +229,7 @@ public class OracleController {
 			throw new Exception("json数据转换出错!", e);
 		}
 	}
-    // 表空间所用数据
+    // 最少可用字节的表空间 所用数据
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Get("viewTableSpaceOverPreview/{monitorId}")
     public void viewTableSpaceOverPreview(@Param("monitorId")String monitorId,Invocation inv) throws Exception {
@@ -249,7 +255,7 @@ public class OracleController {
             throw new Exception("json数据转换出错!", e);
         }
     }
-	// 数据库详细所用数据
+	// 数据库详细所用数据（目前没有调用）
 	public void viewOracleDetail(String monitorId,Invocation inv) {
 		OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
 		inv.addModel("oracleDetailModel", oracleDetailModel);

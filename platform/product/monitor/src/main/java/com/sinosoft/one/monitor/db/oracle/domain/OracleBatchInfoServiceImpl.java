@@ -54,21 +54,25 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
     @Override
     public List<OracleAvaInfoModel> avaInfoList(StaTimeEnum staTimeEnum) {
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "sysTime"));
+        //获取所有数据库监控
         List<Info> infoList = (List<Info>) infoRepository.findAll(sort);
+        //数据库监控对象集合
         List<OracleAvaInfoModel> oracleAvaInfoModelList = new ArrayList<OracleAvaInfoModel>();
         Date now = new Date();
         Date timeStart =  StaTimeEnum.getTime(staTimeEnum,now);
         long during =  (now.getTime()-timeStart.getTime())/100;
         for (Info info : infoList) {
             OracleAvaInfoModel oracleAvaInfoModel = new OracleAvaInfoModel();
-            AvaSta avaSta = avaStaRepository.findAvaSta(info.getId());
+            Date time = StaTimeEnum.getTime(StaTimeEnum.TODAY,now);
+            AvaSta avaSta = avaStaRepository.findAvaSta(info.getId(), time);
             oracleAvaInfoModel.setMonitorID(info.getId());
             oracleAvaInfoModel.setMonitorName(info.getName());
-            double avaRate = 0;
+            Double avaRate = 0d;
             if(avaSta != null){
-                avaRate = avaSta.getNormalRuntime() / ((avaSta.getNormalRuntime() + avaSta.getTotalPoweroffTime())/1.0);
+                avaRate = avaSta.getNormalRuntime() / ((avaSta.getNormalRuntime() + avaSta.getTotalPoweroffTime() + avaSta.getUnknowTime())/1.0);
             }
-            oracleAvaInfoModel.setAvaRate(avaRate + "");
+            avaRate = avaRate*100;
+            oracleAvaInfoModel.setAvaRate(avaRate.intValue() + "");
             if(staTimeEnum==StaTimeEnum.LAST_24HOUR){
                 List<Ava> avaList0 = avaRepository.find24Hour(timeStart, info.getId());
                 List<Ava> avaList = caculate(avaList0,timeStart.getTime(),now.getTime());
@@ -92,13 +96,18 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         return oracleAvaInfoModelList;
     }
     private List<Ava> caculate(List<Ava> avaList,long startTime,long endTime){
+        //定义合并后的Ava对象集合
         List<Ava> avas = new ArrayList<Ava>();
         //遍历avaList去除状态相同项
         for(int i=0;i<avaList.size();i++){
+            //定义合并后的对象
             Ava caculateAva = new Ava();
             if(avas.size()>0){
+                //获取目前已经合并后的Ava对象集合中的最后一条记录
                 caculateAva = avas.get(avas.size()-1);
-            }else {
+            }
+            //初始化合并后的对象(caculateAva)
+            else {
                 caculateAva.setState("-1");
                 caculateAva.setRecordTime(new Date(0));
                 caculateAva.setInterval(-1);
@@ -149,37 +158,6 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             newAva.setRecordTime(new Date(startTime));
             avas.add(newAva);
         }
-//        for(int i=0;i<avaList.size()-1;i++){
-//            int j=i;
-//            int flag = 0;
-//            while(j+1<avaList.size()&&avaList.get(j).getState().equals(avaList.get(j+1).getState())){
-//                long interval = avaList.get(j).getInterval()*60000;
-//                long recordTime = avaList.get(j).getRecordTime().getTime();
-//                long nextTime =  avaList.get(j+1).getRecordTime().getTime();
-//                j++;
-//                if(nextTime-recordTime>interval+1000){
-//                    flag = 1;
-//                    j--;
-//                    break;
-//                }
-//            }
-//            if(flag == 0){
-//                Ava ava = new Ava();
-//                ava.setState(avaList.get(i).getState());
-//                ava.setRecordTime(avaList.get(i).getRecordTime());
-//                avas.add(ava);
-//            } else {
-//                Ava ava = new Ava();
-//                ava.setState(avaList.get(i).getState());
-//                ava.setRecordTime(avaList.get(i).getRecordTime());
-//                avas.add(ava);
-//                Ava ava1 = new Ava();
-//                ava1.setState("2");
-//                ava1.setRecordTime(new Date(avaList.get(j).getRecordTime().getTime()+avaList.get(j).getInterval()*60000));
-//                avas.add(ava1);
-//            }
-//            i = j;
-//        }
         return avas;
     }
     

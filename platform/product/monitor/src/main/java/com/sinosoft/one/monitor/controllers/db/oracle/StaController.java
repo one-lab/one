@@ -29,7 +29,7 @@ import com.sinosoft.one.uiutil.UIUtil;
  * @ClassName: StaController
  * @author yangzongbin
  * @date 2013-3-6 下午09:51:52
- * @description 这个类用来展示7天连接数报表
+ * @description 这个类用来展示7天，30天报表
  */
 
 @Path("sta")
@@ -56,7 +56,13 @@ public class StaController {
 	// //System.out.println(monitorId);
 	//
 	// }
-	@Get("view/{monitorId}/{eventType}/{eventName}/{st}")
+    /*//最近7天的连接时间
+    监视器名称 	te01
+    属性 	连接时间 ms
+    从 	2013-03-06 19:49
+    到 	2013-03-13 19:49*/
+
+    @Get("view/{monitorId}/{eventType}/{eventName}/{st}")
 	public String viewPage(@Param("monitorId") String monitorId,@Param("eventType")int eventType,@Param("eventName")int eventName,@Param("st")int st, Invocation inv)
 			throws Exception {
 		String en = "";

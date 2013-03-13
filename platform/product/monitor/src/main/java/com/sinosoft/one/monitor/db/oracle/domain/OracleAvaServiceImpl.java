@@ -6,6 +6,7 @@ import com.sinosoft.one.monitor.db.oracle.repository.AvaStaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,8 +24,9 @@ public class OracleAvaServiceImpl implements OracleAvaService {
         AvaSta avaSta = null;
         switch (avaStaTimeEnum) {
             case TODAY: {
-
-                avaSta = avaStaRepository.findAvaSta(monitorId);
+                Date date = new Date();
+                date = StaTimeEnum.getTime(StaTimeEnum.TODAY,date);
+                avaSta = avaStaRepository.findAvaSta(monitorId,date);
 
                 break;
             }
