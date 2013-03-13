@@ -84,7 +84,7 @@
       <div class="head-cpu">今天的可用性</div>
       <div class="cpu-img"><a class="cpu7-img" href='javascript:void(0)' onclick='viewWindow(this,"historyAvaylable/7")'></a><a class="cpu30-img" href='javascript:void(0)' onclick='viewWindow(this,"historyAvaylable/30")'></a></div>
       <div id="container" style="width: 300px; height: 240px; margin: 0 auto"></div>
-      <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg">&nbsp;</a></b></div>
+     <!--  <div class="cpu-text"><b>当前状态&nbsp;&nbsp;<a class="cpu-textimg">&nbsp;</a></b></div> -->
     </div>
   </div>
   <div class="know-time" style="width:49.5%; height:80px">

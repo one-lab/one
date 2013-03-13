@@ -3,7 +3,7 @@ Highcharts.setOptions({
 		useUTC : false
 	}
 });
-function creatSimpleChart(url, renderTo, text) {
+function creatSimpleChart(url, renderTo, text,time) {
 	$.ajax({
 				type : "post",
 				url : url,
@@ -59,8 +59,12 @@ function creatSimpleChart(url, renderTo, text) {
 								tooltip : {
 									enabled : true,
 									formatter: function() {
-				                        return '<b>'+ this.series.name +'</b><br/>'+
-				                        Highcharts.dateFormat('%H. %M', this.x) +': '+ this.y ;
+										if(time==false){
+											return '<b>'+ this.series.name +'</b><br/>'+Highcharts.dateFormat('%H. %M', this.x) +': '+ this.y ;
+										}else{
+											return '<b>'+ this.series.name +'</b><br/>'+Highcharts.dateFormat('%Y-%m-%d', this.x) +': '+ this.y ;
+										}
+											
 									}
 
 								},

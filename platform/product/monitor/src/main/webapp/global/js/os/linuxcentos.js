@@ -210,8 +210,8 @@ function refresh() {
 
 		}
 	});
-	creatSimpleChart("/monitor/os/getCpuAndRam/" + osid, 'CPU_line', 'CPU内存利用率%');
-	creatSimpleChart("/monitor/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%');
+	creatSimpleChart("/monitor/os/getCpuAndRam/" + osid, 'CPU_line', 'CPU内存利用率%',false);
+	creatSimpleChart("/monitor/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%',false);
 	
 	// 物理和交换内存利用率列表
 	$("#grid_Memory").Grid({
@@ -450,5 +450,5 @@ function viewWindow(e, url) {
 	});
 }
 $(function() {
-	setTimeout(refresh, 1000 * 5 * 60);
+	setInterval(refresh, 1000 * 5* 60);
 });

@@ -85,8 +85,8 @@ public class LinuxcentosController {
 			map.put("nextTime", "未知"); 
 		}else{
 			Calendar c  = Calendar.getInstance();
-			c.setTime(lastSampleTime.getSampleDate());
-			c.set(Calendar.MINUTE, lastSampleTime.getSampleDate().getMinutes()+os.getIntercycleTime());
+			c.setTime(currentTime);
+			c.set(Calendar.MINUTE, currentTime.getMinutes()+os.getIntercycleTime());
 			Date nextSampleTime=c.getTime();
 			map.put("lastTime", simpleDateFormat.format(lastSampleTime.getSampleDate()));
 			map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 

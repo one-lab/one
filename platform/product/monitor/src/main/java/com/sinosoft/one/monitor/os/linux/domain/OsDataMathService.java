@@ -55,25 +55,25 @@ public class OsDataMathService {
 	 * @param timeSpan 时间段类型标记
 	 */											//当前时间           //查询时间段的目标时间	 //轮询时间 分钟
 	public void statiAvailable(String osInfoId,Date currentTime,Date targetTime,int interCycleTime ,Date timeSpan, OsAvailabletemp osAvailabletemp ){
-		int stopCount=0;//停机次数
+//		int stopCount=0;//停机次数
 		OsAvailable osAvailable=osAvailableServcie.getAvailable(osInfoId, timeSpan);
-		OsAvailabletemp lastAvailableTemp=osAvailableServcie.getLastAvailable(osInfoId, currentTime);
+		OsAvailabletemp lastAvailableTemp=osAvailableServcie.getLastAvailable(osInfoId, currentTime);//最后一次采样
 		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
 		//可用性停机及次数LIST
 		List<AvailableCountsGroupByInterval> availableCountsGroupByIntervals=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
-		long lastRecordTime = 0;//上次时间变量
-		for (int i = 0; i < osAvailabletemps.size(); i++) {
-			if(i==0){//判断第一次与查询时间起始时间targetTime 是否大于轮询时间
-				if(osAvailabletemps.get(i).getSampleDate().getTime()-targetTime.getTime()>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
-					stopCount=stopCount+1;
-				}
-			}else{
-				if(osAvailabletemps.get(i).getSampleDate().getTime()-lastRecordTime>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
-					stopCount=stopCount+1;
-				}
-			}
-			lastRecordTime=osAvailabletemps.get(i).getSampleDate().getTime();
-		}
+//		long lastRecordTime = 0;//上次时间变量
+//		for (int i = 0; i < osAvailabletemps.size(); i++) {
+//			if(i==0){//判断第一次与查询时间起始时间targetTime 是否大于轮询时间
+//				if(osAvailabletemps.get(i).getSampleDate().getTime()-targetTime.getTime()>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
+//					stopCount=stopCount+1;
+//				}
+//			}else{
+//				if(osAvailabletemps.get(i).getSampleDate().getTime()-lastRecordTime>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
+//					stopCount=stopCount+1;
+//				}
+//			}
+//			lastRecordTime=osAvailabletemps.get(i).getSampleDate().getTime();
+//		}
 		AvailableStatistics availableStatistics;
 		if(osAvailable==null){//当天开始的统计
 			availableStatistics=new AvailableStatistics(Long.valueOf(0),Long.valueOf(0), 0);
@@ -82,11 +82,13 @@ public class OsDataMathService {
 			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);
 			osAvailableServcie.saveAvailable(osInfoId,availableCalculate.getAliveTime().longValue(),availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),availableCalculate.getTimeBetweenFailures().longValue(), timeSpan,availableCalculate.getFalseCount().intValue());
 		}else{
+			//上一次采样记录
 			AvailableInf availableInf =new AvailableInf(lastAvailableTemp.getSampleDate(),true , lastAvailableTemp.getIntercycleTime());
-			availableStatistics= new AvailableStatistics(osAvailable.getNormalRun(), osAvailable.getCrashTime(), stopCount); 
+			//原来的统计记录
+			availableStatistics= new AvailableStatistics(osAvailable.getNormalRun(), osAvailable.getCrashTime(), osAvailable.getStopCount()); 
 			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, true, availableInf);
 			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);
-			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),stopCount);
+			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),availableCalculate.getFalseCount().intValue());
 		}
 	}
 	
