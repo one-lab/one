@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import com.sinosoft.one.monitor.alarm.domain.AlarmService;
+import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableServcie;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsCpuViewHandle;
@@ -64,6 +66,8 @@ public class LinuxcentosController {
 	
 	@Autowired
 	private OsDiskViewHandle osDiskViewHandle;
+	@Autowired
+	private AlarmRepository alarmRepository;
 	@Post("osInfo/{osId}")
 	public Reply osInfo(@Param("osId") String osId ) {
 		Map<String, String> map = new HashMap<String, String>();
@@ -96,6 +100,7 @@ public class LinuxcentosController {
 		else{
 			map.put("respondTime",responTime+"毫秒");
 		}
+		String messageFormat1 = "<span class={0}>{1}</span>";
 		return Replys.with(map).as(Json.class);
 	}
 

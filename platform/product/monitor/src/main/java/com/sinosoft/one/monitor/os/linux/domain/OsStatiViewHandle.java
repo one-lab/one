@@ -43,7 +43,7 @@ public class OsStatiViewHandle {
 	}
 	
 	/**
-	 *  最平均值的曲线
+	 *  平均值的曲线
 	 * @param os
 	 * @param currentTime
 	 * @param type

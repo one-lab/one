@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
 import com.sinosoft.one.monitor.common.AlarmSource;
@@ -93,6 +94,7 @@ public class OsProcessService {
 	 * @param time
 	 * @param Status
 	 */
+	@Transactional
 	public void savaAvailableSampleData(String osInfoId,Date sampleTime,int interCycleTime ,String Status){
 		OsAvailabletemp osAvailabletemp=new OsAvailabletemp();
 		Os os=new Os();
