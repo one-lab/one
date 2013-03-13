@@ -106,6 +106,8 @@ public class OracleController {
         }  else {
             JSONArray  y = new JSONArray();
             y.add(0);
+            y.add(0);
+            y.add(100);
             //System.out.println(y.toJSONString());
             return "@"+y.toJSONString();
         }
