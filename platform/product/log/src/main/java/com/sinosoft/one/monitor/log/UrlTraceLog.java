@@ -68,6 +68,7 @@ public class UrlTraceLog implements NotificationModel {
     public UrlTraceLog() {
 		userId = Loggables.getUserId();
 		username = Loggables.getUserName();
+	    id = UUID.randomUUID().toString().replace("-", "");
     }
 
     public String getUserIp() {

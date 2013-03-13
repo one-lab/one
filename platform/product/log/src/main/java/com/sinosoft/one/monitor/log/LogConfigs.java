@@ -57,6 +57,13 @@ public class LogConfigs {
 		while (iterator.hasNext()) {
 			LogUrl logUrl = iterator.next();
 			String tempUrl = logUrl.getUrl().startsWith("/") ? logUrl.getUrl() : "/" + logUrl.getUrl();
+			tempUrl = tempUrl.endsWith("/") ? tempUrl : tempUrl + "/";
+			if(!url.startsWith("/")) {
+				url = "/" + url;
+			}
+			if(!url.endsWith("/")) {
+				url = url + "/";
+			}
 			if(("/" + applicationName  + tempUrl).equalsIgnoreCase(url)) {
 				return logUrl.getId();
 			}

@@ -44,7 +44,7 @@ public class LogTraceAspect {
 	public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
 			throws Throwable {
 	    TraceModel traceModel = TraceUtils.getTraceModel();
-	    if(traceModel == null) {
+	    if(traceModel == null || traceModel.getUrlId() == null) {
 		    return pjp.proceed();
 	    }
 	    String traceId = traceModel.getTraceId();
