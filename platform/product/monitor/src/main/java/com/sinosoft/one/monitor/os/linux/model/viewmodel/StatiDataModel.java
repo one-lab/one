@@ -3,7 +3,8 @@ package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 import java.util.Date;
 
 /**
- * 数据查询接收对象
+ * 数据查询接收对象 
+ * 最大最小值等数值
  * @author Administrator
  *
  */
@@ -19,14 +20,29 @@ public class StatiDataModel {
 	
 	private String minAvgValue;
 	
+	/**
+	 * 正常运行时间
+	 */
 	private String normalRun;
 	
+	/**
+	 * 停机时间
+	 */
 	private String crashTime;
 	
+	/**
+	 * 平均回复时间
+	 */
 	private String aveRepairTime;
 	
+	/**
+	 * 平均故障间隔
+	 */
 	private String aveFaultTime;
 	
+	/**
+	 * 时间
+	 */
 	private Date date;
 	
 	public String getNormalRun() {

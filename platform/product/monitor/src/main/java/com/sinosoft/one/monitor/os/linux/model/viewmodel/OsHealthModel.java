@@ -3,7 +3,8 @@ package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 import java.util.List;
 
 /**
- * User: Chunliang.Han
+ * 健康状况信息对象
+ * User:chenxiongxi
  * Date: 13-2-28
  * Time: 下午8:20
  */
