@@ -70,7 +70,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             }
             oracleAvaInfoModel.setAvaRate(avaRate + "");
             if(staTimeEnum==StaTimeEnum.LAST_24HOUR){
-                List<Ava> avaList0 = avaRepository.find24Day(timeStart,info.getId());
+                List<Ava> avaList0 = avaRepository.find24Hour(timeStart, info.getId());
                 List<Ava> avaList = caculate(avaList0,timeStart.getTime(),now.getTime());
                 List<String[]> parts = new ArrayList<String[]>();
                 for (int i = 0; i < avaList.size() - 1; i++) {

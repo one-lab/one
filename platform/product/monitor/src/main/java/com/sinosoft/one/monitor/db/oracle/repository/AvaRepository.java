@@ -19,15 +19,15 @@ public interface AvaRepository extends PagingAndSortingRepository<Ava, String> {
             "" +"(select * from GE_MONITOR_ORACLE_AVA where DATABASE_ID=?1 order by record_time desc) b" +
             "  where  rownum=1")
     String findState(String id);
-    @SQL("select count(a.interval) \"count\", a.interval \"interval\" from GE_MONITOR_ORACLE_AVA a where a.DATABASE_ID=?2 and a.state='1' and a.record_time > ?1 group by a.interval")
+    @SQL("select count(a.interval) \"count\", a.interval \"interval\" from GE_MONITOR_ORACLE_AVA a where a.DATABASE_ID=?2 and a.state='1' and a.record_time >= ?1 group by a.interval")
 	List<AvailableCountsGroupByInterval> findAvCount(Date inserTime, String databaseId);
-    @SQL("select count(a.interval) \"count\", a.interval \"interval\" from GE_MONITOR_ORACLE_AVA a where a.DATABASE_ID=?2 a.state='0' and a.record_time > ?1 group by a.interval")
+    @SQL("select count(a.interval) \"count\", a.interval \"interval\" from GE_MONITOR_ORACLE_AVA a where a.DATABASE_ID=?2 and a.state='0' and a.record_time >= ?1 group by a.interval")
 	List<AvailableCountsGroupByInterval> findUnAvCount(Date inserTime, String databaseId);
     @SQL("delete from GE_MONITOR_ORACLE_AVA  where record_time < ?1")
 	void clear(Date timePoint);
     @SQL("delete from GE_MONITOR_ORACLE_AVA  where DATABASE_ID in (?1)")
     void deleteByMonitorIds(List<String> monitorId);
-    @SQL("select * from GE_MONITOR_ORACLE_AVA where DATABASE_ID = ?2 and record_time > ?1 order by record_time")
-    List<Ava> find24Day(Date timeStart, String id);
+    @SQL("select * from GE_MONITOR_ORACLE_AVA where DATABASE_ID = ?2 and record_time >= ?1 order by record_time")
+    List<Ava> find24Hour(Date timeStart, String id);
 }
 

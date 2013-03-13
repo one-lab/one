@@ -14,7 +14,7 @@ public interface AvaStaRepository extends PagingAndSortingRepository<AvaSta, Str
             "(select * from GE_MONITOR_ORACLE_AVA_STA  where database_id=?1 order by ava_record_time desc) a" +
             " where rownum=1")
     AvaSta findAvaSta(String monitorId);
-    @SQL("select * from GE_MONITOR_ORACLE_AVA_STA a   where a.database_id=?1 and rownum=1 and a.ava_record_time = ?2")
+    @SQL("select * from GE_MONITOR_ORACLE_AVA_STA a   where a.database_id=?1 and rownum=1 and a.record_time = ?2")
     AvaSta findAvaStaByTime(String monitorId,Date inserTime);
     @SQL("delete from GE_MONITOR_ORACLE_AVA_STA where database_id in (?1)")
     void deleteByMonitorIds(List<String> monitorId);
