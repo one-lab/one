@@ -54,6 +54,10 @@ public class EventSta  implements java.io.Serializable {
     */
     private Date eventRecordTime;
     /**
+     * 创建时间.
+     */
+    private Date recordTime;
+    /**
     * 统计次数.
     */
     private long eventCount;
@@ -69,7 +73,14 @@ public class EventSta  implements java.io.Serializable {
     	
 		return date;
 	}
+    @Column(name="RECORD_TIME")
+    public Date getRecordTime() {
+        return recordTime;
+    }
 
+    public void setRecordTime(Date recordTime) {
+        this.recordTime = recordTime;
+    }
 
     @Transient
 	public String getTime() {

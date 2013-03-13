@@ -22,9 +22,9 @@ public class OracleTableSpaceServiceImpl implements OracleTableSpaceService {
     private DBUtil4Monitor dbUtil4Monitor;
     @Override
     public List<OracleTableSpaceModel> listTableSpaceInfo(String monitorId) {
-    	dbUtil4Monitor.changeConnection(monitorId);
+    	DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
         String sql = OracleMonitorSql.tableSpaceInfo;
-        List<OracleTableSpaceModel> rsList = DBUtil.queryBeans(SqlObj.newInstance(sql), OracleTableSpaceModel.class);
+        List<OracleTableSpaceModel> rsList = dbutil.queryBeans(SqlObj.newInstance(sql), OracleTableSpaceModel.class);
         return rsList;
     }
 }

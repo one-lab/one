@@ -47,6 +47,8 @@ public class OracleInfoServiceImpl implements OracleInfoService {
     private ResourcesRepository resourcesRepository;
     @Autowired
     private DBUtil4Monitor dbUtil4Monitor ;
+    @Autowired
+    private OracleMonitorTask oracleMonitorTask;
     @Override
     @Transactional
     public void saveMonitor(Info info) throws Exception{
@@ -60,10 +62,9 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         String driver = OracleMonitorSql.DRIVER;
         //"jdbc:oracle:thin:@192.168.18.151:1521:orcl"
         String url = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + instanceName;
-        dbUtil4Monitor.openConnection(driver, url, username, password);
-
+        DBUtil dbuUtil = dbUtil4Monitor.getDBUtil(driver, url, username, password);
         String sql = OracleMonitorSql.versionAndStartUpTime;
-        List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
+        List<Map<String, String>> rsList = dbuUtil.queryStrMaps(SqlObj.newInstance(sql));
         Map<String, String> rsObj = rsList.get(0);
         String version = rsObj.get("VERSIONLABLE");
         String startTime = rsObj.get("STARTUPTIME");
@@ -75,6 +76,7 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         resource.setResourceId(info.getId());
         resource.setResourceType(ResourceType.DB.name());
         resourcesRepository.save(resource);
+        oracleMonitorTask.addTask(info);
     }
 
     @Override
@@ -87,19 +89,24 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         newInfo.setName(info.getName());
         newInfo.setPullInterval(info.getPullInterval());
         infoRepository.save(newInfo);
+        oracleMonitorTask.updateTask(newInfo);
     }
 
     @Override
     @Transactional
-    public void deleteMonitor(List<String> monitorId) {
+    public void deleteMonitor(List<String> monitorIds) {
 
-        lasteventRepository.deleteByMonitorIds(monitorId);
-        eventStaRepository.deleteByMonitorIds(monitorId);
-        avaRepository.deleteByMonitorIds(monitorId);
-        avaStaRepository.deleteByMonitorIds(monitorId);
-        resourcesRepository.deleteByMoitorIds(monitorId);
-        alarmRepository.deleteByMonitorIds(monitorId);
-        infoRepository.deleteByIds(monitorId);
+        lasteventRepository.deleteByMonitorIds(monitorIds);
+        eventStaRepository.deleteByMonitorIds(monitorIds);
+        avaRepository.deleteByMonitorIds(monitorIds);
+        avaStaRepository.deleteByMonitorIds(monitorIds);
+        resourcesRepository.deleteByMoitorIds(monitorIds);
+        alarmRepository.deleteByMonitorIds(monitorIds);
+        infoRepository.deleteByIds(monitorIds);
+        for(int i=0;i<monitorIds.size();i++){
+            Info info = new Info(monitorIds.get(i));
+            oracleMonitorTask.deleteTask(info);
+        }
     }
 
     @Override
@@ -145,20 +152,23 @@ public class OracleInfoServiceImpl implements OracleInfoService {
         oracleInfoModel.setHealth(healthyPint);
 
         oracleInfoModel.setHostName(info.getIpAddress());
-        Date lastExecTime = lasteventRepository.findLastExecTime();
+        Date lastExecTime = lasteventRepository.findLastExecTime(monitorId);
         Long pullIntervalMillis = info.getPullInterval() * 60 * 1000L;
         if(lastExecTime==null){
             oracleInfoModel.setLastExecTime("");
             oracleInfoModel.setNextExecTime(sdf.format(new Date(info.getSysTime().getTime()+pullIntervalMillis)));
+        }else if(lastExecTime.getTime()+pullIntervalMillis+1000<endTime.getTime()){
+            oracleInfoModel.setLastExecTime(sdf.format(lastExecTime));
+            oracleInfoModel.setNextExecTime("");
         }else{
             oracleInfoModel.setLastExecTime(sdf.format(lastExecTime));
             Long nextExecTime = lastExecTime.getTime() + pullIntervalMillis;
             oracleInfoModel.setNextExecTime(sdf.format(nextExecTime));
         }
         oracleInfoModel.setMonitorName(info.getName());
-        dbUtil4Monitor.changeConnection(monitorId);
+        DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
         String sql = OracleMonitorSql.osName;
-        List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
+        List<Map<String, String>> rsList = dbutil.queryStrMaps(SqlObj.newInstance(sql));
         Map<String, String> rsObj = rsList.get(0);
         String platformName = rsObj.get("platform_name");
         //*操作系统信息，暂时不获取

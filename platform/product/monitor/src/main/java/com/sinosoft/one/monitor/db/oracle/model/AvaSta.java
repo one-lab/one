@@ -51,6 +51,10 @@ public class AvaSta  implements java.io.Serializable {
     */
     private Date avaRecordTime;
     /**
+     * 创建时间
+     */
+    private Date recordTime;
+    /**
     * 可以次数.
     */
     private long avCount;
@@ -72,7 +76,15 @@ public class AvaSta  implements java.io.Serializable {
     public AvaSta(String id) {
         this.id = id;
     }
-   
+    @Column(name="RECORD_TIME")
+    public Date getRecordTime() {
+        return recordTime;
+    }
+
+    public void setRecordTime(Date recordTime) {
+        this.recordTime = recordTime;
+    }
+
     @Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")

@@ -14,39 +14,26 @@ import java.util.Set;
 
 
 
-public final class DBUtil extends ConnUtil {
-
+public final class DBUtil {
+	private ConnUtil connUtil;
 	private DBUtil(){}
-    public static void reStart(String DRIVER,String URL,String USER,String PASSWORD,int SIZE){
-        ConnUtil.clearPool();
-        DBDriver.start( DRIVER, URL, USER, PASSWORD, SIZE);
+	public static DBUtil getInstance(ConnUtil connUtil){
+		DBUtil dbutil = new DBUtil();
+		dbutil.connUtil = connUtil;
+    	return dbutil;
     }
-
-    /**
-     * 默认回收长度1000
-     * @param DRIVER
-     * @param URL
-     * @param USER
-     * @param PASSWORD
-     */
-    public static void reStart(String DRIVER,String URL,String USER,String PASSWORD){
-        ConnUtil.clearPool();
-        DBDriver.start( DRIVER, URL, USER, PASSWORD, 500);
-    }
-	private static Connection getConn() {
-		
-		return getConnection();
+	private Connection getConn() {
+		return connUtil.getConnection();
 	}
-	private static void closeConn(){
-		
-		closeConnection();
+	private void closeConn(){
+		connUtil.closeConnection();
 	}
 	/**
 	 * 获取不到PreparedStatement时返回null
 	 * 
 	 * @return
 	 */
-	private static PreparedStatement getPstm(SqlObj jsql) {
+	private PreparedStatement getPstm(SqlObj jsql) {
 		
 		PreparedStatement pstm = null;
 		try {
@@ -68,7 +55,7 @@ public final class DBUtil extends ConnUtil {
 		return pstm;
 	}
 
-	private static void closePstm(PreparedStatement pstm) {
+	private void closePstm(PreparedStatement pstm) {
 		
 		try {
 			if (pstm != null) {
@@ -95,7 +82,7 @@ public final class DBUtil extends ConnUtil {
 		return rs;
 	}
 
-	private static void closeRs(ResultSet rs, PreparedStatement pstm) {
+	private void closeRs(ResultSet rs, PreparedStatement pstm) {
 		
 		try {
 			if (rs != null) {
@@ -166,7 +153,7 @@ public final class DBUtil extends ConnUtil {
 		return ls;
 	}
 
-	public static boolean execute(SqlObj jsql) {
+	public boolean execute(SqlObj jsql) {
 		boolean isOk = false;
 		PreparedStatement pstm = getPstm(jsql);
 		try {
@@ -174,7 +161,6 @@ public final class DBUtil extends ConnUtil {
 				isOk = pstm.execute();
 			}
 		} catch (SQLException e) {
-			System.out.println("test");
 			e.printStackTrace();
 		} finally {
 			closePstm(pstm);
@@ -182,7 +168,7 @@ public final class DBUtil extends ConnUtil {
 		return isOk;
 	}
 
-	public static int update(SqlObj jsql) {
+	public int update(SqlObj jsql) {
 		
 		int count = -1;
 		PreparedStatement pstm = getPstm(jsql);
@@ -204,7 +190,7 @@ public final class DBUtil extends ConnUtil {
 	 * @param jsql
 	 * @return
 	 */
-	public static <T> T queryObj(SqlObj jsql, Rs2obj<T> Rs2obj) {
+	public <T> T queryObj(SqlObj jsql, Rs2obj<T> Rs2obj) {
 		
 		PreparedStatement pstm = getPstm(jsql);
 		ResultSet rs = getRs(pstm);
@@ -220,7 +206,7 @@ public final class DBUtil extends ConnUtil {
 		return o;
 	}
 
-	public static <Bean> List<Bean> queryBeans(SqlObj jsql,
+	public <Bean> List<Bean> queryBeans(SqlObj jsql,
 			final Class<Bean> clazz) {
 		
 		List<Bean> beans = queryObj(jsql, new Rs2obj<List<Bean>>() {
@@ -231,7 +217,7 @@ public final class DBUtil extends ConnUtil {
 		return beans;
 	}
 
-	public static List<Map<String, String>> queryStrMaps(SqlObj jsql) {
+	public List<Map<String, String>> queryStrMaps(SqlObj jsql) {
 		
 		List<Map<String, String>> maps = queryObj(jsql,
 			new Rs2obj<List<Map<String, String>>>() {
@@ -243,7 +229,7 @@ public final class DBUtil extends ConnUtil {
 		return maps;
 	}
 
-	public static List<Map<String, Object>> queryObjMaps(SqlObj jsql) {
+	public List<Map<String, Object>> queryObjMaps(SqlObj jsql) {
 		
 		List<Map<String, Object>> maps = queryObj(jsql,
 			new Rs2obj<List<Map<String, Object>>>() {
@@ -286,17 +272,12 @@ public final class DBUtil extends ConnUtil {
 	}
 	
 	public static void main(String[] args) {
-		DBDriver.start(
-				"oracle.jdbc.driver.OracleDriver", 
-				"jdbc:oracle:thin:@192.168.18.151:1521:orcl", 
-				"kongyz", 
-				"kongyz", 
-				1000);
-		SqlObj jsql = SqlObj.newInstance("Select a.version as version1, b.startup_time as startupTime1 FROM Product_component_version a,v$instance b Where SUBSTR(PRODUCT,1,6)='Oracle'");	
-		List<Map<String, String>> mp =  DBUtil.queryStrMaps(jsql);
-		System.out.println(DBUtil.getConn());
-		System.out.println(DBUtil.getConn());
-		System.out.println(DBUtil.getConn());
-		System.out.println(mp);
+//		DBDriver.start(
+//				"oracle.jdbc.driver.OracleDriver", 
+//				"jdbc:oracle:thin:@192.168.18.151:1521:orcl", 
+//				"kongyz", 
+//				"kongyz", 
+//				1000);
+//		SqlObj jsql = SqlObj.newInstance("Select a.version as version1, b.startup_time as startupTime1 FROM Product_component_version a,v$instance b Where SUBSTR(PRODUCT,1,6)='Oracle'");	
 	}
 }

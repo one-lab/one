@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.db.oracle.domain;
 
-import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.db.oracle.model.*;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,9 +89,9 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
     public OracleDetailModel viewDbDetail(String monitorId) {
     	Info info = infoRepository.findOne(monitorId);
         OracleDetailModel oracleDetailModel = new OracleDetailModel();
-        dbUtil4Monitor.changeConnection(monitorId);
+        DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
         String sql = OracleMonitorSql.dbInfo;
-        List<Map<String, String>> rsList = DBUtil.queryStrMaps(SqlObj.newInstance(sql));
+        List<Map<String, String>> rsList = dbutil.queryStrMaps(SqlObj.newInstance(sql));
         Map<String, String> rsObj = rsList.get(0);
         // CREATED,OPEN_MODE,LOG_MODE
         String created = rsObj.get("CREATED");
@@ -102,7 +100,7 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
         long connectTime =  dbUtil4Monitor.connectTime(info);
         
         String sql1 = OracleMonitorSql.activeCount;
-        List<Map<String, Object>> rsList1 = DBUtil.queryObjMaps(SqlObj
+        List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj
                 .newInstance(sql1));
         int active =   ((BigDecimal)rsList1.get(0).get("active") ).intValue();
         

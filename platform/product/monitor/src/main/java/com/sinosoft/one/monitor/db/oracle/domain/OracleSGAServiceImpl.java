@@ -34,11 +34,11 @@ public class OracleSGAServiceImpl implements OracleSGAService {
     private DBUtil4Monitor dbUtil4Monitor;
     @Override
     public OracleSGAModel viewSGAInfo(String monitorId) {
-    	dbUtil4Monitor.changeConnection(monitorId);
+    	DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
         OracleSGAModel oracleSGAModel = new OracleSGAModel();
         String sql1 = OracleMonitorSql.sgaInfo1;
         String sql2 = OracleMonitorSql.sgaInfo2;
-        List<Map<String, String>> rsList1 = DBUtil.queryStrMaps(SqlObj.newInstance(sql1));
+        List<Map<String, String>> rsList1 = dbutil.queryStrMaps(SqlObj.newInstance(sql1));
         //'Fixed SGA Size','Redo Buffers','Buffer Cache Size','Shared Pool Size','Large Pool Size','Java Pool Size'
         String fixedSGASize = rsList1.get(0).get("bytes");
         String redoBuffers = rsList1.get(1).get("bytes");
@@ -46,7 +46,7 @@ public class OracleSGAServiceImpl implements OracleSGAService {
         String sharedPoolSize = rsList1.get(3).get("bytes");
         String largePoolSize = rsList1.get(4).get("bytes");
         String javaPoolSize = rsList1.get(5).get("bytes");
-        List<Map<String, String>> rsList2 = DBUtil.queryStrMaps(SqlObj.newInstance(sql2));
+        List<Map<String, String>> rsList2 = dbutil.queryStrMaps(SqlObj.newInstance(sql2));
         // 'sql area' ,'library cache','sga dev dict ;
         String sqlArea = rsList2.get(0).get("bytes");
         String libCache = rsList2.get(1).get("bytes");
@@ -66,16 +66,16 @@ public class OracleSGAServiceImpl implements OracleSGAService {
 
     @Override
     public SGAStateModel viewSGAStateInfo(String monitorId) {
-    	dbUtil4Monitor.changeConnection(monitorId);
+    	DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
         SGAStateModel sgaStateModel = new SGAStateModel();
         String sql1 = OracleMonitorSql.bufferRatio;
         String sql2 = OracleMonitorSql.dictionaryRatio;
         String sql3 = OracleMonitorSql.libraryRatio;
         String sql4 = OracleMonitorSql.sgaFreeMemory;
-        List<Map<String, Object>> rsList1 = DBUtil.queryObjMaps(SqlObj.newInstance(sql1));
-        List<Map<String, Object>> rsList2 = DBUtil.queryObjMaps(SqlObj.newInstance(sql2));
-        List<Map<String, Object>> rsList3 = DBUtil.queryObjMaps(SqlObj.newInstance(sql3));
-        List<Map<String, Object>> rsList4 = DBUtil.queryObjMaps(SqlObj.newInstance(sql4));
+        List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj.newInstance(sql1));
+        List<Map<String, Object>> rsList2 = dbutil.queryObjMaps(SqlObj.newInstance(sql2));
+        List<Map<String, Object>> rsList3 = dbutil.queryObjMaps(SqlObj.newInstance(sql3));
+        List<Map<String, Object>> rsList4 = dbutil.queryObjMaps(SqlObj.newInstance(sql4));
         String rate1 = ((BigDecimal)rsList1.get(0).get("Hit Ratio")).movePointRight(2).toString().substring(0,2);
         String rate2 = ((BigDecimal)rsList2.get(0).get("dictRatio")).movePointRight(2).toString().substring(0,2);
         String rate3 = ((BigDecimal)rsList3.get(0).get("libHitRatio")).movePointRight(2).toString().substring(0,2);

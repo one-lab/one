@@ -4,6 +4,7 @@ import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.db.ClassLoaderUtil;
+import com.sinosoft.one.monitor.db.oracle.utils.db.ConnUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,11 +23,15 @@ import java.util.Date;
 public class DBUtil4Monitor {
     @Autowired
     private InfoRepository infoRepository;
-    public static void openConnection(String DRIVER,String URL,String USER,String PASSWORD) {
-        DBUtil.reStart(DRIVER, URL, USER, PASSWORD);
+    public DBUtil getDBUtil(String DRIVER,String URL,String USER,String PASSWORD) {
+    	DBUtil dbutil = DBUtil.getInstance(new ConnUtil(DRIVER, URL, USER, PASSWORD));
+    	return dbutil;
     }
     public void changeConnection(String monitorId) {
-        Info info = infoRepository.findOne(monitorId);
+        
+    }
+    public DBUtil getDBUtil(String monitorId){
+    	Info info = infoRepository.findOne(monitorId);
         String ip = info.getIpAddress();
         String port = info.getPort();
         String instanceName = info.getInstanceName();
@@ -34,7 +39,8 @@ public class DBUtil4Monitor {
         String password = info.getPassword();
         String driver = OracleMonitorSql.DRIVER;
         String url = "jdbc:oracle:thin:@"+ip+":"+port+":"+instanceName;
-        DBUtil.reStart(driver, url, username, password);
+    	DBUtil dbutil = DBUtil.getInstance(new ConnUtil(driver, url, username, password));
+       return dbutil;
     }
     public long connectTime(Info info){
         Date begin = new Date();

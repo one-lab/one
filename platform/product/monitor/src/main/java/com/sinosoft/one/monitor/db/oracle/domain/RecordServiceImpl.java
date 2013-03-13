@@ -49,25 +49,23 @@ public class RecordServiceImpl implements RecordService {
     private DBUtil4Monitor dbUtil4Monitor;
 	@Autowired
 	private AlarmMessageBuilder alarmMessageBuilder;
-	private static Date lastDate = new Date(0);
-	private static Date avaLastDate = new Date(0);
 
 	@Override
 	public void insertLastEvent(Info info, Date date) {
 		Lastevent lastevent = new Lastevent();
 		// 获取event数据
-		dbUtil4Monitor.changeConnection(info.getId());
+		DBUtil dbutil = dbUtil4Monitor.getDBUtil(info.getId());
 		String sql1 = OracleMonitorSql.bufferRatio;
 		String sql2 = OracleMonitorSql.dictionaryRatio;
 		String sql3 = OracleMonitorSql.libraryRatio;
         String sql4 = OracleMonitorSql.activeCount;
-		List<Map<String, Object>> rsList1 = DBUtil.queryObjMaps(SqlObj
+		List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj
                 .newInstance(sql1));
-        List<Map<String, Object>> rsList2 = DBUtil.queryObjMaps(SqlObj
+        List<Map<String, Object>> rsList2 = dbutil.queryObjMaps(SqlObj
                 .newInstance(sql2));
-		List<Map<String, Object>> rsList3 = DBUtil.queryObjMaps(SqlObj
+		List<Map<String, Object>> rsList3 = dbutil.queryObjMaps(SqlObj
                 .newInstance(sql3));
-        List<Map<String, Object>> rsList4 = DBUtil.queryObjMaps(SqlObj
+        List<Map<String, Object>> rsList4 = dbutil.queryObjMaps(SqlObj
                 .newInstance(sql4));
         double hitRatio = ((BigDecimal)rsList1.get(0).get("Hit Ratio")).doubleValue();
 		lastevent.setBufferHitRate(hitRatio);
@@ -81,7 +79,7 @@ public class RecordServiceImpl implements RecordService {
 		lastevent.setDickHitRate(dictRatio);
 		lastevent.setDatabaseId(info.getId());
 		lastevent.setRecordTime(date);
-		lasteventRepository.save(lastevent);
+        lastevent = lasteventRepository.save(lastevent);
 		
 		alarmMessageBuilder.newMessageBase(info.getId())
 		.addAlarmAttribute(AttributeName.BufferHitRatio, hitRatio + "")
@@ -92,20 +90,23 @@ public class RecordServiceImpl implements RecordService {
 		Calendar calender = DateUtil.getCalender();
 		calender.setTime(date);
 		Calendar newCalender = DateUtil.getCalender();
-		newCalender.set(calender.get(Calendar.YEAR),
-				calender.get(Calendar.MONTH), calender.get(Calendar.DATE));
+		newCalender.set(
+                calender.get(Calendar.YEAR),
+				calender.get(Calendar.MONTH),
+                calender.get(Calendar.DATE));
+        newCalender.set(Calendar.HOUR_OF_DAY,calender.get(Calendar.HOUR_OF_DAY));
 		Date newDate = newCalender.getTime();
-		if (lastDate.getTime() != newDate.getTime()) {
-			insertEventSta(lastevent, newDate);
-			lastDate = newDate;
+        List<EventSta> eventStas =  eventStaRepository.findByTimeAndMonitorId(newDate,info.getId());
+		if (eventStas == null || eventStas.size() == 0) {
+			insertEventSta(lastevent, newDate,date);
 		} else {
-			//updateEventSta(lastevent, lastDate);
+			updateEventSta(lastevent, newDate);
 		}
 		Date timePoint = StaTimeEnum.getTime(StaTimeEnum.LAST_24HOUR, date);
-		//lasteventRepository.clear(timePoint);
+		lasteventRepository.clear(timePoint);
 	}
 
-	private void insertEventSta(Lastevent lastevent, Date inserTime) {
+	private void insertEventSta(Lastevent lastevent, Date inserTime, Date date) {
 		// 连接时间统计
 		EventSta connectTimeSta = new EventSta();
 		connectTimeSta.setDatabaseId(lastevent.getDatabaseId());
@@ -113,7 +114,8 @@ public class RecordServiceImpl implements RecordService {
 		connectTimeSta.setAvg(lastevent.getConnectTime() / 1.0);
 		connectTimeSta.setMax(lastevent.getConnectTime() / 1.0);
 		connectTimeSta.setMin(lastevent.getConnectTime() / 1.0);
-		connectTimeSta.setEventRecordTime(inserTime);
+		connectTimeSta.setEventRecordTime(date);
+        connectTimeSta.setRecordTime(inserTime);
 		connectTimeSta.setEventCount(1);
 		// 连接数统计记录
 		EventSta activeCountSta = new EventSta();
@@ -122,7 +124,8 @@ public class RecordServiceImpl implements RecordService {
 		activeCountSta.setAvg(lastevent.getActiveCount() / 1.0);
 		activeCountSta.setMax(lastevent.getActiveCount() / 1.0);
 		activeCountSta.setMin(lastevent.getActiveCount() / 1.0);
-		activeCountSta.setEventRecordTime(inserTime);
+		activeCountSta.setEventRecordTime(date);
+        activeCountSta.setRecordTime(inserTime);
         activeCountSta.setEventCount(1);
 		// 缓冲区击中率统计记录
 		EventSta bufferHitRateSta = new EventSta();
@@ -131,7 +134,8 @@ public class RecordServiceImpl implements RecordService {
 		bufferHitRateSta.setAvg(lastevent.getBufferHitRate() / 1.0);
 		bufferHitRateSta.setMax(lastevent.getBufferHitRate() / 1.0);
 		bufferHitRateSta.setMin(lastevent.getBufferHitRate() / 1.0);
-		bufferHitRateSta.setEventRecordTime(inserTime);
+		bufferHitRateSta.setEventRecordTime(date);
+        bufferHitRateSta.setRecordTime(inserTime);
         bufferHitRateSta.setEventCount(1);
 		eventStaRepository.save(connectTimeSta);
 		eventStaRepository.save(activeCountSta);
@@ -168,35 +172,35 @@ public class RecordServiceImpl implements RecordService {
 		connectTimeSta.setMax(connectTimeMax);
 		connectTimeSta.setMin(connectTimeMin);
 		connectTimeSta.setEventCount(connectTimeSta.getEventCount() + 1);
-		connectTimeSta.setEventRecordTime(inserTime);
+//		connectTimeSta.setEventRecordTime(inserTime);
 		// 连接数统计记录
 		EventSta activeCountSta = eventStaRepository.findActiveCountSta(
 				monitorId, inserTime);
 		activeCountSta.setDatabaseId(lastevent.getDatabaseId());
 		activeCountSta.setEventType("2");
 		Double activeCount = (double) lastevent.getActiveCount();
-		Double activeCountAvg = getAvg(connectTimeSta, activeCount);
-		Double activeCountMax = getMax(connectTimeSta, activeCount);
-		Double activeCountMin = getMin(connectTimeSta, activeCount);
-		connectTimeSta.setAvg(activeCountAvg);
-		connectTimeSta.setMax(activeCountMax);
-		connectTimeSta.setMin(activeCountMin);
-		connectTimeSta.setEventCount(connectTimeSta.getEventCount() + 1);
-		activeCountSta.setEventRecordTime(inserTime);
+		Double activeCountAvg = getAvg(activeCountSta, activeCount);
+		Double activeCountMax = getMax(activeCountSta, activeCount);
+		Double activeCountMin = getMin(activeCountSta, activeCount);
+        activeCountSta.setAvg(activeCountAvg);
+        activeCountSta.setMax(activeCountMax);
+        activeCountSta.setMin(activeCountMin);
+        activeCountSta.setEventCount(connectTimeSta.getEventCount() + 1);
+//		activeCountSta.setEventRecordTime(inserTime);
 		// 缓冲区击中率统计记录
 		EventSta bufferHitRateSta = eventStaRepository.findHitRateSta(
 				monitorId, inserTime);
 		bufferHitRateSta.setDatabaseId(lastevent.getDatabaseId());
 		bufferHitRateSta.setEventType("3");
 		Double bufferHitRateCount = (double) lastevent.getActiveCount();
-		Double bufferHitRateAvg = getAvg(connectTimeSta, bufferHitRateCount);
-		Double bufferHitRateMax = getMax(connectTimeSta, bufferHitRateCount);
-		Double bufferHitRateMin = getMin(connectTimeSta, bufferHitRateCount);
-		connectTimeSta.setAvg(bufferHitRateAvg);
-		connectTimeSta.setMax(bufferHitRateMax);
-		connectTimeSta.setMin(bufferHitRateMin);
-		connectTimeSta.setEventCount(connectTimeSta.getEventCount() + 1);
-		bufferHitRateSta.setEventRecordTime(inserTime);
+		Double bufferHitRateAvg = getAvg(bufferHitRateSta, bufferHitRateCount);
+		Double bufferHitRateMax = getMax(bufferHitRateSta, bufferHitRateCount);
+		Double bufferHitRateMin = getMin(bufferHitRateSta, bufferHitRateCount);
+        bufferHitRateSta.setAvg(bufferHitRateAvg);
+        bufferHitRateSta.setMax(bufferHitRateMax);
+        bufferHitRateSta.setMin(bufferHitRateMin);
+        bufferHitRateSta.setEventCount(connectTimeSta.getEventCount() + 1);
+//		bufferHitRateSta.setEventRecordTime(inserTime);
 		eventStaRepository.save(connectTimeSta);
 		eventStaRepository.save(activeCountSta);
 		eventStaRepository.save(bufferHitRateSta);
@@ -223,20 +227,21 @@ public class RecordServiceImpl implements RecordService {
 		newCalender.set(calender.get(Calendar.YEAR),
 				calender.get(Calendar.MONTH), calender.get(Calendar.DATE));
 		Date newDate = newCalender.getTime();
-		if (avaLastDate.getTime() != newDate.getTime()) {
-			insertAvaSta(ava, newDate,info.getPullInterval());
-			avaLastDate = newDate;
+        AvaSta avaSta = avaStaRepository.findAvaStaByTime(info.getId(),newDate);
+		if (avaSta==null||avaSta.getId()==null||avaSta.getId().equals("")) {
+			insertAvaSta(ava, date,newDate,info.getPullInterval());
 		} else {
-			//updateAvaSta(ava, lastDate,info.getPullInterval());
+			updateAvaSta(ava, newDate,info.getPullInterval());
 		}
 		Date timePoint = StaTimeEnum.getTime(StaTimeEnum.LAST_24HOUR, date);
 		//avaRepository.clear(timePoint);
 	}
 
-	private void insertAvaSta(Ava ava, Date inserTime,int interval) {
+	private void insertAvaSta(Ava ava, Date date, Date inserTime, int interval) {
 		AvaSta avaSta = new AvaSta();
 		avaSta.setDatabaseId(ava.getDatabaseId());
-		avaSta.setAvaRecordTime(inserTime);
+		avaSta.setAvaRecordTime(date);
+        avaSta.setRecordTime(inserTime);
 		if(StringUtils.equals(ava.getState(), "0")){
 			// 正常运行时间
 			avaSta.setNormalRuntime(0);
@@ -294,7 +299,7 @@ public class RecordServiceImpl implements RecordService {
     	);
     	
 //    	AvailableCalculate availableCalculate =  AvailableCalculate.calculate(
-//    			avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(), 
+//    			avaSta.getAvaRecordTime(), avaSta.getNormalRuntime(), avaSta.getTotalPoweroffTime(),
 //    			avCountList, unAvCountList, falseCount, interval);
     	AvailableCalculate availableCalculate =  AvailableCalculate.calculate(avaCalParam);
         //正常运行时间
