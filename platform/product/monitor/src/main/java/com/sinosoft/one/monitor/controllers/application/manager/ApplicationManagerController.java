@@ -26,11 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * 应用的增删改查Controller.
  * User: zfb
  * Date: 13-2-27
  * Time: 下午10:14
- * To change this template use File | Settings | File Templates.
  */
 @Path("appmanager")
 public class ApplicationManagerController {

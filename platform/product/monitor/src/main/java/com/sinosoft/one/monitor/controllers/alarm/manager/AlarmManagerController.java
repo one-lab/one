@@ -30,11 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * 告警列表和告警详细信息处理Controller.
  * User: zfb
  * Date: 13-3-8
  * Time: 下午3:11
- * To change this template use File | Settings | File Templates.
  */
 @Path("alarmmanager")
 public class AlarmManagerController {
