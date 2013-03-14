@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.controllers;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -92,7 +93,8 @@ public class OsAgentController {
 	@Post("recieveOsResult")
 	public void recieveOsResult(Invocation inv) {
 		try {
-			Date sampleTime=new Date();
+			Calendar calendar=Calendar.getInstance();
+			calendar.set(Calendar.MILLISECOND, 0);
 			osAgentInfo =  inv.getRequest().getParameterMap();
 			osAgentID = getValue("ID", osAgentInfo);
 			Os os = osService.getOsBasicById(osAgentID);
@@ -110,9 +112,9 @@ public class OsAgentController {
 				oos.writeObject(requestInfo);
 				oos.close();
 			}
-			osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, sampleTime);
+			osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, calendar.getTime());
 			//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
-			osProcessService.savaAvailableSampleData(os.getOsInfoId(), sampleTime, Integer.valueOf(thisInterCycleTime), "1");
+			osProcessService.savaAvailableSampleData(os.getOsInfoId(), calendar.getTime(), Integer.valueOf(thisInterCycleTime), "1");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
