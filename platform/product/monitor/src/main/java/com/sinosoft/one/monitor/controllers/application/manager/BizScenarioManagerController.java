@@ -27,11 +27,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * 业务场景的增删改查Controller.
  * User: zfb
  * Date: 13-2-28
  * Time: 下午2:43
- * To change this template use File | Settings | File Templates.
  */
 @Path("bsmanager")
 public class BizScenarioManagerController {
