@@ -11,9 +11,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface AvaStaRepository extends PagingAndSortingRepository<AvaSta, String> {
 
     @SQL("select a.* from " +
-            "(select * from GE_MONITOR_ORACLE_AVA_STA  where database_id=?1 order by ava_record_time desc) a" +
+            "(select * from GE_MONITOR_ORACLE_AVA_STA  where database_id=?1 and record_time = ?2 ) a" +
             " where rownum=1")
-    AvaSta findAvaSta(String monitorId);
+    AvaSta findAvaSta(String monitorId, Date date);
     @SQL("select * from GE_MONITOR_ORACLE_AVA_STA a   where a.database_id=?1 and rownum=1 and a.record_time = ?2")
     AvaSta findAvaStaByTime(String monitorId,Date inserTime);
     @SQL("delete from GE_MONITOR_ORACLE_AVA_STA where database_id in (?1)")

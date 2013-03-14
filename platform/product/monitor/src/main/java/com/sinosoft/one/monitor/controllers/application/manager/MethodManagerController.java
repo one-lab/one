@@ -23,11 +23,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * Method的增删改查Controller.
  * User: zfb
  * Date: 13-2-28
  * Time: 下午2:41
- * To change this template use File | Settings | File Templates.
  */
 @Path("methodmanager")
 public class MethodManagerController {
