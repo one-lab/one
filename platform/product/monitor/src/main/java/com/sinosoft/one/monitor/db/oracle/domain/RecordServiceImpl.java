@@ -187,7 +187,7 @@ public class RecordServiceImpl implements RecordService {
                 monitorId, inserTime);
         bufferHitRateSta.setDatabaseId(lastevent.getDatabaseId());
         bufferHitRateSta.setEventType("3");
-        Double bufferHitRateCount = (double) lastevent.getActiveCount();
+        Double bufferHitRateCount =  lastevent.getBufferHitRate();
         Double bufferHitRateAvg = getAvg(bufferHitRateSta, bufferHitRateCount);
         Double bufferHitRateMax = getMax(bufferHitRateSta, bufferHitRateCount);
         Double bufferHitRateMin = getMin(bufferHitRateSta, bufferHitRateCount);

@@ -97,8 +97,8 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
         String created = rsObj.get("CREATED");
         String openMode = rsObj.get("OPEN_MODE");
         String logMode = rsObj.get("LOG_MODE");
-        long connectTime =  dbUtil4Monitor.connectTime(info);
-        
+       Long connectTime =  dbUtil4Monitor.connectTime(info);
+       
         String sql1 = OracleMonitorSql.activeCount;
         List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj
                 .newInstance(sql1));
