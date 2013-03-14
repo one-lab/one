@@ -215,7 +215,7 @@ function refreshPie1(_data){
                 ['未知',_data[2]]
            ]
         }],
-		colors: [ '#5cff5c','#Ff4f4f','#FFFF00']
+		colors: [ '#5cff5c','#Ff4f4f','#ddd']
     });
 }
 

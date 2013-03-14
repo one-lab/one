@@ -141,7 +141,7 @@ public class OracleController {
         if(connectPoints!=null){
             for (int i = 0; i < connectPoints.size(); i++) {
                 categories.add(sdf.format(connectPoints.get(i).getxAxis()));
-                connectData.add(connectPoints.get(i).getyAxis()*100);
+                connectData.add(connectPoints.get(i).getyAxis());
             }
         }
 

@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -50,12 +49,6 @@ public class StaController {
 	// 从 2013-2-26 上午11:00
 	// 到 2013-3-1 下午6:22
 
-	// public void viewBaseInfo(@Param("monitorId")String monitorId, Invocation
-	// inv) {
-	//
-	// //System.out.println(monitorId);
-	//
-	// }
     /*//最近7天的连接时间
     监视器名称 	te01
     属性 	连接时间 ms
@@ -86,9 +79,6 @@ public class StaController {
 			en = HIT_RATE;
 		break;
 		}
-		// System.out.println("+++++++++++++++++++++++++++++++++++++++");
-		// System.out.println("+++++++++++++++++++++++++++++++++++++++");
-		// System.out.println(monitorId);
 		OracleStaInfoDetailModel oracleStaInfoDetailModel = oracleStaService
 		.getBaseInfo(monitorId, eventType, en, new Date(),
 				sta, TimeGranularityEnum.DAY);
@@ -105,8 +95,6 @@ public class StaController {
         }
 		inv.addModel("osdm", oracleStaInfoDetailModel);
         inv.addModel("monitorId", monitorId);
-		// viewTable(monitorId,inv);
-		// System.out.println("+++++++++++++++++++++++++++");
 		if(eventType == 1 && st == 1 ){
 			return "sevenDayConnect";
 		}else if(eventType == 1 && st == 2){
@@ -171,6 +159,13 @@ public class StaController {
                 eventSta.setMax(Double.parseDouble(maxInt+""));
                 eventSta.setMin(Double.parseDouble(minInt+""));
             }
+        }else if(en.equals(ACTIVE_COUNT) || en.equals(CONNECT_TIME)){
+        	for(EventSta eventSta:eventStas){
+        		eventSta.setAvg(Double.parseDouble(eventSta.getAvg().intValue()+""));
+                eventSta.setMax(Double.parseDouble(eventSta.getMax().intValue()+""));
+                eventSta.setMin(Double.parseDouble(eventSta.getMin().intValue()+""));
+                
+        	}
         }
 		Page page = new PageImpl(eventStas);
 		Gridable<EventSta> gridable = new Gridable<EventSta>(page);
@@ -239,6 +234,8 @@ public class StaController {
                 avg = avg*100;
                 int usePercents = avg.intValue();
                 eventStas.get(i).setAvg(Double.parseDouble(usePercents+""));
+            }else if(en.equals(ACTIVE_COUNT) || en.equals(CONNECT_TIME)){
+            	 eventStas.get(i).setAvg(Double.parseDouble(eventStas.get(i).getAvg().intValue()+""));
             }
 			data.add(eventStas.get(i).getAvg());
 		}
