@@ -57,7 +57,7 @@ public class OsAvailableViewHandle {
 				long timeLength=(currentTime.getTime()-lastFFtime.getTime())/100;//(当前时间到前24小时时间长度 )/1000/100 ：获取这个时间段中 1%的长度
 				 //图形传输对象
 				OsAvailableLineModel viewModel=null;//需要new的对象外放
-				Date lastDate=osAvailabletemps.get(0).getSampleDate();
+				OsAvailabletemp lastRecord=osAvailabletemps.get(0);
 				for (int i = 0; i < listSize; i++) {
 					OsAvailabletemp osAvtemp=osAvailabletemps.get(i);
 					if(i==0){//判断第一条数据的时间与 时间轴起点时间是否大于轮询时间
@@ -83,9 +83,9 @@ public class OsAvailableViewHandle {
 							osAvailableViewModels.add(viewModel);
 						}
 					}else {
-						if(osAvtemp.getSampleDate().getTime()-lastDate.getTime()>(osAvtemp.getIntercycleTime())*60*1000){
+						if(osAvtemp.getSampleDate().getTime()-lastRecord.getSampleDate().getTime()>(lastRecord.getIntercycleTime()*60*1000)+2000){
 									//如果相隔时间大于轮询时间则为不可用 //则保存上一个为1的对象 创建新的对象
-							crashtime=crashtime+(osAvtemp.getSampleDate().getTime()-lastDate.getTime()-osAvtemp.getIntercycleTime()*60*1000);
+							crashtime=crashtime+(osAvtemp.getSampleDate().getTime()-lastRecord.getSampleDate().getTime()-lastRecord.getIntercycleTime()*60*1000);
 							if(i==listSize-1){//判断是否是最后一个
 								if(nomorRun>0){//2次的差值大于轮询时间 则可用时间可能为0
 									setOsAvailableModelPercentage(nomorRun, timeLength, viewModel,  "1");
@@ -110,7 +110,7 @@ public class OsAvailableViewHandle {
 									viewModel=new OsAvailableLineModel();//保存后再创建新的图形对象
 									nomorRun=0;//可用时间归零
 								}else{//2次的差值大于轮询时间 则可用时间可能为0
-									setOsAvailableModelPercentage(osAvtemp.getIntercycleTime()*60*1000, timeLength, viewModel,  "1");
+									setOsAvailableModelPercentage(lastRecord.getIntercycleTime()*60*1000, timeLength, viewModel,  "1");
 									osAvailableViewModels.add(viewModel);
 									viewModel=new OsAvailableLineModel();//保存后再创建新的图形对象
 									nomorRun=0;//可用时间归零
@@ -121,7 +121,7 @@ public class OsAvailableViewHandle {
 								crashtime=0;
 							}
 						}else{ 
-							nomorRun+=osAvtemp.getSampleDate().getTime()-lastDate.getTime();
+							nomorRun+=osAvtemp.getSampleDate().getTime()-lastRecord.getSampleDate().getTime();
 							if(i==listSize-1){
 								setOsAvailableModelPercentage(nomorRun, timeLength, viewModel, "1");
 								viewModel.setPercentage(Integer.parseInt(viewModel.getPercentage())+"");
@@ -136,7 +136,7 @@ public class OsAvailableViewHandle {
 							} 
 						}
 					}
-					lastDate=osAvtemp.getSampleDate();
+					lastRecord=osAvtemp;
 					
 				}
 				oneOsinfomap.put("name", os.getName());

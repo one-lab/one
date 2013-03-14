@@ -59,9 +59,7 @@ public class OsProcessService {
 		
 		List<OsDisk> osDisks=OsTransUtil.getDiskInfo(diskInfo);
 		osDiskService.saveDisk(osInfoId,osDisks, sampleTime);//保存磁盘采样
-		for(OsDisk osDisk : osDisks){
-			messageBase.addAlarmAttribute(AttributeName.DiskUtilization, osDisk.getUsedUtiliZation());
-		}
+		messageBase.addAlarmAttribute(AttributeName.DiskUtilization, osDisks.get(0).getTotalUtiliZation());
 		
  		OsRam osRam=OsTransUtil.getRamInfo(ramInfo);
 		osRamService.saveRam(osInfoId,osRam , sampleTime);//保存内存采样

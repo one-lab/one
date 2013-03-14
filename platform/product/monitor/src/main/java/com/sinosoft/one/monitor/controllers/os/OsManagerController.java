@@ -232,10 +232,22 @@ public class OsManagerController {
 			row.put("id", osBaseInfoModel.getMonitorID());
 			List<String> cell = new ArrayList<String>();
 			/* 可用性 1-可用sys_up ；0-不可用 sys_down*/
-			String usabilityClass = "1".equals(osBaseInfoModel.getUsability()) ? "sys_up" : "sys_down";
+			String usabilityClass = "1".equals(osBaseInfoModel.getUsability()) ? "fine" : "poor";
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
 			String[] healthy = osBaseInfoModel.getHealthy();
-			String healthyClass = "1".equals(healthy[0]) ? "fine" : "poor";
+			String healthyClass="";
+			if("1".equals(healthy[0])){
+				 healthyClass = "fine";
+			}
+			if("2".equals(healthy[0])){
+				 healthyClass = "y_poor";
+			}
+			if("3".equals(healthy[0])){
+				 healthyClass = "poor";
+			}
+			if("4".equals(healthy[0])){
+				 healthyClass = "sys_normal";
+			}
 			/* 构建修改连接+对应数据库MonitorID*/
 			String url = contextPath + "/os/linuxcentos/" + osBaseInfoModel.getMonitorID();
 			String editUrl = contextPath + "/os/editUI/" + osBaseInfoModel.getMonitorID();

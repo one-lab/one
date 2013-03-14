@@ -177,7 +177,7 @@ public class OsService {
 			String[] healthyPint = new String[2];
 			 StringBuilder msg = new StringBuilder();
 			if(osAvailabletemp!=null){
-	            String healthyFlag = "1";
+	            String healthyFlag = "4";
 				osBaseInfoModel.setUsability("1");
 				 List<Alarm> alarmList = alarmRepository.findAlarmByMonitorId(os.getOsInfoId(), begintime, currentTime);
 	             for (Alarm alarm : alarmList) {
@@ -199,7 +199,7 @@ public class OsService {
 			}else {
 				 healthyPint[0] = "3";
 				 healthyPint[1] = msg.append(os.getName()).append("为停止").toString();
-				osBaseInfoModel.setUsability("0");
+				 osBaseInfoModel.setUsability("0");
 			}
 			osBaseInfoModel.setHealthy(healthyPint);
 			osBaseInfoModel.setMonitorID(os.getOsInfoId());
