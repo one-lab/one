@@ -61,7 +61,7 @@ public class OsAvailableViewHandle {
 				for (int i = 0; i < listSize; i++) {
 					OsAvailabletemp osAvtemp=osAvailabletemps.get(i);
 					if(i==0){//判断第一条数据的时间与 时间轴起点时间是否大于轮询时间
-						timeDiffer=osAvtemp.getSampleDate().getTime()-lastFFtime.getTime();
+						timeDiffer=osAvtemp.getSampleDate().getTime()-(lastFFtime.getTime()+2000);
 						if(timeDiffer>(osAvtemp.getIntercycleTime()*60*1000)){//时间差大于轮询时间则为无数据状态
 							OsAvailableLineModel oneviewModel=new OsAvailableLineModel();	//创建第一个图形对象
 							setOsAvailableModelPercentage(timeDiffer, timeLength, oneviewModel,"0");

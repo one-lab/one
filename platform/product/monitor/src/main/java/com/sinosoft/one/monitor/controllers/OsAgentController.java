@@ -35,6 +35,8 @@ public class OsAgentController {
 	public static String ramInfo = "";
 	public static String diskInfo = "";
 	public static String agentIp = "";
+	public static String respondTime="";
+	public static String thisInterCycleTime="";
 	public static Map<String, String[]> osAgentInfo = new HashMap<String, String[]>();
 
 	/**
@@ -76,30 +78,6 @@ public class OsAgentController {
 				shellAndIp.put("ID", null);
 			}
 			oos.writeObject(shellAndIp);
-			
-//			if(null!=getValue("ID", osAgentInfo)&&!"".toString().equals(getValue("ID", osAgentInfo))){
-//				for (Os os : oss) {
-//					if(os.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
-//						shellAndIp.put("ID", os.getOsInfoId());
-//						shellAndIp.put("pollingTime", os.getIntercycleTime()+"");
-//						List<OsShell>osShells=osService.getOsShell();
-//						for (OsShell osShell : osShells) {
-//							shellAndIp.put(osShell.getType(),osShell.getTemplate());
-//						}
-//						oos.writeObject(shellAndIp);
-//						System.out.println("正确返回");
-//					}
-//				}
-//			}else {
-//				shellAndIp.put("ID", null);
-//				oos.writeObject(shellAndIp);
-//			}
-			
-//			for (Os o : oss) {
-//				if(o.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
-//					
-//				}
-//			}
 			oos.close();
 
 		} catch (IOException e) {
@@ -114,40 +92,27 @@ public class OsAgentController {
 	@Post("recieveOsResult")
 	public void recieveOsResult(Invocation inv) {
 		try {
+			Date sampleTime=new Date();
 			osAgentInfo =  inv.getRequest().getParameterMap();
 			osAgentID = getValue("ID", osAgentInfo);
 			Os os = osService.getOsBasicById(osAgentID);
 			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse().getOutputStream());
-			Map<String, Object>requestInfo=new HashMap<String, Object>();//返回代理端的响应信息;
+			Map<String, String>requestInfo=new HashMap<String, String>();//返回代理端的响应信息;
 			if(os!=null){
-				cpuInfo = getValue("cpuInfo", osAgentInfo);
-				System.out.println("收集返回的CPU："+cpuInfo);
-				ramInfo = getValue("ramInfo", osAgentInfo);
-				System.out.println("收集返回的内存："+ramInfo);
-				diskInfo = getValue("diskInfo", osAgentInfo);
-				System.out.println("收集返回的磁盘："+diskInfo);
-				String respondTime = getValue("respondTime", osAgentInfo);
-				System.out.println("响应时间"+respondTime);
-				
-				
-//				oos.writeObject("继续监控");
 				//采样时间
-				Date sampleTime=new Date();
-				System.out.println(sampleTime.toLocaleString()+"1111111111111111111111");
+				cpuInfo = getValue("cpuInfo", osAgentInfo);
+				ramInfo = getValue("ramInfo", osAgentInfo);
+				diskInfo = getValue("diskInfo", osAgentInfo);
+				respondTime = getValue("respondTime", osAgentInfo);
+				thisInterCycleTime=getValue("thisInterCycleTime", osAgentInfo);
 				//保存采样数据
-				osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, sampleTime);
-				//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
-				osProcessService.savaAvailableSampleData(os.getOsInfoId(), sampleTime, os.getIntercycleTime(), "1");
-				
-				requestInfo.put("interCycle", os.getIntercycleTime());//返回轮询时间
-			}else {
-//				oos.writeObject("停止监控");
-//				Date date=new Date();
-//				//保存不可用状态起始点 状态码“0”
-//				osProcessService.savaAvailableSampleData(os.getOsInfoId(), date,os.getIntercycleTime(),  "0");
+				requestInfo.put("newInterCycle", os.getIntercycleTime()+"");//返回轮询时间
+				oos.writeObject(requestInfo);
+				oos.close();
 			}
-			oos.writeObject(requestInfo);
-			oos.close();
+			osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, sampleTime);
+			//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
+			osProcessService.savaAvailableSampleData(os.getOsInfoId(), sampleTime, Integer.valueOf(thisInterCycleTime), "1");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
