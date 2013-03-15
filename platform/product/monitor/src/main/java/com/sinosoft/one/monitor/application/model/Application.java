@@ -30,8 +30,6 @@ public class Application implements java.io.Serializable {
     /**
      * 应用系统英文名称.
      */
-    @NotEmpty(message = "显示名称不能为空")
-    @Pattern(regexp = "[a-zA-Z]{1,100}",message = "显示名称必须是英文，长度应该在1到100位")
     private String applicationName;
     /**
      * 应用系统中文名称.
