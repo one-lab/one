@@ -177,7 +177,7 @@ public class OsService {
 			String[] healthyPint = new String[2];
 			 StringBuilder msg = new StringBuilder();
 			if(osAvailabletemp!=null){
-	            String healthyFlag = "4";
+	            String healthyFlag = "1";
 				osBaseInfoModel.setUsability("1");
 				 List<Alarm> alarmList = alarmRepository.findAlarmByMonitorId(os.getOsInfoId(), begintime, currentTime);
 	             for (Alarm alarm : alarmList) {
