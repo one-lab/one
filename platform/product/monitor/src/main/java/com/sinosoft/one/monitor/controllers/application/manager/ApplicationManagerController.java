@@ -112,7 +112,7 @@ public class ApplicationManagerController {
         //获得当前用户id
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         //更新时间使用sysdate
-        applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
+        applicationService.updateApplicationWithModifyInfo(appId,application.getCnName(),
                 application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());
         businessEmulation.restart(appId);
         //应用列表页面
