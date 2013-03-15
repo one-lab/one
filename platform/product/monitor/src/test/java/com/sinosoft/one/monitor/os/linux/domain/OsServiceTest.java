@@ -20,10 +20,6 @@ public class OsServiceTest extends AbstractJUnit4SpringContextTests {
 	@Autowired
 	private OsService osService;
 	
-	@Test
-	public void saveOsBasic() throws Exception{
-		osService.saveOsBasic( "test", "linux", "192.168.18.217", "255.255.255.0", 5);
-	}
 	
 	@Test
 	public void getOsBasic(){
@@ -37,15 +33,15 @@ public class OsServiceTest extends AbstractJUnit4SpringContextTests {
 		
 	}
 	
-	@Test
-	public void deleteOsBasic(){
-		osService.deleteOsBasic("402892163d1f4f23013d1f4f27220000");
-	}
-	
-	@Test
-	public void checkOsByIp(){
-		Assert.assertEquals(true, osService. checkOsByIp("192.168.18.222"));
-	}
+//	@Test
+//	public void deleteOsBasic(){
+//		osService.deleteOsBasic("402892163d1f4f23013d1f4f27220000");
+//	}
+//	
+//	@Test
+//	public void checkOsByIp(){
+//		Assert.assertEquals(true, osService. checkOsByIp("192.168.18.222"));
+//	}
 	
 	@Test
 	public void saveShell(){
@@ -65,11 +61,11 @@ public class OsServiceTest extends AbstractJUnit4SpringContextTests {
 //								"echo $Disp_SYS_Rate%\n";
 		//磁盘脚本
 		String DK="df -k | awk '{print  $1,\"-\",$2,\"-\",$3,\"-\",$4,\"-\",$5,\"-\",$6,\",\"}'";
-		osService.saveShell("DK", DK);
+//		osService.saveShell("DK", DK);
 		String RM="top -b -n 1 | head -5 | tail -2 |awk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9}'";
-		osService.saveShell("RM", RM);
+//		osService.saveShell("RM", RM);
 		String CB="vmstat |tail -1|awk '{print $1,$2,$13,$14,$16,$15,$11}'";
-		osService.saveShell("CB", CB);
+//		osService.saveShell("CB", CB);
 	}
 	
 	@Test

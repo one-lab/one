@@ -61,7 +61,7 @@ public class OsAvailableViewHandle {
 				for (int i = 0; i < listSize; i++) {
 					OsAvailabletemp osAvtemp=osAvailabletemps.get(i);
 					if(i==0){//判断第一条数据的时间与 时间轴起点时间是否大于轮询时间
-						timeDiffer=osAvtemp.getSampleDate().getTime()-(lastFFtime.getTime()+2000);
+						timeDiffer=osAvtemp.getSampleDate().getTime()-osAvtemp.getIntercycleTime()*60*1000-(lastFFtime.getTime()+2000);
 						if(timeDiffer>(osAvtemp.getIntercycleTime()*60*1000)){//时间差大于轮询时间则为无数据状态
 							OsAvailableLineModel oneviewModel=new OsAvailableLineModel();	//创建第一个图形对象
 							setOsAvailableModelPercentage(timeDiffer, timeLength, oneviewModel,"0");
@@ -77,7 +77,7 @@ public class OsAvailableViewHandle {
 							setOsAvailableModelPercentage(osAvtemp.getIntercycleTime()*1000*60, timeLength, viewModel, "1");
 							osAvailableViewModels.add(viewModel);
 							viewModel=new OsAvailableLineModel();
-							timeDiffer=currentTime.getTime()-osAvtemp.getSampleDate().getTime()-os.getIntercycleTime()*60*1000;
+							timeDiffer=currentTime.getTime()-osAvtemp.getSampleDate().getTime();
 							setOsAvailableModelPercentage(timeDiffer, timeLength, viewModel, "0");
 						
 							osAvailableViewModels.add(viewModel);
@@ -87,19 +87,20 @@ public class OsAvailableViewHandle {
 									//如果相隔时间大于轮询时间则为不可用 //则保存上一个为1的对象 创建新的对象
 							crashtime=crashtime+(osAvtemp.getSampleDate().getTime()-lastRecord.getSampleDate().getTime()-lastRecord.getIntercycleTime()*60*1000);
 							if(i==listSize-1){//判断是否是最后一个
-								if(nomorRun>0){//2次的差值大于轮询时间 则可用时间可能为0
+								if(nomorRun>0){//如果之前记录了正常时间则存入
 									setOsAvailableModelPercentage(nomorRun, timeLength, viewModel,  "1");
 									osAvailableViewModels.add(viewModel);
-								}else{//2次的差值大于轮询时间 则可用时间可能为0
+									viewModel=new OsAvailableLineModel();
+								}else{//否则本次为一次成功直接存入
 									setOsAvailableModelPercentage(osAvtemp.getIntercycleTime()*60*1000, timeLength, viewModel,  "1");
 									osAvailableViewModels.add(viewModel);
+									viewModel=new OsAvailableLineModel();
 								} 
 								setOsAvailableModelPercentage(crashtime, timeLength, viewModel,"0");
-								osAvailableViewModels.add(viewModel);
-								endrecordTime=osAvtemp.getSampleDate();
-								if(currentTime.getTime()-osAvtemp.getSampleDate().getTime()>osAvtemp.getIntercycleTime()*60*1000){
+								osAvailableViewModels.add(viewModel);//作为最后一个则之间的差值需要存为失败
+								if(currentTime.getTime()-osAvtemp.getSampleDate().getTime()>osAvtemp.getIntercycleTime()*60*1000){//最后一个与当前时间是否有差值 如果有这为失败
 									OsAvailableLineModel endViewModel=new OsAvailableLineModel();
-									crashtime=currentTime.getTime()-osAvtemp.getSampleDate().getTime()-(osAvtemp.getIntercycleTime()*60*1000);
+									crashtime=currentTime.getTime()-osAvtemp.getSampleDate().getTime();
 									setOsAvailableModelPercentage(crashtime, timeLength, endViewModel,"0");
 									osAvailableViewModels.add(endViewModel);
 								}
@@ -126,10 +127,9 @@ public class OsAvailableViewHandle {
 								setOsAvailableModelPercentage(nomorRun, timeLength, viewModel, "1");
 								viewModel.setPercentage(Integer.parseInt(viewModel.getPercentage())+"");
 								osAvailableViewModels.add(viewModel);
-								endrecordTime=osAvtemp.getSampleDate();
 								if(currentTime.getTime()-osAvtemp.getSampleDate().getTime()>osAvtemp.getIntercycleTime()*60*1000){
 									OsAvailableLineModel endViewModel=new OsAvailableLineModel();
-									crashtime=currentTime.getTime()-osAvtemp.getSampleDate().getTime()-(osAvtemp.getIntercycleTime()*60*1000);
+									crashtime=currentTime.getTime()-osAvtemp.getSampleDate().getTime();
 									setOsAvailableModelPercentage(crashtime, timeLength, endViewModel,"0");
 									osAvailableViewModels.add(endViewModel);
 								}
