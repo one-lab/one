@@ -47,7 +47,8 @@ public class OsServiceTest extends AbstractJUnit4SpringContextTests {
 	public void saveShell(){
 //		String template="top -b -n 1 | head -5 | tail -2 |awk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9}'";
 //		String CB="vmstat |tail -1|awk '{print $1,$2,$13,$14,$16,$15,$11}'";
-		String CU="CPULOG_1=$(cat /proc/stat | grep 'cpu ' | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8}') \n" +
+		String CU="/bin/sh \n"+
+			"CPULOG_1=$(cat /proc/stat | grep 'cpu ' | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8}') \n" +
 				"SYS_IDLE_1=$(echo $CPULOG_1 | awk '{print $4}') \n" +
 				"Total_1=$(echo $CPULOG_1 | awk '{print $1+$2+$3+$4+$5+$6+$7}') \n" +
 				"CPULOG_2=$(cat /proc/stat | grep 'cpu ' | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8}') \n" +

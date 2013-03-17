@@ -93,7 +93,7 @@ public class OsUtil {
 	 */
 	public static String getCpuUilitZation() {
 		System.out.println("执行cpu利用率脚本：========"+OsConfig.osCmd_cpuUilitZation);
-		return executeWithResult(OsConfig.osCmd_cpuUilitZation);
+		return execute(OsConfig.osCmd_cpuUilitZation);
 	}
 	/**
 	 * 获取内存信息
