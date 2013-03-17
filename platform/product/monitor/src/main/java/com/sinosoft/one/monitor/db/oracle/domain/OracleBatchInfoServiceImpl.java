@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.sinosoft.one.data.jade.parsers.util.StringUtil;
+import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,8 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
     private LasteventRepository lasteventRepository;
     @Autowired
     private AlarmRepository alarmRepository;
+    @Autowired
+    private DBUtil4Monitor dbUtil4Monitor ;
 
     /**
      * 最近24小时可用性统计
@@ -353,7 +356,10 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             oracleStaBaseInfoModel.setMonitorID(info.getId());
             oracleStaBaseInfoModel.setMonitorName(info.getName());
             //查询数据库得到当前是否可连接
-            String state = avaRepository.findState(info.getId());
+            String state = "0";
+            if(dbUtil4Monitor.canConnect(info)){
+                state = "1";
+            }
             oracleStaBaseInfoModel.setUsability(state);
             //获取5分钟前到现在报警信息
             Date endTime = new Date();
