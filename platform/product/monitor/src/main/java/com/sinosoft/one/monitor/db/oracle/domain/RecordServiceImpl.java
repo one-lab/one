@@ -223,12 +223,7 @@ public class RecordServiceImpl implements RecordService {
         }
         ava.setRecordTime(date);
         ava.setDatabaseId(info.getId());
-        long interval =  0;
-        if(oldAva!=null){
-            interval =  oldAva.getInterval();
-        } else {
-            interval =  info.getPullInterval();
-        }
+        long interval = info.getPullInterval();
         ava.setInterval(interval);
         avaRepository.save(ava);
         AvaSta avaSta = avaStaRepository.findAvaStaByTime(info.getId(), newDate);
