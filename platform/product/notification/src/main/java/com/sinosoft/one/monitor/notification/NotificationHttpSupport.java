@@ -28,8 +28,11 @@ final class NotificationHttpSupport {
 			httpConnection.setDoOutput(true);
 			httpConnection.setDoInput(true);
 			httpConnection.setUseCaches(false);
-			httpConnection.setInstanceFollowRedirects(true);
 			httpConnection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			httpConnection.setRequestProperty("Accept-Charset", "utf-8");
+			httpConnection.setRequestProperty("contentType", "utf-8");
+			httpConnection.setInstanceFollowRedirects(true);
+
 		} catch (Exception e) {
 			logger.error("connect url [" + url + " failure.", e);
 		}
@@ -69,7 +72,7 @@ final class NotificationHttpSupport {
 				out = new DataOutputStream(httpURLConnection.getOutputStream());
 				// The URL-encoded contend
 				// // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写道流里面
-				out.writeBytes(content);
+				out.write(content.getBytes("UTF-8"));
 				//flush and close
 				out.flush();
 			}

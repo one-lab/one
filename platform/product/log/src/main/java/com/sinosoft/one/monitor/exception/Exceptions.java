@@ -5,7 +5,6 @@ import com.sinosoft.one.monitor.log.TraceModel;
 import com.sinosoft.one.monitor.log.TraceUtils;
 import com.sinosoft.one.monitor.log.UrlTraceLog;
 import com.sinosoft.one.monitor.notification.NotificationServiceFactory;
-import org.apache.log4j.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

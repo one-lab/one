@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.sinosoft.one.monitor.application.model.*;
+import com.sinosoft.one.monitor.application.repository.*;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -17,19 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.application.model.Method;
-import com.sinosoft.one.monitor.application.model.MethodResponseTime;
-import com.sinosoft.one.monitor.application.model.UrlResponseTime;
-import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlCountViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlHealthAvaViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationUrlInfoViewModel;
 import com.sinosoft.one.monitor.application.model.viewmodel.UrlTraceLogViewModel;
-import com.sinosoft.one.monitor.application.repository.MethodRepository;
-import com.sinosoft.one.monitor.application.repository.MethodResponseTimeRepository;
-import com.sinosoft.one.monitor.application.repository.UrlResponseTimeRepository;
-import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
-import com.sinosoft.one.monitor.application.repository.UrlVisitsStaRepository;
 import com.sinosoft.one.monitor.common.HealthStaService;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.common.Trend;
@@ -57,7 +50,7 @@ public class ApplicationUrlService {
 	@Autowired
 	private MethodResponseTimeRepository methodResponseTimeRepository;
 	@Autowired
-	private AlarmRepository alarmRepository;
+	private ApplicationRepository applicationRepository;
 	@Autowired
 	private MethodRepository methodRepository;
 
@@ -66,19 +59,11 @@ public class ApplicationUrlService {
 		SeverityLevel severityLevel  = SeverityLevel.UNKNOW;
 		Date startDate = LocalDate.now().toDate();
 		Date endDate = LocalDateTime.now().toDate();
-		int criticalCount = alarmRepository.countCriticalBySubReousrce(applicationId, ResourceType.APPLICATION_SCENARIO_URL.name(),
-				urlId, startDate, endDate);
-		if(criticalCount > 0) {
-			severityLevel = SeverityLevel.CRITICAL;
-		} else {
-			int warningCount = alarmRepository.countWarningBySubReousrce(applicationId,  ResourceType.APPLICATION_SCENARIO_URL.name(),
-					urlId, startDate, endDate);
-			if(warningCount > 0) {
-				severityLevel = SeverityLevel.WARNING;
-			} else {
-				severityLevel = SeverityLevel.INFO;
-			}
-		}
+		Application application = applicationRepository.findOne(applicationId);
+		int interval = application.getInterval().intValue();
+
+		severityLevel = healthStaService.healthStaForCurrent(applicationId, ResourceType.APPLICATION_SCENARIO_URL,
+				urlId, interval);
 
 		// 获得可用性信息
 		UrlAvailableInf urlAvailableInf = applicationEmuService.getUrlAvailableToday(urlId);

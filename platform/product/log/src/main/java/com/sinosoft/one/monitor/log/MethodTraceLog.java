@@ -12,6 +12,9 @@ import java.util.Date;
  * Time: 上午6:12
  */
 public class MethodTraceLog {
+	private static final String FORMAT_STRING_PREFIX = "[@MethodTrace]";
+	public static final String FORMAT_STRING = FORMAT_STRING_PREFIX  + "{}[@traceId={}] 在 {}" +
+			" 调用类 {} 的方法 {}, 传入参数 {}, 返回 {}, 在 {} 结束, 经历时长为 {}";
 	/**
 	 * 主键ID
 	 */
@@ -19,7 +22,7 @@ public class MethodTraceLog {
 	/**
 	 * URL追踪ID
 	 */
-    private String urlTraceId;
+    private String urlTraceLogId;
 	/**
 	 * 方法名
 	 */
@@ -68,12 +71,12 @@ public class MethodTraceLog {
         this.id = id;
     }
 
-    public String getUrlTraceId() {
-        return urlTraceId;
+    public String getUrlTraceLogId() {
+        return urlTraceLogId;
     }
 
-    public void setUrlTraceId(String urlTraceId) {
-        this.urlTraceId = urlTraceId;
+    public void setUrlTraceLogId(String urlTraceLogId) {
+        this.urlTraceLogId = urlTraceLogId;
     }
 
     public String getMethodName() {
@@ -152,11 +155,24 @@ public class MethodTraceLog {
 		this.methodId = methodId;
 	}
 
+	public Object[] toObjectArray() {
+		return new Object[]{
+				id,
+				urlTraceLogId,
+				beginTime,
+				className,
+				methodName,
+				inParam,
+				outParam,
+				endTime,
+				consumeTime
+		};
+	}
 	@Override
     public String toString() {
         return new ToStringBuilder(this)
             .append("id", id)
-            .append("urlTraceId", urlTraceId)
+            .append("urlTraceLogId", urlTraceLogId)
             .append("methodName", methodName)
             .append("className", className)
             .append("inParam", inParam)

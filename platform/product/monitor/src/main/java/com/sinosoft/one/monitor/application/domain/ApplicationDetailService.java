@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.application.domain;
 
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationDetailAlarmViewModel;
@@ -40,6 +41,8 @@ public class ApplicationDetailService {
 	@Autowired
 	private HealthStaCache healthStaCache;
 	@Autowired
+	private HealthStaService healthStaService;
+	@Autowired
 	private ApplicationRepository applicationRepository;
 
 
@@ -52,19 +55,15 @@ public class ApplicationDetailService {
 		Date startDate = DateUtil.getTodayBeginDate();
 		Date endDate = new Date();
 
+		Application application = applicationRepository.findOne(applicationId);
+		int interval = application.getInterval().intValue();
 		ApplicationDetailAlarmViewModel applicationDetailAlarmViewModel = new ApplicationDetailAlarmViewModel();
 		// 获得健康度
+		SeverityLevel severityLevel = healthStaService.healthStaForCurrent(applicationId, interval);
+
+		applicationDetailAlarmViewModel.setSeverityLevel(severityLevel);
 		int criticalCount = alarmRepository.countCriticalByMonitorId(applicationId, startDate, endDate);
-		if(criticalCount > 0) {
-			applicationDetailAlarmViewModel.setSeverityLevel(SeverityLevel.CRITICAL);
-		} else {
-			int warningCount = alarmRepository.countWarningByMonitorId(applicationId, startDate, endDate);
-			if(warningCount > 0) {
-				applicationDetailAlarmViewModel.setSeverityLevel(SeverityLevel.WARNING);
-			} else {
-				applicationDetailAlarmViewModel.setSeverityLevel(SeverityLevel.INFO);
-			}
-		}
+
 
 		Pageable pageable = new PageRequest(0, 10, Sort.Direction.DESC, "create_time");
 		Page<Alarm> alarmPage = alarmRepository.selectCriticalAlarmsByMonitorId(pageable, applicationId, startDate, endDate);

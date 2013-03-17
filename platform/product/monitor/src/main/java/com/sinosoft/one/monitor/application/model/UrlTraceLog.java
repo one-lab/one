@@ -1,9 +1,7 @@
 package com.sinosoft.one.monitor.application.model;
 
 
-import com.sinosoft.one.monitor.common.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -98,8 +96,6 @@ public class UrlTraceLog {
     }
 
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
     public String getId() {
         return id;
     }
@@ -202,7 +198,7 @@ public class UrlTraceLog {
 		this.methodTraceLogList = methodTraceLogList;
 	}
 
-	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "URL_TRACE_LOG_ID")
 	public List<MethodTraceLog> getMethodTraceLogList() {
 		return methodTraceLogList;

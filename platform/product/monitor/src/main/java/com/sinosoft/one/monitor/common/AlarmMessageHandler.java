@@ -183,7 +183,7 @@ public class AlarmMessageHandler {
 
 		Alarm prevAlarm = alarmService.queryLatestAlarm(thresholdAlarmParams.resource.getResourceId());
 		if(alarm.isSameAlarmInfo(prevAlarm)) {
-			if(System.currentTimeMillis() - prevAlarm.getCreateTime().getTime() < 30 * 60 * 1000) {
+			if(System.currentTimeMillis() - prevAlarm.getCreateTime().getTime() < 5 * 60 * 1000) {
 				return;
 			}
 		}
