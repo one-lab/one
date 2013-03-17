@@ -211,7 +211,7 @@ public class RecordServiceImpl implements RecordService {
         newCalender.set(calender.get(Calendar.YEAR),
                 calender.get(Calendar.MONTH), calender.get(Calendar.DATE));
         Date newDate = newCalender.getTime();
-        Ava oldAva = avaRepository.findAvaByTime(info.getId(),newDate, date);
+//        Ava oldAva = avaRepository.findAvaByTime(info.getId(),newDate, date);
         Ava ava = new Ava();
         boolean canConnect = dbUtil4Monitor.canConnect(info);
         if (canConnect) {
@@ -223,6 +223,12 @@ public class RecordServiceImpl implements RecordService {
         }
         ava.setRecordTime(date);
         ava.setDatabaseId(info.getId());
+//        long interval =  0;
+//        if(oldAva!=null){
+//            interval =  oldAva.getInterval();
+//        } else {
+//            interval =  info.getPullInterval();
+//        }
         long interval = info.getPullInterval();
         ava.setInterval(interval);
         avaRepository.save(ava);
