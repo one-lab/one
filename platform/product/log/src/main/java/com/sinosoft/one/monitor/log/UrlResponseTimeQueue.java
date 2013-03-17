@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class UrlResponseTimeQueue implements NotificationModel {
 	private UrlResponseTimeQueue() {}
 	private String data = "[]";
-	private final static int SIZE = 1;
+	private final static int SIZE = 100;
 	private final static UrlResponseTimeQueue INSTANCE = new UrlResponseTimeQueue();
 
 	private List<UrlResponseTime> urlResponseTimeList = new CopyOnWriteArrayList<UrlResponseTime>();

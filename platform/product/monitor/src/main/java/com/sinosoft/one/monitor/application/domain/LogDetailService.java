@@ -26,7 +26,7 @@ import java.util.Set;
 public class LogDetailService {
 
     @Autowired
-    LogDetailRepository logDetailRepository;
+    private LogDetailRepository logDetailRepository;
 
     /**
      * 根据logId获取请求详细信息
@@ -65,14 +65,20 @@ public class LogDetailService {
      */
     public String getParamDetail(String logId) {
         UrlTraceLog urlTraceLog = logDetailRepository.selectUrlDetail(logId);
-        String requestParams = urlTraceLog.getRequestParams();
+		ExceptionInfo exceptionInfo = logDetailRepository.selectExceptionInfo(logId);
 
+        String requestParams = "";
+	    if(exceptionInfo == null) {
+	        requestParams = urlTraceLog.getRequestParams();
+	    } else {
+			requestParams = exceptionInfo.getRequestParams();
+	    }
         if("{}".equals(requestParams)){
             return "{\"total\": \"0\",\"rows\": [{\"id\":\"1\",\"cell\":[\"无\",\"无\"]}]}";
         } else {
             JSONObject param = JSON.parseObject(requestParams);
             Set<String> keys = param.keySet();
-            String[] keyArr = (String[])keys.toArray(new String[0]);
+            String[] keyArr = keys.toArray(new String[0]);
 
             JSONObject paramJson = new JSONObject();
             String[] paramArr = requestParams.substring(1,requestParams.length()-1).split(",");
@@ -101,10 +107,8 @@ public class LogDetailService {
      * @param logId
      * @return
      */
-    public String getExceptionInfo(String logId){
-        ExceptionInfo exceptionInfo = logDetailRepository.selectExceptionInfo(logId);
-        String exceptionStackTrace = exceptionInfo == null ? "无" : exceptionInfo.getExceptionStackTrace().replaceAll("\n","<br/>");
-        return exceptionStackTrace;
+    public ExceptionInfo getExceptionInfo(String logId){
+        return logDetailRepository.selectExceptionInfo(logId);
     }
 
     public MethodTraceLog getMethodDetail(String methodId) {

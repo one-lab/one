@@ -102,7 +102,7 @@ public class ExceptionInfo {
 		return exceptionStackTrace;
 	}
 
-	public void setExceptionStackTrace(String exceptionStackTrace) {
+	public void setExceptionStackTrace(String exceptionStackTrace) throws Exception{
 		this.exceptionStackTrace = exceptionStackTrace;
 	}
 
