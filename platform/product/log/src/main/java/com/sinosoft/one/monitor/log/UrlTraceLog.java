@@ -5,6 +5,8 @@ import com.sinosoft.one.monitor.notification.NotificationModel;
 import com.sinosoft.one.monitor.notification.NotificationServiceFactory;
 import com.sinosoft.one.monitor.notification.NotificationType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -18,6 +20,10 @@ import java.util.*;
  * 用于记录URL追踪信息.
  */
 public class UrlTraceLog implements NotificationModel {
+	private static final String FORMAT_STRING_PREFIX = "[@UrlTrace]";
+	private static final String FORMAT_STRING = FORMAT_STRING_PREFIX  +"{} 在 {} 访问URL {}, 在 {} 结束,经历时长为 " +
+			"{}, 访问用户为 {}, 用户IP为 {}, Session Id 为 {}";
+	private static final Logger logger = LoggerFactory.getLogger(UrlTraceLog.class);
 	/**
 	 * 主键ID
 	 */
@@ -182,12 +188,25 @@ public class UrlTraceLog implements NotificationModel {
         targetURLTraceLog.setSessionId(request.getSession().getId());
         targetURLTraceLog.setUserIp(TraceUtils.getIPAddr(request));
         targetURLTraceLog.setRequestParams(traceModel.getRequestParams());
+		logger.debug(FORMAT_STRING, targetURLTraceLog.toObjectArray());
 	    NotificationServiceFactory.buildNotificationService().notification(targetURLTraceLog);
 	    return endTime;
     }
 
 
 
+	public Object[] toObjectArray() {
+		return new Object[]{
+			id,
+			url,
+			beginTime,
+			endTime,
+			consumeTime,
+			userId,
+			userIp,
+			sessionId
+		};
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this)

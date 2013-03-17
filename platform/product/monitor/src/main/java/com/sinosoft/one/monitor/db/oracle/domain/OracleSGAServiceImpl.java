@@ -34,56 +34,76 @@ public class OracleSGAServiceImpl implements OracleSGAService {
     private DBUtil4Monitor dbUtil4Monitor;
     @Override
     public OracleSGAModel viewSGAInfo(String monitorId) {
-    	DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
         OracleSGAModel oracleSGAModel = new OracleSGAModel();
-        String sql1 = OracleMonitorSql.sgaInfo1;
-        String sql2 = OracleMonitorSql.sgaInfo2;
-        List<Map<String, String>> rsList1 = dbutil.queryStrMaps(SqlObj.newInstance(sql1));
-        //'Fixed SGA Size','Redo Buffers','Buffer Cache Size','Shared Pool Size','Large Pool Size','Java Pool Size'
-        String fixedSGASize = rsList1.get(0).get("bytes");
-        String redoBuffers = rsList1.get(1).get("bytes");
-        String bufferCacheSize = rsList1.get(2).get("bytes");
-        String sharedPoolSize = rsList1.get(3).get("bytes");
-        String largePoolSize = rsList1.get(4).get("bytes");
-        String javaPoolSize = rsList1.get(5).get("bytes");
-        List<Map<String, String>> rsList2 = dbutil.queryStrMaps(SqlObj.newInstance(sql2));
-        // 'sql area' ,'library cache','sga dev dict ;
-        String sqlArea = rsList2.get(0).get("bytes");
-        String libCache = rsList2.get(1).get("bytes");
-        String sgaDevDict = rsList2.get(2).get("bytes");
+        if(dbUtil4Monitor.canConnect(monitorId)){
+            DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
+            String sql1 = OracleMonitorSql.sgaInfo1;
+            String sql2 = OracleMonitorSql.sgaInfo2;
+            List<Map<String, String>> rsList1 = dbutil.queryStrMaps(SqlObj.newInstance(sql1));
+            //'Fixed SGA Size','Redo Buffers','Buffer Cache Size','Shared Pool Size','Large Pool Size','Java Pool Size'
+            String fixedSGASize = rsList1.get(0).get("bytes");
+            String redoBuffers = rsList1.get(1).get("bytes");
+            String bufferCacheSize = rsList1.get(2).get("bytes");
+            String sharedPoolSize = rsList1.get(3).get("bytes");
+            String largePoolSize = rsList1.get(4).get("bytes");
+            String javaPoolSize = rsList1.get(5).get("bytes");
+            List<Map<String, String>> rsList2 = dbutil.queryStrMaps(SqlObj.newInstance(sql2));
+            // 'sql area' ,'library cache','sga dev dict ;
+            String sqlArea = rsList2.get(0).get("bytes");
+            String libCache = rsList2.get(1).get("bytes");
+            String sgaDevDict = rsList2.get(2).get("bytes");
 
-        oracleSGAModel.setBufferCacheSize(bufferCacheSize);
-        oracleSGAModel.setDictSize(sgaDevDict);
-        oracleSGAModel.setFixedSGASize(fixedSGASize);
-        oracleSGAModel.setJavaPoolSize(javaPoolSize);
-        oracleSGAModel.setRedoLogCacheSize(redoBuffers);
-        oracleSGAModel.setSqlAreaSize(sqlArea);
-        oracleSGAModel.setLargePoolSize(largePoolSize);
-        oracleSGAModel.setLibCacheSize(libCache);
-        oracleSGAModel.setSharePoolSize(sharedPoolSize);
+            oracleSGAModel.setBufferCacheSize(bufferCacheSize);
+            oracleSGAModel.setDictSize(sgaDevDict);
+            oracleSGAModel.setFixedSGASize(fixedSGASize);
+            oracleSGAModel.setJavaPoolSize(javaPoolSize);
+            oracleSGAModel.setRedoLogCacheSize(redoBuffers);
+            oracleSGAModel.setSqlAreaSize(sqlArea);
+            oracleSGAModel.setLargePoolSize(largePoolSize);
+            oracleSGAModel.setLibCacheSize(libCache);
+            oracleSGAModel.setSharePoolSize(sharedPoolSize);
+        } else {
+            oracleSGAModel.setBufferCacheSize("");
+            oracleSGAModel.setDictSize("");
+            oracleSGAModel.setFixedSGASize("");
+            oracleSGAModel.setJavaPoolSize("");
+            oracleSGAModel.setRedoLogCacheSize("");
+            oracleSGAModel.setSqlAreaSize("");
+            oracleSGAModel.setLargePoolSize("");
+            oracleSGAModel.setLibCacheSize("");
+            oracleSGAModel.setSharePoolSize("");
+        }
+
         return oracleSGAModel;
     }
 
     @Override
     public SGAStateModel viewSGAStateInfo(String monitorId) {
-    	DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
         SGAStateModel sgaStateModel = new SGAStateModel();
-        String sql1 = OracleMonitorSql.bufferRatio;
-        String sql2 = OracleMonitorSql.dictionaryRatio;
-        String sql3 = OracleMonitorSql.libraryRatio;
-        String sql4 = OracleMonitorSql.sgaFreeMemory;
-        List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj.newInstance(sql1));
-        List<Map<String, Object>> rsList2 = dbutil.queryObjMaps(SqlObj.newInstance(sql2));
-        List<Map<String, Object>> rsList3 = dbutil.queryObjMaps(SqlObj.newInstance(sql3));
-        List<Map<String, Object>> rsList4 = dbutil.queryObjMaps(SqlObj.newInstance(sql4));
-        String rate1 = ((BigDecimal)rsList1.get(0).get("Hit Ratio")).movePointRight(2).toString().substring(0,2);
-        String rate2 = ((BigDecimal)rsList2.get(0).get("dictRatio")).movePointRight(2).toString().substring(0,2);
-        String rate3 = ((BigDecimal)rsList3.get(0).get("libHitRatio")).movePointRight(2).toString().substring(0,2);
-        String rate4 = ((BigDecimal)rsList4.get(0).get("free memory")).movePointRight(2).toString().substring(0,2);
-        sgaStateModel.setBufferHitRate(rate1);
-        sgaStateModel.setDictHitRate(rate2);
-        sgaStateModel.setLibHitRate(rate3);
-        sgaStateModel.setUnusedCache(rate4);
+        if(dbUtil4Monitor.canConnect(monitorId)){
+            DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
+            String sql1 = OracleMonitorSql.bufferRatio;
+            String sql2 = OracleMonitorSql.dictionaryRatio;
+            String sql3 = OracleMonitorSql.libraryRatio;
+            String sql4 = OracleMonitorSql.sgaFreeMemory;
+            List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj.newInstance(sql1));
+            List<Map<String, Object>> rsList2 = dbutil.queryObjMaps(SqlObj.newInstance(sql2));
+            List<Map<String, Object>> rsList3 = dbutil.queryObjMaps(SqlObj.newInstance(sql3));
+            List<Map<String, Object>> rsList4 = dbutil.queryObjMaps(SqlObj.newInstance(sql4));
+            String rate1 = ((BigDecimal)rsList1.get(0).get("Hit Ratio")).movePointRight(2).toString().substring(0,2);
+            String rate2 = ((BigDecimal)rsList2.get(0).get("dictRatio")).movePointRight(2).toString().substring(0,2);
+            String rate3 = ((BigDecimal)rsList3.get(0).get("libHitRatio")).movePointRight(2).toString().substring(0,2);
+            String rate4 = ((BigDecimal)rsList4.get(0).get("free memory")).movePointRight(2).toString().substring(0,2);
+            sgaStateModel.setBufferHitRate(rate1);
+            sgaStateModel.setDictHitRate(rate2);
+            sgaStateModel.setLibHitRate(rate3);
+            sgaStateModel.setUnusedCache(rate4);
+        } else {
+            sgaStateModel.setBufferHitRate("");
+            sgaStateModel.setDictHitRate("");
+            sgaStateModel.setLibHitRate("");
+            sgaStateModel.setUnusedCache("");
+        }
         return sgaStateModel;
     }
 

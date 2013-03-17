@@ -89,26 +89,35 @@ public class OraclePreviewServiceImpl implements OraclePreviewService {
     public OracleDetailModel viewDbDetail(String monitorId) {
     	Info info = infoRepository.findOne(monitorId);
         OracleDetailModel oracleDetailModel = new OracleDetailModel();
-        DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
-        String sql = OracleMonitorSql.dbInfo;
-        List<Map<String, String>> rsList = dbutil.queryStrMaps(SqlObj.newInstance(sql));
-        Map<String, String> rsObj = rsList.get(0);
-        // CREATED,OPEN_MODE,LOG_MODE
-        String created = rsObj.get("CREATED");
-        String openMode = rsObj.get("OPEN_MODE");
-        String logMode = rsObj.get("LOG_MODE");
-       Long connectTime =  dbUtil4Monitor.connectTime(info);
-       
-        String sql1 = OracleMonitorSql.activeCount;
-        List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj
-                .newInstance(sql1));
-        int active =   ((BigDecimal)rsList1.get(0).get("active") ).intValue();
-        
-        oracleDetailModel.setDbCreateTime(created);
-        oracleDetailModel.setLogType(logMode);
-        oracleDetailModel.setOpenType(openMode);
-        oracleDetailModel.setConnectTime(connectTime+"");
-        oracleDetailModel.setActiveCount(active+"");
+        boolean canConnect = dbUtil4Monitor.canConnect(info);
+        if(canConnect){
+            DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
+            String sql = OracleMonitorSql.dbInfo;
+            List<Map<String, String>> rsList = dbutil.queryStrMaps(SqlObj.newInstance(sql));
+            Map<String, String> rsObj = rsList.get(0);
+            // CREATED,OPEN_MODE,LOG_MODE
+            String created = rsObj.get("CREATED");
+            String openMode = rsObj.get("OPEN_MODE");
+            String logMode = rsObj.get("LOG_MODE");
+            Long connectTime =  dbUtil4Monitor.connectTime(info);
+
+            String sql1 = OracleMonitorSql.activeCount;
+            List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj
+                    .newInstance(sql1));
+            int active =   ((BigDecimal)rsList1.get(0).get("active") ).intValue();
+
+            oracleDetailModel.setDbCreateTime(created);
+            oracleDetailModel.setLogType(logMode);
+            oracleDetailModel.setOpenType(openMode);
+            oracleDetailModel.setConnectTime(connectTime+"");
+            oracleDetailModel.setActiveCount(active+"");
+        } else {
+            oracleDetailModel.setDbCreateTime("");
+            oracleDetailModel.setLogType("");
+            oracleDetailModel.setOpenType("");
+            oracleDetailModel.setConnectTime("");
+            oracleDetailModel.setActiveCount("");
+        }
         return oracleDetailModel;
     }
 }

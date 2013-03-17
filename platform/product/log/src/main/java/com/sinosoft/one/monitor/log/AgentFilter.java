@@ -2,6 +2,9 @@ package com.sinosoft.one.monitor.log;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -47,7 +50,15 @@ public class AgentFilter implements Filter {
 						traceModel.setUrlId(urlId);
 						traceModel.setUrlTraceLog(urlTraceLog);
 					}
-					traceModel.setRequestParams(JSON.toJSONString(request.getParameterMap()));
+
+					Enumeration<String> paramNames = httpServletRequest.getParameterNames();
+					Map<String, String> requestParameterMap = new HashMap<String, String>();
+					while(paramNames.hasMoreElements()) {
+						String paramName = paramNames.nextElement();
+						requestParameterMap.put(paramName, httpServletRequest.getParameter(paramName));
+
+					}
+					traceModel.setRequestParams(JSON.toJSONString(requestParameterMap));
 				}
 				traceModel.setUrl(logConfigs.getRealPath(url));
 				TraceUtils.beginTrace(traceModel);
@@ -72,7 +83,8 @@ public class AgentFilter implements Filter {
 		ApplicationContext oldRootContext = (ApplicationContext) config.getServletContext().getAttribute(
 				WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 		if(oldRootContext == null) {
-	        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml");
+	        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml",
+			        "classpath:spring/applicationContext-exception.xml");
 			logConfigs = (LogConfigs)applicationContext.getBean("logConfigs");
 		} else {
 			logConfigs = (LogConfigs)oldRootContext.getBean("logConfigs");

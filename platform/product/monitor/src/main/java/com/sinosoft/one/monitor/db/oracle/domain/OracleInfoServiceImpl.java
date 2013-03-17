@@ -166,12 +166,16 @@ public class OracleInfoServiceImpl implements OracleInfoService {
             oracleInfoModel.setNextExecTime(sdf.format(nextExecTime));
         }
         oracleInfoModel.setMonitorName(info.getName());
-        DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
-        String sql = OracleMonitorSql.osName;
-        List<Map<String, String>> rsList = dbutil.queryStrMaps(SqlObj.newInstance(sql));
-        Map<String, String> rsObj = rsList.get(0);
-        String platformName = rsObj.get("platform_name");
-        //*操作系统信息，暂时不获取
+        boolean canConnect = dbUtil4Monitor.canConnect(info);
+        String platformName = "";
+        if(canConnect){
+            DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
+            String sql = OracleMonitorSql.osName;
+            List<Map<String, String>> rsList = dbutil.queryStrMaps(SqlObj.newInstance(sql));
+            Map<String, String> rsObj = rsList.get(0);
+            platformName = rsObj.get("platform_name");
+        }
+        //*操作系统信息
         oracleInfoModel.setOs(platformName);
         oracleInfoModel.setPort(info.getPort());
         //执行SQL语句查询

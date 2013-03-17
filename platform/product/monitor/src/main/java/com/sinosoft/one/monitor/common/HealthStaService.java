@@ -83,13 +83,25 @@ public class HealthStaService {
 	public SeverityLevel healthStaForCurrent(String moinitorId, int minutes) {
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Date endDate = localDateTime.toDate();
-		Date startDate = localDateTime.minusMinutes(5).toDate();
+		Date startDate = localDateTime.minusMinutes(minutes).toDate();
 		List<Alarm> alarms = alarmRepository.findAlarmByMonitorId(moinitorId, startDate, endDate);
 		if(alarms == null || alarms.size() == 0) {
-			return SeverityLevel.UNKNOW;
+			return SeverityLevel.INFO;
 		}
-		Alarm alarm = alarms.get(0);
-		return alarm.getSeverity();
+
+		int warningCount = 0;
+		for(Alarm alarm : alarms) {
+			if(alarm.getSeverity() == SeverityLevel.CRITICAL) {
+				return SeverityLevel.CRITICAL;
+			} else if(alarm.getSeverity() == SeverityLevel.WARNING) {
+				warningCount++;
+			}
+		}
+		if(warningCount > 0) {
+			return SeverityLevel.WARNING;
+		} else {
+			return SeverityLevel.INFO;
+		}
 	}
 
 	/**
@@ -104,10 +116,22 @@ public class HealthStaService {
 		Date startDate = localDateTime.minusMinutes(minutes).toDate();
 		List<Alarm> alarms = alarmRepository.findAlarmByMonitorId(moinitorId, subResourceType.name(), subResourceId, startDate, endDate);
 		if(alarms == null || alarms.size() == 0) {
-			return SeverityLevel.UNKNOW;
+			return SeverityLevel.INFO;
 		}
-		Alarm alarm = alarms.get(0);
-		return alarm.getSeverity();
+
+		int warningCount = 0;
+		for(Alarm alarm : alarms) {
+			if(alarm.getSeverity() == SeverityLevel.CRITICAL) {
+				return SeverityLevel.CRITICAL;
+			} else if(alarm.getSeverity() == SeverityLevel.WARNING) {
+				warningCount++;
+			}
+		}
+		if(warningCount > 0) {
+			return SeverityLevel.WARNING;
+		} else {
+			return SeverityLevel.INFO;
+		}
 	}
 
 	private Map<Integer, SeverityLevel> generateHealthStaMap(List<HealthStaForTime> healthStaForTimes) {

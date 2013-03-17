@@ -98,7 +98,9 @@ function getExceptionInfo(){
         async:false,
         success:function(data){
             var detailInfo = "<strong> 异常信息：</strong>";
-            $("#exceptionInfo").html(detailInfo+data);
+            var dataStr = data.replace(/\n/g, '<br/>');
+            dataStr = dataStr.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+            $("#exceptionInfo").html(detailInfo + dataStr);
         },
         error:function () {
             alert("暂时无法获得异常信息");

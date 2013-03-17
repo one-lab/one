@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.controllers.application.manager;
 
 import com.sinosoft.one.monitor.application.domain.LogDetailService;
+import com.sinosoft.one.monitor.application.model.ExceptionInfo;
 import com.sinosoft.one.monitor.application.model.LogDetail;
 import com.sinosoft.one.monitor.application.model.MethodTraceLog;
 import com.sinosoft.one.mvc.web.Invocation;
@@ -12,6 +13,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -49,14 +51,17 @@ public class ApplicationMethodController {
 
     @Get("getParamDetail/{logId}")
     public String getParamDetail(@Param("logId") String logId, Invocation inv){
+
         String ParamData = logDetailService.getParamDetail(logId);
         return "@"+ ParamData;
     }
 
     @Get("getExceptionInfo/{logId}")
     public String getExceptionInfo(@Param("logId") String logId, Invocation inv){
-        String exceptionInfo = logDetailService.getExceptionInfo(logId);
-        return "@" + exceptionInfo;
+	    ExceptionInfo exceptionInfo = logDetailService.getExceptionInfo(logId);
+	    String exceptionStackTrace = exceptionInfo.getExceptionStackTrace();
+	    exceptionStackTrace = StringUtils.isBlank(exceptionStackTrace) ? "无" : exceptionStackTrace;
+        return "@" + exceptionStackTrace;
     }
 
     @Get("getMethodDetail/{applicationId}/{urlId}/{logId}/{methodId}")

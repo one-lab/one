@@ -10,6 +10,7 @@ import com.sinosoft.one.monitor.utils.DateUtil;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,6 +39,7 @@ public class LogAgentMessageService implements AgentMessageService {
 	 * @param applicationId 应用系统ID
 	 * @param data 日志数据
 	 */
+	@Transactional
 	public void handleMessage(String applicationId, String data) {
 		UrlTraceLog urlTraceLog = JSON.parseObject(data, UrlTraceLog.class);
 		urlTraceLog.setApplicationId(applicationId);

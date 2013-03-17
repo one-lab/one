@@ -180,29 +180,33 @@ public class OracleController {
 	public String viewSGA(@Param("monitorId")String monitorId) {
     	
 		OracleSGAModel oracleSGAModel = oracleSGAService.viewSGAInfo(monitorId);
-		BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize(),MathContext.DECIMAL32);
-		bufferCacheSize = bufferCacheSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize(),MathContext.DECIMAL32);
-		sharePoolSize =sharePoolSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize(),MathContext.DECIMAL32);
-		redoLogCacheSize = redoLogCacheSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal libCacheSize =  new BigDecimal(oracleSGAModel.getLibCacheSize(),MathContext.DECIMAL32);
-		libCacheSize = libCacheSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal dictSize =  new BigDecimal(oracleSGAModel.getDictSize(),MathContext.DECIMAL32);
-		dictSize = dictSize.setScale(6,RoundingMode.CEILING);
-		BigDecimal sqlAreaSize =  new BigDecimal(oracleSGAModel.getSqlAreaSize(),MathContext.DECIMAL32);
-		sqlAreaSize = sqlAreaSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal fixedSGASize = new BigDecimal( oracleSGAModel.getFixedSGASize(),MathContext.DECIMAL32);
-		fixedSGASize= fixedSGASize.setScale(2,RoundingMode.CEILING);
-		JSONArray data = new JSONArray();
-		data.add(bufferCacheSize);
-		data.add(sharePoolSize);
-		data.add(redoLogCacheSize);
-		data.add(libCacheSize);
-		data.add(dictSize);
-		data.add(sqlAreaSize);
-		data.add(fixedSGASize);
-		return "@" +data.toJSONString();
+        if(!oracleSGAModel.getBufferCacheSize().equals("")){
+            BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize(),MathContext.DECIMAL32);
+            bufferCacheSize = bufferCacheSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize(),MathContext.DECIMAL32);
+            sharePoolSize =sharePoolSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize(),MathContext.DECIMAL32);
+            redoLogCacheSize = redoLogCacheSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal libCacheSize =  new BigDecimal(oracleSGAModel.getLibCacheSize(),MathContext.DECIMAL32);
+            libCacheSize = libCacheSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal dictSize =  new BigDecimal(oracleSGAModel.getDictSize(),MathContext.DECIMAL32);
+            dictSize = dictSize.setScale(6,RoundingMode.CEILING);
+            BigDecimal sqlAreaSize =  new BigDecimal(oracleSGAModel.getSqlAreaSize(),MathContext.DECIMAL32);
+            sqlAreaSize = sqlAreaSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal fixedSGASize = new BigDecimal( oracleSGAModel.getFixedSGASize(),MathContext.DECIMAL32);
+            fixedSGASize= fixedSGASize.setScale(2,RoundingMode.CEILING);
+            JSONArray data = new JSONArray();
+            data.add(bufferCacheSize);
+            data.add(sharePoolSize);
+            data.add(redoLogCacheSize);
+            data.add(libCacheSize);
+            data.add(dictSize);
+            data.add(sqlAreaSize);
+            data.add(fixedSGASize);
+            return "@" +data.toJSONString();
+        }  else {
+            return "@" +new JSONArray().toJSONString();
+        }
 	}
 
 	// 表空间所用数据

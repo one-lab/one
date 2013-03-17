@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSON;
@@ -24,7 +23,6 @@ import org.springframework.util.ClassUtils;
  */
 @Aspect
 public class LogTraceAspect {
-
     private static Logger logger = LoggerFactory.getLogger(LogTraceAspect.class);
 
     private static  LogConfigs logConfigs;
@@ -47,7 +45,7 @@ public class LogTraceAspect {
 	    if(traceModel == null || traceModel.getUrlId() == null) {
 		    return pjp.proceed();
 	    }
-	    String traceId = traceModel.getTraceId();
+	    String traceId = traceModel.getUrlTraceLog().getId();
 		Class<?> sourceClass = pjp.getSignature().getDeclaringType();
 		Class<?> targetClass = pjp.getTarget().getClass();
         if(logger.isDebugEnabled()){
@@ -65,7 +63,6 @@ public class LogTraceAspect {
 		long begin = 0;
 		long end = 0;
 		long time = 0;
-	    String exceptionStackTrace = "";
 		try {
 			begin = System.currentTimeMillis();
 			result = pjp.proceed();
@@ -82,16 +79,18 @@ public class LogTraceAspect {
                         if(logMethod.getClassName().equals(sourceClass.getName()) && logMethod.getMethodName().equals(specificMethod.getName())) {
 	                        MethodTraceLog methodTraceLog = new MethodTraceLog();
 
-	                        methodTraceLog.setUrlTraceId(traceId);
+	                        methodTraceLog.setUrlTraceLogId(traceId);
 	                        methodTraceLog.setMethodId(logMethod.getId());
 	                        methodTraceLog.setBeginTime(new Timestamp(begin));
 	                        methodTraceLog.setEndTime(new Timestamp(end));
 	                        methodTraceLog.setConsumeTime(time);
-	                        methodTraceLog.setMethodName(method.getName());
+	                        methodTraceLog.setMethodName(specificMethod.getName());
 	                        methodTraceLog.setClassName(sourceClass.getName());
 	                        methodTraceLog.setInParam(JSON.toJSONString(pjp.getArgs()));
 	                        methodTraceLog.setOutParam(JSON.toJSONString(result));
 	                        methodTraceLog.setRecordTime(new Date());
+
+	                        logger.debug(MethodTraceLog.FORMAT_STRING, methodTraceLog.toObjectArray());
 
 	                        UrlTraceLog urlTraceLog = traceModel.getUrlTraceLog();
 	                        urlTraceLog.addMethodTraceLog(methodTraceLog);
