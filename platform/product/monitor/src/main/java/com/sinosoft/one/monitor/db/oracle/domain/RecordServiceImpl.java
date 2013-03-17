@@ -49,58 +49,61 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void insertLastEvent(Info info, Date date) {
-        Lastevent lastevent = new Lastevent();
-        // 获取event数据
-        DBUtil dbutil = dbUtil4Monitor.getDBUtil(info.getId());
-        String sql1 = OracleMonitorSql.bufferRatio;
-        String sql2 = OracleMonitorSql.dictionaryRatio;
-        String sql3 = OracleMonitorSql.libraryRatio;
-        String sql4 = OracleMonitorSql.activeCount;
-        List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj
-                .newInstance(sql1));
-        List<Map<String, Object>> rsList2 = dbutil.queryObjMaps(SqlObj
-                .newInstance(sql2));
-        List<Map<String, Object>> rsList3 = dbutil.queryObjMaps(SqlObj
-                .newInstance(sql3));
-        List<Map<String, Object>> rsList4 = dbutil.queryObjMaps(SqlObj
-                .newInstance(sql4));
-        double hitRatio = ((BigDecimal) rsList1.get(0).get("Hit Ratio")).doubleValue();
-        lastevent.setBufferHitRate(hitRatio);
-        int active = ((BigDecimal) rsList4.get(0).get("active")).intValue();
-        lastevent.setActiveCount(active);
-        double libHitRatio = ((BigDecimal) rsList3.get(0).get("libHitRatio")).doubleValue();
-        lastevent.setBufferLibHitRate(libHitRatio);
-        long connectionTime = dbUtil4Monitor.connectTime(info);
-        lastevent.setConnectTime(connectionTime);
-        double dictRatio = ((BigDecimal) rsList2.get(0).get("dictRatio")).doubleValue();
-        lastevent.setDickHitRate(dictRatio);
-        lastevent.setDatabaseId(info.getId());
-        lastevent.setRecordTime(date);
-        lastevent = lasteventRepository.save(lastevent);
+        boolean canConnect = dbUtil4Monitor.canConnect(info);
+        if(canConnect){
+            Lastevent lastevent = new Lastevent();
+            // 获取event数据
+            DBUtil dbutil = dbUtil4Monitor.getDBUtil(info.getId());
+            String sql1 = OracleMonitorSql.bufferRatio;
+            String sql2 = OracleMonitorSql.dictionaryRatio;
+            String sql3 = OracleMonitorSql.libraryRatio;
+            String sql4 = OracleMonitorSql.activeCount;
+            List<Map<String, Object>> rsList1 = dbutil.queryObjMaps(SqlObj
+                    .newInstance(sql1));
+            List<Map<String, Object>> rsList2 = dbutil.queryObjMaps(SqlObj
+                    .newInstance(sql2));
+            List<Map<String, Object>> rsList3 = dbutil.queryObjMaps(SqlObj
+                    .newInstance(sql3));
+            List<Map<String, Object>> rsList4 = dbutil.queryObjMaps(SqlObj
+                    .newInstance(sql4));
+            double hitRatio = ((BigDecimal) rsList1.get(0).get("Hit Ratio")).doubleValue();
+            lastevent.setBufferHitRate(hitRatio);
+            int active = ((BigDecimal) rsList4.get(0).get("active")).intValue();
+            lastevent.setActiveCount(active);
+            double libHitRatio = ((BigDecimal) rsList3.get(0).get("libHitRatio")).doubleValue();
+            lastevent.setBufferLibHitRate(libHitRatio);
+            long connectionTime = dbUtil4Monitor.connectTime(info);
+            lastevent.setConnectTime(connectionTime);
+            double dictRatio = ((BigDecimal) rsList2.get(0).get("dictRatio")).doubleValue();
+            lastevent.setDickHitRate(dictRatio);
+            lastevent.setDatabaseId(info.getId());
+            lastevent.setRecordTime(date);
+            lastevent = lasteventRepository.save(lastevent);
 
-        alarmMessageBuilder.newMessageBase(info.getId())
-                .addAlarmAttribute(AttributeName.BufferHitRatio, hitRatio + "")
-                .addAlarmAttribute(AttributeName.ResponseTime, connectionTime + "")
-                .addAlarmAttribute(AttributeName.ActiveConnection, active + "").alarmSource(AlarmSource.DB).alarm();
+            alarmMessageBuilder.newMessageBase(info.getId())
+                    .addAlarmAttribute(AttributeName.BufferHitRatio, hitRatio + "")
+                    .addAlarmAttribute(AttributeName.ResponseTime, connectionTime + "")
+                    .addAlarmAttribute(AttributeName.ActiveConnection, active + "").alarmSource(AlarmSource.DB).alarm();
 
 
-        Calendar calender = DateUtil.getCalender();
-        calender.setTime(date);
-        Calendar newCalender = DateUtil.getCalender();
-        newCalender.set(
-                calender.get(Calendar.YEAR),
-                calender.get(Calendar.MONTH),
-                calender.get(Calendar.DATE));
-        newCalender.set(Calendar.HOUR_OF_DAY, calender.get(Calendar.HOUR_OF_DAY));
-        Date newDate = newCalender.getTime();
-        List<EventSta> eventStas = eventStaRepository.findByTimeAndMonitorId(newDate, info.getId());
-        if (eventStas == null || eventStas.size() == 0) {
-            insertEventSta(lastevent, newDate, date);
-        } else {
-            updateEventSta(lastevent, newDate);
+            Calendar calender = DateUtil.getCalender();
+            calender.setTime(date);
+            Calendar newCalender = DateUtil.getCalender();
+            newCalender.set(
+                    calender.get(Calendar.YEAR),
+                    calender.get(Calendar.MONTH),
+                    calender.get(Calendar.DATE));
+            newCalender.set(Calendar.HOUR_OF_DAY, calender.get(Calendar.HOUR_OF_DAY));
+            Date newDate = newCalender.getTime();
+            List<EventSta> eventStas = eventStaRepository.findByTimeAndMonitorId(newDate, info.getId());
+            if (eventStas == null || eventStas.size() == 0) {
+                insertEventSta(lastevent, newDate, date);
+            } else {
+                updateEventSta(lastevent, newDate);
+            }
+            Date timePoint = StaTimeEnum.getTime(StaTimeEnum.LAST_24HOUR, date);
+            lasteventRepository.clear(timePoint);
         }
-        Date timePoint = StaTimeEnum.getTime(StaTimeEnum.LAST_24HOUR, date);
-        lasteventRepository.clear(timePoint);
     }
 
     private void insertEventSta(Lastevent lastevent, Date inserTime, Date date) {
@@ -202,26 +205,32 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void insertAva(Info info, Date date) {
-        Ava ava = new Ava();
-        Connection conn = DBUtil4Monitor.getConnection(info);
-        if (conn != null) {
-            ava.setState("1");
-        } else {
-            ava.setState("0");
-            alarmMessageBuilder.newMessageBase(info.getId())
-                    .addAlarmAttribute(AttributeName.Availability, "0").alarmSource(AlarmSource.DB).alarm();
-        }
-        dbUtil4Monitor.closeConnection(conn);
-        ava.setRecordTime(date);
-        ava.setDatabaseId(info.getId());
-        ava.setInterval(info.getPullInterval());
-        avaRepository.save(ava);
         Calendar calender = DateUtil.getCalender();
         calender.setTime(date);
         Calendar newCalender = DateUtil.getCalender();
         newCalender.set(calender.get(Calendar.YEAR),
                 calender.get(Calendar.MONTH), calender.get(Calendar.DATE));
         Date newDate = newCalender.getTime();
+        Ava oldAva = avaRepository.findAvaByTime(info.getId(),newDate, date);
+        Ava ava = new Ava();
+        boolean canConnect = dbUtil4Monitor.canConnect(info);
+        if (canConnect) {
+            ava.setState("1");
+        } else {
+            ava.setState("0");
+            alarmMessageBuilder.newMessageBase(info.getId())
+                    .addAlarmAttribute(AttributeName.Availability, "0").alarmSource(AlarmSource.DB).alarm();
+        }
+        ava.setRecordTime(date);
+        ava.setDatabaseId(info.getId());
+        long interval =  0;
+        if(oldAva!=null){
+            interval =  oldAva.getInterval();
+        } else {
+            interval =  info.getPullInterval();
+        }
+        ava.setInterval(interval);
+        avaRepository.save(ava);
         AvaSta avaSta = avaStaRepository.findAvaStaByTime(info.getId(), newDate);
         if (avaSta == null || avaSta.getId() == null || avaSta.getId().equals("")) {
             insertAvaSta(ava, date, newDate, info.getPullInterval());

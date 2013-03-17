@@ -29,5 +29,11 @@ public interface AvaRepository extends PagingAndSortingRepository<Ava, String> {
     void deleteByMonitorIds(List<String> monitorId);
     @SQL("select * from GE_MONITOR_ORACLE_AVA where DATABASE_ID = ?2 and record_time >= ?1 order by record_time")
     List<Ava> find24Hour(Date timeStart, String id);
+    @SQL("select * from " +
+            "(select * from GE_MONITOR_ORACLE_AVA a " +
+            " where a.database_id=?1" +
+            " and a.record_time between ?2 and ?3" +
+            " order by a.record_time desc) where rownum=1")
+    Ava findAvaByTime(String id, Date newDate, Date date);
 }
 
