@@ -9,6 +9,7 @@ import com.sinosoft.one.monitor.db.oracle.utils.db.SqlObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,9 +23,13 @@ public class OracleTableSpaceServiceImpl implements OracleTableSpaceService {
     private DBUtil4Monitor dbUtil4Monitor;
     @Override
     public List<OracleTableSpaceModel> listTableSpaceInfo(String monitorId) {
-    	dbUtil4Monitor.changeConnection(monitorId);
-        String sql = OracleMonitorSql.tableSpaceInfo;
-        List<OracleTableSpaceModel> rsList = DBUtil.queryBeans(SqlObj.newInstance(sql), OracleTableSpaceModel.class);
+        List<OracleTableSpaceModel> rsList = new ArrayList<OracleTableSpaceModel>();
+        if(dbUtil4Monitor.canConnect(monitorId)){
+            DBUtil dbutil = dbUtil4Monitor.getDBUtil(monitorId);
+            String sql = OracleMonitorSql.tableSpaceInfo;
+            rsList = dbutil.queryBeans(SqlObj.newInstance(sql), OracleTableSpaceModel.class);
+        }
+
         return rsList;
     }
 }

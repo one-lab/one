@@ -65,7 +65,7 @@ public class OsRamViewHandle {
 		Map<String,List<List<?>>> osCpuUiliZation =new HashMap<String,List<List<?>>>();
 		for (Os os : Oss) {
 			List<List<?>> data=new ArrayList<List<?>>();
-			List<OsRam> osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+			List<OsRam> osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 			for (OsRam osRam:osRams) {
 				DateTime date= new DateTime(osRam.getSampleDate());
 				Long time = date.getMillis();
@@ -85,9 +85,9 @@ public class OsRamViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneRamLineData(Os os,Date currentTime,int interCycle,int timespan){
+	public List<List<?>> creatOneRamLineData(Os os,Date currentTime,int timespan){
 		List<List<?>> data=new ArrayList<List<?>>();
-		List<OsRam>osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+		List<OsRam>osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 		for (OsRam osRam:osRams) {
 			DateTime date= new DateTime(osRam.getSampleDate());
 			Long time = date.getMillis();
@@ -105,7 +105,7 @@ public class OsRamViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneSwapLineData(Os os,Date currentTime,int interCycle,int timespan){
+	public List<List<?>> creatOneSwapLineData(Os os,Date currentTime,int timespan){
 		List<List<?>> data=new ArrayList<List<?>>();
 		List<OsRam>osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
 		for (OsRam osRam:osRams) {

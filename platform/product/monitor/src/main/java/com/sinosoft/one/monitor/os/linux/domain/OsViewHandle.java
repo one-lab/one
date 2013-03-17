@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -76,12 +77,12 @@ public class OsViewHandle {
 	 * @param timespan 需要的时间段 如 1为1小时内
 	 * @return
 	 */
-	public  Map<String,List<List<?>>>   createOneOsCpuAndMemline(String osid,Date currentTime ,int interCycle ,int timespan){
+	public  Map<String,List<List<?>>>   createOneOsCpuAndMemline(String osid,Date currentTime  ,int timespan){
 		Os os =osService.getOsBasicById(osid);
 		Map<String,List<List<?>>> viewMap=new   HashMap<String, List<List<?>>>();
-		List<List<?>> oneCpuLineViewMaps=osCpuViewDataHandle.creatOneCpuUsedLineData(os, currentTime, interCycle, timespan);
-		List<List<?>> oneRamLineViewMaps=osRamViewHandle.creatOneRamLineData(os, currentTime, interCycle, timespan);
-		List<List<?>> oneSwapLineViewMaps=osRamViewHandle.creatOneSwapLineData(os, currentTime, interCycle, timespan);
+		List<List<?>> oneCpuLineViewMaps=osCpuViewDataHandle.creatOneCpuUsedLineData(os, currentTime, timespan);
+		List<List<?>> oneRamLineViewMaps=osRamViewHandle.creatOneRamLineData(os, currentTime, timespan);
+		List<List<?>> oneSwapLineViewMaps=osRamViewHandle.creatOneSwapLineData(os, currentTime, timespan);
 		viewMap.put("CPU", oneCpuLineViewMaps);
 		viewMap.put("MEM", oneRamLineViewMaps);
 		viewMap.put("SWAP", oneSwapLineViewMaps);
@@ -96,17 +97,14 @@ public class OsViewHandle {
 	 * @param timespan 需要的时间段 如 1为1小时内
 	 * @return
 	 */
-	public Map<String,List<List<?>>>  createOneCpuResolveView(String osid,Date currentTime ,int interCycle ,int timespan){
+	public Map<String,List<List<?>>>  createOneCpuResolveView(String osid,Date currentTime  ,int timespan){
 		Os os =osService.getOsBasicById(osid);
 		Map<String,List<List<?>>> viewMap=new   HashMap<String, List<List<?>>>();
-		Calendar c  = Calendar.getInstance();
-		c.setTime(currentTime);
-		c.set(Calendar.HOUR_OF_DAY,currentTime.getHours()-timespan);
-		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), c.getTime(), currentTime);
-		List<List<?>> oneCpuUserTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuUserTimeLine(os, currentTime, interCycle, timespan,osCpus);
-		List<List<?>> oneCpuSysTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuSysTimeLine(os, currentTime, interCycle, timespan,osCpus);
-		List<List<?>> oneCpuIOLineViewMaps=osCpuViewDataHandle.creatOneCpuIOLine(os, currentTime, interCycle, timespan,osCpus);
-		List<List<?>> OneCpuIDLELineViewMaps=osCpuViewDataHandle.creatOneCpuIDLELine(os, currentTime, interCycle, timespan,osCpus);
+		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
+		List<List<?>> oneCpuUserTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuUserTimeLine(os,osCpus);
+		List<List<?>> oneCpuSysTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuSysTimeLine(os,osCpus);
+		List<List<?>> oneCpuIOLineViewMaps=osCpuViewDataHandle.creatOneCpuIOLine(os,osCpus);
+		List<List<?>> OneCpuIDLELineViewMaps=osCpuViewDataHandle.creatOneCpuIDLELine(os,osCpus);
 		viewMap.put("userTime", oneCpuUserTimeLineViewMaps);
 		viewMap.put("sysTime", oneCpuSysTimeLineViewMaps);
 		viewMap.put("io", oneCpuIOLineViewMaps);

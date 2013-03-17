@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
 import com.sinosoft.one.monitor.common.AlarmSource;
@@ -58,9 +59,7 @@ public class OsProcessService {
 		
 		List<OsDisk> osDisks=OsTransUtil.getDiskInfo(diskInfo);
 		osDiskService.saveDisk(osInfoId,osDisks, sampleTime);//保存磁盘采样
-		for(OsDisk osDisk : osDisks){
-			messageBase.addAlarmAttribute(AttributeName.DiskUtilization, osDisk.getUsedUtiliZation());
-		}
+		messageBase.addAlarmAttribute(AttributeName.DiskUtilization, osDisks.get(0).getTotalUtiliZation());
 		
  		OsRam osRam=OsTransUtil.getRamInfo(ramInfo);
 		osRamService.saveRam(osInfoId,osRam , sampleTime);//保存内存采样
@@ -93,6 +92,7 @@ public class OsProcessService {
 	 * @param time
 	 * @param Status
 	 */
+	@Transactional
 	public void savaAvailableSampleData(String osInfoId,Date sampleTime,int interCycleTime ,String Status){
 		OsAvailabletemp osAvailabletemp=new OsAvailabletemp();
 		Os os=new Os();

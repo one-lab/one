@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +28,7 @@ import com.sinosoft.one.uiutil.UIUtil;
  * @ClassName: StaController
  * @author yangzongbin
  * @date 2013-3-6 下午09:51:52
- * @description 这个类用来展示7天连接数报表
+ * @description 这个类用来展示7天，30天报表
  */
 
 @Path("sta")
@@ -50,13 +49,13 @@ public class StaController {
 	// 从 2013-2-26 上午11:00
 	// 到 2013-3-1 下午6:22
 
-	// public void viewBaseInfo(@Param("monitorId")String monitorId, Invocation
-	// inv) {
-	//
-	// //System.out.println(monitorId);
-	//
-	// }
-	@Get("view/{monitorId}/{eventType}/{eventName}/{st}")
+    /*//最近7天的连接时间
+    监视器名称 	te01
+    属性 	连接时间 ms
+    从 	2013-03-06 19:49
+    到 	2013-03-13 19:49*/
+
+    @Get("view/{monitorId}/{eventType}/{eventName}/{st}")
 	public String viewPage(@Param("monitorId") String monitorId,@Param("eventType")int eventType,@Param("eventName")int eventName,@Param("st")int st, Invocation inv)
 			throws Exception {
 		String en = "";
@@ -80,9 +79,6 @@ public class StaController {
 			en = HIT_RATE;
 		break;
 		}
-		// System.out.println("+++++++++++++++++++++++++++++++++++++++");
-		// System.out.println("+++++++++++++++++++++++++++++++++++++++");
-		// System.out.println(monitorId);
 		OracleStaInfoDetailModel oracleStaInfoDetailModel = oracleStaService
 		.getBaseInfo(monitorId, eventType, en, new Date(),
 				sta, TimeGranularityEnum.DAY);
@@ -99,8 +95,6 @@ public class StaController {
         }
 		inv.addModel("osdm", oracleStaInfoDetailModel);
         inv.addModel("monitorId", monitorId);
-		// viewTable(monitorId,inv);
-		// System.out.println("+++++++++++++++++++++++++++");
 		if(eventType == 1 && st == 1 ){
 			return "sevenDayConnect";
 		}else if(eventType == 1 && st == 2){
@@ -165,6 +159,13 @@ public class StaController {
                 eventSta.setMax(Double.parseDouble(maxInt+""));
                 eventSta.setMin(Double.parseDouble(minInt+""));
             }
+        }else if(en.equals(ACTIVE_COUNT) || en.equals(CONNECT_TIME)){
+        	for(EventSta eventSta:eventStas){
+        		eventSta.setAvg(Double.parseDouble(eventSta.getAvg().intValue()+""));
+                eventSta.setMax(Double.parseDouble(eventSta.getMax().intValue()+""));
+                eventSta.setMin(Double.parseDouble(eventSta.getMin().intValue()+""));
+                
+        	}
         }
 		Page page = new PageImpl(eventStas);
 		Gridable<EventSta> gridable = new Gridable<EventSta>(page);
@@ -233,6 +234,8 @@ public class StaController {
                 avg = avg*100;
                 int usePercents = avg.intValue();
                 eventStas.get(i).setAvg(Double.parseDouble(usePercents+""));
+            }else if(en.equals(ACTIVE_COUNT) || en.equals(CONNECT_TIME)){
+            	 eventStas.get(i).setAvg(Double.parseDouble(eventStas.get(i).getAvg().intValue()+""));
             }
 			data.add(eventStas.get(i).getAvg());
 		}

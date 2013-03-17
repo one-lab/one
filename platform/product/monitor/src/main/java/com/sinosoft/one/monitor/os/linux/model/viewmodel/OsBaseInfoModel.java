@@ -1,5 +1,10 @@
 package com.sinosoft.one.monitor.os.linux.model.viewmodel;
 
+/**
+ * 基本信息 可用性 健康状况等 信息对象
+ * @author Administrator
+ *
+ */
 public class OsBaseInfoModel {
 	 
 	/**

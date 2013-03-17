@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface LasteventRepository extends PagingAndSortingRepository<Lastevent, String> {
     @SQL("select t.record_time from \n" +
-            "(select * from ge_monitor_oracle_lastevent order by record_time desc) t\n" +
+            "(select * from ge_monitor_oracle_lastevent where DATABASE_ID=?1 order by record_time desc) t\n" +
             "where rownum=1")
-    Date findLastExecTime();
+    Date findLastExecTime(String monitorId);
     @SQL("select t1.* from ge_monitor_oracle_lastevent t1 WHERE DATABASE_ID=?1 and record_time between ?2 AND ?3 order by record_time")
     List<Lastevent> findLastEventList(String monitorId, Date start, Date end);
     @SQL("delete from GE_MONITOR_ORACLE_LASTEVENT  where record_time < ?1")

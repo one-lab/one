@@ -55,7 +55,7 @@
           </tr>
           <tr>
             <td class="monitorinfoodd">系统健康状况</td>
-            <td class="monitorinfoeven"><img src="${ctx}/global/images/bussinessY.gif" />&nbsp;&nbsp;健康状态为正常  .&nbsp;没有出现严重的告警。 </td>
+            <td id="healthy" class="monitorinfoeven"> </td>
           </tr>
           <tr>
             <td class="monitorinfoodd" >类型 </td>

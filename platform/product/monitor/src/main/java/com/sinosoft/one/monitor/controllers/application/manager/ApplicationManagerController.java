@@ -26,11 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * 应用的增删改查Controller.
  * User: zfb
  * Date: 13-2-27
  * Time: 下午10:14
- * To change this template use File | Settings | File Templates.
  */
 @Path("appmanager")
 public class ApplicationManagerController {
@@ -113,7 +112,7 @@ public class ApplicationManagerController {
         //获得当前用户id
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         //更新时间使用sysdate
-        applicationService.updateApplicationWithModifyInfo(appId,application.getApplicationName(),application.getCnName(),
+        applicationService.updateApplicationWithModifyInfo(appId,application.getCnName(),
                 application.getApplicationIp(),application.getApplicationPort(),modifierId,application.getInterval());
         businessEmulation.restart(appId);
         //应用列表页面

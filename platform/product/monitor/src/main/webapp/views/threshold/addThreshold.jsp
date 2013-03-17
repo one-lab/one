@@ -110,7 +110,7 @@ function toSaveThreshold() {
               <tr class="hideRows">
                 <td>&nbsp;</td>
                 <td width="8%" valign="top">信息</td>
-                <td><textarea cols="48" class="formtext" style="height:60px" name="criticalThresholdMessage"  >${threshold.criticalThresholdMessage==null?"严重警告信息":threshold.criticalThresholdMessage}</textarea></td>
+                <td><textarea cols="48" class="formtext" style="height:60px" name="criticalThresholdMessage"  >${threshold.criticalThresholdMessage eq null ? "严重警告信息" : threshold.criticalThresholdMessage}</textarea></td>
               </tr>
               <tr class="hideRows">
                 <td colspan="3">
@@ -134,7 +134,7 @@ function toSaveThreshold() {
               <tr class="hideRows">
                 <td>&nbsp;</td>
                 <td width="8%" valign="top">信息</td>
-                <td><textarea cols="48" class="formtext" style="height:60px" name="warningThresholdMessage" >${threshold.warningThresholdMessage==null?"警告告警信息":threshold.warningThresholdMessage}</textarea></td>
+                <td><textarea cols="48" class="formtext" style="height:60px" name="warningThresholdMessage" >${threshold.warningThresholdMessage eq null ? "警告告警信息" : threshold.warningThresholdMessage}</textarea></td>
               </tr>
               <tr class="hideRows">
                 <td colspan="3"><hr class="hr" /></td>
@@ -156,7 +156,7 @@ function toSaveThreshold() {
               <tr class="hideRows">
                 <td>&nbsp;</td>
                 <td valign="top">信息</td>
-                <td><textarea name="infoThresholdMessage" cols="48" class="formtext" style="height:60px" >${threshold.infoThresholdMessage==null?"正常告警信息":threshold.infoThresholdMessage}</textarea></td>
+                <td><textarea name="infoThresholdMessage" cols="48" class="formtext" style="height:60px" >${threshold.infoThresholdMessage eq null ? "正常告警信息" : threshold.infoThresholdMessage}</textarea></td>
               </tr>
               <tr>
                 <td class="group_name">&nbsp;</td>

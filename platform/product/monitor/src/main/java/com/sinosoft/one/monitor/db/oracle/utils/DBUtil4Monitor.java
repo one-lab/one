@@ -4,6 +4,7 @@ import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.monitorSql.OracleMonitorSql;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.utils.db.ClassLoaderUtil;
+import com.sinosoft.one.monitor.db.oracle.utils.db.ConnUtil;
 import com.sinosoft.one.monitor.db.oracle.utils.db.DBUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Logger;
 
 /**
  * User: Chunliang.Han
@@ -22,11 +24,13 @@ import java.util.Date;
 public class DBUtil4Monitor {
     @Autowired
     private InfoRepository infoRepository;
-    public static void openConnection(String DRIVER,String URL,String USER,String PASSWORD) {
-        DBUtil.reStart(DRIVER, URL, USER, PASSWORD);
+    Logger logger = Logger.getLogger(this.getClass().getName());
+    public DBUtil getDBUtil(String DRIVER,String URL,String USER,String PASSWORD) {
+    	DBUtil dbutil = DBUtil.getInstance(new ConnUtil(DRIVER, URL, USER, PASSWORD));
+    	return dbutil;
     }
-    public void changeConnection(String monitorId) {
-        Info info = infoRepository.findOne(monitorId);
+    public DBUtil getDBUtil(String monitorId){
+    	Info info = infoRepository.findOne(monitorId);
         String ip = info.getIpAddress();
         String port = info.getPort();
         String instanceName = info.getInstanceName();
@@ -34,7 +38,8 @@ public class DBUtil4Monitor {
         String password = info.getPassword();
         String driver = OracleMonitorSql.DRIVER;
         String url = "jdbc:oracle:thin:@"+ip+":"+port+":"+instanceName;
-        DBUtil.reStart(driver, url, username, password);
+    	DBUtil dbutil = DBUtil.getInstance(new ConnUtil(driver, url, username, password));
+       return dbutil;
     }
     public long connectTime(Info info){
         Date begin = new Date();
@@ -51,13 +56,14 @@ public class DBUtil4Monitor {
             }
         } catch (SQLException e) {
             // 记录日志
-            e.printStackTrace();
+            //e.printStackTrace();
+            logger.info(e.getMessage());
         }
     }
 
 
 
-    public static Connection getConnection(Info info){
+    public Connection getConnection(Info info){
         String ip = info.getIpAddress();
         String port = info.getPort();
         String instanceName = info.getInstanceName();
@@ -74,8 +80,51 @@ public class DBUtil4Monitor {
             }
         } catch (SQLException e1) {
             // 记录日志
-            e1.printStackTrace();
+            //e1.printStackTrace();
+            logger.info(e1.getMessage());
         }
         return conn;
+    }
+    public Connection getConnection(String DRIVER,String URL,String USER,String PASSWORD){
+        Connection conn = null;
+        try {
+            if (conn == null || conn.isClosed()) {
+                ClassLoaderUtil.loadClass(DRIVER);
+                conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            }
+        } catch (SQLException e1) {
+            // 记录日志
+            //e1.printStackTrace();
+            logger.info(e1.getMessage());
+        }
+        return conn;
+    }
+    public boolean canConnect(String DRIVER,String URL,String USER,String PASSWORD){
+        boolean canConnect = false;
+        Connection connection = getConnection(DRIVER,URL,USER,PASSWORD);
+        if(connection!=null){
+            canConnect = true;
+            closeConnection(connection);
+        }
+        return canConnect;
+    }
+    public boolean canConnect(Info info){
+        boolean canConnect = false;
+        Connection connection = getConnection(info);
+        if(connection!=null){
+            canConnect = true;
+            closeConnection(connection);
+        }
+        return canConnect;
+    }
+    public boolean canConnect(String monitorId){
+        Info info = infoRepository.findOne(monitorId);
+        boolean canConnect = false;
+        Connection connection = getConnection(info);
+        if(connection!=null){
+            canConnect = true;
+            closeConnection(connection);
+        }
+        return canConnect;
     }
 }

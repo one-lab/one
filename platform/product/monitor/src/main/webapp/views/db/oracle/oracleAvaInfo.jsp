@@ -17,7 +17,7 @@
                </tr>
            </table>
        </td><!--
-       <td>${oracleAvaInfo.avaRate}</td>
+       <td>可用：${oracleAvaInfo.avaRate}%</td>
    --></tr>
    </c:forEach>
   <tr class="last_row">

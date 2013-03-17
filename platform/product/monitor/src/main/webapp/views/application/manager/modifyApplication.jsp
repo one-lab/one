@@ -54,10 +54,10 @@
         /*校验数据*/
         function isValid(form) {
             var appName="^[A-Za-z]+$";
-            if (!form.applicationName.value.match(appName)) {
+            /*if (!form.applicationName.value.match(appName)) {
                 msgAlert('系统消息','显示名称必须是英文！')
                 return false;
-            }
+            }*/
             if (form.cnName.value==null||form.cnName.value=="") {
                 msgAlert('系统消息','中文名称不能为空！')
                 return false;
@@ -102,8 +102,8 @@
                     </tr>
                     <tr>
                         <td width="25%">显示名称<span class="mandatory">*</span></td>
-                        <td><input id="applicationName" name="applicationName" value="${application.applicationName}" type="text" class="formtext"/>
-                            <msg:errorMsg property="applicationName" type="message"/>
+                        <td><%--<input id="applicationName" name="applicationName" value="${application.applicationName}" type="text" class="formtext"/>
+                            <msg:errorMsg property="applicationName" type="message"/>--%> ${application.applicationName}
                         </td>
                     </tr>
                     <tr>

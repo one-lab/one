@@ -61,19 +61,6 @@ public class OsDataMathService {
 		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
 		//可用性停机及次数LIST
 		List<AvailableCountsGroupByInterval> availableCountsGroupByIntervals=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
-//		long lastRecordTime = 0;//上次时间变量
-//		for (int i = 0; i < osAvailabletemps.size(); i++) {
-//			if(i==0){//判断第一次与查询时间起始时间targetTime 是否大于轮询时间
-//				if(osAvailabletemps.get(i).getSampleDate().getTime()-targetTime.getTime()>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
-//					stopCount=stopCount+1;
-//				}
-//			}else{
-//				if(osAvailabletemps.get(i).getSampleDate().getTime()-lastRecordTime>(osAvailabletemps.get(i).getIntercycleTime()*60*1000+5000)){
-//					stopCount=stopCount+1;
-//				}
-//			}
-//			lastRecordTime=osAvailabletemps.get(i).getSampleDate().getTime();
-//		}
 		AvailableStatistics availableStatistics;
 		if(osAvailable==null){//当天开始的统计
 			availableStatistics=new AvailableStatistics(Long.valueOf(0),Long.valueOf(0), 0);

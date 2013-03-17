@@ -44,11 +44,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * 处理配置告警的Controller.
  * User: zfb
  * Date: 13-3-5
  * Time: 上午10:56
- * To change this template use File | Settings | File Templates.
  */
 @Path("configemergency")
 public class ConfigEmergencyController {

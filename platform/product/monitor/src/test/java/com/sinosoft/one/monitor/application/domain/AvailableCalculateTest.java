@@ -2,19 +2,23 @@ package com.sinosoft.one.monitor.application.domain;
 
 
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
+import com.sinosoft.one.util.test.SpringTxTestCase;
+
 import junit.framework.Assert;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-
-public class AvailableCalculateTest {
+@DirtiesContext
+@ContextConfiguration(locations = {"/spring/applicationContext-test.xml"})
+public class AvailableCalculateTest extends   SpringTxTestCase{
 
     private int dayMinute;
 

@@ -57,7 +57,7 @@ public class OsCpuViewHandle {
 		Map<String,List<List<?>>> osCpuUiliZation =new HashMap<String,List<List<?>>>();
 		for (Os os : Oss) {
 			List<List<?>> data=new ArrayList<List<?>>();
-			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 			for (OsCpu osCpu:osCpus) {
 				 DateTime date= new DateTime(osCpu.getSampleDate());
 				Long time = date.getMillis();
@@ -77,9 +77,9 @@ public class OsCpuViewHandle {
 	 * @param timespan 小时数 
 	 * @return
 	 */
-	public List<List<?>>  creatOneCpuUsedLineData(Os os,Date currentTime,int interCycle,int timespan){
+	public List<List<?>>  creatOneCpuUsedLineData(Os os,Date currentTime,int timespan){
 			List<List<?>> data=new ArrayList<List<?>>();
-			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 			for (OsCpu osCpu:osCpus) {
 				 DateTime date= new DateTime(osCpu.getSampleDate());
 				Long time = date.getMillis();
@@ -98,7 +98,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneCpuUserTimeLine(Os os,Date currentTime,int interCycle,int timespan ,List<OsCpu> osCpus){
+	public List<List<?>> creatOneCpuUserTimeLine(Os os,List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());
@@ -117,7 +117,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneCpuSysTimeLine(Os os,Date currentTime,int interCycle,int timespan, List<OsCpu> osCpus){
+	public List<List<?>> creatOneCpuSysTimeLine(Os os, List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());
@@ -136,7 +136,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneCpuIOLine(Os os,Date currentTime,int interCycle,int timespan,List<OsCpu> osCpus){
+	public List<List<?>> creatOneCpuIOLine(Os os,List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());
@@ -155,7 +155,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>>  creatOneCpuIDLELine(Os os,Date currentTime,int interCycle,int timespan,List<OsCpu> osCpus){
+	public List<List<?>>  creatOneCpuIDLELine(Os os,List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());

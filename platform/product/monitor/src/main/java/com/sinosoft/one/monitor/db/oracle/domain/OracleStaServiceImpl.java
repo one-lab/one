@@ -75,7 +75,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                 }
                 staInfoDetailModel.setMaxAvg(max);
                 staInfoDetailModel.setMinAvg(min);
-                staInfoDetailModel.setAvg(sum / eventStaList.size());
+                Double avg1 = sum / eventStaList.size();
+                int  avg2 = avg1.intValue();
+                staInfoDetailModel.setAvg(Double.parseDouble(avg2+""));
 
                 //图形点
                 staInfoDetailModel.setxName("时间");
@@ -116,7 +118,9 @@ public class OracleStaServiceImpl implements OracleStaService {
                 }
                 staInfoDetailModel.setMaxAvg(max);
                 staInfoDetailModel.setMinAvg(min);
-                staInfoDetailModel.setAvg(sum / eventStaList.size());
+                Double avg1 = sum / eventStaList.size();
+                int avg2 = avg1.intValue();
+                staInfoDetailModel.setAvg(Double.parseDouble(avg2+""));
 
                 //图形点
                 staInfoDetailModel.setxName("时间");

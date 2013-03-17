@@ -199,7 +199,7 @@ public class OsService {
 			}else {
 				 healthyPint[0] = "3";
 				 healthyPint[1] = msg.append(os.getName()).append("为停止").toString();
-				osBaseInfoModel.setUsability("0");
+				 osBaseInfoModel.setUsability("0");
 			}
 			osBaseInfoModel.setHealthy(healthyPint);
 			osBaseInfoModel.setMonitorID(os.getOsInfoId());

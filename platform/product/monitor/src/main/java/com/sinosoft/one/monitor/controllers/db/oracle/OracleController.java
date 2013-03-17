@@ -66,11 +66,12 @@ public class OracleController {
 	// 展现oracle基本信息
 	@Get("viewInfo/{monitorId}")
 	public String viewInfo(@Param("monitorId")String monitorId, Invocation inv) {
-
+        //oracle主页面-基本信息
 		OracleInfoModel oracleInfoModel = oracleInfoService
 				.getMonitorInfo(monitorId);
+        //oracle主页面-SGA-SGA状态
         SGAStateModel sgaStateModel =  oracleSGAService.viewSGAStateInfo(monitorId);
-
+        //oracle主页面-数据库明细,连接时间和用户数也包含在内
         OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
         
         inv.addModel("oracleDetailModel", oracleDetailModel);
@@ -88,25 +89,32 @@ public class OracleController {
         if(avaSta!=null){
             long normalRuntime = avaSta.getNormalRuntime();
             long powerOffTime = avaSta.getTotalPoweroffTime();
+            long unKnowTime = avaSta.getUnknowTime();
             // 如何保留两位小数
             Double usePercent = normalRuntime
-                    / (normalRuntime + powerOffTime / 1.0) * 100;
+                    / (unKnowTime + normalRuntime + powerOffTime / 1.0) * 100;
+            Double unUsedPercent = powerOffTime  / (unKnowTime + normalRuntime + powerOffTime / 1.0) * 100;
             int usePercents = usePercent.intValue();
-            int unUsedPercents = 100 - usePercents;
+            int unUsedPercents = unUsedPercent.intValue();
+            int unknowPercents = 100-usePercents-unUsedPercents;
             JSONArray  y = new JSONArray();
+            y.add(usePercents);
             y.add(unUsedPercents);
+            y.add(unknowPercents);
             //System.out.println(y.toJSONString());
             return "@"+y.toJSONString();
         }  else {
             JSONArray  y = new JSONArray();
             y.add(0);
+            y.add(0);
+            y.add(100);
             //System.out.println(y.toJSONString());
             return "@"+y.toJSONString();
         }
 	}
 	
     @Get("viewConnect/{monitorId}")
-	// 用户连接数和连接时间所用数据
+	// 用户连接数和连接时间所用数据（图形所用数据）
 	public String viewConnectAndActive(@Param("monitorId")String monitorId) {
 		EventInfoModel[] eventInfoModel = oraclePreviewService
 				.viewConnectInfo(monitorId);
@@ -133,7 +141,7 @@ public class OracleController {
         if(connectPoints!=null){
             for (int i = 0; i < connectPoints.size(); i++) {
                 categories.add(sdf.format(connectPoints.get(i).getxAxis()));
-                connectData.add(connectPoints.get(i).getyAxis()*100);
+                connectData.add(connectPoints.get(i).getyAxis());
             }
         }
 
@@ -172,29 +180,33 @@ public class OracleController {
 	public String viewSGA(@Param("monitorId")String monitorId) {
     	
 		OracleSGAModel oracleSGAModel = oracleSGAService.viewSGAInfo(monitorId);
-		BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize(),MathContext.DECIMAL32);
-		bufferCacheSize = bufferCacheSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize(),MathContext.DECIMAL32);
-		sharePoolSize =sharePoolSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize(),MathContext.DECIMAL32);
-		redoLogCacheSize = redoLogCacheSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal libCacheSize =  new BigDecimal(oracleSGAModel.getLibCacheSize(),MathContext.DECIMAL32);
-		libCacheSize = libCacheSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal dictSize =  new BigDecimal(oracleSGAModel.getDictSize(),MathContext.DECIMAL32);
-		dictSize = dictSize.setScale(6,RoundingMode.CEILING);
-		BigDecimal sqlAreaSize =  new BigDecimal(oracleSGAModel.getSqlAreaSize(),MathContext.DECIMAL32);
-		sqlAreaSize = sqlAreaSize.setScale(2,RoundingMode.CEILING);
-		BigDecimal fixedSGASize = new BigDecimal( oracleSGAModel.getFixedSGASize(),MathContext.DECIMAL32);
-		fixedSGASize= fixedSGASize.setScale(2,RoundingMode.CEILING);
-		JSONArray data = new JSONArray();
-		data.add(bufferCacheSize);
-		data.add(sharePoolSize);
-		data.add(redoLogCacheSize);
-		data.add(libCacheSize);
-		data.add(dictSize);
-		data.add(sqlAreaSize);
-		data.add(fixedSGASize);
-		return "@" +data.toJSONString();
+        if(!oracleSGAModel.getBufferCacheSize().equals("")){
+            BigDecimal bufferCacheSize = new BigDecimal(oracleSGAModel.getBufferCacheSize(),MathContext.DECIMAL32);
+            bufferCacheSize = bufferCacheSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal sharePoolSize =  new BigDecimal(oracleSGAModel.getSharePoolSize(),MathContext.DECIMAL32);
+            sharePoolSize =sharePoolSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal redoLogCacheSize =  new BigDecimal(oracleSGAModel.getRedoLogCacheSize(),MathContext.DECIMAL32);
+            redoLogCacheSize = redoLogCacheSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal libCacheSize =  new BigDecimal(oracleSGAModel.getLibCacheSize(),MathContext.DECIMAL32);
+            libCacheSize = libCacheSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal dictSize =  new BigDecimal(oracleSGAModel.getDictSize(),MathContext.DECIMAL32);
+            dictSize = dictSize.setScale(6,RoundingMode.CEILING);
+            BigDecimal sqlAreaSize =  new BigDecimal(oracleSGAModel.getSqlAreaSize(),MathContext.DECIMAL32);
+            sqlAreaSize = sqlAreaSize.setScale(2,RoundingMode.CEILING);
+            BigDecimal fixedSGASize = new BigDecimal( oracleSGAModel.getFixedSGASize(),MathContext.DECIMAL32);
+            fixedSGASize= fixedSGASize.setScale(2,RoundingMode.CEILING);
+            JSONArray data = new JSONArray();
+            data.add(bufferCacheSize);
+            data.add(sharePoolSize);
+            data.add(redoLogCacheSize);
+            data.add(libCacheSize);
+            data.add(dictSize);
+            data.add(sqlAreaSize);
+            data.add(fixedSGASize);
+            return "@" +data.toJSONString();
+        }  else {
+            return "@" +new JSONArray().toJSONString();
+        }
 	}
 
 	// 表空间所用数据
@@ -223,7 +235,7 @@ public class OracleController {
 			throw new Exception("json数据转换出错!", e);
 		}
 	}
-    // 表空间所用数据
+    // 最少可用字节的表空间 所用数据
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Get("viewTableSpaceOverPreview/{monitorId}")
     public void viewTableSpaceOverPreview(@Param("monitorId")String monitorId,Invocation inv) throws Exception {
@@ -249,7 +261,7 @@ public class OracleController {
             throw new Exception("json数据转换出错!", e);
         }
     }
-	// 数据库详细所用数据
+	// 数据库详细所用数据（目前没有调用）
 	public void viewOracleDetail(String monitorId,Invocation inv) {
 		OracleDetailModel oracleDetailModel = oraclePreviewService.viewDbDetail(monitorId);
 		inv.addModel("oracleDetailModel", oracleDetailModel);

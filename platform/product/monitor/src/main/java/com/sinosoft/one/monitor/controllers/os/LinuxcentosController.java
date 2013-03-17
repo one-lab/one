@@ -7,10 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import com.sinosoft.one.monitor.alarm.domain.AlarmService;
+import com.sinosoft.one.monitor.alarm.model.Alarm;
+import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableServcie;
 import com.sinosoft.one.monitor.os.linux.domain.OsAvailableViewHandle;
 import com.sinosoft.one.monitor.os.linux.domain.OsCpuViewHandle;
@@ -25,6 +29,7 @@ import com.sinosoft.one.monitor.os.linux.model.OsAvailabletemp;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.viewmodel.OsGridModel;
 import com.sinosoft.one.monitor.os.linux.util.OsUtil;
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -64,6 +69,8 @@ public class LinuxcentosController {
 	
 	@Autowired
 	private OsDiskViewHandle osDiskViewHandle;
+	@Autowired
+	private AlarmRepository alarmRepository;
 	@Post("osInfo/{osId}")
 	public Reply osInfo(@Param("osId") String osId ) {
 		Map<String, String> map = new HashMap<String, String>();
@@ -91,11 +98,26 @@ public class LinuxcentosController {
 			map.put("lastTime", simpleDateFormat.format(lastSampleTime.getSampleDate()));
 			map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
 		}
+		String healthyFlag= "<img src='/monitor/global/images/bussinessY.gif'>&nbsp;&nbsp;健康状态为正常.";
+		List<Alarm> alarmList = alarmRepository.findAlarmByMonitorId(os.getOsInfoId(),  new DateTime(currentTime).minusMinutes(os.getIntercycleTime()).toDate(), currentTime);
+		for (Alarm alarm : alarmList) {
+			if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
+				healthyFlag = "<img src='/monitor/global/images/bussinessY.gif'>&nbsp;&nbsp;健康状态为正常.&nbsp;没有出现告警。";
+            } else if (alarm.getSeverity().equals(SeverityLevel.WARNING)) {
+                healthyFlag = "<img src='/monitor/global/images/bussinessY3.gif'>&nbsp;&nbsp;健康状态为警告.&nbsp;出现中等的告警。";
+            } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
+                healthyFlag = "<img src='/monitor/global/images/bussinessY2.gif'>&nbsp;&nbsp;健康状态为严重.&nbsp;出现出现严重的告警。";
+            } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
+                healthyFlag = "<img src='/monitor/global/images/icon_health_unknown.gif'>&nbsp;&nbsp;健康状态为未知.";
+            }
+		}
+		map.put("healthy", healthyFlag);
 		if(responTime==null)
 			map.put("respondTime",0+"毫秒");
 		else{
 			map.put("respondTime",responTime+"毫秒");
 		}
+		String messageFormat1 = "<span class={0}>{1}</span>";
 		return Replys.with(map).as(Json.class);
 	}
 
@@ -133,7 +155,7 @@ public class LinuxcentosController {
 	@Post("getCpuAndRam/{osId}")
 	public Reply getCpuAndRam(@Param("osId") String osId ) {
 		Date currentTime=new Date();
-		Map<String,List<List<?>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 5, 3);
+		Map<String,List<List<?>>> oneOsCpuAndMem= osViewHandle.createOneOsCpuAndMemline(osId, currentTime, 3);
 		return Replys.with(oneOsCpuAndMem).as(Json.class);
 	}
 	/**
@@ -144,7 +166,7 @@ public class LinuxcentosController {
 	@Post("getCpuInfo/{osId}")
 	public Reply getCpuInfo(@Param("osId") String osId ) {
 		Date currentTime=new Date();
-		Map<String,List<List<?>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 5, 3);
+		Map<String,List<List<?>>> lineMap =osViewHandle.createOneCpuResolveView(osId, currentTime, 3);
 		return Replys.with(lineMap).as(Json.class);
 	}
 

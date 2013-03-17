@@ -27,40 +27,44 @@ public class AvaSta  implements java.io.Serializable {
     */
     private String id;
     /**
-    * 数据库ID.
+    * 1数据库ID.
     */
     private String databaseId;
     /**
-    * 正常运行时间.
+    * 2正常运行时间.
     */
     private long normalRuntime;
     /**
-    * 总停机时间.
+    * 3总停机时间.
     */
     private long totalPoweroffTime;
     /**
-    * 停机次数.
+    * 4停机次数.
     */
     private long poweroffCount;
     /**
-    * 平均故障间隔时间.
+    * 5平均故障间隔时间.
     */
     private long avgFailureTime;
     /**
-    * 记录时间.
+    * 6记录时间.
     */
     private Date avaRecordTime;
     /**
-    * 可以次数.
+     * 7创建时间
+     */
+    private Date recordTime;
+    /**
+    * 8可用次数.
     */
     private long avCount;
     /**
-     * 不可用次数.
+     * 9不可用次数.
      */
     private long unavCount;
     
     /**
-     * 未知时间
+     * 10未知时间
      */
     private long unknowTime;
     
@@ -72,7 +76,15 @@ public class AvaSta  implements java.io.Serializable {
     public AvaSta(String id) {
         this.id = id;
     }
-   
+    @Column(name="RECORD_TIME")
+    public Date getRecordTime() {
+        return recordTime;
+    }
+
+    public void setRecordTime(Date recordTime) {
+        this.recordTime = recordTime;
+    }
+
     @Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")

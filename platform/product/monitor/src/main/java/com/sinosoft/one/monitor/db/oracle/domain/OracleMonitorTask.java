@@ -9,9 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -36,6 +34,10 @@ public class OracleMonitorTask {
      */
     public  ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(100);
     public OracleMonitorTask(){}
+
+    /**
+     * Spring注入该类后执行该方法
+     */
     @PostConstruct
     public  void execute(){
         System.out.println("启动oracle监听服务。。。");
@@ -44,15 +46,30 @@ public class OracleMonitorTask {
         	execute(scheduledExecutorService,info);
         }
     }
+
+    /**
+     * 增加oracle监听时调用
+     * @param info
+     */
     public  void addTask(Info info){
         System.out.println("添加oracle监听服务。。。");
     	execute(scheduledExecutorService,info);
     }
+
+    /**
+     * 修改oracle监听时调用
+     * @param info
+     */
     public  void updateTask(Info info){
         System.out.println("修改oracle监听服务。。。");
     	deleteTask(info);
     	execute(scheduledExecutorService,info);
     }
+
+    /**
+     * 删除oracle监听时调用
+     * @param info
+     */
     public  void deleteTask(Info info){
         System.out.println("删除oracle监听服务。。。");
         ScheduledFuture<?> beeperHandle = beeperHandleMap.get(info.getId());
@@ -62,9 +79,16 @@ public class OracleMonitorTask {
         }
         beeperHandleMap.remove(info.getId());
     }
+
+    /**
+     * 开启一个新的定时任务
+     * @param scheduledExecutorService
+     * @param info
+     */
     private  void execute(ScheduledExecutorService scheduledExecutorService,Info info){
         int timeDuring = info.getPullInterval();
         Runnable monitorRunnable = new MonitorRunnable(info);
+        //开启定时任务延时一个轮询时间数
         ScheduledFuture<?>  beeperHandle = scheduledExecutorService.scheduleAtFixedRate(monitorRunnable,timeDuring,timeDuring, TimeUnit.MINUTES);
         beeperHandleMap.put(info.getId(),beeperHandle);
     }
@@ -74,10 +98,15 @@ public class OracleMonitorTask {
         public MonitorRunnable(Info info){
              this.info = info;
         }
+        /**
+         * 定时任务的执行方法
+         */
         @Override
         public void run() {
             Date date = new Date();
+            //向AVA表中插入数据 ，同时更新AVA_STA表中的数据
             recordService.insertAva(info,date);
+            //向LASTEVENT表中插入数据，同时更新EVENT_STA表中的数据
             recordService.insertLastEvent(info,date);
         }
     }
