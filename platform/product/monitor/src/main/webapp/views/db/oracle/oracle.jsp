@@ -34,6 +34,8 @@ $(function(){
 		var center = $("#layout_center");
 		$("#main").width(center.width() - 31).height(center.height() - 30);
 	}
+	
+	$("#sga").width($("#layout_center").width()-40);
 	$("#myDesk").height($("#layout_center").height());
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
@@ -549,7 +551,7 @@ function createThirtyDayHitRate() {
                    <a onclick="createThirtyDayHitRate()"><div class="thirty_days"></div></a>
                    <a onclick="createSevenDayHitRate()"><div class="seven_days"></div></a>
                 </div>
-                <div id="sga_target" style="width:90%"></div>
+                <div id="sga_target"></div>
               </div>
             </td>
           </tr>
