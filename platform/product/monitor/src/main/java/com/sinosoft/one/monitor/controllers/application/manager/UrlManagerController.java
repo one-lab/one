@@ -1,8 +1,11 @@
 package com.sinosoft.one.monitor.controllers.application.manager;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sinosoft.one.monitor.application.domain.BizScenarioService;
 import com.sinosoft.one.monitor.application.domain.BusinessEmulation;
 import com.sinosoft.one.monitor.application.domain.UrlService;
+import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.BizScenario;
 import com.sinosoft.one.monitor.application.model.EumUrl;
 import com.sinosoft.one.monitor.application.model.Url;
@@ -25,6 +28,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,7 +109,7 @@ public class UrlManagerController {
      */
     @Post("addurl/{bizScenarioId}")
     public String saveUrl(@Validation(errorPath = "a:errorcreateurl") Url url,
-                          @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
+                          @Param("bizScenarioId") String bizScenarioId, Invocation inv) throws IOException {
         BizScenario bizScenario = bizScenarioService.findBizScenario(bizScenarioId);
         List<Url> urls=urlService.findAllUrl();
 
@@ -148,6 +157,16 @@ public class UrlManagerController {
         eumUrl.setRecordTime(new Date());
         eumUrlRepository.save(eumUrl);
         saveResourceWithUrl(url);*/
+        Application application =bizScenario.getApplication();
+        String monitorAddress=application.getApplicationIp()+":"+application.getApplicationPort()+"/"+application.getApplicationName();
+        List<String> addUrlArgs=new ArrayList<String>();
+        addUrlArgs.add(url.getId());
+        addUrlArgs.add(url.getUrl());
+        try {
+            httpUrlConnectionOfUpdateUrl(monitorAddress, "addLogUrl", addUrlArgs);
+        } catch (IOException e) {
+            throw new IOException("发送http请求失败！");
+        }
         businessEmulation.restart(bizScenario.getApplication().getId());
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
@@ -271,5 +290,57 @@ public class UrlManagerController {
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
+    }
+
+    /**
+     * 更新或刪除URL時，发送的http请求.
+     */
+    private void httpUrlConnectionOfUpdateUrl(String monitorAddress,String operation,List<String> arguments) throws IOException {
+        ObjectOutputStream objectOutputStream = null;
+        BufferedReader bufferedReader = null;
+        try {
+            String requestUrl = "http://" + monitorAddress + "/jolokia/";
+            URL postUrl = new URL(requestUrl);
+            URLConnection urlConnection = postUrl.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.setUseCaches(false);
+            /*httpURLConnection.setRequestProperty("Content-Type", "application/json");*/
+            httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.connect();
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(outputStream);
+            //http正文begin
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("mbean", "log:name=LogConfigs");
+            //addLogUrl或者removeLogUrl,addLogMethod或者removeLogMethod
+            jsonObject.put("operation", operation);
+            jsonObject.put("arguments", arguments);
+            jsonObject.put("type", "exec");
+            //http正文end
+            objectOutputStream.write(jsonObject.toJSONString().getBytes());
+            objectOutputStream.flush();
+            objectOutputStream.close();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String jsonString = "";
+            String nextJsonString = null;
+            while ((nextJsonString = bufferedReader.readLine()) != null) {
+                jsonString = jsonString + nextJsonString;
+            }
+            System.out.println("===================================================================");
+            System.out.println("返回的JSON字符串" + jsonString);
+        } catch (IOException e) {
+            throw new IOException("发送http请求失败！");
+        } finally {
+            if (null != objectOutputStream) {
+                objectOutputStream.close();
+            }
+            if (null != bufferedReader) {
+                bufferedReader.close();
+            }
+        }
     }
 }
