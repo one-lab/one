@@ -19,7 +19,6 @@
             location.href = "${ctx}/application/manager/appmanager/applist/" + $(obj).val();
         }
         function appDel(appId){
-            alert("shanchu");
             msgConfirm('系统消息','确定要删除当前的应用吗？',function(){
                 window.location.href="${ctx}/application/manager/appmanager/delete/"+appId;
             });
