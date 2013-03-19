@@ -120,7 +120,9 @@ public class OracleMonitorController {
 			/* 判断x轴信息是否为空，如果为空填充x轴信息*/
 			boolean xflag = exchange_utilization.getCategories().isEmpty();
 			for(Lastevent lastevent : staGraph.getLasteventList()) {
-				memorySerie.addData(lastevent.getBufferHitRate());
+				Double bufferHitRate = lastevent.getBufferHitRate()*100;
+				int bhr = bufferHitRate.intValue();
+				memorySerie.addData(Double.parseDouble(bhr+""));
 				exchangeSerie.addData(Double.valueOf(lastevent.getConnectTime()));
 				replySerie.addData(Double.valueOf(lastevent.getActiveCount()));
 				
