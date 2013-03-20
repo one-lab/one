@@ -17,7 +17,7 @@ $(function(){
 	});
 	$("#thresholdList").Grid({
         type:"post",
-		url : "${ctx}/application/manager/methodmanager/methodlist/${urlId}",
+		url : "${ctx}/application/manager/methodmanager/methods/${urlId}",
 		dataType: "json",
 		colDisplay: false,  
 		clickSelect: true,
@@ -75,7 +75,7 @@ function delRow(e){
         /*id前面多了“rows”*/
         var methodId=id.substr(4,32);
         /*删除method操作*/
-        window.location.href="${ctx}/application/manager/methodmanager/delete/${urlId}/"+methodId;
+        window.location.href="${ctx}/application/manager/methodmanager/delete/${bizScenarioId}/${urlId}/"+methodId;
     });
 }
 function eidRow(e){
@@ -84,7 +84,7 @@ function eidRow(e){
     /*id前面多了“rows”*/
     var methodId=id.substr(4,32);
     /*更新method页面*/
-    window.location.href="${ctx}/application/manager/methodmanager/updatemethod/${urlId}/"+methodId;
+    window.location.href="${ctx}/application/manager/methodmanager/updatemethod/${bizScenarioId}/${urlId}/"+methodId;
 }
 function batchDel(){
 	var $g = $("#thresholdList div.grid_view > table");
@@ -99,7 +99,7 @@ function batchDel(){
 			});
             $.ajax({
                 type:"post",
-                url:"${ctx}/application/manager/methodmanager/batchdelete/${urlId}",
+                url:"${ctx}/application/manager/methodmanager/batchdelete/${bizScenarioId}/${urlId}",
                 data:{methodIds:_methodIds},
                 success:function(data){
                     if(data){
@@ -136,7 +136,7 @@ function batchDel(){
                         <h2 class="title2"><b>URL名称 : ${urlName} URL地址 : ${urlAddress}</b></h2>
 
                         <div class="tool_bar_top">
-                            <a href="${ctx}/application/manager/methodmanager/createmethod/${urlId}"
+                            <a href="${ctx}/application/manager/methodmanager/createmethod/${bizScenarioId}/${urlId}"
                                class="add_bus_scene">添加方法</a>
                             <a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a>
                         </div>

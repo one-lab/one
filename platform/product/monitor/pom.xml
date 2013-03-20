@@ -54,8 +54,13 @@
 			<artifactId>ojdbc</artifactId>
 			<version>6</version>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
 
-		<!-- SPRING begin -->
+
+        <!-- SPRING begin -->
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>

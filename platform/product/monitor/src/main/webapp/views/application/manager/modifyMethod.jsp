@@ -98,7 +98,7 @@
             <h2 class="title2"><b>修改方法　</b>
 
             </h2>
-            <form:form id="addMethod" modelAttribute="method" action="${ctx}/application/manager/methodmanager/updatemethod/${urlId}/${method.id}"
+            <form:form id="addMethod" modelAttribute="method" action="${ctx}/application/manager/methodmanager/updatemethod/${bizScenarioId}/${urlId}/${method.id}"
                        method="post" class="form-horizontal" onsubmit="return isValid(this);">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
                     <tr>
