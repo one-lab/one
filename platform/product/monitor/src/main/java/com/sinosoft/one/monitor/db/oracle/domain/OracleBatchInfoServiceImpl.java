@@ -63,7 +63,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         List<OracleAvaInfoModel> oracleAvaInfoModelList = new ArrayList<OracleAvaInfoModel>();
         Date now = new Date();
         Date timeStart =  StaTimeEnum.getTime(staTimeEnum,now);
-        long during =  (now.getTime()-timeStart.getTime())/100;
+        long during =  now.getTime()-timeStart.getTime();
         for (Info info : infoList) {
             OracleAvaInfoModel oracleAvaInfoModel = new OracleAvaInfoModel();
             Date time = StaTimeEnum.getTime(StaTimeEnum.TODAY,now);
