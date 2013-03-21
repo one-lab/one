@@ -12,10 +12,13 @@
            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="xp_available">
                <tr>
                    <c:forEach items="${oracleAvaInfo.graphInfo}" var="point">
-                    <td width="${point[2]}%" class="${point[1]==0?'not_available':(point[1]==2?'':'green_bar')}">&nbsp;</td>
+                   <td width="${point[2]}%" class="${point[1]==0?'not_available':(point[1]==2?'':'green_bar')}">&nbsp;</td>
                    </c:forEach>
                </tr>
            </table>
+           <script type="text/javascript">
+           $(".green_bar").attr("width").split("%")[0]<1?$(".green_bar").removeClass("green_bar"):true;
+           </script>
        </td><!--
        <td>可用：${oracleAvaInfo.avaRate}%</td>
    --></tr>
