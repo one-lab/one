@@ -276,15 +276,12 @@ public class MethodManagerController {
      * 批量删除Method.
      */
     @Post("batchdelete/{bizScenarioId}/{urlId}")
-    public String batchDeleteMethod(@Param("bizScenarioId") String bizScenarioId, @Param("urlId") String urlId, Invocation inv) {
+    public String batchDeleteMethod(@Param("bizScenarioId") String bizScenarioId, @Param("urlId") String urlId, Invocation inv) throws IOException {
         String[] methodIds=inv.getRequest().getParameterValues("methodIds[]");
         for(int i=0;i<methodIds.length;i++){
             methodService.deleteUrlAndMethod(urlId,methodIds[i]);
+            synAgentOfDelete(bizScenarioId,urlId,methodIds[i]);
         }
-        /*//先删除中间表GE_MONITOR_URL_METHOD的记录
-        methodService.batchDeleteUrlAndMethod(urlId,methodIds);
-        //删除GE_MONITOR_METHOD的记录
-        methodService.batchDeleteMethod(methodIds);*/
         //Method列表页面
         return "r:/application/manager/methodmanager/methodlist/"+bizScenarioId+"/"+urlId;
     }

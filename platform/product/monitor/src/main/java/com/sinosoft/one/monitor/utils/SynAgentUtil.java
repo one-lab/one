@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,5 +49,38 @@ public class SynAgentUtil {
         } finally {
             httpPost.releaseConnection();
         }
+    }
+    /**
+     * URL批量删除操作時，发送http请求，同步agent.
+     */
+    public static void httpClientOfSynAgent(String host, int port, String applicationName, String operation,String[] arguments) throws IOException {
+        HttpPost httpPost=null;
+        URIBuilder builder = new URIBuilder();
+        builder.setScheme("http").setHost(host).setPort(port).setPath(applicationName + "/jolokia/");
+            try {
+                for(int i=0;i<arguments.length;i++){
+                    List<String> idList=new ArrayList<String>();
+                    idList.add(arguments[i]);
+                    URI uri = builder.build();
+                    httpPost = new HttpPost(uri);
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("mbean", "log:name=LogConfigs");
+                    jsonObject.put("operation", operation);
+                    jsonObject.put("arguments", idList);
+                    jsonObject.put("type", "exec");
+                    StringEntity stringEntity = new StringEntity(jsonObject.toJSONString(),
+                            ContentType.create("text/plain", "UTF-8"));
+                    httpPost.setEntity(stringEntity);
+                    HttpClient httpClient = new DefaultHttpClient();
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+                    if(httpResponse.getStatusLine().getStatusCode() != 200) {
+                        throw new RuntimeException("更新客户端URL失败！");
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("发送http请求失败！", e);
+            } finally {
+                httpPost.releaseConnection();
+            }
     }
 }

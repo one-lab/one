@@ -273,43 +273,18 @@ public class UrlManagerController {
         for(int i=0;i<urlIds.length;i++){
             urlService.deleteUrl(bizScenarioId,urlIds[i]);
         }
+        Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
+        try {
+            SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                    Integer.parseInt(application.getApplicationPort()),
+                    "/" + application.getApplicationName(),
+                    "removeLogUrl", urlIds);
+
+        } catch (IOException e) {
+            throw new IOException("发送http请求失败！");
+        }
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
-
-
-	/**
-	 * 更新或刪除URL時，发送的http请求.
-	 */
-	private void httpClientOfUpdateUrl(String host, int port, String applicationName, String operation,List<String> arguments) throws IOException {
-        HttpPost httpPost=null;
-		try {
-			URIBuilder builder = new URIBuilder();
-			builder.setScheme("http").setHost(host).setPort(port).setPath(applicationName + "/jolokia/");
-
-			URI uri = builder.build();
-			httpPost = new HttpPost(uri);
-
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("mbean", "log:name=LogConfigs");
-			jsonObject.put("operation", operation);
-			jsonObject.put("arguments", arguments);
-			jsonObject.put("type", "exec");
-
-			StringEntity stringEntity = new StringEntity(jsonObject.toJSONString(),
-					ContentType.create("text/plain", "UTF-8"));
-			httpPost.setEntity(stringEntity);
-
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpResponse httpResponse = httpClient.execute(httpPost);
-			if(httpResponse.getStatusLine().getStatusCode() != 200) {
-				throw new RuntimeException("更新客户端URL失败！");
-			}
-		} catch (Exception e) {
-			throw new RuntimeException("发送http请求失败！", e);
-		} finally {
-            httpPost.releaseConnection();
-		}
-	}
 }
