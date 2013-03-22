@@ -231,7 +231,7 @@ public class RecordServiceImpl implements RecordService {
 //        }
         long interval = info.getPullInterval();
         ava.setInterval(interval);
-        avaRepository.save(ava);
+      
         AvaSta avaSta = avaStaRepository.findAvaStaByTime(info.getId(), newDate);
         if (avaSta == null || avaSta.getId() == null || avaSta.getId().equals("")) {
             insertAvaSta(ava, date, newDate, info.getPullInterval());
@@ -239,6 +239,7 @@ public class RecordServiceImpl implements RecordService {
             updateAvaSta(ava, newDate, info.getPullInterval());
         }
         Date timePoint = StaTimeEnum.getTime(StaTimeEnum.LAST_24HOUR, date);
+        avaRepository.save(ava);
         avaRepository.clear(timePoint);
     }
 
