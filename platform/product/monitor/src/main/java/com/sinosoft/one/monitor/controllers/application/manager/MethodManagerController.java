@@ -138,22 +138,18 @@ public class MethodManagerController {
     /**
      * 增加或者修改METHOD时，同步agent端.
      */
-    private void synAgentOfAddOrUpdate(String bizScenarioId,Url url,Method method) throws IOException {
+    private void synAgentOfAddOrUpdate(String bizScenarioId,Url url,Method method) {
         Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
         List<String> addUrlArgs=new ArrayList<String>();
         addUrlArgs.add(url.getId());
         addUrlArgs.add(method.getId());
         addUrlArgs.add(method.getClassName());
         addUrlArgs.add(method.getMethodName());
-        try {
-            SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
-                    Integer.parseInt(application.getApplicationPort()),
-                    "/" + application.getApplicationName(),
-                    "addLogMethod", addUrlArgs);
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "addLogMethod", addUrlArgs);
 
-        } catch (IOException e) {
-            throw new IOException("发送http请求失败！");
-        }
     }
 
     /**
@@ -246,7 +242,7 @@ public class MethodManagerController {
      * 单个删除Method.
      */
     @Get("delete/{bizScenarioId}/{urlId}/{methodId}")
-    public String deleteMethod(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, @Param("methodId") String methodId, Invocation inv) throws IOException {
+    public String deleteMethod(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, @Param("methodId") String methodId, Invocation inv) {
         methodService.deleteUrlAndMethod(urlId,methodId);
         synAgentOfDelete(bizScenarioId,urlId,methodId);
         //Method列表页面
@@ -256,20 +252,15 @@ public class MethodManagerController {
     /**
      * 删除METHOD时，同步agent端.
      */
-    private void synAgentOfDelete(String bizScenarioId,String urlId,String methodId) throws IOException {
+    private void synAgentOfDelete(String bizScenarioId,String urlId,String methodId){
         Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
         List<String> addUrlArgs=new ArrayList<String>();
         addUrlArgs.add(urlId);
         addUrlArgs.add(methodId);
-        try {
-            SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
-                    Integer.parseInt(application.getApplicationPort()),
-                    "/" + application.getApplicationName(),
-                    "removeLogMethod", addUrlArgs);
-
-        } catch (IOException e) {
-            throw new IOException("发送http请求失败！");
-        }
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "removeLogMethod", addUrlArgs);
     }
 
     /**

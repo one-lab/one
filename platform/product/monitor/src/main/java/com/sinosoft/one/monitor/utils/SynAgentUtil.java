@@ -8,6 +8,8 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,10 +23,11 @@ import java.util.List;
  * Time: 下午5:25
  */
 public class SynAgentUtil {
+    private static Logger logger = LoggerFactory.getLogger(Reflections.class);
     /**
      * URL,METHOD的更新操作時，发送http请求，同步agent.
      */
-    public static void httpClientOfSynAgent(String host, int port, String applicationName, String operation,List<String> arguments) throws IOException {
+    public static void httpClientOfSynAgent(String host, int port, String applicationName, String operation,List<String> arguments){
         HttpPost httpPost=null;
         try {
             URIBuilder builder = new URIBuilder();
@@ -42,18 +45,19 @@ public class SynAgentUtil {
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse httpResponse = httpClient.execute(httpPost);
             if(httpResponse.getStatusLine().getStatusCode() != 200) {
-                throw new RuntimeException("更新客户端URL失败！");
+                logger.error("更新客户端URL失败！");
             }
         } catch (Exception e) {
-            throw new RuntimeException("发送http请求失败！", e);
+            logger.error("发送http请求失败！",e.getMessage());
         } finally {
             httpPost.releaseConnection();
         }
     }
+
     /**
      * URL批量删除操作時，发送http请求，同步agent.
      */
-    public static void httpClientOfSynAgent(String host, int port, String applicationName, String operation,String[] arguments) throws IOException {
+    public static void httpClientOfSynAgent(String host, int port, String applicationName, String operation,String[] arguments){
         HttpPost httpPost=null;
         URIBuilder builder = new URIBuilder();
         builder.setScheme("http").setHost(host).setPort(port).setPath(applicationName + "/jolokia/");
@@ -74,11 +78,11 @@ public class SynAgentUtil {
                     HttpClient httpClient = new DefaultHttpClient();
                     HttpResponse httpResponse = httpClient.execute(httpPost);
                     if(httpResponse.getStatusLine().getStatusCode() != 200) {
-                        throw new RuntimeException("更新客户端URL失败！");
+                        logger.error("更新客户端URL失败！");
                     }
                 }
             } catch (Exception e) {
-                throw new RuntimeException("发送http请求失败！", e);
+                logger.error("发送http请求失败！",e.getMessage());
             } finally {
                 httpPost.releaseConnection();
             }

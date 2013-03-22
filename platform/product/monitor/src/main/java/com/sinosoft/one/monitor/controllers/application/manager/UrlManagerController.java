@@ -137,15 +137,11 @@ public class UrlManagerController {
         List<String> addUrlArgs=new ArrayList<String>();
         addUrlArgs.add(url.getId());
         addUrlArgs.add(url.getUrl());
-        try {
-            SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
-                    Integer.parseInt(application.getApplicationPort()),
-                    "/" + application.getApplicationName(),
-                    "addLogUrl", addUrlArgs);
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "addLogUrl", addUrlArgs);
 
-        } catch (IOException e) {
-            throw new IOException("发送http请求失败！");
-        }
         businessEmulation.restart(bizScenario.getApplication().getId());
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
@@ -226,15 +222,10 @@ public class UrlManagerController {
         List<String> addUrlArgs=new ArrayList<String>();
         addUrlArgs.add(urlId);
         addUrlArgs.add(url.getUrl());
-        try {
-            SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
-                    Integer.parseInt(application.getApplicationPort()),
-                    "/" + application.getApplicationName(),
-                    "addLogUrl", addUrlArgs);
-
-        } catch (IOException e) {
-            throw new IOException("发送http请求失败！");
-        }
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "addLogUrl", addUrlArgs);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //Url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
@@ -249,15 +240,10 @@ public class UrlManagerController {
         Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
         List<String> addUrlArgs=new ArrayList<String>();
         addUrlArgs.add(urlId);
-        try {
-            SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
-                    Integer.parseInt(application.getApplicationPort()),
-                    "/" + application.getApplicationName(),
-                    "removeLogUrl", addUrlArgs);
-
-        } catch (IOException e) {
-            throw new IOException("发送http请求失败！");
-        }
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "removeLogUrl", addUrlArgs);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
@@ -267,22 +253,17 @@ public class UrlManagerController {
      * 批量删除url.
      */
     @Post("batchdelete/{bizScenarioId}")
-    public String batchDeleteUrl(@Param("bizScenarioId") String bizScenarioId, Invocation inv) throws IOException {
+    public String batchDeleteUrl(@Param("bizScenarioId") String bizScenarioId, Invocation inv) {
         //写回bizScenarioId，返回url列表页面时用到
         String[] urlIds=inv.getRequest().getParameterValues("urlIds[]");
         for(int i=0;i<urlIds.length;i++){
             urlService.deleteUrl(bizScenarioId,urlIds[i]);
         }
         Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
-        try {
-            SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
-                    Integer.parseInt(application.getApplicationPort()),
-                    "/" + application.getApplicationName(),
-                    "removeLogUrl", urlIds);
-
-        } catch (IOException e) {
-            throw new IOException("发送http请求失败！");
-        }
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "removeLogUrl", urlIds);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
