@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>performance性能</title>
+    <title>应用性能</title>
     <link href="${ctx}/global/css/performance/performance.css" rel="stylesheet" type="text/css" />
     <%@include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
