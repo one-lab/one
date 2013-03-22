@@ -88,8 +88,10 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                     long time2 = ava2.getRecordTime().getTime();
                     part[0] = time1+"";
                     part[1] = ava1.getState();
-                    part[2] = ((time2-time1)/during)+"";
-                    parts.add(part);
+                    if(((time2-time1)*1.0/during)>0.1){
+                        part[2] = ((time2-time1)*1.0/during)+"";
+                        parts.add(part);
+                    }
                 }
                 oracleAvaInfoModel.setGraphInfo(parts);
             }
