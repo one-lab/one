@@ -94,13 +94,14 @@ public class OracleController {
             Double usePercent = normalRuntime
                     / (unKnowTime + normalRuntime + powerOffTime / 1.0) * 100;
             Double unUsedPercent = powerOffTime  / (unKnowTime + normalRuntime + powerOffTime / 1.0) * 100;
-            int usePercents = usePercent.intValue();
-            int unUsedPercents = unUsedPercent.intValue();
-            int unknowPercents = 100-usePercents-unUsedPercents;
+          //  int usePercents = usePercent.intValue();
+           // int unUsedPercents = unUsedPercent.intValue();
+           // int unknowPercents = 100-usePercents-unUsedPercents;
+            Double unknowPercent = 100 -usePercent-unUsedPercent;
             JSONArray  y = new JSONArray();
-            y.add(usePercents);
-            y.add(unUsedPercents);
-            y.add(unknowPercents);
+            y.add(usePercent);
+            y.add(unUsedPercent);
+            y.add(unknowPercent);
             //System.out.println(y.toJSONString());
             return "@"+y.toJSONString();
         }  else {

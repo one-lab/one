@@ -74,10 +74,9 @@ public class DBUtil4Monitor {
         System.out.print(url);
         Connection conn = null;
         try {
-            if (conn == null || conn.isClosed()) {
-            	ClassLoaderUtil.loadClass(driver);
-                conn = DriverManager.getConnection(url, username, password);
-            }
+            ClassLoaderUtil.loadClass(driver);
+            DriverManager.setLoginTimeout(1);
+            conn = DriverManager.getConnection(url, username, password);
         } catch (SQLException e1) {
             // 记录日志
             //e1.printStackTrace();
@@ -88,10 +87,9 @@ public class DBUtil4Monitor {
     public Connection getConnection(String DRIVER,String URL,String USER,String PASSWORD){
         Connection conn = null;
         try {
-            if (conn == null || conn.isClosed()) {
-                ClassLoaderUtil.loadClass(DRIVER);
-                conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            }
+            ClassLoaderUtil.loadClass(DRIVER);
+            DriverManager.setLoginTimeout(1);
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e1) {
             // 记录日志
             //e1.printStackTrace();
@@ -99,6 +97,7 @@ public class DBUtil4Monitor {
         }
         return conn;
     }
+
     public boolean canConnect(String DRIVER,String URL,String USER,String PASSWORD){
         boolean canConnect = false;
         Connection connection = getConnection(DRIVER,URL,USER,PASSWORD);
