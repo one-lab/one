@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.controllers.db.oracle;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -294,6 +295,12 @@ public class OracleMonitorController {
 		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
 		/* 查询数据库健康列表数据*/
 		List<OracleStaBaseInfoModel> oracleStaBaseInfos = oracleBatchInfoService.listStaBaseInfo();
+		
+		String message_format_a="<a href={0}>{1}</a>";
+//		String message_form_a_subtitle="<a href={0} title={1}>{2}</a>";
+		String message_format_div="<div class={0}></div>";
+//		String message_format_span="<span class={0}>{1}</span>";
+		String handler_format="<a href={0} class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
 		/* 循环构建表格行数据*/
 		for(OracleStaBaseInfoModel oracleStaBaseInfo : oracleStaBaseInfos) {
 			Map<String, Object> row = new HashMap<String, Object>();
@@ -309,10 +316,10 @@ public class OracleMonitorController {
 			/* 构建修改连接+对应数据库MonitorID*/
 			String editUrl = contextPath + "/db/oracle/editUI/" + oracleStaBaseInfo.getMonitorID();
 			/* 格式化表格数据信息*/
-			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, url, oracleStaBaseInfo.getMonitorName()));
-			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, usabilityClass));
-			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, healthyClass));
-			cell.add(MessageUtils.formateMessage(MessageUtils.HANDLER_FORMAT, editUrl));
+			cell.add(MessageFormat.format(message_format_a, url, oracleStaBaseInfo.getMonitorName()));
+			cell.add(MessageFormat.format(message_format_div, usabilityClass));
+			cell.add(MessageFormat.format(message_format_div, healthyClass));
+			cell.add(MessageFormat.format(handler_format, editUrl));
 			row.put("cell", cell);
 			rows.add(row);
 		}

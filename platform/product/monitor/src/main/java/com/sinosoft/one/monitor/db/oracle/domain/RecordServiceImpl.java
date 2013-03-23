@@ -234,6 +234,11 @@ public class RecordServiceImpl implements RecordService {
         //把这行移到原242行avaRepository.clear(timePoint);的上面
         AvaSta avaSta = avaStaRepository.findAvaStaByTime(info.getId(), newDate);
         if (avaSta == null || avaSta.getId() == null || avaSta.getId().equals("")) {
+            long interval1 = date.getTime()-newDate.getTime();
+            interval1 = interval1/60000;
+            if(interval1<interval){
+                info.setPullInterval((int)interval1);
+            }
             insertAvaSta(ava, date, newDate, info.getPullInterval());
         } else {
             updateAvaSta(ava, newDate, info.getPullInterval());
