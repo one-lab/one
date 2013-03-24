@@ -44,6 +44,7 @@ public class LogTraceAspect {
 //  @Around("execution(* com.sinosig.servicebus..*(..))")
     public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
 			throws Throwable {
+    	logger.debug("LogTraceAspect");
     	TraceModel traceModel = TraceUtils.getTraceModel();
 		if(traceModel == null || traceModel.getUrlId() == null) {
 			return pjp.proceed();
