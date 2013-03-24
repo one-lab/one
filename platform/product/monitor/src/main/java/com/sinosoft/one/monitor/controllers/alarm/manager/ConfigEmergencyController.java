@@ -96,7 +96,7 @@ public class ConfigEmergencyController {
                     jsonArray.add(jsonObject);
                 }
                 jsonMonitorNames = jsonArray.toJSONString();
-                return Replys.with(jsonMonitorNames);
+                return Replys.with(jsonMonitorNames).as(Json.class);
             }
             return null;
         }else if(ResourceType.DB.name().equals(resourceType)){

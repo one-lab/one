@@ -175,20 +175,15 @@ public class OsCpuViewHandle {
 		Os os=osService.getOsBasicById(osId);
 		OsCpu osCpu=osCpuService.findNealyCpu(os.getOsInfoId(), currentTime, os.getIntercycleTime());
 		List<OsGridModel>osSwapViewModels=new ArrayList<OsGridModel>();
+		OsGridModel osRamViewModel=new OsGridModel();
+		osRamViewModel.setName("CPU使用率");
 		if(osCpu==null){
-			OsGridModel osRamViewModel=new OsGridModel();
-			osRamViewModel.setName("CPU使用率");
 			osRamViewModel.setUtilzation("未知");
-			osRamViewModel.setLink("<a href='#'onclick='viewWindow(this,\"historyCPU/7\")' class='img-7'></a>");
-			osSwapViewModels.add(osRamViewModel);
 		}else{
-			OsGridModel osRamViewModel=new OsGridModel();
-			osRamViewModel.setName("CPU使用率");
 			osRamViewModel.setUtilzation(osCpu.getUtiliZation());
-			osRamViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
-			osSwapViewModels.add(osRamViewModel);
-			
 		}
+		osRamViewModel.setLink("<a href='#'onclick='viewWindow(this,\"historyCPU/7\")' class='img-7'></a>");
+		osSwapViewModels.add(osRamViewModel);
 		return osSwapViewModels;
 	}
 	

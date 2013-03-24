@@ -123,16 +123,6 @@ public class OsUtil {
 		return executeWithResult(OsConfig.osCmd_diskInfo);
 	}
 
-	/**
-	 * 获取os信息 主要是获取内存总容量和操作系统ip
-	 * 
-	 * @return
-	 */
-	public static String getOsInfo() {
-
-		return null;
-
-	}
 	
 	/**
 	 * 读取配置文件

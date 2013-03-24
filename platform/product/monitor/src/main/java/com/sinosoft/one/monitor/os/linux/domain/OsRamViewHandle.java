@@ -40,7 +40,7 @@ public class OsRamViewHandle {
 		Map<String,List<List<?>>> osCpuUiliZation =new HashMap<String,List<List<?>>>();
 		for (Os os : Oss) {
 			List<List<?>> data=new ArrayList<List<?>>();
-			List<OsRam> osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+			List<OsRam> osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 			for (OsRam osRam:osRams) {
 				 DateTime date= new DateTime(osRam.getSampleDate());
 				Long time = date.getMillis();
@@ -107,7 +107,7 @@ public class OsRamViewHandle {
 	 */
 	public List<List<?>> creatOneSwapLineData(Os os,Date currentTime,int timespan){
 		List<List<?>> data=new ArrayList<List<?>>();
-		List<OsRam>osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+		List<OsRam>osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 		for (OsRam osRam:osRams) {
 			DateTime date= new DateTime(osRam.getSampleDate());
 			Long time = date.getMillis();
@@ -150,7 +150,7 @@ public class OsRamViewHandle {
 			OsGridModel osSwapViewModel=new OsGridModel();
 			osSwapViewModel.setName("交换内存利用率");
 			osSwapViewModel.setUtilzation(osRam.getSwapUtiliZation());
-			osSwapViewModel.setLink("<a href='#' onclick='viewWindow(this,\"historyMem/7\")' class='img-7'></a>");
+			osSwapViewModel.setLink(" ");
 			osSwapViewModel.setUsed(OsTransUtil.countUtilZation("1024", osRam.getSwapUsed()));
 			osSwapViewModels.add(osSwapViewModel);
 		}

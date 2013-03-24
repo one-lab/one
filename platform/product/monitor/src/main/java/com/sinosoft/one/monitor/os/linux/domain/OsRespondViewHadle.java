@@ -30,7 +30,7 @@ public class OsRespondViewHadle {
 		Map<String,List<List<?>>> osCpuUiliZation =new HashMap<String,List<List<?>>>();
 		for (Os os : Oss) {
 			List<List<?>> data=new ArrayList<List<?>>();
-			List<OsRespondtime> osRespondtimes=osRespondTimeService.getRespondTimeByTime(os.getOsInfoId(), new DateTime(currentTime).minusHours(1).toDate(), currentTime);
+			List<OsRespondtime> osRespondtimes=osRespondTimeService.getRespondTimeByTime(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 			for (OsRespondtime osRespondtime:osRespondtimes) {
 				DateTime date= new DateTime(osRespondtime.getSampleDate());
 				Long time = date.getMillis();

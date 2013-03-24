@@ -59,6 +59,7 @@ public class HandleTask extends TimerTask {
 							HandleTask.class));
 					ID = OsConfig.ID;
 					cpuUilitZation=OsUtil.getCpuUilitZation();
+					
 					logger.debug(cpuUilitZation);
 					cpuInfo = OsUtil.getCpuInfo();
 					logger.debug(cpuInfo);
@@ -69,7 +70,7 @@ public class HandleTask extends TimerTask {
 					endTime=System.currentTimeMillis();
 					long respondTime=endTime- startTime;
 					osInfo.put("ID", ID);
-					osInfo.put("cpuUilitZation", cpuUilitZation);
+//					osInfo.put("cpuUilitZation", cpuUilitZation);
 					osInfo.put("cpuInfo", cpuInfo);
 					osInfo.put("ramInfo", ramInfo);
 					osInfo.put("diskInfo", diskInfo);
