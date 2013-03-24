@@ -1,10 +1,13 @@
 package com.sinosoft.one.monitor.controllers.application.manager;
 
+import com.sinosoft.one.monitor.application.domain.BizScenarioService;
 import com.sinosoft.one.monitor.application.domain.MethodService;
 import com.sinosoft.one.monitor.application.domain.UrlService;
+import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.utils.CurrentUserUtil;
+import com.sinosoft.one.monitor.utils.SynAgentUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -19,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,14 +40,17 @@ public class MethodManagerController {
     MethodService methodService;
     @Autowired
     UrlService urlService;
+    @Autowired
+    BizScenarioService bizScenarioService;
 
     /**
      * 管理Method页面.
      */
-    @Get("methodlist/{urlId}")
+    @Get("methodlist/{bizScenarioId}/{urlId}")
     /*@Post("methodList")*/
-    public String managerMethod(@Param("urlId") String urlId,Invocation inv) {
+    public String managerMethod(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId,Invocation inv) {
         inv.getRequest().setAttribute("urlId",urlId);
+        inv.addModel("bizScenarioId",bizScenarioId);
         Url url=urlService.findUrl(urlId);
         inv.getRequest().setAttribute("urlName",url.getDescription());
         inv.getRequest().setAttribute("urlAddress",url.getUrl());
@@ -52,7 +60,7 @@ public class MethodManagerController {
     /**
      * 获得Url下所有的Method.
      */
-    @Post("methodlist/{urlId}")
+    @Post("methods/{urlId}")
     /*@Post("methodList")*/
     public void getAllMethodsOfUrl(@Param("urlId") String urlId,Invocation inv) throws Exception {
         inv.getRequest().setAttribute("urlId",urlId);
@@ -75,10 +83,11 @@ public class MethodManagerController {
     /**
      * 增加Method的表单页面(其中id是所属的Method的id).
      */
-    @Get("createmethod/{urlId}")
+    @Get("createmethod/{bizScenarioId}/{urlId}")
     @Post("errorcreatemethod")
-    public String createMethod(@Param("urlId") String urlId,Invocation inv) {
+    public String createMethod(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId,Invocation inv) {
         inv.getRequest().setAttribute("urlId",urlId);
+        inv.addModel("bizScenarioId",bizScenarioId);
         inv.addModel("method", new Method());
         //页面所在路径application/manager/
         return "addMethod";
@@ -89,9 +98,10 @@ public class MethodManagerController {
      * methods是新增加的method
      * methodIds是在已有的method列表中勾选的method的id
      */
-    @Post("addmethod/{urlId}")
+    @Post("addmethod/{bizScenarioId}/{urlId}")
     public String saveMethod(@Validation(errorPath = "a:errorcreatemethod") Method method,
-                             @Param("urlId") String urlId, Invocation inv) {
+                             @Param("bizScenarioId") String bizScenarioId,
+                             @Param("urlId") String urlId, Invocation inv) throws IOException {
         Url url = urlService.findUrl(urlId);
         List<Method> methods = methodService.findAllMethod();
         //获得当前用户id
@@ -106,7 +116,7 @@ public class MethodManagerController {
                 if (dbMethodAndClassName.equals(methodAndClassName)) {
                     dbMethod.setUrl(url);
                     methodService.saveMethod(dbMethod);
-                    return "r:/application/manager/methodmanager/methodlist/"+urlId;
+                    return "r:/application/manager/methodmanager/methodlist/"+bizScenarioId+"/"+urlId;
                 }
             }
         }
@@ -121,7 +131,25 @@ public class MethodManagerController {
         method.setCreatorId(creatorId);
         method.setCreateTime(new Date());
         methodService.saveMethod(method);
-        return "r:/application/manager/methodmanager/methodlist/"+urlId;
+        synAgentOfAddOrUpdate(bizScenarioId,url,method);
+        return "r:/application/manager/methodmanager/methodlist/"+bizScenarioId+"/"+urlId;
+    }
+
+    /**
+     * 增加或者修改METHOD时，同步agent端.
+     */
+    private void synAgentOfAddOrUpdate(String bizScenarioId,Url url,Method method) {
+        Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
+        List<String> addUrlArgs=new ArrayList<String>();
+        addUrlArgs.add(url.getId());
+        addUrlArgs.add(method.getId());
+        addUrlArgs.add(method.getClassName());
+        addUrlArgs.add(method.getMethodName());
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "addLogMethod", addUrlArgs);
+
     }
 
     /**
@@ -181,10 +209,11 @@ public class MethodManagerController {
     /**
      * 更新Method的表单页面.
      */
-    @Get("updatemethod/{urlId}/{methodId}")
+    @Get("updatemethod/{bizScenarioId}/{urlId}/{methodId}")
     @Post("errorupdatemethod/{methodId}")
-    public String methodForm(@Param("urlId") String urlId,@Param("methodId") String methodId, Invocation inv) {
+    public String methodForm(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId,@Param("methodId") String methodId, Invocation inv) {
         inv.getRequest().setAttribute("urlId",urlId);
+        inv.addModel("bizScenarioId",bizScenarioId);
         inv.addModel("method", methodService.findMethod(methodId));
         //页面所在路径application/manager/
         return "modifyMethod";
@@ -193,9 +222,10 @@ public class MethodManagerController {
     /**
      * 更新Method.
      */
-    @Post("updatemethod/{urlId}/{methodId}")
+    @Post("updatemethod/{bizScenarioId}/{urlId}/{methodId}")
     public String updateMethod(@Validation(errorPath = "a:errorupdatemethod/{methodId}") Method method,
-                               @Param("urlId") String urlId, @Param("methodId") String methodId,Invocation inv) {
+                               @Param("bizScenarioId") String bizScenarioId,
+                               @Param("urlId") String urlId, @Param("methodId") String methodId,Invocation inv) throws IOException {
         //将urlId写回，managerMethod页面发送ajax请求时会用到
         inv.getRequest().setAttribute("urlId",urlId);
         if(StringUtils.isBlank(method.getDescription())){
@@ -204,37 +234,46 @@ public class MethodManagerController {
         //获得当前用户
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         methodService.updateMethodWithModifyInfo(methodId,method.getClassName(),method.getMethodName(),method.getDescription(),modifierId);
-        return "r:/application/manager/methodmanager/methodlist/"+urlId;
+        synAgentOfAddOrUpdate(bizScenarioId,urlService.findUrl(urlId),methodService.findMethod(methodId));
+        return "r:/application/manager/methodmanager/methodlist/"+bizScenarioId+"/"+urlId;
     }
 
     /**
      * 单个删除Method.
      */
-    @Get("delete/{urlId}/{methodId}")
-    public String deleteMethod(@Param("urlId") String urlId, @Param("methodId") String methodId, Invocation inv) {
+    @Get("delete/{bizScenarioId}/{urlId}/{methodId}")
+    public String deleteMethod(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, @Param("methodId") String methodId, Invocation inv) {
         methodService.deleteUrlAndMethod(urlId,methodId);
-        /*//先删除中间表GE_MONITOR_URL_METHOD的记录
-        methodService.deleteUrlAndMethod(urlId,methodId);
-        //删除GE_MONITOR_METHOD的记录
-        methodService.deleteMethod(methodId);*/
+        synAgentOfDelete(bizScenarioId,urlId,methodId);
         //Method列表页面
-        return "r:/application/manager/methodmanager/methodlist/"+urlId;
+        return "r:/application/manager/methodmanager/methodlist/"+bizScenarioId+"/"+urlId;
+    }
+
+    /**
+     * 删除METHOD时，同步agent端.
+     */
+    private void synAgentOfDelete(String bizScenarioId,String urlId,String methodId){
+        Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
+        List<String> addUrlArgs=new ArrayList<String>();
+        addUrlArgs.add(urlId);
+        addUrlArgs.add(methodId);
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "removeLogMethod", addUrlArgs);
     }
 
     /**
      * 批量删除Method.
      */
-    @Post("batchdelete/{urlId}")
-    public String batchDeleteMethod(@Param("urlId") String urlId, Invocation inv) {
+    @Post("batchdelete/{bizScenarioId}/{urlId}")
+    public String batchDeleteMethod(@Param("bizScenarioId") String bizScenarioId, @Param("urlId") String urlId, Invocation inv) throws IOException {
         String[] methodIds=inv.getRequest().getParameterValues("methodIds[]");
         for(int i=0;i<methodIds.length;i++){
             methodService.deleteUrlAndMethod(urlId,methodIds[i]);
+            synAgentOfDelete(bizScenarioId,urlId,methodIds[i]);
         }
-        /*//先删除中间表GE_MONITOR_URL_METHOD的记录
-        methodService.batchDeleteUrlAndMethod(urlId,methodIds);
-        //删除GE_MONITOR_METHOD的记录
-        methodService.batchDeleteMethod(methodIds);*/
         //Method列表页面
-        return "r:/application/manager/methodmanager/methodlist/"+urlId;
+        return "r:/application/manager/methodmanager/methodlist/"+bizScenarioId+"/"+urlId;
     }
 }

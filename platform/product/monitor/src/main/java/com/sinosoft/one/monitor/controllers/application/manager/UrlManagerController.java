@@ -3,8 +3,8 @@ package com.sinosoft.one.monitor.controllers.application.manager;
 import com.sinosoft.one.monitor.application.domain.BizScenarioService;
 import com.sinosoft.one.monitor.application.domain.BusinessEmulation;
 import com.sinosoft.one.monitor.application.domain.UrlService;
+import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.BizScenario;
-import com.sinosoft.one.monitor.application.model.EumUrl;
 import com.sinosoft.one.monitor.application.model.Url;
 import com.sinosoft.one.monitor.application.repository.EumUrlRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
@@ -12,6 +12,7 @@ import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.utils.CurrentUserUtil;
+import com.sinosoft.one.monitor.utils.SynAgentUtil;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -25,7 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
-import java.util.Date;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,7 +102,7 @@ public class UrlManagerController {
      */
     @Post("addurl/{bizScenarioId}")
     public String saveUrl(@Validation(errorPath = "a:errorcreateurl") Url url,
-                          @Param("bizScenarioId") String bizScenarioId, Invocation inv) {
+                          @Param("bizScenarioId") String bizScenarioId, Invocation inv) throws IOException {
         BizScenario bizScenario = bizScenarioService.findBizScenario(bizScenarioId);
         List<Url> urls=urlService.findAllUrl();
 
@@ -117,37 +119,20 @@ public class UrlManagerController {
                     eumUrlRepository.save(eumUrl);*/
                     //资源表中已经有当前的URL，那么不需要再保存
                     urlService.saveUrl(dbUrl);
-                    /*if(null!=resourcesService.getResource(dbUrl.getId())){
-                        businessEmulation.restart(bizScenario.getApplication().getId());
-                        return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
-                    }
-                    saveResourceWithUrl(dbUrl);
-                    businessEmulation.restart(bizScenario.getApplication().getId());*/
                     return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
                 }
             }
         }
         urlService.saveUrlWithTransactional(url,bizScenario);
-        /*EumUrl eumUrl=new EumUrl();
-        eumUrl.setUrl(url.getUrl());
-        eumUrl.setApplication(bizScenario.getApplication());
-        //获得当前用户id
-        *//*String creatorId = CurrentUserUtil.getCurrentUser().getId();*//*
-        //如果新增加的url是库中没有的，那么入库
-        //当前Url所属的业务场景
-        url.setBizScenario(bizScenario);
-        url.setStatus(String.valueOf(1));
-        //保存当前创建url的用户
-        url.setCreatorId(CurrentUserUtil.getCurrentUser().getId());
-        //开发阶段固定用户id
-        *//*url.setCreatorId("4028921a3cfba342013cfba4623e0000");*//*
-        url.setCreateTime(new Date());
-        urlService.saveUrl(url);
-        //向EUM_URL表中插入记录（url的application信息）
-        eumUrl.setUrlId(url.getId());
-        eumUrl.setRecordTime(new Date());
-        eumUrlRepository.save(eumUrl);
-        saveResourceWithUrl(url);*/
+        Application application =bizScenario.getApplication();
+        List<String> addUrlArgs=new ArrayList<String>();
+        addUrlArgs.add(url.getId());
+        addUrlArgs.add(url.getUrl());
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "addLogUrl", addUrlArgs);
+
         businessEmulation.restart(bizScenario.getApplication().getId());
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
     }
@@ -219,11 +204,19 @@ public class UrlManagerController {
      */
     @Post("update/{bizScenarioId}/{urlId}")
     public String updateUrl(@Validation(errorPath = "a:errorupdateurl") Url url, @Param("bizScenarioId") String bizScenarioId,
-                            @Param("urlId") String urlId, Invocation inv) {
+                            @Param("urlId") String urlId, Invocation inv) throws IOException {
         String modifierId=CurrentUserUtil.getCurrentUser().getId();
         urlService.updateUrlWithModifyInfo(urlId,url.getUrl(),url.getDescription(),modifierId);
         //更新GE_MONITOR_EUM_URL表中的URL地址
         eumUrlRepository.updateEumUrlsWithUrlId(url.getUrl(),urlId);
+        Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
+        List<String> addUrlArgs=new ArrayList<String>();
+        addUrlArgs.add(urlId);
+        addUrlArgs.add(url.getUrl());
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "addLogUrl", addUrlArgs);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //Url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
@@ -233,8 +226,15 @@ public class UrlManagerController {
      * 删除url.
      */
     @Get("delete/{bizScenarioId}/{urlId}")
-    public String deleteUrl(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, Invocation inv) {
-	    urlService.deleteUrl(bizScenarioId, urlId);
+    public String deleteUrl(@Param("bizScenarioId") String bizScenarioId,@Param("urlId") String urlId, Invocation inv) throws IOException {
+        urlService.deleteUrl(bizScenarioId, urlId);
+        Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
+        List<String> addUrlArgs=new ArrayList<String>();
+        addUrlArgs.add(urlId);
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "removeLogUrl", addUrlArgs);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
@@ -250,24 +250,11 @@ public class UrlManagerController {
         for(int i=0;i<urlIds.length;i++){
             urlService.deleteUrl(bizScenarioId,urlIds[i]);
         }
-        /*//先删除中间表GE_MONITOR_BIZ_SCENARIO_URL的记录
-        urlService.batchDeleteBizScenarioAndUrl(bizScenarioId, urlIds);
-        //先删除中间表GE_MONITOR_URL_METHOD的记录
-        urlService.batchDeleteUrlAndMethod(urlIds);
-        //删除GE_MONITOR_URL的记录
-        urlService.batchDeleteUrl(urlIds);
-        //删除Resource表中的记录
-        List<Resource> dbResources=resourcesRepository.findAllResourcesWithUrlIds(urlIds);
-        resourcesRepository.delete(dbResources);
-        *//*for(Resource resource:dbResources){
-            resourcesRepository.delete(resource);
-        }*//*
-        //删除EumUrl表中的记录
-        List<EumUrl> dbEumUrls=eumUrlRepository.findAllEumUrlsWithUrlIds(urlIds);
-        eumUrlRepository.delete(dbEumUrls);*/
-        /*for(EumUrl eumUrl:dbEumUrls){
-            eumUrlRepository.delete(eumUrl);
-        }*/
+        Application application =bizScenarioService.findBizScenario(bizScenarioId).getApplication();
+        SynAgentUtil.httpClientOfSynAgent(application.getApplicationIp(),
+                Integer.parseInt(application.getApplicationPort()),
+                "/" + application.getApplicationName(),
+                "removeLogUrl", urlIds);
         businessEmulation.restart(bizScenarioService.findBizScenario(bizScenarioId).getApplication().getId());
         //url列表页面
         return "r:/application/manager/urlmanager/urllist/"+bizScenarioId;
