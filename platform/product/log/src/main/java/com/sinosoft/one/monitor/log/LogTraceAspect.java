@@ -8,11 +8,13 @@ import java.util.Set;
 
 import com.alibaba.fastjson.JSON;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.BridgeMethodResolver;
 import org.springframework.util.ClassUtils;
 
@@ -36,21 +38,23 @@ public class LogTraceAspect {
 	 * 
 	 * @param pjp
 	 * @return
-	 * @throws Throwable
+	 * @throws Throwable  com.sinosig.servicebus.transpolicy.webservice.TransPolicyService
 	 */
-    @Around("execution(* com.sinosoft.one.demo.service..*(..))")
-	public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
+    @Around("execution(* com.sinosig.servicebus.*.*service..*.*(..))")
+//  @Around("execution(* com.sinosig.servicebus..*(..))")
+    public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
 			throws Throwable {
-	    TraceModel traceModel = TraceUtils.getTraceModel();
-	    if(traceModel == null || traceModel.getUrlId() == null) {
-		    return pjp.proceed();
-	    }
-	    String traceId = traceModel.getUrlTraceLog().getId();
+    	TraceModel traceModel = TraceUtils.getTraceModel();
+		if(traceModel == null || traceModel.getUrlId() == null) {
+			return pjp.proceed();
+		}
+		String traceId = traceModel.getUrlTraceLog().getId();
 		Class<?> sourceClass = pjp.getSignature().getDeclaringType();
-		Class<?> targetClass = pjp.getTarget().getClass();
-        if(logger.isDebugEnabled()){
-            logger.debug("target class is:",targetClass);
-        }
+		Class<?> targetClass = pjp.getTarget() == null ? sourceClass : pjp.getTarget().getClass();
+
+		if(logger.isDebugEnabled()){
+			logger.debug("target class is:",targetClass);
+		}
 		Method method = getMethod(pjp);
 
 		// 获取cglib代理对象
@@ -71,33 +75,33 @@ public class LogTraceAspect {
 			return result;
 		} finally {
 			// @Interfacetrace检查
-			if(!ClassUtils.isCglibProxyClass(targetClass)) {
+			if(!AopUtils.isCglibProxyClass(targetClass)) {
 				String urlId = traceModel.getUrlId();
 				Set<LogMethod> logMethods = logConfigs.getLogMethods(urlId);
-                if(logMethods != null && logMethods.size() > 0) {
-                    for(LogMethod logMethod : logMethods) {
-                        if(logMethod.getClassName().equals(sourceClass.getName()) && logMethod.getMethodName().equals(specificMethod.getName())) {
-	                        MethodTraceLog methodTraceLog = new MethodTraceLog();
+				if(logMethods != null && logMethods.size() > 0) {
+					for(LogMethod logMethod : logMethods) {
+						if(logMethod.getClassName().equals(sourceClass.getName()) && logMethod.getMethodName().equals(specificMethod.getName())) {
+							MethodTraceLog methodTraceLog = new MethodTraceLog();
 
-	                        methodTraceLog.setUrlTraceLogId(traceId);
-	                        methodTraceLog.setMethodId(logMethod.getId());
-	                        methodTraceLog.setBeginTime(new Timestamp(begin));
-	                        methodTraceLog.setEndTime(new Timestamp(end));
-	                        methodTraceLog.setConsumeTime(time);
-	                        methodTraceLog.setMethodName(specificMethod.getName());
-	                        methodTraceLog.setClassName(sourceClass.getName());
-	                        methodTraceLog.setInParam(JSON.toJSONString(pjp.getArgs()));
-	                        methodTraceLog.setOutParam(JSON.toJSONString(result));
-	                        methodTraceLog.setRecordTime(new Date());
+							methodTraceLog.setUrlTraceLogId(traceId);
+							methodTraceLog.setMethodId(logMethod.getId());
+							methodTraceLog.setBeginTime(new Timestamp(begin));
+							methodTraceLog.setEndTime(new Timestamp(end));
+							methodTraceLog.setConsumeTime(time);
+							methodTraceLog.setMethodName(specificMethod.getName());
+							methodTraceLog.setClassName(sourceClass.getName());
+							methodTraceLog.setInParam(JSON.toJSONString(pjp.getArgs()));
+							methodTraceLog.setOutParam(JSON.toJSONString(result));
+							methodTraceLog.setRecordTime(new Date());
 
-	                        logger.debug(MethodTraceLog.FORMAT_STRING, methodTraceLog.toObjectArray());
+							logger.debug(MethodTraceLog.FORMAT_STRING, methodTraceLog.toObjectArray());
 
-	                        UrlTraceLog urlTraceLog = traceModel.getUrlTraceLog();
-	                        urlTraceLog.addMethodTraceLog(methodTraceLog);
-                        }
-                    }
-                }
-            }
+							UrlTraceLog urlTraceLog = traceModel.getUrlTraceLog();
+							urlTraceLog.addMethodTraceLog(methodTraceLog);
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -108,11 +112,11 @@ public class LogTraceAspect {
 	 * @return 执行方法
 	 */
 	private Method getMethod(ProceedingJoinPoint pjp) throws NoSuchMethodException {
-        MethodSignature signature = (MethodSignature) pjp.getSignature();
-        Method m = signature.getMethod();
-        if( Proxy.isProxyClass(pjp.getThis().getClass())) {
-            m = pjp.getTarget().getClass().getMethod(m.getName(), m.getParameterTypes());
-        }
-        return m;
+		MethodSignature signature = (MethodSignature) pjp.getSignature();
+		Method m = signature.getMethod();
+		if(m != null && pjp.getThis()!=null&&Proxy.isProxyClass(pjp.getThis().getClass())) {
+			m = pjp.getTarget().getClass().getMethod(m.getName(), m.getParameterTypes());
+		}
+		return m;
 	}
 }

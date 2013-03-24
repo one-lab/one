@@ -213,10 +213,10 @@ public class ApplicationEmuService {
             todayCount += getTodayEumUrlStatistics(eumUrl.getId()).getFailureCount().intValue();
             yesterdayCount+= getEumUrlStatisticsByEnumIdAndDate(eumUrl.getId(),yesterday).getFailureCount().intValue();
         }
-        if(yesterdayCount<todayCount){
+        if(yesterdayCount>todayCount){
             return Trend.RISE;
         }
-        else if(yesterdayCount>todayCount){
+        else if(yesterdayCount<todayCount){
             return Trend.DROP;
         }
         else

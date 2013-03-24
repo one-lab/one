@@ -32,7 +32,7 @@ public class OsConfig {
 	public static String recieveOsResult = "";//
 	public static String recieveOsInfo = "";
 
-	
+	public static boolean newTimer=true;
 	public static boolean first=true;
 	public static Map<String, String> shellAndId = new HashMap<String, String>();
 	public static Map<String, Object> ipMap = new HashMap<String, Object>();
@@ -52,30 +52,32 @@ public class OsConfig {
 			monitorAddress = properties.getProperty("monitorAddress");
 			monitorAddress = monitorAddress + "recieveOsInfo";
 			osCmd_getIp = properties.getProperty("osCmd_getIp");//读取本地文件获取monitor IP
-			ip = OsUtil.executeWithResult(osCmd_getIp).split(":")[1];
-			System.out.println(OsUtil.executeWithResult(osCmd_getIp)+"IP结果");
+//			ip = OsUtil.executeWithResult(osCmd_getIp).split(":")[1];
+			ip=osCmd_getIp.split(":")[1];
+			logger.debug("IP", ip);
 			ipMap.put("ip", ip);//把IP放入Map
 			ID=OsUtil.readFile( "ID", "osAgentInfo/os.info");//读取本地OSID
 			ipMap.put("ID", ID);//放入ID
 			//连接MONITOR获取 脚本将ID 返回校验
+			logger.debug("monitorAddress",monitorAddress.toString());
 			getConfigData(monitorAddress, ipMap);
 			if (shellAndId.get("ID") != null) {//返回的ID是否为空 ---NULL不匹配
 				OsUtil.writeFile("ID", shellAndId.get("ID"), "osAgentInfo/os.info");
 				ID=shellAndId.get("ID");
 				interCycleTime = new Integer(shellAndId.get("pollingTime"));
 				osCmd_vmstat = shellAndId.get("CB");
-				System.out.println(osCmd_vmstat+"返回的脚本");
+				logger.debug(osCmd_vmstat+"返回的脚本");
 				osCmd_ramInfo = shellAndId.get("RM");
-				System.out.println(osCmd_ramInfo+"返回的脚本");
+				logger.debug(osCmd_ramInfo+"返回的脚本");
 				osCmd_diskInfo = shellAndId.get("DK");
-				System.out.println(osCmd_diskInfo+"返回的脚本");
+				logger.debug(osCmd_diskInfo+"返回的脚本");
 				osCmd_cpuUilitZation=shellAndId.get("CU");
-				System.out.println(osCmd_cpuUilitZation+"返回的脚本");
+				logger.debug(osCmd_cpuUilitZation+"返回的脚本");
 			} else {
 				System.out.println("ip不匹配");
 			}
-		}  catch (Exception e) {
-			logger.error("++++++++++++++++++++++++++", e);
+		}  catch (Throwable e) {
+			logger.error("error",e);
 			e.printStackTrace();
 		}
 
@@ -88,6 +90,7 @@ public class OsConfig {
 	 */
 	private static void getConfigData(String monitorAddress,
 			Map<String, Object> ipMap) {
+		logger.debug(monitorAddress);
 		HttpConnectionUtil connectionUtil = new HttpConnectionUtil();
 		shellAndId = (Map<String, String>) connectionUtil.request(
 				monitorAddress, ipMap);
@@ -97,7 +100,7 @@ public class OsConfig {
 		Properties properties = new Properties();
 		try {
 			properties.load(OsUtil.getFileStream("config/osConfig.properties",OsConfig.class));
-		} catch (IOException e) {
+		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

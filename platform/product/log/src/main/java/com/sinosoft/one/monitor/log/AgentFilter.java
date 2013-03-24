@@ -15,12 +15,16 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
 
 public class AgentFilter implements Filter {
+	 private static Logger logger = LoggerFactory.getLogger(AgentFilter.class);
 	private ApplicationContext applicationContext;
     private LogConfigs logConfigs;
 
@@ -30,6 +34,7 @@ public class AgentFilter implements Filter {
 	public void destroy() {}
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
+		logger.info("AgentFilter");
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		String url = httpServletRequest.getRequestURI();
 
@@ -83,8 +88,8 @@ public class AgentFilter implements Filter {
 		ApplicationContext oldRootContext = (ApplicationContext) config.getServletContext().getAttribute(
 				WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 		if(oldRootContext == null) {
-	        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml",
-			        "classpath:spring/applicationContext-exception.xml");
+			String[] claspaths={"classpath:spring/applicationContext-log.xml","classpath:spring/applicationContext-exception.xml"};
+	        applicationContext = new ClassPathXmlApplicationContext(claspaths );
 			logConfigs = (LogConfigs)applicationContext.getBean("logConfigs");
 		} else {
 			logConfigs = (LogConfigs)oldRootContext.getBean("logConfigs");

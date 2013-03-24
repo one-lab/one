@@ -14,22 +14,22 @@
         function savelinux() {
         	var name=$("#name").val();
         	if(name==null||name==""){
-      		  msgSuccess("系统消息", "名称不能为空");
+        		msgAlert("系统消息","中文名称不能为空！");
       			return false;  
       		}
         	if(!name.match("^[A-Za-z]+$")){
-        		msgSuccess("系统消息", "请输入英文");
+        		msgAlert("系统消息", "显示名称必须是英文！");
         		return false;  
         	}
         	var ip=$("#ipAddr").val();
         	if(!ip.match("^[0-9.]+$")){
-      		  	msgSuccess("系统消息", "IP格式错误");
+        		msgAlert("系统消息", "IP格式错误");
       			return false;  
       		}
         	var intercycleTime=$("#intercycleTime").val();
         	if(!intercycleTime.match("^[0-9]+$")){
-        		  msgSuccess("系统消息", "轮询时间必须为数字");
-        		  return false;  
+        		msgAlert("系统消息", "轮询时间必须为数字");
+        		return false;  
         	}
             var flag = false;
             $.ajax({

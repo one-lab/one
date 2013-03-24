@@ -19,7 +19,10 @@ function refresheSGA(msg) {
              text:''
          },
          xAxis:{
-             categories: msg.categories
+             categories: msg.categories  ,
+             labels: {
+                 step:msg.step
+             }
          },
          yAxis:{
              title:{
@@ -205,12 +208,13 @@ function refreshPie1(_data){
             type: 'pie',
             name: 'Browser share',
             data: [
-                {
-	                name: '可用',
-	                y: _data[0],
-	                sliced: false,
-	                selected: false
-                },
+//                {
+//	                name: '可用',
+//	                y: _data[0],
+//	                sliced: false,
+//	                selected: false
+//                },
+                ['可用',_data[0]],
                 ['不可用',_data[1]],
                 ['未知',_data[2]]
            ]

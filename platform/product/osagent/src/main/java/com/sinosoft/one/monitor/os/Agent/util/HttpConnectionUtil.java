@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.os.Agent.util;
 
 import java.io.ObjectInputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,14 +15,20 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sinosoft.one.monitor.os.Agent.config.OsConfig;
 
 public class HttpConnectionUtil {
-
+	private static Logger logger = LoggerFactory.getLogger(HttpConnectionUtil.class);
 	public Object request(String url, Map<String, Object> osInfo) {
-		HttpPost post = new HttpPost(url);
-		HttpResponse response = null;
-		Object o = null;
 		try {
+			logger.debug(url.toString());
+			HttpPost post = new HttpPost(url);
+			logger.debug(post.toString());
+			HttpResponse response = null;
+			Object o = null;
 			if (osInfo != null) {
 				List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 				Entry<String, String> entry = null;
@@ -34,13 +41,17 @@ public class HttpConnectionUtil {
 				}
 			}
 			response = new DefaultHttpClient().execute(post);
+			System.out.println(response);
 			ObjectInputStream ois = new ObjectInputStream(response.getEntity()
 					.getContent());
 			o = ois.readObject();
 			ois.close();
-		} catch (Exception e) {
+			return o;
+		} catch (Throwable  e) {
+			logger.error("++",e);
 			e.printStackTrace();
-		}
-		return o;
+			
+		} 
+		return null;
 	}
 }

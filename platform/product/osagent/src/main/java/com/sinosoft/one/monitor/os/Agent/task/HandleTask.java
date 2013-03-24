@@ -11,6 +11,9 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sinosoft.one.monitor.os.Agent.config.OsConfig;
 import com.sinosoft.one.monitor.os.Agent.util.HttpConnectionUtil;
 import com.sinosoft.one.monitor.os.Agent.util.OsUtil;
@@ -34,20 +37,20 @@ public class HandleTask extends TimerTask {
 	private SimpleDateFormat sdf = new SimpleDateFormat("SSS");
 	private long startTime ;
 	private long endTime ;
-
+	private static Logger logger = LoggerFactory.getLogger(OsConfig.class);
 	public HandleTask(Timer supTimer) {
 		this.timer = supTimer;
 	}
 
 	@Override
 	public void run() {
+		System.gc();
 			try {
-				System.out.println("每次开始的"+OsConfig.interCycleTime);
-				System.out.println("每次开始的"+OsConfig.first);
 				if(OsConfig.first==true){
-					System.out.println(OsConfig.first);
+					logger.debug(OsConfig.first+"");
 					OsConfig.init("config/osConfig.properties");
 					OsConfig.first=false;
+					logger.debug(OsConfig.interCycleTime+"");
 					setPeriod(OsConfig.interCycleTime*60*1000);
 				}else{
 					connectionUtil = new HttpConnectionUtil();
@@ -56,9 +59,9 @@ public class HandleTask extends TimerTask {
 							HandleTask.class));
 					ID = OsConfig.ID;
 					cpuUilitZation=OsUtil.getCpuUilitZation();
-					System.out.println(cpuUilitZation+"lllllllllllllllllllllllllll");
+					logger.debug(cpuUilitZation);
 					cpuInfo = OsUtil.getCpuInfo();
-					System.out.println(cpuInfo);
+					logger.debug(cpuInfo);
 					ramInfo = OsUtil.getRamInfo();
 					diskInfo = OsUtil.getDiskInfo();
 					startTime=System.currentTimeMillis();
@@ -82,15 +85,14 @@ public class HandleTask extends TimerTask {
 						if(Integer.valueOf((String) object)!= OsConfig.interCycleTime){
 							System.out.println("修改轮询时间");
 							OsConfig.interCycleTime= Integer.valueOf((String) requestMap.get("newInterCycle"));
-							System.out.println(11111111);
 							setPeriod(OsConfig.interCycleTime*60*1000);
 						}
 					}else{
 						OsConfig.first=true;
 					}
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (Throwable e) {
+				logger.debug(e.getMessage());
 				e.printStackTrace();
 			}
 	}

@@ -16,7 +16,20 @@ public class Highchart {
 	/** 线性数据*/
 	private List<HighchartSerie> Series = new ArrayList<HighchartSerie>();
 
-	public Highchart(String renderId) {
+    /**
+     * step
+     */
+    private int step = 1;
+
+    public int getStep() {
+        return step;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
+    }
+
+    public Highchart(String renderId) {
 		super();
 		this.renderId = renderId;
 	}

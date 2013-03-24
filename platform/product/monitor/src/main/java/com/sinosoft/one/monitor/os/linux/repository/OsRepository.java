@@ -9,6 +9,9 @@ import com.sinosoft.one.monitor.os.linux.model.Os;
 
 public interface OsRepository extends PagingAndSortingRepository<Os, String> {
 	
+	@SQL("select * from ge_monitor_os where OS_INFO_ID=?1")
+	public Os findOsbyId(String id);
+	
 	@Query("from Os where ipAddr= ?1")
     public Os findOsbyIp(String ipAddr);
 	
