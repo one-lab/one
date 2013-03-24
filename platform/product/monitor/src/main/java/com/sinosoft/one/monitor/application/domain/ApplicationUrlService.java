@@ -57,8 +57,6 @@ public class ApplicationUrlService {
 	public ApplicationUrlInfoViewModel generateUrlInfoViewModel(String applicationId, String urlId) {
 		// 获得健康度
 		SeverityLevel severityLevel  = SeverityLevel.UNKNOW;
-		Date startDate = LocalDate.now().toDate();
-		Date endDate = LocalDateTime.now().toDate();
 		Application application = applicationRepository.findOne(applicationId);
 		int interval = application.getInterval().intValue();
 

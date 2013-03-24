@@ -6,6 +6,7 @@ import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -75,6 +76,10 @@ public class Alarm  implements java.io.Serializable {
      * 页面显示的记录时间(recordTime).
      */
     private String recordTime;
+	/**
+	 * 资源名称
+	 */
+	private String resourceName;
 
 
     public Alarm() {
@@ -218,6 +223,17 @@ public class Alarm  implements java.io.Serializable {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+
+	@Transient
+	public String getResourceName() {
+		return resourceName;
+	}
+
+	public void setResourceName(String resourceName) {
+		this.resourceName = StringUtils.isBlank(resourceName) ? "未知" : resourceName;
+	}
+
+
 
 
 	public boolean isSameAlarmInfo(Alarm alarm) {

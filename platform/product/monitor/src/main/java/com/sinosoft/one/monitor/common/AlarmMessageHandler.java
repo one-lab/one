@@ -63,12 +63,18 @@ public class AlarmMessageHandler {
 			AlarmAttribute alarmAttribute = alarmMessageList.get(i);
 
 			if(alarmAttribute.isAvailabilityAlarm()) {
-				thresholdAlarmParams.isAvailabilityAlarm = true;
-				thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
-				String availabilityAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Availability.name());
-				thresholdAlarmParams.availabilityAttributeActions = actionService.queryAttributeActions(resourceId, availabilityAttributeId, SeverityLevel.CRITICAL);
-				if(thresholdAlarmParams.healthAttributeActions == null) {
-					thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, thresholdAlarmParams.healthAttributeId, SeverityLevel.CRITICAL);
+
+				if(AvailabilityStatus.ERROR.value().equals(alarmAttribute.getAttributeValue())) {
+					thresholdAlarmParams.isAvailabilityAlarmError = true;
+					thresholdAlarmParams.severityLevel = SeverityLevel.CRITICAL;
+					String availabilityAttributeId = attributeCache.getAttributeId(thresholdAlarmParams.resource.getResourceType(), AttributeName.Availability.name());
+					thresholdAlarmParams.availabilityAttributeActions = actionService.queryAttributeActions(resourceId, availabilityAttributeId, SeverityLevel.CRITICAL);
+					if(thresholdAlarmParams.healthAttributeActions == null) {
+						thresholdAlarmParams.healthAttributeActions = actionService.queryAttributeActions(resourceId, thresholdAlarmParams.healthAttributeId, SeverityLevel.CRITICAL);
+					}
+				} else {
+					thresholdAlarmParams.isAvailabilityAlarmNormal = true;
+					thresholdAlarmParams.severityLevel = SeverityLevel.INFO;
 				}
 				break;
 			}
@@ -134,10 +140,23 @@ public class AlarmMessageHandler {
 		alarmMessageBuilder.append(thresholdAlarmParams.resource.getResourceName() + "的健康状况为" + thresholdAlarmParams.severityLevel.cnName());
 		alarmMessageBuilder.append("<br>根本原因");
 
-		if(thresholdAlarmParams.isAvailabilityAlarm) {
-			alarmMessageBuilder.append("<br> ").append(thresholdAlarmParams.resource.getResourceName()).append("不可用");
+		if(thresholdAlarmParams.isAvailabilityAlarmError) {
+			alarmMessageBuilder.append("<br> ").append(thresholdAlarmParams.resource.getResourceName());
+			if(thresholdAlarmParams.subResourceType != null) {
+				Resource subResource = resourcesCache.getResource(thresholdAlarmParams.subResourceId);
+				alarmMessageBuilder.append("资源[").append(subResource.getResourceType()).append("][")
+						.append(StringUtils.stripToEmpty(subResource.getResourceName())).append("]");
+			}
+			alarmMessageBuilder.append("不可用");
 			if(thresholdAlarmParams.availabilityAttributeActions != null && thresholdAlarmParams.availabilityAttributeActions.size() > 0) {
 				allAttributeActions.addAll(thresholdAlarmParams.availabilityAttributeActions);
+			}
+		} else if(thresholdAlarmParams.isAvailabilityAlarmNormal) {
+			alarmMessageBuilder.append("<br> ").append(thresholdAlarmParams.resource.getResourceName());
+			if(thresholdAlarmParams.subResourceType != null) {
+				Resource subResource = resourcesCache.getResource(thresholdAlarmParams.subResourceId);
+				alarmMessageBuilder.append("资源[").append(subResource.getResourceType()).append("][")
+						.append(StringUtils.stripToEmpty(subResource.getResourceName())).append("]可用性为可用");
 			}
 		} else if(thresholdAlarmParams.isExceptionAlarm) {
 			alarmMessageBuilder.append("<br> ").append(thresholdAlarmParams.resource.getResourceName()).append("发生异常");
@@ -236,7 +255,8 @@ public class AlarmMessageHandler {
 		private String alarmId;
 		private Resource resource;
 		private AlarmSource alarmSource;
-		private boolean isAvailabilityAlarm;
+		private boolean isAvailabilityAlarmError;
+		private boolean isAvailabilityAlarmNormal;
 		private boolean isExceptionAlarm;
 		private SeverityLevel severityLevel = SeverityLevel.UNKNOW;
 		private String healthAttributeId;

@@ -131,7 +131,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="6" class="mark_info">
-                                                <div class="unknow"></div><div>未知</div>
+                                                <%--<div class="unknow"></div><div>未知</div>--%>
                                                 <div class="normal"></div><div>正常</div>
                                                 <div class="warning"></div><div>警告</div>
                                                 <div class="serious"></div><div>严重</div>

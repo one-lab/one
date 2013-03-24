@@ -6,6 +6,7 @@ import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesService;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -75,10 +76,9 @@ public class AlarmService {
      * @return
      */
     public List<Alarm> queryLatestAlarmsRowsFifty(){
-        Sort desc = new Sort(Sort.Direction.DESC,"createTime");
-        PageRequest pageRequest = new PageRequest(0,50,desc);
-        List<Alarm>  alarms =   alarmRepository.findAll(pageRequest).getContent();
-        return  fillAlarm(alarms);
+        PageRequest pageRequest = new PageRequest(0,50);
+        List<Alarm>  alarms =   alarmRepository.selectAlarmsBySeverity(pageRequest, new String[]{SeverityLevel.CRITICAL.name(), SeverityLevel.WARNING.name()}).getContent();
+        return alarms;
     }
 
 	public Alarm queryLatestAlarm(String monitorId) {
@@ -90,9 +90,8 @@ public class AlarmService {
     }
 
     public Page<Alarm> queryLatestAlarmsByPageNo(int currentPageNumber) {
-        Sort desc = new Sort(Sort.Direction.DESC,"createTime");
-        PageRequest pageRequest = new PageRequest(currentPageNumber,10,desc);
-        Page<Alarm> page = alarmRepository.findAll(pageRequest);
+        PageRequest pageRequest = new PageRequest(currentPageNumber,10);
+        Page<Alarm> page = alarmRepository.selectAlarmsBySeverity(pageRequest, new String[]{SeverityLevel.CRITICAL.name(), SeverityLevel.WARNING.name()});
         return  page;
     }
 

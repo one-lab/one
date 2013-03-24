@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.application.model.viewmodel;
 
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Date;
@@ -45,7 +46,7 @@ public class UrlTraceLogViewModel {
 	}
 
 	public void setUserId(String userId) {
-		this.userId = userId;
+		this.userId = StringUtils.isBlank(userId) ? "未知" : userId;
 	}
 
 	public Date getRecordTime() {

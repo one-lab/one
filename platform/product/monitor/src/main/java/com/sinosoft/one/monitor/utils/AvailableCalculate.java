@@ -83,7 +83,7 @@ public class AvailableCalculate {
             //如果上次状态成功，且上次间隔时间与这次间隔时间一致,但两次时间差大于设置间隔则代表有问题。此处等待将来linux端改为其他方式后，可以进行调整
             if(previousInf!=null&&previousInf.getStatus()&&previousInf.getInterval().equals(interval)){
                 Interval timeInterval = new Interval(new DateTime(previousInf.getRecordDate()),DateTime.now());
-                if(timeInterval.toDuration().getStandardMinutes()>interval){
+	            if(timeInterval.toDuration().getStandardMinutes()>interval){
                     failureCountNeedAdd = true;
                 }
             }

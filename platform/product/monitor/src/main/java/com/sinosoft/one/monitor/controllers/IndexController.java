@@ -66,7 +66,7 @@ public class IndexController {
 			String title = alarm.getMessage();
 			String subTitle = title.length()>10 ? title.substring(0, 9)+"...." : title;
 			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORM_A_SUBTITLE, url, title, subTitle));
-			cell.add(alarm.getAppName());
+			cell.add(alarm.getResourceName());
 			cell.add(alarm.getMonitorType());
 			cell.add(DateFormatUtils.format(alarm.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
 			row.put("cell", cell);

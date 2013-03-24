@@ -30,6 +30,7 @@ $(document).ready(function() {
         url : ctx + "/application/manager/url/tracelog/" + urlId,
         dataType: "json",
         height: 'auto',
+        type : 'POST',
         colums:[
             {id:'1',text:'IP',name:"userIp",width:'400',index:'1',align:'',color:''},
             {id:'2',text:'访问者',name:"visitor",width:'',index:'1',align:'',color:''},
@@ -74,7 +75,7 @@ function initUrlHealthAndAva() {
             for(var i = 0, len=times.length; i<len; i++) {
                 var time = times[i];
                 var urlHealth = urlHealths[time];
-                var urlHealthCss = "unknow";
+                var urlHealthCss = "normal";
                 if(urlHealth == "CRITICAL") {
                     urlHealthCss = "serious";
                 } else if(urlHealth == "WARNING") {
@@ -181,7 +182,7 @@ function createVisitNumberChart(times, data) {
             line:{              // 数据点的点击事件
                 events:{
                     click: function(event){
-                        alert('The bar was clicked, and you can add any other functions.');
+//                        alert('The bar was clicked, and you can add any other functions.');
                     }
                 }
             }
@@ -237,7 +238,7 @@ function createResponseTimeChart(times, data) {
             line:{              // 数据点的点击事件
                 events:{
                     click: function(event){
-                        alert('The bar was clicked, and you can add any other functions.');
+//                        alert('The bar was clicked, and you can add any other functions.');
                     }
                 }
             }
