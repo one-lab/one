@@ -91,6 +91,14 @@ public class LogConfigs {
         @ManagedOperationParameter(name = "url", description = "Request url of log url.")
     })
     public void addLogUrl(String id, String url) {
+	    Iterator<LogUrl> iterator = urls.iterator();
+	    while (iterator.hasNext()) {
+		    LogUrl logUrl = iterator.next();
+		    if(logUrl.getId().equalsIgnoreCase(id)) {
+			    logUrl.setUrl(url);
+			    return;
+		    }
+	    }
         urls.add(new LogUrl(id, url));
     }
 
@@ -118,6 +126,16 @@ public class LogConfigs {
 	    while (iterator.hasNext()) {
 		    LogUrl logUrl = iterator.next();
 		    if(logUrl.getId().equals(urlId)) {
+			    Set<LogMethod> logMethods = logUrl.getLogMethodSet();
+			    Iterator<LogMethod> logMethodIterator = logMethods.iterator();
+			    while(logMethodIterator.hasNext()) {
+				    LogMethod logMethod = logMethodIterator.next();
+				    if(logMethod.getId().equals(methodId)) {
+					    logMethod.setClassName(className);
+					    logMethod.setMethodName(methodName);
+					    return;
+				    }
+			    }
 			    logUrl.addLogMethod(new LogMethod(methodId, className, methodName));
 		    }
 	    }
