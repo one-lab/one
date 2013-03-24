@@ -24,6 +24,10 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 public class OsAgentController {
 	private static String ID = "";
 	public static String pollingTime = "0";
+	public static String osCmd_vmstat = "";
+	public static String osCmd_ramInfo = "";
+	public static String osCmd_diskInfo = "";
+	public static String osCmd_getIp = "";
 	public static String osAgentIp = "";
 	public static String osAgentID = "";
 	public static String ip = "";
@@ -35,7 +39,6 @@ public class OsAgentController {
 	public static String agentIp = "";
 	public static String respondTime="";
 	public static String thisInterCycleTime="";
-	public static String cpuUilitZation="";
 	public static Map<String, String[]> osAgentInfo = new HashMap<String, String[]>();
 
 	/**
@@ -107,13 +110,12 @@ public class OsAgentController {
 				diskInfo = getValue("diskInfo", osAgentInfo);
 				respondTime = getValue("respondTime", osAgentInfo);
 				thisInterCycleTime=getValue("thisInterCycleTime", osAgentInfo);
-				cpuUilitZation=getValue("cpuUilitZation", osAgentInfo);
 				//保存采样数据
 				requestInfo.put("newInterCycle", os.getIntercycleTime()+"");//返回轮询时间
 				oos.writeObject(requestInfo);
 				oos.close();
 			}
-			osProcessService.saveSampleData(os.getOsInfoId(), cpuUilitZation,cpuInfo, ramInfo, diskInfo, respondTime, calendar.getTime());
+			osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, calendar.getTime());
 			//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
 			osProcessService.savaAvailableSampleData(os.getOsInfoId(), calendar.getTime(), Integer.valueOf(thisInterCycleTime), "1");
 		} catch (IOException e) {
