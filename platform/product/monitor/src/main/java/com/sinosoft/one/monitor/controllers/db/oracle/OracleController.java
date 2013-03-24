@@ -150,8 +150,9 @@ public class OracleController {
 									  	:3
 										} 
 		 */
+        int step = categories.size()/6;
 		JSONObject jos = new JSONObject();
-		jos.put("step", 2);
+		jos.put("step", step);
 		xAxis.put("labels", jos);
 		xAxis.put("categories", categories);
 		surr.put("data", connectData);
@@ -421,6 +422,8 @@ public class OracleController {
                 highchart.addCategory(oracleSGAHitRate.getRecordTime());
             }
         }
+        int step = highchart.getCategories().size()/12;
+        highchart.setStep(step);
 		highchart.addSerie(highchartSerie1);
 		highchart.addSerie(highchartSerie2);
 		highchart.addSerie(highchartSerie3);

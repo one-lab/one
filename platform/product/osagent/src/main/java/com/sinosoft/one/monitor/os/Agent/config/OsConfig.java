@@ -21,7 +21,6 @@ import com.sinosoft.one.monitor.os.Agent.util.OsUtil;
 public class OsConfig {
 	public static int interCycleTime = 1;
 	public static String osCmd_vmstat = "";
-	public static String osCmd_cpuUilitZation = "";
 	public static String osCmd_ramInfo = "";
 	public static String osCmd_getIp = "";
 	public static String osCmd_diskInfo = "";
@@ -53,7 +52,6 @@ public class OsConfig {
 			monitorAddress = monitorAddress + "recieveOsInfo";
 			osCmd_getIp = properties.getProperty("osCmd_getIp");//读取本地文件获取monitor IP
 			ip = OsUtil.executeWithResult(osCmd_getIp).split(":")[1];
-			System.out.println(OsUtil.executeWithResult(osCmd_getIp)+"IP结果");
 			ipMap.put("ip", ip);//把IP放入Map
 			ID=OsUtil.readFile( "ID", "osAgentInfo/os.info");//读取本地OSID
 			ipMap.put("ID", ID);//放入ID
@@ -64,13 +62,8 @@ public class OsConfig {
 				ID=shellAndId.get("ID");
 				interCycleTime = new Integer(shellAndId.get("pollingTime"));
 				osCmd_vmstat = shellAndId.get("CB");
-				System.out.println(osCmd_vmstat+"返回的脚本");
 				osCmd_ramInfo = shellAndId.get("RM");
-				System.out.println(osCmd_ramInfo+"返回的脚本");
 				osCmd_diskInfo = shellAndId.get("DK");
-				System.out.println(osCmd_diskInfo+"返回的脚本");
-				osCmd_cpuUilitZation=shellAndId.get("CU");
-				System.out.println(osCmd_cpuUilitZation+"返回的脚本");
 			} else {
 				System.out.println("ip不匹配");
 			}

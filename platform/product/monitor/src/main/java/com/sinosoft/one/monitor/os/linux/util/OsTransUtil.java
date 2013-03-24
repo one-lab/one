@@ -21,7 +21,7 @@ public class OsTransUtil {
 	private static OsRam osRam = null;
 	private static OsDisk osDisk = null;
 
-	public static OsCpu getCpuInfo(String cpuInfo ,String cpuUilitZation) {
+	public static OsCpu getCpuInfo(String cpuInfo) {
 		// 运行队列，阻塞进程，用户时间%，系统时间%，i/o等待%，空闲时间%，中断/秒
 		String[] cpuInfos = cpuInfo.split(" ");
 		osCpu = new OsCpu();
@@ -32,8 +32,8 @@ public class OsTransUtil {
 		osCpu.setIoWait(cpuInfos[4].trim());
 		osCpu.setCpuIdle(cpuInfos[5].trim());
 		osCpu.setInterRupt(cpuInfos[6].trim());
-//		Integer cpuUtilZation = 100 - new Integer(osCpu.getCpuIdle());
-		osCpu.setUtiliZation(cpuUilitZation);
+		Integer cpuUtilZation = 100 - new Integer(osCpu.getCpuIdle());
+		osCpu.setUtiliZation(cpuUtilZation.toString());
 		return osCpu;
 	}
 

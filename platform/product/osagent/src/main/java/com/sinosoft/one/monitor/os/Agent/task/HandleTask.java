@@ -27,7 +27,6 @@ public class HandleTask extends TimerTask {
 	private static String cpuInfo = "";
 	private static String ramInfo = "";
 	private static String diskInfo = "";
-	private static String cpuUilitZation = "";
 	private static Map<String, Object> osInfo = new HashMap<String, Object>();
 	HttpConnectionUtil connectionUtil = null;
 	private Timer timer;
@@ -55,10 +54,7 @@ public class HandleTask extends TimerTask {
 					properties.load(OsUtil.getFileStream("config/osConfig.properties",
 							HandleTask.class));
 					ID = OsConfig.ID;
-					cpuUilitZation=OsUtil.getCpuUilitZation();
-					System.out.println(cpuUilitZation+"lllllllllllllllllllllllllll");
 					cpuInfo = OsUtil.getCpuInfo();
-					System.out.println(cpuInfo);
 					ramInfo = OsUtil.getRamInfo();
 					diskInfo = OsUtil.getDiskInfo();
 					startTime=System.currentTimeMillis();
@@ -66,7 +62,6 @@ public class HandleTask extends TimerTask {
 					endTime=System.currentTimeMillis();
 					long respondTime=endTime- startTime;
 					osInfo.put("ID", ID);
-					osInfo.put("cpuUilitZation", cpuUilitZation);
 					osInfo.put("cpuInfo", cpuInfo);
 					osInfo.put("ramInfo", ramInfo);
 					osInfo.put("diskInfo", diskInfo);

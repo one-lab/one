@@ -88,8 +88,10 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                     long time2 = ava2.getRecordTime().getTime();
                     part[0] = time1+"";
                     part[1] = ava1.getState();
-                    part[2] = ((time2-time1)/during)+"";
-                    parts.add(part);
+                    if(((time2-time1)*1.0/during)>0.1){
+                        part[2] = ((time2-time1)*1.0/during)+"";
+                        parts.add(part);
+                    }
                 }
                 oracleAvaInfoModel.setGraphInfo(parts);
             }
@@ -101,6 +103,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
     private List<Ava> caculate(List<Ava> avaList,long startTime,long endTime){
         //定义合并后的Ava对象集合
         List<Ava> avas = new ArrayList<Ava>();
+        long lastTime =  startTime;
         //遍历avaList去除状态相同项
         for(int i=0;i<avaList.size();i++){
             //定义合并后的对象
@@ -109,57 +112,64 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                 //获取目前已经合并后的Ava对象集合中的最后一条记录
                 caculateAva = avas.get(avas.size()-1);
             }
-            //初始化合并后的对象(caculateAva)
-            else {
-                caculateAva.setState("-1");
-                caculateAva.setRecordTime(new Date(0));
-                caculateAva.setInterval(-1);
-            }
             Ava ava = avaList.get(i);
-            long caculateTime = caculateAva.getRecordTime().getTime();
             long avaTime = ava.getRecordTime().getTime();
             long interval = caculateAva.getInterval()*60000;
             //如果相邻的两个元素状态不相等，则插入新的记录
-            if(!StringUtil.equals(ava.getState(),caculateAva.getState())){
-                if(i==0){
-                    if(startTime+60000<avaTime){
-                        Ava newAva = new Ava();
-                        newAva.setState("2");
-                        newAva.setRecordTime(new Date(startTime));
-                        avas.add(newAva);
-                        avas.add(ava);
-                    }else{
-                        avas.add(ava);
-                    }
+            if(i==0){
+                if(startTime+60000<avaTime){
+                    Ava newAva = new Ava();
+                    newAva.setState("2");
+                    newAva.setRecordTime(new Date(startTime));
+                    avas.add(newAva);
+                    avas.add(ava);
+
+                }else{
+                    avas.add(ava);
+                }
+            } else {
+                if(lastTime+60000<avaTime){
+                    Ava newAva = new Ava();
+                    newAva.setState("2");
+                    newAva.setRecordTime(new Date(lastTime));
+                    avas.add(newAva);
+                    avas.add(ava);
                 } else {
-                    if(caculateTime+interval+1000<avaTime){
-                        Ava newAva = new Ava();
-                        newAva.setState("2");
-                        newAva.setRecordTime(new Date(caculateTime+interval));
-                        avas.add(newAva);
-                        avas.add(ava);
-                    }else{
+                    if(!StringUtil.equals(ava.getState(),caculateAva.getState())){
                         avas.add(ava);
                     }
                 }
             }
+            lastTime = ava.getRecordTime().getTime()+interval;
         }
         if(avaList.size()>0){
             Ava ava = avaList.get(avaList.size()-1);
-            avas.add(ava);
             long avaTime = ava.getRecordTime().getTime();
             long interval = ava.getInterval()*60000;
-            if(avaTime+interval+60000<endTime){
+            if(avaTime+interval<endTime){
                 Ava newAva = new Ava();
                 newAva.setState("2");
                 newAva.setRecordTime(new Date(avaTime+interval));
                 avas.add(newAva);
+                Ava newAva1 = new Ava();
+                newAva1.setState("2");
+                newAva1.setRecordTime(new Date(endTime));
+                avas.add(newAva1);
+            } else {
+                Ava newAva1 = new Ava();
+                newAva1.setState("2");
+                newAva1.setRecordTime(new Date(endTime));
+                avas.add(newAva1);
             }
         }else{
             Ava newAva = new Ava();
             newAva.setState("2");
             newAva.setRecordTime(new Date(startTime));
             avas.add(newAva);
+            Ava newAva1 = new Ava();
+            newAva1.setState("2");
+            newAva1.setRecordTime(new Date(endTime));
+            avas.add(newAva1);
         }
         return avas;
     }

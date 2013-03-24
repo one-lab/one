@@ -52,31 +52,6 @@ public class OsUtil {
 	}
 
 	/**
-	 * 执行shell 有返回结果
-	 * 
-	 * @param command
-	 * @return
-	 */
-	public static String execute(String command) {
-		String result = "";
-		try {
-//			String[] cmd = new String[] { "/bin/sh", "-c", command };
-			Process ps = Runtime.getRuntime().exec(command);
-
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					ps.getInputStream()));
-			StringBuffer sb = new StringBuffer();
-			String line;
-			while ((line = br.readLine()) != null) {
-				sb.append(line).append("");
-			}
-			result = sb.toString();
-		} catch (Exception e) {
-			logger.error("osutil :", e);
-		}
-		return result;
-	}
-	/**
 	 * 获取cpu信息
 	 * 
 	 * @return
@@ -86,15 +61,6 @@ public class OsUtil {
 		return executeWithResult(OsConfig.osCmd_vmstat);
 	}
 
-	/**
-	 * 获取cpu利用率
-	 * 
-	 * @return
-	 */
-	public static String getCpuUilitZation() {
-		System.out.println("执行cpu利用率脚本：========"+OsConfig.osCmd_cpuUilitZation);
-		return executeWithResult(OsConfig.osCmd_cpuUilitZation);
-	}
 	/**
 	 * 获取内存信息
 	 * 

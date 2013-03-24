@@ -45,7 +45,7 @@ public class OsProcessService {
 	 * @param respondTime 采集的响应信息字符串
 	 * @param sampleTime 采集时间
 	 */
-	public void saveSampleData(String osInfoId,String cpuUilitZation,String cpuInfo,String ramInfo,String diskInfo,String respondTime ,Date sampleTime){
+	public void saveSampleData(String osInfoId,String cpuInfo,String ramInfo,String diskInfo,String respondTime ,Date sampleTime){
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
 		c.setTime(sampleTime);
@@ -53,7 +53,7 @@ public class OsProcessService {
 		c.set(Calendar.SECOND, 0);
 		Date hourPoint=c.getTime();
 		MessageBase messageBase = alarmMessageBuilder.newMessageBase(osInfoId);
-		OsCpu osCpu=OsTransUtil.getCpuInfo(cpuInfo,cpuUilitZation);
+		OsCpu osCpu=OsTransUtil.getCpuInfo(cpuInfo);
 		osCpuService.saveCpu(osInfoId,osCpu ,sampleTime);//保存CPU采样
 		messageBase.addAlarmAttribute(AttributeName.CPUUtilization, osCpu.getUtiliZation());
 		
