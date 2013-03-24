@@ -55,7 +55,7 @@ public class ApplicationEmuService {
      * @return
      */
     public EumUrlAvaSta getTodayEumUrlStatistics(String eumUrlId){
-        return getEumUrlStatisticsByEnumIdAndDate(eumUrlId,DateTime.now().toDate());
+        return getEumUrlStatisticsByEnumIdAndDate(eumUrlId,LocalDate.now().toDate());
     }
 
     EumUrlAvaSta getEumUrlStatisticsByEnumIdAndDate(String eumUrlId,Date date){
@@ -208,7 +208,7 @@ public class ApplicationEmuService {
     private Trend calTrend(List<EumUrl> eumUrls ){
         int yesterdayCount=0;
         int todayCount=0;
-        Date yesterday = DateTime.now().minusDays(1).toDate();
+        Date yesterday = LocalDate.now().minusDays(1).toDate();
         for(EumUrl eumUrl:eumUrls){
             todayCount += getTodayEumUrlStatistics(eumUrl.getId()).getFailureCount().intValue();
             yesterdayCount+= getEumUrlStatisticsByEnumIdAndDate(eumUrl.getId(),yesterday).getFailureCount().intValue();
