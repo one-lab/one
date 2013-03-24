@@ -17,6 +17,7 @@ import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.model.OsShell;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 
 @Path
@@ -57,6 +58,7 @@ public class OsAgentController {
 	 * 响应Angent，发送基本信息的脚本
 	 */
 	@Post("recieveOsInfo")
+	@Get("recieveOsInfo")
 	public void recieveOsInfo(Invocation inv) {
 		try {
 			osAgentInfo = inv.getRequest().getParameterMap();
@@ -91,6 +93,7 @@ public class OsAgentController {
 	 * 获取系统所有监控数据
 	 */
 	@Post("recieveOsResult")
+	@Get("recieveOsResult")
 	public void recieveOsResult(Invocation inv) {
 		try {
 			Calendar calendar=Calendar.getInstance();

@@ -98,7 +98,7 @@ function isValid(form) {
        	  <h2 class="title2"><b>添加方法　</b>
           	
           </h2>
-          <form:form id="addMethod" action="${ctx}/application/manager/methodmanager/addmethod/${urlId}" method="post"
+          <form:form id="addMethod" action="${ctx}/application/manager/methodmanager/addmethod/${bizScenarioId}/${urlId}" method="post"
                      class="form-horizontal" onsubmit="return isValid(this);">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>

@@ -83,8 +83,7 @@ public class AgentFilter implements Filter {
 		ApplicationContext oldRootContext = (ApplicationContext) config.getServletContext().getAttribute(
 				WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 		if(oldRootContext == null) {
-	        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml",
-			        "classpath:spring/applicationContext-exception.xml");
+	        applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-log.xml");
 			logConfigs = (LogConfigs)applicationContext.getBean("logConfigs");
 		} else {
 			logConfigs = (LogConfigs)oldRootContext.getBean("logConfigs");

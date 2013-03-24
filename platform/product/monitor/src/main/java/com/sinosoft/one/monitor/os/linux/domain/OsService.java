@@ -73,7 +73,7 @@ public class OsService {
 	 * @return
 	 */
 	public Os getOsBasicById(String id){
-		Os os=osRepository.findOne(id);
+		Os os=osRepository.findOsbyId(id);
 		return  os;
 	}
 	/**

@@ -52,6 +52,39 @@ public class OsUtil {
 	}
 
 	/**
+	 * 执行shell 有返回结果
+	 * 
+	 * @param command
+	 * @return
+	 */
+	public static String execute(String command) {
+		String result = " ";
+		try {
+			String[] cmd = new String[] {};
+ 			Process ps = Runtime.getRuntime().exec( new String[]{ "/bin/sh", "-c", "CPULOG_1=$(cat /proc/stat | grep 'cpu ' | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8}')" });
+ 			ps = Runtime.getRuntime().exec("SYS_IDLE_1=$(echo $CPULOG_1 | awk '{print $4}')");
+ 			ps = Runtime.getRuntime().exec("Total_1=$(echo $CPULOG_1 | awk '{print $1+$2+$3+$4+$5+$6+$7}')");
+ 			ps = Runtime.getRuntime().exec("CPULOG_2=$(cat /proc/stat | grep 'cpu ' | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8}') ");
+ 			ps = Runtime.getRuntime().exec("SYS_IDLE_2=$(echo $CPULOG_2 | awk '{print $4}')" );
+ 			ps = Runtime.getRuntime().exec("Total_2=$(echo $CPULOG_2 | awk '{print $1+$2+$3+$4+$5+$6+$7}')");
+ 			ps = Runtime.getRuntime().exec("SYS_IDLE=`expr $SYS_IDLE_2 - $SYS_IDLE_1`");
+ 			ps = Runtime.getRuntime().exec("SYS_USAGE=`expr $SYS_IDLE/$Total*100 |bc -l`");
+ 			ps = Runtime.getRuntime().exec("Disp_SYS_Rate=`expr \"scale=3; $SYS_Rate/1\" |bc`");
+ 			ps = Runtime.getRuntime().exec("echo $Disp_SYS_Rate ");
+ 			BufferedReader br = new BufferedReader(new InputStreamReader(
+ 					ps.getInputStream()));
+			StringBuffer sb = new StringBuffer();
+			String line;
+			while ((line = br.readLine()) != null) {
+				sb.append(line).append("");
+			}
+//			result = sb.toString();
+		} catch (Exception e) {
+			logger.error("osutil :", e);
+		}
+		return result;
+	}
+	/**
 	 * 获取cpu信息
 	 * 
 	 * @return
@@ -61,6 +94,15 @@ public class OsUtil {
 		return executeWithResult(OsConfig.osCmd_vmstat);
 	}
 
+	/**
+	 * 获取cpu利用率
+	 * 
+	 * @return
+	 */
+	public static String getCpuUilitZation() {
+		System.out.println("执行cpu利用率脚本：========"+OsConfig.osCmd_cpuUilitZation);
+		return execute(OsConfig.osCmd_cpuUilitZation);
+	}
 	/**
 	 * 获取内存信息
 	 * 
@@ -104,11 +146,7 @@ public class OsUtil {
 				propertiesConfigPath);
 		return is;
 	}
-	/**
-	 * 判断monitor是否停止监控
-	 * 
-	 * @return
-	 */
+	 
 
 public static  String readFile(String key, String fileName) {
 	String value = null;

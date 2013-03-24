@@ -115,7 +115,7 @@ function managerMethod(e){
     /*id前面多了“rows”*/
     var urlId=id.substr(4,32);
     /*管理method页面*/
-    window.location.href="${ctx}/application/manager/methodmanager/methodlist/"+urlId;
+    window.location.href="${ctx}/application/manager/methodmanager/methodlist/${bizScenarioId}/"+urlId;
 }
 function editRow(e){
     var rows = $(e).parent().parent();

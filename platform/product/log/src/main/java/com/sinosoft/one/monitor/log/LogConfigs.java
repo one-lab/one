@@ -103,7 +103,7 @@ public class LogConfigs {
     }
 
     @ManagedOperation(description = "Remove a url.")
-    @ManagedOperationParameters({ @ManagedOperationParameter(name = "id", description = "Url id to remove.") })
+    @ManagedOperationParameters({@ManagedOperationParameter(name = "id", description = "Url id to remove.")})
     public void removeLogUrl(String id) {
         Iterator<LogUrl> iterator = urls.iterator();
         while (iterator.hasNext()) {

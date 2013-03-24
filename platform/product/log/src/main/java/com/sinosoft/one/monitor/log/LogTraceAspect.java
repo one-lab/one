@@ -25,32 +25,34 @@ import org.springframework.util.ClassUtils;
  */
 @Aspect
 public class LogTraceAspect {
-	private static Logger logger = LoggerFactory.getLogger(LogTraceAspect.class);
+    private static Logger logger = LoggerFactory.getLogger(LogTraceAspect.class);
 
-	private static  LogConfigs logConfigs;
+    private static  LogConfigs logConfigs;
 
-	public static void setLogConfigs(LogConfigs logConfigs) {
-		LogTraceAspect.logConfigs = logConfigs;
-	}
+    public static void setLogConfigs(LogConfigs logConfigs) {
+	    LogTraceAspect.logConfigs = logConfigs;
+    }
 
-	/**
+    /**
 	 * 根据@InterfaceTraced标记来记录日志
-	 *
+	 * 
 	 * @param pjp
 	 * @return
-	 * @throws Throwable
+	 * @throws Throwable  com.sinosig.servicebus.transpolicy.webservice.TransPolicyService
 	 */
-//    @Around("execution(* com.sinosig.servicebus.*.service.impl.*Service*.*(..))")
-	@Around("execution(* com.sinosig.servicebus..*(..))")
-	public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
+    @Around("execution(* com.sinosig.servicebus.*.*service..*.*(..))")
+//  @Around("execution(* com.sinosig.servicebus..*(..))")
+    public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
 			throws Throwable {
-		TraceModel traceModel = TraceUtils.getTraceModel();
+    	logger.debug("LogTraceAspect");
+    	TraceModel traceModel = TraceUtils.getTraceModel();
 		if(traceModel == null || traceModel.getUrlId() == null) {
 			return pjp.proceed();
 		}
 		String traceId = traceModel.getUrlTraceLog().getId();
 		Class<?> sourceClass = pjp.getSignature().getDeclaringType();
-		Class<?> targetClass = pjp.getTarget() == null ? null : pjp.getTarget().getClass();
+		Class<?> targetClass = pjp.getTarget() == null ? sourceClass : pjp.getTarget().getClass();
+
 		if(logger.isDebugEnabled()){
 			logger.debug("target class is:",targetClass);
 		}
@@ -62,9 +64,6 @@ public class LogTraceAspect {
 				userClass);
 		specificMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
 
-		if(specificMethod == null) {
-			return pjp.proceed();
-		}
 		Object result = null;
 		long begin = 0;
 		long end = 0;
@@ -116,7 +115,7 @@ public class LogTraceAspect {
 	private Method getMethod(ProceedingJoinPoint pjp) throws NoSuchMethodException {
 		MethodSignature signature = (MethodSignature) pjp.getSignature();
 		Method m = signature.getMethod();
-		if(m != null && Proxy.isProxyClass(pjp.getThis().getClass())) {
+		if(m != null && pjp.getThis()!=null&&Proxy.isProxyClass(pjp.getThis().getClass())) {
 			m = pjp.getTarget().getClass().getMethod(m.getName(), m.getParameterTypes());
 		}
 		return m;

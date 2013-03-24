@@ -21,7 +21,7 @@ public class OsTransUtil {
 	private static OsRam osRam = null;
 	private static OsDisk osDisk = null;
 
-	public static OsCpu getCpuInfo(String cpuInfo) {
+	public static OsCpu getCpuInfo(String cpuInfo ) {
 		// 运行队列，阻塞进程，用户时间%，系统时间%，i/o等待%，空闲时间%，中断/秒
 		String[] cpuInfos = cpuInfo.split(" ");
 		osCpu = new OsCpu();
@@ -33,7 +33,7 @@ public class OsTransUtil {
 		osCpu.setCpuIdle(cpuInfos[5].trim());
 		osCpu.setInterRupt(cpuInfos[6].trim());
 		Integer cpuUtilZation = 100 - new Integer(osCpu.getCpuIdle());
-		osCpu.setUtiliZation(cpuUtilZation.toString());
+		osCpu.setUtiliZation(cpuUtilZation+"");
 		return osCpu;
 	}
 
@@ -73,36 +73,64 @@ public class OsTransUtil {
 		long totalCount = 0;
 		long UsedCount = 0;
 		String totalUtiliZation;
+		String[] lastelements=diskInfos[0].split(":");
 		for (int i = 0; i < diskInfos.length; i++) {
 			String line = diskInfos[i];
-			elements = line.split("-");
-			if (i == 0) {
+			elements = line.split(":");
+			
+			if (i == 0||elements[1].trim().equals("")) {
+				lastelements=elements;
 				continue;
 			}
-			totalCount += Long.parseLong(elements[1].trim());
-			UsedCount += Long.parseLong(elements[2].trim());
+			if(elements[5].trim().equals("")){
+				String[] newelements={lastelements[0],elements[0],elements[1],elements[2],elements[3],elements[4]};
+				totalCount += Long.parseLong(newelements[1].trim());
+				UsedCount += Long.parseLong(newelements[2].trim());
+			}else{
+				totalCount += Long.parseLong(elements[1].trim());
+				UsedCount += Long.parseLong(elements[2].trim());
+			}
+			lastelements=elements;
 		}
 		totalUtiliZation = countUtilZation(totalCount + "", UsedCount + "");
 		for (int i = 0; i < diskInfos.length; i++) {
 			String line = diskInfos[i];
-			elements = line.split("-");
-			if (i == 0) {
+			elements = line.split(":");
+			if (i == 0||elements[1].trim().equals("")) {
+				lastelements=elements;
 				continue;
 			}
-			osDisk = new OsDisk();
-			osDisk.setDiskPath(elements[0].trim());
-			osDisk.setTotal(elements[1].trim());
-			osDisk.setUsed(elements[2].trim());
-			osDisk.setFree(elements[3].trim());
-			osDisk.setUsedUtiliZation(elements[4].substring(0,
-					elements[4].indexOf("%")).trim());
-			Integer freeUtilZation = 100 - new Integer(
-					osDisk.getUsedUtiliZation());
-			osDisk.setFreeUtiliZation(freeUtilZation.toString());
-			osDisk.setMountPoint(elements[5].trim());
-			osDisk.setTotalUtiliZation(totalUtiliZation);
-			osDisks.add(osDisk);
-
+			
+			if(elements[5].trim().equals("")){
+				osDisk = new OsDisk();
+				osDisk.setDiskPath(lastelements[0].trim());
+				osDisk.setTotal(elements[0].trim());
+				osDisk.setUsed(elements[1].trim());
+				osDisk.setFree(elements[2].trim());
+				osDisk.setUsedUtiliZation(elements[3].substring(0,
+						elements[3].indexOf("%")).trim());
+				Integer freeUtilZation = 100 - new Integer(
+						osDisk.getUsedUtiliZation());
+				osDisk.setFreeUtiliZation(freeUtilZation.toString());
+				osDisk.setMountPoint(elements[4].trim());
+				osDisk.setTotalUtiliZation(totalUtiliZation);
+				osDisks.add(osDisk);
+			}else{
+				osDisk = new OsDisk();
+				osDisk.setDiskPath(elements[0].trim());
+				osDisk.setTotal(elements[1].trim());
+				osDisk.setUsed(elements[2].trim());
+				osDisk.setFree(elements[3].trim());
+				osDisk.setUsedUtiliZation(elements[4].substring(0,
+						elements[4].indexOf("%")).trim());
+				Integer freeUtilZation = 100 - new Integer(
+						osDisk.getUsedUtiliZation());
+				osDisk.setFreeUtiliZation(freeUtilZation.toString());
+				osDisk.setMountPoint(elements[5].trim());
+				osDisk.setTotalUtiliZation(totalUtiliZation);
+				osDisks.add(osDisk);
+			}
+			lastelements=elements;
 		}
 		return osDisks;
 	}

@@ -7,12 +7,6 @@
 	http://www.springframework.org/schema/context 
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd"
 	default-autowire="byName" default-lazy-init="false">
-	<!-- 必须打开component-scan -->
-	<context:component-scan base-package="cn.com.chinalife.ebusiness" />
-
-	<bean id="queuesHolder" class="cn.com.chinaelife.ebusiness.sys.util.queue.QueuesHolder">
-		<property name="queueSize" value="1000" />
-	</bean>
-
+	<context:component-scan base-package="com.sinosfot.one.monitor" />
 
 </beans>

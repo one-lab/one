@@ -32,6 +32,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -109,7 +110,7 @@ public class ConfigEmergencyController {
                     jsonArray.add(jsonObject);
                 }
                 jsonMonitorNames = jsonArray.toJSONString();
-                return Replys.with(jsonMonitorNames);
+                return Replys.with(jsonMonitorNames).as(Json.class);
             }
             return null;
         }else if(ResourceType.OS.name().equals(resourceType)){
@@ -123,7 +124,7 @@ public class ConfigEmergencyController {
                     jsonArray.add(jsonObject);
                 }
                 jsonMonitorNames = jsonArray.toJSONString();
-                return Replys.with(jsonMonitorNames);
+                return Replys.with(jsonMonitorNames).as(Json.class);
             }
             return null;
         }else {
@@ -264,7 +265,7 @@ public class ConfigEmergencyController {
                 jsonArray.add(jsonObject);
             }
             jsonActionNames = jsonArray.toJSONString();
-            return Replys.with(jsonActionNames);
+            return Replys.with(jsonActionNames).as(Json.class);
         }
         return null;
     }
@@ -379,9 +380,9 @@ public class ConfigEmergencyController {
                 attributeAction.setActionType(ActionType.MAIL);
                 attributeActionRepository.save(attributeAction);
             }
-            return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId));
+            return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId)).as(Json.class);
         }
-        return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId));
+        return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId)).as(Json.class);
     }
 
 
@@ -394,7 +395,7 @@ public class ConfigEmergencyController {
         if(attributeThreshold!=null){
             attributeThresholdRepository.delete(attributeThreshold);
         }
-        return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId));
+        return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId)).as(Json.class);
     }
 
     @Get("available")
@@ -427,7 +428,7 @@ public class ConfigEmergencyController {
                 jsonArray.add(jsonObject);
             }
             jsonThresholdNames = jsonArray.toJSONString();
-            return Replys.with(jsonThresholdNames);
+            return Replys.with(jsonThresholdNames).as(Json.class);
         }
         return null;
     }
