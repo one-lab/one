@@ -207,8 +207,9 @@ function buildHighchart(_highChart) {
 		},
 		xAxis: {
 		    categories: xData,
-		    labels: { 
-           	 step:15
+		    labels: {
+             //修改步长为自动调整 modified by hanchunliang 3013-03-26
+           	 step:_highChart.step
 			 } 
 		},
 		yAxis: {
