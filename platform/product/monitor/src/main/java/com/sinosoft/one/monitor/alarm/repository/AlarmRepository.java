@@ -5,6 +5,7 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.common.HealthStaForMonitor;
 import com.sinosoft.one.monitor.common.HealthStaForTime;
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -17,6 +18,9 @@ import java.util.List;
  * 告警信息持久化接口
  */
 public interface AlarmRepository extends PagingAndSortingRepository<Alarm, String> {
+
+	@SQL("select ma.*, r.resource_name from ge_monitor_alarm ma, ge_monitor_resources r where ma.monitor_id=r.resource_id and ma.severity in (?2) order by ma.create_time desc")
+	Page<Alarm> selectAlarmsBySeverity(Pageable pageable, String[] severityLevels);
 
     @SQL("select * from ge_monitor_alarm where monitor_id = ?1 and create_time between ?2 and ?3  order by create_time desc")
     List<Alarm> findAlarmByMonitorId(String monitorId, Date startTime, Date endTime);
@@ -183,11 +187,11 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     List<Alarm> findAllAlarms();
 
     //获得当前监视器的历史告警信息
-    @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1 order by CREATE_TIME desc")
+    @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1  AND (a.severity='CRITICAL' or a.severity='WARNING') order by CREATE_TIME desc")
     List<Alarm> findByMonitorId(String monitorId);
 
     //获得当前监视器的历史告警信息
-    @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1 order by CREATE_TIME desc")
+    @SQL("select * from GE_MONITOR_ALARM a where a.MONITOR_ID=?1  AND (a.severity='CRITICAL' or a.severity='WARNING') order by CREATE_TIME desc")
     Page<Alarm> findByMonitorId(String monitorId,Pageable pageable);
 
     //批量删除告警信息
@@ -197,23 +201,23 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     //查询24小时内的告警信息
     @SQL("select * from GE_MONITOR_ALARM a #if(:givenTime=='24') { where (a.CREATE_TIME between (select sysdate - interval '24' hour from dual) and  sysdate)}" +
             "#if(:givenTime=='30'){ where (a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate)}" +
-            "#if(:givenType!=''){ and a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
+            "#if(:givenType!=''){ and a.MONITOR_TYPE = :givenType} AND (a.severity='CRITICAL' or a.severity='WARNING') order by a.CREATE_TIME desc")
     List<Alarm> findAlarmsWithGivenTimeAndType(@Param("givenTime") String givenTime,@Param("givenType") String givenType);
 
     //查询24小时内的告警信息
     @SQL("select * from GE_MONITOR_ALARM a #if(:givenTime=='24') { where (a.CREATE_TIME between (select sysdate - interval '24' hour from dual) and  sysdate)}" +
             "#if(:givenTime=='30'){ where (a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate)}" +
-            "#if(:givenType!=''){ and a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
+            "#if(:givenType!=''){ and a.MONITOR_TYPE = :givenType} AND (a.severity='CRITICAL' or a.severity='WARNING') order by a.CREATE_TIME desc")
     Page<Alarm> findAlarmsWithGivenTimeAndType(@Param("givenTime") String givenTime,@Param("givenType") String givenType,Pageable pageable);
 
     //查询指定时间的告警信息
     @SQL("select * from GE_MONITOR_ALARM a #if(?1=='24') { where a.CREATE_TIME between (select sysdate - interval '24' hour from dual) and  sysdate}" +
-            "#if(?1=='30'){ where a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate} order by a.CREATE_TIME desc")
+            "#if(?1=='30'){ where a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate} AND (a.severity='CRITICAL' or a.severity='WARNING')  order by a.CREATE_TIME desc")
     /*Page<Alarm> findAlarmsWithGivenTime(@Param("givenTime") String givenTime,Pageable pageable);*/
     Page<Alarm> findAlarmsWithGivenTime(String givenTime,Pageable pageable);
 
     //查询指定类型的告警信息
-    @SQL("select * from GE_MONITOR_ALARM a #if(:givenType!=''){ where a.MONITOR_TYPE = :givenType} order by a.CREATE_TIME desc")
+    @SQL("select * from GE_MONITOR_ALARM a #if(:givenType!=''){ where a.MONITOR_TYPE = :givenType} AND (a.severity='CRITICAL' or a.severity='WARNING')  order by a.CREATE_TIME desc")
     Page<Alarm> findAlarmsWithGivenType(@Param("givenType") String givenType,Pageable pageable);
 
     @SQL("delete from GE_MONITOR_ALARM where monitor_id in (?1)")

@@ -56,7 +56,7 @@ public class HealthStaService {
 				.withField(DateTimeFieldType.secondOfMinute(), 0).withField(DateTimeFieldType.millisOfSecond(), 0);
 		Date startDate =  localDateTime.minusHours(hours).toDate();
 		Date endDate = localDateTime.toDate();
-		List<HealthStaForTime> healthStaForTimeList = alarmRepository.selectHealthStaForHour(monitorId, startDate, endDate);
+		List<HealthStaForTime> healthStaForTimeList = alarmRepository.selectHealthStaForHour(monitorId, subResourceType, subResourceId, startDate, endDate);
 		return generateHealthStaMap(healthStaForTimeList);
 	}
 

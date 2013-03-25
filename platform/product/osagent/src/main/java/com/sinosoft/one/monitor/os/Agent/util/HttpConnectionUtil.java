@@ -22,7 +22,7 @@ import com.sinosoft.one.monitor.os.Agent.config.OsConfig;
 
 public class HttpConnectionUtil {
 	private static Logger logger = LoggerFactory.getLogger(HttpConnectionUtil.class);
-	public Object request(String url, Map<String, Object> osInfo) {
+	public static Object request(String url, Map<String, Object> osInfo) {
 		try {
 			logger.debug(url.toString());
 			HttpPost post = new HttpPost(url);

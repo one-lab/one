@@ -57,8 +57,8 @@ function getBarLength(){
                 $("#logDetail").append(rowData);
             }
         },
-        error:function(a,b,c){
-            alert("暂时无法获得详细数据");
+        error:function(){
+            //alert("暂时无法获得详细数据");
         }
     });
 }
@@ -103,7 +103,7 @@ function getExceptionInfo(){
             $("#exceptionInfo").html(detailInfo + dataStr);
         },
         error:function () {
-            alert("暂时无法获得异常信息");
+            //alert("暂时无法获得异常信息");
         }
     });
 }

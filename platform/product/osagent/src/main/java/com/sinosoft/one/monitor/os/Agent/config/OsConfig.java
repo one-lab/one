@@ -73,6 +73,7 @@ public class OsConfig {
 				logger.debug(osCmd_diskInfo+"返回的脚本");
 				osCmd_cpuUilitZation=shellAndId.get("CU");
 				logger.debug(osCmd_cpuUilitZation+"返回的脚本");
+				OsConfig.first=false;
 			} else {
 				System.out.println("ip不匹配");
 			}

@@ -172,8 +172,8 @@ public class LinuxcentosController {
 
 
 	/**
-	 *  CPU与内存利用率曲线下面的表格
 	 * 概览页面内存利用率表格
+	 *  CPU与内存利用率曲线下面的表格
 	 * @param osId
 	 * @param inv
 	 */

@@ -59,7 +59,7 @@ public class ApplicationMethodController {
     @Get("getExceptionInfo/{logId}")
     public String getExceptionInfo(@Param("logId") String logId, Invocation inv){
 	    ExceptionInfo exceptionInfo = logDetailService.getExceptionInfo(logId);
-	    String exceptionStackTrace = exceptionInfo.getExceptionStackTrace();
+	    String exceptionStackTrace = exceptionInfo == null ? "无" : exceptionInfo.getExceptionStackTrace();
 	    exceptionStackTrace = StringUtils.isBlank(exceptionStackTrace) ? "无" : exceptionStackTrace;
         return "@" + exceptionStackTrace;
     }

@@ -55,7 +55,7 @@ public class ApplicationEmuService {
      * @return
      */
     public EumUrlAvaSta getTodayEumUrlStatistics(String eumUrlId){
-        return getEumUrlStatisticsByEnumIdAndDate(eumUrlId,DateTime.now().toDate());
+        return getEumUrlStatisticsByEnumIdAndDate(eumUrlId,LocalDate.now().toDate());
     }
 
     EumUrlAvaSta getEumUrlStatisticsByEnumIdAndDate(String eumUrlId,Date date){
@@ -152,10 +152,9 @@ public class ApplicationEmuService {
 
     List<TimeQuantumAvailableInfo> findAvailableStatisticsByUrlId(String urlId) {
         Assert.hasText(urlId);
-        ArrayList<TimeQuantumAvailableStatistics> availableStatisticsList = new ArrayList<TimeQuantumAvailableStatistics>(0);
-        DateTime now = DateTime.now();
+        DateTime now = DateTime.now().withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
         DateTime prev = now.minusHours(6);
-        List<TimeQuantumAvailableStatistics>  list = eumUrlAvaRepository.statisticsByEumUrlIdAndRecordTime(getEumUrlByUrlId(urlId).getId(),now.toDate(),prev.toDate());
+        List<TimeQuantumAvailableStatistics>  list = eumUrlAvaRepository.statisticsByEumUrlIdAndRecordTime(getEumUrlByUrlId(urlId).getId(),prev.toDate(),now.toDate());
         Map<String,TimeQuantumAvailableInfo> map = Maps.newHashMap();
         for(TimeQuantumAvailableStatistics statistics:list){
             TimeQuantumAvailableInfo timeQuantumAvailableInfo = null;
@@ -165,11 +164,12 @@ public class ApplicationEmuService {
                     timeQuantumAvailableInfo.setAvaCount(statistics.getCount());
                 }
                 timeQuantumAvailableInfo.setCount(statistics.getCount());
+	            timeQuantumAvailableInfo.setTimeQuantum(statistics.getTimeQuantum());
                 map.put(statistics.getTimeQuantum(),timeQuantumAvailableInfo);
             }else{
                 timeQuantumAvailableInfo =map.get(statistics.getTimeQuantum());
                 if(statistics.getStatus().equals("1")){
-                    timeQuantumAvailableInfo.setAvaCount(statistics.getCount());
+                    timeQuantumAvailableInfo.setAvaCount(timeQuantumAvailableInfo.getAvaCount() + statistics.getCount());
                 }
                 int count = timeQuantumAvailableInfo.getCount()+statistics.getCount();
                 timeQuantumAvailableInfo.setCount(count);
@@ -208,10 +208,10 @@ public class ApplicationEmuService {
     private Trend calTrend(List<EumUrl> eumUrls ){
         int yesterdayCount=0;
         int todayCount=0;
-        Date yesterday = DateTime.now().minusDays(1).toDate();
+        Date yesterday = LocalDate.now().minusDays(1).toDate();
         for(EumUrl eumUrl:eumUrls){
-            todayCount += getTodayEumUrlStatistics(eumUrl.getId()).getFailureCount().intValue();
-            yesterdayCount+= getEumUrlStatisticsByEnumIdAndDate(eumUrl.getId(),yesterday).getFailureCount().intValue();
+            todayCount += getTodayEumUrlStatistics(eumUrl.getId()).getTotalFailureTime().intValue();
+            yesterdayCount+= getEumUrlStatisticsByEnumIdAndDate(eumUrl.getId(),yesterday).getTotalFailureTime().intValue();
         }
         if(yesterdayCount>todayCount){
             return Trend.RISE;

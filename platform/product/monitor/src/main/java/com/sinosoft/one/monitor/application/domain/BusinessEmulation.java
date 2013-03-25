@@ -4,10 +4,7 @@ import com.google.common.collect.MapMaker;
 import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaRepository;
 import com.sinosoft.one.monitor.application.repository.EumUrlAvaStaRepository;
-import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
-import com.sinosoft.one.monitor.common.AlarmSource;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.monitor.common.*;
 import com.sinosoft.one.monitor.utils.AvailableCalculate;
 import com.sinosoft.one.monitor.utils.ResponseUtil;
 import com.sinosoft.one.util.thread.ThreadUtils;
@@ -83,13 +80,17 @@ public class BusinessEmulation {
 
     @Transactional(readOnly = false)
     private void recordEnum(EumUrl url, boolean result, BigDecimal interval){
+	    AvailabilityStatus availabilityStatus;
 	    if(!result) {
-		    alarmMessageBuilder.newMessageBase(url.getApplication().getId())
-				    .alarmSource(AlarmSource.EUM)
-				    .addAlarmAttribute(AttributeName.Availability, "0")
-		            .subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
-		            .subResourceId(url.getUrlId()).alarm();
+		    availabilityStatus = AvailabilityStatus.ERROR;
+	    } else {
+		    availabilityStatus = AvailabilityStatus.NORMAL;
 	    }
+	    alarmMessageBuilder.newMessageBase(url.getApplication().getId())
+			    .alarmSource(AlarmSource.EUM)
+			    .addAlarmAttribute(AttributeName.Availability, availabilityStatus.value())
+			    .subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
+			    .subResourceId(url.getUrlId()).alarm();
 
         //记录当天的统计信息
         applicationEmuService.saveEnumUrlAvailableStatistics(url.getId(),result,interval);
@@ -136,13 +137,18 @@ public class BusinessEmulation {
 
             System.out.println("application id = " + application.getId() + " time is = " + new Date() + " url is = " + urls.size());
             //  loggerInv.info("Investigation {} has started, url size is : {}",application.getApplicationName(),urls.size());
-            try {
+
                 for (EumUrl url : urls) {
-                    recordEnum(url, ResponseUtil.getResponseCode(createHttpUrl(url.getUrl()))!= 404, this.application.getInterval());
+	                boolean result = false;
+	                try {
+		                result = ResponseUtil.getResponseCode(createHttpUrl(url.getUrl()))!= 404;
+                        recordEnum(url, result, this.application.getInterval());
+	                } catch (Throwable e) {
+		                applicationEmuService.saveEnumUrlAvailableDetail(url.getId(),result,this.application.getInterval());
+		                logger.warn("Scan url availability exception.", e);
+	                }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
 
 

@@ -10,6 +10,7 @@ import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
+import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
@@ -47,6 +48,7 @@ public class ApplicationUrlController {
 		UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
 	}
 
+	@Post("/tracelog/${urlId}")
 	@Get("/tracelog/${urlId}")
 	public void queryUrlTraceLogs(@Param("urlId") String urlId,
 	                                     Invocation invocation) throws Exception {

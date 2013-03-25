@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.application.domain;
 
-import java.util.Date;
 
 /**
  * 时间端可用性状态统计

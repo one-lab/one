@@ -5,6 +5,7 @@ import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.model.viewmodel.ApplicationIndexViewModel;
 import com.sinosoft.one.monitor.application.repository.*;
 import com.sinosoft.one.monitor.common.HealthStaForMonitor;
+import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class ApplicationService {
 	private UrlVisitsStaRepository urlVisitsStaRepository;
 	@Autowired
 	private ExceptionInfoRepository exceptionInfoRepository;
+	@Autowired
+	private ResourcesRepository resourcesRepository;
+
 
     /**
      * 新增一个应用.
@@ -54,6 +58,7 @@ public class ApplicationService {
     @Transactional(readOnly = false)
     public void deleteApplication(Application application) {
         applicationRepository.delete(application);
+	    resourcesRepository.delete(application.getId());
     }
 
     /**
@@ -62,6 +67,7 @@ public class ApplicationService {
     @Transactional(readOnly = false)
     public void deleteApplication(String id) {
         applicationRepository.deleteApplicationById(id);
+	    resourcesRepository.delete(id);
     }
 
     /**

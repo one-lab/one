@@ -21,7 +21,7 @@ public class OsTransUtil {
 	private static OsRam osRam = null;
 	private static OsDisk osDisk = null;
 
-	public static OsCpu getCpuInfo(String cpuInfo ,String cpuUilitZation) {
+	public static OsCpu getCpuInfo(String cpuInfo ) {
 		// 运行队列，阻塞进程，用户时间%，系统时间%，i/o等待%，空闲时间%，中断/秒
 		String[] cpuInfos = cpuInfo.split(" ");
 		osCpu = new OsCpu();
