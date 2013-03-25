@@ -111,10 +111,13 @@ display:block;height:22px;float:left}
 .my_table a{color:#005590}
 .my_table a:hover{color:#000;text-decoration:none}
 .my_table th,.my_table td{padding:0 4px;line-height:26px;border-bottom:#ececec 1px solid}
-.green_bar{background:url(../images/bg_available.gif) repeat-x;border:#5d5d5d 1px solid;}
-.green_bar td{line-height:12px;height:12px;border:none}
-.green_bar .not_available{background:url(../images/bg_available_r.gif) repeat-x}
-.green_bar .xp_available{background:url(../images/bg_available_y.gif) repeat-x}
+
+
+.xp_available{background:url(../images/bg_available_y.gif) repeat-x;border:#5d5d5d 1px solid;}
+.xp_available td{line-height:12px;height:12px;border:none}
+.xp_available .not_available{background:url(../images/bg_available_r.gif) repeat-x}
+.xp_available .green_bar{background:url(../images/bg_available.gif) repeat-x}
+
 .last_row td{line-height:10px;height:10px;padding-top:8px;border:none}
 .ruler_bar{border-left:#ccc 1px solid}
 .ruler_bar td{height:8px;line-height:8px;border:#ccc 1px solid;border-width:1px 1px 0 0;padding:0;}
@@ -124,6 +127,7 @@ display:block;height:22px;float:left}
 .explain li,.explain li span{float:left}
 .explain li span{display:block;width:10px;height:10px;background:#f00;border:#333 1px solid;margin:10px 3px 0 12px}
 .explain li .ex_is{background:#84c65a}
+.explain li .ex_warn{background:#f0e404}
 .explain li .ex_xp{background:#ddd}
 .grid_view .sys_up,.grid_view .fine,.grid_view .y_poor,.grid_view .sys_down,.grid_view .poor,.grid_view .sys_normal{background:url(../images/icon_availability_up.gif) no-repeat;width:13px;height:13px;cursor:pointer}
 .grid_view .sys_down{background-image:url(../images/icon_availability_down.gif)}

@@ -191,7 +191,7 @@ function refreshPie1(_data){
 		},
         tooltip: {
             formatter: function() {
-                return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
             }
         },
         plotOptions: {
@@ -208,12 +208,6 @@ function refreshPie1(_data){
             type: 'pie',
             name: 'Browser share',
             data: [
-//                {
-//	                name: '可用',
-//	                y: _data[0],
-//	                sliced: false,
-//	                selected: false
-//                },
                 ['可用',_data[0]],
                 ['不可用',_data[1]],
                 ['未知',_data[2]]

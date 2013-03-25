@@ -55,6 +55,10 @@ $(function(){
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
+	$(".normal").wrapInner("<p style='display:none'></p>");
+	$(".normal,.warn,.critical").each(function(){
+		$(this).attr("title",$(this).find("p").text()).css("cursor","pointer");
+	});
 });
 function navHover(){
 	$(this).toggleClass("hover")
@@ -156,8 +160,9 @@ function hideNav(e){
                 	  <div class="explain">
                 	    <ul>
                           <li><span class="ex_is"></span>正常</li>
-                          <li><span class="ex_xp"></span>警告</li>
+                          <li><span class="ex_warn"></span>警告</li>
                 	      <li><span class="ex_no"></span>严重</li>
+                	      <li><span class="ex_xp"></span>未知</li>
               	      </ul>
                 	     查看监视器/业务组过去24小时或30天的健康状态告警</div>
               	  </div>
