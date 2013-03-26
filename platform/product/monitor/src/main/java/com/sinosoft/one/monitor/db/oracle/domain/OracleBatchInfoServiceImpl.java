@@ -300,7 +300,6 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                     } else if (recordTimeNumber >= end) {
                         break;
                     } else if (alarm.getSeverity() != null) {
-
                         info.append(alarm.getMessage()).append("\n");
                         if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
                             healthyFlag = "1";

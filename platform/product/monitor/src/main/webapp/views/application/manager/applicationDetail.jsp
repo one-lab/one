@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-store" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>无标题文档</title>
+    <title>应用透视</title>
     <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
     <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
     <link href="${ctx}/global/css/apmservice/apmservice.css" rel="stylesheet" type="text/css" />

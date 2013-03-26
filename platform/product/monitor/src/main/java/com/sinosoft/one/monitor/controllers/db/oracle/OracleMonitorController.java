@@ -121,7 +121,7 @@ public class OracleMonitorController {
 			/* 判断x轴信息是否为空，如果为空填充x轴信息*/
 			boolean xflag = exchange_utilization.getCategories().isEmpty();
 			for(Lastevent lastevent : staGraph.getLasteventList()) {
-				memorySerie.addData(lastevent.getBufferHitRate());
+				memorySerie.addData(lastevent.getBufferHitRate()*100.0);
 				exchangeSerie.addData(Double.valueOf(lastevent.getConnectTime()));
 				replySerie.addData(Double.valueOf(lastevent.getActiveCount()));
 				
@@ -134,6 +134,14 @@ public class OracleMonitorController {
 					memory_utilization.addCategory(category);
 				}
 			}
+
+            /*修改步长为自动调整 added by hanchunliang 3013-03-26  start*/
+            int step = memory_utilization.getCategories().size()/6;
+            memory_utilization.setStep(step);
+            exchange_utilization.setStep(step);
+            reply_utilization.setStep(step);
+            /*修改步长为自动调整 added by hanchunliang 3013-03-26  end*/
+
 			memory_utilization.addSerie(memorySerie);
 			exchange_utilization.addSerie(exchangeSerie);
 			reply_utilization.addSerie(replySerie);

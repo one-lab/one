@@ -33,6 +33,6 @@ public interface AttributeActionRepository extends PagingAndSortingRepository<At
     List<AttributeAction> findAllAttributeActionsWithAttributeId(String attributeId, String monitorId);
 
     @SQL("select a.")
-    List<String> findAllActionsWithResourceIdAndAttributeId(String resourceId,String attributeId);
+    List<String> findAllActionsWithResourceIdAndAttributeId(String resourceId, String attributeId);
 }
 
