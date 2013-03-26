@@ -16,6 +16,16 @@ public class ApplicationIndexViewModel {
 	private int avgResponseTime;
 	private double rpm;
 
+	private MaxBar maxBar = MaxBar.NONE;
+	private int max;
+
+	private enum MaxBar {
+		GREEN,
+		YELLOW,
+		RED,
+		NONE
+	}
+
 	public String getApplicationId() {
 		return applicationId;
 	}
@@ -46,6 +56,7 @@ public class ApplicationIndexViewModel {
 
 	public void setGreenBarLength(int greenBarLength) {
 		this.greenBarLength = greenBarLength;
+		setMaxBar(greenBarLength, MaxBar.GREEN);
 	}
 
 	public int getYellowBarLength() {
@@ -54,6 +65,8 @@ public class ApplicationIndexViewModel {
 
 	public void setYellowBarLength(int yellowBarLength) {
 		this.yellowBarLength = yellowBarLength;
+		setMaxBar(yellowBarLength, MaxBar.YELLOW);
+
 	}
 
 	public int getRedBarLength() {
@@ -62,6 +75,7 @@ public class ApplicationIndexViewModel {
 
 	public void setRedBarLength(int redBarLength) {
 		this.redBarLength = redBarLength;
+		setMaxBar(redBarLength, MaxBar.RED);
 	}
 
 	public int getAvgResponseTime() {
@@ -78,5 +92,24 @@ public class ApplicationIndexViewModel {
 
 	public void setRpm(double rpm) {
 		this.rpm = rpm;
+	}
+
+	private void setMaxBar(int barLength, MaxBar maxBar) {
+		if(max < barLength) {
+			max = barLength;
+			this.maxBar = maxBar;
+		}
+	}
+	public void reconculate() {
+		int totalLength = redBarLength + greenBarLength + yellowBarLength;
+		if( totalLength > 100) {
+			int minus = totalLength - 100;
+			switch(this.maxBar) {
+				case GREEN: greenBarLength = greenBarLength - minus; break;
+				case YELLOW: yellowBarLength = yellowBarLength - minus; break;
+				case RED: redBarLength = redBarLength - minus; break;
+			}
+
+		}
 	}
 }

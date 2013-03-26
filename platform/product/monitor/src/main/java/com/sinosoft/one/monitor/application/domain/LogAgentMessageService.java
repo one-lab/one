@@ -43,13 +43,15 @@ public class LogAgentMessageService implements AgentMessageService {
 	public void handleMessage(String applicationId, String data) {
 		UrlTraceLog urlTraceLog = JSON.parseObject(data, UrlTraceLog.class);
 		urlTraceLog.setApplicationId(applicationId);
-		String alarmId = alarmMessageBuilder.newMessageBase(applicationId)
-				.alarmSource(AlarmSource.LOG)
-				.subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
-				.subResourceId(urlTraceLog.getUrlId())
-				.addAlarmAttribute(AttributeName.ResponseTime, urlTraceLog.getConsumeTime() + "")
-				.alarm();
-		urlTraceLog.setAlarmId(alarmId);
+		if(!urlTraceLog.getHasException()) {
+			alarmMessageBuilder.newMessageBase(applicationId)
+					.alarmSource(AlarmSource.LOG)
+					.subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
+					.subResourceId(urlTraceLog.getUrlId())
+					.addAlarmAttribute(AttributeName.ResponseTime, urlTraceLog.getConsumeTime() + "")
+					.alarmId(urlTraceLog.getAlarmId())
+					.alarm();
+		}
 		urlTraceLog.setRecordTime(new Date());
 		urlTraceLogRepository.save(urlTraceLog);
 		Date currentHourDate = DateUtil.getHoursDate(urlTraceLog.getBeginTime());

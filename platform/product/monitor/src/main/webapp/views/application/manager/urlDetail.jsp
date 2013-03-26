@@ -52,15 +52,15 @@
                         <td class="time_info_head" colspan="5">URL信息</td>
                     </tr>
                     <tr class="time_info_title">
-                        <td>健康状况</td>
                         <td>可用性</td>
+                        <td>健康状况</td>
                         <td>今日可用性</td>
                         <td>今日运行时间</td>
                         <td>最后故障时间</td>
                     </tr>
                     <tr class="time_info_text">
-                        <td align="center"><div class="${urlInfo.health}"></div></td>
                         <td align="center"><div class="${urlInfo.availability}"></div></td>
+                        <td align="center"><div class="${urlInfo.health}"></div></td>
                         <td>${urlInfo.todayAvailability}%</td>
                         <td>${urlInfo.todayRunningTime}</td>
                         <td>${urlInfo.latestFailTime}</td>

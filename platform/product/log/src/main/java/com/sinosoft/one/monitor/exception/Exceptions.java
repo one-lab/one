@@ -8,6 +8,8 @@ import com.sinosoft.one.monitor.notification.NotificationServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
+
 /**
  * 异常处理工具类.
  * User: carvin
@@ -25,9 +27,11 @@ public final class Exceptions {
 		TraceModel traceModel = TraceUtils.getTraceModel();
 	    UrlTraceLog urlTraceLog = traceModel.getUrlTraceLog();
 	    String urlTraceId = urlTraceLog == null ? "" : urlTraceLog.getId();
+	    String alarmId = urlTraceLog == null ? UUID.randomUUID().toString().replaceAll("-", "") : urlTraceLog.getAlarmId();
 	    ExceptionModel exceptionModel = new ExceptionModel(urlTraceId , throwable.getMessage(), getExceptionStackTrace(throwable));
 	    exceptionModel.setUrl(traceModel.getUrl());
 	    exceptionModel.setRequestParams(traceModel.getRequestParams());
+	    exceptionModel.setAlarmId(alarmId);
 	    logger.error(ExceptionModel.FORMAT_STRING, exceptionModel.toObjectArray());
 	    NotificationServiceFactory.buildNotificationService().notification(exceptionModel);
     }

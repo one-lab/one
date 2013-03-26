@@ -37,11 +37,14 @@ public class ApplicationUrlController {
 	private ApplicationUrlService applicationUrlService;
 
 	@Get("/methodresponsetime/${applicationId}/${urlId}")
+	@Post("/methodresponsetime/${applicationId}/${urlId}")
 	public void queryMethodResponseTimes(@Param("applicationId") String applicationId, @Param("urlId") String urlId,
 	                                     Invocation invocation) throws Exception {
-		List<MethodResponseTime> methodResponseTimeList = applicationUrlService.queryMethodResponseTimes(urlId);
-		Page page = new PageImpl(methodResponseTimeList);
-		Gridable<MethodResponseTime> gridable = new Gridable<MethodResponseTime>(page);
+		int pageNo = Integer.parseInt(invocation.getParameter("pageNo"));
+		int rowNum = Integer.parseInt(invocation.getParameter("rowNum"));
+		Pageable pageable = new PageRequest(pageNo-1, rowNum);
+		Page<MethodResponseTime> methodResponseTimeList = applicationUrlService.queryMethodResponseTimes(pageable, urlId);
+		Gridable<MethodResponseTime> gridable = new Gridable<MethodResponseTime>(methodResponseTimeList);
 		String cellString = "methodName,maxResponseTime,minResponseTime,avgResponseTime";
 		gridable.setIdField("methodId");
 		gridable.setCellStringField(cellString);
@@ -57,7 +60,7 @@ public class ApplicationUrlController {
 		Pageable pageable = new PageRequest(pageNo-1, rowNum);
 		Page<UrlTraceLogViewModel> urlTraceLogList = applicationUrlService.queryUrlTraceLogs(pageable, urlId);
 		Gridable<UrlTraceLogViewModel> gridable = new Gridable<UrlTraceLogViewModel>(urlTraceLogList);
-		String cellString = "userIp,userId,recordTimeStr,statusStr,operateStr";
+		String cellString = "userIp,recordTimeStr,statusStr,operateStr";
 		gridable.setIdField("id");
 		gridable.setCellStringField(cellString);
 		UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());

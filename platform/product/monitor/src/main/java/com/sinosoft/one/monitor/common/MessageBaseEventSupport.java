@@ -5,6 +5,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.SingleThreadedClaimStrategy;
 import com.lmax.disruptor.SleepingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,13 +41,15 @@ public class MessageBaseEventSupport {
 		ringBuffer = disruptor.start();
 	}
 
-	public String doMessageBase(MessageBase messageBase) {
+	public void doMessageBase(MessageBase messageBase) {
 		long sequence = ringBuffer.next();
 		MessageBaseEvent messageBaseEvent = ringBuffer.get(sequence);
 		messageBaseEvent.setMessageBase(messageBase);
-		String alarmId = UUID.randomUUID().toString().replaceAll("-", "");
+		String alarmId = messageBase.getAlarmId();
+		if(StringUtils.isBlank(alarmId)) {
+			alarmId = UUID.randomUUID().toString().replaceAll("-", "");
+		}
 		messageBaseEvent.setAlarmId(alarmId);
 		ringBuffer.publish(sequence);
-		return alarmId;
 	}
 }

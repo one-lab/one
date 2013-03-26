@@ -40,6 +40,12 @@ public class ExceptionModel implements NotificationModel {
 	 * URL请求参数
 	 */
 	private String requestParams;
+	/**
+	 * 告警信息ID
+	 */
+	private String alarmId;
+
+
 
 	public ExceptionModel(String urlTraceId,  String exceptionDescription,  String exceptionStackTrace) {
 		this.urlTraceId = urlTraceId;
@@ -102,6 +108,14 @@ public class ExceptionModel implements NotificationModel {
 				requestParams,
 				exceptionStackTrace
 		};
+	}
+
+	public String getAlarmId() {
+		return alarmId;
+	}
+
+	public void setAlarmId(String alarmId) {
+		this.alarmId = alarmId;
 	}
 
 	@Override

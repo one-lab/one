@@ -32,7 +32,7 @@ public class ApplicationEnhanceFactory {
      * @return
      */
     public  ApplicationEnhance enhanceApplication(Application application) {
-        SeverityLevel health = healthStaService.healthStaForCurrent(application.getId(), 10);
+        SeverityLevel health = healthStaService.healthStaForCurrent(application.getId(), application.getInterval() == null ? 10 : application.getInterval().intValue());
         Trend available = null;
         try {
             available = applicationEmuService.getApplicationAvailableToday(application.getId()).getTrend();

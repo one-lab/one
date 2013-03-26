@@ -31,11 +31,11 @@ public class ExceptionAgentMessageService implements AgentMessageService{
 	public void handleMessage(String applicationId, String data) {
 		ExceptionInfo exceptionInfo = JSON.parseObject(data, ExceptionInfo.class);
 		exceptionInfo.setApplicationId(applicationId);
-		String alarmId = alarmMessageBuilder.newMessageBase(applicationId)
+		alarmMessageBuilder.newMessageBase(applicationId)
 				.alarmSource(AlarmSource.EXCEPTION)
 				.addAlarmAttribute(AttributeName.Exception, "0")
+				.alarmId(exceptionInfo.getAlarmId())
 				.alarm();
-		exceptionInfo.setAlarmId(alarmId);
 		exceptionInfoRepository.save(exceptionInfo);
 	}
 }
