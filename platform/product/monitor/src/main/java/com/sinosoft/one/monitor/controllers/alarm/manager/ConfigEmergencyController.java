@@ -194,7 +194,7 @@ public class ConfigEmergencyController {
     //获得监视器名称，属性名称
     @Get("sub/{resourceType}/{monitorId}/{attribute}")
     public String setHealthOrAvailableForm(@Param("resourceType") String resourceType,@Param("monitorId") String monitorId,
-                                @Param("attribute") String attribute,Invocation inv){
+                                           @Param("attribute") String attribute,Invocation inv){
         //获得监视器名称（也就是应用中文名）
         if(ResourceType.APPLICATION.name().equals(resourceType)){
             inv.addModel("monitorName",applicationService.findApplication(monitorId).getCnName());
@@ -273,7 +273,7 @@ public class ConfigEmergencyController {
     //通用保存方法
     @Post("save/{monitorId}/{attributeId}")
     public Reply saveConfigEmergency(@Param("monitorId") String monitorId,
-                                   @Param("attributeId") String attributeId,Invocation inv){
+                                     @Param("attributeId") String attributeId,Invocation inv){
         //相应的动作的id
         String[] criticalIds=inv.getRequest().getParameterValues("CRITICAL[]");
         String[] warningIds=inv.getRequest().getParameterValues("WARNING[]");
@@ -330,12 +330,14 @@ public class ConfigEmergencyController {
 
     public Reply saveAllAttributeActions(String[] criticalIds, String[] warningIds, String[] infoIds, String monitorId, String attributeId){
         List<AttributeAction> dbAttributeActions=new ArrayList<AttributeAction>();
-        dbAttributeActions=attributeActionRepository.findAllAttributeActionsWithAttributeId(attributeId);
+        dbAttributeActions=attributeActionRepository.findAllAttributeActionsWithAttributeId(attributeId,monitorId);
         List<AttributeAction> attributeActions=new ArrayList<AttributeAction>();
 
         if(null==criticalIds&&null==warningIds&&null==infoIds){
             //如果关联的动作为null，那么DB中将这些记录全部删除
-            attributeActionRepository.delete(dbAttributeActions);
+            if(null!=dbAttributeActions&&dbAttributeActions.size()>0){
+                attributeActionRepository.delete(dbAttributeActions);
+            }
             return Replys.with(getJsonStringOfMonitorTypeAndId(monitorId));
         }
         if(criticalIds!=null&&criticalIds.length>0){
@@ -373,7 +375,9 @@ public class ConfigEmergencyController {
         }
         if(attributeActions!=null&&attributeActions.size()>0){
             //如果db中已经有当前属性关联的记录，那么将这些记录全部删除
-            attributeActionRepository.delete(dbAttributeActions);
+            if(null!=dbAttributeActions&&dbAttributeActions.size()>0){
+                attributeActionRepository.delete(dbAttributeActions);
+            }
             //之后，保存当前属性新关联的动作
             for(AttributeAction attributeAction:attributeActions){
                 // TODO 到时候需要修改类型的设置
@@ -388,7 +392,7 @@ public class ConfigEmergencyController {
 
     @Post("delete/{monitorId}/{attributeId}")
     public Reply deleteHealthConfig(@Param("monitorId") String monitorId,
-                                   @Param("attributeId") String attributeId,Invocation inv){
+                                    @Param("attributeId") String attributeId,Invocation inv){
         List<AttributeAction> attributeActions=attributeActionRepository.findByResourceIdAndAttributeId(monitorId,attributeId);
         attributeActionRepository.delete(attributeActions);
         AttributeThreshold attributeThreshold=attributeThresholdRepository.findByResourceIdAndAttributeId(monitorId,attributeId);
