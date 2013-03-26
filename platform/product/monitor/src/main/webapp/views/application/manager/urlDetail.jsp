@@ -61,9 +61,9 @@
                     <tr class="time_info_text">
                         <td align="center"><div class="${urlInfo.health}"></div></td>
                         <td align="center"><div class="${urlInfo.availability}"></div></td>
-                        <td><a href="#">${urlInfo.todayAvailability}%</a></td>
-                        <td><a href="#">${urlInfo.todayRunningTime}</a></td>
-                        <td><a href="#">${urlInfo.latestFailTime}</a></td>
+                        <td>${urlInfo.todayAvailability}%</td>
+                        <td>${urlInfo.todayRunningTime}</td>
+                        <td>${urlInfo.latestFailTime}</td>
                     </tr>
 
                 </table>

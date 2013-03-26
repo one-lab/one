@@ -46,10 +46,6 @@ function hideNav(e){
 	});	
 	$(document).unbind();
 }
-function save(){
-	msgSuccess("系统消息", "操作成功，监视器已保存！");
-	window.location.href="manageBusScene.html";
-}
 /*校验数据*/
 function isValid(form) {
     if (form.name.value==null||form.name.value=="") {
@@ -78,7 +74,7 @@ function isValid(form) {
        	  <h2 class="title2"><b>编辑业务场景　</b>
           	
           </h2>
-          <form:form id="addBizScenario" action="${ctx}/application/manager/bsmanager/update/${appId}/${bizScenario.id}"
+          <form:form id="modifyBizScenario" action="${ctx}/application/manager/bsmanager/update/${appId}/${bizScenario.id}"
                      method="post" class="form-horizontal" onsubmit="return isValid(this);">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>
@@ -90,23 +86,13 @@ function isValid(form) {
                     <msg:errorMsg property="name" type="message"/>
                 </td>
               </tr>
-              <%--<tr>
-                <td>id<span class="mandatory"></span></td>
-                <td><input id="appId" name="input" type="text" value="${appId}" class="formtext" size="32" /></td>
-              </tr>--%>
-              <%--<tr>
-                <td>添加时间<span class="mandatory">*</span></td>
-                <td><input name="input3" type="text" class="formtext" value="255.255.255.0" size="30" /></td>
-              </tr>--%>
               <tr>
                 <td>级别<span class="mandatory">*</span></td>
                 <td>
                 	<select id="bizScenarioGrade" name="bizScenarioGrade" class="diySelect" >
-                            <%--<option value="">选择级别</option>--%>
-                    <option <c:if test="${bizScenario.bizScenarioGrade=='HIGH'}">selected="selected"</c:if> >高</option>
-                    <option <c:if test="${bizScenario.bizScenarioGrade=='INTERMEDIATE'}">selected="selected"</c:if> >中</option>
-                    <option <c:if test="${bizScenario.bizScenarioGrade=='LOW'}">selected="selected"</c:if> >低</option>
-
+                    <option <c:if test="${bizScenario.bizScenarioGrade=='HIGH'}">selected="selected"</c:if> value="高">高</option>
+                    <option <c:if test="${bizScenario.bizScenarioGrade=='INTERMEDIATE'}">selected="selected" </c:if> value="中">中</option>
+                    <option <c:if test="${bizScenario.bizScenarioGrade=='LOW'}">selected="selected"</c:if> value="低">低</option>
                   </select>
                     <msg:errorMsg property="bizScenarioGrade" type="message"/>
                 </td>
@@ -114,7 +100,7 @@ function isValid(form) {
               <tr>
                 <td class="group_name">&nbsp;</td>
                 <td class="group_name">
-                	<input id="submit" type="submit" class="buttons" value="确定添加" <%--onclick="save()"--%> />　
+                	<input id="submit" type="submit" class="buttons" value="确定修改"　
                     <input type="reset" class="buttons" value="重 置" />　
                     <input type="button" class="buttons" value="取 消" onclick="window.history.back()" />
                 </td>

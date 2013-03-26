@@ -14,7 +14,7 @@ import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 public interface OsCpuRepository extends PagingAndSortingRepository<OsCpu, String> {
 	
 	//根据时间
-	@Query("from OsCpu o where o.sampleDate between to_date(?2,?4) and to_date(?3,?4) and o.os.osInfoId= ?1 ORDER by o.sampleDate")
+	@SQL("select * from GE_MONITOR_OS_CPU o where o.SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and o.OS_INFO_ID= ?1 ORDER by o.SAMPLE_DATE")
 	public List<OsCpu> findOsCpuByDate(String osid,String beginTime,String endTime,String dateFormat);
 	
 	//CPU利用率最大值

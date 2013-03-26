@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="ctx1" value="${pageContext.request.localPort}"/>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -42,6 +43,9 @@ $(function(){
 
 
 });
+function viewLogDetail(applicationId,urlId,traceId){
+    window.location.href = "${ctx}/application/manager/appmethod/viewLogDetail/" + applicationId + "/" + urlId + "/" + traceId;
+}
 function navHover(){
 	$(this).toggleClass("hover")
 }
@@ -96,34 +100,16 @@ function hideNav(e){
                 <td>创建时间</td>
                 <td><fmt:formatDate value="${alarm.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
               </tr>
-              <%--<tr>
-                <td>最后告警时间</td>
-                <td>2013-08-01 8:03</td>
-              </tr>--%>
               <tr>
                 <td>健康状态</td>
                 <td><img src="${ctx}/global/images/${alarmImage}" width="14" height="13" /> ${_cnName}</td>
-                <%--<td><img src="${ctx}/global/images/bussinessY.gif" width="14" height="13" /> 正常</td>--%>
               </tr>
-              <%--<tr>
-                <td>依赖规则</td>
-                <td>取决于任一子属性</td>
-              </tr>--%>
-              <%--<tr>
-                <td>用户</td>
-                <td>无</td>
-              </tr>--%>
               <tr>
                 <td>告警信息</td>
                 <td><p class="magess">
-                    ${alarm.message}
+                    <a href="javascript:void(0);" onClick="viewLogDetail('${monitorId}','${urlTraceLog.urlId}','${urlTraceLog.id}');">${alarm.message}</a>
                 </p></td>
               </tr>
-              <%--<tr>
-                <td>Custom Fields</td>
-                <td><p class="magess">Label : 没有关联</p>
-                </td>
-              </tr>--%>
             </table>
             </form>
         </div>

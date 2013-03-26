@@ -38,6 +38,10 @@ public class AlarmService {
 		alarmRepository.save(alarm);
 	}
 
+    public Alarm findAlarm(String alarmId){
+        return alarmRepository.findOne(alarmId);
+    }
+
 	/**
 	 * 根据监视器ID，查询当前天的alarm
 	 * @param monitorId 监视器ID

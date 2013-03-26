@@ -78,14 +78,14 @@ public class OsViewHandle {
 	 * @return
 	 */
 	public  Map<String,List<List<?>>>   createOneOsCpuAndMemline(String osid,Date currentTime  ,int timespan){
-		Os os =osService.getOsBasicById(osid);
+//		Os os =osService.getOsBasicById(osid);
 		Map<String,List<List<?>>> viewMap=new   HashMap<String, List<List<?>>>();
-		List<List<?>> oneCpuLineViewMaps=osCpuViewDataHandle.creatOneCpuUsedLineData(os, currentTime, timespan);
-		List<List<?>> oneRamLineViewMaps=osRamViewHandle.creatOneRamLineData(os, currentTime, timespan);
-		List<List<?>> oneSwapLineViewMaps=osRamViewHandle.creatOneSwapLineData(os, currentTime, timespan);
+		List<List<?>> oneCpuLineViewMaps=osCpuViewDataHandle.creatOneCpuUsedLineData(osid, currentTime, timespan);
+		Map<String, List<List<?>>> oneRamLineViewMaps=osRamViewHandle.creatOneRamLineData(osid, currentTime, timespan);
+//		List<List<?>> oneSwapLineViewMaps=osRamViewHandle.creatOneSwapLineData(osid, currentTime, timespan);
 		viewMap.put("CPU", oneCpuLineViewMaps);
-		viewMap.put("MEM", oneRamLineViewMaps);
-		viewMap.put("SWAP", oneSwapLineViewMaps);
+		viewMap.put("MEM", oneRamLineViewMaps.get("ram"));
+		viewMap.put("SWAP", oneRamLineViewMaps.get("swap"));
 		return viewMap;
 	}
 	
@@ -98,13 +98,13 @@ public class OsViewHandle {
 	 * @return
 	 */
 	public Map<String,List<List<?>>>  createOneCpuResolveView(String osid,Date currentTime  ,int timespan){
-		Os os =osService.getOsBasicById(osid);
+//		Os os =osService.getOsBasicById(osid);
 		Map<String,List<List<?>>> viewMap=new   HashMap<String, List<List<?>>>();
-		List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
-		List<List<?>> oneCpuUserTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuUserTimeLine(os,osCpus);
-		List<List<?>> oneCpuSysTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuSysTimeLine(os,osCpus);
-		List<List<?>> oneCpuIOLineViewMaps=osCpuViewDataHandle.creatOneCpuIOLine(os,osCpus);
-		List<List<?>> OneCpuIDLELineViewMaps=osCpuViewDataHandle.creatOneCpuIDLELine(os,osCpus);
+		List<OsCpu> osCpus=osCpuService.getCpuByDate(osid, new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
+		List<List<?>> oneCpuUserTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuUserTimeLine(osCpus);
+		List<List<?>> oneCpuSysTimeLineViewMaps=osCpuViewDataHandle.creatOneCpuSysTimeLine(osCpus);
+		List<List<?>> oneCpuIOLineViewMaps=osCpuViewDataHandle.creatOneCpuIOLine(osCpus);
+		List<List<?>> OneCpuIDLELineViewMaps=osCpuViewDataHandle.creatOneCpuIDLELine(osCpus);
 		viewMap.put("userTime", oneCpuUserTimeLineViewMaps);
 		viewMap.put("sysTime", oneCpuSysTimeLineViewMaps);
 		viewMap.put("io", oneCpuIOLineViewMaps);

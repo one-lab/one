@@ -1,9 +1,13 @@
 package com.sinosoft.one.monitor.controllers.application.manager;
 
+import com.sinosoft.one.monitor.alarm.domain.AlarmService;
+import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.application.domain.LogDetailService;
 import com.sinosoft.one.monitor.application.model.ExceptionInfo;
 import com.sinosoft.one.monitor.application.model.LogDetail;
 import com.sinosoft.one.monitor.application.model.MethodTraceLog;
+import com.sinosoft.one.monitor.application.model.UrlTraceLog;
+import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -30,6 +34,10 @@ public class ApplicationMethodController {
 
     @Autowired
     LogDetailService logDetailService;
+    @Autowired
+    UrlTraceLogRepository urlTraceLogRepository;
+    @Autowired
+    AlarmService alarmService;
 
     @Get("viewLogDetail/${applicationId}/${urlId}/${urlTraceLogId}")
     public String viewLogDetail(@Param("applicationId") String applicationId, @Param("urlId") String urlId,
@@ -37,6 +45,7 @@ public class ApplicationMethodController {
 	    inv.addModel("applicationId", applicationId);
 	    inv.addModel("urlId", urlId);
 		inv.addModel("logId", urlTraceLogId);
+        inv.addModel("alarmId",urlTraceLogRepository.findOne(urlTraceLogId).getAlarmId());
         return "logDetail";
     }
 
@@ -62,6 +71,14 @@ public class ApplicationMethodController {
 	    String exceptionStackTrace = exceptionInfo == null ? "无" : exceptionInfo.getExceptionStackTrace();
 	    exceptionStackTrace = StringUtils.isBlank(exceptionStackTrace) ? "无" : exceptionStackTrace;
         return "@" + exceptionStackTrace;
+    }
+
+    @Get("getAlarmInfo/{alarmId}")
+    public String getAlarmInfo(@Param("alarmId") String alarmId, Invocation inv){
+        Alarm alarm = alarmService.findAlarm(alarmId);
+        String alarmInfo = alarm == null ? "无" : alarm.getMessage();
+        alarmInfo = StringUtils.isBlank(alarmInfo) ? "无" : alarmInfo;
+        return "@" + alarmInfo;
     }
 
     @Get("getMethodDetail/{applicationId}/{urlId}/{logId}/{methodId}")

@@ -36,16 +36,6 @@
         });
     });
 
-function rowsTogle(){
-	var rows = $("#threshold tr.hideRows");
-	if(rows.eq(0).is(':hidden')){
-		rows.show();
-	}else{
-		rows.hide();
-	};
-	return false;
-}
-
 function toSaveThreshold() {
     var name = $("#name").val();
     if(!name || name == "") {
@@ -90,8 +80,8 @@ function toSaveThreshold() {
               </tr>
               <tr>
                 <td><img src="${ctx}/global/images/icon_critical.gif" alt="严重重要度" class="m_b"/> <b>严重重要度:</b></td>
-                <td colspan="2"> 被监控的值是
-               	  <select name="criticalThresholdCondition" class="diySelect" style="font-family:Arial, Helvetica, sans-serif;width:60px">
+                <td > 被监控的值是 </td>
+               	<td>  <select name="criticalThresholdCondition" class="diySelect" style="margin-right:20px;font-family:Arial, Helvetica, sans-serif;width:60px">
                          <option value="LT"   ${threshold.criticalThresholdCondition eq "LT"  ? "selected='selected'" : ''}>&lt;</option>
                          <option value="GT"   ${threshold.criticalThresholdCondition eq "GT"  ? "selected='selected'" : ''}>&gt;</option>
                          <option value="EQ"   ${threshold.criticalThresholdCondition eq "EQ"  ? "selected='selected'" : ''}>=</option>
@@ -99,28 +89,28 @@ function toSaveThreshold() {
                          <option value="LE"  ${threshold.criticalThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
                          <option value="GE"  ${threshold.criticalThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
                     </select>
-                    　			阈值界限
+阈值界限
                     <input  type="text" class="formtext"  size="4" id="criticalThresholdValue" name="criticalThresholdValue" value="${ threshold.criticalThresholdValue}"/>
                 </td>
               </tr>
-              <tr>
+              <%--<tr>
                 <td><input name="senior" type="checkbox" value="" class="m_b"  onclick="rowsTogle()" id="senior" /> <label for="senior">显示高级选项</label></td>
                 <td colspan="2"></td>
-              </tr>
-              <tr class="hideRows">
+              </tr>--%>
+              <tr>
                 <td>&nbsp;</td>
                 <td width="8%" valign="top">信息</td>
                 <td><textarea cols="48" class="formtext" style="height:60px" name="criticalThresholdMessage"  >${threshold.criticalThresholdMessage eq null ? "严重警告信息" : threshold.criticalThresholdMessage}</textarea></td>
               </tr>
-              <tr class="hideRows">
+              <tr>
                 <td colspan="3">
                 	<hr class="hr" />
                 </td>
               </tr>
-              <tr class="hideRows">
+              <tr>
                 <td><img src="${ctx}/global/images/icon_warning.gif" alt="严重重要度" class="m_b"/> <b>警告重要度:</b></td>
                 <td>被监控的值是</td>
-                <td><select name="warningThresholdCondition" class="diySelect" style="font-family:Arial, Helvetica, sans-serif;width:60px">
+                <td><select name="warningThresholdCondition" class="diySelect" style="margin-right:20px;font-family:Arial, Helvetica, sans-serif;width:60px">
                    		  <option value="LT"   ${threshold.warningThresholdCondition eq "LT"  ? "selected='selected'" : ''}>&lt;</option>
 		                  <option value="GT"   ${threshold.warningThresholdCondition eq "GT"  ? "selected='selected'" : ''}>&gt;</option>
 		                  <option value="EQ"   ${threshold.warningThresholdCondition eq "EQ"  ? "selected='selected'" : ''}>=</option>
@@ -128,32 +118,33 @@ function toSaveThreshold() {
 		                  <option value="LE"  ${threshold.warningThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
 		                  <option value="GE"  ${threshold.warningThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
                 </select>
-　				阈值界限
+阈值界限
 			<input name="warningThresholdValue" id="warningThresholdValue" type="text" class="formtext" size="4" value="${ threshold.warningThresholdValue}" /></td>
               </tr>
-              <tr class="hideRows">
+              <tr>
                 <td>&nbsp;</td>
                 <td width="8%" valign="top">信息</td>
                 <td><textarea cols="48" class="formtext" style="height:60px" name="warningThresholdMessage" >${threshold.warningThresholdMessage eq null ? "警告告警信息" : threshold.warningThresholdMessage}</textarea></td>
               </tr>
-              <tr class="hideRows">
+              <tr>
                 <td colspan="3"><hr class="hr" /></td>
               </tr>
-              <tr class="hideRows">
+              <tr>
                 <td><img src="${ctx}/global/images/icon_clear.gif" alt="严重重要度" class="m_b"/> <b>正常重要度:</b></td>
                 <td>被监控的值是                  </td>
-                <td><select name="infoThresholdCondition" class="diySelect" style="font-family:Arial, Helvetica, sans-serif;width:60px">
-                    <option value="LT"   ${threshold.infoThresholdCondition eq "LT"  ? "selected='selected'" : ''}>&lt;</option>
-                    <option value="GT"   ${threshold.infoThresholdCondition eq "GT"  ? "selected='selected'" : ''}>&gt;</option>
-                    <option value="EQ"   ${threshold.infoThresholdCondition eq "EQ"  ? "selected='selected'" : ''}>=</option>
-                    <option value="NE"  ${threshold.infoThresholdCondition eq "NE"  ? "selected='selected'" : ''}>!=</option>
-                    <option value="LE"  ${threshold.infoThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
-                    <option value="GE"  ${threshold.infoThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
-                </select>
-	阈值界限
-	<input type="text" class="formtext"  size="4" id="infoThresholdValue" name="infoThresholdValue"  value="${ threshold.infoThresholdValue}"/></td>
+                <td>
+                    <select name="infoThresholdCondition" class="diySelect" style="margin-right:20px;font-family:Arial, Helvetica, sans-serif;width:60px">
+                        <option value="LT"   ${threshold.infoThresholdCondition eq "LT"  ? "selected='selected'" : ''}>&lt;</option>
+                        <option value="GT"   ${threshold.infoThresholdCondition eq "GT"  ? "selected='selected'" : ''}>&gt;</option>
+                        <option value="EQ"   ${threshold.infoThresholdCondition eq "EQ"  ? "selected='selected'" : ''}>=</option>
+                        <option value="NE"  ${threshold.infoThresholdCondition eq "NE"  ? "selected='selected'" : ''}>!=</option>
+                        <option value="LE"  ${threshold.infoThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
+                        <option value="GE"  ${threshold.infoThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
+                    </select>
+阈值界限
+	                <input type="text" class="formtext"  size="4" id="infoThresholdValue" name="infoThresholdValue"  value="${ threshold.infoThresholdValue}"/></td>
               </tr>
-              <tr class="hideRows">
+              <tr>
                 <td>&nbsp;</td>
                 <td valign="top">信息</td>
                 <td><textarea name="infoThresholdMessage" cols="48" class="formtext" style="height:60px" >${threshold.infoThresholdMessage eq null ? "正常告警信息" : threshold.infoThresholdMessage}</textarea></td>
@@ -161,10 +152,11 @@ function toSaveThreshold() {
               <tr>
                 <td class="group_name">&nbsp;</td>
                 <td colspan="2" class="group_name">
-                	<input type="button" class="buttons" value="创建阈值配置文件" onclick="toSaveThreshold()"/>　
+                	<input id="createPropFile" type="button" class="buttons" value="创建阈值配置文件" onclick="toSaveThreshold()"/>　
                     <input type="reset" class="buttons" value="重 置" />　
                     <input type="button" class="buttons" value="取 消" onclick="window.history.back()" />
                 </td>
+
               </tr>
             </table>
             </form>
@@ -175,4 +167,9 @@ function toSaveThreshold() {
 	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
 </div>
 </body>
+<script type="text/javascript">
+        if($("#criticalThresholdValue").val() || $("#warningThresholdValue").val() || $("infoThresholdValue").val()){
+            $("#createPropFile").val("确定修改");
+        }
+</script>
 </html>

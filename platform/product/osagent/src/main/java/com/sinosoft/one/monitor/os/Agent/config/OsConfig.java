@@ -5,12 +5,15 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sinosoft.one.monitor.os.Agent.util.HttpConnectionUtil;
 import com.sinosoft.one.monitor.os.Agent.util.OsUtil;
+import com.sinosoft.one.util.thread.ThreadUtils;
 
 /**
  * 基本资源实例化 ，保存脚本等基本信息
@@ -39,6 +42,8 @@ public class OsConfig {
 	public static Class clazz = OsConfig.class;
 	
 	private static Logger logger = LoggerFactory.getLogger(OsConfig.class);
+	
+	public static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(200, new ThreadUtils.CustomizableThreadFactory("osAgent"));
 	/**
 	 * init
 	 * 
