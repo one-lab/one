@@ -189,7 +189,8 @@ public class OracleMonitorController {
 				}  else { //未知
 					cssClass = "";
 				}
-				cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_SPAN,  cssClass, values[1]));
+				//cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_SPAN,  cssClass, values[1]));
+				cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_SPAN,  cssClass, ""));
 			}
 			row.put("cell", cell);
 			rows.add(row);

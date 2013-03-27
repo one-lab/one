@@ -3,14 +3,18 @@ package com.sinosoft.one.monitor.db.oracle.domain;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
-import com.sinosoft.one.data.jade.parsers.util.StringUtil;
-import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.sinosoft.one.data.jade.parsers.util.StringUtil;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.db.oracle.model.Ava;
@@ -25,6 +29,7 @@ import com.sinosoft.one.monitor.db.oracle.repository.AvaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.AvaStaRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.db.oracle.repository.LasteventRepository;
+import com.sinosoft.one.monitor.db.oracle.utils.DBUtil4Monitor;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 
 /**
@@ -259,6 +264,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                 StringBuilder info = new StringBuilder();
                 long start = dateMap[0];
                 long end = dateMap[1];
+            	Map<SeverityLevel, Map<String, List<List<String>>>>  maps = new HashMap<SeverityLevel,Map<String, List<List<String>>>>();
                 for (Alarm alarm : alarmList) {
                     Date recordTime = alarm.getCreateTime();
                     long recordTimeNumber = recordTime.getTime();
@@ -267,9 +273,10 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                     } else if (recordTimeNumber >= end) {
                         break;
                     } else if (alarm.getSeverity() != null) {
-
-                        info.append(alarm.getMessage()).append("\n");
-                        if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
+                    	 produceAlarm(maps, alarm);
+                    	
+                        //info.append(alarm.getMessage()).append("\n");
+                       /* if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
                             healthyFlag = "1";
                         } else if (alarm.getSeverity().equals(SeverityLevel.WARNING)) {
                             healthyFlag = "2";
@@ -277,9 +284,23 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                             healthyFlag = "3";
                         } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
                             healthyFlag = "4";
-                        }
+                        }*/
                     }
-                }
+                    } 
+                	
+	                if(maps.containsKey(SeverityLevel.CRITICAL)){
+	              	  	healthyFlag="3";
+	              	  	Map<String, List<List<String>>> map = maps.get(SeverityLevel.CRITICAL);
+	              	  	getMessage(info, map);
+	                }else if(maps.containsKey(SeverityLevel.WARNING)){
+	                	    healthyFlag="2";
+	                		Map<String, List<List<String>>> map = maps.get(SeverityLevel.WARNING);
+	                  	  	getMessage(info, map);
+	                }else if(maps.containsKey(SeverityLevel.UNKNOW)){
+	              	  	healthyFlag="4";
+	              		Map<String, List<List<String>>> map = maps.get(SeverityLevel.UNKNOW);
+	              	  	getMessage(info, map);
+	                }
                 healthyPint[0] = healthyFlag;
                 healthyPint[1] = info.toString();
                 healthy.add(healthyPint);
@@ -292,6 +313,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                 StringBuilder info = new StringBuilder();
                 long start = dateMap[0];
                 long end = dateMap[1];
+                Map<SeverityLevel, Map<String, List<List<String>>>>  maps = new HashMap<SeverityLevel,Map<String, List<List<String>>>>();
                 for (Alarm alarm : alarmList) {
                     Date recordTime = alarm.getCreateTime();
                     long recordTimeNumber = recordTime.getTime();
@@ -300,7 +322,8 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                     } else if (recordTimeNumber >= end) {
                         break;
                     } else if (alarm.getSeverity() != null) {
-                        info.append(alarm.getMessage()).append("\n");
+                    	 produceAlarm(maps, alarm);
+                       /* info.append(alarm.getMessage()).append("\n");
                         if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
                             healthyFlag = "1";
                         } else if (alarm.getSeverity().equals(SeverityLevel.WARNING)) {
@@ -309,8 +332,21 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                             healthyFlag = "3";
                         } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
                             healthyFlag = "4";
-                        }
-                    }
+                        }*/
+                    	}
+                    } 
+		                if(maps.containsKey(SeverityLevel.CRITICAL)){
+		              	  	healthyFlag="3";
+		              	  	Map<String, List<List<String>>> map = maps.get(SeverityLevel.CRITICAL);
+		              	  	getMessage(info, map);
+		                }else if(maps.containsKey(SeverityLevel.WARNING)){
+		                	  healthyFlag="2";
+		                		Map<String, List<List<String>>> map = maps.get(SeverityLevel.WARNING);
+		                  	  	getMessage(info, map);
+		                }else if(maps.containsKey(SeverityLevel.UNKNOW)){
+		              	  	healthyFlag="4";
+		              		Map<String, List<List<String>>> map = maps.get(SeverityLevel.UNKNOW);
+		              	  	getMessage(info, map);
                 }
                 healthyPint[0] = healthyFlag;
                 healthyPint[1] = info.toString();
@@ -319,6 +355,90 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         }
         return healthy;
     }
+    /**
+     * 
+     * @Title: getMessage
+     * @Description:组装信息，每种阈值只取一条
+     * @param @param info
+     * @param @param map    设定文件
+     * @return void    返回类型
+     * @throws
+     */
+	private void getMessage(StringBuilder info,
+			Map<String, List<List<String>>> map) {
+		for(Entry<String, List<List<String>>> set:map.entrySet()){
+			if(set.getKey().equals("8")){
+				info.append(set.getValue().get(0)).append("\n");
+			}else if(set.getKey().equals("9")){
+				info.append(set.getValue().get(0)).append("\n");
+			}else if(set.getKey().equals("10")){
+				info.append(set.getValue().get(0)).append("\n");
+			}else if(set.getKey().equals("11")){
+				info.append(set.getValue().get(0)).append("\n");
+			}else if(set.getKey().equals("12")){
+				info.append(set.getValue().get(0)).append("\n");
+			}
+		}
+	}
+	/**
+	 * 
+	 * @Title: produceAlarm
+	 * @Description: 处理信息，每种阈值可能有多个信息，分别存放
+	 * @param @param maps
+	 * @param @param alarm    设定文件
+	 * @return void    返回类型
+	 * @throws
+	 */
+	private void produceAlarm(Map<SeverityLevel, Map<String,List<List<String>>>> maps, Alarm alarm) {
+		Map<String, List<List<String>>>infoMap = new HashMap<String,List<List<String>>>();
+		Map<String,List<List<String>>>warnMap = new HashMap<String,List<List<String>>>();
+		Map<String,List<List<String>>>criticalMap = new HashMap<String,List<List<String>>>();
+		Map<String,List<List<String>>>unknowMap = new HashMap<String,List<List<String>>>();
+		List<List<String>> infoLists = new ArrayList<List<String>>();
+		List<List<String>> warnLists = new ArrayList<List<String>>();
+		List<List<String>> criticalLists = new ArrayList<List<String>>();
+		List<List<String>> unknowLists = new ArrayList<List<String>>();
+		 if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
+			 putMessage(alarm, infoLists);
+			 infoMap.put(alarm.getAttributeId(), infoLists);
+		} else if (alarm.getSeverity().equals(SeverityLevel.WARNING)) {
+			putMessage(alarm, warnLists);
+			warnMap.put(alarm.getAttributeId(),  warnLists);
+		} else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
+			putMessage(alarm, criticalLists);
+			criticalMap.put(alarm.getAttributeId(), criticalLists);
+		} else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
+			putMessage(alarm, unknowLists);
+			unknowMap.put(alarm.getAttributeId(), unknowLists);
+		}
+		 maps.put(alarm.getSeverity(),infoMap);
+		 maps.put(alarm.getSeverity(), warnMap);
+		 maps.put(alarm.getSeverity(), criticalMap);
+		 maps.put(alarm.getSeverity(), unknowMap);
+	}
+	private void putMessage(Alarm alarm, List<List<String>> infoLists) {
+		if(alarm.getAttributeId().equals("8")){
+			List<String> list1 = new ArrayList<String>();
+			list1.add(alarm.getMessage());
+			infoLists.add(list1);
+		}else if(alarm.getAttributeId().equals("9")){
+			List<String> list2 = new ArrayList<String>();
+			list2.add(alarm.getMessage());
+			infoLists.add(list2);
+		}else if(alarm.getAttributeId().equals("10")){
+			List<String> list3 = new ArrayList<String>();
+			list3.add(alarm.getMessage());
+			infoLists.add(list3);
+		}else if(alarm.getAttributeId().equals("11")){
+			List<String> list4 = new ArrayList<String>();
+			list4.add(alarm.getMessage());
+			infoLists.add(list4);
+		}else{
+			List<String> list5 = new ArrayList<String>();
+			list5.add(alarm.getMessage());
+			infoLists.add(list5);
+		}
+	}
 
     /**
      * @param dateMapList 要装的时间段集合
@@ -378,31 +498,50 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
             Date startTime = calendar.getTime();
             //根据报警信息接确定当前是否可用
             String[] healthyPint = new String[2];
-            String healthyFlag = "1";
-            StringBuilder msg = new StringBuilder();
+
             //"1"代表可用，"0"代表不可用
             if("0".equals(state)){
                 healthyPint[0] = "3";
-                healthyPint[1] = msg.append(info.getName()).append("为停止").toString();
+                healthyPint[1] = info.getName()+"为停止";
             } else {
                 List<Alarm> alarmList = alarmRepository.findAlarmByMonitorId(info.getId(), startTime, endTime);
+                Set<String> infoMsg = new HashSet<String>();
+                Set<String> warnMsg = new HashSet<String>();
+                Set<String> criticalMsg = new HashSet<String>();
+                Set<String> unknowMsg = new HashSet<String>();
+                Map<String,Set<String>> msgMap = new HashMap<String,Set<String>>(4);
+                msgMap.put("1",infoMsg);
+                msgMap.put("2",warnMsg);
+                msgMap.put("3",criticalMsg);
+                msgMap.put("4",unknowMsg);
+                Set<String> set = new HashSet<String>();
                 for (Alarm alarm : alarmList) {
                     if (alarm.getSeverity() != null) {
-                        msg.append(alarm.getMessage()).append("\n");
+                        //msg.append(alarm.getMessage()).append("\n");
                         if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
-                            healthyFlag = "1";
+                            infoMsg.add(alarm.getMessage()) ;
+                            set.add("1");
                         } else if (alarm.getSeverity().equals(SeverityLevel.WARNING)) {
-                            healthyFlag = "2";
+                            warnMsg.add(alarm.getMessage()) ;
+                            set.add("2");
                         } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
-                            healthyFlag = "3";
+                            criticalMsg.add(alarm.getMessage()) ;
+                            set.add("3");
                         } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
-                            healthyFlag = "4";
+                            unknowMsg.add(alarm.getMessage()) ;
+                            set.add("4");
                         }
                     }
                 }
-                healthyPint[0] = healthyFlag;
+                String status =  getState(set,"3",",2","4","1");
+                healthyPint[0] = status;
+                Set<String> msgSet = msgMap.get(status);
+                StringBuilder msg = new StringBuilder();
+                for(String iterm : msgSet){
+                    msg.append(iterm).append("\r\n");
+                }
                 healthyPint[1] = msg.toString();
-            }
+        }
             //插入可用性
             oracleStaBaseInfoModel.setHealthy(healthyPint);
             oracleStaBaseInfoModelList.add(oracleStaBaseInfoModel);
@@ -410,6 +549,22 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
         return oracleStaBaseInfoModelList;
     }
 
+    /**
+     * 获取状态的方法
+     * @param set
+     * @param arr
+     * @return
+     */
+    private String getState(Set<String> set,String... arr){
+        String status = "1";
+        for(String str : arr){
+            if(set.contains(arr)){
+                status = str;
+                break ;
+            }
+        }
+        return status;
+    }
     @Override
     public List<StaGraphModel> listMonitorEventSta() {
         List<StaGraphModel> totalStaGraphModelList = new ArrayList<StaGraphModel>();

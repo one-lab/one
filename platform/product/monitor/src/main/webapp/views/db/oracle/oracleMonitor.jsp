@@ -55,11 +55,13 @@ $(function(){
 	$("#nav").delegate('li', 'mouseover mouseout', navHover);
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
-	$(".normal").wrapInner("<p style='display:none'></p>");
+});
+function wrapP(){
+	$(".normal,.warn,.critical").wrapInner("<p style='display:none'></p>");
 	$(".normal,.warn,.critical").each(function(){
 		$(this).attr("title",$(this).find("p").text()).css("cursor","pointer");
 	});
-});
+}
 function navHover(){
 	$(this).toggleClass("hover")
 }
