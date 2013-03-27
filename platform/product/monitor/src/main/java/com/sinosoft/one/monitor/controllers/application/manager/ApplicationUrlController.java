@@ -1,4 +1,4 @@
-package com.sinosoft.one.monitor.controllers.application.manager;
+ package com.sinosoft.one.monitor.controllers.application.manager;
 
 import com.sinosoft.one.monitor.application.domain.ApplicationUrlService;
 import com.sinosoft.one.monitor.application.model.MethodResponseTime;

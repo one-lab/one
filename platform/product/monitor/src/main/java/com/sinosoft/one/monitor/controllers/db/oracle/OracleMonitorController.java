@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -118,22 +119,38 @@ public class OracleMonitorController {
 			HighchartSerie memorySerie = new HighchartSerie(staGraph.getName());
 			HighchartSerie exchangeSerie = new HighchartSerie(staGraph.getName());
 			HighchartSerie replySerie = new HighchartSerie(staGraph.getName());
+            List<String> categories = new ArrayList<String>();
+            List<Long> categoriesTime = new ArrayList<Long>();
 			/* 判断x轴信息是否为空，如果为空填充x轴信息*/
-			boolean xflag = exchange_utilization.getCategories().isEmpty();
+//			boolean xflag = exchange_utilization.getCategories().isEmpty();
 			for(Lastevent lastevent : staGraph.getLasteventList()) {
 				memorySerie.addData(lastevent.getBufferHitRate()*100.0);
 				exchangeSerie.addData(Double.valueOf(lastevent.getConnectTime()));
 				replySerie.addData(Double.valueOf(lastevent.getActiveCount()));
 				
 				/* 格式化X轴显示时间格式*/
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-				String category = sdf.format(lastevent.getRecordTime());
-				if(xflag) { //若果外层为第一次循环，构建X轴信息
-					exchange_utilization.addCategory(category);
-					reply_utilization.addCategory(category);
-					memory_utilization.addCategory(category);
-				}
+                long time = lastevent.getRecordTime().getTime();
+                if(!categoriesTime.contains(time)){
+                    categoriesTime.add(time);
+                }
+//				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+//				String category = sdf.format(lastevent.getRecordTime());
+//				if(xflag) { //若果外层为第一次循环，构建X轴信息
+//					exchange_utilization.addCategory(category);
+//					reply_utilization.addCategory(category);
+//					memory_utilization.addCategory(category);
+//				}
 			}
+            Collections.sort(categoriesTime);
+            for(Long time : categoriesTime){
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+				String category = sdf.format(time);
+                categories.add(category);
+            }
+            /*附上x轴信息*/
+            exchange_utilization.setCategories(categories);
+            reply_utilization.setCategories(categories);
+            memory_utilization.setCategories(categories);
 
             /*修改步长为自动调整 added by hanchunliang 3013-03-26  start*/
             int step = memory_utilization.getCategories().size()/6;
@@ -148,6 +165,7 @@ public class OracleMonitorController {
 		}
 		return Replys.with(Arrays.asList(memory_utilization, exchange_utilization, reply_utilization)).as(Json.class);
 	}
+
 	
 	/**
 	 * 健康状态列表
@@ -189,7 +207,8 @@ public class OracleMonitorController {
 				}  else { //未知
 					cssClass = "";
 				}
-				cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_SPAN,  cssClass, values[1]));
+				//cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_SPAN,  cssClass, values[1]));
+				cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_SPAN,  cssClass, ""));
 			}
 			row.put("cell", cell);
 			rows.add(row);

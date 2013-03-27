@@ -1,4 +1,4 @@
-package com.sinosoft.one.monitor.application.repository;
+ package com.sinosoft.one.monitor.application.repository;
 // Generated 2013-2-27 18:41:37 by One Data Tools 1.0.0
 
 import com.sinosoft.one.data.jade.annotation.SQL;
@@ -7,6 +7,7 @@ import com.sinosoft.one.monitor.application.model.viewmodel.UrlTraceLogViewModel
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 
@@ -25,4 +26,3 @@ public interface UrlTraceLogRepository extends PagingAndSortingRepository<UrlTra
             "ORDER BY l.record_time DESC")
     Page<UrlTraceLogViewModel> selectUrlTraceLogs(Pageable pageable, String urlId, Date startDate, Date endDate, String givenSeverity);
 }
-

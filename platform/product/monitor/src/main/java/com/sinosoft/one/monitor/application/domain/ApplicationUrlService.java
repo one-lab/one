@@ -1,4 +1,4 @@
-package com.sinosoft.one.monitor.application.domain;
+ package com.sinosoft.one.monitor.application.domain;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
