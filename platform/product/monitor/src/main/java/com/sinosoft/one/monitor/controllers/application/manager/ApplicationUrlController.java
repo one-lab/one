@@ -17,6 +17,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -51,20 +52,27 @@ public class ApplicationUrlController {
 		UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
 	}
 
-	@Post("/tracelog/${urlId}")
-	@Get("/tracelog/${urlId}")
-	public void queryUrlTraceLogs(@Param("urlId") String urlId,
-	                                     Invocation invocation) throws Exception {
-		int pageNo = Integer.parseInt(invocation.getParameter("pageNo"));
-		int rowNum = Integer.parseInt(invocation.getParameter("rowNum"));
-		Pageable pageable = new PageRequest(pageNo-1, rowNum);
-		Page<UrlTraceLogViewModel> urlTraceLogList = applicationUrlService.queryUrlTraceLogs(pageable, urlId);
-		Gridable<UrlTraceLogViewModel> gridable = new Gridable<UrlTraceLogViewModel>(urlTraceLogList);
-		String cellString = "userIp,recordTimeStr,statusStr,operateStr";
-		gridable.setIdField("id");
-		gridable.setCellStringField(cellString);
-		UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
-	}
+    @Post("/tracelog/${urlId}")
+    @Get("/tracelog/${urlId}")
+    public void queryUrlTraceLogs(@Param("urlId") String urlId,
+                                  Invocation invocation) throws Exception {
+        int pageNo = Integer.parseInt(invocation.getParameter("pageNo"));
+        int rowNum = Integer.parseInt(invocation.getParameter("rowNum"));
+        Pageable pageable = new PageRequest(pageNo-1, rowNum);
+        String givenTime=invocation.getRequest().getParameter("_givenTime");
+        String givenSeverity=invocation.getRequest().getParameter("_givenSeverity");
+        Page<UrlTraceLogViewModel> urlTraceLogList=null;
+        if(!StringUtils.isBlank(givenTime)||!StringUtils.isBlank(givenSeverity)){
+            urlTraceLogList = applicationUrlService.queryUrlTraceLogs(pageable, urlId,givenTime,givenSeverity);
+        }else {
+            urlTraceLogList = applicationUrlService.queryUrlTraceLogs(pageable, urlId);
+        }
+        Gridable<UrlTraceLogViewModel> gridable = new Gridable<UrlTraceLogViewModel>(urlTraceLogList);
+        String cellString = "userIp,recordTimeStr,statusStr,operateStr";
+        gridable.setIdField("id");
+        gridable.setCellStringField(cellString);
+        UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
+    }
 
 	@Get("/main/${applicationId}/${urlId}")
 	public String main(@Param("applicationId") String applicationId, @Param("urlId") String urlId,
