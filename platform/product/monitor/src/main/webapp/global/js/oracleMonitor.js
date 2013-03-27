@@ -128,6 +128,7 @@ function healthList() {
 		number:false,  
 		multiselect: false  
 	});
+	wrapP();
 }
 
 /**
