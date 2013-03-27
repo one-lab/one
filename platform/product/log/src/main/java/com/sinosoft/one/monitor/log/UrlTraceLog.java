@@ -205,7 +205,6 @@ public class UrlTraceLog implements NotificationModel {
         targetURLTraceLog.setEndTime(new Timestamp(endTime));
         targetURLTraceLog.setConsumeTime(endTime - targetURLTraceLog.getBeginTime().getTime());
         targetURLTraceLog.setSessionId(request.getSession().getId());
-        targetURLTraceLog.setUserIp(TraceUtils.getIPAddr(request));
         targetURLTraceLog.setRequestParams(traceModel.getRequestParams());
 	    targetURLTraceLog.setHasException(traceModel.hasException());
 		logger.debug(FORMAT_STRING, targetURLTraceLog.toObjectArray());

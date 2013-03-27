@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
 
+import com.sinosoft.one.monitor.notification.NotificationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -41,6 +42,11 @@ public class AgentFilter implements Filter {
 		if(isExclude(extension)) {
 			filterChain.doFilter(request, response);
 		} else {
+			String ip = TraceUtils.getIPAddr(httpServletRequest);
+			if(ip.equals(NotificationConfiguration.getInstance().getMonitorServerIp())) {
+				filterChain.doFilter(request, response);
+				return;
+			}
 			TraceModel traceModel = TraceUtils.getTraceModel();
 			if(traceModel == null) {
 				traceModel = new TraceModel();
@@ -52,6 +58,7 @@ public class AgentFilter implements Filter {
 						urlTraceLog.setUrlId(urlId);
 						urlTraceLog.setBeginTime(new Timestamp(traceModel.getBeginTime()));
 						urlTraceLog.setAlarmId(UUID.randomUUID().toString().replace("-", ""));
+						urlTraceLog.setUserIp(ip);
 						traceModel.setUrlId(urlId);
 						traceModel.setUrlTraceLog(urlTraceLog);
 					}

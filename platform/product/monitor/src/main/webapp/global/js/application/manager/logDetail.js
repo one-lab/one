@@ -8,7 +8,7 @@ $(function(){
     $("#nav,#menu").delegate('li', 'click', navClick);
     getBarLength();
     $("#detail_grid").Grid({
-        url : ctx+"/application/manager/appmethod/getParamDetail/"+logId,
+        url : ctx+"/application/manager/appmethod/getParamDetail/"+logId + "?time=" + new Date().getTime(),
         dataType: "json",
         height: 'auto',
         colums:[
@@ -27,7 +27,7 @@ $(function(){
 });
 function getBarLength(){
     $.ajax({
-        url:ctx+"/application/manager/appmethod/getLogDetail/"+logId,
+        url:ctx+"/application/manager/appmethod/getLogDetail/"+logId + "?time=" + new Date().getTime(),
         type:"GET",
         dataType:"json",
         async:false,
@@ -93,7 +93,7 @@ function hideNav(e){
 
 function getExceptionInfo(){
     $.ajax({
-        url:ctx+"/application/manager/appmethod/getExceptionInfo/"+logId,
+        url:ctx+"/application/manager/appmethod/getExceptionInfo/"+logId + "?time=" + new Date().getTime(),
         type:"GET",
         dataType:"text",
         async:false,
@@ -111,7 +111,7 @@ function getExceptionInfo(){
 
 function getAlarmInfo(){
     $.ajax({
-        url:ctx+"/application/manager/appmethod/getAlarmInfo/"+alarmId,
+        url:ctx+"/application/manager/appmethod/getAlarmInfo/"+alarmId + "?time=" + new Date().getTime(),
         type:"GET",
         dataType:"text",
         async:false,
@@ -128,6 +128,6 @@ function getAlarmInfo(){
 }
 
 function getParam(methodId){
-    window.location.href = ctx+"/application/manager/appmethod/getMethodDetail/" + applicationId + "/" + urlId + "/" + logId + "/" + methodId;
+    window.location.href = ctx+"/application/manager/appmethod/getMethodDetail/" + applicationId + "/" + urlId + "/" + logId + "/" + methodId + "?time=" + new Date().getTime();
         //ctx+"/views/application/manager/methodDetail.jsp?methodId=" + methodId;
 }

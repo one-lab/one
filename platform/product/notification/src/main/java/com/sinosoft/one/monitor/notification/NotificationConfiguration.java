@@ -172,4 +172,8 @@ public final class NotificationConfiguration {
 	public String getBaseUrl() {
 		return baseUrl;
 	}
+
+	public String getMonitorServerIp() {
+		return notificationProperties != null ? notificationProperties.getProperty("monitor.server.ip") : "";
+	}
 }
