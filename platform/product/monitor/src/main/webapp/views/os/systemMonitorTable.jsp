@@ -38,7 +38,7 @@
 		<tr>
 			<td><a href="${ctx}/os/linuxcentos/${list.id}">${list.name}</a></td>
 			<td><table width="100%" border="0" cellspacing="0"
-					cellpadding="0" class="green_bar">
+					cellpadding="0" class="xp_available">
 					<tr>
 						<c:forEach items="${list.list}" var="model">
 
@@ -49,7 +49,7 @@
 								<td class="not_available" width="${model.percentage }%"></td>
 							</c:if>
 							<c:if test="${model.status == '1' }">
-								<td width="${model.percentage }%"></td>
+								<td class="green_bar" width="${model.percentage }%"></td>
 							</c:if>
 						</c:forEach>
 					</tr>
