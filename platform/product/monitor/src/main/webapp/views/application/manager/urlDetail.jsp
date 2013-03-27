@@ -20,7 +20,7 @@
 <link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.core.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/global/css/sinosoft.datepicker.theme.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/global/css/sinosoft.theme.css" rel="stylesheet" type="text/css">
