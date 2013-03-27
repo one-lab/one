@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%@ include file="/WEB-INF/layouts/base.jsp" %>
 <title>monitor监控系统</title>
-<%@ include file="/WEB-INF/layouts/base.jsp" %>
+
 <script type="text/javascript">
 var columStyle1 =
 	[  
@@ -34,10 +34,10 @@ $(function(){
     //thresholdList emergencyList systemList oracleList
 	var gridList = new Array();
 	
-	gridList.push({"renderId":"thresholdList","url":rootPath+"/applicationList", "columStyle":columStyle1});
-	gridList.push({"renderId":"emergencyList","url":rootPath+"/alarmList", "columStyle":columStyle2});
-	gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList", "columStyle":columStyle1});
-	gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList", "columStyle":columStyle1});
+	gridList.push({"renderId":"thresholdList","url":rootPath+"/applicationList?time=" + new Date().getTime(), "columStyle":columStyle1});
+	gridList.push({"renderId":"emergencyList","url":rootPath+"/alarmList?time=" + new Date().getTime(), "columStyle":columStyle2});
+	gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList?time=" + new Date().getTime(), "columStyle":columStyle1});
+	gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList?time=" + new Date().getTime(), "columStyle":columStyle1});
 	
 	$(gridList).each(function(i, d){
 		$("#"+d.renderId).Grid({

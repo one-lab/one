@@ -22,6 +22,7 @@ $(function(){
         multiselect:false
     });
     getExceptionInfo();
+    getAlarmInfo();
 
 });
 function getBarLength(){
@@ -101,6 +102,24 @@ function getExceptionInfo(){
             var dataStr = data.replace(/\n/g, '<br/>');
             dataStr = dataStr.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
             $("#exceptionInfo").html(detailInfo + dataStr);
+        },
+        error:function () {
+            //alert("暂时无法获得异常信息");
+        }
+    });
+}
+
+function getAlarmInfo(){
+    $.ajax({
+        url:ctx+"/application/manager/appmethod/getAlarmInfo/"+alarmId,
+        type:"GET",
+        dataType:"text",
+        async:false,
+        success:function(data){
+            var detailInfo = "<strong> 告警信息：</strong>";
+            var dataStr = data.replace(/\n/g, '<br/>');
+            dataStr = dataStr.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+            $("#alarmInfo").html(detailInfo + dataStr);
         },
         error:function () {
             //alert("暂时无法获得异常信息");

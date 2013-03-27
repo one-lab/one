@@ -2,19 +2,21 @@ package com.sinosoft.one.monitor.application.domain;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.sinosoft.one.monitor.application.model.*;
 import com.sinosoft.one.monitor.application.repository.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -67,8 +69,8 @@ public class ApplicationUrlService {
 		UrlAvailableInf urlAvailableInf = applicationEmuService.getUrlAvailableToday(urlId);
 
 		ApplicationUrlInfoViewModel applicationUrlInfoViewModel = new ApplicationUrlInfoViewModel();
-		applicationUrlInfoViewModel.setHealth(severityLevel == SeverityLevel.INFO ? "cando" : "cannot");
-		applicationUrlInfoViewModel.setAvailability(urlAvailableInf.getTrend() != Trend.DROP ? "up" : "down");
+		applicationUrlInfoViewModel.setHealth(severityLevel == SeverityLevel.INFO ? "up" : "down");
+		applicationUrlInfoViewModel.setAvailability(urlAvailableInf.getTrend() != Trend.DROP ? "cando" : "cannot");
 		applicationUrlInfoViewModel.setTodayAvailability(urlAvailableInf.getCount() == 0 ? "0" :
 				BigDecimal.valueOf(urlAvailableInf.getAvailableCount()).divide(BigDecimal.valueOf(urlAvailableInf.getCount()), 2, RoundingMode.HALF_UP)
 				.multiply(BigDecimal.valueOf(100)).toString()
@@ -146,12 +148,33 @@ public class ApplicationUrlService {
 		return urlTraceLogRepository.selectUrlTraceLogs(pageable, urlId, startDate, endDate);
 	}
 
-	public List<MethodResponseTime> queryMethodResponseTimes(String urlId) {
+    public Page<UrlTraceLogViewModel> queryUrlTraceLogs(Pageable pageable, String urlId, String givenTime, String givenSeverity) throws ParseException, ParseException {
+        Date startDate=null;
+        Date endDate=null;
+        if(!StringUtils.isBlank(givenTime)){
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            startDate= dateFormat.parse(givenTime);
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(startDate);
+            calendar.add(calendar.DATE,1);
+            endDate = calendar.getTime();
+        }else{
+            startDate = LocalDate.now().toDate();
+            endDate = LocalDateTime.now().toDate();
+        }
+        if(StringUtils.isBlank(givenSeverity)){
+            givenSeverity="";
+        }
+        return urlTraceLogRepository.selectUrlTraceLogs(pageable,urlId,startDate,endDate,givenSeverity);
+    }
+
+	public Page<MethodResponseTime> queryMethodResponseTimes(Pageable pageable, String urlId) {
 		Date startDate = LocalDate.now().toDate();
 		Date endDate = LocalDateTime.now().toDate();
 
-		List<Method> methods = methodRepository.selectMethodsOfUrlById(urlId);
+		Page<Method> methods = methodRepository.selectMethodsOfUrlById(pageable, urlId);
 		List<MethodResponseTime> methodResponseTimes = new ArrayList<MethodResponseTime>();
+
 		for(Method method : methods) {
 			MethodResponseTime methodResponseTime = methodResponseTimeRepository.selectMethodResponseTimes(urlId, method.getId(), startDate, endDate);
 			if(methodResponseTime == null) {
@@ -166,6 +189,6 @@ public class ApplicationUrlService {
 			methodResponseTime.setMethodName(method.getFullName());
 			methodResponseTimes.add(methodResponseTime);
 		}
-		return methodResponseTimes;
+		return new PageImpl<MethodResponseTime>(methodResponseTimes, pageable, methods.getTotalElements());
 	}
 }

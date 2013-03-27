@@ -31,7 +31,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
-    <bean class="com.sinosoft.one.data.jade.context.spring.JadeBeanFactoryPostProcessor" />
+
 
     <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
         <!--<property name="driverClassName" value="org.hsqldb.jdbcDriver" />-->

@@ -19,6 +19,7 @@ public class MessageBase {
 	private ResourceType subResourceType;
 	private String subResourceId;
 	private MessageBaseEventSupport messageBaseEventSupport;
+	private String alarmId;
 
 	MessageBase(String resourceId) {
 		Assert.hasText(resourceId);
@@ -65,6 +66,15 @@ public class MessageBase {
 		return this;
 	}
 
+	public String getAlarmId() {
+		return alarmId;
+	}
+
+	public MessageBase alarmId(String alarmId) {
+		this.alarmId = alarmId;
+		return this;
+	}
+
 	public MessageBase addAlarmAttribute(AttributeName attributeName, String attributeValue) {
 		Assert.notNull(attributeName);
 		Assert.hasText(attributeValue);
@@ -72,8 +82,8 @@ public class MessageBase {
 		return this;
 	}
 
-	public String alarm() {
-		return messageBaseEventSupport.doMessageBase(this);
+	public void alarm() {
+		messageBaseEventSupport.doMessageBase(this);
 	}
 
 }

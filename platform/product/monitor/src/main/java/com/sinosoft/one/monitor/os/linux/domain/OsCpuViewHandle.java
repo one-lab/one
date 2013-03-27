@@ -77,9 +77,9 @@ public class OsCpuViewHandle {
 	 * @param timespan 小时数 
 	 * @return
 	 */
-	public List<List<?>>  creatOneCpuUsedLineData(Os os,Date currentTime,int timespan){
+	public List<List<?>>  creatOneCpuUsedLineData(String osid,Date currentTime,int timespan){
 			List<List<?>> data=new ArrayList<List<?>>();
-			List<OsCpu> osCpus=osCpuService.getCpuByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
+			List<OsCpu> osCpus=osCpuService.getCpuByDate(osid, new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 			for (OsCpu osCpu:osCpus) {
 				 DateTime date= new DateTime(osCpu.getSampleDate());
 				Long time = date.getMillis();
@@ -98,7 +98,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneCpuUserTimeLine(Os os,List<OsCpu> osCpus){
+	public List<List<?>> creatOneCpuUserTimeLine(List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());
@@ -117,7 +117,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneCpuSysTimeLine(Os os, List<OsCpu> osCpus){
+	public List<List<?>> creatOneCpuSysTimeLine(List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());
@@ -136,7 +136,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneCpuIOLine(Os os,List<OsCpu> osCpus){
+	public List<List<?>> creatOneCpuIOLine( List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());
@@ -155,7 +155,7 @@ public class OsCpuViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>>  creatOneCpuIDLELine(Os os,List<OsCpu> osCpus){
+	public List<List<?>>  creatOneCpuIDLELine(List<OsCpu> osCpus){
 		List<List<?>> data=new ArrayList<List<?>>();
 		for (OsCpu osCpu:osCpus) {
 			 DateTime date= new DateTime(osCpu.getSampleDate());

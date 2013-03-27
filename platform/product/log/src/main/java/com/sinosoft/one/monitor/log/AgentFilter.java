@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -47,6 +48,7 @@ public class AgentFilter implements Filter {
 						UrlTraceLog urlTraceLog = new UrlTraceLog();
 						urlTraceLog.setUrlId(urlId);
 						urlTraceLog.setBeginTime(new Timestamp(traceModel.getBeginTime()));
+						urlTraceLog.setAlarmId(UUID.randomUUID().toString().replace("-", ""));
 						traceModel.setUrlId(urlId);
 						traceModel.setUrlTraceLog(urlTraceLog);
 					}
@@ -70,7 +72,7 @@ public class AgentFilter implements Filter {
 	            filterChain.doFilter(request, response);
 			} finally {
 				TraceModel resultTraceModel = TraceUtils.getTraceModel();
-				if(resultTraceModel.getIndex() == 0) {
+				if(resultTraceModel.getIndex() == 0 || traceModel.hasException()) {
 					doUrlTraceLogEnd(httpServletRequest, resultTraceModel);
 				} else {
 					resultTraceModel.decreaseIndex();

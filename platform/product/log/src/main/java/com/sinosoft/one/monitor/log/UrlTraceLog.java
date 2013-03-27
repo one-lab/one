@@ -68,6 +68,15 @@ public class UrlTraceLog implements NotificationModel {
 	 * URL ID
 	 */
 	private String urlId;
+	/**
+	 * 告警信息ID
+	 */
+	private String alarmId;
+	/**
+	 * 是否有异常
+	 */
+	private boolean hasException;
+
 
 	List<MethodTraceLog> methodTraceLogList = new ArrayList<MethodTraceLog>();
 
@@ -165,6 +174,22 @@ public class UrlTraceLog implements NotificationModel {
 		this.username = username;
 	}
 
+	public String getAlarmId() {
+		return alarmId;
+	}
+
+	public void setAlarmId(String alarmId) {
+		this.alarmId = alarmId;
+	}
+
+	public boolean getHasException() {
+		return hasException;
+	}
+
+	public void setHasException(boolean hasException) {
+		this.hasException = hasException;
+	}
+
 	public void addMethodTraceLog(MethodTraceLog methodTraceLog) {
 		this.methodTraceLogList.add(methodTraceLog);
 	}
@@ -172,12 +197,6 @@ public class UrlTraceLog implements NotificationModel {
 	public List<MethodTraceLog> getMethodTraceLogList() {
 		return methodTraceLogList;
 	}
-
-	public static UrlTraceLog beginTrace() {
-        UrlTraceLog urlTraceLog = new UrlTraceLog();
-        urlTraceLog.setBeginTime(new Timestamp(System.currentTimeMillis()));
-        return urlTraceLog;
-    }
 
     public static long endTrace(HttpServletRequest request, TraceModel traceModel) {
 	    UrlTraceLog targetURLTraceLog = traceModel.getUrlTraceLog();
@@ -188,6 +207,7 @@ public class UrlTraceLog implements NotificationModel {
         targetURLTraceLog.setSessionId(request.getSession().getId());
         targetURLTraceLog.setUserIp(TraceUtils.getIPAddr(request));
         targetURLTraceLog.setRequestParams(traceModel.getRequestParams());
+	    targetURLTraceLog.setHasException(traceModel.hasException());
 		logger.debug(FORMAT_STRING, targetURLTraceLog.toObjectArray());
 	    NotificationServiceFactory.buildNotificationService().notification(targetURLTraceLog);
 	    return endTime;

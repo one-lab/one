@@ -7,6 +7,7 @@ import com.sinosoft.one.monitor.application.model.viewmodel.UrlTraceLogViewModel
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 
@@ -14,5 +15,13 @@ public interface UrlTraceLogRepository extends PagingAndSortingRepository<UrlTra
 	@SQL("select l.id, l.user_id, l.user_ip,l.record_time, a.severity, i.id as exceptionId from ge_monitor_url_trace_log l, ge_monitor_alarm a, ge_monitor_exception_info i\n" +
 			"where l.alarm_id=a.id(+) and l.id=i.url_trace_log_id(+) and l.url_id=?2 AND l.record_time BETWEEN ?3 AND ?4 ORDER BY l.record_time DESC")
 	Page<UrlTraceLogViewModel> selectUrlTraceLogs(Pageable pageable, String urlId, Date startDate, Date endDate);
+
+    UrlTraceLog findByAlarmId(String alarmId);
+
+    @SQL("select l.id, l.user_id, l.user_ip,l.record_time, a.severity, i.id as exceptionId from ge_monitor_url_trace_log l, ge_monitor_alarm a, ge_monitor_exception_info i\n" +
+            "where l.alarm_id=a.id(+) and l.id=i.url_trace_log_id(+) and l.url_id=?2 " +
+            "#if(?3!=null){ AND l.record_time BETWEEN ?3 AND ?4 } " +
+            "#if(?5!=''){ and a.severity=?5 } ORDER BY l.record_time DESC")
+    Page<UrlTraceLogViewModel> selectUrlTraceLogs(Pageable pageable, String urlId, Date startDate, Date endDate, String givenSeverity);
 }
 

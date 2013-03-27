@@ -21,6 +21,7 @@
         var applicationId = "${applicationId}";
         var urlId = "${urlId}";
         var logId = "${logId}";
+        var alarmId = "${alarmId}";
     </script>
     <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
     <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
@@ -71,6 +72,21 @@
                 <div class="conf_cont">
                     <ul>
                         <li id="exceptionInfo"></li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div style="float:left;width:100%;margin-top:20px;">
+            <div class="conf_title">
+                <div class="conf_title_r"></div>
+                <div class="conf_title_l"></div>
+                告警信息
+            </div>
+            <div class="conf_cont_box">
+                <div class="conf_cont">
+                    <ul>
+                        <li id="alarmInfo"></li>
                     </ul>
 
                 </div>

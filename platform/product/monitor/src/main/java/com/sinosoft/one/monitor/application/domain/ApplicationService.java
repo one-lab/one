@@ -190,6 +190,7 @@ public class ApplicationService {
 		applicationIndexViewModel.setGreenBarLength(BigDecimal.valueOf(normalCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue());
 		applicationIndexViewModel.setRedBarLength(BigDecimal.valueOf(criticalCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue());
 		applicationIndexViewModel.setYellowBarLength(BigDecimal.valueOf(warningCount).divide(totalBigDecimal, 2, RoundingMode.HALF_UP).multiply(hundredBigDecimal).intValue());
+		applicationIndexViewModel.reconculate();
 	}
 
 	/**

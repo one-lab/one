@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <td  style="width:35%">评定</td>
-                    <td><div class="bar"><a href="#">${alarmViewModel.criticalCount}</a></div></td>
+                    <td><div class="bar">${alarmViewModel.criticalCount}</div></td>
                 </tr>
             </table>
         </td>

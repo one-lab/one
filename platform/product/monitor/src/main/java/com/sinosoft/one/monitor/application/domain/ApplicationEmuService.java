@@ -195,7 +195,7 @@ public class ApplicationEmuService {
         if(eumAvaLast!=null){
             LocalDate prevDate = new LocalDate(eumAvaLast.getRecordTime());
             if(prevDate.compareTo(LocalDate.now())<0){
-                eumUrlAvaRepository.deleteAll();
+                eumUrlAvaRepository.deleteByLessThanDate(LocalDate.now().minusDays(1).toDate());
             }
         }
     }

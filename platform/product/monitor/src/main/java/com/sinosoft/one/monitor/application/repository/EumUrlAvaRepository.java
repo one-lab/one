@@ -36,6 +36,8 @@ public interface EumUrlAvaRepository extends PagingAndSortingRepository<EumUrlAv
              " group by to_char(a.record_time, 'yyyy-MM-dd HH24'), state")
      public List<TimeQuantumAvailableStatistics> statisticsByEumUrlIdAndRecordTime(String eumUrlId,Date start,Date end);
 
+	@SQL("delete ge_monitor_eum_url_ava a where a.record_time < ?1")
+	 void deleteByLessThanDate(Date date);
 
 }
 

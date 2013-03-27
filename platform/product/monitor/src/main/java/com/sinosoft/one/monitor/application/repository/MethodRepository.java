@@ -3,6 +3,8 @@ package com.sinosoft.one.monitor.application.repository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.application.model.Method;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
@@ -10,6 +12,9 @@ import java.util.List;
 public interface MethodRepository extends PagingAndSortingRepository<Method, String> {
 
     Method findByMethodName(String methodName);
+
+    @SQL("select * from GE_MONITOR_METHOD a where a.ID in (select m.METHOD_ID from GE_MONITOR_URL_METHOD m where m.url_id=?2)")
+    Page<Method> selectMethodsOfUrlById(Pageable pageable, String urlId);
 
     @SQL("select * from GE_MONITOR_METHOD a where a.ID in (select m.METHOD_ID from GE_MONITOR_URL_METHOD m where m.url_id=?1)")
     List<Method> selectMethodsOfUrlById(String urlId);

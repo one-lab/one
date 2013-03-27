@@ -85,16 +85,22 @@ public class OsRamViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneRamLineData(Os os,Date currentTime,int timespan){
-		List<List<?>> data=new ArrayList<List<?>>();
-		List<OsRam>osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
+	public Map<String, List<List<?>>> creatOneRamLineData(String osid,Date currentTime,int timespan){
+		Map<String, List<List<?>>>line=new HashMap<String, List<List<?>>>();
+		List<List<?>> ramdata=new ArrayList<List<?>>();
+		List<List<?>> swapdata=new ArrayList<List<?>>();
+		List<OsRam>osRams=osRamService.getRamByDate(osid, new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 		for (OsRam osRam:osRams) {
 			DateTime date= new DateTime(osRam.getSampleDate());
 			Long time = date.getMillis();
-			Double utiliZation = Double.parseDouble(osRam.getMemUtiliZation());
-			data.add(Lists.newArrayList(time,utiliZation));
+			Double rmsutiliZation = Double.parseDouble(osRam.getMemUtiliZation());
+			Double swaputiliZation = Double.parseDouble(osRam.getSwapUtiliZation());
+			ramdata.add(Lists.newArrayList(time,rmsutiliZation));
+			swapdata.add(Lists.newArrayList(time,swaputiliZation));
 		}
-		return data;
+		line.put("ram", ramdata);
+		line.put("swap", swapdata);
+		return line;
 	}
 	
 	/**
@@ -105,9 +111,9 @@ public class OsRamViewHandle {
 	 * @param timespan
 	 * @return
 	 */
-	public List<List<?>> creatOneSwapLineData(Os os,Date currentTime,int timespan){
+	public List<List<?>> creatOneSwapLineData(String osid,Date currentTime,int timespan){
 		List<List<?>> data=new ArrayList<List<?>>();
-		List<OsRam>osRams=osRamService.getRamByDate(os.getOsInfoId(), new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
+		List<OsRam>osRams=osRamService.getRamByDate(osid, new DateTime(currentTime).minusHours(timespan).toDate(), currentTime);
 		for (OsRam osRam:osRams) {
 			DateTime date= new DateTime(osRam.getSampleDate());
 			Long time = date.getMillis();

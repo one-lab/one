@@ -29,8 +29,8 @@ public class OsAgent {
 	 */
 	public static void main(String[] args) {
 //		do {
-			OsAgentInvestigation osAgentInvestigation=new OsAgentInvestigation(executorService);
-			osAgentInvestigation.start();
+		OsAgentInvestigation osAgentInvestigation=new OsAgentInvestigation();
+		osAgentInvestigation.start();
 //		} while (OsConfig.newTimer);
 //		  investigation.setScheduledFuture(scheduledFuture);
 //		Timer handleTaskTimer = new Timer();

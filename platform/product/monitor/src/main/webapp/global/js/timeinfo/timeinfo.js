@@ -10,7 +10,7 @@ $(document).ready(function() {
         $("#main").width(center.width() - 38).height(center.height() - 30);
     }
     $("#list_table").Grid({
-        url : ctx + "/application/manager/url/methodresponsetime/" + applicationId + "/" + urlId,
+        url : ctx + "/application/manager/url/methodresponsetime/" + applicationId + "/" + urlId + "?time=" + new Date().getTime(),
         dataType: "json",
         height: 'auto',
         colums:[
@@ -27,13 +27,13 @@ $(document).ready(function() {
     });
 
     $("#event_log_grid").Grid({
-        url : ctx + "/application/manager/url/tracelog/" + urlId,
+        url : ctx + "/application/manager/url/tracelog/" + urlId + "?time=" + new Date().getTime(),
         dataType: "json",
         height: 'auto',
         type : 'POST',
         colums:[
             {id:'1',text:'IP',name:"userIp",width:'400',index:'1',align:'',color:''},
-            {id:'2',text:'访问者',name:"visitor",width:'',index:'1',align:'',color:''},
+            /*{id:'2',text:'访问者',name:"visitor",width:'',index:'1',align:'',color:''},*/
             {id:'3',text:'时间',name:"recordTime",width:'',index:'1',align:'',color:''},
             {id:'4',text:'状态',name:"status",width:'',index:'1',align:'',color:''},
             {id:'5',text:'操作',name:"operate",width:'',index:'1',align:'',color:''}
@@ -53,7 +53,7 @@ $(document).ready(function() {
 
 function initUrlHealthAndAva() {
     $.ajax({
-        url : ctx + "/application/manager/url/healthava/" + applicationId + "/" + urlId,
+        url : ctx + "/application/manager/url/healthava/" + applicationId + "/" + urlId + "?time=" + new Date().getTime(),
         type : "GET",
         dataType : "json",
         async : false,
@@ -118,7 +118,7 @@ function initUrlHealthAndAva() {
 
 function initUrlCountSta() {
     $.ajax({
-        url : ctx + "/application/manager/url/urlcountsta/" + applicationId + "/" + urlId,
+        url : ctx + "/application/manager/url/urlcountsta/" + applicationId + "/" + urlId + "?time=" + new Date().getTime(),
         type : "GET",
         dataType : "json",
         async : false,
@@ -265,5 +265,5 @@ function createResponseTimeChart(times, data) {
 }
 
 function operateDetail(id) {
-    location.href = ctx + "/application/manager/appmethod/viewLogDetail/" + applicationId + "/" + urlId + "/" + id;
+    location.href = ctx + "/application/manager/appmethod/viewLogDetail/" + applicationId + "/" + urlId + "/" + id + "?time=" + new Date().getTime();
 }

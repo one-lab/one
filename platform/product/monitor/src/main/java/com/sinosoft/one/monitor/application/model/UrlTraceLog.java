@@ -84,6 +84,11 @@ public class UrlTraceLog {
 	 */
 	private Date recordTime;
 
+	/**
+	 * 是否有异常
+	 */
+	private boolean hasException;
+
 	List<MethodTraceLog> methodTraceLogList = new ArrayList<MethodTraceLog>();
 
 	@Column(name = "USER_IP")
@@ -194,9 +199,20 @@ public class UrlTraceLog {
 		this.alarmId = alarmId;
 	}
 
+	@Transient
+	public boolean getHasException() {
+		return hasException;
+	}
+
+	public void setHasException(boolean hasException) {
+		this.hasException = hasException;
+	}
+
 	public void setMethodTraceLogList(List<MethodTraceLog> methodTraceLogList) {
 		this.methodTraceLogList = methodTraceLogList;
 	}
+
+
 
 	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "URL_TRACE_LOG_ID")

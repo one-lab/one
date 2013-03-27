@@ -3,7 +3,9 @@ package com.sinosoft.one.monitor.controllers.alarm.manager;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.sinosoft.one.monitor.application.model.UrlTraceLog;
 import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
+import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
@@ -48,6 +50,8 @@ public class AlarmManagerController {
     OsRepository osRepository;
     @Autowired
     InfoRepository infoRepository;
+    @Autowired
+    UrlTraceLogRepository urlTraceLogRepository;
 
     @Get("list")
     public String getAlarmList(Invocation inv){
@@ -222,6 +226,8 @@ public class AlarmManagerController {
         inv.addModel("alarmImage",getImageOfAlarm(dbAlarm.getSeverity()));
         //用以发送ajax，获得当前监视器的历史告警信息
         inv.addModel("monitorId",dbAlarm.getMonitorId());
+        UrlTraceLog urlTraceLog=urlTraceLogRepository.findByAlarmId(dbAlarm.getId());
+        inv.addModel("urlTraceLog",urlTraceLog);
         return "alarmDetail";
     }
 

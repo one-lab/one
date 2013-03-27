@@ -13,13 +13,18 @@
     <title>业务仿真</title>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/timeinfo/timeinfo.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/status.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-    <link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/sinosoft.core.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/global/css/sinosoft.datepicker.theme.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/global/css/sinosoft.theme.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/global/css/OneDatapicker.css" rel="stylesheet" type="text/css">
 <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
@@ -28,10 +33,52 @@
 <script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 <script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.core.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.widget.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.datepicker.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.datepicker-zh-CN.js"></script>
 <script type="text/javascript">
     var ctx = "${ctx}";
     var applicationId = "${applicationId}";
     var urlId = "${urlId}";
+    $(function(){
+        $("#timeSelect").datepicker({ maxDate: "+0m +0w",minDate: new Date(2013, 1 - 1, 1) } );
+        $("#timeSelect").bind("change",function(){
+            var _givenTime=$(this).val();
+            var _givenSeverity=$("#severityStatus").val();
+            getEventLogByGivenTimeOrSeverity(_givenTime,_givenSeverity);
+        });
+        $("#severityStatus").bind("change",function(){
+            var _givenTime=$("#timeSelect").val();
+            var _givenSeverity=$(this).val();
+            getEventLogByGivenTimeOrSeverity(_givenTime,_givenSeverity);
+        });
+    })
+
+    function getEventLogByGivenTimeOrSeverity(givenTime,givenSeverity){
+        var $mn = $("#event_log_grid");
+        //防止每次查询时，表格中的数据不断累积
+        $mn.html("");
+        $("#event_log_grid").Grid({
+            url : "${ctx}/application/manager/url/tracelog/${urlId}?_givenTime="+givenTime+"&_givenSeverity="+givenSeverity,
+            dataType: "json",
+            height: 'auto',
+            type : 'GET',
+            async:false,
+            colums:[
+                {id:'1',text:'IP',name:"userIp",width:'400',index:'1',align:'',color:''},
+                /*{id:'2',text:'访问者',name:"visitor",width:'',index:'1',align:'',color:''},*/
+                {id:'3',text:'时间',name:"recordTime",width:'',index:'1',align:'',color:''},
+                {id:'4',text:'状态',name:"status",width:'',index:'1',align:'',color:''},
+                {id:'5',text:'操作',name:"operate",width:'',index:'1',align:'',color:''}
+            ],
+            rowNum:10,
+            rowList:[10,20,30],
+            pager : true,
+            number:false,
+            multiselect:false
+        });
+    }
 </script>
 </head>
 
@@ -52,18 +99,18 @@
                         <td class="time_info_head" colspan="5">URL信息</td>
                     </tr>
                     <tr class="time_info_title">
-                        <td>健康状况</td>
                         <td>可用性</td>
+                        <td>健康状况</td>
                         <td>今日可用性</td>
                         <td>今日运行时间</td>
                         <td>最后故障时间</td>
                     </tr>
                     <tr class="time_info_text">
-                        <td align="center"><div class="${urlInfo.health}"></div></td>
                         <td align="center"><div class="${urlInfo.availability}"></div></td>
-                        <td><a href="#">${urlInfo.todayAvailability}%</a></td>
-                        <td><a href="#">${urlInfo.todayRunningTime}</a></td>
-                        <td><a href="#">${urlInfo.latestFailTime}</a></td>
+                        <td align="center"><div class="${urlInfo.health}"></div></td>
+                        <td>${urlInfo.todayAvailability}%</td>
+                        <td>${urlInfo.todayRunningTime}</td>
+                        <td>${urlInfo.latestFailTime}</td>
                     </tr>
 
                 </table>
@@ -173,8 +220,24 @@
 
                 <div class="event_log">
                     <div class="threshold_file">
-                        <div class="tool_bar_top">事件日志</div>
+                        <div class="tool_bar_top">事件日志
+                            <strong class="right" style="float:right;margin-right: 50px;">状态：
+                                <select id="severityStatus" style="width:100px">
+                                    <option value="">请选择状态</option>
+                                    <option value="CRITICAL">严重</option>
+                                    <option value="WARNING">警告</option>
+                                    <option value="INFO">正常</option>
+                                </select>
+                            </strong>
+                            <strong class="right" style="float:right;margin-right: 10px;">日期：
+                                <input id="timeSelect" type="text">
+                            </strong>
+
+                        </div>
                         <div id="event_log_grid"></div>
+
+                    </div>
+                    <div>
                     </div>
                 </div>
 
