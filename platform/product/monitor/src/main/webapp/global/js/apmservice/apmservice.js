@@ -12,7 +12,7 @@ $(document).ready(function() {
     $(".hide_some_error").live("click",hideSomeError);
 
     $("#grid_info_table").Grid({
-        url : ctx + "/application/manager/detail/urls/" + applicationId,
+        url : ctx + "/application/manager/detail/urls/" + applicationId + "?time=" + new Date().getTime(),
         dataType: "json",
         height: 'auto',
         colums:[

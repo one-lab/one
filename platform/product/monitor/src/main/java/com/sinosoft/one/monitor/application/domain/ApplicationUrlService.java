@@ -103,8 +103,19 @@ public class ApplicationUrlService {
 		for(TimeQuantumAvailableInfo timeQuantumAvailableInfo : timeQuantumAvailableInfoList) {
 			String tempTime = timeQuantumAvailableInfo.getTimeQuantum();
 			tempTime = tempTime.substring(tempTime.indexOf(" ") + 1) + ":00";
-			applicationUrlHealthAvaViewModel.addUrlAva(tempTime, evalPercent(timeQuantumAvailableInfo.getAvaCount(), timeQuantumAvailableInfo.getCount())
-					+ ":" + evalPercent(timeQuantumAvailableInfo.getFailCount(), timeQuantumAvailableInfo.getCount()));
+			int avaPercent = evalPercent(timeQuantumAvailableInfo.getAvaCount(), timeQuantumAvailableInfo.getCount()).intValue();
+			int failPercent = evalPercent(timeQuantumAvailableInfo.getFailCount(), timeQuantumAvailableInfo.getCount()).intValue();
+			int totalPercent = avaPercent + failPercent;
+			if(totalPercent > 100) {
+				if(avaPercent > failPercent) {
+					avaPercent -= totalPercent - 100;
+				} else {
+					failPercent -= totalPercent - 100;
+				}
+			}
+
+			applicationUrlHealthAvaViewModel.addUrlAva(tempTime,
+					avaPercent + ":" + failPercent);
 		}
 
 		return applicationUrlHealthAvaViewModel;

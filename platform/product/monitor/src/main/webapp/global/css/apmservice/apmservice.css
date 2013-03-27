@@ -29,7 +29,11 @@
 .info_head{width:100%; min-width:800px;height:25px; background:url(../../images/spmservice/bg_tableheader.gif) repeat-x;}
 .info_thead{ font-weight:bold;}
 .grid_info{margin-top:10px;width:100% }
-.red_bar,.yellow_bar{float:left;}
-.green_bar{height:12px;}
+
+.green_bar{background:url(../../images/bg_available.gif) repeat-x;border:#5d5d5d 1px solid;height:12px;}
+.green_bar td{line-height:12px;height:12px;border:none}
+.green_bar .not_available{background:url(../../images/bg_available_r.gif) repeat-x}
+.green_bar .xp_available{background:url(../../images/bg_available_y.gif) repeat-x}
 .red_bar{height:12px; background:url(../../images/red-bar.png) repeat-x;}
 .yellow_bar{height:12px; background: url(../../images/bg_available_y.gif) repeat-x}
+.red_bar,.yellow_bar{float:left;}

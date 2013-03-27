@@ -5,10 +5,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%@include file="/WEB-INF/layouts/base.jsp"%>
     <title>应用性能</title>
     <link href="${ctx}/global/css/performance/performance.css" rel="stylesheet" type="text/css" />
-    <%@include file="/WEB-INF/layouts/base.jsp"%>
+
     <script type="text/javascript">
         $(function(){
             $("body").layout({
@@ -35,7 +35,7 @@
 <div id="layout_center">
     <div class="main">
         <ul class="crumbs">
-            <li><a href="">应用性能</a> ></li>
+            <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a> > </li>
             <li><b>应用列表</b></li>
         </ul>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">

@@ -41,7 +41,7 @@ public class LogTraceAspect {
 	 * @throws Throwable  com.sinosig.servicebus.transpolicy.webservice.TransPolicyService
 	 */
     @Around("execution(* com.sinosig.servicebus.*.*service..*.*(..))")
-//  @Around("execution(* com.sinosig.servicebus..*(..))")
+//  @Around("execution(* com.sinosoft.one.demo..*.*(..))")
     public Object logAgroundClassAndInterface(ProceedingJoinPoint pjp)
 			throws Throwable {
     	logger.debug("LogTraceAspect");
