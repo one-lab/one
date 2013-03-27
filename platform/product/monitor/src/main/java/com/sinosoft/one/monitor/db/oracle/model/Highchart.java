@@ -45,6 +45,10 @@ public class Highchart {
 	public List<String> getCategories() {
 		return categories;
 	}
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
 	
 	public void addCategory(String category) {
 		categories.add(category);
