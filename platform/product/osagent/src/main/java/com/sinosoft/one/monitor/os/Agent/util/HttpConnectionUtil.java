@@ -40,7 +40,9 @@ public class HttpConnectionUtil {
 					post.setEntity(new UrlEncodedFormEntity(pairs, HTTP.UTF_8));
 				}
 			}
-			response = new DefaultHttpClient().execute(post);
+			DefaultHttpClient defaultHttpClient=new DefaultHttpClient();
+			response = defaultHttpClient.execute(post);
+			defaultHttpClient.getConnectionManager().shutdown();
 			System.out.println(response);
 			ObjectInputStream ois = new ObjectInputStream(response.getEntity()
 					.getContent());

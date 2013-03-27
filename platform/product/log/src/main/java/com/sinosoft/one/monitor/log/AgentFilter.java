@@ -16,6 +16,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
@@ -24,7 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class AgentFilter implements Filter {
 	private ApplicationContext applicationContext;
     private LogConfigs logConfigs;
-
+    private static Logger logger = LoggerFactory.getLogger(AgentFilter.class);
 	private static final String DEFAULT_EXCLUDE_EXTENSIONS = "jspx,js,css,gif,png,jpg,jpeg,bmp,html,htm,swf";
 	private String[] excludeExtensions = new String[0];
 
@@ -102,7 +105,9 @@ public class AgentFilter implements Filter {
 	        endTime = System.currentTimeMillis();
         }
 	    try {
+	    	logger.debug("获取响应时间");
 		    if(!traceModel.hasException()) {
+		    	logger.debug("获取响应时间成功");
 			    UrlResponseTimeEventSupport.build().publish(new UrlResponseTime(traceModel.getUrl(), traceModel.getUrlId(), endTime-traceModel.getBeginTime()));
 		    }
 	    } finally {

@@ -40,6 +40,7 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 	 * @param data URL响应时间数据
 	 */
 	public void handleMessage(String applicationId, String data) {
+		logger.debug("UrlResponseTimeAgentMessageService");
 		List<UrlResponseTime> urlResponseTimes = JSON.parseArray(data, UrlResponseTime.class);
 
 		MinMaxTime minMaxTime = new MinMaxTime();
@@ -72,8 +73,10 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 					urlResponseTimeMap.remove(key);
 				}
 			}
+			logger.debug("addToUpdateUrlResponseTime");
 			addToUpdateUrlResponseTime(toUpdateUrlResponseTimes, urlResponseTimeMap, applicationId);
 		}
+		logger.debug("urlResponseTimeRepository.save");
 		urlResponseTimeRepository.save(toUpdateUrlResponseTimes);
 
 
@@ -88,10 +91,12 @@ public class UrlResponseTimeAgentMessageService implements AgentMessageService{
 					requestPerMinuteMap.remove(requestPerMinuteKey);
 				}
 			}
+			logger.debug("addToUpdateRequestPerMinute");
 			addToUpdateRequestPerMinute(toUpdateRequestPerMinutes, requestPerMinuteMap, applicationId);
 		} else {
 			addToUpdateRequestPerMinute(toUpdateRequestPerMinutes, requestPerMinuteMap, applicationId);
 		}
+		logger.debug("urlResponseTimeRepository.save");
 		requestPerMinuteRepository.save(toUpdateRequestPerMinutes);
 	}
 

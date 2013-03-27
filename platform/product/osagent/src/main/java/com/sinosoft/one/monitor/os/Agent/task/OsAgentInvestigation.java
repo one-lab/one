@@ -39,16 +39,13 @@ public class OsAgentInvestigation implements Runnable{
 //		this.scheduledExecutorService=superScheduledExecutorService;
 //	}
 	
-	public void start(){
-		scheduledFuture = OsConfig.executorService.scheduleAtFixedRate(this ,  0, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
-	}
 	public void run() {
 		try {
 			if(OsConfig.first==true){
 				OsConfig.init("config/osConfig.properties");
 				logger.debug(OsConfig.interCycleTime+"");
-				scheduledFuture.cancel(true);
-				scheduledFuture = OsConfig.executorService.scheduleAtFixedRate(new OsAgentInvestigation(),   OsConfig.interCycleTime*60, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
+				OsConfig.scheduledFuture.cancel(true);
+				OsConfig.scheduledFuture = OsConfig.executorService.scheduleAtFixedRate(new OsAgentInvestigation(),   OsConfig.interCycleTime*60, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
 				System.out.println(321);
 			}else{
 				connectionUtil = new HttpConnectionUtil();
@@ -81,8 +78,8 @@ public class OsAgentInvestigation implements Runnable{
 					Object object=requestMap.get("newInterCycle");
 					if(Integer.valueOf((String) object)!= OsConfig.interCycleTime){
 						logger.debug("修改轮询时间");
-						scheduledFuture.cancel(true);
-						scheduledFuture = OsConfig.executorService.scheduleAtFixedRate(new OsAgentInvestigation(),OsConfig.interCycleTime*60, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
+						OsConfig.scheduledFuture.cancel(true);
+						OsConfig.scheduledFuture = OsConfig.executorService.scheduleAtFixedRate(new OsAgentInvestigation(),OsConfig.interCycleTime*60, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
 						System.out.println(123);
 					}
 				}else{

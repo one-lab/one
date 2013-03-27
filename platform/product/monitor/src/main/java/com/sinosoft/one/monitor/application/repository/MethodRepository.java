@@ -16,6 +16,10 @@ public interface MethodRepository extends PagingAndSortingRepository<Method, Str
     @SQL("select * from GE_MONITOR_METHOD a where a.ID in (select m.METHOD_ID from GE_MONITOR_URL_METHOD m where m.url_id=?2)")
     Page<Method> selectMethodsOfUrlById(Pageable pageable, String urlId);
 
+    @SQL("select * from GE_MONITOR_METHOD a where a.ID in (select m.METHOD_ID from GE_MONITOR_URL_METHOD m where m.url_id=?1)")
+    List<Method> selectMethodsOfUrlById(String urlId);
+
+    
     @SQL("update GE_MONITOR_METHOD set CLASS_NAME=?2,METHOD_NAME=?3,DESCRIPTION=?4,MODIFIER_ID=?5,MODIFY_TIME=sysdate where id=?1")
     void updateMethod(String methodId, String className, String methodName, String description, String modifierId);
 

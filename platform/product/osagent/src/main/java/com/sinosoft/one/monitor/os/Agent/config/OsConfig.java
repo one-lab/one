@@ -7,10 +7,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sinosoft.one.monitor.os.Agent.task.OsAgentInvestigation;
 import com.sinosoft.one.monitor.os.Agent.util.HttpConnectionUtil;
 import com.sinosoft.one.monitor.os.Agent.util.OsUtil;
 import com.sinosoft.one.util.thread.ThreadUtils;
@@ -43,7 +46,14 @@ public class OsConfig {
 	
 	private static Logger logger = LoggerFactory.getLogger(OsConfig.class);
 	
-	public static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(200, new ThreadUtils.CustomizableThreadFactory("osAgent"));
+	
+	public static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(3, new ThreadUtils.CustomizableThreadFactory("osAgent"));
+	
+	public static  ScheduledFuture<?>  scheduledFuture =null;
+	
+	public static void starTread(){
+		 scheduledFuture = executorService.scheduleAtFixedRate(new OsAgentInvestigation() ,  0, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
+	}
 	/**
 	 * init
 	 * 
