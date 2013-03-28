@@ -218,7 +218,13 @@ public class AlarmManagerController {
             inv.addModel("monitorName",applicationRepository.findOne(dbAlarm.getMonitorId()).getCnName());
             inv.addModel("monitorType",ResourceType.APPLICATION.name());
             UrlTraceLog urlTraceLog=urlTraceLogRepository.findByAlarmId(dbAlarm.getId());
-            inv.addModel("urlTraceLog",urlTraceLog);
+            if(null==urlTraceLog){
+                inv.addModel("urlTraceLogUrlId","-1");
+                inv.addModel("urlTraceLogId","notExist");
+            }else{
+                inv.addModel("urlTraceLogUrlId",urlTraceLog.getUrlId());
+                inv.addModel("urlTraceLogId",urlTraceLog.getId());
+            }
         }else if(ResourceType.OS.name().equals(dbAlarm.getMonitorType())){
             inv.addModel("monitorName",osRepository.findOne(dbAlarm.getMonitorId()).getName());
         }else if(ResourceType.DB.name().equals(dbAlarm.getMonitorType())){

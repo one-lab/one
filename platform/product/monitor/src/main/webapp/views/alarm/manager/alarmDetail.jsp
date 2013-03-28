@@ -44,7 +44,12 @@
 
         });
         function viewLogDetail(applicationId, urlId, traceId) {
-            window.location.href = "${ctx}/application/manager/appmethod/viewLogDetail/" + applicationId + "/" + urlId + "/" + traceId;
+            if(traceId=="notExist"){
+                traceId=-1;
+                window.location.href = "${ctx}/application/manager/appmethod/viewLogDetail/" + applicationId + "/" + urlId + "/" + traceId+"?alarmDetailId=${alarm.id}";
+            }else{
+                window.location.href = "${ctx}/application/manager/appmethod/viewLogDetail/" + applicationId + "/" + urlId + "/" + traceId;
+            }
         }
         function navHover() {
             $(this).toggleClass("hover")
@@ -57,13 +62,11 @@
                 if ($(this).parent().attr("id") == "menu") {
                     isAdd = true;
                 }
-                ;
                 subMav.slideDown('fast', function () {
                     $(document).bind('click', {dom: subMav, add: isAdd}, hideNav);
                     return false;
                 });
             }
-            ;
         }
         function hideNav(e) {
             var subMenu = e.data.dom;
@@ -72,7 +75,6 @@
                 if (isAdd) {
                     subMenu.parent().removeClass('seleck');
                 }
-                ;
             });
             $(document).unbind();
         }
@@ -115,7 +117,7 @@
                         <td>
                             <p class="magess">
                                 <c:if test="${monitorType eq 'APPLICATION'}">
-                                    <a  href="javascript:void(0);"  onClick="viewLogDetail('${monitorId}','${urlTraceLog.urlId}','${urlTraceLog.id}');"> ${alarm.message}</a>
+                                    <a  href="javascript:void(0);"  onclick="viewLogDetail('${monitorId}','${urlTraceLogUrlId}','${urlTraceLogId}');"> ${alarm.message}</a>
                                 </c:if>
                                 <c:if test="${monitorType ne 'APPLICATION'}">
                                      ${alarm.message}
