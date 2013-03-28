@@ -216,6 +216,9 @@ public class AlarmManagerController {
         Alarm dbAlarm=alarmRepository.findOne(alarmId);
         if(ResourceType.APPLICATION.name().equals(dbAlarm.getMonitorType())){
             inv.addModel("monitorName",applicationRepository.findOne(dbAlarm.getMonitorId()).getCnName());
+            inv.addModel("monitorType",ResourceType.APPLICATION.name());
+            UrlTraceLog urlTraceLog=urlTraceLogRepository.findByAlarmId(dbAlarm.getId());
+            inv.addModel("urlTraceLog",urlTraceLog);
         }else if(ResourceType.OS.name().equals(dbAlarm.getMonitorType())){
             inv.addModel("monitorName",osRepository.findOne(dbAlarm.getMonitorId()).getName());
         }else if(ResourceType.DB.name().equals(dbAlarm.getMonitorType())){
@@ -226,8 +229,6 @@ public class AlarmManagerController {
         inv.addModel("alarmImage",getImageOfAlarm(dbAlarm.getSeverity()));
         //用以发送ajax，获得当前监视器的历史告警信息
         inv.addModel("monitorId",dbAlarm.getMonitorId());
-        UrlTraceLog urlTraceLog=urlTraceLogRepository.findByAlarmId(dbAlarm.getId());
-        inv.addModel("urlTraceLog",urlTraceLog);
         return "alarmDetail";
     }
 
