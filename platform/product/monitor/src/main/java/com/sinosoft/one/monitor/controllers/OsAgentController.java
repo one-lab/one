@@ -77,6 +77,7 @@ public class OsAgentController {
 				
 				System.out.println("正确返回");
 //						break;
+				System.gc();
 			}else {
 				shellAndIp.put("ID", null);
 			}
@@ -118,6 +119,7 @@ public class OsAgentController {
 			osProcessService.saveSampleData(os.getOsInfoId(), cpuInfo, ramInfo, diskInfo, respondTime, calendar.getTime());
 			//记录每次采样的可用性临时数据 此处为可用状态  状态码“1”
 			osProcessService.savaAvailableSampleData(os.getOsInfoId(), calendar.getTime(), Integer.valueOf(thisInterCycleTime), "1");
+			System.gc();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

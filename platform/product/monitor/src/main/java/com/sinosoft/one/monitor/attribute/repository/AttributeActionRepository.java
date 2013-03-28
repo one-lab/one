@@ -34,5 +34,9 @@ public interface AttributeActionRepository extends PagingAndSortingRepository<At
 
     @SQL("select a.")
     List<String> findAllActionsWithResourceIdAndAttributeId(String resourceId, String attributeId);
+
+    @SQL("delete GE_MONITOR_ATTRIBUTE_ACTION a where a.ACTION_ID= ?1 ")
+    public void deleteByActionId(String actionid);
+    
 }
 

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,7 +59,44 @@ public class OsDataMathService {
 //		int stopCount=0;//停机次数
 		OsAvailable osAvailable=osAvailableServcie.getAvailable(osInfoId, timeSpan);
 		OsAvailabletemp lastAvailableTemp=osAvailableServcie.getLastAvailable(osInfoId, currentTime);//最后一次采样
-		List<OsAvailabletemp> osAvailabletemps=osAvailableServcie.getAvailableTemps(osInfoId, targetTime, currentTime);
+		//可用性停机及次数LIST
+		List<AvailableCountsGroupByInterval> availableCountsGroupByIntervals=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
+		AvailableStatistics availableStatistics;
+		if(osAvailable==null){//当天开始的统计
+			int currntTimeminute=new DateTime(currentTime).getMinuteOfHour();
+			int zeroTimeminute=new DateTime(targetTime).getMinuteOfHour();
+			if(currntTimeminute- zeroTimeminute<interCycleTime){
+				interCycleTime=currntTimeminute- zeroTimeminute;
+				osAvailabletemp.setIntercycleTime(interCycleTime);
+			}
+			availableStatistics=new AvailableStatistics(Long.valueOf(0),Long.valueOf(0), 0);
+			//本次采样的信息
+			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, true, null);
+			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);
+			osAvailableServcie.saveAvailable(osInfoId,availableCalculate.getAliveTime().longValue(),availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),availableCalculate.getTimeBetweenFailures().longValue(), timeSpan,availableCalculate.getFalseCount().intValue());
+		}else{
+			//上一次采样记录
+			AvailableInf availableInf =new AvailableInf(lastAvailableTemp.getSampleDate(),true , lastAvailableTemp.getIntercycleTime());
+			//原来的统计记录
+			availableStatistics= new AvailableStatistics(osAvailable.getNormalRun(), osAvailable.getCrashTime(), osAvailable.getStopCount()); 
+			AvailableCalculate.AvailableCalculateParam availableCalculateParam= new AvailableCalculate.AvailableCalculateParam(availableStatistics, availableCountsGroupByIntervals, null, interCycleTime, true, availableInf);
+			AvailableCalculate availableCalculate=AvailableCalculate.calculate(availableCalculateParam);
+			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),availableCalculate.getFalseCount().intValue());
+		}
+	}
+	
+	
+	/**
+	 * 可用性统计算法 进行可用性数据统计计算
+	 * @param osInfoId OSID
+	 * @param currentTime当前时间
+	 * @param targetTime目标时间
+	 * @param interCycleTime轮询时间
+	 * @param timeSpan 时间段类型标记
+	 */											//当前时间           //查询时间段的目标时间	 //轮询时间 分钟
+	public void statiAvailableMy(String osInfoId,Date currentTime,Date targetTime,int interCycleTime ,Date timeSpan, OsAvailabletemp osAvailabletemp ){
+		OsAvailable osAvailable=osAvailableServcie.getAvailable(osInfoId, timeSpan);
+		OsAvailabletemp lastAvailableTemp=osAvailableServcie.getLastAvailable(osInfoId, currentTime);//最后一次采样
 		//可用性停机及次数LIST
 		List<AvailableCountsGroupByInterval> availableCountsGroupByIntervals=osAvailableServcie.findGroupByInterCycleTime(osInfoId, targetTime);
 		AvailableStatistics availableStatistics;
@@ -78,6 +116,8 @@ public class OsDataMathService {
 			osAvailableServcie.updateAvailable(osAvailable, availableCalculate.getAliveTime().longValue() , availableCalculate.getStopTime().longValue(), availableCalculate.getTimeToRepair().longValue(),  availableCalculate.getTimeBetweenFailures().longValue(),availableCalculate.getFalseCount().intValue());
 		}
 	}
+	
+	
 	
 	
 	/**

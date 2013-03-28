@@ -17,14 +17,11 @@ import com.sinosoft.one.monitor.os.linux.model.OsRam;
  *
  */
 public class OsTransUtil {
-	private static OsCpu osCpu = null;
-	private static OsRam osRam = null;
-	private static OsDisk osDisk = null;
 
 	public static OsCpu getCpuInfo(String cpuInfo ) {
 		// 运行队列，阻塞进程，用户时间%，系统时间%，i/o等待%，空闲时间%，中断/秒
 		String[] cpuInfos = cpuInfo.split(" ");
-		osCpu = new OsCpu();
+		OsCpu osCpu = new OsCpu();
 		osCpu.setRunQueue(cpuInfos[0].trim());
 		osCpu.setBlockProcess(cpuInfos[1].trim());
 		osCpu.setUserTime(cpuInfos[2].trim());
@@ -41,7 +38,7 @@ public class OsTransUtil {
 		String MemInfo = ramInfo.substring(ramInfo.indexOf("Mem"),
 				ramInfo.indexOf("Swap")).split(":")[1];
 		String SwapInfo = ramInfo.substring(ramInfo.indexOf("Swap")).split(":")[1];
-		osRam = new OsRam();
+		OsRam osRam = new OsRam();
 		for (String mems : MemInfo.split(",")) {
 			String[] mem = mems.trim().split("k");
 			if (mem[1].trim().equals("total")) {
@@ -102,7 +99,7 @@ public class OsTransUtil {
 			}
 			
 			if(elements[5].trim().equals("")){
-				osDisk = new OsDisk();
+				OsDisk osDisk = new OsDisk();
 				osDisk.setDiskPath(lastelements[0].trim());
 				osDisk.setTotal(elements[0].trim());
 				osDisk.setUsed(elements[1].trim());
@@ -116,7 +113,7 @@ public class OsTransUtil {
 				osDisk.setTotalUtiliZation(totalUtiliZation);
 				osDisks.add(osDisk);
 			}else{
-				osDisk = new OsDisk();
+				OsDisk osDisk = new OsDisk();
 				osDisk.setDiskPath(elements[0].trim());
 				osDisk.setTotal(elements[1].trim());
 				osDisk.setUsed(elements[2].trim());

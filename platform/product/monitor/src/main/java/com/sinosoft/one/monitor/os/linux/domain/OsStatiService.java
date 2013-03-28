@@ -33,7 +33,7 @@ public class OsStatiService {
 	 *  创建当前一小时的统计数据 不断更新 (CPU、物理内存、交换内存、磁盘、响应时间)
 	 * @param ram
 	 */
-	public OsStati  creatStatiOneHour(String osInfoId ,String type,Date hourPoint,String maxValue ,String minValue,String averageValue){
+	public void  creatStatiOneHour(String osInfoId ,String type,Date hourPoint,String maxValue ,String minValue,String averageValue){
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		hourPoint=new DateTime(hourPoint).plusHours(1).toDate();
 		OsStati osStati=osStatiRepository.getStatiThisTime(osInfoId, type, simpleDateFormat.format( hourPoint), OsUtil.ORCL_DATEFORMATE);
@@ -45,7 +45,7 @@ public class OsStatiService {
 		osStati.setMaxValue(maxValue);
 		osStati.setMinValue(minValue);
 		osStati.setAverageValue(averageValue);
-		return osStatiRepository.save(osStati);
+		 osStatiRepository.save(osStati);
 	}
 	
 	

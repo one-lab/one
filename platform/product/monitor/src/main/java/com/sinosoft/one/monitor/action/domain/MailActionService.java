@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.monitor.action.repository.MailActionRepository;
+import com.sinosoft.one.monitor.attribute.repository.AttributeActionRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,9 @@ public class MailActionService {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MailActionService.class);
 	private MailActionRepository mailActionRepository;
-
+	
+	private AttributeActionRepository attributeActionRepository;
+	
 	public void saveEntity(MailAction entity) {
 		if (logger.isDebugEnabled()) {
 			logger.info("ActionService$saveEntity开始执行，参数entity={}", entity);
@@ -33,6 +37,7 @@ public class MailActionService {
 		}
 		Assert.notNull(entity, "ActionService$deleteEntity中的参数entity不能为NULL.");
 		mailActionRepository.delete(entity);
+		attributeActionRepository.deleteByActionId(entity.getId());
 	}
 
 	public void deleteEntity(String id) {
