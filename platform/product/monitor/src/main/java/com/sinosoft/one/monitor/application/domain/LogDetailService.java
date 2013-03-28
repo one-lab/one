@@ -115,4 +115,13 @@ public class LogDetailService {
         MethodTraceLog methodDetail = logDetailRepository.getMethodDetail(methodId);
         return methodDetail ;
     }
+
+    /**
+     * 根据alarmId查询异常信息
+     * @param alarmDetailId
+     * @return ExceptionInfo
+     */
+    public ExceptionInfo getExceptionInfoOfAlarm(String alarmDetailId) {
+        return logDetailRepository.selectExceptionInfoOfAlarm(alarmDetailId);
+    }
 }

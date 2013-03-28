@@ -22,6 +22,8 @@
         var urlId = "${urlId}";
         var logId = "${logId}";
         var alarmId = "${alarmId}";
+        var alarmDetailId = "${alarmDetailId}";
+        var existLogId = "${existLogId}";
     </script>
     <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
     <script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
