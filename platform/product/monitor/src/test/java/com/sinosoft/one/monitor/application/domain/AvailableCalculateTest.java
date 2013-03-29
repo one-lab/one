@@ -21,7 +21,10 @@ import java.util.List;
 public class AvailableCalculateTest extends   SpringTxTestCase{
 
     private int dayMinute;
-
+    @Test
+    public void test(){
+    	
+    }
     @Before
     public void init(){
         LocalTime localTime = LocalTime.now();
