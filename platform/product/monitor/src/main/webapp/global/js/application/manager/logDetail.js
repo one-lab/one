@@ -7,61 +7,70 @@ $(function(){
     $("#nav").delegate('li', 'mouseover mouseout', navHover);
     $("#nav,#menu").delegate('li', 'click', navClick);
     getBarLength();
-    $("#detail_grid").Grid({
-        url : ctx+"/application/manager/appmethod/getParamDetail/"+logId + "?time=" + new Date().getTime(),
-        dataType: "json",
-        height: 'auto',
-        colums:[
-            {id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
-            {id:'2',text:'数值',name:"maxTime",width:'',index:'1',align:'',color:''}
-        ],
-        rowNum:10,
-        rowList:[10,20,30],
-        pager : false,
-        number:false,
-        multiselect:false
-    });
+    if("notExist"!=existLogId){
+        $("#detail_grid").Grid({
+            url : ctx+"/application/manager/appmethod/getParamDetail/"+logId + "?time=" + new Date().getTime(),
+            dataType: "json",
+            height: 'auto',
+            colums:[
+                {id:'1',text:'名称',name:"methodName",width:'',index:'1',align:'',color:''},
+                {id:'2',text:'数值',name:"maxTime",width:'',index:'1',align:'',color:''}
+            ],
+            rowNum:10,
+            rowList:[10,20,30],
+            pager : false,
+            number:false,
+            multiselect:false
+        });
+    }
     getExceptionInfo();
     getAlarmInfo();
 
 });
 function getBarLength(){
-    $.ajax({
-        url:ctx+"/application/manager/appmethod/getLogDetail/"+logId + "?time=" + new Date().getTime(),
-        type:"GET",
-        dataType:"json",
-        async:false,
-        success:function(data){
-            var len = data.length;
-            $("#logDetail").html("");
-            if(len > 0){
-                var rowData = "";
-                var sumLen = 0;
-                var beginPosition = 0;
-                for(var i = 0; i < len; i++){
-                    if(data[i].type == "url"){
-                        sumLen = data[i].consumeTime;
-                        rowData = rowData + "<tr><td width='20%' class='m_name'><a>"+ data[i].urlOrMethod +"</a></td>"+
-                        "<td width='20%' class='m_time' id='total_time'>总耗时:"+ data[i].consumeTime +"ms</td>" +
-                        "<td width='60%'><div><div class='green_bar'>&nbsp;</div></div></td></tr>";
-                    }else if(data[i].type == "method"){
-                        var percent = data[i].consumeTime / sumLen *100;
-                        rowData = rowData + "<tr onclick='getParam(\""+data[i].id+"\")'><td class='m_name'><a>"+ data[i].urlOrMethod +"</a></td>" +
-                            "<td class='m_time'>耗时:"+ data[i].consumeTime +"ms</td>" +
-                            "<td><div><a><div class='yellow_bar' style='margin-left:"+beginPosition+"%;width:"+percent+"%'>&nbsp;</div></a></div></td></tr>";
-                        beginPosition= beginPosition+percent;
+    if("notExist"==existLogId){
+        $("#logDetail").html("");
+        $("#logDetail").append("无");
+        $("#detail_grid").html("");
+        $("#detail_grid").append("无");
+    }else{
+        $.ajax({
+            url:ctx+"/application/manager/appmethod/getLogDetail/"+logId + "?time=" + new Date().getTime(),
+            type:"GET",
+            dataType:"json",
+            async:false,
+            success:function(data){
+                var len = data.length;
+                $("#logDetail").html("");
+                if(len > 0){
+                    var rowData = "";
+                    var sumLen = 0;
+                    var beginPosition = 0;
+                    for(var i = 0; i < len; i++){
+                        if(data[i].type == "url"){
+                            sumLen = data[i].consumeTime;
+                            rowData = rowData + "<tr><td width='20%' class='m_name'><a>"+ data[i].urlOrMethod +"</a></td>"+
+                                "<td width='20%' class='m_time' id='total_time'>总耗时:"+ data[i].consumeTime +"ms</td>" +
+                                "<td width='60%'><div><div class='green_bar'>&nbsp;</div></div></td></tr>";
+                        }else if(data[i].type == "method"){
+                            var percent = data[i].consumeTime / sumLen *100;
+                            rowData = rowData + "<tr onclick='getParam(\""+data[i].id+"\")'><td class='m_name'><a>"+ data[i].urlOrMethod +"</a></td>" +
+                                "<td class='m_time'>耗时:"+ data[i].consumeTime +"ms</td>" +
+                                "<td><div><a><div class='yellow_bar' style='margin-left:"+beginPosition+"%;width:"+percent+"%'>&nbsp;</div></a></div></td></tr>";
+                            beginPosition= beginPosition+percent;
+                        }
                     }
+                    $("#logDetail").append("<tr><th width='20%' class='m_name'><a>请求路径/方法</a></th>" +
+                        "<th width='20%' class='m_time' id='total_time'>执行时间</th>" +
+                        "<th width='60%'>进度</th></tr>");
+                    $("#logDetail").append(rowData);
                 }
-                $("#logDetail").append("<tr><th width='20%' class='m_name'><a>请求路径/方法</a></th>" +
-                "<th width='20%' class='m_time' id='total_time'>执行时间</th>" +
-                "<th width='60%'>进度</th></tr>");
-                $("#logDetail").append(rowData);
+            },
+            error:function(){
+                //alert("暂时无法获得详细数据");
             }
-        },
-        error:function(){
-            //alert("暂时无法获得详细数据");
-        }
-    });
+        });
+    }
 }
 function navHover(){
     $(this).toggleClass("hover")
@@ -92,8 +101,14 @@ function hideNav(e){
 }
 
 function getExceptionInfo(){
+    var _url;
+    if(null==alarmDetailId || ''==alarmDetailId){
+        _url=ctx+"/application/manager/appmethod/getExceptionInfo/"+logId + "?time=" + new Date().getTime();
+    }else{
+        _url=ctx+"/application/manager/appmethod/getExceptionInfoOfAlarm/"+alarmDetailId + "?time=" + new Date().getTime()
+    }
     $.ajax({
-        url:ctx+"/application/manager/appmethod/getExceptionInfo/"+logId + "?time=" + new Date().getTime(),
+        url:_url,
         type:"GET",
         dataType:"text",
         async:false,

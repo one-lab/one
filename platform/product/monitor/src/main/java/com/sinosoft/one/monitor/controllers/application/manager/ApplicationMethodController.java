@@ -42,10 +42,22 @@ public class ApplicationMethodController {
     @Get("viewLogDetail/${applicationId}/${urlId}/${urlTraceLogId}")
     public String viewLogDetail(@Param("applicationId") String applicationId, @Param("urlId") String urlId,
                                 @Param("urlTraceLogId") String urlTraceLogId, Invocation inv){
+        String alarmDetailId=inv.getParameter("alarmDetailId");
+        //alarmDetailId不为null，说明tracelogID为null
+        if(null!=alarmDetailId){
+            //alarmDetailId作为判断是有有tracelog用
+            inv.addModel("alarmDetailId",alarmDetailId);
+            inv.addModel("existLogId","notExist");
+            //alarmId用以得到告警信息
+            inv.addModel("alarmId",alarmDetailId);
+        }else{
+            inv.addModel("alarmDetailId",null);
+            inv.addModel("existLogId","Exist");
+            inv.addModel("alarmId",urlTraceLogRepository.findOne(urlTraceLogId).getAlarmId());
+        }
 	    inv.addModel("applicationId", applicationId);
 	    inv.addModel("urlId", urlId);
 		inv.addModel("logId", urlTraceLogId);
-        inv.addModel("alarmId",urlTraceLogRepository.findOne(urlTraceLogId).getAlarmId());
         return "logDetail";
     }
 
@@ -70,6 +82,14 @@ public class ApplicationMethodController {
 	    ExceptionInfo exceptionInfo = logDetailService.getExceptionInfo(logId);
 	    String exceptionStackTrace = exceptionInfo == null ? "无" : exceptionInfo.getExceptionStackTrace();
 	    exceptionStackTrace = StringUtils.isBlank(exceptionStackTrace) ? "无" : exceptionStackTrace;
+        return "@" + exceptionStackTrace;
+    }
+
+    @Get("getExceptionInfoOfAlarm/{alarmDetailId}")
+    public String getExceptionInfoOfAlarm(@Param("alarmDetailId") String alarmDetailId, Invocation inv){
+        ExceptionInfo exceptionInfo = logDetailService.getExceptionInfoOfAlarm(alarmDetailId);
+        String exceptionStackTrace = exceptionInfo == null ? "无" : exceptionInfo.getExceptionStackTrace();
+        exceptionStackTrace = StringUtils.isBlank(exceptionStackTrace) ? "无" : exceptionStackTrace;
         return "@" + exceptionStackTrace;
     }
 

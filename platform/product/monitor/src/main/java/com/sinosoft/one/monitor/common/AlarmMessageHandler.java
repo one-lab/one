@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +42,7 @@ public class AlarmMessageHandler {
 	private ActionService actionService;
 	@Autowired
 	private HealthStaCache healthStaCache;
-
+	private static Logger logger = LoggerFactory.getLogger(AlarmMessageHandler.class);
 	/**
 	 * 处理告警消息
 	 * @param messageBase
@@ -201,12 +203,15 @@ public class AlarmMessageHandler {
 		alarm.setSubResourceType(thresholdAlarmParams.subResourceType);
 
 		Alarm prevAlarm = alarmService.queryLatestAlarm(thresholdAlarmParams.resource.getResourceId());
-		if(alarm.isSameAlarmInfo(prevAlarm)) {
+		
+		logger.info("保存Alarm数据判断");
+		if(thresholdAlarmParams.severityLevel == SeverityLevel.INFO && alarm.isSameAlarmInfo(prevAlarm)) {
 			if(System.currentTimeMillis() - prevAlarm.getCreateTime().getTime() < 5 * 60 * 1000) {
 				return;
 			}
 		}
-
+		logger.info("保存Alarm数据");
+		
 		// 保存告警信息
 		alarmService.saveAlarm(alarm);
 		if(thresholdAlarmParams.subResourceType != ResourceType.NONE && StringUtils.isNotBlank(thresholdAlarmParams.subResourceId)) {

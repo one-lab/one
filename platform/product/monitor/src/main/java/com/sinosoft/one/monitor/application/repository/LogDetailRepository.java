@@ -48,4 +48,12 @@ public interface LogDetailRepository extends PagingAndSortingRepository<MethodTr
      */
     @SQL("select * from ge_monitor_method_trace_log where id = ?1")
     MethodTraceLog getMethodDetail(String methodId);
+
+    /**
+     * 根据ge_monitor_exception_info表ALARM_ID查询异常记录
+     * @param alarmDetailId
+     * @return ExceptionInfo
+     */
+    @SQL("select * from ge_monitor_exception_info where alarm_id = ?1")
+    ExceptionInfo selectExceptionInfoOfAlarm(String alarmDetailId);
 }

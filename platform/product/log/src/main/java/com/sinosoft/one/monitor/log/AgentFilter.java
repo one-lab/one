@@ -43,6 +43,8 @@ public class AgentFilter implements Filter {
 			filterChain.doFilter(request, response);
 		} else {
 			String ip = TraceUtils.getIPAddr(httpServletRequest);
+			logger.debug("本地IP",ip);
+			logger.info("监控服务IP",NotificationConfiguration.getInstance().getMonitorServerIp());
 			if(ip.equals(NotificationConfiguration.getInstance().getMonitorServerIp())) {
 				filterChain.doFilter(request, response);
 				return;
