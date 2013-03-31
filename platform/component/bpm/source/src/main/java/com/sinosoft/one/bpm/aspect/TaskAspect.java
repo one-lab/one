@@ -39,7 +39,9 @@ public class TaskAspect {
      * @throws Throwable
      */
     public Object getTask(ProceedingJoinPoint pjp) throws Throwable {
-        logger.info("into getTask aspect");
+    	Object result = pjp.proceed();
+    	
+    	logger.info("into getTask aspect");
         GetTask getTask = parserAnnotation(pjp, GetTask.class);
         String userId = getTask.userId();
         if(StringUtils.isBlank(userId)) {
@@ -63,7 +65,6 @@ public class TaskAspect {
             }
         }
         
-        Object result = pjp.proceed();
         Iterator<?> it = getIterator(result);
         String realBusinessIdAttributeName = businessIdAttributeName;
         if(it == null) {
@@ -115,7 +116,9 @@ public class TaskAspect {
      * @throws Throwable
      */
     public Object processTask(ProceedingJoinPoint pjp) throws Throwable {
-        logger.info("into processTask aspect");
+    	Object result = pjp.proceed();
+    	
+    	logger.info("into processTask aspect");
         ProcessTask processTask = parserAnnotation(pjp, ProcessTask.class);
         Object[] args = pjp.getArgs();
         Object bean = args[processTask.businessBeanOffset()];
@@ -129,7 +132,7 @@ public class TaskAspect {
         	}
         	userId = this.parserAttributeValue(pjp.getArgs()[userIdBeanOffset], processTask.userIdAttributeName());
         }
-        Object result = null;
+        
         
         Map<String, Object> paramData = new HashMap<String, Object>();
         TaskParams taskParamsAnnotation = parserAnnotation(pjp, TaskParams.class);
@@ -148,13 +151,13 @@ public class TaskAspect {
         }
         
         long taskId = bpmService.getTaskId(userId, businessId);
-        bpmService.startTask(taskId, userId);
+        
         try {
-            result = pjp.proceed();
+        	bpmService.startTask(taskId, userId);
         } catch (Exception e) {
             bpmService.releaseTask(taskId, userId);
             logger.info("releaseTask taskId="+taskId+"  userId="+userId);
-            throw e;
+            throw new RuntimeException(e);
         }   
         
         bpmService.submitTask(taskId, userId, paramData);
@@ -177,6 +180,7 @@ public class TaskAspect {
      * @throws Throwable
      */
     public Object startProcess(ProceedingJoinPoint pjp) throws Throwable {
+    	Object result = pjp.proceed();
         logger.info("into processTask aspect");
         StartProcess startProcess = parserAnnotation(pjp, StartProcess.class);
         Object bean = pjp.getArgs()[startProcess.businessBeanOffset()];
@@ -184,7 +188,6 @@ public class TaskAspect {
                 startProcess.businessIdAttibuteName());
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("businessId", businessId);
-        Object result = pjp.proceed();
         bpmService.createProcess(startProcess.processId(), params);
         logger.info("out processTask aspect");
         return result;

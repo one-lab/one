@@ -115,12 +115,14 @@ public class OracleMonitorController {
 		Highchart exchange_utilization = new Highchart("exchange_utilization");
 		/* 活动连接数*/
 		Highchart reply_utilization = new Highchart("reply_utilization");
+        List<String> categories = new ArrayList<String>();
+        List<Long> categoriesTime = new ArrayList<Long>();
 		for(StaGraphModel staGraph : staGraphs) {
 			HighchartSerie memorySerie = new HighchartSerie(staGraph.getName());
 			HighchartSerie exchangeSerie = new HighchartSerie(staGraph.getName());
 			HighchartSerie replySerie = new HighchartSerie(staGraph.getName());
-            List<String> categories = new ArrayList<String>();
-            List<Long> categoriesTime = new ArrayList<Long>();
+//            List<String> categories = new ArrayList<String>();
+//            List<Long> categoriesTime = new ArrayList<Long>();
 			/* 判断x轴信息是否为空，如果为空填充x轴信息*/
 //			boolean xflag = exchange_utilization.getCategories().isEmpty();
 			for(Lastevent lastevent : staGraph.getLasteventList()) {
@@ -141,28 +143,26 @@ public class OracleMonitorController {
 //					memory_utilization.addCategory(category);
 //				}
 			}
-            Collections.sort(categoriesTime);
-            for(Long time : categoriesTime){
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-				String category = sdf.format(time);
-                categories.add(category);
-            }
-            /*附上x轴信息*/
-            exchange_utilization.setCategories(categories);
-            reply_utilization.setCategories(categories);
-            memory_utilization.setCategories(categories);
-
-            /*修改步长为自动调整 added by hanchunliang 3013-03-26  start*/
-            int step = memory_utilization.getCategories().size()/6;
-            memory_utilization.setStep(step);
-            exchange_utilization.setStep(step);
-            reply_utilization.setStep(step);
-            /*修改步长为自动调整 added by hanchunliang 3013-03-26  end*/
-
 			memory_utilization.addSerie(memorySerie);
 			exchange_utilization.addSerie(exchangeSerie);
 			reply_utilization.addSerie(replySerie);
 		}
+        Collections.sort(categoriesTime);
+        for(Long time : categoriesTime){
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            String category = sdf.format(time);
+            categories.add(category);
+        }
+            /*附上x轴信息*/
+        exchange_utilization.setCategories(categories);
+        reply_utilization.setCategories(categories);
+        memory_utilization.setCategories(categories);
+         /*修改步长为自动调整 added by hanchunliang 3013-03-26  start*/
+        int step = memory_utilization.getCategories().size()/6;
+        memory_utilization.setStep(step);
+        exchange_utilization.setStep(step);
+        reply_utilization.setStep(step);
+        /*修改步长为自动调整 added by hanchunliang 3013-03-26  end*/
 		return Replys.with(Arrays.asList(memory_utilization, exchange_utilization, reply_utilization)).as(Json.class);
 	}
 

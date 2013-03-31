@@ -1,8 +1,9 @@
 package com.sinosoft.one.bpm.service.spring;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
@@ -12,8 +13,12 @@ import com.sinosoft.one.bpm.model.ProcessInstanceBOInfo;
 import com.sinosoft.one.bpm.service.facade.ProcessInstanceBOService;
 
 public class ProcessInstanceBOServiceSpringImpl implements ProcessInstanceBOService{
-	@PersistenceContext
 	private EntityManager em;
+	
+	public ProcessInstanceBOServiceSpringImpl(EntityManagerFactory emf) {
+		em = emf.createEntityManager();
+	}
+	
 	private static Logger logger = LoggerFactory.getLogger(ProcessInstanceBOServiceSpringImpl.class);
 	public ProcessInstanceBOInfo getProcessInstanceBOInfo(
 			String processId, String businessId) {
@@ -35,7 +40,18 @@ public class ProcessInstanceBOServiceSpringImpl implements ProcessInstanceBOServ
 
 	public void createProcessInstanceBOInfo(final ProcessInstanceBOInfo info) {
 		try {
-			em.persist(info);
+			final EntityTransaction tx = em.getTransaction();
+	        try {
+	            if (!tx.isActive()) {
+	                tx.begin();
+	            }
+	            em.persist(info);
+	            tx.commit();
+	        } finally {
+	            if( tx.isActive() ) {
+	                tx.rollback();
+	            }
+	        }
 		} finally {
 			if(em != null) {
 				em.close();
