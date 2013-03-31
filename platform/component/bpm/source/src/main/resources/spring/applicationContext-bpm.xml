@@ -5,7 +5,8 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-	http://drools.org/schema/drools-spring http://drools.org/schema/drools-spring/org/drools/container/spring/drools-spring-1.3.0.xsd 
+	http://drools.org/schema/drools-spring 
+	http://drools.org/schema/drools-spring.xsd 
 	http://www.springframework.org/schema/aop 
 	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
 	http://www.springframework.org/schema/context 
@@ -14,18 +15,18 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd"
 	default-autowire="byName" default-lazy-init="false">
 
-	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="${jdbc.driverClassName}" />
+	<bean id="bpmDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-		<property name="initialSize" value="1" />
+
 		<property name="maxActive" value="${jdbc.maxActive}" />
 	</bean>
 
-	<bean id="bpmEmf"
+	<bean id="bpmEMF"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="ds" />
+		<property name="dataSource" ref="bpmDataSource" />
 		<property name="persistenceUnitName" value="org.drools.persistence.jpa.local" />
 		<property name="persistenceXmlLocation" value="classpath:config/META-INF/persistence.xml" />
 		<property name="jpaVendorAdapter">
@@ -41,26 +42,11 @@
 			</props>
 		</property>
 	</bean>
-	<bean id="bpmTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="bpmEmf" />
-	</bean>
 
-	<tx:advice id="txAdvice" transaction-manager="bpmTxManager">
-		<!-- the transactional semantics... -->
-		<tx:attributes>
-			<!-- all methods starting with 'get' are read-only -->
-			<tx:method name="get*" read-only="true" />
-			<!-- other methods use the default transaction settings (see below) -->
-			<tx:method name="*" />
-		</tx:attributes>
-	</tx:advice>
-	<!-- ensure that the above transactional advice runs for any execution of 
-		an operation defined by the FooService interface -->
-	<aop:config>
-		<aop:pointcut id="processInstanceBOServiceOperation"
-			expression="execution(* com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSpringImpl.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="processInstanceBOServiceOperation" />
-	</aop:config>
+	<bean id="bpmTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="bpmEMF" />
+    </bean>
+
 	<aop:config>
 		<aop:aspect ref="bpmTraceAspect">
 			<aop:around method="getTask"
@@ -74,12 +60,13 @@
 
 	<bean id="processInstanceBOService"
 		class="com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSpringImpl">
+		<constructor-arg ref="bpmEMF" />
 	</bean>
 
 	<bean id="processInstanceBOCache" class="com.sinosoft.one.bpm.util.ProcessInstanceBOCache">
 		<property name="processInstanceBOService" ref="processInstanceBOService" />
 	</bean>
-	
+
 	<bean id="bpmProcessEventListener" class="com.sinosoft.one.bpm.util.BpmProcessEventListener">
 		<property name="cache" ref="processInstanceBOCache" />
 	</bean>
@@ -87,7 +74,7 @@
 	<bean id="bpmServiceSupport" scope="singleton"
 		class="com.sinosoft.one.bpm.util.BpmServiceSupport" init-method="init"
 		destroy-method="destory">
-		<property name="bpmEmf" ref="bpmEmf" />
+		<property name="bpmEMF" ref="bpmEMF" />
 		<property name="bpmTxManager" ref="bpmTxManager" />
 		<property name="cache" ref="processInstanceBOCache" />
 		<property name="bpmProcessEventListener" ref="bpmProcessEventListener" />

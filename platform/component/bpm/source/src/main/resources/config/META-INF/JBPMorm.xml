@@ -6,7 +6,7 @@
   version="1.0">
       <named-query name="ProcessInstancesWaitingForEvent">
           <query>
-select 
+select   
     processInstanceInfo.processInstanceId
 from 
     ProcessInstanceInfo processInstanceInfo join processInstanceInfo.eventTypes eventTypes
