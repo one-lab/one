@@ -89,9 +89,9 @@ public class ComboServiceSpringImpl implements ComboService {
 			if(c==null)System.out.println("c==null");
 				dataStore.store(c);
             studentStore.saveStudent(new Student(UUID.randomUUID().toString().replaceAll("-", ""), "carvin"));
+//            Integer.valueOf("aaa");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		System.out.println("------creat--------combo:" + comboCode);
 	}

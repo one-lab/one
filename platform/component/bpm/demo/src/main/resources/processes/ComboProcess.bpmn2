@@ -33,7 +33,7 @@
     <!-- nodes -->
     <startEvent id="_1" name="StartProcess" />
     <endEvent id="_3" name="EndProcess" >
-        <terminateEventDefinition/>
+        <terminateEventDefinition />
     </endEvent>
     <scriptTask id="_5" name="进入第二步" scriptFormat="http://www.java.com/java" >
       <script>System.out.println("----------step into the second ------------");</script>
@@ -222,7 +222,7 @@
     <sequenceFlow id="_12-2-_12-4" sourceRef="_12-2" targetRef="_12-4" />
     </subProcess>
     <endEvent id="_13" name="End" >
-        <terminateEventDefinition/>
+        <terminateEventDefinition />
     </endEvent>
     <callActivity id="_14" name="Sub-Process" calledElement="comboSubProcess" >
       <ioSpecification>
@@ -294,19 +294,19 @@
         <dc:Bounds x="104" y="137" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12" >
-        <dc:Bounds x="113" y="380" width="606" height="125" />
+        <dc:Bounds x="124" y="379" width="606" height="125" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-1" >
-        <dc:Bounds x="153" y="416" width="48" height="48" />
+        <dc:Bounds x="164" y="415" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-2" >
-        <dc:Bounds x="249" y="417" width="80" height="48" />
+        <dc:Bounds x="278" y="416" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-3" >
-        <dc:Bounds x="622" y="415" width="48" height="48" />
+        <dc:Bounds x="633" y="414" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-4" >
-        <dc:Bounds x="496" y="795" width="100" height="48" />
+        <dc:Bounds x="470" y="413" width="100" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_13" >
         <dc:Bounds x="542" y="141" width="48" height="48" />
@@ -319,18 +319,18 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_12-1-_12-2" >
         <di:waypoint x="64" y="60" />
-        <di:waypoint x="176" y="61" />
+        <di:waypoint x="194" y="61" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_12-4-_12-3" >
-        <di:waypoint x="433" y="439" />
+        <di:waypoint x="396" y="58" />
         <di:waypoint x="533" y="59" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_12-2-_12-4" >
-        <di:waypoint x="176" y="61" />
-        <di:waypoint x="433" y="439" />
+        <di:waypoint x="194" y="61" />
+        <di:waypoint x="396" y="58" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_12-_3" >
-        <di:waypoint x="416" y="442" />
+        <di:waypoint x="427" y="441" />
         <di:waypoint x="416" y="557" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_15-_5" >
@@ -367,7 +367,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_7-_12" >
         <di:waypoint x="424" y="338" />
-        <di:waypoint x="416" y="442" />
+        <di:waypoint x="427" y="441" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_10-_13" >
         <di:waypoint x="440" y="164" />

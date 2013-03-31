@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "t_course")
+@Table(name = "bpm_demo_course")
 public class Course {
     private String id;
     private String name;
