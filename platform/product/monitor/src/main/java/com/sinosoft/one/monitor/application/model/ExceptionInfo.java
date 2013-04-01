@@ -55,6 +55,11 @@ public class ExceptionInfo {
 	 */
 	private String requestParams;
 
+	/**
+	 * URL ID
+	 */
+	private String urlId;
+
 
 	public ExceptionInfo() {}
 
@@ -140,5 +145,14 @@ public class ExceptionInfo {
 
 	public void setRequestParams(String requestParams) {
 		this.requestParams = requestParams;
+	}
+
+	@Transient
+	public String getUrlId() {
+		return urlId;
+	}
+
+	public void setUrlId(String urlId) {
+		this.urlId = urlId;
 	}
 }

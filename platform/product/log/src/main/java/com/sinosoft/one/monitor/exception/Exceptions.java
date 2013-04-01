@@ -27,9 +27,17 @@ public final class Exceptions {
 		TraceModel traceModel = TraceUtils.getTraceModel();
 	    UrlTraceLog urlTraceLog = traceModel.getUrlTraceLog();
 	    String urlTraceId = urlTraceLog == null ? "" : urlTraceLog.getId();
-	    String alarmId = urlTraceLog == null ? UUID.randomUUID().toString().replaceAll("-", "") : urlTraceLog.getAlarmId();
+	    String urlId = "";
+	    String alarmId;
+	    if(urlTraceLog == null) {
+		    alarmId = UUID.randomUUID().toString().replaceAll("-", "");
+	    } else {
+		    urlId = urlTraceLog.getUrlId();
+		    alarmId = urlTraceLog.getAlarmId();
+	    }
 	    ExceptionModel exceptionModel = new ExceptionModel(urlTraceId , throwable.getMessage(), getExceptionStackTrace(throwable));
 	    exceptionModel.setUrl(traceModel.getUrl());
+	    exceptionModel.setUrlId(urlId);
 	    exceptionModel.setRequestParams(traceModel.getRequestParams());
 	    exceptionModel.setAlarmId(alarmId);
 	    logger.error(ExceptionModel.FORMAT_STRING, exceptionModel.toObjectArray());

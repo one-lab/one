@@ -63,7 +63,6 @@ public class ApplicationEmuService {
         return eumUrlAvaStas.isEmpty()?newEumUrlAvaSta():eumUrlAvaStas.get(0);
     }
 
-
     public EumUrlAva getTodayLatestEumUrlAva(String eumUrlId){
         Assert.hasText(eumUrlId);
         Sort desc = new Sort(Sort.Direction.DESC,"recordTime");
@@ -224,11 +223,10 @@ public class ApplicationEmuService {
     }
 
 
-    public void saveEnumUrlAvailableStatistics(String eumUrlId,boolean result,BigDecimal interval) {
+    public void saveEnumUrlAvailableStatistics(String eumUrlId, EumUrlAvaSta eumUrlAvaSta, boolean result,BigDecimal interval) {
         Assert.hasText(eumUrlId);
         Assert.notNull(interval);
-        Date now = LocalDate.now().toDate();
-        EumUrlAvaSta eumUrlAvaSta = getEumUrlStatisticsByEnumIdAndDate(eumUrlId,now);
+
         List<AvailableCalculate.AvailableCountsGroupByInterval> avaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"1");
         List<AvailableCalculate.AvailableCountsGroupByInterval> unAvaCount = eumUrlAvaRepository.countsGroupByInterval(eumUrlId,"0");
         EumUrlAva eumAvaLast = getTodayLatestEumUrlAva(eumUrlId);
@@ -247,7 +245,6 @@ public class ApplicationEmuService {
         eumUrlAvaSta.setFailureCount(avaResult.getFalseCount());
         eumUrlAvaSta.setAvgFailureTime(avaResult.getTimeBetweenFailures());
         eumUrlAvaSta.setNormalRuntime(avaResult.getAliveTime());
-        eumUrlAvaSta.setRecordTime(now);
         eumUrlAvaSta.setEumUrlId(eumUrlId);
 
         eumUrlAvaStaRepository.save(eumUrlAvaSta);

@@ -11,6 +11,7 @@ import com.sinosoft.one.util.thread.ThreadUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ public class BusinessEmulation {
 
 
 
+
     @PostConstruct
     public void init(){
       List<Application> applications =  applicationService.findValidateApplication();
@@ -92,10 +94,22 @@ public class BusinessEmulation {
 			    .subResourceType(ResourceType.APPLICATION_SCENARIO_URL)
 			    .subResourceId(url.getUrlId()).alarm();
 
+	    Date now = LocalDate.now().toDate();
+	    EumUrlAvaSta eumUrlAvaSta = applicationEmuService.getEumUrlStatisticsByEnumIdAndDate(url.getId(), now);
+	    eumUrlAvaSta.setRecordTime(now);
+	    BigDecimal newInterval = interval;
+	    // 调整Interval
+	    if(eumUrlAvaSta.getId() == null) {
+		    int minutes = DateTime.now().getMinuteOfHour();
+		    if(minutes < interval.intValue()) {
+			    newInterval = BigDecimal.valueOf(minutes);
+		    }
+	    }
+
         //记录当天的统计信息
-        applicationEmuService.saveEnumUrlAvailableStatistics(url.getId(),result,interval);
+        applicationEmuService.saveEnumUrlAvailableStatistics(url.getId(), eumUrlAvaSta, result, newInterval);
         //记录至今天访问明细
-        applicationEmuService.saveEnumUrlAvailableDetail(url.getId(),result,interval);
+        applicationEmuService.saveEnumUrlAvailableDetail(url.getId(),result, newInterval);
     }
 
 
@@ -142,6 +156,7 @@ public class BusinessEmulation {
 	                boolean result = false;
 	                try {
 		                result = ResponseUtil.getResponseCode(createHttpUrl(url.getUrl()))!= 404;
+
                         recordEnum(url, result, this.application.getInterval());
 	                } catch (Throwable e) {
 		                applicationEmuService.saveEnumUrlAvailableDetail(url.getId(),result,this.application.getInterval());
