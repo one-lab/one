@@ -32,7 +32,7 @@ public class OracleMonitorTask {
     /**
      * 定义任务处理器，线程池的长度设定为100
      */
-    public  ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(100);
+    public  ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
     public OracleMonitorTask(){}
 
     /**

@@ -44,6 +44,10 @@ public class ExceptionModel implements NotificationModel {
 	 * 告警信息ID
 	 */
 	private String alarmId;
+	/**
+	 * URL ID
+	 */
+	private String urlId;
 
 
 
@@ -99,6 +103,14 @@ public class ExceptionModel implements NotificationModel {
 
 	public void setRequestParams(String requestParams) {
 		this.requestParams = requestParams;
+	}
+
+	public String getUrlId() {
+		return urlId;
+	}
+
+	public void setUrlId(String urlId) {
+		this.urlId = urlId;
 	}
 
 	public Object[] toObjectArray() {
