@@ -334,7 +334,7 @@ public class OracleMonitorController {
 			row.put("id", oracleStaBaseInfo.getMonitorID());
 			List<String> cell = new ArrayList<String>();
 			/* 可用性 1-可用sys_up ；0-不可用 sys_down*/
-			String usabilityClass = "1".equals(oracleStaBaseInfo.getUsability()) ? "sys_up" : "sys_down";
+			String usabilityClass = "1".equals(oracleStaBaseInfo.getUsability()) ? "fine" : "poor";
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
 			String[] healthy = oracleStaBaseInfo.getHealthy();
 			String healthyClass = "1".equals(healthy[0]) ? "fine" : "poor";
