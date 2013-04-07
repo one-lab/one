@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -20,12 +19,14 @@ import org.drools.definition.process.NodeContainer;
 import org.drools.definition.process.WorkflowProcess;
 import org.drools.event.process.ProcessEventListener;
 import org.drools.impl.EnvironmentFactory;
+import org.drools.persistence.TransactionManager;
 import org.drools.persistence.jpa.JPAKnowledgeService;
 import org.drools.runtime.Environment;
 import org.drools.runtime.EnvironmentName;
 import org.drools.runtime.KnowledgeSessionConfiguration;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.conf.ClockTypeOption;
+import org.drools.runtime.process.ProcessInstance;
 import org.drools.runtime.process.WorkflowProcessInstance;
 import org.jbpm.process.audit.JPAProcessInstanceDbLog;
 import org.jbpm.process.audit.JPAWorkingMemoryDbLogger;
@@ -57,7 +58,8 @@ public class BpmServiceSupport {
 	private ProcessEventListener bpmProcessEventListener;
 	
 	private JPAProcessInstanceDbLog jpaProcessInstanceDbLog;
-
+	
+	private Environment env;
 
 	public void init() {
 		
@@ -134,7 +136,7 @@ public class BpmServiceSupport {
 		createKnowledgeBase(process);
 		final KnowledgeSessionConfiguration conf = KnowledgeBaseFactory
 				.newKnowledgeSessionConfiguration();
-		Environment env = createEnvironment();
+		createEnvironment();
 		// 每次启动都加载第一个session
 		try {
 			result = JPAKnowledgeService.loadStatefulKnowledgeSession(1, kbase,
@@ -154,14 +156,6 @@ public class BpmServiceSupport {
 		return createKnowledgeSession();
 	}
 
-	/*
-	 * * Create EntityManagerFactory and register it in the environment
-	 */
-	public static EntityManagerFactory getEmf(EntityManagerFactory emf) {
-		emf = Persistence
-				.createEntityManagerFactory("org.jbpm.persistence.jpa");
-		return emf;
-	}
 
 	/**
 	 * 获取session,如果没有创建,则创建一个
@@ -185,9 +179,21 @@ public class BpmServiceSupport {
 		 */
 		if (ksession == null) {
 			ksession = createKnowledgeSession(propertiesFilePath);
+			ksession.addEventListener(bpmProcessEventListener);
 		}
-		ksession.addEventListener(bpmProcessEventListener);
 		return ksession;
+	}
+	
+	/**
+	 * 获取session,如果没有创建,则创建一个
+	 * 
+	 * @param propertiesFilePath
+	 * @return
+	 * @throws Exception
+	 */
+	public StatefulKnowledgeSession getSession()
+			throws Exception {
+		return getSession("drools.properties");
 	}
 
 	/**
@@ -221,7 +227,7 @@ public class BpmServiceSupport {
 		final KnowledgeSessionConfiguration conf = KnowledgeBaseFactory
 				.newKnowledgeSessionConfiguration();
 		ClockTypeOption.get("realtime");
-		Environment env = createEnvironment();
+		createEnvironment();
 		result = JPAKnowledgeService.newStatefulKnowledgeSession(kbase, conf,
 				env);
 		dbLogger = new JPAWorkingMemoryDbLogger(result);
@@ -234,15 +240,14 @@ public class BpmServiceSupport {
 	 * @param emf
 	 * @return
 	 */
-	private Environment createEnvironment() {
-		Environment env = EnvironmentFactory.newEnvironment();  
+	private void createEnvironment() {
+		env = EnvironmentFactory.newEnvironment();  
 		env.set(EnvironmentName.ENTITY_MANAGER_FACTORY, bpmEMF);     
 		env.set(EnvironmentName.TRANSACTION_MANAGER, bpmTxManager);
 
 		if(jpaProcessInstanceDbLog == null) {
 			jpaProcessInstanceDbLog = new JPAProcessInstanceDbLog(env);
 		}
-		return env;
 	}
 
 	/**
@@ -281,15 +286,52 @@ public class BpmServiceSupport {
 		return taskService;
 	}
 	
+	public Object getGlobalVariable(String variableName) throws Exception {
+		return getSession().getGlobal(variableName);
+	}
+	
+	public void setGlobalVariable(String variableName, Object variableValue) throws Exception {
+		getSession().setGlobal(variableName, variableValue);
+	}
+	
+	public Object getProcessInstanceVariable(String processId, String businessId, String variableName) throws Exception {
+		ProcessInstance pi = getSession().getProcessInstance(getProcessInstanceId(processId, businessId));
+		if(pi instanceof WorkflowProcessInstance) {
+			return ((WorkflowProcessInstance)pi).getVariable(variableName);
+		}
+		return null;
+	}
+	
+	public void setProcessInstanceVariable(String processId, String businessId, String variableName, Object variableValue) throws Exception {
+		TransactionManager tx = null;
+		tx = (TransactionManager) env.get(EnvironmentName.TRANSACTION_MANAGER);
+		boolean transactionOwner = false;
+		transactionOwner = tx.begin();
+		try {
+			ProcessInstance pi = getSession().getProcessInstance(getProcessInstanceId(processId, businessId));
+			if(pi instanceof WorkflowProcessInstance) {
+					((WorkflowProcessInstance)pi).setVariable(variableName, variableValue);
+			}
+			tx.commit(transactionOwner);
+		} catch(Throwable t) {
+			if(tx != null) {
+				tx.rollback(transactionOwner);
+			} 
+			throw new RuntimeException(t);
+		}
+	}
+	
 	public String getBusinessId(long processInstanceId) throws Exception {
 		String businessId = cache.getBusinessId(processInstanceId);
 		if(StringUtils.isBlank(businessId)) {
-			WorkflowProcessInstance wpi = (WorkflowProcessInstance) getSession("drools.properties").getProcessInstance(
-					processInstanceId);
-			if (wpi != null) {
-				businessId = (String) wpi.getVariable("businessId");
-				if(StringUtils.isNotBlank(businessId)) {
-					cache.put(wpi.getProcessId(), businessId, processInstanceId);
+			ProcessInstance processInstance = getSession("drools.properties").getProcessInstance(processInstanceId);
+			if(processInstance instanceof WorkflowProcessInstance) {
+				WorkflowProcessInstance wpi = (WorkflowProcessInstance) processInstance;
+				if (wpi != null) {
+					businessId = (String) wpi.getVariable("businessId");
+					if(StringUtils.isNotBlank(businessId)) {
+						cache.putAndSave(wpi.getProcessId(), businessId, processInstanceId);
+					}
 				}
 			}
 		}
@@ -299,12 +341,14 @@ public class BpmServiceSupport {
 	public List<String> getBusinessIds(String userId) throws Exception {
 		List<String> results = new ArrayList<String>();
 		List<TaskSummary> tasks = getTasks(userId);
-		for (TaskSummary task : tasks) {
-            String businessId = getBusinessId(task.getProcessInstanceId());
-            if (StringUtils.isNotBlank(businessId)) {
-                results.add(businessId);
-            }
-        }
+		if(tasks != null && tasks.size() > 0) {
+			for (TaskSummary task : tasks) {
+	            String businessId = getBusinessId(task.getProcessInstanceId());
+	            if (StringUtils.isNotBlank(businessId)) {
+	                results.add(businessId);
+	            }
+	        }
+		}
 		return results;
 	}
 	
@@ -315,14 +359,32 @@ public class BpmServiceSupport {
 		return tasks;
 	}
 
-	public List<ActiveNodeInfo> getActiveNodeInfo(String processId, String businessId) {
+	public long getProcessInstanceId(String processId, String businessId) {
 		Long instanceId = cache.getProcessInstanceId(processId, businessId);
 		if (instanceId == null) {
-			throw new IllegalArgumentException(
-					"Could not find process instance by [ " + processId + ", " + businessId + " ]" );
-		}
-		ProcessInstanceLog processInstance = jpaProcessInstanceDbLog.findProcessInstance(instanceId);
-		if (processInstance == null) {
+			List<ProcessInstanceLog> processInstanceLogs = jpaProcessInstanceDbLog.findActiveProcessInstances(processId);
+			for(ProcessInstanceLog tempProcessInstanceLog : processInstanceLogs) {
+				Long processInstanceId = tempProcessInstanceLog.getProcessInstanceId();
+				ProcessInstance targetProcessInstance = ksession.getProcessInstance(processInstanceId);
+				if(targetProcessInstance instanceof WorkflowProcessInstance) {
+					WorkflowProcessInstance wpi = (WorkflowProcessInstance) targetProcessInstance;
+					String targetBusinessId = (String)wpi.getVariable("businessId");
+					if(businessId.equals(targetBusinessId)) {
+						instanceId = processInstanceId;
+						cache.putAndSave(processId, businessId, processInstanceId);
+						break;
+					}
+				}
+				
+			}
+		} 
+		return instanceId == null ? -1 : instanceId;
+	}
+	
+	public List<ActiveNodeInfo> getActiveNodeInfo(String processId, String businessId) {
+		Long instanceId = getProcessInstanceId(processId, businessId);
+		ProcessInstanceLog processInstanceLog = jpaProcessInstanceDbLog.findProcessInstance(instanceId);
+		if (processInstanceLog == null) {
 			throw new IllegalArgumentException(
 					"Could not find process instance by instance id : " + instanceId);
 		}
@@ -341,7 +403,7 @@ public class BpmServiceSupport {
 			List<ActiveNodeInfo> result = new ArrayList<ActiveNodeInfo>();
 			for (NodeInstanceLog nodeInstance : nodeInstances.values()) {
 				boolean found = false;
-				DiagramInfo diagramInfo = getDiagramInfo(processInstance
+				DiagramInfo diagramInfo = getDiagramInfo(processInstanceLog
 						.getProcessId());
 				if (diagramInfo != null) {
 					for (DiagramNodeInfo nodeInfo : diagramInfo.getNodeList()) {
@@ -357,13 +419,13 @@ public class BpmServiceSupport {
 				} else {
 					throw new IllegalArgumentException(
 							"Could not find info for diagram for process "
-									+ processInstance.getProcessId());
+									+ processInstanceLog.getProcessId());
 				}
 				if (!found) {
 					throw new IllegalArgumentException(
 							"Could not find info for node "
 									+ nodeInstance.getNodeId() + " of process "
-									+ processInstance.getProcessId());
+									+ processInstanceLog.getProcessId());
 				}
 			}
 			return result;

@@ -16,6 +16,8 @@ public interface ComboService {
 	public void processCombo_StepTwo(String comboCode, Combo c);
 
 	public void processCombo_StepThree(String comboCode, Combo c);
+	
+	public void processCombo_StepFour(String comboCode, Combo c);
 
 	public void createCombo(String comboCode, Combo c);
 

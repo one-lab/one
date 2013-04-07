@@ -6,8 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.bpm.aspect.GetTask;
+import com.sinosoft.one.bpm.aspect.Variable;
 import com.sinosoft.one.bpm.aspect.ProcessTask;
 import com.sinosoft.one.bpm.aspect.StartProcess;
+import com.sinosoft.one.bpm.aspect.Variables;
+import com.sinosoft.one.bpm.variable.VariableOperate;
+import com.sinosoft.one.bpm.variable.VariableScope;
+import com.sinosoft.one.bpm.variable.VariableType;
 import com.sinosoft.one.service.facade.ComboService;
 import com.sinosoft.one.test.domain.Combo;
 import com.sinosoft.one.test.domain.Kind;
@@ -115,7 +120,8 @@ public class ComboServiceSpringImpl implements ComboService {
 	/**
 	 * 简单类型的解析属性
 	 */
-	@ProcessTask(userId = "combo001", businessBeanOffset = 0)
+	@ProcessTask(userId = "combo001",  businessBeanOffset = 1, businessIdAttibuteName = "comboCode")
+	@Variable(name = "myList", variableValue="myList", scope=VariableScope.GLOBAL, operate=VariableOperate.ADD, type=VariableType.LIST)
 	public void processCombo_StepOne(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepOne ");
 	}
@@ -124,6 +130,7 @@ public class ComboServiceSpringImpl implements ComboService {
 	 * 简单复合类型的解析属性
 	 */
 	@ProcessTask(userId = "combo002", businessBeanOffset = 1, businessIdAttibuteName = "comboCode")
+	@Variable(name = "myMap", scope=VariableScope.GLOBAL, variableValue="myMap", operate=VariableOperate.ADD, type=VariableType.MAP, mapKey="myMap")
 	public void processCombo_StepTwo(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepTwo");
 	}
@@ -132,16 +139,36 @@ public class ComboServiceSpringImpl implements ComboService {
 	 * 嵌套复合类型的解析属性
 	 */
 	@ProcessTask(userId = "combo003", businessBeanOffset = 1, businessIdAttibuteName = "kind.comboCode")
+	@Variables(variables = {
+			@Variable(name = "listData", variableValue="listData1", scope=VariableScope.PROCESSINSTANCE,
+					type = VariableType.LIST,
+					processId="comboProcess", businessIdBeanOffset=0),
+			@Variable(name = "listData", variableValue="listData2", scope=VariableScope.PROCESSINSTANCE,
+					type = VariableType.LIST,
+					processId="comboProcess", businessIdBeanOffset=0)		
+	})
 	public void processCombo_StepThree(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepThree");
 	}
+	
+	
 
 	/**
 	 *  
 	 */
 	@StartProcess(processId = "comboProcess", businessBeanOffset = 1, businessIdAttibuteName = "comboCode")
+	@Variables(variables = {
+			@Variable(name = "myData", variableValue="myData", scope=VariableScope.GLOBAL),
+			@Variable(name = "myProcessInstanceData", variableValue="myProcessInstanceData", scope=VariableScope.PROCESSINSTANCE,
+				processId="comboProcess", businessIdBeanOffset=0)
+	})
 	public void createCombo(String comboCode, Combo c) {
 		System.out.println("--------------comboCode-----------areaCode");
+	}
+
+	@ProcessTask(userId = "combo004", businessBeanOffset = 1, businessIdAttibuteName = "kind.comboCode")
+	public void processCombo_StepFour(String comboCode, Combo c) {
+		System.out.println("--------------processCombo_StepFour-----------");
 	}
 
 }

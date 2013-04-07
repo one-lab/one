@@ -12,14 +12,15 @@ import org.slf4j.LoggerFactory;
 import com.sinosoft.one.bpm.model.ProcessInstanceBOInfo;
 import com.sinosoft.one.bpm.service.facade.ProcessInstanceBOService;
 
-public class ProcessInstanceBOServiceSpringImpl implements ProcessInstanceBOService{
+public class ProcessInstanceBOServiceSupport implements ProcessInstanceBOService{
 	private EntityManager em;
+	private EntityManagerFactory emf;
 	
-	public ProcessInstanceBOServiceSpringImpl(EntityManagerFactory emf) {
-		em = emf.createEntityManager();
+	public ProcessInstanceBOServiceSupport() {
+		
 	}
 	
-	private static Logger logger = LoggerFactory.getLogger(ProcessInstanceBOServiceSpringImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(ProcessInstanceBOServiceSupport.class);
 	public ProcessInstanceBOInfo getProcessInstanceBOInfo(
 			String processId, String businessId) {
 		ProcessInstanceBOInfo result = null;
@@ -30,33 +31,28 @@ public class ProcessInstanceBOServiceSpringImpl implements ProcessInstanceBOServ
 	        result = (ProcessInstanceBOInfo) query.getSingleResult();
 		} catch(NoResultException exception) {
 			logger.warn(exception.getLocalizedMessage());
-		} finally {
-			if(em != null) {
-				em.close();
-			}
-		}
+		} 
 		return result;
 	}
 
 	public void createProcessInstanceBOInfo(final ProcessInstanceBOInfo info) {
-		try {
-			final EntityTransaction tx = em.getTransaction();
-	        try {
-	            if (!tx.isActive()) {
-	                tx.begin();
-	            }
-	            em.persist(info);
-	            tx.commit();
-	        } finally {
-	            if( tx.isActive() ) {
-	                tx.rollback();
-	            }
-	        }
-		} finally {
-			if(em != null) {
-				em.close();
-			}
+		if(!em.isOpen()) {
+			em = emf.createEntityManager();
 		}
+		final EntityTransaction tx = em.getTransaction();
+        try {
+            if (!tx.isActive()) {
+                tx.begin();
+            }
+            em.persist(info);
+            tx.commit();
+        } catch(Throwable throwable) {
+        	logger.warn("save process instance bo info exception.", throwable);
+        } finally {
+            if( tx.isActive() ) {
+                tx.rollback();
+            }
+        }
 	}
 
 
@@ -68,11 +64,16 @@ public class ProcessInstanceBOServiceSpringImpl implements ProcessInstanceBOServ
 	        result = (ProcessInstanceBOInfo) query.getSingleResult();
 		} catch(NoResultException exception) {
 			logger.warn(exception.getLocalizedMessage());
-		} finally {
-			if(em != null) {
-				em.close();
-			}
 		}
 		return result;
+	}
+
+	public EntityManagerFactory getEmf() {
+		return emf;
+	}
+
+	public void setEmf(EntityManagerFactory emf) {
+		this.emf = emf;
+		this.em = emf.createEntityManager();
 	}
 }

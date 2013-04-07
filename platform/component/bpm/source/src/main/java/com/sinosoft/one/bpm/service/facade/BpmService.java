@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.jbpm.task.query.TaskSummary;
 
+import com.sinosoft.one.bpm.aspect.Variable;
+
 public interface BpmService {
 
 	public abstract long createProcess(String processId,
@@ -22,5 +24,7 @@ public interface BpmService {
 	public String getBusinessId(long processInstanceId) throws Exception;
 
 	public long getTaskId(String userId, String businessId) throws Exception;
+	
+	public void doVariable(Object[] args, Variable globalVariable) throws Exception;
 	
 }

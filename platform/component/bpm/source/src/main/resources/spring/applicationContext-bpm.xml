@@ -20,8 +20,22 @@
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-
+		
 		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="initialSize" value="1" />
+        <property name="maxWait" value="60000" />
+        <property name="minIdle" value="1" />
+
+		<property name="filters" value="stat" />
+		
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <property name="validationQuery" value="SELECT 'x' FROM DUAL" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
 	</bean>
 
 	<bean id="bpmEMF"
@@ -57,10 +71,10 @@
 				pointcut="execution(${bpm.aspect.expression}) and @annotation(com.sinosoft.one.bpm.aspect.StartProcess )" />
 		</aop:aspect>
 	</aop:config>
-
+	
 	<bean id="processInstanceBOService"
-		class="com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSpringImpl">
-		<constructor-arg ref="bpmEMF" />
+		class="com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSupport">
+		<property name="emf" ref="bpmEMF" />
 	</bean>
 
 	<bean id="processInstanceBOCache" class="com.sinosoft.one.bpm.util.ProcessInstanceBOCache">
@@ -81,8 +95,7 @@
 	</bean>
 
 	<bean id="bpmService"
-		class="com.sinosoft.one.bpm.service.spring.BpmServiceSpringImpl">
-		<property name="cache" ref="processInstanceBOCache" />
+		class="com.sinosoft.one.bpm.service.spring.BpmServiceImplement">
 		<property name="bpmServiceSupport" ref="bpmServiceSupport" />
 	</bean>
 

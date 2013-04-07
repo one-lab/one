@@ -15,15 +15,16 @@ import org.jbpm.task.service.ContentData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sinosoft.one.bpm.aspect.Variable;
 import com.sinosoft.one.bpm.service.facade.BpmService;
 import com.sinosoft.one.bpm.util.BpmServiceSupport;
-import com.sinosoft.one.bpm.util.ProcessInstanceBOCache;
+import com.sinosoft.one.bpm.variable.VariableHandler;
+import com.sinosoft.one.bpm.variable.VariableHandlerFactory;
 
-public class BpmServiceSpringImpl implements BpmService {
+public class BpmServiceImplement implements BpmService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private BpmServiceSupport bpmServiceSupport;
-	private ProcessInstanceBOCache cache;
 
 	/*
 	 * 用BpmServiceSupport的session创建流程
@@ -34,12 +35,9 @@ public class BpmServiceSpringImpl implements BpmService {
 	 */
 	public long createProcess(String processId, Map<String, Object> params)
 			throws Exception {
-		StatefulKnowledgeSession ksession = bpmServiceSupport
-				.getSession("drools.properties");
+		StatefulKnowledgeSession ksession = bpmServiceSupport.getSession();
 		ProcessInstance pi = ksession.startProcess(processId, params);
-		
 		ksession.fireAllRules();
-		cache.putAndSave(processId, params.get("businessId").toString(), pi.getId());
 		return pi.getId();
 	}
 
@@ -126,7 +124,7 @@ public class BpmServiceSpringImpl implements BpmService {
 	 * .lang.String,java.lang.String)
 	 */
 	public long getTaskId(String userId, String businessId) throws Exception {
-		long taskId = 0;
+		long taskId = -1;
 		List<TaskSummary> tasks = this.getTasks(userId);
 		for (TaskSummary task : tasks) {
 			long processInstanceId = task.getProcessInstanceId();
@@ -135,14 +133,18 @@ public class BpmServiceSpringImpl implements BpmService {
 				break;
 			}
 		}
+		if(taskId == -1) {
+			throw new RuntimeException("No any task find for userId : " + userId + ", businessId : " + businessId);
+		}
 		return taskId;
+	}
+	
+	public void doVariable(Object[] args, Variable variable) throws Exception {
+		VariableHandler variableHandler = VariableHandlerFactory.buildVariableHandler(variable.type(), bpmServiceSupport);
+		variableHandler.handler(args, variable);
 	}
 
 	public void setBpmServiceSupport(BpmServiceSupport bpmServiceSupport) {
 		this.bpmServiceSupport = bpmServiceSupport;
-	}
-
-	public void setCache(ProcessInstanceBOCache cache) {
-		this.cache = cache;
 	}
 }

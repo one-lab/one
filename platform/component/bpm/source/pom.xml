@@ -9,12 +9,9 @@
 	<groupId>com.sinosoft.one</groupId>
 	<artifactId>bpm</artifactId>
 	<version>1.0.3-SNAPSHOT</version>
-	
-	<!-- <properties>
-		<jbpm5.version>5.4.0.Final</jbpm5.version>
-        <drools.version>5.5.0.Final</drools.version>
-	</properties>
- -->
+
+	<!-- <properties> <jbpm5.version>5.4.0.Final</jbpm5.version> <drools.version>5.5.0.Final</drools.version> 
+		</properties> -->
 	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -37,7 +34,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<version>0.2.10</version>
+			<version>0.2.12</version>
 		</dependency>
 
 		<dependency>
@@ -109,15 +106,15 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
 		<!-- spring end -->
 		<!-- commons -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -129,13 +126,6 @@
 			<artifactId>servlet-api</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.sinosoft.one</groupId>
-			<artifactId>util</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- db begin -->
 		<dependency>
 			<groupId>commons-dbcp</groupId>
@@ -150,6 +140,22 @@
 
 		<!-- db end -->
 
+		<!-- log begin -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<!-- slf4j-log4j绑定 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		<!-- log end -->
 		<!-- test begin -->
 		<dependency>
 			<groupId>junit</groupId>

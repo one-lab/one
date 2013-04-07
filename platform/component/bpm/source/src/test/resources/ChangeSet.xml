@@ -5,9 +5,7 @@
 
 		<!-- <resource source='http://localhost:8080/drools-guvnor/org.drools.guvnor.Guvnor/package/defaultPackage/LATEST' 
 			type='PKG' /> -->
-		<resource source='classpath:processes/ComboProcess.bpmn' type="BPMN2">
-		</resource>
-		<resource source='classpath:processes/Evaluation.bpmn' type="BPMN2">
+		<resource source='classpath:processes/ComboProcess.bpmn2' type="BPMN2">
 		</resource>
 	</add>
 

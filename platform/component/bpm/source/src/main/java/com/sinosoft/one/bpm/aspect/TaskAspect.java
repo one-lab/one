@@ -3,6 +3,8 @@ package com.sinosoft.one.bpm.aspect;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,17 +18,19 @@ import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.jbpm.task.query.TaskSummary;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 
 import com.sinosoft.one.bpm.service.facade.BpmService;
+import com.sinosoft.one.bpm.util.BpmCommonUtils;
+import com.sinosoft.one.bpm.variable.VariableScope;
 
 /**
  *
- * @author zhujinwei
+ * @author carvin
  *
  */
-public class TaskAspect {
+public class TaskAspect implements Ordered {
     @Autowired
     private BpmService bpmService;
     private Logger logger = Logger.getLogger(TaskAspect.class);
@@ -49,7 +53,7 @@ public class TaskAspect {
         	if(userIdBeanOffset == -1) {
         		throw new IllegalArgumentException("getTask annotation must assign userId or userIdBeanOffset.");
         	}
-        	userId = this.parserAttributeValue(pjp.getArgs()[userIdBeanOffset], getTask.userIdAttributeName());
+        	userId = BpmCommonUtils.parseAttributeValue(pjp.getArgs()[userIdBeanOffset], getTask.userIdAttributeName());
         }
         String businessIdAttributeName = getTask.businessIdAttibuteName();
         if(StringUtils.isBlank(businessIdAttributeName)) {
@@ -116,10 +120,26 @@ public class TaskAspect {
      * @throws Throwable
      */
     public Object processTask(ProceedingJoinPoint pjp) throws Throwable {
+    	StartProcess startProcess = parserAnnotation(pjp, StartProcess.class);
+    	if(startProcess != null) {
+    		return null;
+    	}
     	Object result = pjp.proceed();
     	
+    	// 处理全局变量
+    	Variables globalVariablesAnnotation = parserAnnotation(pjp, Variables.class);
+        Variable globalVariableAnnotation = parserAnnotation(pjp, Variable.class);
+        doVariables(globalVariablesAnnotation, globalVariableAnnotation, pjp.getArgs());
+        
+    	processTaskHandler(pjp);
+    	return result;
+    	
+    }
+    
+    private void processTaskHandler(ProceedingJoinPoint pjp) throws Throwable {
     	logger.info("into processTask aspect");
         ProcessTask processTask = parserAnnotation(pjp, ProcessTask.class);
+        if(processTask == null) return;
         Object[] args = pjp.getArgs();
         Object bean = args[processTask.businessBeanOffset()];
         String businessId = parserBusinessId(bean,
@@ -130,7 +150,7 @@ public class TaskAspect {
         	if(userIdBeanOffset == -1) {
         		throw new IllegalArgumentException("processTask annotation must assign userId or userIdBeanOffset.");
         	}
-        	userId = this.parserAttributeValue(pjp.getArgs()[userIdBeanOffset], processTask.userIdAttributeName());
+        	userId = BpmCommonUtils.parseAttributeValue(pjp.getArgs()[userIdBeanOffset], processTask.userIdAttributeName());
         }
         
         
@@ -159,17 +179,40 @@ public class TaskAspect {
             logger.info("releaseTask taskId="+taskId+"  userId="+userId);
             throw new RuntimeException(e);
         }   
-        
         bpmService.submitTask(taskId, userId, paramData);
         logger.info("out processTask aspect");
-        return result;
     }
     
     private void addParam(Map<String, Object> paramData, TaskParam taskParam, Object[] args) throws Exception {
     	String key = taskParam.key();
 		if(StringUtils.isNotBlank(key)) {
-			paramData.put(key, parserAttributeValue(args[taskParam.paramValueBeanOffset()], taskParam.paramValueAttributeName()));
+			paramData.put(key, BpmCommonUtils.parseAttributeValue(args[taskParam.paramValueBeanOffset()], taskParam.paramValueAttributeName()));
 		}
+    }
+    
+    /**
+     * 处理全局变量
+     * @param globalVariables
+     * @param globalVariable
+     * @param args
+     * @throws Exception
+     */
+    private void doVariables(Variables variables, Variable variable, Object[] args) throws Exception {
+    	List<Variable> variableList = new ArrayList<Variable>();
+    	if(variables != null) {
+    		variableList.addAll(Arrays.asList(variables.variables()));
+    	}
+    	if(variable != null) {
+    		variableList.add(variable);
+    	}
+    	doVariables(variableList, args);
+    	
+    }
+    
+    private void doVariables(List<Variable> variableList, Object[] args)  throws Exception {
+    	for(Variable aVariable : variableList) {
+    		bpmService.doVariable(args, aVariable);
+    	}
     }
 
     /**
@@ -181,7 +224,37 @@ public class TaskAspect {
      */
     public Object startProcess(ProceedingJoinPoint pjp) throws Throwable {
     	Object result = pjp.proceed();
-        logger.info("into processTask aspect");
+        logger.info("into startProcess aspect");
+        
+     // 处理全局变量
+        Variables variablesAnnotation = parserAnnotation(pjp, Variables.class);
+        Variable variableAnnotation = parserAnnotation(pjp, Variable.class);
+        
+        List<Variable> globalVaribles = new ArrayList<Variable>();
+        List<Variable> processInstanceVaribles = new ArrayList<Variable>();
+        
+        Variable[] variables = variablesAnnotation.variables();
+        if(variables != null) {
+        	for(Variable variable : variables) {
+        		if(variable.scope() == VariableScope.GLOBAL) {
+        			globalVaribles.add(variable);
+        		} else {
+        			processInstanceVaribles.add(variable);
+        		}
+        	}
+        }
+        
+        if(variableAnnotation != null) {
+	        if(variableAnnotation.scope() == VariableScope.GLOBAL) {
+				globalVaribles.add(variableAnnotation);
+			} else {
+				processInstanceVaribles.add(variableAnnotation);
+			}
+        }
+        
+        // 处理全局变量
+        doVariables(globalVaribles, pjp.getArgs());
+        
         StartProcess startProcess = parserAnnotation(pjp, StartProcess.class);
         Object bean = pjp.getArgs()[startProcess.businessBeanOffset()];
         String businessId = parserBusinessId(bean,
@@ -189,7 +262,13 @@ public class TaskAspect {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("businessId", businessId);
         bpmService.createProcess(startProcess.processId(), params);
-        logger.info("out processTask aspect");
+        
+     // 处理流程变量
+        doVariables(processInstanceVaribles, pjp.getArgs());
+        
+        // 如果需要流程启动直接处理第一个节点
+        processTaskHandler(pjp);
+        logger.info("out startProcess aspect");
         return result;
     }
 
@@ -203,24 +282,9 @@ public class TaskAspect {
      */
     public String parserBusinessId(Object bean, String attributeName)
             throws Exception {
-        
-        return parserAttributeValue(bean, attributeName);
+        return BpmCommonUtils.parseAttributeValue(bean, attributeName);
     }
     
-    public String parserAttributeValue(Object bean, String attributeName) throws Exception  {
-    	String value = "";
-        if (BeanUtils.isSimpleProperty(bean.getClass())) {
-        	value = bean.toString();
-        } else {
-        	if(StringUtils.isBlank(attributeName)) {
-        		throw new IllegalArgumentException("the attribute value [" + attributeName + "] is invalid.");
-        	}
-        	value = PropertyUtils.getProperty(bean, attributeName)
-                    .toString();
-        }
-        return value;
-    }
-
     /**
      * Description:解析注解
      *
@@ -240,4 +304,8 @@ public class TaskAspect {
         }
         return (T) m.getAnnotation(annotationClass);
     }
+
+	public int getOrder() {
+		return 99;
+	}
 }

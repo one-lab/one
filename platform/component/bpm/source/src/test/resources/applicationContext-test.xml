@@ -30,5 +30,4 @@
 	
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="com.sinosoft.one" />
-	
 </beans>

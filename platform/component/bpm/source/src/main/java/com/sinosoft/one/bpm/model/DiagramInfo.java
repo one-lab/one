@@ -8,7 +8,7 @@ public class DiagramInfo
 {
   private int width = -1;
   private int height = -1;
-  private List<DiagramNodeInfo> nodeList = new ArrayList();
+  private List<DiagramNodeInfo> nodeList = new ArrayList<DiagramNodeInfo>();
 
   public DiagramInfo()
   {
@@ -17,7 +17,7 @@ public class DiagramInfo
   public DiagramInfo(int height, int width, List<DiagramNodeInfo> l) {
     this.height = height;
     this.width = width;
-    List list = new ArrayList();
+    List<DiagramNodeInfo> list = new ArrayList<DiagramNodeInfo>();
     for (DiagramNodeInfo nodeInfo : l) {
       list.add(nodeInfo);
     }

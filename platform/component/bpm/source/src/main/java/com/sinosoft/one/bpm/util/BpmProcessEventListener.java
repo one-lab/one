@@ -1,18 +1,37 @@
 package com.sinosoft.one.bpm.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.drools.event.process.DefaultProcessEventListener;
 import org.drools.event.process.ProcessCompletedEvent;
+import org.drools.event.process.ProcessStartedEvent;
 import org.drools.runtime.process.ProcessInstance;
+import org.drools.runtime.process.WorkflowProcessInstance;
 
 public class BpmProcessEventListener extends DefaultProcessEventListener {
 	private ProcessInstanceBOCache cache;
 	
+	@Override
 	public void afterProcessCompleted(ProcessCompletedEvent event) {
 		ProcessInstance pi = event.getProcessInstance();
 		String processId = pi.getProcessId();
 		String processInstanceId = pi.getId() + "";
 		
 		cache.removeFromCache(processId, processInstanceId);
+	}
+	
+	@Override
+	public void afterProcessStarted(ProcessStartedEvent event) {
+		ProcessInstance pi = event.getProcessInstance();
+		String businessId = "";
+		if(pi instanceof WorkflowProcessInstance) {
+			WorkflowProcessInstance wpi = (WorkflowProcessInstance)pi;
+			businessId = (String) wpi.getVariable("businessId");
+			if(StringUtils.isNotBlank(businessId)) {
+				cache.putAndSave(wpi.getProcessId(), businessId, pi.getId());
+			}
+		}
+		
+		super.afterProcessStarted(event);
 	}
 
 	public void setCache(ProcessInstanceBOCache cache) {
