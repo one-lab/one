@@ -38,5 +38,8 @@ public interface MethodRepository extends PagingAndSortingRepository<Method, Str
 
     @SQL("delete GE_MONITOR_METHOD a where a.ID in (?1)")
     void batchDeleteMethod(String[] methodIds);
+    
+    @SQL("select * from GE_MONITOR_METHOD a where a.ID =?1")
+    Method findMethodByid(String  methodId);
 }
 

@@ -1,6 +1,8 @@
 package com.sinosoft.one.monitor.application.domain;
 
+import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.application.model.BizScenario;
+import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
 import com.sinosoft.one.monitor.application.repository.BizScenarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -23,7 +25,9 @@ public class BizScenarioService {
 
     @Autowired
     BizScenarioRepository bizScenarioRepository;
-
+    
+    @Autowired
+    ApplicationRepository applicationRepository;
     /**
      * 新增一个业务场景.
      */
@@ -52,7 +56,9 @@ public class BizScenarioService {
      * 查询一个应用，通过应用id.
      */
     public BizScenario findBizScenario(String id) {
-        BizScenario bizScenario = bizScenarioRepository.findOne(id);
+        BizScenario bizScenario = bizScenarioRepository.findBizById(id);
+        Application application=  applicationRepository.findApplicationbyBizID(id);
+        bizScenario.setApplication(application);
         return bizScenario;
     }
 

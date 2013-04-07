@@ -126,7 +126,7 @@ public class UrlService {
      * 查询一个URL，通过URL的id.
      */
     public Url findUrl(String id) {
-        Url url = urlRepository.findOne(id);
+        Url url = urlRepository.findUrlByID(id);
         return url;
     }
 

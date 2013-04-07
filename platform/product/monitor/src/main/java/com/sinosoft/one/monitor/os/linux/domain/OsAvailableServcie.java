@@ -179,7 +179,7 @@ public class OsAvailableServcie {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 		Calendar c=Calendar.getInstance();
 		c.set(Calendar.MINUTE, 0);
-		Date date=new Date(c.getTime().getTime()-Long.valueOf(interCycle*60*1000));
+		Date date=new Date(currentTime.getTime()-Long.valueOf(interCycle*60*1000));
 		return osAvailabletempRepository.findNealyAvailable(osInfoId, simpleDateFormat.format(date), OsUtil.ORCL_DATEFORMATE);
 	}
 	

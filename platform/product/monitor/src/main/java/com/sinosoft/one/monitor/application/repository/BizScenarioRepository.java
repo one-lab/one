@@ -29,5 +29,8 @@ public interface BizScenarioRepository extends PagingAndSortingRepository<BizSce
 
     @SQL("select a.*,b.NAME as userName from GE_MONITOR_BIZ_SCENARIO a left join GE_MONITOR_ACCOUNT b on a.CREATOR_ID=b.ID where a.ID in (?1) and a.BIZ_SCENARIO_GRADE=?2")
     List<BizScenario> selectUserNameOfBizScenarioByIdsAndGivenGrade(List<String> bizScenarioIds, String givenGrade);
+    
+    @SQL("select * from GE_MONITOR_BIZ_SCENARIO a where a.ID = ?1")
+    BizScenario findBizById(String  bizScenarioId);
 }
 

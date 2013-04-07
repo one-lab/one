@@ -56,5 +56,7 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
     @SQL("select * from GE_MONITOR_APPLICATION a where a.id= 1?")
     Application findApplicationbyId(String id);
     
+    @SQL("select * from GE_MONITOR_APPLICATION a where a.id= (select APPLICATION_ID from GE_MONITOR_BIZ_SCENARIO where id=?1 )")
+    Application findApplicationbyBizID(String BizID);
 }
 

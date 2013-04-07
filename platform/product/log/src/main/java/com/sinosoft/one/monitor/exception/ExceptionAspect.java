@@ -26,7 +26,7 @@ public class ExceptionAspect {
      * @param throwable
      */
 //    @AfterThrowing(pointcut = "execution(* com.sinosoft.one.demo..*.*(..))", throwing="throwable")
-	@AfterThrowing(pointcut ="execution(* com.sinosig.servicebus.*.*service..*.*(..))", throwing="throwable")
+	@AfterThrowing(pointcut ="execution(* com.sinosig.servicebus..*.*(..))", throwing="throwable")
 	public void exceptionCatch(Throwable throwable) {
 		logger.info("ExceptionAspectStart");
 	    TraceModel traceModel = TraceUtils.getTraceModel();

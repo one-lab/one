@@ -37,5 +37,8 @@ public interface UrlRepository extends PagingAndSortingRepository<Url, String> {
 
     @SQL("delete GE_MONITOR_URL a where a.ID in (?1)")
     void batchDelete(String[] ids);
+    
+    @SQL("select * from GE_MONITOR_URL a where a.ID =?1")
+    Url findUrlByID(String id);
 }
 

@@ -53,7 +53,7 @@ public class MethodService {
      * 查询一个Method，通过Method的id.
      */
     public Method findMethod(String id) {
-        Method method = methodRepository.findOne(id);
+        Method method = methodRepository.findMethodByid(id);
         return method;
     }
 

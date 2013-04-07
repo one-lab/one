@@ -46,7 +46,7 @@ public class OsAgentInvestigation implements Runnable{
 				OsConfig.init("config/osConfig.properties");
 				logger.debug(OsConfig.interCycleTime+"");
 				OsConfig.scheduledFuture.cancel(true);
-				OsConfig.scheduledFuture = OsConfig.executorService.scheduleAtFixedRate(new OsAgentInvestigation(),0, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
+				OsConfig.scheduledFuture = OsConfig.executorService.scheduleAtFixedRate(new OsAgentInvestigation(),OsConfig.interCycleTime*60, OsConfig.interCycleTime*60, TimeUnit.SECONDS);
 				System.out.println(321);
 				System.gc();
 			}else{

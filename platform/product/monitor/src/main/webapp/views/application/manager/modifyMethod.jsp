@@ -106,13 +106,13 @@
                     </tr>
                     <tr>
                         <td>全类名<span class="mandatory">*</span></td>
-                        <td><input id="className" name="className" type="text" value="${method.className}" class="formtext" />
-                            <msg:errorMsg property="className" type="message"/>
+                        <td><input id="className" name="className" type="text" value="${method.className}" class="formtext"  style="width: 700px;" />
+                            <msg:errorMsg property="className"  type="message"/>
                         </td>
                     </tr>
                     <tr>
                         <td>方法名<span class="mandatory">*</span></td>
-                        <td><input id="methodName" name="methodName" type="text" value="${method.methodName}" class="formtext" />
+                        <td><input id="methodName" name="methodName" type="text" value="${method.methodName}"  class="formtext"  style="width: 300px;" />
                             <msg:errorMsg property="methodName" type="message"/>
                         </td>
                     </tr>

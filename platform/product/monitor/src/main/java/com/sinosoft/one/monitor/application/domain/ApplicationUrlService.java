@@ -69,8 +69,8 @@ public class ApplicationUrlService {
 		UrlAvailableInf urlAvailableInf = applicationEmuService.getUrlAvailableToday(urlId);
 
 		ApplicationUrlInfoViewModel applicationUrlInfoViewModel = new ApplicationUrlInfoViewModel();
-		applicationUrlInfoViewModel.setHealth(severityLevel == SeverityLevel.INFO ? "up" : "down");
-		applicationUrlInfoViewModel.setAvailability(urlAvailableInf.getTrend() != Trend.DROP ? "cando" : "cannot");
+		applicationUrlInfoViewModel.setHealth(severityLevel == SeverityLevel.INFO ? "cando" : "cannot");
+		applicationUrlInfoViewModel.setAvailability(urlAvailableInf.getTrend() != Trend.DROP ? "up" : "down");
 		applicationUrlInfoViewModel.setTodayAvailability(urlAvailableInf.getCount() == 0 ? "0" :
 				BigDecimal.valueOf(urlAvailableInf.getAvailableCount()).divide(BigDecimal.valueOf(urlAvailableInf.getCount()), 2, RoundingMode.HALF_UP)
 				.multiply(BigDecimal.valueOf(100)).toString()

@@ -174,10 +174,10 @@ public class HistoryViewController {
 	 * @return
 	 */
 	@Post("historyAvailablePie/{timespan}/{osId}")
-	public Reply getUsability(@Param("osId") String osId ) {
+	public Reply getUsability(@Param("osId") String osId ,@Param("timespan") String timespan) {
 		Map<String, Double> map = new HashMap<String, Double>();
 		Date currentTime=new Date();
-		map = osAvailableViewHandle.creatAvailablePie(osId, currentTime, 1);
+		map = osAvailableViewHandle.creatAvailablePie(osId, currentTime,Integer.valueOf(timespan));
 		return Replys.with(map).as(Json.class);
 	}
 	/**
