@@ -31,7 +31,6 @@ public class BpmProcessEventListener extends DefaultProcessEventListener {
 			}
 		}
 		
-		super.afterProcessStarted(event);
 	}
 
 	public void setCache(ProcessInstanceBOCache cache) {

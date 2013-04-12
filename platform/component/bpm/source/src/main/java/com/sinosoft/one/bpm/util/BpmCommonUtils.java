@@ -1,5 +1,8 @@
 package com.sinosoft.one.bpm.util;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +23,27 @@ public final class BpmCommonUtils {
         }
         return value;
     }
+	
+	public static Object parseVariableValue(Object bean, String attributeName) throws Exception  {
+    	String value = "";
+        if (BeanUtils.isSimpleProperty(bean.getClass())) {
+        	value = bean.toString();
+        } else {
+        	if(bean instanceof Collection || bean instanceof Map || bean instanceof String[]) {
+        		return bean;
+        	}
+        	if(StringUtils.isBlank(attributeName)) {
+        		throw new IllegalArgumentException("the attribute value [" + attributeName + "] is invalid.");
+        	}
+        	value = PropertyUtils.getProperty(bean, attributeName)
+                    .toString();
+        }
+        return value;
+    }
+	
+	public static Object parseVariableValue(Object[] args, int attributeOffset, String attributeName) throws Exception {
+		return parseVariableValue(args[attributeOffset], attributeName);
+	}
 	
 	public static String parseAttributeValue(Object[] args, int attributeOffset, String attributeName) throws Exception {
 		return parseAttributeValue(args[attributeOffset], attributeName);

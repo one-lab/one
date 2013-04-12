@@ -91,8 +91,8 @@ public class BpmServiceImplTest extends AbstractJUnit4SpringContextTests {
 			System.out.println("@@@@@@@@end  processCombo");
 			Assert.assertNotNull(results);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

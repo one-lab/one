@@ -10,8 +10,10 @@
 	<artifactId>bpm</artifactId>
 	<version>1.0.3-SNAPSHOT</version>
 
-	<!-- <properties> <jbpm5.version>5.4.0.Final</jbpm5.version> <drools.version>5.5.0.Final</drools.version> 
-		</properties> -->
+	<properties>
+		<jbpm5.version>5.4.0.Final</jbpm5.version>
+		<drools.version>5.5.0.Final</drools.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -35,29 +37,34 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>0.2.12</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-bam</artifactId>
+			<version>${jbpm5.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-bpmn2</artifactId>
+			<version>${jbpm5.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jbpm</groupId>
-			<artifactId>jbpm-human-task</artifactId>
+			<artifactId>jbpm-human-task-core</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.el</groupId>
 					<artifactId>el-api</artifactId>
 				</exclusion>
 			</exclusions>
+			<version>${jbpm5.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-persistence-jpa</artifactId>
+			<version>${jbpm5.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.drools</groupId>
@@ -68,6 +75,7 @@
 					<artifactId>drools-grid-impl</artifactId>
 				</exclusion>
 			</exclusions>
+			<version>${drools.version}</version>
 		</dependency>
 
 		<dependency>
@@ -136,6 +144,7 @@
 			<groupId>oracle</groupId>
 			<artifactId>ojdbc</artifactId>
 			<scope>provided</scope>
+			<version>6</version>
 		</dependency>
 
 		<!-- db end -->

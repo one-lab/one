@@ -15,7 +15,7 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd"
 	default-autowire="byName" default-lazy-init="false">
 
-	<bean id="bpmDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+	<!-- <bean id="bpmDataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
@@ -36,11 +36,11 @@
         <property name="testOnReturn" value="false" />
         <property name="poolPreparedStatements" value="true" />
         <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
-	</bean>
+	</bean> -->
 
 	<bean id="bpmEMF"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="bpmDataSource" />
+		<property name="dataSource" ref="dataSource" />
 		<property name="persistenceUnitName" value="org.drools.persistence.jpa.local" />
 		<property name="persistenceXmlLocation" value="classpath:config/META-INF/persistence.xml" />
 		<property name="jpaVendorAdapter">
@@ -57,9 +57,9 @@
 		</property>
 	</bean>
 
-	<bean id="bpmTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<!-- <bean id="bpmTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="bpmEMF" />
-    </bean>
+    </bean> -->
 
 	<aop:config>
 		<aop:aspect ref="bpmTraceAspect">
@@ -89,7 +89,7 @@
 		class="com.sinosoft.one.bpm.util.BpmServiceSupport" init-method="init"
 		destroy-method="destory">
 		<property name="bpmEMF" ref="bpmEMF" />
-		<property name="bpmTxManager" ref="bpmTxManager" />
+		<property name="bpmTxManager" ref="transactionManager" />
 		<property name="cache" ref="processInstanceBOCache" />
 		<property name="bpmProcessEventListener" ref="bpmProcessEventListener" />
 	</bean>

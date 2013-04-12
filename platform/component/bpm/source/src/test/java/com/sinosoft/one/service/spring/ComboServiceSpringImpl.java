@@ -31,7 +31,7 @@ public class ComboServiceSpringImpl implements ComboService {
 	/**
 	 * 支持嵌套
 	 */
-	@GetTask(userId = "combo001", businessIdAttibuteName = "comboCode")
+	@GetTask(userId = "combo001", businessIdAttributeName = "comboCode")
 	public List<Combo> getCombos_StepOne(String condation) {
 		System.out.println("--------------getCombos");
 		List<Combo> results = new ArrayList<Combo>();
@@ -59,7 +59,7 @@ public class ComboServiceSpringImpl implements ComboService {
 		return results;
 	}
 
-	@GetTask(userId = "combo002", businessIdAttibuteName = "comboCode")
+	@GetTask(userId = "combo002", businessIdAttributeName = "comboCode")
 	public List<Combo> getCombos_StepTwo(String condation) {
 		//在此处抛异常测试
 //		int j=10/0;
@@ -89,7 +89,7 @@ public class ComboServiceSpringImpl implements ComboService {
 		return results;
 	}
 
-	@GetTask(userId = "combo003", businessIdAttibuteName = "comboCode")
+	@GetTask(userId = "combo003", businessIdAttributeName = "comboCode")
 	public List<Combo> getCombos_StepThree(String condation) {
 		System.out.println("--------------getCombos");
 		List<Combo> results = new ArrayList<Combo>();
@@ -120,7 +120,7 @@ public class ComboServiceSpringImpl implements ComboService {
 	/**
 	 * 简单类型的解析属性
 	 */
-	@ProcessTask(userId = "combo001",  businessBeanOffset = 1, businessIdAttibuteName = "comboCode")
+	@ProcessTask(userId = "combo001",  businessBeanOffset = 1, businessIdAttributeName = "comboCode")
 	@Variable(name = "myList", variableValue="myList", scope=VariableScope.GLOBAL, operate=VariableOperate.ADD, type=VariableType.LIST)
 	public void processCombo_StepOne(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepOne ");
@@ -129,7 +129,7 @@ public class ComboServiceSpringImpl implements ComboService {
 	/**
 	 * 简单复合类型的解析属性
 	 */
-	@ProcessTask(userId = "combo002", businessBeanOffset = 1, businessIdAttibuteName = "comboCode")
+	@ProcessTask(userId = "combo002", businessBeanOffset = 1, businessIdAttributeName = "comboCode")
 	@Variable(name = "myMap", scope=VariableScope.GLOBAL, variableValue="myMap", operate=VariableOperate.ADD, type=VariableType.MAP, mapKey="myMap")
 	public void processCombo_StepTwo(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepTwo");
@@ -138,14 +138,16 @@ public class ComboServiceSpringImpl implements ComboService {
 	/**
 	 * 嵌套复合类型的解析属性
 	 */
-	@ProcessTask(userId = "combo003", businessBeanOffset = 1, businessIdAttibuteName = "kind.comboCode")
+	@ProcessTask(userId = "combo003", businessBeanOffset = 1, businessIdAttributeName = "kind.comboCode")
 	@Variables(variables = {
-			@Variable(name = "listData", variableValue="listData1", scope=VariableScope.PROCESSINSTANCE,
+			@Variable(name = "listData", variableValueBeanOffset=0, scope=VariableScope.PROCESSINSTANCE,
 					type = VariableType.LIST,
-					processId="comboProcess", businessIdBeanOffset=0),
-			@Variable(name = "listData", variableValue="listData2", scope=VariableScope.PROCESSINSTANCE,
+					processId="comboProcess", businessBeanOffset=0),
+			@Variable(name = "listData", 
+					variableValueBeanOffset=1, variableValueAttributeName="comboCode", 
+					scope=VariableScope.PROCESSINSTANCE,
 					type = VariableType.LIST,
-					processId="comboProcess", businessIdBeanOffset=0)		
+					processId="comboProcess", businessBeanOffset=0)		
 	})
 	public void processCombo_StepThree(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepThree");
@@ -156,17 +158,17 @@ public class ComboServiceSpringImpl implements ComboService {
 	/**
 	 *  
 	 */
-	@StartProcess(processId = "comboProcess", businessBeanOffset = 1, businessIdAttibuteName = "comboCode")
+	@StartProcess(processId = "comboProcess", businessBeanOffset = 1, businessIdAttributeName = "comboCode")
 	@Variables(variables = {
 			@Variable(name = "myData", variableValue="myData", scope=VariableScope.GLOBAL),
 			@Variable(name = "myProcessInstanceData", variableValue="myProcessInstanceData", scope=VariableScope.PROCESSINSTANCE,
-				processId="comboProcess", businessIdBeanOffset=0)
+				processId="comboProcess", businessBeanOffset=0)
 	})
 	public void createCombo(String comboCode, Combo c) {
 		System.out.println("--------------comboCode-----------areaCode");
 	}
 
-	@ProcessTask(userId = "combo004", businessBeanOffset = 1, businessIdAttibuteName = "kind.comboCode")
+	@ProcessTask(userId = "combo004", businessBeanOffset = 1, businessIdAttributeName = "kind.comboCode")
 	public void processCombo_StepFour(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepFour-----------");
 	}

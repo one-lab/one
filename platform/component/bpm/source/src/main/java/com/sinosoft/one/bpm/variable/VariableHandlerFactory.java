@@ -15,8 +15,8 @@ public final class VariableHandlerFactory {
 		case LIST : 
 			return ListVariableHandler.build(bpmServiceSupport);
 		
-		case STRING : 
-			return StringVariableHandler.build(bpmServiceSupport);
+		case DEFAULT : 
+			return DefaultVariableHandler.build(bpmServiceSupport);
 		default : 
 			throw new IllegalArgumentException("Can not support the variable type [" + variableType.name() + "]");
 		}

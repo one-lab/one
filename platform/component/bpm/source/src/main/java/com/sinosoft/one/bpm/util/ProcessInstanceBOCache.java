@@ -49,7 +49,20 @@ public class ProcessInstanceBOCache {
 	}
 	
 	public String getBusinessId(Long processInstanceId) {
-		return businessIdCache.get(processInstanceId);
+		String businessId = businessIdCache.get(processInstanceId);
+		if(businessId == null) {
+			synchronized (ProcessInstanceBOCache.class) {
+				if(businessId == null) {
+					logger.info("fetch from database");
+					ProcessInstanceBOInfo info = processInstanceBOService.getProcessInstanceBOInfo(processInstanceId);
+					businessId = info != null ? info.getBusinessId() : null;
+					if(businessId != null) {
+						put(info.getProcessId(), businessId, processInstanceId);
+					}
+				}
+			}
+		}
+		return businessId;
 	}
 
 	public void setProcessInstanceBOService(

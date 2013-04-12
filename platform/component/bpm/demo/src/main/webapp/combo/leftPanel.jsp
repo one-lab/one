@@ -19,6 +19,7 @@
 				<li onclick="changeLi(this,'${ctx}/combo/operation/verify2/index.jsp')">套餐审核2</li>
 				<li onclick="changeLi(this,'${ctx}/combo/operation/deploy/index.jsp')">套餐发布</li>
 				<li onclick="changeLi(this,'${ctx}/combo/operation/deploy2/index.jsp')">套餐发布确认</li>
+				<li onclick="changeLi(this,'${ctx}/combo/operation/deploy3/index.jsp')">套餐发布最终确认</li>
 			</ul>
 		</div>
 	</div>

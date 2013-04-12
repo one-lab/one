@@ -32,8 +32,8 @@
 
     <extensionElements>
      <tns:global identifier="myList" type="java.util.List" />
-     <tns:global identifier="myData" type="String" />
      <tns:global identifier="myMap" type="java.util.Map" />
+     <tns:global identifier="myData" type="String" />
     </extensionElements>
     <!-- process variables -->
     <property id="myProcessInstanceData" itemSubjectRef="_myProcessInstanceDataItem"/>
@@ -43,11 +43,20 @@
     <startEvent id="_1" name="Start" />
     <userTask id="_2" name="µÚÒ»²½" >
       <ioSpecification>
+        <dataInput id="_2_GroupIdInput" name="GroupId" />
         <inputSet>
+          <dataInputRefs>_2_GroupIdInput</dataInputRefs>
         </inputSet>
         <outputSet>
         </outputSet>
       </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_2_GroupIdInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression"></from>
+          <to xsi:type="tFormalExpression">_2_GroupIdInput</to>
+        </assignment>
+      </dataInputAssociation>
       <potentialOwner>
         <resourceAssignmentExpression>
           <formalExpression>combo001</formalExpression>

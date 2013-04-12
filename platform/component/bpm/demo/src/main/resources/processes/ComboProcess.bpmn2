@@ -14,21 +14,35 @@
 
   <itemDefinition id="_dataItem" structureRef="java.util.HashMap" />
   <itemDefinition id="_isPassedItem" structureRef="String" />
+  <itemDefinition id="_listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_mapDataItem" structureRef="java.util.Map" />
 
   <itemDefinition id="_6-dataItem" structureRef="java.util.HashMap" />
   <itemDefinition id="_6-isPassedItem" structureRef="String" />
+  <itemDefinition id="_6-listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_6-mapDataItem" structureRef="java.util.Map" />
 
   <itemDefinition id="_7-dataItem" structureRef="java.util.HashMap" />
   <itemDefinition id="_7-isPassedItem" structureRef="String" />
+  <itemDefinition id="_7-listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_7-mapDataItem" structureRef="java.util.Map" />
 
   <itemDefinition id="_9-dataItem" structureRef="java.util.HashMap" />
   <itemDefinition id="_9-isPassedItem" structureRef="String" />
+  <itemDefinition id="_9-listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_9-mapDataItem" structureRef="java.util.Map" />
+
+  <itemDefinition id="_17-2-3-strDataItem" />
+
+  <itemDefinition id="_17_multiInstanceItemType" />
 
   <process processType="Private" isExecutable="true" id="comboProcess" name="comboProcess" tns:packageName="combo" tns:version="1.1" >
 
     <!-- process variables -->
     <property id="data" itemSubjectRef="_dataItem"/>
     <property id="isPassed" itemSubjectRef="_isPassedItem"/>
+    <property id="listData" itemSubjectRef="_listDataItem"/>
+    <property id="mapData" itemSubjectRef="_mapDataItem"/>
 
     <!-- nodes -->
     <startEvent id="_1" name="StartProcess" />
@@ -43,14 +57,14 @@
         <dataInput id="_6_SkippableInput" name="Skippable" />
         <dataInput id="_6_TaskNameInput" name="TaskName" />
         <dataInput id="_6_PriorityInput" name="Priority" />
-        <dataOutput id="_6_isPassed1Output" name="isPassed1" />
+        <dataOutput id="_6_isPassedOutput" name="isPassed" />
         <inputSet>
           <dataInputRefs>_6_SkippableInput</dataInputRefs>
           <dataInputRefs>_6_TaskNameInput</dataInputRefs>
           <dataInputRefs>_6_PriorityInput</dataInputRefs>
         </inputSet>
         <outputSet>
-          <dataOutputRefs>_6_isPassed1Output</dataOutputRefs>
+          <dataOutputRefs>_6_isPassedOutput</dataOutputRefs>
         </outputSet>
       </ioSpecification>
       <dataInputAssociation>
@@ -75,7 +89,7 @@
         </assignment>
       </dataInputAssociation>
       <dataOutputAssociation>
-        <sourceRef>_6_isPassed1Output</sourceRef>
+        <sourceRef>_6_isPassedOutput</sourceRef>
         <targetRef>isPassed</targetRef>
       </dataOutputAssociation>
       <potentialOwner>
@@ -185,7 +199,6 @@
         </resourceAssignmentExpression>
       </potentialOwner>
     </userTask>
-    <inclusiveGateway id="_10" name="Gateway" gatewayDirection="Diverging" />
     <exclusiveGateway id="_11" name="Gateway" gatewayDirection="Converging" />
     <subProcess id="_12" name="Sub-Process"  >
     <!-- nodes -->
@@ -232,154 +245,212 @@
         </outputSet>
       </ioSpecification>
     </callActivity>
-    <callActivity id="_15" name="Sub-Process" calledElement="comboSubProcess" >
+    <subProcess id="_17" name="Multiple Instances"  >
+      <ioSpecification>
+        <dataInput id="_17_input" name="MultiInstanceInput" />
+        <inputSet/>
+        <outputSet/>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>listData</sourceRef>
+        <targetRef>_17_input</targetRef>
+      </dataInputAssociation>
+      <multiInstanceLoopCharacteristics>
+        <loopDataInputRef>_17_input</loopDataInputRef>
+        <inputDataItem id="strData" itemSubjectRef="_17_multiInstanceItemType"/>
+      </multiInstanceLoopCharacteristics>
+    <!-- nodes -->
+    <startEvent id="_17-2-1" name="Start" />
+    <scriptTask id="_17-2-2" name="第五步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("====step 5 : " + strData + "==========");</script>
+    </scriptTask>
+    <userTask id="_17-2-3" name="step5" >
       <ioSpecification>
         <inputSet>
         </inputSet>
         <outputSet>
         </outputSet>
       </ioSpecification>
-    </callActivity>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo005</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <endEvent id="_17-2-4" name="End" />
+    <!-- connections -->
+    <sequenceFlow id="_17-2-1-_17-2-2" sourceRef="_17-2-1" targetRef="_17-2-2" />
+    <sequenceFlow id="_17-2-2-_17-2-3" sourceRef="_17-2-2" targetRef="_17-2-3" />
+    <sequenceFlow id="_17-2-3-_17-2-4" sourceRef="_17-2-3" targetRef="_17-2-4" />
+    </subProcess>
+    <inclusiveGateway id="_18" name="Gateway" gatewayDirection="Diverging" />
 
     <!-- connections -->
-    <sequenceFlow id="_12-_3" sourceRef="_12" targetRef="_3" />
-    <sequenceFlow id="_15-_5" sourceRef="_15" targetRef="_5" />
+    <sequenceFlow id="_17-_3" sourceRef="_17" targetRef="_3" />
+    <sequenceFlow id="_9-_5" sourceRef="_9" targetRef="_5" />
     <sequenceFlow id="_5-_6" sourceRef="_5" targetRef="_6" />
     <sequenceFlow id="_8-_7" sourceRef="_8" targetRef="_7" />
     <sequenceFlow id="_14-_8" sourceRef="_14" targetRef="_8" />
     <sequenceFlow id="_11-_9" sourceRef="_11" targetRef="_9" />
-    <sequenceFlow id="_6-_10" sourceRef="_6" targetRef="_10" />
-    <sequenceFlow id="_10-_11" sourceRef="_10" targetRef="_11" name="不通过" tns:priority="1" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "false".equals(isPassed);</conditionExpression>
-    </sequenceFlow>
     <sequenceFlow id="_1-_11" sourceRef="_1" targetRef="_11" />
+    <sequenceFlow id="_18-_11" sourceRef="_18" targetRef="_11" name="不通过" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("false===========" + isPassed);
+return "false".equals(isPassed);</conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="_7-_12" sourceRef="_7" targetRef="_12" />
-    <sequenceFlow id="_10-_13" sourceRef="_10" targetRef="_13" name="撤销" tns:priority="1" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "end".equals(isPassed);</conditionExpression>
+    <sequenceFlow id="_18-_13" sourceRef="_18" targetRef="_13" name="撤销" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("end===========" + isPassed);
+return "end".equals(isPassed);</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="_10-_14" sourceRef="_10" targetRef="_14" name="通过" tns:priority="1" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "true".equals(isPassed);</conditionExpression>
+    <sequenceFlow id="_18-_14" sourceRef="_18" targetRef="_14" name="通过" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("true===========" + isPassed);
+return "true".equals(isPassed);</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="_9-_15" sourceRef="_9" targetRef="_15" />
+    <sequenceFlow id="_12-_17" sourceRef="_12" targetRef="_17" />
+    <sequenceFlow id="_6-_18" sourceRef="_6" targetRef="_18" />
 
   </process>
 
   <bpmndi:BPMNDiagram>
     <bpmndi:BPMNPlane bpmnElement="comboProcess" >
       <bpmndi:BPMNShape bpmnElement="_1" >
-        <dc:Bounds x="15" y="22" width="48" height="48" />
+        <dc:Bounds x="98" y="23" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_3" >
-        <dc:Bounds x="392" y="533" width="48" height="48" />
+        <dc:Bounds x="343" y="445" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_5" >
-        <dc:Bounds x="252" y="22" width="80" height="48" />
+        <dc:Bounds x="506" y="19" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_6" >
-        <dc:Bounds x="390" y="22" width="100" height="48" />
+        <dc:Bounds x="497" y="90" width="100" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_7" >
-        <dc:Bounds x="374" y="314" width="100" height="48" />
+        <dc:Bounds x="818" y="154" width="100" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_8" >
-        <dc:Bounds x="386" y="227" width="80" height="48" />
+        <dc:Bounds x="659" y="155" width="92" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_9" >
-        <dc:Bounds x="116" y="6" width="100" height="48" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_10" >
-        <dc:Bounds x="416" y="140" width="48" height="48" />
+        <dc:Bounds x="331" y="21" width="100" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_11" >
-        <dc:Bounds x="104" y="137" width="48" height="48" />
+        <dc:Bounds x="217" y="21" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12" >
-        <dc:Bounds x="124" y="379" width="606" height="125" />
+        <dc:Bounds x="636" y="247" width="461" height="125" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-1" >
-        <dc:Bounds x="164" y="415" width="48" height="48" />
+        <dc:Bounds x="661" y="284" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-2" >
-        <dc:Bounds x="278" y="416" width="80" height="48" />
+        <dc:Bounds x="754" y="284" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-3" >
-        <dc:Bounds x="633" y="414" width="48" height="48" />
+        <dc:Bounds x="1030" y="285" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12-4" >
-        <dc:Bounds x="470" y="413" width="100" height="48" />
+        <dc:Bounds x="889" y="285" width="100" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_13" >
-        <dc:Bounds x="542" y="141" width="48" height="48" />
+        <dc:Bounds x="244" y="156" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_14" >
-        <dc:Bounds x="507" y="224" width="110" height="60" />
+        <dc:Bounds x="506" y="149" width="110" height="60" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_15" >
-        <dc:Bounds x="237" y="93" width="110" height="60" />
+      <bpmndi:BPMNShape bpmnElement="_17" >
+        <dc:Bounds x="160" y="247" width="412" height="134" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_17-2-1" >
+        <dc:Bounds x="170" y="294" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_17-2-2" >
+        <dc:Bounds x="243" y="294" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_17-2-3" >
+        <dc:Bounds x="366" y="293" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_17-2-4" >
+        <dc:Bounds x="505" y="294" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_18" >
+        <dc:Bounds x="354" y="146" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_12-1-_12-2" >
-        <di:waypoint x="64" y="60" />
-        <di:waypoint x="194" y="61" />
+        <di:waypoint x="49" y="61" />
+        <di:waypoint x="158" y="61" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_12-4-_12-3" >
-        <di:waypoint x="396" y="58" />
-        <di:waypoint x="533" y="59" />
+        <di:waypoint x="303" y="62" />
+        <di:waypoint x="418" y="62" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_12-2-_12-4" >
-        <di:waypoint x="194" y="61" />
-        <di:waypoint x="396" y="58" />
+        <di:waypoint x="158" y="61" />
+        <di:waypoint x="303" y="62" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_12-_3" >
-        <di:waypoint x="427" y="441" />
-        <di:waypoint x="416" y="557" />
+      <bpmndi:BPMNEdge bpmnElement="_17-2-1-_17-2-2" >
+        <di:waypoint x="34" y="71" />
+        <di:waypoint x="123" y="71" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_15-_5" >
-        <di:waypoint x="292" y="123" />
-        <di:waypoint x="292" y="46" />
+      <bpmndi:BPMNEdge bpmnElement="_17-2-2-_17-2-3" >
+        <di:waypoint x="123" y="71" />
+        <di:waypoint x="256" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_17-2-3-_17-2-4" >
+        <di:waypoint x="256" y="70" />
+        <di:waypoint x="369" y="71" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_17-_3" >
+        <di:waypoint x="366" y="314" />
+        <di:waypoint x="367" y="469" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9-_5" >
+        <di:waypoint x="381" y="45" />
+        <di:waypoint x="546" y="43" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_5-_6" >
-        <di:waypoint x="292" y="46" />
-        <di:waypoint x="440" y="46" />
+        <di:waypoint x="546" y="43" />
+        <di:waypoint x="547" y="114" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_8-_7" >
-        <di:waypoint x="426" y="251" />
-        <di:waypoint x="424" y="338" />
+        <di:waypoint x="705" y="179" />
+        <di:waypoint x="868" y="178" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_14-_8" >
-        <di:waypoint x="562" y="254" />
-        <di:waypoint x="426" y="251" />
+        <di:waypoint x="561" y="179" />
+        <di:waypoint x="705" y="179" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_11-_9" >
-        <di:waypoint x="128" y="161" />
-        <di:waypoint x="166" y="30" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_6-_10" >
-        <di:waypoint x="440" y="46" />
-        <di:waypoint x="440" y="164" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_10-_11" >
-        <di:waypoint x="440" y="164" />
-        <di:waypoint x="128" y="161" />
+        <di:waypoint x="241" y="45" />
+        <di:waypoint x="381" y="45" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_1-_11" >
-        <di:waypoint x="39" y="46" />
-        <di:waypoint x="128" y="161" />
+        <di:waypoint x="122" y="47" />
+        <di:waypoint x="241" y="45" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_18-_11" >
+        <di:waypoint x="378" y="170" />
+        <di:waypoint x="241" y="45" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_7-_12" >
-        <di:waypoint x="424" y="338" />
-        <di:waypoint x="427" y="441" />
+        <di:waypoint x="868" y="178" />
+        <di:waypoint x="866" y="309" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_10-_13" >
-        <di:waypoint x="440" y="164" />
-        <di:waypoint x="566" y="165" />
+      <bpmndi:BPMNEdge bpmnElement="_18-_13" >
+        <di:waypoint x="378" y="170" />
+        <di:waypoint x="268" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_10-_14" >
-        <di:waypoint x="440" y="164" />
-        <di:waypoint x="562" y="254" />
+      <bpmndi:BPMNEdge bpmnElement="_18-_14" >
+        <di:waypoint x="378" y="170" />
+        <di:waypoint x="561" y="179" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_9-_15" >
-        <di:waypoint x="166" y="30" />
-        <di:waypoint x="292" y="123" />
+      <bpmndi:BPMNEdge bpmnElement="_12-_17" >
+        <di:waypoint x="866" y="309" />
+        <di:waypoint x="366" y="314" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6-_18" >
+        <di:waypoint x="547" y="114" />
+        <di:waypoint x="378" y="170" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

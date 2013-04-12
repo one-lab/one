@@ -3,13 +3,15 @@ package com.sinosoft.one.bpmWebDemo.web;
 import ins.framework.common.Page;
 import ins.framework.web.Struts2Action;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.sinosoft.one.bpm.util.JbpmAPIUtil;
-import com.sinosoft.one.bpmWebDemo.data.DataStore;
 import com.sinosoft.one.bpmWebDemo.domain.Combo;
 import com.sinosoft.one.bpmWebDemo.service.facade.ComboService;
 
@@ -25,7 +27,9 @@ public class ComboAction extends Struts2Action {
 		System.out.println("--------createCombo：" + combo.getComboCode());
 		System.out.println("--------createCombo kind:" + combo.getKind().getKindCode());
 		combo.getKind().setComboCode(combo.getComboCode());
-		comboService.createCombo(combo.getComboCode(), combo);
+		Map<String, Object> mapData = new HashMap<String, Object>();
+		mapData.put("111", "1111");
+		comboService.createCombo(combo.getComboCode(), combo, mapData);
 		System.out.println("--------createCombo--------");
 	}
 
@@ -42,7 +46,7 @@ public class ComboAction extends Struts2Action {
 
 	public void verifyCombo1() {
 		combo.getKind().setComboCode(combo.getComboCode());
-		comboService.processCombo_StepOne("combo001", combo.getComboCode(), combo);
+		comboService.processComboStepOne("combo001", combo.getComboCode(), combo);
 		System.out.println("fisrt step--------verifyCombo1--------");
 		System.out.println("-------verifyCombo1--------success");
 	}
@@ -58,9 +62,9 @@ public class ComboAction extends Struts2Action {
 		return SUCCESS;
 	}
 
-	public void verifyCombo2() {
+	public void verifyCombo2() throws Exception {
 		combo.getKind().setComboCode(combo.getComboCode());
-		comboService.processCombo_StepTwo(combo.getComboCode(), combo, this.getRequest().getParameter("isPassed"));
+		comboService.processComboStepTwo(combo.getComboCode(), combo, this.getRequest().getParameter("isPassed"));
 		System.out.println("second step--------verifyCombo2--------");
 
 	}
@@ -76,9 +80,9 @@ public class ComboAction extends Struts2Action {
 		return SUCCESS;
 	}
 
-	public void verifyCombo3() {
+	public void verifyCombo3() throws Exception {
 		combo.getKind().setComboCode(combo.getComboCode());
-		comboService.processCombo_StepTwo(combo.getComboCode(), combo, this.getRequest().getParameter("isPassed"));
+		comboService.processComboStepTwo(combo.getComboCode(), combo, this.getRequest().getParameter("isPassed"));
 		System.out.println("second step--------verifyCombo3--------");
 
 	}
@@ -96,14 +100,14 @@ public class ComboAction extends Struts2Action {
 	
 	public void deploy() {
 		combo.getKind().setComboCode(combo.getComboCode());
-		comboService.processCombo_StepThree(combo.getComboCode(), combo);
+		comboService.processComboStepThree(combo.getComboCode(), combo);
 		System.out.println("third step--------deployCombo--------");
 
 	}
 	
 	public String getDeploy2Combos() {
 		this.page = new Page();
-		List<Combo> results = comboService.getCombos_StepFour("");
+		List<Combo> results = comboService.getCombosStepFour("");
 
 		for (Combo c : results) {
 			page.getResult().add(c);
@@ -116,11 +120,48 @@ public class ComboAction extends Struts2Action {
 		combo = comboService.getCombo(combo.getComboCode());
 		return SUCCESS;
 	}
+	
 
 	public void deploy2() {
 		combo.getKind().setComboCode(combo.getComboCode());
-		comboService.processCombo_StepFour(combo.getComboCode(), combo);
+		List<String> strList = new ArrayList<String>();
+		strList.add("aaa");
+		strList.add("bbb");
+		comboService.processComboStepFour(combo.getComboCode(), combo, strList);
 		System.out.println("four step--------deployCombo-2222222-------");
+
+	}
+	
+	
+	
+	public String getDeploy3Combos() {
+		this.page = new Page();
+		List<Combo> results = comboService.getCombosStepFive("");
+
+		for (Combo c : results) {
+			page.getResult().add(c);
+		}
+		System.out.println("page size--------" + results.size());
+		return SUCCESS;
+	}
+	
+	public String prepareDeploy3() {
+		combo = comboService.getCombo(combo.getComboCode());
+		return SUCCESS;
+	}
+	
+	public void deploy3() {
+		combo.getKind().setComboCode(combo.getComboCode());
+		List<String> listData = new ArrayList<String>() {
+			{
+				add("aaaa");
+				add("bbbb");
+			}
+		};
+		for(String strData : listData) {
+			comboService.processComboStepFive(combo.getComboCode(), combo);
+		}
+		System.out.println("five step--------deployCombo-3333-------");
 
 	}
 	

@@ -6,18 +6,18 @@ import com.sinosoft.one.bpm.aspect.Variable;
 import com.sinosoft.one.bpm.util.BpmCommonUtils;
 import com.sinosoft.one.bpm.util.BpmServiceSupport;
 
-public final class StringVariableHandler extends AbstractVariableHandler {
-	private  static volatile  StringVariableHandler stringVariableHandler;
+public final class DefaultVariableHandler extends AbstractVariableHandler {
+	private  static volatile  DefaultVariableHandler stringVariableHandler;
 	
-	private StringVariableHandler(BpmServiceSupport bpmServiceSupport) {
+	private DefaultVariableHandler(BpmServiceSupport bpmServiceSupport) {
 		super(bpmServiceSupport);
 	} 
 
-	public static StringVariableHandler build(BpmServiceSupport bpmServiceSupport) {
+	public static DefaultVariableHandler build(BpmServiceSupport bpmServiceSupport) {
 		if(stringVariableHandler == null) {
-			synchronized(StringVariableHandler.class) {
+			synchronized(DefaultVariableHandler.class) {
 				if(stringVariableHandler == null) {
-					stringVariableHandler = new StringVariableHandler(bpmServiceSupport);
+					stringVariableHandler = new DefaultVariableHandler(bpmServiceSupport);
 				}
 			}
 		}
@@ -29,7 +29,7 @@ public final class StringVariableHandler extends AbstractVariableHandler {
 			Variable variable) throws Exception {
 		String variableName = variable.name();
 		if(StringUtils.isBlank(variableName)) {
-			throw new IllegalArgumentException("The name of @Variable can not be empty and null for String variable type.");
+			throw new IllegalArgumentException("The name of @Variable can not be empty and null for default variable type.");
 		}
 		
 		Object variableValue = getVariableValue(args, variable);
@@ -41,14 +41,14 @@ public final class StringVariableHandler extends AbstractVariableHandler {
 					bpmServiceSupport.setGlobalVariable(variableName, variableValue);
 				} else {
 					processId = variable.processId();
-					businessId = BpmCommonUtils.parseAttributeValue(args, variable.businessIdBeanOffset(),
+					businessId = BpmCommonUtils.parseAttributeValue(args, variable.businessBeanOffset(),
 							variable.businessIdAttributeName());
 					
 					BpmCommonUtils.hasText(processId, 
-								"The processId of @Variable can not be empty and null for ProcessInstance scope of List variable type.");
+								"The processId of @Variable can not be empty and null for ProcessInstance scope of default variable type.");
 					
 					BpmCommonUtils.hasText(businessId,
-								"The businessId of @Variable can not be empty and null for ProcessInstance scope of List variable type.");
+								"The businessId of @Variable can not be empty and null for ProcessInstance scope of default variable type.");
 					
 					bpmServiceSupport.setProcessInstanceVariable(
 							processId, businessId, variableName, variableValue);
@@ -56,7 +56,7 @@ public final class StringVariableHandler extends AbstractVariableHandler {
 				break;
 			}
 			default : {
-				throw new UnsupportedOperationException("The String variable type only support ADD operate");
+				throw new UnsupportedOperationException("The Default variable type only support ADD operate");
 			}
 		}
 	}

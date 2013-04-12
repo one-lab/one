@@ -1,17 +1,14 @@
 package com.sinosoft.one.bpm.service.spring;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Map;
 
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.process.ProcessInstance;
-import org.jbpm.task.AccessType;
 import org.jbpm.task.TaskService;
 import org.jbpm.task.query.TaskSummary;
 import org.jbpm.task.service.ContentData;
+import org.jbpm.task.utils.ContentMarshallerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,16 +62,9 @@ public class BpmServiceImplement implements BpmService {
 			throws Exception {
 		ContentData contentData = null;
 		if (data != null) {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutputStream outs;
 			try {
-				outs = new ObjectOutputStream(bos);
-				outs.writeObject(data);
-				outs.close();
-				contentData = new ContentData();
-				contentData.setContent(bos.toByteArray());
-				contentData.setAccessType(AccessType.Inline);
-			} catch (IOException e) {
+				contentData = ContentMarshallerHelper.marshal(data, bpmServiceSupport.currentEnvironment());
+			} catch (Exception e) {
 				logger.error("submit task exception. task id : " + taskId, e);
                 throw new Exception(e);
 			}

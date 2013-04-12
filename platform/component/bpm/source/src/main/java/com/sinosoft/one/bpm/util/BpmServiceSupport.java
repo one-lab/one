@@ -32,11 +32,12 @@ import org.jbpm.process.audit.JPAProcessInstanceDbLog;
 import org.jbpm.process.audit.JPAWorkingMemoryDbLogger;
 import org.jbpm.process.audit.NodeInstanceLog;
 import org.jbpm.process.audit.ProcessInstanceLog;
-import org.jbpm.process.workitem.wsht.SyncWSHumanTaskHandler;
+import org.jbpm.process.workitem.wsht.LocalHTWorkItemHandler;
 import org.jbpm.task.TaskService;
+import org.jbpm.task.identity.UserGroupCallbackManager;
 import org.jbpm.task.query.TaskSummary;
-import org.jbpm.task.service.TaskServiceSession;
 import org.jbpm.task.service.local.LocalTaskService;
+import org.jbpm.task.utils.OnErrorAction;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
 import com.sinosoft.one.bpm.model.ActiveNodeInfo;
@@ -56,8 +57,6 @@ public class BpmServiceSupport {
 	private EntityManagerFactory bpmEMF;
 	private AbstractPlatformTransactionManager bpmTxManager;
 	private ProcessEventListener bpmProcessEventListener;
-	
-	private JPAProcessInstanceDbLog jpaProcessInstanceDbLog;
 	
 	private Environment env;
 
@@ -209,8 +208,9 @@ public class BpmServiceSupport {
 				ksession = getSession("drools.properties");
 			}
 			taskService = getTskService(ksession, tservice);
-			System.setProperty("jbpm.usergroup.callback",
-					"org.jbpm.task.service.DefaultUserGroupCallbackImpl");
+			System.setProperty(UserGroupCallbackManager.USER_GROUP_CALLBACK_KEY, "com.sinosoft.one.bpm.identity.BpmDefaultUserGroupCallback");
+//			System.setProperty(UserGroupCallbackManager.USER_GROUP_CALLBACK_KEY, "org.jbpm.task.identity.DefaultUserGroupCallbackImpl");
+//			System.setProperty("jbpm.user.group.mapping", "classpath:/roles.properties");
 		}
 		return taskService;
 	}
@@ -245,9 +245,10 @@ public class BpmServiceSupport {
 		env.set(EnvironmentName.ENTITY_MANAGER_FACTORY, bpmEMF);     
 		env.set(EnvironmentName.TRANSACTION_MANAGER, bpmTxManager);
 
-		if(jpaProcessInstanceDbLog == null) {
-			jpaProcessInstanceDbLog = new JPAProcessInstanceDbLog(env);
-		}
+		JPAProcessInstanceDbLog.setEnvironment(env);
+//		if(jpaProcessInstanceDbLog == null) {
+//			jpaProcessInstanceDbLog = new JPAProcessInstanceDbLog(env);
+//		}
 	}
 
 	/**
@@ -263,12 +264,8 @@ public class BpmServiceSupport {
 		if (taskService == null) {
 			taskService = getService();
 		}
-		
-		TaskServiceSession taskServiceSession = taskService.createSession();
-		LocalTaskService localTaskService = new LocalTaskService(taskServiceSession);
-		
-		SyncWSHumanTaskHandler humanTaskHandler = new SyncWSHumanTaskHandler(localTaskService, ksession);
-		humanTaskHandler.setLocal(true);
+		LocalTaskService localTaskService = new LocalTaskService(taskService);
+		LocalHTWorkItemHandler humanTaskHandler = new LocalHTWorkItemHandler(localTaskService, ksession, OnErrorAction.RETHROW);
 		humanTaskHandler.connect();
 		ksession.getWorkItemManager().registerWorkItemHandler("Human Task", humanTaskHandler);
 		
@@ -362,7 +359,7 @@ public class BpmServiceSupport {
 	public long getProcessInstanceId(String processId, String businessId) {
 		Long instanceId = cache.getProcessInstanceId(processId, businessId);
 		if (instanceId == null) {
-			List<ProcessInstanceLog> processInstanceLogs = jpaProcessInstanceDbLog.findActiveProcessInstances(processId);
+			List<ProcessInstanceLog> processInstanceLogs = JPAProcessInstanceDbLog.findActiveProcessInstances(processId);
 			for(ProcessInstanceLog tempProcessInstanceLog : processInstanceLogs) {
 				Long processInstanceId = tempProcessInstanceLog.getProcessInstanceId();
 				ProcessInstance targetProcessInstance = ksession.getProcessInstance(processInstanceId);
@@ -383,13 +380,13 @@ public class BpmServiceSupport {
 	
 	public List<ActiveNodeInfo> getActiveNodeInfo(String processId, String businessId) {
 		Long instanceId = getProcessInstanceId(processId, businessId);
-		ProcessInstanceLog processInstanceLog = jpaProcessInstanceDbLog.findProcessInstance(instanceId);
+		ProcessInstanceLog processInstanceLog = JPAProcessInstanceDbLog.findProcessInstance(instanceId);
 		if (processInstanceLog == null) {
 			throw new IllegalArgumentException(
 					"Could not find process instance by instance id : " + instanceId);
 		}
 		Map<String, NodeInstanceLog> nodeInstances = new HashMap<String, NodeInstanceLog>();
-		List<NodeInstanceLog> nodeInstanceList = jpaProcessInstanceDbLog.findNodeInstances(instanceId);
+		List<NodeInstanceLog> nodeInstanceList = JPAProcessInstanceDbLog.findNodeInstances(instanceId);
 		Collections.sort(nodeInstanceList, new NodeInstanceLogComparator());
 		for (NodeInstanceLog nodeInstance : nodeInstanceList) {
 			if (nodeInstance.getType() == NodeInstanceLog.TYPE_ENTER) {
@@ -483,5 +480,9 @@ public class BpmServiceSupport {
 
 	public void setBpmTxManager(AbstractPlatformTransactionManager bpmTxManager) {
 		this.bpmTxManager = bpmTxManager;
+	}
+	
+	public Environment currentEnvironment() {
+		return env;
 	}
 }

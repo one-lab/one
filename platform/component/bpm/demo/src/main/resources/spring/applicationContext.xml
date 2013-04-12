@@ -42,7 +42,7 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="bpmDataSource" />
+        <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan" value="com.sinosoft.one" />
         <property name="hibernateProperties">
         	<props>
@@ -71,8 +71,8 @@
         </tx:attributes>
     </tx:advice>
     <aop:config>
-        <aop:pointcut id="servicePointcut" expression="execution(public * com.sinosoft.one.bpmWebDemo.*..*ServiceSpringImpl.*(..))" />
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointcut" />
+        <aop:pointcut id="servicePointcut" expression="execution(public * com.sinosoft.one.bpmWebDemo.service..*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointcut" order="1"/>
     </aop:config>
 
 </beans>

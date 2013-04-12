@@ -35,6 +35,13 @@
 		<action name="prepareDeploy2" class="comboAction" method="prepareDeploy2">
 			<result name="success">/combo/operation/deploy2/prepareDeploy.jsp </result>
 		</action>
+		<action name="deploy3" class="comboAction" method="deploy3"></action>
+		<action name="getDeploy3Combos" class="comboAction" method="getDeploy3Combos">
+			<result name="success">/combo/operation/deploy3/search.jsp </result>
+		</action>
+		<action name="prepareDeploy3" class="comboAction" method="prepareDeploy3">
+			<result name="success">/combo/operation/deploy3/prepareDeploy.jsp </result>
+		</action>
 		<action name="showImage" class="comboAction" method="showImage">
 			<result name="success">/combo/showimage.jsp </result>
 		</action>

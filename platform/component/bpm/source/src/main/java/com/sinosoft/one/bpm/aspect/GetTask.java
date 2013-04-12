@@ -21,5 +21,5 @@ public @interface GetTask {
 	
 	String userIdAttributeName() default "";
 	
-	String businessIdAttibuteName();
+	String businessIdAttributeName();
 }

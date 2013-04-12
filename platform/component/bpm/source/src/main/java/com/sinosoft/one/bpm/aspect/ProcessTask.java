@@ -23,5 +23,5 @@ public @interface ProcessTask {
 
 	int businessBeanOffset();
 
-	String businessIdAttibuteName() default "";
+	String businessIdAttributeName() default "";
 }

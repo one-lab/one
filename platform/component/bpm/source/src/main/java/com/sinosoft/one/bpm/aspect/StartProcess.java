@@ -19,6 +19,6 @@ public @interface StartProcess {
 
 	int businessBeanOffset();
 
-	String businessIdAttibuteName();
+	String businessIdAttributeName();
 
 }

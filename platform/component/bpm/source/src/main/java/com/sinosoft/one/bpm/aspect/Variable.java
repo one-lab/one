@@ -17,7 +17,7 @@ public @interface Variable {
 	String name();
 	VariableScope scope() default VariableScope.PROCESSINSTANCE;
 	VariableOperate operate() default VariableOperate.ADD;
-	VariableType type() default VariableType.STRING;
+	VariableType type() default VariableType.DEFAULT;
 	String mapKey() default "";
 	String variableValue() default "";
 	int variableValueBeanOffset() default 0;
@@ -25,6 +25,6 @@ public @interface Variable {
 	
 	// process instace variable need to set
 	String processId() default "";
-	int businessIdBeanOffset() default 0;
+	int businessBeanOffset() default 0;
 	String businessIdAttributeName() default "";
 }

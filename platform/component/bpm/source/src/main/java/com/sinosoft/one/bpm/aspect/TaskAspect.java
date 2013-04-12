@@ -55,7 +55,7 @@ public class TaskAspect implements Ordered {
         	}
         	userId = BpmCommonUtils.parseAttributeValue(pjp.getArgs()[userIdBeanOffset], getTask.userIdAttributeName());
         }
-        String businessIdAttributeName = getTask.businessIdAttibuteName();
+        String businessIdAttributeName = getTask.businessIdAttributeName();
         if(StringUtils.isBlank(businessIdAttributeName)) {
         	throw new IllegalArgumentException("@getTask's property[businessIdAttributeName]  can't be empty .");
         }
@@ -126,10 +126,10 @@ public class TaskAspect implements Ordered {
     	}
     	Object result = pjp.proceed();
     	
-    	// 处理全局变量
-    	Variables globalVariablesAnnotation = parserAnnotation(pjp, Variables.class);
-        Variable globalVariableAnnotation = parserAnnotation(pjp, Variable.class);
-        doVariables(globalVariablesAnnotation, globalVariableAnnotation, pjp.getArgs());
+    	// 处理变量
+    	Variables variablesAnnotation = parserAnnotation(pjp, Variables.class);
+        Variable variableAnnotation = parserAnnotation(pjp, Variable.class);
+        doVariables(variablesAnnotation, variableAnnotation, pjp.getArgs());
         
     	processTaskHandler(pjp);
     	return result;
@@ -143,7 +143,7 @@ public class TaskAspect implements Ordered {
         Object[] args = pjp.getArgs();
         Object bean = args[processTask.businessBeanOffset()];
         String businessId = parserBusinessId(bean,
-                processTask.businessIdAttibuteName());
+                processTask.businessIdAttributeName());
         String userId = processTask.userId();
         if(StringUtils.isBlank(userId)) {
         	int userIdBeanOffset = processTask.userIdBeanOffset();
@@ -233,15 +233,17 @@ public class TaskAspect implements Ordered {
         List<Variable> globalVaribles = new ArrayList<Variable>();
         List<Variable> processInstanceVaribles = new ArrayList<Variable>();
         
-        Variable[] variables = variablesAnnotation.variables();
-        if(variables != null) {
-        	for(Variable variable : variables) {
-        		if(variable.scope() == VariableScope.GLOBAL) {
-        			globalVaribles.add(variable);
-        		} else {
-        			processInstanceVaribles.add(variable);
-        		}
-        	}
+        if(variablesAnnotation != null) {
+        	Variable[] variables = variablesAnnotation.variables();
+            if(variables != null) {
+            	for(Variable variable : variables) {
+            		if(variable.scope() == VariableScope.GLOBAL) {
+            			globalVaribles.add(variable);
+            		} else {
+            			processInstanceVaribles.add(variable);
+            		}
+            	}
+            }
         }
         
         if(variableAnnotation != null) {
@@ -258,7 +260,7 @@ public class TaskAspect implements Ordered {
         StartProcess startProcess = parserAnnotation(pjp, StartProcess.class);
         Object bean = pjp.getArgs()[startProcess.businessBeanOffset()];
         String businessId = parserBusinessId(bean,
-                startProcess.businessIdAttibuteName());
+                startProcess.businessIdAttributeName());
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("businessId", businessId);
         bpmService.createProcess(startProcess.processId(), params);

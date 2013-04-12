@@ -24,7 +24,7 @@ public abstract class AbstractVariableHandler implements VariableHandler {
 	
 	public Object getVariableValue(Object[] args, Variable variable) throws Exception {
 		return StringUtils.isBlank(variable.variableValue()) 
-				? BpmCommonUtils.parseAttributeValue(args, variable.variableValueBeanOffset(), variable.variableValueAttributeName()) 
+				? BpmCommonUtils.parseVariableValue(args, variable.variableValueBeanOffset(), variable.variableValueAttributeName()) 
 				: variable.variableValue();
 	}
 }

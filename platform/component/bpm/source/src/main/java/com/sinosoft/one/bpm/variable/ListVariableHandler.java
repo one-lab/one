@@ -83,7 +83,7 @@ public class ListVariableHandler extends AbstractVariableHandler {
 		String processId = "", businessId = "";
 		if (variable.scope() == VariableScope.PROCESSINSTANCE) {
 			processId = variable.processId();
-			businessId = BpmCommonUtils.parseAttributeValue(args, variable.businessIdBeanOffset(),
+			businessId = BpmCommonUtils.parseAttributeValue(args, variable.businessBeanOffset(),
 					variable.businessIdAttributeName());
 			
 			BpmCommonUtils.hasText(processId, 
