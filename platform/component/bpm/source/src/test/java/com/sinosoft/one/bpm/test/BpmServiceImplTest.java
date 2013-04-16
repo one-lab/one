@@ -1,4 +1,4 @@
-package com.sinosoft.one.bpmtest;
+package com.sinosoft.one.bpm.test;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +14,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.sinosoft.one.bpm.service.facade.BpmService;
+import com.sinosoft.one.bpm.test.domain.Combo;
+import com.sinosoft.one.bpm.test.domain.Kind;
+import com.sinosoft.one.bpm.test.service.facade.ComboService;
 import com.sinosoft.one.bpm.util.BpmServiceSupport;
 import com.sinosoft.one.bpm.util.JbpmAPIUtil;
-import com.sinosoft.one.service.facade.ComboService;
-import com.sinosoft.one.test.domain.Combo;
-import com.sinosoft.one.test.domain.Kind;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-bpm.xml", "/applicationContext-test.xml" })
@@ -34,8 +34,6 @@ public class BpmServiceImplTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void testComboService() {
 		try {
-			bpmServiceSupport.getSession("drools.properties");
-			bpmServiceSupport.getTaskService();
 			System.out.println("===only in update mode test  begin===");
 			List<TaskSummary> tasks = bpmServiceSupport.getTaskService()
 					.getTasksOwned("combo001", "en-UK");
@@ -84,8 +82,9 @@ public class BpmServiceImplTest extends AbstractJUnit4SpringContextTests {
 			// 处理combo c , 应该是从results中选取一个
 			comboService.processCombo_StepThree(id, c);
 			
+//			results = comboService.getCombos_StepFour("condation rule");
 			comboService.processCombo_StepFour(id, c);
-			
+//			
 			comboService.processCombo_StepFour(id, c);
 			
 			System.out.println("@@@@@@@@end  processCombo");

@@ -17,7 +17,8 @@
 
 	<context:annotation-config />
 	<!-- 定义受环境影响易变的变量 -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
@@ -27,46 +28,120 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="com.sinosoft.one" />
-	
-	
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
-		init-method="init" destroy-method="close">
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-		
-		<property name="maxActive" value="${jdbc.maxActive}" />
-		<property name="initialSize" value="1" />
-        <property name="maxWait" value="60000" />
-        <property name="minIdle" value="1" />
 
-		<property name="filters" value="stat" />
-		
-        <property name="timeBetweenEvictionRunsMillis" value="60000" />
-        <property name="minEvictableIdleTimeMillis" value="300000" />
-        <property name="validationQuery" value="SELECT 'x' FROM DUAL" />
-        <property name="testWhileIdle" value="true" />
-        <property name="testOnBorrow" value="false" />
-        <property name="testOnReturn" value="false" />
-        <property name="poolPreparedStatements" value="true" />
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+	<bean id="bpmDataSource" class="bitronix.tm.resource.jdbc.PoolingDataSource"
+		init-method="init" destroy-method="close">
+		<property name="className" value="oracle.jdbc.xa.client.OracleXADataSource" />
+		<property name="uniqueName" value="bpmOracleDS" />
+		<property name="maxPoolSize" value="5" />
+		<property name="allowLocalTransactions" value="true" />
+		<property name="testQuery" value="SELECT 1 FROM DUAL" />
+		<property name="driverProperties">
+			<props>
+				<prop key="user">dbictest</prop>
+				<prop key="password">dbictest</prop>
+				<prop key="URL">jdbc:oracle:thin:@localhost:1521:orcl</prop>
+			</props>
+		</property>
 	</bean>
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="com.sinosoft.one" />
-        <property name="hibernateProperties">
-        	<props>
-        		<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+
+	<!-- Bitronix Transaction Manager embedded configuration -->
+	<bean id="btmConfig" factory-method="getConfiguration"
+		class="bitronix.tm.TransactionManagerServices">
+	</bean>
+
+	<!-- create BTM transaction manager -->
+	<bean id="bitronixTransactionManager" factory-method="getTransactionManager"
+		class="bitronix.tm.TransactionManagerServices" depends-on="btmConfig"
+		destroy-method="shutdown" /> 
+	
+	<bean id="bpmTransactionManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager" ref="bitronixTransactionManager" />
+		<property name="userTransaction" ref="bitronixTransactionManager" />
+	</bean>	
+	
+
+	<!-- atomikos JTA 事务配置 -->
+	<!-- 
+	<bean id="bpmDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName">
+			<value>bpmOracleDS</value>
+		</property>
+		<property name="xaDataSourceClassName">
+			<value>oracle.jdbc.xa.client.OracleXADataSource</value>
+		</property>
+		<property name="xaProperties">
+			<props>
+				<prop key="user">${jdbc.username}</prop>
+				<prop key="password">${jdbc.password}</prop>
+				<prop key="URL">${jdbc.url}</prop>
+			</props>
+		</property>
+		<property name="poolSize">
+			<value>1</value>
+		</property>
+		<property name="testQuery">
+			<value>${jdbc.testQuery}</value>
+		</property>
+	</bean>
+	<bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init" destroy-method="close">
+		<property name="forceShutdown"><value>true</value></property>
+	</bean>
+
+	<bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+	    <property name="transactionTimeout"><value>300</value></property>
+	</bean>
+	
+	<bean id="bpmTransactionManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager" ref="atomikosTransactionManager" />
+		<property name="userTransaction" ref="atomikosUserTransaction" />
+	</bean>	 -->
+
+
+	
+
+
+	<!-- <bean id="dataSourceProxy" class="com.sinosoft.one.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="dataSource" />
+	</bean> -->
+	<!-- <bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean> -->
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="bpmDataSource" />
+		<property name="packagesToScan" value="com.sinosoft.one" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-        	</props>
-        </property>
-    </bean>
+				<prop key="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.BTMTransactionManagerLookup</prop>
+				<!-- <prop key="hibernate.transaction.manager_lookup_class">com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup</prop> -->
+			</props>
+		</property>
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="bpmTransactionManager">
+		<tx:attributes>
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut id="servicePointcut"
+			expression="execution(public * com.sinosoft.one.bpm.test.service.spring.ComboServiceSpringImpl.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointcut"
+			order="1" />
+	</aop:config>
 </beans>

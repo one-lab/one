@@ -14,4 +14,9 @@
 			from ProcessInstanceBOInfo info where info.processInstanceId=:processInstanceId
           </query>
       </named-query>
+      <named-query name="AllNormalProcessInstanceBOInfoes">
+          <query>
+			from ProcessInstanceBOInfo info where info.status='1'
+          </query>
+      </named-query>
 </entity-mappings>

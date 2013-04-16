@@ -1,4 +1,4 @@
-package com.sinosoft.one.test.domain;
+package com.sinosoft.one.bpm.test.domain;
 
 public class Combo {
 	private String comboCode;

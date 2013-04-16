@@ -10,11 +10,15 @@ import org.drools.runtime.process.WorkflowProcessInstance;
 public class BpmProcessEventListener extends DefaultProcessEventListener {
 	private ProcessInstanceBOCache cache;
 	
+	public BpmProcessEventListener(ProcessInstanceBOCache cache) {
+		this.cache = cache;
+	}
+	
 	@Override
 	public void afterProcessCompleted(ProcessCompletedEvent event) {
 		ProcessInstance pi = event.getProcessInstance();
 		String processId = pi.getProcessId();
-		String processInstanceId = pi.getId() + "";
+		long processInstanceId = pi.getId();
 		
 		cache.removeFromCache(processId, processInstanceId);
 	}

@@ -1,5 +1,7 @@
 package com.sinosoft.one.bpm.util;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,6 +19,20 @@ public class ProcessInstanceBOCache {
 	private Map<String, Long> processInstanceIdCache = new ConcurrentHashMap<String, Long>(16);
 	private Map<Long, String> businessIdCache = new ConcurrentHashMap<Long, String>(16);
 	
+	public ProcessInstanceBOCache(ProcessInstanceBOService processInstanceBOService) {
+		this.processInstanceBOService = processInstanceBOService;
+		init();
+	}
+	
+	public void init() {
+		List<ProcessInstanceBOInfo> infoes = processInstanceBOService.getAllNormalProcessInstanceBOInfo();
+		if(infoes != null && infoes.size() > 0) {
+			for(ProcessInstanceBOInfo info : infoes) {
+				put(info.getProcessId(), info.getBusinessId(), info.getProcessInstanceId());
+			}
+		}
+	}
+	
 	public void put(String processId, String businessId, Long processInstanceId) {
 		processInstanceIdCache.put(processId + "_" + businessId, processInstanceId);
 		businessIdCache.put(processInstanceId, businessId);
@@ -27,6 +43,9 @@ public class ProcessInstanceBOCache {
 		info.setBusinessId(businessId);
 		info.setProcessId(processId);
 		info.setProcessInstanceId(processInstanceId);
+		info.setCreateTime(new Date());
+		info.setStatus(String.valueOf(ProcessInstanceBOInfo.Status.NORMAL.ordinal()));
+		
 		processInstanceBOService.createProcessInstanceBOInfo(info);
 		put(processId, businessId, processInstanceId);
 	}
@@ -70,12 +89,15 @@ public class ProcessInstanceBOCache {
 		this.processInstanceBOService = processInstanceBOService;
 	}
 	
-	public void removeFromCache(String processId, String processInstanceId) {
+	public void removeFromCache(String processId, long processInstanceId) {
 		String businessId = businessIdCache.get(processInstanceId);
 		if(StringUtils.isNotBlank(businessId)) {
 			processInstanceIdCache.remove(processId + "_" + businessId);
 			businessIdCache.remove(processInstanceId);
 		}
+		
+		ProcessInstanceBOInfo info = processInstanceBOService.getProcessInstanceBOInfo(processInstanceId);
+		processInstanceBOService.removeProcessInstanceBOInfo(info);
 	}
 	
 }

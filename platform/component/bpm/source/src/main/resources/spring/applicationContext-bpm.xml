@@ -40,7 +40,7 @@
 
 	<bean id="bpmEMF"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="bpmDataSource" />
 		<property name="persistenceUnitName" value="org.drools.persistence.jpa.local" />
 		<property name="persistenceXmlLocation" value="classpath:config/META-INF/persistence.xml" />
 		<property name="jpaVendorAdapter">
@@ -53,6 +53,8 @@
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.BTMTransactionManagerLookup</prop>
+				<!-- <prop key="hibernate.transaction.manager_lookup_class">com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup</prop> -->
 			</props>
 		</property>
 	</bean>
@@ -72,26 +74,27 @@
 		</aop:aspect>
 	</aop:config>
 	
-	<bean id="processInstanceBOService"
+	<!-- <bean id="processInstanceBOService"
 		class="com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSupport">
 		<property name="emf" ref="bpmEMF" />
-	</bean>
+	</bean> -->
 
-	<bean id="processInstanceBOCache" class="com.sinosoft.one.bpm.util.ProcessInstanceBOCache">
+<!-- 	<bean id="processInstanceBOCache" class="com.sinosoft.one.bpm.util.ProcessInstanceBOCache">
 		<property name="processInstanceBOService" ref="processInstanceBOService" />
 	</bean>
 
 	<bean id="bpmProcessEventListener" class="com.sinosoft.one.bpm.util.BpmProcessEventListener">
 		<property name="cache" ref="processInstanceBOCache" />
-	</bean>
+	</bean> -->
 
 	<bean id="bpmServiceSupport" scope="singleton"
 		class="com.sinosoft.one.bpm.util.BpmServiceSupport" init-method="init"
 		destroy-method="destory">
 		<property name="bpmEMF" ref="bpmEMF" />
-		<property name="bpmTxManager" ref="transactionManager" />
-		<property name="cache" ref="processInstanceBOCache" />
-		<property name="bpmProcessEventListener" ref="bpmProcessEventListener" />
+		<property name="bpmTxManager" ref="bpmTransactionManager" />
+		<!-- <property name="cache" ref="processInstanceBOCache" />
+		<property name="bpmProcessEventListener" ref="bpmProcessEventListener" /> -->
+		<property name="useJTA" value="${bpm.transaction.useJTA}" />
 	</bean>
 
 	<bean id="bpmService"

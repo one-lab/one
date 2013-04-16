@@ -36,7 +36,7 @@
 
   <itemDefinition id="_17_multiInstanceItemType" />
 
-  <process processType="Private" isExecutable="true" id="comboProcess" name="comboProcess" tns:packageName="combo" tns:version="1.1" >
+  <process processType="Private" isExecutable="true" id="comboProcess" name="comboProcess" tns:packageName="undwrt" tns:version="1.1" >
 
     <!-- process variables -->
     <property id="data" itemSubjectRef="_dataItem"/>

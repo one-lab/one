@@ -33,8 +33,13 @@ public class BpmDefaultUserGroupCallback implements UserGroupCallback {
 		} else {
 			// return empty list by default
 			return new ArrayList<String>() {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -4563550033615913593L;
+
 				{
-					add(userId);
+					add("");
 				}
 			};
 		}

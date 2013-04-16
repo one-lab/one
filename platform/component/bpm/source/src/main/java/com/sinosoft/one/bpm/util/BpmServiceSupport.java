@@ -37,6 +37,7 @@ import org.jbpm.task.TaskService;
 import org.jbpm.task.identity.UserGroupCallbackManager;
 import org.jbpm.task.query.TaskSummary;
 import org.jbpm.task.service.local.LocalTaskService;
+import org.jbpm.task.service.persistence.TaskSessionSpringFactoryImpl;
 import org.jbpm.task.utils.OnErrorAction;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
@@ -44,6 +45,8 @@ import com.sinosoft.one.bpm.model.ActiveNodeInfo;
 import com.sinosoft.one.bpm.model.DiagramInfo;
 import com.sinosoft.one.bpm.model.DiagramNodeInfo;
 import com.sinosoft.one.bpm.model.NodeInstanceLogComparator;
+import com.sinosoft.one.bpm.service.facade.ProcessInstanceBOService;
+import com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSupport;
 
 public class BpmServiceSupport {
 	static Logger logger = Logger.getLogger(JbpmAPIUtil.class);
@@ -57,15 +60,17 @@ public class BpmServiceSupport {
 	private EntityManagerFactory bpmEMF;
 	private AbstractPlatformTransactionManager bpmTxManager;
 	private ProcessEventListener bpmProcessEventListener;
+	private ProcessInstanceBOService processInstanceBOService;
+	private boolean useJTA;
 	
 	private Environment env;
 
 	public void init() {
-		
 		try {
 			loadKnowledgeSession("drools.properties");
 			getSession("drools.properties");
 			getTaskService();
+			initServiceInstances();
 		} catch (Exception e) {
 			logger.error("init BpmService exception.", e);
 		}
@@ -130,23 +135,22 @@ public class BpmServiceSupport {
 	 * @param emf
 	 * @return
 	 */
-	public StatefulKnowledgeSession loadKnowledgeSession(String process) {
-		StatefulKnowledgeSession result = null;
+	public void loadKnowledgeSession(String process) {
 		createKnowledgeBase(process);
 		final KnowledgeSessionConfiguration conf = KnowledgeBaseFactory
 				.newKnowledgeSessionConfiguration();
 		createEnvironment();
 		// 每次启动都加载第一个session
 		try {
-			result = JPAKnowledgeService.loadStatefulKnowledgeSession(1, kbase,
+			ksession = JPAKnowledgeService.loadStatefulKnowledgeSession(1, kbase,
 					conf, env);
-			dbLogger = new JPAWorkingMemoryDbLogger(result);
-			ksession = result;
-			ksession.addEventListener(bpmProcessEventListener);
+			if(ksession == null) {
+				ksession = createKnowledgeSession("drools.properties");
+			}
+			dbLogger = new JPAWorkingMemoryDbLogger(ksession);
 		} catch (Exception e) {
 			logger.warn("can not load session id =1");
 		}
-		return result;
 	}
 
 	private StatefulKnowledgeSession createKnowledgeSession(
@@ -165,20 +169,13 @@ public class BpmServiceSupport {
 	 */
 	public StatefulKnowledgeSession getSession(String propertiesFilePath)
 			throws Exception {
-
-		/*
-		 * * Create EntityManagerFactory and register it in the environment
-		 */
-		// if (emf == null)
-		// emf = Persistence
-		// .createEntityManagerFactory("org.jbpm.persistence.jpa");
-
-		/*
-		 * Create the knowledge session that uses JPA to persists runtime state
-		 */
 		if (ksession == null) {
 			ksession = createKnowledgeSession(propertiesFilePath);
-			ksession.addEventListener(bpmProcessEventListener);
+			if(bpmProcessEventListener == null) {
+				initServiceInstances();
+			} else {
+				ksession.addEventListener(bpmProcessEventListener);
+			}
 		}
 		return ksession;
 	}
@@ -204,10 +201,7 @@ public class BpmServiceSupport {
 	public TaskService getTaskService() throws Exception {
 		if (taskService == null) {
 			org.jbpm.task.service.TaskService tservice = getService();
-			if (ksession == null) {
-				ksession = getSession("drools.properties");
-			}
-			taskService = getTskService(ksession, tservice);
+			taskService = getTskService(tservice);
 			System.setProperty(UserGroupCallbackManager.USER_GROUP_CALLBACK_KEY, "com.sinosoft.one.bpm.identity.BpmDefaultUserGroupCallback");
 //			System.setProperty(UserGroupCallbackManager.USER_GROUP_CALLBACK_KEY, "org.jbpm.task.identity.DefaultUserGroupCallbackImpl");
 //			System.setProperty("jbpm.user.group.mapping", "classpath:/roles.properties");
@@ -244,11 +238,7 @@ public class BpmServiceSupport {
 		env = EnvironmentFactory.newEnvironment();  
 		env.set(EnvironmentName.ENTITY_MANAGER_FACTORY, bpmEMF);     
 		env.set(EnvironmentName.TRANSACTION_MANAGER, bpmTxManager);
-
 		JPAProcessInstanceDbLog.setEnvironment(env);
-//		if(jpaProcessInstanceDbLog == null) {
-//			jpaProcessInstanceDbLog = new JPAProcessInstanceDbLog(env);
-//		}
 	}
 
 	/**
@@ -259,11 +249,11 @@ public class BpmServiceSupport {
 	 * @param emf
 	 * @return
 	 */
-	public TaskService getTskService(StatefulKnowledgeSession ksession,
-			org.jbpm.task.service.TaskService taskService) {
+	public TaskService getTskService(org.jbpm.task.service.TaskService taskService) {
 		if (taskService == null) {
 			taskService = getService();
 		}
+		
 		LocalTaskService localTaskService = new LocalTaskService(taskService);
 		LocalHTWorkItemHandler humanTaskHandler = new LocalHTWorkItemHandler(localTaskService, ksession, OnErrorAction.RETHROW);
 		humanTaskHandler.connect();
@@ -279,8 +269,32 @@ public class BpmServiceSupport {
 	 * @return
 	 */
 	public org.jbpm.task.service.TaskService getService() {
-		org.jbpm.task.service.TaskService taskService = new org.jbpm.task.service.TaskService(bpmEMF, SystemEventListenerFactory.getSystemEventListener());
+		org.jbpm.task.service.TaskService taskService = new org.jbpm.task.service.TaskService();
+		//bpmEMF, SystemEventListenerFactory.getSystemEventListener()
+		taskService.setSystemEventListener(SystemEventListenerFactory.getSystemEventListener());
+		TaskSessionSpringFactoryImpl taskSessionSpringFactory = new TaskSessionSpringFactoryImpl();
+		taskSessionSpringFactory.setEntityManagerFactory(bpmEMF);
+		taskSessionSpringFactory.setTransactionManager((TransactionManager) env.get(EnvironmentName.TRANSACTION_MANAGER));
+		taskService.setTaskSessionFactory(taskSessionSpringFactory);
+		taskSessionSpringFactory.setTaskService(taskService);
+		taskSessionSpringFactory.setUseJTA(useJTA);
+		
+		taskService.initialize();
 		return taskService;
+	}
+	
+	public void initServiceInstances() {
+		if(processInstanceBOService == null) {
+			TransactionManager tm = (TransactionManager) env.get(EnvironmentName.TRANSACTION_MANAGER);
+			processInstanceBOService = new ProcessInstanceBOServiceSupport(bpmEMF, tm, useJTA);
+		} 
+		if(cache == null) {
+			cache = new ProcessInstanceBOCache(processInstanceBOService);
+		}
+		if(bpmProcessEventListener == null) {
+			bpmProcessEventListener = new BpmProcessEventListener(cache);
+		}
+		ksession.addEventListener(bpmProcessEventListener);
 	}
 	
 	public Object getGlobalVariable(String variableName) throws Exception {
@@ -485,4 +499,14 @@ public class BpmServiceSupport {
 	public Environment currentEnvironment() {
 		return env;
 	}
+
+	public boolean isUseJTA() {
+		return useJTA;
+	}
+
+	public void setUseJTA(boolean useJTA) {
+		this.useJTA = useJTA;
+	}
+	
+	
 }

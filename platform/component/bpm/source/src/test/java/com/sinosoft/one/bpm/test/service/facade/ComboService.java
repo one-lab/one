@@ -1,8 +1,8 @@
-package com.sinosoft.one.service.facade;
+package com.sinosoft.one.bpm.test.service.facade;
 
 import java.util.List;
 
-import com.sinosoft.one.test.domain.Combo;
+import com.sinosoft.one.bpm.test.domain.Combo;
 
 public interface ComboService {
 	public List<Combo> getCombos_StepOne(String condation);
@@ -10,6 +10,8 @@ public interface ComboService {
 	public List<Combo> getCombos_StepTwo(String condation);
 
 	public List<Combo> getCombos_StepThree(String condation);
+	
+	public List<Combo> getCombos_StepFour(String condation);
 
 	public void processCombo_StepOne(String comboCode, Combo c);
 

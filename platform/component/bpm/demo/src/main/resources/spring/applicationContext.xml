@@ -62,6 +62,7 @@
     <bean id="dataStore" class="com.sinosoft.one.bpmWebDemo.data.DataStoreImpl">
         <property name="hibernateTemplate" ref="hibernateTemplate" />
     </bean>
+    
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
@@ -71,7 +72,7 @@
         </tx:attributes>
     </tx:advice>
     <aop:config>
-        <aop:pointcut id="servicePointcut" expression="execution(public * com.sinosoft.one.bpmWebDemo.service..*.*(..))" />
+        <aop:pointcut id="servicePointcut" expression="execution(public * com.sinosoft.one.bpm.test.service.spring.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointcut" order="1"/>
     </aop:config>
 

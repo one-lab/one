@@ -1,4 +1,4 @@
-package com.sinosoft.one.service.spring;
+package com.sinosoft.one.bpm.test.service.spring;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,16 +6,16 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.bpm.aspect.GetTask;
-import com.sinosoft.one.bpm.aspect.Variable;
 import com.sinosoft.one.bpm.aspect.ProcessTask;
 import com.sinosoft.one.bpm.aspect.StartProcess;
+import com.sinosoft.one.bpm.aspect.Variable;
 import com.sinosoft.one.bpm.aspect.Variables;
+import com.sinosoft.one.bpm.test.domain.Combo;
+import com.sinosoft.one.bpm.test.domain.Kind;
+import com.sinosoft.one.bpm.test.service.facade.ComboService;
 import com.sinosoft.one.bpm.variable.VariableOperate;
 import com.sinosoft.one.bpm.variable.VariableScope;
 import com.sinosoft.one.bpm.variable.VariableType;
-import com.sinosoft.one.service.facade.ComboService;
-import com.sinosoft.one.test.domain.Combo;
-import com.sinosoft.one.test.domain.Kind;
 
 @Service
 public class ComboServiceSpringImpl implements ComboService {
@@ -171,6 +171,34 @@ public class ComboServiceSpringImpl implements ComboService {
 	@ProcessTask(userId = "combo004", businessBeanOffset = 1, businessIdAttributeName = "kind.comboCode")
 	public void processCombo_StepFour(String comboCode, Combo c) {
 		System.out.println("--------------processCombo_StepFour-----------");
+	}
+
+	@GetTask(userId = "combo004", businessIdAttributeName = "comboCode")
+	public List<Combo> getCombos_StepFour(String condation) {
+		System.out.println("--------------getCombos");
+		List<Combo> results = new ArrayList<Combo>();
+		for (int i = 0; i < 2; i++) {
+			Combo c = new Combo();
+			c.setComboCode("00001" + i);
+			if (i == 0) {
+				Kind k = new Kind();
+				k.setKindName("险种abc");
+				k.setKindCode("abc");
+				k.setComboCode("abc");
+				c.setComboCode("abc");
+				c.setKind(k);
+			} else {
+				Kind k = new Kind();
+				k.setKindName("险种" + i);
+				k.setKindCode("001" + i);
+				k.setComboCode("001" + i);
+				c.setComboCode("001" + i);
+				c.setKind(k);
+			}
+			results.add(c);
+		}
+		System.out.println("resturn resutl size:" + results.size());
+		return results;
 	}
 
 }
