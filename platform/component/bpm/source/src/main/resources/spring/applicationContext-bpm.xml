@@ -15,6 +15,8 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd"
 	default-autowire="byName" default-lazy-init="false">
 
+	<!-- <context:load-time-weaver/> -->
+	
 	<!-- <bean id="bpmDataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />
@@ -40,7 +42,7 @@
 
 	<bean id="bpmEMF"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="bpmDataSource" />
+		<property name="dataSource" ref="dataSource" />
 		<property name="persistenceUnitName" value="org.drools.persistence.jpa.local" />
 		<property name="persistenceXmlLocation" value="classpath:config/META-INF/persistence.xml" />
 		<property name="jpaVendorAdapter">
@@ -53,11 +55,14 @@
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-				<prop key="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.BTMTransactionManagerLookup</prop>
-				<!-- <prop key="hibernate.transaction.manager_lookup_class">com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup</prop> -->
+				<prop key="hibernate.transaction.manager_lookup_class">${hibernate.transaction.manager_lookup_class}</prop>
 			</props>
 		</property>
 	</bean>
+	
+	<!-- <bean id="bpmEM" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+	  	<property name="entityManagerFactory" ref="bpmEMF"/>
+	</bean> -->
 
 	<!-- <bean id="bpmTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="bpmEMF" />
@@ -67,30 +72,18 @@
 		<aop:aspect ref="bpmTraceAspect">
 			<aop:around method="getTask"
 				pointcut="execution(${bpm.aspect.expression}) and @annotation(com.sinosoft.one.bpm.aspect.GetTask)" />
-			<aop:around method="processTask"
-				pointcut="execution(${bpm.aspect.expression}) and @annotation(com.sinosoft.one.bpm.aspect.ProcessTask)" />
 			<aop:around method="startProcess"
 				pointcut="execution(${bpm.aspect.expression}) and @annotation(com.sinosoft.one.bpm.aspect.StartProcess )" />
+			<aop:around method="processTask"
+				pointcut="execution(${bpm.aspect.expression}) and @annotation(com.sinosoft.one.bpm.aspect.ProcessTask)" />
 		</aop:aspect>
 	</aop:config>
-	
-	<!-- <bean id="processInstanceBOService"
-		class="com.sinosoft.one.bpm.service.spring.ProcessInstanceBOServiceSupport">
-		<property name="emf" ref="bpmEMF" />
-	</bean> -->
-
-<!-- 	<bean id="processInstanceBOCache" class="com.sinosoft.one.bpm.util.ProcessInstanceBOCache">
-		<property name="processInstanceBOService" ref="processInstanceBOService" />
-	</bean>
-
-	<bean id="bpmProcessEventListener" class="com.sinosoft.one.bpm.util.BpmProcessEventListener">
-		<property name="cache" ref="processInstanceBOCache" />
-	</bean> -->
 
 	<bean id="bpmServiceSupport" scope="singleton"
 		class="com.sinosoft.one.bpm.util.BpmServiceSupport" init-method="init"
 		destroy-method="destory">
 		<property name="bpmEMF" ref="bpmEMF" />
+		<!-- <property name="bpmEM" ref="bpmEM" /> -->
 		<property name="bpmTxManager" ref="bpmTransactionManager" />
 		<!-- <property name="cache" ref="processInstanceBOCache" />
 		<property name="bpmProcessEventListener" ref="bpmProcessEventListener" /> -->
@@ -98,7 +91,7 @@
 	</bean>
 
 	<bean id="bpmService"
-		class="com.sinosoft.one.bpm.service.spring.BpmServiceImplement">
+		class="com.sinosoft.one.bpm.service.spring.BpmServiceImplement" >
 		<property name="bpmServiceSupport" ref="bpmServiceSupport" />
 	</bean>
 

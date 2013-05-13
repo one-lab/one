@@ -12,9 +12,11 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<name>bpm demo Maven Webapp</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<properties>
 		<struts2.version>2.3.7</struts2.version>
+		<jbpm5.version>5.4.0.Final</jbpm5.version>
+		<drools.version>5.5.0.Final</drools.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -26,12 +28,21 @@
 			<groupId>com.sinosoft.one</groupId>
 			<artifactId>bpm</artifactId>
 			<version>1.0.3-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>xml-apis</groupId>
-					<artifactId>xml-apis</artifactId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>3.3.2.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.4.0.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<scope>provide</scope>
 		</dependency>
 		<!-- struts2 begin -->
 		<dependency>
@@ -130,6 +141,22 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 		<!-- log end -->
+		<dependency>
+			<groupId>org.codehaus.btm</groupId>
+			<artifactId>btm</artifactId>
+			<version>2.1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ins</groupId>
+			<artifactId>arch4</artifactId>
+			<version>4.2.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sinosoft</groupId>
+			<artifactId>sysframework</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -146,6 +173,40 @@
 					<contextPath>bpmWebDemo</contextPath>
 					<webDefaultXml>src/main/java/webdefault.xml</webDefaultXml>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<url>http://localhost:4080/manager</url>
+					<server>tomcat.server</server>
+					<path>/demo</path>
+					<port>7080</port>
+					<uriEncoding>UTF-8</uriEncoding>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>oracle</groupId>
+						<artifactId>ojdbc</artifactId>
+						<version>6</version>
+					</dependency>
+					<dependency>
+						<groupId>oracle</groupId>
+						<artifactId>orai18n</artifactId>
+						<version>1</version>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.btm</groupId>
+						<artifactId>btm</artifactId>
+						<version>2.1.3</version>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.btm</groupId>
+						<artifactId>btm-tomcat55-lifecycle</artifactId>
+						<version>2.1.3</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

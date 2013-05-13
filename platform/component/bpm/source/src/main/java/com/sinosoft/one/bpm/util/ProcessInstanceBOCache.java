@@ -94,10 +94,11 @@ public class ProcessInstanceBOCache {
 		if(StringUtils.isNotBlank(businessId)) {
 			processInstanceIdCache.remove(processId + "_" + businessId);
 			businessIdCache.remove(processInstanceId);
+			
+			ProcessInstanceBOInfo info = processInstanceBOService.getProcessInstanceBOInfo(processInstanceId);
+			if(info != null) {
+				processInstanceBOService.removeProcessInstanceBOInfo(info);
+			}
 		}
-		
-		ProcessInstanceBOInfo info = processInstanceBOService.getProcessInstanceBOInfo(processInstanceId);
-		processInstanceBOService.removeProcessInstanceBOInfo(info);
 	}
-	
 }

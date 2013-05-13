@@ -1,0 +1,9 @@
+<!DOCTYPE aspectj PUBLIC
+"-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+<weaver options="-verbose -Xset:weaveJavaxPackages=true"></weaver>
+<aspects>
+<!-- weave in just this aspect -->
+<aspect name="com.sinosoft.one.bpm.aspect.TaskAspect" />
+</aspects>
+</aspectj>

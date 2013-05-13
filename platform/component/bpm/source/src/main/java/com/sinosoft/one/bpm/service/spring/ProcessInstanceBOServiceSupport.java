@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -23,9 +22,9 @@ public class ProcessInstanceBOServiceSupport implements ProcessInstanceBOService
 	private TransactionManager tm;
     private boolean useJTA;
 	
-	public ProcessInstanceBOServiceSupport(EntityManagerFactory emf,
+	public ProcessInstanceBOServiceSupport(EntityManager em,
 			TransactionManager tm, boolean useJTA) {
-		this.em = emf.createEntityManager();
+		this.em = em;
 		this.tm = tm;
 		this.useJTA = useJTA;
 		
@@ -81,7 +80,6 @@ public class ProcessInstanceBOServiceSupport implements ProcessInstanceBOService
 			public void doOperation() throws Exception {
 				em.persist(info);
 			}
-			
 		});
 	}
 	

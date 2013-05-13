@@ -167,4 +167,10 @@
 		<location>/global/ui/404.jsp</location>
 	</error-page>
 
+	<resource-ref>
+		<description>yj data source</description>
+		<res-ref-name>java/bpmDataSource</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
 </web-app>

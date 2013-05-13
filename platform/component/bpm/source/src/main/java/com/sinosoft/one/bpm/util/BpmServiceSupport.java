@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
 import org.drools.SystemEventListenerFactory;
 import org.drools.agent.KnowledgeAgent;
+import org.drools.container.spring.beans.persistence.HumanTaskSpringTransactionManager;
 import org.drools.definition.process.Node;
 import org.drools.definition.process.NodeContainer;
 import org.drools.definition.process.WorkflowProcess;
@@ -58,6 +60,7 @@ public class BpmServiceSupport {
 	
 	private ProcessInstanceBOCache cache;
 	private EntityManagerFactory bpmEMF;
+//	private EntityManager bpmEM;
 	private AbstractPlatformTransactionManager bpmTxManager;
 	private ProcessEventListener bpmProcessEventListener;
 	private ProcessInstanceBOService processInstanceBOService;
@@ -144,6 +147,7 @@ public class BpmServiceSupport {
 		try {
 			ksession = JPAKnowledgeService.loadStatefulKnowledgeSession(1, kbase,
 					conf, env);
+			
 			if(ksession == null) {
 				ksession = createKnowledgeSession("drools.properties");
 			}
@@ -236,8 +240,22 @@ public class BpmServiceSupport {
 	 */
 	private void createEnvironment() {
 		env = EnvironmentFactory.newEnvironment();  
-		env.set(EnvironmentName.ENTITY_MANAGER_FACTORY, bpmEMF);     
+		env.set(EnvironmentName.ENTITY_MANAGER_FACTORY, bpmEMF);   
 		env.set(EnvironmentName.TRANSACTION_MANAGER, bpmTxManager);
+		
+//		EntityManager em = bpmEMF.createEntityManager();
+//		env.set(EnvironmentName.APP_SCOPED_ENTITY_MANAGER, bpmEM);
+//		env.set(EnvironmentName.CMD_SCOPED_ENTITY_MANAGER, bpmEM);
+//		
+//		env.set("IS_JTA_TRANSACTION", true);
+//		env.set("IS_SHARED_ENTITY_MANAGER", true);
+//
+//		TransactionManager transactionManager = new DroolsSpringTransactionManager( bpmTxManager );
+//		env.set(EnvironmentName.TRANSACTION_MANAGER, transactionManager);
+//
+//		PersistenceContextManager persistenceContextManager = new DroolsSpringJpaManager(env);
+//		env.set(EnvironmentName.PERSISTENCE_CONTEXT_MANAGER, persistenceContextManager);
+		
 		JPAProcessInstanceDbLog.setEnvironment(env);
 	}
 
@@ -269,12 +287,16 @@ public class BpmServiceSupport {
 	 * @return
 	 */
 	public org.jbpm.task.service.TaskService getService() {
+		
 		org.jbpm.task.service.TaskService taskService = new org.jbpm.task.service.TaskService();
 		//bpmEMF, SystemEventListenerFactory.getSystemEventListener()
 		taskService.setSystemEventListener(SystemEventListenerFactory.getSystemEventListener());
+		
 		TaskSessionSpringFactoryImpl taskSessionSpringFactory = new TaskSessionSpringFactoryImpl();
+//		taskSessionSpringFactory.setEntityManager(bpmEM);
 		taskSessionSpringFactory.setEntityManagerFactory(bpmEMF);
-		taskSessionSpringFactory.setTransactionManager((TransactionManager) env.get(EnvironmentName.TRANSACTION_MANAGER));
+		taskSessionSpringFactory.setTransactionManager(new HumanTaskSpringTransactionManager(bpmTxManager));
+//		taskSessionSpringFactory.setTransactionManager((TransactionManager)env.get(EnvironmentName.TRANSACTION_MANAGER));
 		taskService.setTaskSessionFactory(taskSessionSpringFactory);
 		taskSessionSpringFactory.setTaskService(taskService);
 		taskSessionSpringFactory.setUseJTA(useJTA);
@@ -286,7 +308,14 @@ public class BpmServiceSupport {
 	public void initServiceInstances() {
 		if(processInstanceBOService == null) {
 			TransactionManager tm = (TransactionManager) env.get(EnvironmentName.TRANSACTION_MANAGER);
-			processInstanceBOService = new ProcessInstanceBOServiceSupport(bpmEMF, tm, useJTA);
+			EntityManager em = (EntityManager)env.get(EnvironmentName.APP_SCOPED_ENTITY_MANAGER);
+			if(em == null) {
+				em = (EntityManager)env.get(EnvironmentName.CMD_SCOPED_ENTITY_MANAGER);
+			}
+			if(em == null) {
+				em = bpmEMF.createEntityManager();
+			}
+			processInstanceBOService = new ProcessInstanceBOServiceSupport(em, tm, useJTA);
 		} 
 		if(cache == null) {
 			cache = new ProcessInstanceBOCache(processInstanceBOService);
@@ -488,9 +517,9 @@ public class BpmServiceSupport {
 		this.bpmProcessEventListener = bpmProcessEventListener;
 	}
 
-	public void setBpmEMF(EntityManagerFactory bpmEMF) {
-		this.bpmEMF = bpmEMF;
-	}
+//	public void setBpmEMF(EntityManagerFactory bpmEMF) {
+//		this.bpmEMF = bpmEMF;
+//	}
 
 	public void setBpmTxManager(AbstractPlatformTransactionManager bpmTxManager) {
 		this.bpmTxManager = bpmTxManager;
@@ -507,6 +536,8 @@ public class BpmServiceSupport {
 	public void setUseJTA(boolean useJTA) {
 		this.useJTA = useJTA;
 	}
-	
-	
+
+	public void setBpmEMF(EntityManagerFactory bpmEMF) {
+		this.bpmEMF = bpmEMF;
+	}
 }

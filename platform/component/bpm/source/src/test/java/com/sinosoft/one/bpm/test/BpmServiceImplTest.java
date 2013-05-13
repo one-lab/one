@@ -1,12 +1,13 @@
 package com.sinosoft.one.bpm.test;
 
+import ins.framework.common.Page;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Random;
 
-import junit.framework.Assert;
-
-import org.jbpm.task.query.TaskSummary;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -18,7 +19,6 @@ import com.sinosoft.one.bpm.test.domain.Combo;
 import com.sinosoft.one.bpm.test.domain.Kind;
 import com.sinosoft.one.bpm.test.service.facade.ComboService;
 import com.sinosoft.one.bpm.util.BpmServiceSupport;
-import com.sinosoft.one.bpm.util.JbpmAPIUtil;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-bpm.xml", "/applicationContext-test.xml" })
@@ -31,68 +31,141 @@ public class BpmServiceImplTest extends AbstractJUnit4SpringContextTests {
 	@Autowired
 	public BpmServiceSupport bpmServiceSupport;
 
+	private Combo combo;
+	
+	private Page page;
 	@Test
-	public void testComboService() {
-		try {
-			System.out.println("===only in update mode test  begin===");
-			List<TaskSummary> tasks = bpmServiceSupport.getTaskService()
-					.getTasksOwned("combo001", "en-UK");
-			System.out.println("======task belong to combo001 size is:"
-					+ tasks.size());
-			System.out.println("===only in update mode test  begin===");
+	public void testComboProcess() throws Exception {
+		createCombo();
+		
+//		getStep1();
+//		processStep1();
+//		
+//		getStep2();
+//		processStep2();
+//		
+//		getStep3();
+//		processStep3();
+//		
+//		getStep4();
+//		processStep4();
+//		
+//		getStep5();
+//		processStep5();
+	}
 
-			System.out.println("++++++++begin createCombo");
-			String id = UUID.randomUUID().toString().replaceAll("-", "");
-			Combo c = new Combo();
-			Kind k = new Kind();
-			k.setKindName("险种1");
-			k.setKindCode(id);
-			k.setComboCode(id);
-			c.setComboCode(id);
-			c.setKind(k);
-			comboService.createCombo(id, c);
-			String data = (String)JbpmAPIUtil.getGlobalVariable("myData");
-			Assert.assertEquals("myData", data);
-			
-			String myProcessInstanceData = (String)JbpmAPIUtil.getProcessInstanceVariable("comboProcess", c.getComboCode(), "myProcessInstanceData");
-			Assert.assertEquals("myProcessInstanceData", myProcessInstanceData);
-			
-			System.out.println("++++++++finish createCombo");
-			List<Combo> results = comboService
-					.getCombos_StepOne("condation rule");
-			// 切面过滤后返回的结果
-			for (Combo result : results) {
-				System.out.println("\n combo:" + result.getComboCode() + "  "
-						+ result.getKind().getComboCode());
-			}
-			System.out.println("@@@@@@@@begin  processCombo");
-			System.out.println("----------------------step1------------------");
-			comboService.processCombo_StepOne(id, c);
-			List<String> myList = (List<String>)JbpmAPIUtil.getGlobalVariable("myList");
-			Assert.assertEquals("myList", myList.get(0));
-			// 直接用第一次获取的combo给StepTwo和StepThree使用,应该在每一步调用前获取combo
-			System.out.println("----------------------step2------------------");
-			results = comboService.getCombos_StepTwo("condation rule");
-			// 处理combo c , 应该是从results中选取一个
-			comboService.processCombo_StepTwo(id, c);
-			Map<String, Object> myMap = (Map<String, Object>)JbpmAPIUtil.getGlobalVariable("myMap");
-			Assert.assertEquals("myMap", myMap.get("myMap"));
-			System.out.println("----------------------step3------------------");
-			results = comboService.getCombos_StepThree("condation rule");
-			// 处理combo c , 应该是从results中选取一个
-			comboService.processCombo_StepThree(id, c);
-			
-//			results = comboService.getCombos_StepFour("condation rule");
-			comboService.processCombo_StepFour(id, c);
-//			
-			comboService.processCombo_StepFour(id, c);
-			
-			System.out.println("@@@@@@@@end  processCombo");
-			Assert.assertNotNull(results);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+	
+	public void createCombo() {
+		combo = new Combo();
+		combo.setNo(new Random().nextInt());
+		String uuid = System.currentTimeMillis() + "";
+		combo.setComboCode(uuid);
+		
+		Kind kind = new Kind();
+		kind.setKindCode(uuid);
+		kind.setComboCode(uuid);
+		kind.setKindName("Kind-" + uuid);
+		
+		combo.setKind(kind);
+		
+		System.out.println("--------createCombo：" + combo.getComboCode());
+		System.out.println("--------createCombo kind:" + combo.getKind().getKindCode());
+		combo.getKind().setComboCode(combo.getComboCode());
+		Map<String, Object> mapData = new HashMap<String, Object>();
+		mapData.put("111", "1111");
+		comboService.createCombo(combo.getComboCode(), combo, mapData);
+		System.out.println("--------createCombo--------");
+	}
+
+	public String getStep1() {
+		this.page = comboService.getCombos("combo001", "");
+		System.out.println("page size--------" + page.getResult().size());
+		return "SUCCESS";
+	}
+
+	public void processStep1() {
+		combo.getKind().setComboCode(combo.getComboCode());
+		comboService.processComboStepOne("combo001", combo.getComboCode(), combo);
+		System.out.println("fisrt step--------verifyCombo1--------");
+		System.out.println("-------verifyCombo1--------success");
+	}
+
+	public String getStep2() {
+		this.page = comboService.getCombos("combo002", "");
+		System.out.println("page size--------" + page.getResult().size());
+		return "SUCCESS";
+	}
+
+	public void processStep2() throws Exception {
+		combo.getKind().setComboCode(combo.getComboCode());
+		comboService.processComboStepTwo(combo.getComboCode(), combo, "true");
+		System.out.println("second step--------verifyCombo2--------");
+
+	}
+	
+	public String getStep3() {
+		this.page = comboService.getCombos("combo003", "");
+		System.out.println("page size--------" + page.getResult().size());
+		return "SUCCESS";
+	}
+
+	public void processStep3() throws Exception {
+		combo.getKind().setComboCode(combo.getComboCode());
+		comboService.processComboStepThree(combo.getComboCode(), combo);
+		System.out.println("third step--------verifyCombo3--------");
+
+	}
+
+	public String getStep4() {
+		this.page = new Page();
+		List<Combo> results = comboService.getCombosStepFour("");
+
+		for (Combo c : results) {
+			page.getResult().add(c);
 		}
+		System.out.println("page size--------" + results.size());
+		return "SUCCESS";
+	}
+
+	public void processStep4() {
+		combo.getKind().setComboCode(combo.getComboCode());
+		List<String> strList = new ArrayList<String>();
+		strList.add("aaa");
+		strList.add("bbb");
+		comboService.processComboStepFour(combo.getComboCode(), combo, strList);
+		System.out.println("four step--------deployCombo-2222222-------");
+
+	}
+	
+	public String getStep5() {
+		this.page = new Page();
+		List<Combo> results = comboService.getCombosStepFive("");
+
+		for (Combo c : results) {
+			page.getResult().add(c);
+		}
+		System.out.println("page size--------" + results.size());
+		return "SUCCESS";
+	}
+	
+	public void processStep5() {
+		combo.getKind().setComboCode(combo.getComboCode());
+		List<String> listData = new ArrayList<String>() {
+			{
+				add("aaaa");
+				add("bbbb");
+			}
+		};
+		for(String strData : listData) {
+			comboService.processComboStepFive(combo.getComboCode(), combo);
+		}
+		System.out.println("five step--------deployCombo-3333-------");
+
+	}
+	
+
+	public void setComboService(ComboService comboService) {
+		this.comboService = comboService;
 	}
 
 }

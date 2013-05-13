@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <%@ include file="/global/ui/taglibs.jsp"%>
+<%@ taglib uri="http:/util.one.sinosoft.com/RCDate" prefix="rcDate"%>
+<%@page import="java.util.Date" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<%
+ request.setAttribute("testDate", new Date());
+%>
+
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -76,6 +82,8 @@
 		document.getElementById("pageNo").value = 1;
 		document.getElementById("frmInput").submit();
 	}
+	
+	<rcDate:rcDate name="testDate" formate="yyyy-MM-dd"/>
 </script>
 	
 </body>

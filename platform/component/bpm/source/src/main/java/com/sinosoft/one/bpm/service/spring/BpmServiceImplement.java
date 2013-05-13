@@ -22,6 +22,10 @@ public class BpmServiceImplement implements BpmService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private BpmServiceSupport bpmServiceSupport;
+	
+/*	public void init() {
+		TaskAspect.setBpmSerivce(this);
+	}*/
 
 	/*
 	 * 用BpmServiceSupport的session创建流程

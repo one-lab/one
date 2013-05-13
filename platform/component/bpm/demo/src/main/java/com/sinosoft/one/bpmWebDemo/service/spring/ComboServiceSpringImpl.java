@@ -2,6 +2,7 @@ package com.sinosoft.one.bpmWebDemo.service.spring;
 
 import ins.framework.common.Page;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +25,8 @@ import com.sinosoft.one.bpmWebDemo.data.StudentStore;
 import com.sinosoft.one.bpmWebDemo.domain.Combo;
 import com.sinosoft.one.bpmWebDemo.domain.Student;
 import com.sinosoft.one.bpmWebDemo.service.facade.ComboService;
+import com.sinosoft.sysframework.reference.DBFactory;
+import com.sinosoft.sysframework.reference.DBManager;
 
 @Service
 public class ComboServiceSpringImpl implements ComboService {
@@ -109,12 +112,35 @@ public class ComboServiceSpringImpl implements ComboService {
 	@Variable(name = "mapData", scope = VariableScope.PROCESSINSTANCE, variableValueBeanOffset=2, 
 			processId = "comboProcess", businessBeanOffset = 1, businessIdAttributeName = "comboCode")
 	public void createCombo(String comboCode, Combo c, Map<String, Object> mapData) {
+		DBManager dbManager = null;
 		try {
-			if(c==null)System.out.println("c==null");
-				dataStore.store(c);
+			if(c==null) {
+				System.out.println("c==null");
+				return;
+			}
+			
+			dataStore.store(c);
             studentStore.saveStudent(new Student(UUID.randomUUID().toString().replaceAll("-", ""), "carvin"));
+            
+//            System.out.println(System.getProperty("user.dir") + File.separator +"src" + File.separator +"test"+ File.separator +"resources");
+//            DBFactory.configure(System.getProperty("user.dir") + File.separator +"src" + File.separator +"test"+ File.separator +"resources" + File.separator + "dbmanager-config.xml");
+            dbManager = new DBManager();
+    		dbManager.open("myDataSource");
+    		dbManager.beginTransaction();
+    		dbManager.executeUpdate("update bpm_demo_student set name='222222222' where id='c2cfe5f8eb1a45ab8a8ee54c149d07da'");
+    		dbManager.executeUpdate("update bpm_demo_student set name='222222222' where id='ce7f647ccafa4b6b9763ae7f16a9025b' and ");
+    		dbManager.commitTransaction();
+    		dbManager.close();
+            
 //            Integer.valueOf("aaa");
 		} catch (Exception e) {
+			if(dbManager != null) {
+				try {
+					dbManager.rollbackTransaction();
+				} catch (Exception e1) {
+					throw new RuntimeException(e1);
+				}
+			}
 			throw new RuntimeException(e);
 		}
 		System.out.println("------creat--------combo:" + comboCode);

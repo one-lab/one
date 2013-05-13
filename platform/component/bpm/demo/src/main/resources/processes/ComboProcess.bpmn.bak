@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_mapDataItem" structureRef="java.util.Map" />
+  <itemDefinition id="_listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_isPassedItem" structureRef="String" />
+
+  <itemDefinition id="_3-dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_3-mapDataItem" structureRef="java.util.Map" />
+  <itemDefinition id="_3-listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_3-isPassedItem" structureRef="String" />
+
+  <itemDefinition id="_5-dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_5-mapDataItem" structureRef="java.util.Map" />
+  <itemDefinition id="_5-listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_5-isPassedItem" structureRef="String" />
+
+  <itemDefinition id="_12-dataItem" structureRef="java.util.HashMap" />
+  <itemDefinition id="_12-mapDataItem" structureRef="java.util.Map" />
+  <itemDefinition id="_12-listDataItem" structureRef="java.util.List" />
+  <itemDefinition id="_12-isPassedItem" structureRef="String" />
+
+  <itemDefinition id="_14-2-3-strDataItem" />
+
+  <itemDefinition id="_14_multiInstanceItemType" />
+
+  <process processType="Private" isExecutable="true" id="comboProcess" name="comboProcess" tns:packageName="defaultPackage" >
+
+    <extensionElements>
+     <tns:global identifier="myList" type="java.util.List" />
+     <tns:global identifier="myMap" type="java.util.Map" />
+    </extensionElements>
+    <!-- process variables -->
+    <property id="data" itemSubjectRef="_dataItem"/>
+    <property id="mapData" itemSubjectRef="_mapDataItem"/>
+    <property id="listData" itemSubjectRef="_listDataItem"/>
+    <property id="isPassed" itemSubjectRef="_isPassedItem"/>
+
+    <!-- nodes -->
+    <startEvent id="_1" name="StartProcess" />
+    <userTask id="_3" name="进入第一步" >
+      <ioSpecification>
+        <dataInput id="_3_TaskNameInput" name="TaskName" />
+        <inputSet>
+          <dataInputRefs>_3_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_3_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">step1</from>
+          <to xsi:type="tFormalExpression">_3_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo001</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <scriptTask id="_4" name="进入第二步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("------ into step 2 ----------");</script>
+    </scriptTask>
+    <userTask id="_5" name="第二步" >
+      <ioSpecification>
+        <dataInput id="_5_TaskNameInput" name="TaskName" />
+        <dataOutput id="_5_isPassedOutput" name="isPassed" />
+        <inputSet>
+          <dataInputRefs>_5_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_5_isPassedOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_5_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">step2</from>
+          <to xsi:type="tFormalExpression">_5_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_5_isPassedOutput</sourceRef>
+        <targetRef>isPassed</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo002</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <complexGateway id="_7" name="Gateway" gatewayDirection="Converging" />
+    <inclusiveGateway id="_8" name="Gateway" gatewayDirection="Diverging" />
+    <callActivity id="_9" name="Sub-Process" calledElement="comboSubProcess" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </callActivity>
+    <endEvent id="_10" name="End" >
+        <terminateEventDefinition />
+    </endEvent>
+    <scriptTask id="_11" name="进入第三步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("------ into step 3 --------);</script>
+    </scriptTask>
+    <userTask id="_12" name="第三步" >
+      <ioSpecification>
+        <dataInput id="_12_TaskNameInput" name="TaskName" />
+        <inputSet>
+          <dataInputRefs>_12_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_12_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">step3</from>
+          <to xsi:type="tFormalExpression">_12_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo003</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <subProcess id="_13" name="Sub-Process"  >
+    <!-- nodes -->
+    <startEvent id="_13-1" name="Start" />
+    <scriptTask id="_13-2" name="进入第四步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("------ into step 4 -----");</script>
+    </scriptTask>
+    <userTask id="_13-3" name="第四步" >
+      <ioSpecification>
+        <dataInput id="_13-3_TaskNameInput" name="TaskName" />
+        <inputSet>
+          <dataInputRefs>_13-3_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_13-3_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">step4</from>
+          <to xsi:type="tFormalExpression">_13-3_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo004</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <endEvent id="_13-4" name="End" />
+    <!-- connections -->
+    <sequenceFlow id="_13-1-_13-2" sourceRef="_13-1" targetRef="_13-2" />
+    <sequenceFlow id="_13-2-_13-3" sourceRef="_13-2" targetRef="_13-3" />
+    <sequenceFlow id="_13-3-_13-4" sourceRef="_13-3" targetRef="_13-4" />
+    </subProcess>
+    <subProcess id="_14" name="Multiple Instances"  >
+      <ioSpecification>
+        <dataInput id="_14_input" name="MultiInstanceInput" />
+        <inputSet/>
+        <outputSet/>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>listData</sourceRef>
+        <targetRef>_14_input</targetRef>
+      </dataInputAssociation>
+      <multiInstanceLoopCharacteristics>
+        <loopDataInputRef>_14_input</loopDataInputRef>
+        <inputDataItem id="strData" itemSubjectRef="_14_multiInstanceItemType"/>
+      </multiInstanceLoopCharacteristics>
+    <!-- nodes -->
+    <startEvent id="_14-2-1" name="Start" />
+    <scriptTask id="_14-2-2" name="进入第五步" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("-------into step 5 : " + strData + " --------");</script>
+    </scriptTask>
+    <userTask id="_14-2-3" name="第五步" >
+      <ioSpecification>
+        <dataInput id="_14-2-3_TaskNameInput" name="TaskName" />
+        <inputSet>
+          <dataInputRefs>_14-2-3_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_14-2-3_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">step5</from>
+          <to xsi:type="tFormalExpression">_14-2-3_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>combo005</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <endEvent id="_14-2-4" name="End" />
+    <!-- connections -->
+    <sequenceFlow id="_14-2-1-_14-2-2" sourceRef="_14-2-1" targetRef="_14-2-2" />
+    <sequenceFlow id="_14-2-2-_14-2-3" sourceRef="_14-2-2" targetRef="_14-2-3" />
+    <sequenceFlow id="_14-2-3-_14-2-4" sourceRef="_14-2-3" targetRef="_14-2-4" />
+    </subProcess>
+    <endEvent id="_15" name="End" >
+        <terminateEventDefinition />
+    </endEvent>
+
+    <!-- connections -->
+    <sequenceFlow id="_7-_3" sourceRef="_7" targetRef="_3" />
+    <sequenceFlow id="_3-_4" sourceRef="_3" targetRef="_4" />
+    <sequenceFlow id="_4-_5" sourceRef="_4" targetRef="_5" />
+    <sequenceFlow id="_1-_7" sourceRef="_1" targetRef="_7" />
+    <sequenceFlow id="_8-_7" sourceRef="_8" targetRef="_7" >
+      <conditionExpression xsi:type="tFormalExpression" />
+    </sequenceFlow>
+    <sequenceFlow id="_5-_8" sourceRef="_5" targetRef="_8" />
+    <sequenceFlow id="_8-_9" sourceRef="_8" targetRef="_9" name="通过" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "true".equals(isPassed);</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_8-_10" sourceRef="_8" targetRef="_10" name="撤销" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return "end".equals(isPassed);</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_9-_11" sourceRef="_9" targetRef="_11" />
+    <sequenceFlow id="_11-_12" sourceRef="_11" targetRef="_12" />
+    <sequenceFlow id="_12-_13" sourceRef="_12" targetRef="_13" />
+    <sequenceFlow id="_13-_14" sourceRef="_13" targetRef="_14" />
+    <sequenceFlow id="_14-_15" sourceRef="_14" targetRef="_15" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="comboProcess" >
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="146" y="1" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_3" >
+        <dc:Bounds x="243" y="71" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_4" >
+        <dc:Bounds x="387" y="74" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_5" >
+        <dc:Bounds x="511" y="77" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_7" >
+        <dc:Bounds x="145" y="65" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_8" >
+        <dc:Bounds x="640" y="76" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_9" >
+        <dc:Bounds x="611" y="167" width="110" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_10" >
+        <dc:Bounds x="740" y="77" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_11" >
+        <dc:Bounds x="478" y="166" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12" >
+        <dc:Bounds x="308" y="165" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13" >
+        <dc:Bounds x="307" y="246" width="420" height="128" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13-1" >
+        <dc:Bounds x="323" y="293" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13-2" >
+        <dc:Bounds x="399" y="294" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13-3" >
+        <dc:Bounds x="513" y="292" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13-4" >
+        <dc:Bounds x="660" y="291" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14" >
+        <dc:Bounds x="305" y="414" width="425" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14-2-1" >
+        <dc:Bounds x="323" y="458" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14-2-2" >
+        <dc:Bounds x="397" y="456" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14-2-3" >
+        <dc:Bounds x="512" y="458" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14-2-4" >
+        <dc:Bounds x="657" y="456" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_15" >
+        <dc:Bounds x="784" y="465" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_13-1-_13-2" >
+        <di:waypoint x="40" y="71" />
+        <di:waypoint x="132" y="72" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_13-2-_13-3" >
+        <di:waypoint x="132" y="72" />
+        <di:waypoint x="256" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_13-3-_13-4" >
+        <di:waypoint x="256" y="70" />
+        <di:waypoint x="377" y="69" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14-2-1-_14-2-2" >
+        <di:waypoint x="42" y="68" />
+        <di:waypoint x="132" y="66" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14-2-2-_14-2-3" >
+        <di:waypoint x="132" y="66" />
+        <di:waypoint x="257" y="68" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14-2-3-_14-2-4" >
+        <di:waypoint x="257" y="68" />
+        <di:waypoint x="376" y="66" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7-_3" >
+        <di:waypoint x="169" y="89" />
+        <di:waypoint x="293" y="95" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_3-_4" >
+        <di:waypoint x="293" y="95" />
+        <di:waypoint x="427" y="98" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4-_5" >
+        <di:waypoint x="427" y="98" />
+        <di:waypoint x="561" y="101" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_1-_7" >
+        <di:waypoint x="170" y="25" />
+        <di:waypoint x="169" y="89" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8-_7" >
+        <di:waypoint x="664" y="100" />
+        <di:waypoint x="665" y="22" />
+        <di:waypoint x="219" y="18" />
+        <di:waypoint x="169" y="89" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5-_8" >
+        <di:waypoint x="561" y="101" />
+        <di:waypoint x="664" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8-_9" >
+        <di:waypoint x="664" y="100" />
+        <di:waypoint x="666" y="191" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8-_10" >
+        <di:waypoint x="664" y="100" />
+        <di:waypoint x="764" y="101" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9-_11" >
+        <di:waypoint x="666" y="191" />
+        <di:waypoint x="518" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11-_12" >
+        <di:waypoint x="518" y="190" />
+        <di:waypoint x="358" y="189" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12-_13" >
+        <di:waypoint x="358" y="189" />
+        <di:waypoint x="517" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_13-_14" >
+        <di:waypoint x="517" y="310" />
+        <di:waypoint x="517" y="489" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14-_15" >
+        <di:waypoint x="517" y="489" />
+        <di:waypoint x="808" y="489" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>

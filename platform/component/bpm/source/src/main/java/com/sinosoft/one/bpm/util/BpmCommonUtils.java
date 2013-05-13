@@ -10,22 +10,22 @@ import org.springframework.beans.BeanUtils;
 public final class BpmCommonUtils {
 	private BpmCommonUtils() {}
 	
-	public static String parseAttributeValue(Object bean, String attributeName) throws Exception  {
-    	String value = "";
-        if (BeanUtils.isSimpleProperty(bean.getClass())) {
-        	value = bean.toString();
-        } else {
-        	if(StringUtils.isBlank(attributeName)) {
-        		throw new IllegalArgumentException("the attribute value [" + attributeName + "] is invalid.");
-        	}
-        	value = PropertyUtils.getProperty(bean, attributeName)
-                    .toString();
-        }
-        return value;
-    }
+//	public static String parseAttributeValue(Object bean, String attributeName) throws Exception  {
+//    	String value = "";
+//        if (BeanUtils.isSimpleProperty(bean.getClass())) {
+//        	value = bean.toString();
+//        } else {
+//        	if(StringUtils.isBlank(attributeName)) {
+//        		throw new IllegalArgumentException("the attribute value [" + attributeName + "] is invalid.");
+//        	}
+//        	value = PropertyUtils.getProperty(bean, attributeName)
+//                    .toString();
+//        }
+//        return value;
+//    }
 	
-	public static Object parseVariableValue(Object bean, String attributeName) throws Exception  {
-    	String value = "";
+	public static Object parseAttributeValue(Object bean, String attributeName)  {
+    	Object value = null;
         if (BeanUtils.isSimpleProperty(bean.getClass())) {
         	value = bean.toString();
         } else {
@@ -35,17 +35,20 @@ public final class BpmCommonUtils {
         	if(StringUtils.isBlank(attributeName)) {
         		throw new IllegalArgumentException("the attribute value [" + attributeName + "] is invalid.");
         	}
-        	value = PropertyUtils.getProperty(bean, attributeName)
-                    .toString();
+        	try {
+				value = PropertyUtils.getProperty(bean, attributeName);
+			} catch (Exception e) {
+				throw new IllegalArgumentException("the attribute value [" + attributeName + "] is invalid.");
+			} 
         }
         return value;
     }
 	
 	public static Object parseVariableValue(Object[] args, int attributeOffset, String attributeName) throws Exception {
-		return parseVariableValue(args[attributeOffset], attributeName);
+		return parseAttributeValue(args[attributeOffset], attributeName);
 	}
 	
-	public static String parseAttributeValue(Object[] args, int attributeOffset, String attributeName) throws Exception {
+	public static Object parseAttributeValue(Object[] args, int attributeOffset, String attributeName) throws Exception {
 		return parseAttributeValue(args[attributeOffset], attributeName);
 	}
 	

@@ -41,7 +41,7 @@ public final class DefaultVariableHandler extends AbstractVariableHandler {
 					bpmServiceSupport.setGlobalVariable(variableName, variableValue);
 				} else {
 					processId = variable.processId();
-					businessId = BpmCommonUtils.parseAttributeValue(args, variable.businessBeanOffset(),
+					businessId = (String)BpmCommonUtils.parseAttributeValue(args, variable.businessBeanOffset(),
 							variable.businessIdAttributeName());
 					
 					BpmCommonUtils.hasText(processId, 
