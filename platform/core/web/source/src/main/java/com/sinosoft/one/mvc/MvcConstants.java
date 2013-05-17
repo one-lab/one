@@ -90,8 +90,11 @@ public interface MvcConstants {
 
     public static final String WINDOW_ATTR = "$$one-mvc-portal.window";
 
-    public static final String WINDOW_REQUEST_URI = "$$one-mvc-portal.window.uri";
+    /**
+     * 用于在pipe，主线程的request的标志
+     */
+    public static final String WINDOW_REQUEST_MAIN_FLAG = "$$one-mvc-portal.window.main";
 
-    public static final String IS_WINDOW_REQUEST = "$$one-mvc-portal.is.window.request";
+    public static final String WINDOW_REQUEST_VIEW = "$$one-mvc-portal.window.view";
 
 }

@@ -24,10 +24,13 @@ import com.sinosoft.one.mvc.web.portal.Pipe;
 import com.sinosoft.one.mvc.web.portal.PortalUtils;
 import com.sinosoft.one.mvc.web.portal.Window;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
 /**
- * 
  *
- * 
+ *
+ *
  */
 public class PipeInterceptor extends ControllerInterceptorAdapter {
 
@@ -95,13 +98,13 @@ public class PipeInterceptor extends ControllerInterceptorAdapter {
                                                 + window.getName()
                                                 + "@"
                                                 + window.getContainer().getInvocation()
-                                                        .getRequestPath() + "'");
+                                                .getRequestPath() + "'");
                                     }
                                     break;
                                 }
-
                             }
                         }
+                        //  window.remove(MvcConstants.PIPE_WINDOW_IN);
                     }
                 }
             } catch (InterruptedException e) {
@@ -113,7 +116,7 @@ public class PipeInterceptor extends ControllerInterceptorAdapter {
                         + (System.currentTimeMillis() - begin));
             }
         }
-
+        inv.getRequest().setAttribute(MvcConstants.WINDOW_REQUEST_MAIN_FLAG,Boolean.TRUE);
         return instruction;
     }
 
@@ -137,6 +140,9 @@ public class PipeInterceptor extends ControllerInterceptorAdapter {
         }
 
         if (inv != inv.getHeadInvocation()) {
+            if(logger.isDebugEnabled()){
+                logger.debug("inv not same as inv.getHeadInvocation,please check it");
+            }
             return;
         }
         if (!pipe.isStarted()) {

@@ -25,9 +25,9 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * {@link WindowTask} 把一个窗口任务进行封装，使可以提交到 {@link ExecutorService} 执行。
- * 
  *
- * 
+ *
+ *
  */
 final class WindowTask implements Runnable {
 
@@ -68,18 +68,8 @@ final class WindowTask implements Runnable {
                 windowPath = requestUri + windowPath;
             }
 
-
-         //   request.setAttribute("$$one-mvc-portal.window", window);
-            request.setAttribute("$$one-mvc-portal.window."+window.getName(), window);
-
-//            String list = (String)request.getAttribute("$$one-mvc-portal.window.names");
-//            if(list==null){
-//                list = window.getName();
-//            }
-//            else{
-//                list = list+","+window.getName();
-//            }
-//            request.setAttribute("$$one-mvc-portal.window.names",list);
+            final RequestDispatcher rd = request.getRequestDispatcher(windowPath);
+            request.setAttribute(MvcConstants.WINDOW_ATTR, window);
 
             if (this.response.isCommitted()) {
                 if (logger.isDebugEnabled()) {
@@ -89,19 +79,24 @@ final class WindowTask implements Runnable {
                 window.getContainer().onWindowTimeout(window);
                 return;
             }
+            if (logger.isDebugEnabled()) {
+                logger.debug("window ["+window.getName()+"] has started, path is :"+request.getContextPath() + windowPath);
+            }
 
-            final RequestDispatcher rd = request.getRequestDispatcher(windowPath);
-            request.setAttribute(MvcConstants.WINDOW_REQUEST_URI, request.getContextPath() + windowPath);
             rd.forward(request, this.response);
 
             // done!
             window.getContainer().onWindowDone(window);
+            if (logger.isDebugEnabled()) {
+                logger.debug("window ["+window.getName()+"] has ended, path is :"+request.getContextPath() + windowPath);
+            }
         } catch (Throwable e) {
             logger.error("", e);
             window.setThrowable(e);
             window.getContainer().onWindowError(window);
         } finally {
-            // remove request from ThreadLocal in PortalRequest 
+
+            // remove request from ThreadLocal in PortalRequest
             // 销毁在PortalRequest的ThreadLocal成员变量中保存的与 当前线程相关的request对象，以防内存泄漏。
             final HttpServletRequest wrapper = window.getContainer().getRequest();
             final PortalRequest portalRequest = PortalRequest.unwrapPortalRequest(wrapper);

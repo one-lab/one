@@ -1,13 +1,11 @@
 package com.sinosoft.one.mvc.web.validation;
 
+import org.apache.commons.collections.map.ListOrderedMap;
 import org.hibernate.validator.cfg.ConstraintMapping;
 import org.hibernate.validator.cfg.context.PropertyConstraintMappingContext;
 import org.hibernate.validator.cfg.context.TypeConstraintMappingContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Type校验类型，对validation来说需要校验的class是一种Type
@@ -21,7 +19,7 @@ class ValidationTypeContext<T> {
 
     private Class<T> currentClass;
 
-    private Map<String,ValidationPropertyContext> validationPropertyContextMap = new HashMap<String, ValidationPropertyContext>();
+    private ListOrderedMap validationPropertyContextMap = (ListOrderedMap) ListOrderedMap.decorate(new HashMap<String, ValidationPropertyContext>());
 
     ValidationTypeContext(String name,Class<T> currentClass){
         this.name = name;
@@ -37,13 +35,14 @@ class ValidationTypeContext<T> {
     }
 
     public ValidationPropertyContext getValidationProperty(String nodeName){
-        return this.validationPropertyContextMap.get(nodeName);
+        return (ValidationPropertyContext)this.validationPropertyContextMap.get(nodeName);
     }
 
     public PropertyConstraintMappingContext validate(ConstraintMapping constraintMapping){
         TypeConstraintMappingContext typeConstraintMappingContext = constraintMapping.type(this.currentClass);
         PropertyConstraintMappingContext propertyConstraintMappingContext =null;
-        for(ValidationPropertyContext validationPropertyContext:validationPropertyContextMap.values()){
+        Collection<ValidationPropertyContext> back = validationPropertyContextMap.values();
+        for(ValidationPropertyContext validationPropertyContext:back){
              propertyConstraintMappingContext = validationPropertyContext.validate(typeConstraintMappingContext);
         }
         return propertyConstraintMappingContext;
@@ -51,7 +50,8 @@ class ValidationTypeContext<T> {
 
     public PropertyConstraintMappingContext validate(PropertyConstraintMappingContext propertyConstraintMappingContext){
         TypeConstraintMappingContext typeConstraintMappingContext = propertyConstraintMappingContext.type(this.currentClass);
-        for(ValidationPropertyContext validationPropertyContext:validationPropertyContextMap.values()){
+        Collection<ValidationPropertyContext> back = validationPropertyContextMap.values();
+        for(ValidationPropertyContext validationPropertyContext:back){
             propertyConstraintMappingContext = validationPropertyContext.validate(typeConstraintMappingContext);
         }
         return propertyConstraintMappingContext;

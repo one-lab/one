@@ -64,6 +64,8 @@ import org.springframework.beans.SimpleTypeConverter;
 import org.springframework.beans.TypeConverter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.BindingResult;
@@ -471,6 +473,8 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
     public static final class BeanResolver implements ParamResolver {
 
+        private static ConversionService conversionService = new DefaultConversionService();
+
         public boolean supports(ParamMetaData metaData) {
             return !Modifier.isAbstract(metaData.getParamType().getModifiers());
 
@@ -484,6 +488,8 @@ public class ResolverFactoryImpl implements ResolverFactory {
             } else {
                 binder = new ServletRequestDataBinder(bean, metaData.getParamName());
             }
+            //add for type conversion
+            binder.setConversionService(conversionService);
             binder.bind(inv.getRequest());
             String bindingResultName = BindingResult.MODEL_KEY_PREFIX + metaData.getParamName()
                     + "BindingResult";

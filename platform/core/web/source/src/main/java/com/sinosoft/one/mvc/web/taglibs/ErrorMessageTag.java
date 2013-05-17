@@ -1,6 +1,7 @@
 package com.sinosoft.one.mvc.web.taglibs;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -53,9 +54,9 @@ public class ErrorMessageTag extends TagSupport{
 		if(invocation != null){
             if(invocation.getModel(ErrorMessageType.ERROR_MESSAGE_TYPE_BEAN.name()) != null) {
                 @SuppressWarnings("unchecked")
-                ConstraintViolation<Object> cv = (ConstraintViolation<Object>)
-                        invocation.getModel(this.property+ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX);
-                this.writeBeanErrorMsg(cv);
+                List<ConstraintViolation<?>> cvs = ( List<ConstraintViolation<?>>)
+                        invocation.getModel(ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX+"."+this.property);
+                this.writeBeanErrorMsg(cvs);
             } else if (invocation.getModel(ErrorMessageType.ERROR_MESSAGE_TYPE_METHOD.name()) != null) {
                 @SuppressWarnings("unchecked")
                 MethodConstraintViolation<Object> cv = (MethodConstraintViolation<Object>)
@@ -69,7 +70,6 @@ public class ErrorMessageTag extends TagSupport{
     private void writeMethodErrorMsg(MethodConstraintViolation<Object> cv) {
         if(cv != null){
             JspWriter out = pageContext.getOut();
-
             if (logger.isDebugEnabled()) {
                 logger.debug("getErrorMessage: " + property + "=" + cv);
             }
@@ -90,23 +90,26 @@ public class ErrorMessageTag extends TagSupport{
         }
     }
 	
-    private void writeBeanErrorMsg(ConstraintViolation<Object> cv) {
-        if(cv != null){
+    private void writeBeanErrorMsg(List<ConstraintViolation<?>> cvs) {
+        if(cvs != null&&!cvs.isEmpty()){
             JspWriter out = pageContext.getOut();
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("getErrorMessage: " + property + "=" + cv);
-            }
             try {
-                if(type == null){
-                    out.print("错误的值:" + cv.getInvalidValue() + "  " + cv.getMessage());
-                } else if(type.equalsIgnoreCase("propertyPath")){
-                    out.print(cv.getPropertyPath());
-                } else if(type.equalsIgnoreCase("message")){
-                    out.print(cv.getMessage());
-                } else if(type.equalsIgnoreCase("invalidValue")){
-                    out.print(cv.getInvalidValue());
+                //输入所有值
+                for(ConstraintViolation cv:cvs){
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("getErrorMessage: " + property + "=" + cv);
+                    }
+                    if(type == null){
+                        out.print("错误的值:" + cv.getInvalidValue() + "  " + cv.getMessage());
+                    } else if(type.equalsIgnoreCase("propertyPath")){
+                        out.print(cv.getPropertyPath());
+                    } else if(type.equalsIgnoreCase("message")){
+                        out.print(cv.getMessage());
+                    } else if(type.equalsIgnoreCase("invalidValue")){
+                        out.print(cv.getInvalidValue());
+                    }
                 }
+
             } catch (IOException e) {
                 logger.error(e);
             }

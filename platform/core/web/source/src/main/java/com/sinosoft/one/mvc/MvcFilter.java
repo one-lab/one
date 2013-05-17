@@ -55,6 +55,7 @@ import com.sinosoft.one.mvc.web.impl.thread.Mvc;
 import com.sinosoft.one.mvc.web.instruction.InstructionExecutor;
 import com.sinosoft.one.mvc.web.instruction.InstructionExecutorImpl;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -71,7 +72,7 @@ import org.springframework.web.util.NestedServletException;
  * 该请求将在Mvc调用中完成对客户端响应.
  * 如果一个请求在Mvc中没有找到合适的类来为他服务，Mvc将把该请求移交给web容器的其他组件来处理。
  * <p>
- * 
+ *
  * Mvc使用过滤器而非Servlet来接收web请求，这有它的合理性以及好处。
  * <p>
  * Servlet规范以“边走边看”的方式来处理请求，
@@ -87,13 +88,13 @@ import org.springframework.web.util.NestedServletException;
  * ，一旦该Servlet处理不了，Servlet规范没有提供机制使得可以由配置在web.xml的其他正常组件处理
  * (除404，500等错误处理组件之外)。
  * <p>
- * 
+ *
  * 一个web.xml中可能具有不只一个的Filter，Filter的先后顺序对系统具有重要影响，特别的，Mvc自己的过滤器的配置顺序更是需要讲究
  * 。 如果一个请求在被Mvc处理前应该被某些过滤器过滤，请把这些过滤器的mapping配置在Mvc过滤器之前。
  * <p>
- * 
+ *
  * MvcFilter的配置，建议按以下配置即可：
- * 
+ *
  * <pre>
  * 	&lt;filter&gt;
  * 		&lt;filter-name&gt;mvcFilter&lt;/filter-name&gt;
@@ -107,44 +108,46 @@ import org.springframework.web.util.NestedServletException;
  * 		&lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;
  * 	&lt;/filter-mapping&gt;
  * </pre>
- * 
+ *
  * 1) 大多数请况下，<strong>filter-mapping</strong> 应配置在所有Filter Mapping的最后。<br>
  * 2) 不能将 <strong>FORWARD、INCLUDE</strong> 的 dispatcher 去掉，否则forward、
  * include的请求Mvc框架将拦截不到<br>
  * <p>
- * 
+ *
  * Mvc框架内部采用<strong>"匹配->执行"</strong>两阶段逻辑。Mvc内部结构具有一个匹配树，
  * 这个数据结构可以快速判断一个请求是否应该由Mvc处理并进行， 没有找到匹配的请求交给过滤器的下一个组件处理。匹配成功的请求将进入”执行“阶段。
  * 执行阶段需要经过6个步骤处理：<strong>“参数解析 -〉 验证器 -〉 拦截器 -〉 控制器 -〉 视图渲染
  * -〉渲染后"</strong>的处理链。
  * <p>
- * 
+ *
  * <strong>匹配树</strong>: <br>
  * TODO
  * <p>
- * 
+ *
  * <strong>匹配过程</strong>: <br>
  * TODO
  * <P>
- * 
+ *
  * <strong>参数解析</strong>: <br>
  * 在调用验证器、拦截器
  * 控制器之前，Mvc完成2个解析：解析匹配树上动态的参数出实际值，解析控制器方法中参数实际的值。参数可能会解析失败(例如转化异常等等
  * )，此时该参数以默认值进行代替，同时Mvc解析失败和异常记录起来放到专门的类中，继续下一个过程而不打断执行。
  * <P>
- * 
+ *
  * <strong>拦截器</strong>: <br>
  * Mvc使用自定义的拦截器接口而非一般的拦截器接口这是有理由的。使用Mvc自定义的拦截器接口可以更容易地操作、控制Mvc拦截。
  * 所谓拦截即是对已经匹配的控制器调用进行拦截，在其调用之前、之后以及页面渲染之后执行某些逻辑。设计良好的拦截器可以被多个控制器使用。
  * <P>
- * 
+ *
  * <strong>控制器</strong>: <br>
- * 
+ *
  *
  */
 public class MvcFilter extends GenericFilterBean {
 
     private static final String ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE = WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
+
+    private static final String[] DEFAULT_EXECUDE_EXTENTIONS = new String[] {"jsp","js","css","gif","png","jpg","jpeg","bmp","html","htm","swf"};
 
     /** 使用的applicationContext地址 */
     private String contextConfigLocation;
@@ -192,7 +195,7 @@ public class MvcFilter extends GenericFilterBean {
      * <pre>
      * like: &quot;com.renren.myapp, com.renren.yourapp&quot; etc
      * </pre>
-     * 
+     *
      * @param load
      */
     public void setLoad(String load) {
@@ -247,9 +250,9 @@ public class MvcFilter extends GenericFilterBean {
     @Override
     protected final void initFilterBean() throws ServletException {
         try {
-        	
-        	long startTime = System.currentTimeMillis();
-        	
+
+            long startTime = System.currentTimeMillis();
+
             if (logger.isInfoEnabled()) {
                 logger.info("[init] call 'init/rootContext'");
             }
@@ -290,7 +293,7 @@ public class MvcFilter extends GenericFilterBean {
             }
 
             long endTime = System.currentTimeMillis();
-            
+
             // 打印启动信息
             printMvcInfos(endTime -  startTime);
 
@@ -310,7 +313,7 @@ public class MvcFilter extends GenericFilterBean {
      * 如果没有找到匹配的处理器，Mvc将把请求转交给整个过滤链的下一个组件，让web容器的其他组件来处理它。
      */
     public void doFilter(ServletRequest request, final ServletResponse response,
-            final FilterChain filterChain) throws IOException, ServletException {
+                         final FilterChain filterChain) throws IOException, ServletException {
         // cast
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -323,6 +326,11 @@ public class MvcFilter extends GenericFilterBean {
                 sb.append("?").append(query);
             }
             logger.debug(httpRequest.getMethod() + " " + sb.toString());
+        }
+
+        if(isNotMvcPath(httpRequest)){
+            filterChain.doFilter(request,response);
+            return;
         }
 
         supportsMvcpipe(httpRequest);
@@ -355,6 +363,15 @@ public class MvcFilter extends GenericFilterBean {
         }
     }
 
+    private boolean isNotMvcPath(HttpServletRequest request) {
+        String servletPath = request.getServletPath();
+        String extension = servletPath.substring(servletPath.lastIndexOf(".") + 1);
+        if(logger.isDebugEnabled())
+            logger.debug("isNotMvcPath: servletPath is "+servletPath + " extension is " +extension);
+        return ArrayUtils.contains(DEFAULT_EXECUDE_EXTENTIONS, extension);
+    }
+
+
     // @see com.sinosoft.one.mvc.web.portal.impl.PortalWaitInterceptor#waitForWindows
     protected void supportsMvcpipe(final HttpServletRequest httpRequest) {
         // 这个代码为mvcpipe所用，以避免mvcpipe的"Cannot forward after response has been committed"异常
@@ -364,7 +381,7 @@ public class MvcFilter extends GenericFilterBean {
         String windowName = (String)httpRequest.getAttribute(MvcConstants.WINDOW_ATTR+".name");
         if(StringUtils.isNotBlank(windowName)){
 
-            Object window = httpRequest.getAttribute(MvcConstants.WINDOW_ATTR+"."+windowName);
+            Object window = httpRequest.getAttribute(MvcConstants.WINDOW_ATTR);
 
             if (window != null && window.getClass().getName().startsWith("com.sinosoft.one.mvc.web.portal")) {
                 httpRequest.setAttribute(MvcConstants.PIPE_WINDOW_IN, Boolean.TRUE);
@@ -378,18 +395,19 @@ public class MvcFilter extends GenericFilterBean {
                 }
                 synchronized (window) {
                     window.notifyAll();
-                    httpRequest.removeAttribute(MvcConstants.WINDOW_ATTR+".name");
+                    // httpRequest.removeAttribute(MvcConstants.WINDOW_ATTR+".name");
                 }
             }
         }
-       // Object window = httpRequest.getAttribute(MvcConstants.WINDOW_ATTR);
+        // Object window = httpRequest.getAttribute(MvcConstants.WINDOW_ATTR);
 
     }
+
 
     /**
      * 创建最根级别的 ApplicationContext 对象，比如WEB-INF、WEB-INF/classes、
      * jar中的spring配置文件所组成代表的、整合为一个 ApplicationContext 对象
-     * 
+     *
      * @return
      * @throws IOException
      */
@@ -501,7 +519,7 @@ public class MvcFilter extends GenericFilterBean {
 
     /**
      * 简单、快速判断本次请求，如果不应由Mvc执行，返回true
-     * 
+     *
      * @param requestPath
      * @return
      */
@@ -539,10 +557,10 @@ public class MvcFilter extends GenericFilterBean {
     }
 
     protected void notMatched(//
-            FilterChain filterChain, //
-            HttpServletRequest httpRequest,//
-            HttpServletResponse httpResponse,//
-            RequestPath path)//
+                              FilterChain filterChain, //
+                              HttpServletRequest httpRequest,//
+                              HttpServletResponse httpResponse,//
+                              RequestPath path)//
             throws IOException, ServletException {
         if (logger.isDebugEnabled()) {
             logger.debug("not mvc uri: " + path.getUri());

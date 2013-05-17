@@ -335,12 +335,22 @@ public class AnnotationConfigValidator implements ParamValidator{
 
     private String errorCommonResponse(Invocation inv,Set<ConstraintViolation<Object>> result,String errorPath){
         inv.addModel(ErrorMessageType.ERROR_MESSAGE_TYPE_BEAN.name(),"true");
+
         for(Iterator<ConstraintViolation<Object>> it = result.iterator(); it.hasNext();) {
             ConstraintViolation<Object> cv = it.next();
-            inv.addModel(cv.getPropertyPath()+ ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX.name(),cv);
+            List<ConstraintViolation> constraintViolations= (List<ConstraintViolation>)inv.getModel(ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX.name()+"."+cv.getPropertyPath());
+            //初始化
+            if(constraintViolations==null){
+                constraintViolations = new ArrayList<ConstraintViolation>();
+                //ERROR_MESSAGE_TYPE_SUFFIX放置在前面提供统一前缀
+                inv.addModel(ErrorMessageType.ERROR_MESSAGE_TYPE_SUFFIX.name()+"."+cv.getPropertyPath(),constraintViolations);
+            }
+            constraintViolations.add(cv);
         }
         return errorPath;
     }
+
+
 
     private String methodErrorCommonResponse(Invocation inv
             , Set<MethodConstraintViolation<Object>> result, String errorPath, String[] paramNames) {

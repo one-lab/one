@@ -456,7 +456,8 @@ public final class ActionEngine implements Engine {
                         logger.debug("do validate [" + validators[i].getClass().getName()
                                 + "] and return '" + instruction + "'");
                     }
-                    // 如果返回的instruction不是null、boolean或空串==>杯具：流程到此为止！
+
+                    //校验应该是完整的校验，如果第一个参数校验失败，就直接返回,此处欠考虑 如果返回的instruction不是null、boolean或空串==>杯具：流程到此为止！
                     if (instruction != null) {
                         if (instruction instanceof Boolean) {
                             continue;

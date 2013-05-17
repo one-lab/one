@@ -53,13 +53,7 @@ class WindowResponse extends HttpServletResponseWrapper {
     public ServletOutputStream getOutputStream() throws IOException {
         if (out == null) {
             window.setCharset(getCharacterEncoding());
-            this.out = new ServletOutputStream() {
-
-                @Override
-                public void write(int b) throws IOException {
-                    window.appendContent(b);
-                }
-            };
+            this.out = new ResponseServletOutputStream();
         }
         return out;
     }
@@ -68,23 +62,24 @@ class WindowResponse extends HttpServletResponseWrapper {
     public PrintWriter getWriter() throws IOException {
         window.setCharset(getCharacterEncoding());
         if (this.writer == null) {
-            this.writer = new PrintWriter(new Writer() {
+//            this.writer = new PrintWriter(new Writer() {
+//
+//                @Override
+//                public void close() throws IOException {
+//                }
+//
+//                @Override
+//                public void flush() throws IOException {
+//                }
+//
+//                @Override
+//                public void write(char[] cbuf, int offset, int len) throws IOException {
+//                    String tempString = new String(cbuf, offset, len);
+//                    window.appendContent(tempString.getBytes(getCharacterEncoding()));
+//                }
+//            });
+            this.writer = new ResponsePrintWriter(getCharacterEncoding());
 
-                @Override
-                public void close() throws IOException {
-
-                }
-
-                @Override
-                public void flush() throws IOException {
-                }
-
-                @Override
-                public void write(char[] cbuf, int offset, int len) throws IOException {
-                    String tempString = new String(cbuf, offset, len);
-                    window.appendContent(tempString.getBytes(getCharacterEncoding()));
-                }
-            });
         }
         return writer;
     }
@@ -168,6 +163,43 @@ class WindowResponse extends HttpServletResponseWrapper {
 
     @Override
     public void setContentLength(int len) {
+    }
+
+    private class ResponseServletOutputStream extends ServletOutputStream {
+
+
+        @Override
+        public void write(int b) throws IOException {
+            window.appendContent(b);
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            window.appendContent(b, off, len);
+        }
+
+    }
+
+    private class ResponsePrintWriter extends PrintWriter {
+
+        private ResponsePrintWriter(String characterEncoding) throws UnsupportedEncodingException {
+            super(new OutputStreamWriter(window.getByteArrayOutputStream(), characterEncoding));
+        }
+
+        @Override
+        public void write(char buf[], int off, int len) {
+            super.write(buf, off, len);
+        }
+
+        @Override
+        public void write(String s, int off, int len) {
+            super.write(s, off, len);
+        }
+
+        @Override
+        public void write(int c) {
+            super.write(c);
+        }
     }
 
 }

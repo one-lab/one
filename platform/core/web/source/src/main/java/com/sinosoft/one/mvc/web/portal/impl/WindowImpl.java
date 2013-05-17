@@ -182,6 +182,10 @@ class WindowImpl implements Window {
         return value;
     }
 
+
+    public  ByteArrayOutputStream getByteArrayOutputStream(){
+        return this.byteArrayOutputStream;
+    }
     
     public int getContentLength() {
         return byteArrayOutputStream.size() == 0 ? -1 : byteArrayOutputStream.size();
@@ -204,6 +208,11 @@ class WindowImpl implements Window {
     public void appendContent(byte[] b) throws IOException {
         byteArrayOutputStream.write(b);
     }
+
+    public void appendContent(byte[] b, int off, int len) {
+        byteArrayOutputStream.write(b,off,len);
+    }
+
 
     
     public void clearContent() {
@@ -319,4 +328,6 @@ class WindowImpl implements Window {
     public void setCharset(String charset) {
         this.charset = charset;
     }
+
+
 }

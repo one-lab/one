@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sinosoft.one.mvc.MvcConstants;
@@ -49,9 +50,9 @@ import org.springframework.web.servlet.ViewResolver;
 /**
  * {@link ViewInstruction} 实现 {@link Instruction}接口，调用 {@link ViewResolver}
  * 渲染页面
- * 
  *
- * 
+ *
+ *
  */
 public class ViewInstruction extends AbstractInstruction {
 
@@ -76,7 +77,7 @@ public class ViewInstruction extends AbstractInstruction {
     public void doRender(Invocation inv) throws Exception {
         String name = resolvePlaceHolder(this.name, inv);
         ViewDispatcher viewResolver = getViewDispatcher(inv);
-        String viewPath = getViewPath((InvocationBean) inv, name);
+        final String viewPath = getViewPath((InvocationBean) inv, name);
         if (viewPath != null) {
             HttpServletRequest request = inv.getRequest();
             HttpServletResponse response = inv.getResponse();
@@ -85,9 +86,28 @@ public class ViewInstruction extends AbstractInstruction {
 
             if (!Thread.interrupted()) {
                 inv.addModel(MVC_INVOCATION, inv);
-                if(request.getAttribute(MvcConstants.IS_WINDOW_REQUEST) != null) {
-                    request.setAttribute(MvcConstants.WINDOW_REQUEST_URI, request.getContextPath() + viewPath);
+
+                //用于pipe每个子window线程中的forward的viewPath，防止被覆盖
+                if(request.getAttribute(MvcConstants.PIPE_WINDOW_IN) == Boolean.TRUE) {
+                    request.setAttribute(MvcConstants.WINDOW_REQUEST_VIEW,  viewPath);
                 }
+
+                //用于pipe的主线程请求地址被子线程forward过程中的servletPath重写
+                if(request.getAttribute(MvcConstants.WINDOW_REQUEST_MAIN_FLAG) == Boolean.TRUE){
+
+                    request = new HttpServletRequestWrapper(request) {
+                        @Override
+                        public String getServletPath(){
+                            return viewPath;
+                        }
+
+                        @Override
+                        public String getRequestURI(){
+                            return super.getContextPath()+viewPath;
+                        }
+                    };
+                }
+
                 view.render(inv.getModel().getAttributes(), request, response);
             } else {
                 logger.info("interrupted");
@@ -96,7 +116,7 @@ public class ViewInstruction extends AbstractInstruction {
     }
 
     /**
-     * 
+     *
      * @param inv
      * @param viewName 大多数情况viewName应该是一个普通字符串 (e.g:
      *        index)，也可能是index.jsp带后缀的字符串，
@@ -128,7 +148,7 @@ public class ViewInstruction extends AbstractInstruction {
             try {
                 directFile = MvcPathUtil.getDirectoryFile(inv, directoryPath);
             } catch (Exception e) {
-               throw new IOException(e.getLocalizedMessage());
+                throw new IOException(e.getLocalizedMessage());
             }
             if (directFile == null || !directFile.exists()) {
                 String msg = "404: view directory not found, you need to create it in your webapp:"
@@ -160,7 +180,7 @@ public class ViewInstruction extends AbstractInstruction {
     }
 
     /**
-     * 
+     *
      * @param inv
      * @param viewPathCache
      * @param viewName
@@ -168,7 +188,7 @@ public class ViewInstruction extends AbstractInstruction {
      * @throws IOException
      */
     private String getViewPathFromCache(InvocationBean inv, ViewPathCache viewPathCache,
-            final String viewName) throws IOException {
+                                        final String viewName) throws IOException {
         String viewPath = viewPathCache.getViewPath(viewName);
         if (viewPath != null) {
             return viewPath;
@@ -254,7 +274,7 @@ public class ViewInstruction extends AbstractInstruction {
 
     /**
      * 优先获取大小写敏感的路径，如若找不到，则获取忽略大小写后的路径
-     * 
+     *
      * @param tempHome
      * @param subDirPath
      * @return
@@ -289,14 +309,14 @@ public class ViewInstruction extends AbstractInstruction {
     }
 
     /**
-     * 
+     *
      * @param fileNameToFind
      * @param directoryFile
      * @param ignoreCase
      * @return
      */
     private String searchViewFile(File directoryFile, final String fileNameToFind,
-            final boolean ignoreCase) {
+                                  final boolean ignoreCase) {
         String[] viewFiles = directoryFile.list(new FilenameFilter() {
 
             public boolean accept(File dir, String fileName) {
@@ -337,7 +357,7 @@ public class ViewInstruction extends AbstractInstruction {
 
     /**
      * 注册一个 {@link ViewDispatcher}定义到上下文中，以被这个类的所有实例使用
-     * 
+     *
      * @return
      */
     protected ViewDispatcher registerViewDispatcher(WebApplicationContext applicationContext) {

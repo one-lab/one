@@ -41,10 +41,11 @@ public class DefControllerTest extends AbstractControllerTest {
     }
 
     public void testMutileBean()throws ServletException, IOException{
-        request.addParameter("licensePlate", "n123123");
-        request.addParameter("manufacturer", "0");
-        request.addParameter("rentalCar.rentalStation", "0");
-        request.addParameter("rentalCarList[0].rentalStation", "");
+        request.addParameter("car.licensePlate", "12");
+        request.addParameter("car2.licensePlate", "n123123");
+        request.addParameter("car.manufacturer", "0");
+        request.addParameter("car.rentalCar.rentalStation", "0");
+        request.addParameter("car.rentalCarList[0].rentalStation", "");
         assertEquals("validate/", invoke("/param/validationCar"));
     }
 
