@@ -43,6 +43,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.sinosoft.one.mvc.util.MvcBeanUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Create;
@@ -60,6 +62,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValue;
 import org.springframework.beans.SimpleTypeConverter;
 import org.springframework.beans.TypeConverter;
 import org.springframework.context.ApplicationContext;
@@ -86,6 +90,8 @@ public class ResolverFactoryImpl implements ResolverFactory {
     private static Log logger = LogFactory.getLog(MethodParameterResolver.class);
 
     public static final String MAP_SEPARATOR = ":";
+
+    private static ConversionService conversionService = new DefaultConversionService();
 
     private static final Map<Class<?>, Class<?>> primitiveWrapperTypeMap = new HashMap<Class<?>, Class<?>>(
             8);
@@ -538,6 +544,39 @@ public class ResolverFactoryImpl implements ResolverFactory {
                             + ", the request is not a MultipartRequest");
                 }
             }
+        }
+        else if(arrayTypeMap.get(compnentType) == null && compnentType != String.class){
+
+            if (!metaData.isAnnotationPresent(Param.class)) {
+                throw new IllegalArgumentException(metaData.getControllerClass()+","+metaData.getMethod()+",List<?> need @Param,");
+            }
+            String paramName = metaData.getParamName();
+            Map<String, Object> map = WebUtils.getParametersStartingWith(inv.getRequest(), paramName);
+            Map<String,Map<String,Object>> nMap = Maps.newHashMap();
+            for (String key : map.keySet()) {
+                if(!key.startsWith("[")){
+                    continue;
+                }
+                String mk = StringUtils.substringBefore(key,".");
+                String mv = StringUtils.substringAfter(key,".");
+
+                if(!nMap.containsKey(mk)){
+                    Map<String,Object> temp =Maps.newHashMap();
+                    nMap.put(mk,temp);
+                }
+                nMap.get(mk).put(mv,map.get(key));
+            }
+            List<Object> list = Lists.newArrayList();
+            for (String key : nMap.keySet()) {
+                Object bean = MvcBeanUtils.instantiateClass(compnentType);
+                ServletRequestDataBinder binder = new ServletRequestDataBinder(bean);
+                //add for type conversion
+                binder.setConversionService(conversionService);
+                binder.doBind(new MutablePropertyValues(nMap.get(key)));
+                list.add(bean);
+            }
+            return list.toArray();
+
         } else {
             Object toConvert = null;
             for (String paramName : metaData.getParamNames()) {

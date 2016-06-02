@@ -24,4 +24,5 @@
 	<bean id="proposalRuleService"
 		class="com.sinosoft.one.test.rule.service.spring.ProposalRuleServiceSpringImpl">
 	</bean>
+    <bean id="undwrtService" class="com.sinosoft.one.test.rule.service.spring.UndwrtService" />
 </beans>

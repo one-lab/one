@@ -10,9 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +26,7 @@ public class GridConverter<T> implements Converter<Gridable> {
     private static final String ID_ELEMENT = "id";
     private static final String CELL_ELEMENT = "cell";
 
-    public String toJson(Gridable gridable) throws GridConverterException {
+    public String toJson(Gridable gridable)  {
         if (gridable == null || gridable.getPage() == null) {
             return null;
         } else {
@@ -46,7 +44,7 @@ public class GridConverter<T> implements Converter<Gridable> {
         }
     }
 
-    private JSONArray addCellObjectWithListString(Collection nextItemObject, Gridable gridable) throws GridConverterException {
+    private JSONArray addCellObjectWithListString(Collection nextItemObject, Gridable gridable){
         JSONArray jsonArray = new JSONArray();
         for (Object obj : nextItemObject) {
             JSONObject jsonObject = new JSONObject();
@@ -75,13 +73,27 @@ public class GridConverter<T> implements Converter<Gridable> {
             if (attributeNames != null && attributeNames.size() > 0) {
                 JSONArray cellJsonArray = new JSONArray();
                 for (String attributeName : attributeNames) {
-                    cellJsonArray.add(ReflectionUtils.getFieldValue(obj, attributeName));
+                    cellJsonArray.add(getValue(obj, attributeName));
                 }
                 jsonObject.put(CELL_ELEMENT, cellJsonArray);
             }
             jsonArray.add(jsonObject);
         }
         return jsonArray;
+    }
+
+    private Object getValue(Object obj,String attributeName){
+        Object value = null;
+        if(obj instanceof Map){
+            value = ((Map)obj).get(attributeName);
+            return value;
+        }
+        try{
+            value = ReflectionUtils.invokeGetterMethod(obj,attributeName);
+        }catch (IllegalArgumentException exception){
+            value = ReflectionUtils.getFieldValue(obj, attributeName);
+        }
+        return value.toString();
     }
 
     private List<String> convertToList(String[] cellField) {
@@ -104,4 +116,6 @@ public class GridConverter<T> implements Converter<Gridable> {
     public String toXml(Gridable gridable) {
         return null;
     }
+
+
 }

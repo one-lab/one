@@ -104,7 +104,10 @@ public class DateUtils {
 	 * @return
 	 */
 	public final static Date addDay(Date date,int day){
-		return new DateTime(date.getTime()).plusDays(day).toDate();
+        if(day>=0)
+		    return new DateTime(date.getTime()).plusDays(day).toDate();
+        else
+            return new DateTime(date.getTime()).minusDays(day).toDate();
 	}
 	
 	/**

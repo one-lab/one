@@ -8,10 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.naming.spi.NamingManager;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -47,7 +49,10 @@ public class DBManager
             return (DataSource)object;
         }
 
-        Context context = new InitialContext();
+       // Context context = new InitialContext();
+        Hashtable env = new Hashtable();
+        env.put(Context.INITIAL_CONTEXT_FACTORY,"bitronix.tm.jndi.BitronixInitialContextFactory");
+        Context context = NamingManager.getInitialContext(env);
         DBDataSource dbDataSource = DBFactory.getDB(name);
         DataSource dataSource;
         try
@@ -89,7 +94,7 @@ public class DBManager
     {
         this.dbDataSource = dbDataSource;
 
-        this.connection = getDataSource(dbDataSource.getName()).getConnection();
+        this.connection = DataSourceUtils.doGetConnection(getDataSource(dbDataSource.getName()));
         try
         {
             this.statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -130,7 +135,8 @@ public class DBManager
             }
         }
         if (this.connection != null) {
-            this.connection.close();
+            //this.connection.close();
+            DataSourceUtils.releaseConnection(this.connection,getDataSource(this.name));
             this.connection = null;
         }
         if (sqle != null)
@@ -140,7 +146,7 @@ public class DBManager
     public void beginTransaction()
             throws Exception
     {
-        if (notUsedSpringTranscation()&&this.connection.getAutoCommit() == true)
+       // if (notUsedSpringTranscation()&&this.connection.getAutoCommit() == true)
             this.connection.setAutoCommit(false);
 
     }

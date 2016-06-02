@@ -469,7 +469,7 @@ public class ConnectionSpy implements Connection, Spy
     }
   }
 
-  /*public Clob createClob() throws SQLException {
+  public Clob createClob() throws SQLException {
     String methodCall = "createClob()";
     try
     {
@@ -615,7 +615,7 @@ public class ConnectionSpy implements Connection, Spy
       reportException(methodCall, s);
       throw s;
     }
-  }*/
+  }
 
   public boolean isReadOnly() throws SQLException
   {
@@ -891,7 +891,7 @@ public class ConnectionSpy implements Connection, Spy
     reportReturn(methodCall);
   }
 
-  /*public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) throws SQLException {
     String methodCall = "unwrap(" + (iface==null?"null":iface.getName()) + ")";
     try
     {
@@ -918,5 +918,5 @@ public class ConnectionSpy implements Connection, Spy
       reportException(methodCall,s);
       throw s;
     }
-  }*/
+  }
 }

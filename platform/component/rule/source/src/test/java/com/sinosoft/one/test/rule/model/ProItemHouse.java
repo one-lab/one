@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="GE_PRO_ITEMHOUSE")
@@ -33,7 +31,6 @@ public class ProItemHouse
 
   @Id
   @GeneratedValue(generator="system-uuid")
-  @GenericGenerator(name="system-uuid", strategy="uuid.hex")
   @Column(name="SERIALNO")
   public String getSerialNo()
   {
@@ -47,7 +44,6 @@ public class ProItemHouse
 
   @ManyToOne(fetch=FetchType.LAZY)
   @JoinColumn(name="ORDERNO")
-  @JsonIgnore
   public ProOrder getProOrder() {
     return this.proOrder;
   }
@@ -103,7 +99,6 @@ public class ProItemHouse
 
   @ManyToOne
   @JoinColumn(name="DISTRICT")
-  @JsonIgnore
   public BcDistrict getDistrict() {
     return this.district;
   }
@@ -115,7 +110,6 @@ public class ProItemHouse
 
   @ManyToOne
   @JoinColumn(name="PROVINCE")
-  @JsonIgnore
   public BcProvince getProvince() {
     return this.province;
   }
@@ -127,7 +121,6 @@ public class ProItemHouse
 
   @ManyToOne
   @JoinColumn(name="CITY")
-  @JsonIgnore
   public BcCity getCity() {
     return this.city;
   }

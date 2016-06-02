@@ -26,6 +26,10 @@ public class CollectionController {
                 names.iterator().next().getClass(), bools.get(0).getClass() };
     }
 
+    public Class[] listObject(@Param("phone") List<PhoneImpl> phones,@Param("phone2") List<PhoneImpl> phones2){
+        return new Class[] { phones.get(0).getClass(),phones2.get(0).getClass() };
+    }
+
     @SuppressWarnings("unchecked")
     public Class[] set(@Param(value = "int") Set<Integer> ints, //
             @Param(value = "integer") HashSet<Integer> integers, //

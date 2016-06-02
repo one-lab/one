@@ -2,7 +2,10 @@ package com.sinosoft.one.mvc.testcases.controllers.resolver;
 
 import java.io.IOException;
 
+import com.sinosoft.one.mvc.mock.controllers.resolver.PhoneImpl;
 import com.sinosoft.one.mvc.testcases.AbstractControllerTest;
+
+import javax.servlet.ServletException;
 
 public class CollectionControllerTest extends AbstractControllerTest {
 
@@ -28,6 +31,16 @@ public class CollectionControllerTest extends AbstractControllerTest {
         assertTrue(Integer.class.isAssignableFrom(classes[i++]));
         assertTrue(String.class.isAssignableFrom(classes[i++]));
         assertTrue(Boolean.class.isAssignableFrom(classes[i++]));
+    }
+
+
+    public void testListObject() throws ServletException, IOException {
+        request.addParameter("phone[0].id", "1");
+        request.addParameter("phone[1].id", "2");
+        request.addParameter("phone2[0].id", "11");
+        request.addParameter("phone2[1].id", "22");
+        Class[] classes = (Class[]) invoke("/resolver/collection/listObject");
+        assertTrue(PhoneImpl.class.isAssignableFrom(classes[0]));
     }
 
     public void testSet() throws Exception, IOException {

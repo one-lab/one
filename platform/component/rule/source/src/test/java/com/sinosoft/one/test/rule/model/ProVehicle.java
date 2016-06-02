@@ -3,20 +3,7 @@ package com.sinosoft.one.test.rule.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.hibernate.annotations.GenericGenerator;
 
-@Entity
-@Table(name="GE_PRO_VEHICLE")
 public class ProVehicle
   implements Serializable
 {
@@ -52,25 +39,22 @@ public class ProVehicle
   private String powerType;
   private String vehicleAgeLevel;
   private Byte lastYearReparationCount;
-  private BigDecimal replacementValue;
-  private BigDecimal actualvalue;
 
-  @GenericGenerator(name="generator", strategy="foreign", parameters={@org.hibernate.annotations.Parameter(name="property", value="proOrder")})
-  @Id
-  @GeneratedValue(generator="generator")
-  @Column(name="ORDERNO")
-  public String getOrderNo()
-  {
-    return this.orderNo;
-  }
+  private boolean result;
+
+    public String getOrderNo()
+    {
+        return this.orderNo;
+    }
+    private BigDecimal replacementValue;
+
+  private BigDecimal actualvalue;
 
   public void setOrderNo(String orderNo)
   {
     this.orderNo = orderNo;
   }
 
-  @OneToOne(fetch=FetchType.LAZY)
-  @PrimaryKeyJoinColumn
   public ProOrder getProOrder()
   {
     return this.proOrder;
@@ -81,7 +65,6 @@ public class ProVehicle
     this.proOrder = proOrder;
   }
 
-  @Column(name="VEHICLEOWNERNAME")
   public String getVehicleOwnerName()
   {
     return this.vehicleOwnerName;
@@ -92,7 +75,6 @@ public class ProVehicle
     this.vehicleOwnerName = vehicleOwnerName;
   }
 
-  @Column(name="IDENTIFYTYPE")
   public String getIdentifyType()
   {
     return this.identifyType;
@@ -103,7 +85,6 @@ public class ProVehicle
     this.identifyType = identifyType;
   }
 
-  @Column(name="IDENTIFYNUMBER")
   public String getIdentifyNumber()
   {
     return this.identifyNumber;
@@ -114,7 +95,6 @@ public class ProVehicle
     this.identifyNumber = identifyNumber;
   }
 
-  @Column(name="MODELNAME")
   public String getModelName()
   {
     return this.modelName;
@@ -125,7 +105,6 @@ public class ProVehicle
     this.modelName = modelName;
   }
 
-  @Column(name="MODELCODE")
   public String getModelCode()
   {
     return this.modelCode;
@@ -136,7 +115,6 @@ public class ProVehicle
     this.modelCode = modelCode;
   }
 
-  @Column(name="VEHICLEKIND")
   public String getVehicleKind()
   {
     return this.vehicleKind;
@@ -147,7 +125,6 @@ public class ProVehicle
     this.vehicleKind = vehicleKind;
   }
 
-  @Column(name="VEHICLEATTRIBUTE")
   public String getVehicleAttribute()
   {
     return this.vehicleAttribute;
@@ -158,7 +135,6 @@ public class ProVehicle
     this.vehicleAttribute = vehicleAttribute;
   }
 
-  @Column(name="VEHICLETYPE")
   public String getVehicleType()
   {
     return this.vehicleType;
@@ -169,7 +145,6 @@ public class ProVehicle
     this.vehicleType = vehicleType;
   }
 
-  @Column(name="LICENSEPLATETYPE")
   public String getLicensePlateType()
   {
     return this.licensePlateType;
@@ -180,7 +155,6 @@ public class ProVehicle
     this.licensePlateType = licensePlateType;
   }
 
-  @Column(name="ISNEWVEHICLE")
   public String getIsNewVehicle()
   {
     return this.isNewVehicle;
@@ -191,7 +165,6 @@ public class ProVehicle
     this.isNewVehicle = isNewVehicle;
   }
 
-  @Column(name="LICENSEPLATENO")
   public String getLicensePlateNo()
   {
     return this.licensePlateNo;
@@ -202,7 +175,6 @@ public class ProVehicle
     this.licensePlateNo = licensePlateNo;
   }
 
-  @Column(name="VIN")
   public String getVin()
   {
     return this.vin;
@@ -213,7 +185,6 @@ public class ProVehicle
     this.vin = vin;
   }
 
-  @Column(name="ENGINENO")
   public String getEngineNo()
   {
     return this.engineNo;
@@ -224,7 +195,6 @@ public class ProVehicle
     this.engineNo = engineNo;
   }
 
-  @Column(name="USENATURECODE")
   public String getUseNatureCode()
   {
     return this.useNatureCode;
@@ -235,8 +205,6 @@ public class ProVehicle
     this.useNatureCode = useNatureCode;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name="FIRSTREGISTERDATE")
   public Date getFirstRegisterDate()
   {
     return this.firstRegisterDate;
@@ -247,7 +215,6 @@ public class ProVehicle
     this.firstRegisterDate = firstRegisterDate;
   }
 
-  @Column(name="LICENSECOLORCODE")
   public String getLicenseColorCode()
   {
     return this.licenseColorCode;
@@ -258,7 +225,6 @@ public class ProVehicle
     this.licenseColorCode = licenseColorCode;
   }
 
-  @Column(name="COLORCODE")
   public String getColorCode()
   {
     return this.colorCode;
@@ -269,7 +235,6 @@ public class ProVehicle
     this.colorCode = colorCode;
   }
 
-  @Column(name="TONNAGE")
   public BigDecimal getTonnage()
   {
     return this.tonnage;
@@ -280,7 +245,6 @@ public class ProVehicle
     this.tonnage = tonnage;
   }
 
-  @Column(name="SEATCOUNT")
   public Short getSeatCount()
   {
     return this.seatCount;
@@ -291,7 +255,6 @@ public class ProVehicle
     this.seatCount = seatCount;
   }
 
-  @Column(name="WHOLEWEIGHT")
   public BigDecimal getWholeWeight()
   {
     return this.wholeWeight;
@@ -302,7 +265,6 @@ public class ProVehicle
     this.wholeWeight = wholeWeight;
   }
 
-  @Column(name="DISPLACEMENTA")
   public Long getDisplacementa()
   {
     return this.displacementa;
@@ -313,7 +275,6 @@ public class ProVehicle
     this.displacementa = displacementa;
   }
 
-  @Column(name="RUNMILES")
   public String getRunMiles()
   {
     return this.runMiles;
@@ -324,7 +285,6 @@ public class ProVehicle
     this.runMiles = runMiles;
   }
 
-  @Column(name="GLASSTYPE")
   public String getGlassType()
   {
     return this.glassType;
@@ -335,7 +295,6 @@ public class ProVehicle
     this.glassType = glassType;
   }
 
-  @Column(name="PMQUERYNO")
   public String getPmQueryNo()
   {
     return this.pmQueryNo;
@@ -346,7 +305,6 @@ public class ProVehicle
     this.pmQueryNo = pmQueryNo;
   }
 
-  @Column(name="POWER")
   public String getPower()
   {
     return this.power;
@@ -357,7 +315,6 @@ public class ProVehicle
     this.power = power;
   }
 
-  @Column(name="MODIFYFLAG")
   public String getModifyFlag()
   {
     return this.modifyFlag;
@@ -368,7 +325,6 @@ public class ProVehicle
     this.modifyFlag = modifyFlag;
   }
 
-  @Column(name="POWERTYPE")
   public String getPowerType()
   {
     return this.powerType;
@@ -379,7 +335,6 @@ public class ProVehicle
     this.powerType = powerType;
   }
 
-  @Column(name="VEHICLEAGELEVEL")
   public String getVehicleAgeLevel()
   {
     return this.vehicleAgeLevel;
@@ -390,7 +345,6 @@ public class ProVehicle
     this.vehicleAgeLevel = vehicleAgeLevel;
   }
 
-  @Column(name="LASTYEARREPARATIONCOUNT")
   public Byte getLastYearReparationCount()
   {
     return this.lastYearReparationCount;
@@ -401,7 +355,6 @@ public class ProVehicle
     this.lastYearReparationCount = lastYearReparationCount;
   }
 
-  @Column(name="REPLACEMENTVALUE")
   public BigDecimal getReplacementValue()
   {
     return this.replacementValue;
@@ -412,7 +365,6 @@ public class ProVehicle
     this.replacementValue = replacementValue;
   }
 
-  @Column(name="ACTUALVALUE")
   public BigDecimal getActualvalue()
   {
     return this.actualvalue;

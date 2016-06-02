@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="GE_PRO_KIND")
@@ -53,7 +51,6 @@ public class ProKind
 
   @Id
   @GeneratedValue(generator="system-uuid")
-  @GenericGenerator(name="system-uuid", strategy="uuid.hex")
   @Column(name="SERIALNO")
   public String getSerialNo()
   {
@@ -67,7 +64,6 @@ public class ProKind
 
   @ManyToOne(fetch=FetchType.LAZY)
   @JoinColumn(name="ORDERNO", nullable=false)
-  @JsonIgnore
   public ProOrder getProOrder() {
     return this.proOrder;
   }

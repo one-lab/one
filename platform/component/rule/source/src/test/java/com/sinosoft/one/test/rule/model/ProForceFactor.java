@@ -13,7 +13,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="GE_PRO_FORCEFACTOR")
@@ -46,7 +45,6 @@ public class ProForceFactor
   private BigDecimal ntgtfld2;
   private BigDecimal ntgtfld3;
 
-  @GenericGenerator(name="generator", strategy="foreign", parameters={@org.hibernate.annotations.Parameter(name="property", value="proOrder")})
   @Id
   @GeneratedValue(generator="generator")
   @Column(name="ORDERNO")

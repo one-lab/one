@@ -124,7 +124,6 @@ public class DataAccessImpl implements DataAccess, Repository {
     /**
      * 存储过程 2012-10-12
      */
-    @Transactional
     public void call(String sql, Object[] args, RowMapperFactory rowMapperFactory, ResultSetProcedureResult[] rsprs) {
         Session session = em.unwrap(Session.class);
         CallWork work = new CallWork(sql, args, rsprs,rowMapperFactory);

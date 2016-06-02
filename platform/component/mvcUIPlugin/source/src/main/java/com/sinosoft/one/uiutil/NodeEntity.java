@@ -1,4 +1,4 @@
-package com.sinosoft.one.uiutil.model;
+package com.sinosoft.one.uiutil;
 
 import java.util.List;
 

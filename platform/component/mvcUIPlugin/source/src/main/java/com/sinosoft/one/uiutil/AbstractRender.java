@@ -27,7 +27,7 @@ public abstract class AbstractRender<T extends UIable> implements Render {
         this.t = t;
     }
 
-    public void render(HttpServletResponse response) throws Exception {
+    public void render(HttpServletResponse response)  {
         try {
             log.info("Return the json result to the client.");
             response.setCharacterEncoding(encode);
@@ -35,11 +35,11 @@ public abstract class AbstractRender<T extends UIable> implements Render {
             response.flushBuffer();
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 
-    public Render as(UIType uiType) throws ConverterException {
+    public Render as(UIType uiType){
         if (uiType == UIType.Json) {
             result = converter.toJson(t);
             log.info("The json string is:" + result);
@@ -59,7 +59,8 @@ public abstract class AbstractRender<T extends UIable> implements Render {
         return this;
     }
 
-    public String getResultForTest() {
+    @Override
+    public String getConvertResult() {
         return result;
     }
 

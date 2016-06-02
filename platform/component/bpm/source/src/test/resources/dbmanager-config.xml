@@ -2,7 +2,7 @@
 <datasource-defines>
 	<datasource-define>  
 	    <name>myDataSource</name>
-	    <jndiname>myDataSource</jndiname>
+	    <jndiname>bpmOracleDS</jndiname>
 	    <db-to-server-encode-charset>UTF-8</db-to-server-encode-charset>
 	    <db-to-server-decode-charset>UTF-8</db-to-server-decode-charset>
 	    <need-convert-from-db-to-server>false</need-convert-from-db-to-server>

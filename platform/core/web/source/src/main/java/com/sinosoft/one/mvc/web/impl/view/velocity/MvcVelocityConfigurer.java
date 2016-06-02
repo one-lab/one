@@ -19,11 +19,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
-/**
- * 
- *
- * 
- */
 public class MvcVelocityConfigurer extends VelocityConfigurer {
 
     /** the name of the resource loader for Mvc's bind macros */

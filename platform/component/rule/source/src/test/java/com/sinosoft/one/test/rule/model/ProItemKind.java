@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="GE_PRO_ITEMKIND")
@@ -40,7 +38,6 @@ public class ProItemKind
 
   @Id
   @GeneratedValue(generator="system-uuid")
-  @GenericGenerator(name="system-uuid", strategy="uuid.hex")
   @Column(name="SERIALNO")
   public String getSerialNo()
   {
@@ -54,7 +51,6 @@ public class ProItemKind
 
   @ManyToOne(fetch=FetchType.LAZY)
   @JoinColumn(name="KINDSERIALNO")
-  @JsonIgnore
   public ProKind getProKind() {
     return this.proKind;
   }

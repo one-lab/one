@@ -10,6 +10,7 @@ import org.drools.SystemEventListenerFactory;
 import org.drools.agent.KnowledgeAgent;
 import org.drools.agent.KnowledgeAgentConfiguration;
 import org.drools.agent.KnowledgeAgentFactory;
+import org.drools.agent.conf.ScanResourcesOption;
 import org.drools.io.Resource;
 import org.drools.io.ResourceChangeScannerConfiguration;
 import org.drools.io.ResourceFactory;
@@ -38,12 +39,12 @@ public class KnowledgeAgentManager {
 			sconf.setProperty("drools.resource.scanner.interval",
 					droolsProperties
 							.getProperty("drools.resource.scanner.interval"));
-			ResourceFactory.getResourceChangeScannerService().configure(sconf);
+//			ResourceFactory.getResourceChangeScannerService().configure(sconf);
 			SystemEventListenerFactory
 					.setSystemEventListener(new LogSystemEventListener());
-			ResourceFactory.getResourceChangeNotifierService().start();
-			ResourceFactory.getResourceChangeScannerService().start();
-		} catch (IOException e) {
+//            ResourceFactory.getResourceChangeNotifierService().start();
+//            ResourceFactory.getResourceChangeScannerService().start();
+        } catch (IOException e) {
 			Logger logger = LoggerFactory.getLogger("KnowledgeAgentManager");
 			logger.error("fail to load properties:", e);
 		}
@@ -86,6 +87,8 @@ public class KnowledgeAgentManager {
 				droolsProperties.getProperty("drools.agent.scanDirectories"));
 		kaconf.setProperty("drools.agent.newInstance",
 				droolsProperties.getProperty("drools.agent.newInstance"));
+        kaconf.setProperty(ScanResourcesOption.PROPERTY_NAME,
+                droolsProperties.getProperty("drools.agent.scanResources"));
 
 		KnowledgeAgent kAgent = KnowledgeAgentFactory.newKnowledgeAgent(
 				changeSetFilePath, kaconf);

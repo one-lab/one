@@ -41,12 +41,12 @@ import com.google.common.collect.Lists;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends IdEntity {
 
-    @NotNull(message = "登录名不能为空")
+   // @NotNull(message = "登录名不能为空")
     private String loginName;
 	private String password;// 为简化演示使用明文保存的密码
-    @Pattern( regexp = "[A-Za-z0-9]{4,30}",message = "用户名必须是英文或者数字，长度4到30位")
+   // @Pattern( regexp = "[A-Za-z0-9]{4,30}",message = "用户名必须是英文或者数字，长度4到30位")
 	private String name;
-    @Size(min=4,max=20,message = "邮箱长度必须是4-20之间")
+  //  @Size(min=4,max=20,message = "邮箱长度必须是4-20之间")
 	private String email;
 	private List<Group> groupList = Lists.newArrayList();// 有序的关联对象集合
 	private Date createTime;

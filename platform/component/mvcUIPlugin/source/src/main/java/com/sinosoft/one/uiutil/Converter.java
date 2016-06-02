@@ -10,7 +10,7 @@ import com.sinosoft.one.uiutil.exception.ConverterException;
  * To change this template use File | Settings | File Templates.
  */
 public interface Converter<T extends UIable> {
-    String toJson(T t) throws ConverterException;
+    String toJson(T t);
 
-    String toXml(T t) throws ConverterException;
+    String toXml(T t);
 }

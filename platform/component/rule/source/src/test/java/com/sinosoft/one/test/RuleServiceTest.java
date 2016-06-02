@@ -7,6 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.sinosoft.one.test.rule.domain.*;
+import com.sinosoft.one.test.rule.service.spring.UndwrtService;
+import com.sinosoft.undwrt.undwrtRule.service.UndwrtRuleRiskKind;
+import com.sinosoft.undwrt.undwrtRule.vo.BusinessProposalData;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -17,8 +21,6 @@ import org.springframework.test.context.ContextConfiguration;
 import com.sinosoft.one.quickprice.domain.CarInfoInputBOM;
 import com.sinosoft.one.quickprice.domain.KindBOM;
 import com.sinosoft.one.quickprice.domain.QuickPriceInputGlobal;
-import com.sinosoft.one.test.rule.domain.KindInputBOM;
-import com.sinosoft.one.test.rule.domain.ProPosalInputBOM;
 import com.sinosoft.one.test.rule.model.PdCombo;
 import com.sinosoft.one.test.rule.model.PdComboPack;
 import com.sinosoft.one.test.rule.model.ProKind;
@@ -31,12 +33,12 @@ import com.sinosoft.one.test.rule.service.facade.ProposalCheck;
 import com.sinosoft.one.test.rule.service.facade.ProposalRuleService;
 import com.sinosoft.one.test.rule.service.facade.QuickPriceRuleService;
 import com.sinosoft.one.test.rule.service.facade.SpecialClausRuleService;
-import com.sinosoft.one.util.test.SpringContextTestCase;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext-test.xml",
 		"/spring/applicationContext-rule-test.xml" })
-public class RuleServiceTest extends SpringContextTestCase {
+public class RuleServiceTest extends AbstractJUnit4SpringContextTests {
 	@Autowired
 	public ComboRuleService comboRuleService;
 	@Autowired
@@ -49,6 +51,8 @@ public class RuleServiceTest extends SpringContextTestCase {
 	public SpecialClausRuleService specialClausRuleService;
 	@Autowired
 	public ProposalRuleService proposalRuleService;
+    @Autowired
+    private UndwrtService undwrtService;
 
 	@Test
 	public void testQuickPriceService() {
@@ -233,5 +237,52 @@ public class RuleServiceTest extends SpringContextTestCase {
 			e.printStackTrace();
 		}
 	}
+
+    @Test
+    public void testUndwrt(){
+        UndwrtCondition condition = new UndwrtCondition();
+        condition.setCarType("01");
+        UndwrtRiskKind aKind = new UndwrtRiskKind();
+        aKind.setKindCode("A");
+        aKind.setAmount(1000000);
+        condition.addRiskKind("A",aKind);
+        UndwrtRiskKind bKind = new UndwrtRiskKind();
+        bKind.setKindCode("B");
+        bKind.setAmount(1000000);
+        condition.addRiskKind("B",bKind);
+
+        boolean result = undwrtService.undwrt("8",condition);
+
+        System.out.println(result);
+//        Assert.assertEquals(false,result);
+//
+//        UndwrtCondition condition2 = new UndwrtCondition();
+//        condition2.setCarAge(10);
+//        condition2.setCarNature("00");
+//        condition2.setCarType("02");
+//        boolean result2 = undwrtService.undwrt("8",condition2);
+//        Assert.assertEquals(false,result);
+    }
+
+    @Test
+    public void JFRuleFlowTest() {
+        PrpUISechema prpDomain = new PrpUISechema();
+        prpDomain.setComcode("2510000000");
+        prpDomain.setRiskcode("0101");
+        prpDomain.setExcepType("02");
+        prpDomain.setClasscode("01");
+        prpDomain.setSumpreminu(new BigDecimal(200000));
+        prpDomain.setFirstpremium(new BigDecimal(60000));
+        prpDomain.setPayTimes(3);
+        prpDomain.setLastPayendate("2012-04-07");
+        prpDomain.setEnddate("2012-06-28");
+
+        try {
+            undwrtService.executeRule(prpDomain);
+            System.out.println(prpDomain.getjFeeResult());
+        } catch (Exception e) {
+            throw new RuntimeException("程序出错啦", e);
+        }
+    }
 
 }

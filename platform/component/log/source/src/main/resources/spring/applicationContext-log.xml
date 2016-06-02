@@ -119,7 +119,7 @@
     </bean>
 
 
-    <bean id="logConfigs" class="com.sinosoft.one.log.config.LogConfigs" init-method="init">
+    <bean id="logConfigs" class="com.sinosoft.one.log.config.LogConfigs">
         <property name="environment" value="${log.environment}" />
     </bean>
     <bean id="log4jManager" class="com.sinosoft.one.log.config.Log4jManager" />

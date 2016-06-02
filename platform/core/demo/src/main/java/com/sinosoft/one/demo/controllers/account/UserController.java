@@ -88,7 +88,8 @@ public class UserController {
 
     @Post("save")
     public String save(@Param("groupList") List<Long> gids,
-                       @Validation(errorPath = "a:errorCreate"
+                       @Validation(errorPath = "a:errorCreate",notEmpty = @NotEmptyEx(props = {"name"}, message = "not empty"),
+                               size = @SizeEx(props = {"name"}, min = 6, max = 12, message = "size must between 6 to 12")
                        ) User user, @Param("doc") MultipartFile[] docs, Invocation inv) throws IllegalStateException, IOException {
 
         List<Group> groupList = new ArrayList<Group>();

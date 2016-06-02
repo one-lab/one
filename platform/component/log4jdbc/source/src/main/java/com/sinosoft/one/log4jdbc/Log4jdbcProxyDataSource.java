@@ -98,18 +98,19 @@ public class Log4jdbcProxyDataSource implements DataSource {
     public PrintWriter getLogWriter() throws SQLException {
         return realDataSource.getLogWriter();
     }
-   /* public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return realDataSource.isWrapperFor(iface);
-    }*/
+    }
     public void setLoginTimeout(int seconds) throws SQLException {
         realDataSource.setLoginTimeout(seconds);
     }
     public void setLogWriter(PrintWriter out) throws SQLException {
         realDataSource.setLogWriter(out);
     }
-    /*public <T> T unwrap(Class<T> iface) throws SQLException {
+
+    public <T> T unwrap(Class<T> iface) throws SQLException {
         return realDataSource.unwrap(iface);
-    }*/
+    }
     
 
 }

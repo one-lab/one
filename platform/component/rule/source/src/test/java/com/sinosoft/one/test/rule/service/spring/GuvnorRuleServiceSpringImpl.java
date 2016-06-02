@@ -6,6 +6,7 @@ import com.sinosoft.one.rule.service.facade.DroolsRuleService;
 import com.sinosoft.one.test.rule.service.facade.GuvnorRuleService;
 
 public class GuvnorRuleServiceSpringImpl implements GuvnorRuleService {
+
 	@Autowired
 	public DroolsRuleService droolsRuleService;
 

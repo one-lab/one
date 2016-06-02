@@ -9,7 +9,7 @@
 	<groupId>com.sinosoft.one</groupId>
 	<artifactId>bpm</artifactId>
 	<version>1.0.3-SNAPSHOT</version>
-
+    <name>One :: BPM</name>
 	<properties>
 		<jbpm5.version>5.4.0.Final</jbpm5.version>
 		<drools.version>5.5.0.Final</drools.version>

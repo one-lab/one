@@ -18,7 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.apache.commons.lang3.StringUtils;
 
 import com.sinosoft.one.test.rule.service.facade.ComboPack;
 
@@ -378,8 +377,13 @@ public class PdComboPack implements java.io.Serializable,Comparable<PdComboPack>
 	public String getPackageNo() {
 		return id.getPackageNo();
 	}
-	
-	private List<String> checkCondtions = new ArrayList<String>(0);
+
+    @Override
+    public List<String> getItemsId() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    private List<String> checkCondtions = new ArrayList<String>(0);
 
 	@Transient
 	public List<String> getCheckCondition() {
@@ -390,9 +394,5 @@ public class PdComboPack implements java.io.Serializable,Comparable<PdComboPack>
 		checkCondtions.add(relateKindCode);
 	}
 	
-	@Transient
-	public List<String> getItemsId() {
-		return Arrays.asList(StringUtils.split(this.itemSerNoList, ","));
-	}
 
 }

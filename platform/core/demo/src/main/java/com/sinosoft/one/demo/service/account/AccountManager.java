@@ -13,7 +13,6 @@ import com.sinosoft.one.demo.model.account.QUser;
 import com.sinosoft.one.demo.model.account.User;
 import com.sinosoft.one.demo.model.account.UserInfo;
 import com.sinosoft.one.demo.service.ServiceException;
-import oracle.jdbc.OracleTypes;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +77,7 @@ public class AccountManager {
         if (id == null || StringUtils.isBlank(Long.toString(id))) {
             id = Long.valueOf(1);
         }
+
         return userDao.selectUserForDynamicComplexSql(name, email, id);
     }
 
@@ -114,8 +114,12 @@ public class AccountManager {
             name = "";
         }
         name = "%" + name + "%";
-        ProcedureResult<List<User>> procedureResultUser = new OutProcedureResult<List<User>>(User.class, OracleTypes.CURSOR);
-        ProcedureResult<List<String>> procedureResultPhone = new OutProcedureResult<List<String>>(String.class, OracleTypes.CURSOR);
+        ProcedureResult<List<User>> procedureResultUser = new OutProcedureResult<List<User>>(User.class,
+                //OracleTypes.CURSOR --此处为什么要和oracle绑定死？这个参数做什么用？
+                 1);
+        ProcedureResult<List<String>> procedureResultPhone = new OutProcedureResult<List<String>>(String.class,
+                //OracleTypes.CURSOR--此处为什么要和oracle绑定死？
+                1);
         userDao.procedureResultWithOracle(id, name, procedureResultUser, procedureResultPhone);
         Map<String, OutProcedureResult> outProcedureResultMap = new HashMap<String, OutProcedureResult>();
         outProcedureResultMap.put("users", (OutProcedureResult) procedureResultUser);

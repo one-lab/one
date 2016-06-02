@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * POJO类PdRateFactor
@@ -63,7 +62,6 @@ public class PdRateFactor implements java.io.Serializable {
      */
     @Id
     @GeneratedValue(generator="system-uuid")  
-    @GenericGenerator(name="system-uuid", strategy = "uuid.hex")
     @Column(name = "SERIALNO")
     public String getSerialNo() {
         return this.serialNo;

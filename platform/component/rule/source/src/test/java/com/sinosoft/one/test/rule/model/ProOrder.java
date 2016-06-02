@@ -7,20 +7,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
-@Entity
-@Table(name="GE_PRO_ORDER")
+
 public class ProOrder
   implements Serializable
 {
@@ -61,8 +49,6 @@ public class ProOrder
   private ProVehicle proVehicle;
   private ProContact proContact;
 
-  @Id
-  @Column(name="ORDERNO")
   public String getOrderNo()
   {
     return this.orderNo;
@@ -73,7 +59,6 @@ public class ProOrder
     this.orderNo = orderNo;
   }
 
-  @Column(name="PRODUCTCODE")
   public String getProductCode()
   {
     return this.productCode;
@@ -84,7 +69,6 @@ public class ProOrder
     this.productCode = productCode;
   }
 
-  @Column(name="BUSINESSNATURE")
   public String getBusinessNature()
   {
     return this.businessNature;
@@ -95,7 +79,6 @@ public class ProOrder
     this.businessNature = businessNature;
   }
 
-  @Column(name="AREACODE")
   public String getAreaCode()
   {
     return this.areaCode;
@@ -106,7 +89,6 @@ public class ProOrder
     this.areaCode = areaCode;
   }
 
-  @Column(name="COMBOCODE")
   public String getComboCode()
   {
     return this.comboCode;
@@ -117,7 +99,6 @@ public class ProOrder
     this.comboCode = comboCode;
   }
 
-  @Column(name="CHANNELCODE")
   public String getChannelCode()
   {
     return this.channelCode;
@@ -128,7 +109,6 @@ public class ProOrder
     this.channelCode = channelCode;
   }
 
-  @Column(name="RENEWALFLAG")
   public String getRenewalFlag()
   {
     return this.renewalFlag;
@@ -139,7 +119,6 @@ public class ProOrder
     this.renewalFlag = renewalFlag;
   }
 
-  @Column(name="OLDLPOLICYNO")
   public String getOldlPolicyNo()
   {
     return this.oldlPolicyNo;
@@ -150,7 +129,6 @@ public class ProOrder
     this.oldlPolicyNo = oldlPolicyNo;
   }
 
-  @Column(name="CURRENCY")
   public String getCurrency()
   {
     return this.currency;
@@ -161,7 +139,6 @@ public class ProOrder
     this.currency = currency;
   }
 
-  @Column(name="SUMDISCOUNT")
   public BigDecimal getSumDiscount()
   {
     return this.sumDiscount;
@@ -172,7 +149,6 @@ public class ProOrder
     this.sumDiscount = sumDiscount;
   }
 
-  @Column(name="SUMPREMIUM")
   public BigDecimal getSumPremium()
   {
     return this.sumPremium;
@@ -183,7 +159,6 @@ public class ProOrder
     this.sumPremium = sumPremium;
   }
 
-  @Column(name="SUMBASEPREMIUM")
   public BigDecimal getSumBasePremium()
   {
     return this.sumBasePremium;
@@ -194,8 +169,6 @@ public class ProOrder
     this.sumBasePremium = sumBasePremium;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name="INPUTDATE")
   public Date getInputDate()
   {
     return this.inputDate;
@@ -206,7 +179,6 @@ public class ProOrder
     this.inputDate = inputDate;
   }
 
-  @Column(name="INPUTHOUR")
   public String getInputHour()
   {
     return this.inputHour;
@@ -217,8 +189,6 @@ public class ProOrder
     this.inputHour = inputHour;
   }
 
-  @Temporal(TemporalType.DATE)
-  @Column(name="INVALIDDATE")
   public Date getInvalidDate()
   {
     return this.invalidDate;
@@ -229,7 +199,6 @@ public class ProOrder
     this.invalidDate = invalidDate;
   }
 
-  @Column(name="CUSTSERVICE")
   public String getCustService()
   {
     return this.custService;
@@ -240,7 +209,6 @@ public class ProOrder
     this.custService = custService;
   }
 
-  @Column(name="STATUS")
   public String getStatus()
   {
     return this.status;
@@ -251,7 +219,6 @@ public class ProOrder
     this.status = status;
   }
 
-  @Column(name="PRINTTYPE")
   public String getPrintType()
   {
     return this.printType;
@@ -262,7 +229,6 @@ public class ProOrder
     this.printType = printType;
   }
 
-  @Column(name="FLOW")
   public String getFlow()
   {
     return this.flow;
@@ -273,7 +239,6 @@ public class ProOrder
     this.flow = flow;
   }
 
-  @Column(name="FLAG")
   public String getFlag()
   {
     return this.flag;
@@ -284,8 +249,6 @@ public class ProOrder
     this.flag = flag;
   }
 
-  @OneToMany(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
-  @OrderBy("orderIndex")
   public List<ProInsured> getProInsureds()
   {
     return this.proInsureds;
@@ -296,7 +259,6 @@ public class ProOrder
     this.proInsureds = proInsureds;
   }
 
-  @OneToMany(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
   public List<ProKind> getProKinds()
   {
     return this.proKinds;
@@ -307,7 +269,6 @@ public class ProOrder
     this.proKinds = proKinds;
   }
 
-  @OneToMany(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
   public List<ProRisk> getProRisks()
   {
     return this.proRisks;
@@ -318,7 +279,6 @@ public class ProOrder
     this.proRisks = proRisks;
   }
 
-  @OneToMany(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
   public List<ProItemHouse> getProItemHouses()
   {
     return this.proItemHouses;
@@ -329,7 +289,6 @@ public class ProOrder
     this.proItemHouses = proItemHouses;
   }
 
-  @OneToOne(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
   public ProDelivery getProDelivery()
   {
     return this.proDelivery;
@@ -340,7 +299,6 @@ public class ProOrder
     this.proDelivery = proDelivery;
   }
 
-  @OneToMany(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
   public List<ProCombo> getProCombos()
   {
     return this.proCombos;
@@ -351,13 +309,11 @@ public class ProOrder
     this.proCombos = proCombos;
   }
 
-  @OneToOne(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
   public ProVehicle getProVehicle()
   {
     return this.proVehicle;
   }
 
-  @OneToOne(fetch=FetchType.LAZY, mappedBy="proOrder")
   public ProCommFactor getProCommFactor()
   {
     return this.proCommFactor;
@@ -368,7 +324,6 @@ public class ProOrder
     this.proCommFactor = proCommFactor;
   }
 
-  @OneToOne(fetch=FetchType.LAZY, mappedBy="proOrder")
   public ProVehicletax getProVehicletax()
   {
     return this.proVehicletax;
@@ -379,7 +334,6 @@ public class ProOrder
     this.proVehicletax = proVehicletax;
   }
 
-  @OneToOne(fetch=FetchType.LAZY, mappedBy="proOrder")
   public ProForceFactor getProForceFactor()
   {
     return this.proForceFactor;
@@ -395,7 +349,6 @@ public class ProOrder
     this.proVehicle = proVehicle;
   }
 
-  @OneToOne(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="proOrder")
   public ProContact getProContact()
   {
     return this.proContact;
@@ -406,7 +359,6 @@ public class ProOrder
     this.proContact = proContact;
   }
 
-  @Transient
   public ProInsured getProAppliMan()
   {
     for (Iterator iterator = this.proInsureds.iterator(); iterator.hasNext(); ) {
@@ -417,7 +369,6 @@ public class ProOrder
     return null;
   }
 
-  @Transient
   public List<ProInsured> getProInsureMan()
   {
     List proInsureMans = new ArrayList(0);

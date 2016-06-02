@@ -148,10 +148,17 @@ public class ServletRequestDataBinder extends WebDataBinder {
                 request, prefix));
         if (request instanceof MultipartHttpServletRequest) {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            bindMultipartFiles(multipartRequest.getFileMap(), mpvs);
+            bindMultipart(multipartRequest.getMultiFileMap(), mpvs);
+            //bindMultipartFiles(multipartRequest.getFileMap(), mpvs);
         }
+        addBindValues(mpvs, request);
         doBind(mpvs);
     }
+
+    protected void addBindValues(MutablePropertyValues mpvs, ServletRequest request) {
+
+    }
+
 
     @Override
     protected void doBind(MutablePropertyValues mpvs) {

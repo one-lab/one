@@ -19,6 +19,9 @@ import com.sinosoft.one.bpm.test.domain.Combo;
 import com.sinosoft.one.bpm.test.domain.Kind;
 import com.sinosoft.one.bpm.test.service.facade.ComboService;
 import com.sinosoft.one.bpm.util.BpmServiceSupport;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.Transaction;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/spring/applicationContext-bpm.xml", "/applicationContext-test.xml" })
@@ -54,7 +57,6 @@ public class BpmServiceImplTest extends AbstractJUnit4SpringContextTests {
 //		processStep5();
 	}
 
-	
 	public void createCombo() {
 		combo = new Combo();
 		combo.setNo(new Random().nextInt());

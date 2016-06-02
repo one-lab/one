@@ -8,18 +8,19 @@
     </parent>
     <artifactId>mvc-ui-plugin</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.4</version>
+    <version>1.0.5-SNAPSHOT</version>
     <name>One :: MvcUIPlugin</name>
     <dependencies>
-        <dependency>
-            <groupId>com.sinosoft.one</groupId>
-            <artifactId>util</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
         <dependency>
             <groupId>com.sinosoft.one</groupId>
             <artifactId>data</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sinosoft.one</groupId>
+            <artifactId>util</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -2,7 +2,6 @@ package com.sinosoft.one.test.rule.model;
 
 // 采用工具 Hibernate Tools 3.2.4.GA (sinosoft version) 生成，请勿手工修改。
 
-import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -70,7 +69,6 @@ public class PdComboArea implements java.io.Serializable {
 	@Id
 	@Column(name = "SERIALNO")
     @GeneratedValue(generator = "hibernate-uuid.hex")
-    @GenericGenerator(name = "hibernate-uuid.hex", strategy = "uuid.hex")
 	public String getSerialNo() {
 		return this.serialNo;
 	}

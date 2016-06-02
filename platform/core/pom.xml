@@ -6,7 +6,7 @@
   <packaging>pom</packaging>
   <modules>
   	<module>parent</module>
-  	<module>web</module>
-	<module>persistence</module>
+  	<module>web/source</module>
+	<module>persistence/source</module>
   </modules>
 </project>

@@ -24,16 +24,7 @@ $(document).ready(function() {
 		<%@ include file="/WEB-INF/layouts/header.jsp"%>
 		<div id="content" class="span12">
 			<h2>帐号及权限信息：</h2>
-
-			<div class="window">
-				<div class="title">用户</div>
-				<div class="content" id="p1"></div>
-			</div>
-
-			<div class="window">
-				<div class="title">权限</div>
-				<div class="content" id="p2"></div>
-			</div>
+            <%@ include file="pipeContent.jsp"%>
 		</div>
         <input type="button" value="加载用户"onclick="showLazyContent('uuuu','p1');" >&nbsp;&nbsp;<input type="button" value="加载权限" onclick="showLazyContent('ytyy','p2');">
 		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
@@ -42,7 +33,7 @@ $(document).ready(function() {
 </body>
 </html>
 <mvcpipe:writes>
-    <mvcpipe:write id = "uuuu" lazyLoad = "true" targetId="p1" />
-    <mvcpipe:write id = "ytyy" lazyLoad = "true" targetId="p2" />
+    <mvcpipe:write id = "uuuu" lazyLoad = "false" targetId="p1" />
+    <mvcpipe:write id = "ytyy" lazyLoad = "false" targetId="p2" />
 </mvcpipe:writes>
 

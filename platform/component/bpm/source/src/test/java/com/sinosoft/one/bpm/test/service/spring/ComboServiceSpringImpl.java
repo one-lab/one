@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.one.bpm.aspect.GetTask;
@@ -35,6 +36,10 @@ public class ComboServiceSpringImpl implements ComboService {
     private StudentStore studentStore;
     @Autowired
     private DataStore dataStore;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
 	public void init() {
 		System.out.println("--------------init");
 	}
@@ -121,15 +126,19 @@ public class ComboServiceSpringImpl implements ComboService {
             
 //            Jndis.bind();
             System.out.println(System.getProperty("user.dir") + File.separator +"src" + File.separator +"test"+ File.separator +"resources");
-            DBFactory.configure(System.getProperty("user.dir") + File.separator +"src" + File.separator +"test"+ File.separator +"resources" + File.separator + "dbmanager-config.xml");
-            dbManager = new DBManager();
-    		dbManager.open("myDataSource");
-    		dbManager.beginTransaction();
-    		dbManager.executeUpdate("update bpm_demo_student set name='222222222' where id='c2cfe5f8eb1a45ab8a8ee54c149d07da'");
-    		dbManager.executeUpdate("update bpm_demo_student set name='222222222' where id='ce7f647ccafa4b6b9763ae7f16a9025b'");
-    		dbManager.commitTransaction();
-    		dbManager.close();
 
+//            DBFactory.configure("/Volumes/LACIE/work/platform/gitPlatform/platform/component/bpm/source/src/test/resources/dbmanager-config.xml");
+//            dbManager = new DBManager();
+//    		dbManager.open("myDataSource");
+//    		dbManager.beginTransaction();
+//    		dbManager.executeUpdate("update bpm_demo_student set name='2222' where id='cdefb6b1b9a24dd9a822bdcf313acd01'");
+//    		dbManager.executeUpdate("update bpm_demo_student set name='22' where id='e8771e02850c4b3b9f08b7674864179c'");
+//    		dbManager.commitTransaction();
+//    		dbManager.close();
+            jdbcTemplate.getDataSource().getConnection().setAutoCommit(false);
+            jdbcTemplate.update("update bpm_demo_student set name='2222' where id='cdefb6b1b9a24dd9a822bdcf313acd01'");
+            jdbcTemplate.update("update bpm_demo_student set name='22' where id='e8771e02850c4b3b9f08b7674864179c'");
+            //jdbcTemplate.
 		} catch (Exception e) {
 			if(dbManager != null) {
 				try {
@@ -140,7 +149,9 @@ public class ComboServiceSpringImpl implements ComboService {
 			}
 			throw new RuntimeException(e);
 		}
+
 		System.out.println("------creat--------combo:" + comboCode);
+        throw  new RuntimeException();
 	}
 
     public Student findStudent(String id) {

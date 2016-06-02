@@ -62,7 +62,7 @@ public class GridJsonTest {
         testEmployeeAttributes.add("operation");
         gridable.setCellListStringField(testEmployeeAttributes);
         AbstractRender abstractRender = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-        assertEquals(gridJson, abstractRender.getResultForTest());
+        assertEquals(gridJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class GridJsonTest {
         testEmployeeAttributes.add("operation");
         gridable.setCellListStringField(testEmployeeAttributes);
         AbstractRender abstractRender = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-        assertEquals(gridJson, abstractRender.getResultForTest());
+        assertEquals(gridJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class GridJsonTest {
         testEmployeeAttributes.add("operation");
         gridable.setCellListStringField(testEmployeeAttributes);
         AbstractRender abstractRender = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-        assertEquals(gridJson, abstractRender.getResultForTest());
+        assertEquals(gridJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -119,7 +119,7 @@ public class GridJsonTest {
         testEmployeeAttributes.add("operation");
         gridable.setCellListStringField(testEmployeeAttributes);
         AbstractRender abstractRender = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-        assertEquals(gridJson, abstractRender.getResultForTest());
+        assertEquals(gridJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class GridJsonTest {
         gridable.setIdField("id");
         gridable.setCellStringArrayField(cellStringArray);
         AbstractRender abstractRender = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-        assertEquals(gridJson, abstractRender.getResultForTest());
+        assertEquals(gridJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -165,6 +165,6 @@ public class GridJsonTest {
         gridable.setIdField("id");
         gridable.setCellStringField(cellString);
         AbstractRender abstractRender = (GridRender) UIUtil.with(gridable).as(UIType.Json);
-        assertEquals(gridJson, abstractRender.getResultForTest());
+        assertEquals(gridJson, abstractRender.getConvertResult());
     }
 }

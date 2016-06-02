@@ -38,7 +38,7 @@ import com.sinosoft.one.util.thread.ThreadUtils.CustomizableThreadFactory;
  * 
  */
 @SuppressWarnings("unchecked")
-public abstract class QueueConsumer implements Runnable {
+public abstract class QueueConsumer<T> implements Runnable {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -49,7 +49,7 @@ public abstract class QueueConsumer implements Runnable {
 	protected String persistencePath = System.getProperty("java.io.tmpdir") + File.separator + "queue";
 	protected Object persistenceLock = new Object(); //用于在backup与restore间等待的锁.
 
-	protected BlockingQueue queue;
+	protected BlockingQueue<T> queue;
 	protected ExecutorService executor;
 
 	/**
@@ -154,7 +154,7 @@ public abstract class QueueConsumer implements Runnable {
 				while (true) {
 					try {
 						Object message = ois.readObject();
-						queue.put(message);
+						queue.put((T)message);
 						count++;
 					} catch (EOFException e) {
 						break;

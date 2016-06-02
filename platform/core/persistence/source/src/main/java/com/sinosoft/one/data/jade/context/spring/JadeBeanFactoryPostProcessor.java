@@ -95,7 +95,8 @@ public class JadeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName.substring(1));
 
             MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
-            propertyValues.addPropertyValue("rowMapperFactory", getRowMapperFactory());
+            propertyValues.addPropertyValue("rowMapperFactory",
+                    getRowMapperFactory());
             propertyValues.addPropertyValue("interpreterFactory", getInterpreterFactory(beanFactory));
             String cacheProviderName = getCacheProviderName(beanFactory);
             if (cacheProviderName != null) {

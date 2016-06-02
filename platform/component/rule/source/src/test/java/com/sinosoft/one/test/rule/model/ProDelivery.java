@@ -14,8 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="GE_PRO_DELIVERY")
@@ -35,10 +33,8 @@ public class ProDelivery
   private BcCity city;
   private BcDistrict district;
 
-  @GenericGenerator(name="generator", strategy="foreign", parameters={@org.hibernate.annotations.Parameter(name="property", value="proOrder")})
   @Id
   @Column(name="ORDERNO", unique=true)
-  @JsonIgnore
   public String getOrderNo()
   {
     return this.orderNo;
@@ -51,7 +47,6 @@ public class ProDelivery
 
   @OneToOne(fetch=FetchType.LAZY)
   @PrimaryKeyJoinColumn
-  @JsonIgnore
   public ProOrder getProOrder() {
     return this.proOrder;
   }
@@ -130,7 +125,6 @@ public class ProDelivery
 
   @ManyToOne
   @JoinColumn(name="DISTRICT")
-  @JsonIgnore
   public BcDistrict getDistrict() {
     return this.district;
   }
@@ -142,7 +136,6 @@ public class ProDelivery
 
   @ManyToOne
   @JoinColumn(name="PROVINCE")
-  @JsonIgnore
   public BcProvince getProvince() {
     return this.province;
   }
@@ -154,7 +147,6 @@ public class ProDelivery
 
   @ManyToOne
   @JoinColumn(name="CITY")
-  @JsonIgnore
   public BcCity getCity() {
     return this.city;
   }

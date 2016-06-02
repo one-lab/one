@@ -16,6 +16,6 @@ public interface DroolsRuleService {
 	public void executeRulesWithGlobal(String ruleFlowName, Object global,
 			String changeSetFilePath, Object... facts);
 
-	public void executeRules(String ruleFlowName, GlobalBOM global,
-			String changeSetFilePath, InputBOM... facts);
+//	public void executeRules(String ruleFlowName, GlobalBOM global,
+//			String changeSetFilePath, Object... facts);
 }

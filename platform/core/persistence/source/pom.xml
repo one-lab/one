@@ -9,7 +9,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>data</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-RELEASE</version>
     <name>One :: Data</name>
 
     <properties>
@@ -27,6 +27,7 @@
        <dependency>
            <groupId>org.springframework.data</groupId>
            <artifactId>spring-data-jpa</artifactId>
+           <version>1.1.0.RELEASE</version>
        </dependency>
 
         <!-- Logging (SLF4J + JCL bridge) -->
@@ -54,6 +55,10 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -147,6 +152,8 @@
             <groupId>com.microsoft</groupId>
             <artifactId>jdbc4</artifactId>
             <version>1.0</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -228,13 +235,13 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
-<!--one-arch4-->
-        <dependency>
-            <groupId>com.sinosoft.one.plugins</groupId>
-            <artifactId>arch4</artifactId>
-            <version>4.2.7</version>
-            <scope>test</scope>
-        </dependency>
+        <!--one-arch4-->
+        <!--<dependency>-->
+            <!--<groupId>com.sinosoft.one.plugins</groupId>-->
+            <!--<artifactId>arch4</artifactId>-->
+            <!--<version>4.2.7</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
@@ -264,8 +271,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>

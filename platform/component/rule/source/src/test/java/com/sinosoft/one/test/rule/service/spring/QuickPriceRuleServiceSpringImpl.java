@@ -6,6 +6,7 @@ import com.sinosoft.one.rule.service.facade.DroolsRuleService;
 import com.sinosoft.one.test.rule.service.facade.QuickPriceRuleService;
 
 public class QuickPriceRuleServiceSpringImpl implements QuickPriceRuleService {
+
 	@Autowired
 	public DroolsRuleService droolsRuleService;
 

@@ -26,26 +26,42 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class TraceFilter implements Filter {
 
-    private URLTraceLog urlTraceLog;
     private boolean userBehaviorLogSynchronized = true;
-    private LogUrl logUrl;
 
     private LogConfigs logConfigs;
-	public void destroy() {}
+
+    private Boolean urlTraceFlag =false;
+
+    public void destroy() {}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        doUserBehaviorLog(httpServletRequest);
-        doUrlTraceLogBegin(httpServletRequest);
+
+        URLTraceLog urlTraceLog= null;
+
+        if(urlTraceFlag){
+            doUserBehaviorLog(httpServletRequest);
+            urlTraceLog= doUrlTraceLogBegin(httpServletRequest);
+        }
+
+        TraceUtils.beginTrace();
         filterChain.doFilter(request, response);
-        doUrlTraceLogEnd(httpServletRequest);
+        TraceUtils.endTrace();
+
+        if(urlTraceFlag&&urlTraceLog!=null)
+            doUrlTraceLogEnd(httpServletRequest,urlTraceLog);
 	}
 
 	public void init(FilterConfig config) throws ServletException {
         String userBehaviorLogSynchronizedStr = config.getInitParameter("userBehaviorLogSynchronized");
+        String urlFlag = config.getInitParameter("url");
         if(!StringUtils.isBlank(userBehaviorLogSynchronizedStr)) {
             userBehaviorLogSynchronized = Boolean.valueOf(userBehaviorLogSynchronizedStr);
+        }
+        if(!StringUtils.isNotBlank(urlFlag)){
+            urlTraceFlag = Boolean.valueOf(urlFlag);
         }
     }
 
@@ -58,39 +74,41 @@ public class TraceFilter implements Filter {
         }
     }
 
-    private void doUrlTraceLogBegin(HttpServletRequest request) {
+    private URLTraceLog doUrlTraceLogBegin(HttpServletRequest request) {
         String url = request.getRequestURI();
+        URLTraceLog urlTraceLog =null;
+        LogUrl logUrl =null;
         if(logConfigs == null) {
             setLogConfigsFromRequest(request);
         }
         if(logConfigs != null) {
-            logUrl = logConfigs.getLogUrl(url);
+             logUrl = logConfigs.getLogUrl(url);
         }
         if(logUrl != null) {
-            TraceUtils.beginTrace();
-            urlTraceLog = URLTraceLog.beginTrace();
+            urlTraceLog = URLTraceLog.beginTrace(logUrl);
         }
+        return urlTraceLog;
     }
 
-    private void doUrlTraceLogEnd(HttpServletRequest request) {
-        if(urlTraceLog != null) {
+    private void doUrlTraceLogEnd(HttpServletRequest request, URLTraceLog urlTraceLog) {
             URLTraceLog.endTrace(request, urlTraceLog);
-            if(urlTraceLog.getConsumeTime() > logUrl.getMaxExecuteTime()) {
+            if(urlTraceLog.getConsumeTime() > urlTraceLog.getLogUrl().getMaxExecuteTime()) {
                 String title = "URL [" + urlTraceLog.getUrl() + "] 追踪日志预警";
                 String content = "URL [" + urlTraceLog.getUrl() + "] 响应超时，最大响应时间为["
-                        + logUrl.getMaxExecuteTime() + "]ms，实际响应时间为[" + urlTraceLog.getConsumeTime() + "]ms.";
+                        + urlTraceLog.getLogUrl().getMaxExecuteTime() + "]ms，实际响应时间为[" + urlTraceLog.getConsumeTime() + "]ms.";
                 NotificationEvent notificationEvent = new NotificationEvent(title, content, "",
                         NotificationModule.RESPONSE, "");
                 Loggables.notification(notificationEvent);
             }
-            TraceUtils.endTrace();
+
             Loggables.doLogStatistics(urlTraceLog.getUrl(), urlTraceLog.getConsumeTime());
-        }
     }
 
     private void setLogConfigsFromRequest(HttpServletRequest request) {
         WebApplicationContext webApplicationContext = getWebApplicationContext(request);
         logConfigs = webApplicationContext != null ? webApplicationContext.getBean(LogConfigs.class) : null;
+        if(logConfigs!=null&&urlTraceFlag)
+            logConfigs.loadRemoteConfig();
     }
 
 

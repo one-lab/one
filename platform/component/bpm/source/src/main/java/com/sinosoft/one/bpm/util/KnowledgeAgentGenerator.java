@@ -91,8 +91,7 @@ public class KnowledgeAgentGenerator {
 
 	private static InputStream getFileStream(String propertiesFilePath) {
 		InputStream is = null;
-		is = KnowledgeAgentGenerator.class.getClassLoader()
-				.getResourceAsStream(propertiesFilePath);
+		is = KnowledgeAgentGenerator.class.getClassLoader().getResourceAsStream(propertiesFilePath);
 		return is;
 	}
 }
@@ -101,17 +100,14 @@ class LogSystemEventListener implements SystemEventListener {
 	private Logger logger = LoggerFactory.getLogger("LogSystemEventListener");
 
 	public void info(String message) {
-		// TODO Auto-generated method stub
 		this.info(message, null);
 	}
 
 	public void info(String message, Object object) {
-		// TODO Auto-generated method stub
 		logger.info(message, object);
 	}
 
 	public void warning(String message) {
-		// TODO Auto-generated method stub
 		this.warning(message, null);
 	}
 
@@ -123,12 +119,10 @@ class LogSystemEventListener implements SystemEventListener {
 				logger.warn(it.next().getMessage());
 			}
 		}
-		// TODO Auto-generated method stub
 		logger.warn(message, object);
 	}
 
 	public void exception(String message, Throwable e) {
-		// TODO Auto-generated method stub
 		logger.error(message, e);
 	}
 

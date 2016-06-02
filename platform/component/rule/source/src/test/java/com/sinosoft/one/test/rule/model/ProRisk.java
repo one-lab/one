@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name="GE_PRO_RISK")
@@ -51,7 +50,6 @@ public class ProRisk
 
   @ManyToOne(fetch=FetchType.LAZY)
   @JoinColumn(name="ORDERNO", nullable=false, insertable=false, updatable=false)
-  @JsonIgnore
   public ProOrder getProOrder() {
     return this.proOrder;
   }
@@ -174,7 +172,6 @@ public class ProRisk
   }
 
   @Transient
-  @JsonIgnore
   public List<ProKind> getProKinds()
   {
     List proKinds = new ArrayList(0);

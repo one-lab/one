@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * POJO类PdFactor
@@ -47,7 +46,6 @@ public class PdFactor implements java.io.Serializable {
      */
     @Id
     @GeneratedValue(generator="system-uuid")  
-    @GenericGenerator(name="system-uuid", strategy = "uuid.hex")
     @Column(name = "SERIALNO")
     public String getSerialNo() {
         return this.serialNo;

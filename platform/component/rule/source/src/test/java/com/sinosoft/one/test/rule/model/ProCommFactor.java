@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="GE_PRO_COMMFACTOR")
@@ -38,7 +37,6 @@ public class ProCommFactor
   private BigDecimal theftAdjustValue;
   private BigDecimal safeDriveValue;
 
-  @GenericGenerator(name="generator", strategy="foreign", parameters={@org.hibernate.annotations.Parameter(name="property", value="proOrder")})
   @Id
   @GeneratedValue(generator="generator")
   @Column(name="ORDERNO")

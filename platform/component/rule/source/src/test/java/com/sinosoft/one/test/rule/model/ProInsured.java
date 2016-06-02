@@ -14,8 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="GE_PRO_INSURED")
@@ -55,7 +53,6 @@ public class ProInsured
 
   @Id
   @GeneratedValue(generator="system-uuid")
-  @GenericGenerator(name="system-uuid", strategy="uuid.hex")
   @Column(name="SERIALNO")
   public String getSerialNo()
   {
@@ -69,7 +66,6 @@ public class ProInsured
 
   @ManyToOne(fetch=FetchType.LAZY)
   @JoinColumn(name="ORDERNO", nullable=false)
-  @JsonIgnore
   public ProOrder getProOrder() {
     return this.proOrder;
   }
@@ -335,7 +331,6 @@ public class ProInsured
 
   @ManyToOne
   @JoinColumn(name="ADDRPROVINCE")
-  @JsonIgnore
   public BcProvince getAddrProvince()
   {
     return this.addrProvince;
@@ -348,7 +343,6 @@ public class ProInsured
 
   @ManyToOne
   @JoinColumn(name="ADDRCITY")
-  @JsonIgnore
   public BcCity getAddrCity() {
     return this.addrCity;
   }
@@ -360,7 +354,6 @@ public class ProInsured
 
   @ManyToOne
   @JoinColumn(name="ADDRDISTRICT")
-  @JsonIgnore
   public BcDistrict getAddrDistrict() {
     return this.addrDistrict;
   }

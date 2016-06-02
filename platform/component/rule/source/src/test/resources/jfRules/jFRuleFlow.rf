@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<process xmlns="http://drools.org/drools-5.0/process"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+         xs:schemaLocation="http://drools.org/drools-5.0/process drools-processes-5.0.xsd"
+         type="RuleFlow" name="JFRuleFlow" id="jfRuleFlow" package-name="com.sinosoft.amic" >
+
+  <header>
+    <imports>
+      <import name="com.sinosoft.one.test.rule.domain.PrpUISechema" />
+    </imports>
+  </header>
+
+  <nodes>
+    <start id="1" name="Start" x="270" y="25" width="48" height="48" />
+    <end id="19" name="End" x="284" y="329" width="48" height="48" />
+    <ruleSet id="3" name="aaaa" x="259" y="128" width="80" height="48" ruleFlowGroup="jianfeikongzhi" />
+    <end id="18" name="End" x="71" y="325" width="48" height="48" />
+    <split id="7" name="Gateway" x="279" y="216" width="49" height="49" type="2" >
+      <constraints>
+        <constraint toNodeId="8" toType="DROOLS_DEFAULT" name="constraint" priority="1" type="rule" dialect="mvel" >PrpUISechema(result=="01")</constraint>
+        <constraint toNodeId="19" toType="DROOLS_DEFAULT" name="constraint" priority="1" type="rule" dialect="mvel" >PrpUISechema(result=="00")</constraint>
+      </constraints>
+    </split>
+    <ruleSet id="8" name="bbbb" x="56" y="224" width="80" height="48" ruleFlowGroup="fenqikongzhi" />
+  </nodes>
+
+  <connections>
+    <connection from="7" to="19" />
+    <connection from="1" to="3" />
+    <connection from="8" to="18" />
+    <connection from="3" to="7" />
+    <connection from="7" to="8" />
+  </connections>
+
+</process>

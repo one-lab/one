@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
     xmlns:onejpa="http://com.sinosoft.one/schema/data/jpa"
 	xsi:schemaLocation="
@@ -19,11 +19,13 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
+
+
 	<!-- Jpa Entity Manager 配置 -->
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
-		<property name="dataSource" ref="dataSource"/> 
-		<property name="persistenceUnitName" value="defaultPU"/>
-		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/> 
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
+        <property name="packagesToScan" value="com.sinosoft.one.demo"/>
 		<property name="jpaProperties">
 			<props>
 				<!--<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</prop>-->
@@ -35,7 +37,7 @@
 			</props>
 		</property>
 	</bean>
-	
+
 	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="databasePlatform">
             <bean factory-method="getDialect" class="com.sinosoft.one.demo.utils.Hibernates">
@@ -56,19 +58,31 @@
 
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
-	
+
+
 	<!-- production/local development环境 -->
  		<context:property-placeholder ignore-unresolvable="true"
 			location="classpath*:/application.properties" />
-		
+
+
+    <bean id="dataSource" class="com.sinosoft.one.data.adapter.MultiJdbcProxyDataSource">
+        <property name="realDataSourceMap">
+            <map>
+                <entry key="010" value-ref="dataSource1"></entry>
+                <entry key="020" value-ref="dataSource2"></entry>
+            </map>
+        </property>
+    </bean>
+
+
 		<!-- 数据源配置, 使用DBCP数据库连接池 -->
-		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<bean id="dataSource1" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 			<!-- Connection Info -->
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
 			<property name="password" value="${jdbc.password}" />
-		
+
 			<!-- Connection Pooling Info -->
 			<property name="maxActive" value="${dbcp.maxActive}" />
 			<property name="maxIdle" value="${dbcp.maxIdle}" />
@@ -77,6 +91,22 @@
 			<property name="timeBetweenEvictionRunsMillis" value="3600000" />
 			<property name="minEvictableIdleTimeMillis" value="3600000" />
 		</bean>
+
+    <bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url2}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <!-- Connection Pooling Info -->
+        <property name="maxActive" value="${dbcp.maxActive}" />
+        <property name="maxIdle" value="${dbcp.maxIdle}" />
+        <property name="defaultAutoCommit" value="false" />
+        <!-- 连接Idle一个小时后超时 -->
+        <property name="timeBetweenEvictionRunsMillis" value="3600000" />
+        <property name="minEvictableIdleTimeMillis" value="3600000" />
+    </bean>
 
 
 		<!-- 数据源配置,使用应用服务器的数据库连接池 -->

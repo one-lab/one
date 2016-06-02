@@ -1,7 +1,7 @@
 package com.sinosoft.one.uiutil;
 
 import com.sinosoft.one.uiutil.exception.ConverterException;
-import com.sinosoft.one.uiutil.model.NodeEntity;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class TreeJsonTest {
         String treeJson = null;
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(null, "id", "title", "children", "state").classField("classField").urlField("urlField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"\",\"id\":\"1\"},\"data\":{\"attr\":{\"href\":\"javascript:void(0);\"},\"title\":\"A jie dian\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"\",\"id\":\"1\"},\"data\":{\"attr\":{\"href\":\"javascript:void(0);\"},\"title\":\"A jie dian\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"\",\"id\":\"1\"},\"data\":{\"attr\":{\"href\":\"javascript:void(0);\"},\"title\":\"A jie dian\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"\",\"id\":\"1\"},\"data\":{\"attr\":{\"href\":\"javascript:void(0);\"},\"title\":\"A jie dian\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").urlField("urlField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"\",\"id\":\"12\"},\"children\":[{\"attr\":{\"class\":\"\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"javascript:void(0);\"},\"title\":\"A2_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"javascript:void(0);\"},\"title\":\"A2_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"javascript:void(0);\"},\"title\":\"A2\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"classA\",\"id\":\"1\"},\"children\":[{\"attr\":{\"class\":\"classA1\",\"id\":\"11\"},\"data\":{\"attr\":{\"href\":\"www.A1.com\"},\"title\":\"A1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA2\",\"id\":\"12\"},\"children\":[{\"attr\":{\"class\":\"classA2_1\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"www.A2_1.com\"},\"title\":\"A2_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA2_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.A2_2.com\"},\"title\":\"A2_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.A2.com\"},\"title\":\"A2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.A.com\"},\"title\":\"A\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classB\",\"id\":\"2\"},\"children\":[{\"attr\":{\"class\":\"classB1\",\"id\":\"21\"},\"data\":{\"attr\":{\"href\":\"www.B1.com\"},\"title\":\"B1\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.B.com\"},\"title\":\"B\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList3, "id", "title", "children", "state").classField("classField").urlField("urlField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -126,8 +126,8 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        System.out.println(abstractRender.getResultForTest().toString());
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        System.out.println(abstractRender.getConvertResult().toString());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -147,8 +147,8 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        System.out.println(abstractRender.getResultForTest().toString());
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        System.out.println(abstractRender.getConvertResult().toString());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -168,8 +168,8 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\",\"type\":\"飞机类型\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\",\"type\":\"民用飞机\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        System.out.println(abstractRender.getResultForTest().toString());
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        System.out.println(abstractRender.getConvertResult().toString());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -190,8 +190,8 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\",\"type\":\"飞机类型\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        System.out.println(abstractRender.getResultForTest().toString());
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        System.out.println(abstractRender.getConvertResult().toString());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 
     @Test
@@ -216,7 +216,7 @@ public class TreeJsonTest {
         String treeJson = "[{\"attr\":{\"class\":\"classA2\",\"id\":\"2\",\"rel\":\"图片2\",\"type\":\"飞机类型\"},\"children\":[{\"attr\":{\"class\":\"classA3_1\",\"id\":\"31\",\"rel\":\"图片3-1\",\"type\":\"民用飞机\"},\"data\":{\"attr\":{\"href\":\"www.test31.com\"},\"title\":\"A3_1\"},\"state\":\"close\"},{\"attr\":{\"class\":\"classA3_2\",\"id\":\"32\"},\"data\":{\"attr\":{\"href\":\"www.test32.com\"},\"title\":\"A3_2\"},\"state\":\"close\"}],\"data\":{\"attr\":{\"href\":\"www.test2.com\"},\"title\":\"A2\"},\"state\":\"close\"}]";
         Treeable<NodeEntity> treeable = new Treeable.Builder<NodeEntity>(nodeEntityList, "id", "title", "children", "state").classField("classField").urlField("urlField").typeField("typeField").relField("relField").builder();
         AbstractRender abstractRender = (TreeRender) UIUtil.with(treeable).as(UIType.Json);
-        System.out.println(abstractRender.getResultForTest().toString());
-        assertEquals(treeJson, abstractRender.getResultForTest());
+        System.out.println(abstractRender.getConvertResult().toString());
+        assertEquals(treeJson, abstractRender.getConvertResult());
     }
 }

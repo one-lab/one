@@ -38,4 +38,9 @@ public class ParamValidationController {
     }
 
 
+    public String validat2(){
+        return null;
+    }
+
+
 }

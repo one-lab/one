@@ -2,6 +2,7 @@ package com.sinosoft.one.log.urltrace;
 
 import com.alibaba.fastjson.JSON;
 import com.sinosoft.one.log.*;
+import com.sinosoft.one.log.config.LogUrl;
 import com.sinosoft.one.log.event.LogEventSupport;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -30,6 +31,8 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
     private byte[] requestInfo;
 
     private LogEventSupport logEventSupport;
+
+    private LogUrl logUrl;
 
     public URLTraceLog() {
         logHandler = Loggables.getUrlTraceLogHandler();
@@ -119,11 +122,16 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
         return paramMap;
     }
 
-    public static URLTraceLog beginTrace() {
+    public static URLTraceLog beginTrace(LogUrl logUrl) {
         URLTraceLog urlTraceLog = new URLTraceLog();
         urlTraceLog.setId(TraceUtils.getTraceId());
         urlTraceLog.setBeginTime(new Timestamp(System.currentTimeMillis()));
+        urlTraceLog.setLogUrl(logUrl);
         return urlTraceLog;
+    }
+
+    private void setLogUrl(LogUrl logUrl) {
+        this.logUrl = logUrl;
     }
 
     public static void endTrace(HttpServletRequest request, URLTraceLog targetURLTraceLog) {
@@ -150,5 +158,9 @@ public class URLTraceLog extends AbstractLoggable implements Loggable {
             .append("userIp", userIp)
             .append("appName", appName)
             .build();
+    }
+
+    public LogUrl getLogUrl() {
+        return logUrl;
     }
 }

@@ -7,7 +7,7 @@ package com.sinosoft.one.uiutil.exception;
  * Time: 下午5:10
  * To change this template use File | Settings | File Templates.
  */
-public class ConverterException extends Exception {
+public class ConverterException extends RuntimeException {
     public ConverterException() {
         super();
     }

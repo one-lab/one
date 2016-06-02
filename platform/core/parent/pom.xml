@@ -9,13 +9,13 @@
 	<name>One :: Parent</name>
 
 	<properties>
-        <spring.version>3.1.1.RELEASE</spring.version>
+        <spring.version>3.2.8.RELEASE</spring.version>
         <spring.security.version>3.0.5.RELEASE</spring.security.version>
         <org.aspectj.version>1.6.12</org.aspectj.version>
         <hibernate.version>3.6.10.Final</hibernate.version>
         <cxf.version>2.6.0</cxf.version>
         <shiro.version>1.2.0</shiro.version>
-        <jackson.version>2.0.4</jackson.version>
+        <jackson.version>2.2.1</jackson.version>
         <slf4j.version>1.6.4</slf4j.version>
         <jetty.version>7.6.3.v20120416</jetty.version>
         <mockito.version>1.9.0</mockito.version>
@@ -23,14 +23,14 @@
         <selenium.version>2.21.0</selenium.version>
         <atomikos.version>3.8.0</atomikos.version>
         <junit.version>4.10</junit.version>
-        <jbpm5.version>5.2.0.Final</jbpm5.version>
-        <drools.version>5.3.1.Final</drools.version>
+        <jbpm5.version>5.4.0.Final</jbpm5.version>
+        <drools.version>5.5.0.Final</drools.version>
         <struts.version>2.3.4</struts.version>
         <cglib.version>2.2.2</cglib.version>
         <!-- Plugin的属性定义  -->
         <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.5</jdk.version>
+        <jdk.version>1.6</jdk.version>
 	</properties>
 
     <!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
@@ -38,12 +38,20 @@
         <repository>
             <id>nexus</id>
             <name>Team Nexus Repository</name>
-            <url>http://219.141.211.14:9720/nexus/content/groups/public</url>
+            <url>http://123.57.5.3:9092/nexus/content/groups/public</url>
         </repository>
         <repository>
             <id>central</id>
             <name>Central Repository</name>
             <url>http://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>central2</id>
+            <name>Central Repository2</name>
+            <url>http://repo2.maven.org/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -94,7 +102,7 @@
         <pluginRepository>
             <id>nexus</id>
             <name>Team Nexus Repository</name>
-            <url>http://219.141.211.14:9720/nexus/content/groups/public</url>
+            <url>http://123.57.5.3:9092/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -112,14 +120,14 @@
     <!-- 设定团队持续集成发布包服务器 -->
     <distributionManagement>
         <repository>
-            <id>nexus-releases</id>
+            <id>releases</id>
             <name>Team Nexus Release Repository</name>
-            <url>http://219.141.211.14:9720/nexus/content/repositories/releases</url>
+            <url>http://123.57.5.3:9092/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
+            <id>snapshots</id>
             <name>Team Nexus Snapshot Repository</name>
-            <url>http://219.141.211.14:9720/nexus/content/repositories/snapshots</url>
+            <url>http://123.57.5.3:9092/nexus/content/repositories/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
@@ -158,6 +166,11 @@
             <!-- spring basic end  -->
 
             <!-- spring tx begin -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-instrument</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
@@ -1152,6 +1165,7 @@
                     <configuration>
                         <source>${jdk.version}</source>
                         <target>${jdk.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
                         <showWarnings>true</showWarnings>
                     </configuration>
                 </plugin>

@@ -1,6 +1,7 @@
 package com.sinosoft.one.log.config;
 
 import com.sinosoft.one.log.Environment;
+import com.sinosoft.one.log.methodtrace.MethodTraceLogInspectMode;
 import com.sinosoft.one.log.statistics.LogStatisticsHandler;
 import com.sinosoft.one.monitoragent.notification.MethodInitConfigure;
 import com.sinosoft.one.monitoragent.notification.NotificationService;
@@ -25,9 +26,9 @@ public class LogConfigs {
     private List<LogUrl> urls = new ArrayList<LogUrl>();
     private List<LogMethod> methods = new ArrayList<LogMethod>();
     private Environment environment;
+    private MethodTraceLogInspectMode inspectMode;
 
-    @PostConstruct
-    public void init() {
+    public void loadRemoteConfig() {
         try {
             initMethods();
             initUrls();
@@ -197,4 +198,7 @@ public class LogConfigs {
         return false;
     }
 
+    public void setInspectMode(MethodTraceLogInspectMode inspectMode) {
+        this.inspectMode = inspectMode;
+    }
 }

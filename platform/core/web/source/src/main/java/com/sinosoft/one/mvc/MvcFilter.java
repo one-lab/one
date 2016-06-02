@@ -16,10 +16,7 @@
 package com.sinosoft.one.mvc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,6 +32,7 @@ import com.sinosoft.one.mvc.scanner.ModuleResourceProviderImpl;
 import com.sinosoft.one.mvc.scanning.LoadScope;
 import com.sinosoft.one.mvc.scanning.context.MvcWebAppContext;
 import com.sinosoft.one.mvc.util.PrinteHelper;
+import com.sinosoft.one.mvc.web.Dispatcher;
 import com.sinosoft.one.mvc.web.RequestPath;
 import com.sinosoft.one.mvc.web.annotation.ReqMethod;
 import com.sinosoft.one.mvc.web.impl.mapping.ConstantMapping;
@@ -57,12 +55,15 @@ import com.sinosoft.one.mvc.web.instruction.InstructionExecutorImpl;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.SpringVersion;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.util.NestedServletException;
 
 /**
@@ -163,6 +164,9 @@ public class MvcFilter extends GenericFilterBean {
     private Class<? extends ModulesBuilder> modulesBuilderClass = ModulesBuilderImpl.class;
 
     private LoadScope load = new LoadScope("", "controllers");
+
+    /**i18处理对象**/
+    private LocaleResolver localeResolver;
 
     private IgnoredPath[] ignoredPaths = new IgnoredPath[] {
             new IgnoredPathStarts(MvcConstants.VIEWS_PATH_WITH_END_SEP),
@@ -271,6 +275,8 @@ public class MvcFilter extends GenericFilterBean {
 
             WebApplicationContext rootContext = prepareRootApplicationContext();
 
+            initLocaleResolver(rootContext);
+
             if (logger.isInfoEnabled()) {
                 logger.info("[init] exits from 'init/rootContext'");
                 logger.info("[init] call 'init/module'");
@@ -307,6 +313,30 @@ public class MvcFilter extends GenericFilterBean {
             throw new NestedServletException(sb.toString(), e);
         }
     }
+
+
+    /**
+     * Initialize the LocaleResolver used by this class.
+     * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
+     * we default to AcceptHeaderLocaleResolver.
+     */
+    private void initLocaleResolver(ApplicationContext context) {
+        try {
+            this.localeResolver = context.getBean(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME, LocaleResolver.class);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Using LocaleResolver [" + this.localeResolver + "]");
+            }
+        }
+        catch (NoSuchBeanDefinitionException ex) {
+            // We need to use the default.
+            this.localeResolver = context.getAutowireCapableBeanFactory().createBean(org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver.class);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Unable to locate LocaleResolver with name '" + DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME +
+                        "': using default [" + this.localeResolver + "]");
+            }
+        }
+    }
+
 
     /**
      * 接收所有进入 MvcFilter 的请求进行匹配，如果匹配到有相应的处理类处理它则由这个类来处理他、渲染并响应给客户端。
@@ -346,6 +376,10 @@ public class MvcFilter extends GenericFilterBean {
 
         // matched为true代表本次请求被Mvc匹配，不需要转发给容器的其他 filter 或 servlet
         boolean matched = false;
+
+        //增加localResolver处理i18国际化
+        request.setAttribute(DispatcherServlet.LOCALE_RESOLVER_ATTRIBUTE, this.localeResolver);
+
         try {
             // mvc 对象代表Mvc框架对一次请求的执行
             final Mvc mvc = new Mvc(modules, mappingTree, httpRequest, httpResponse, requestPath);

@@ -217,12 +217,8 @@ public class ViewInstruction extends AbstractInstruction {
             } else {
                 directoryPath = viewPathCache.getDirectoryPath();
                 String subDirPath = viewName.substring(0, viewNameIndex);
-                File tempHome = null;
-                try {
-                    tempHome = new File(inv.getServletContext().getResource(directoryPath).toURI());
-                } catch (URISyntaxException e) {
-                    throw new IOException(e.getLocalizedMessage());
-                }
+                //fix 支持相对路径问题，可以在views下 通过相对路径找寻文件
+                File tempHome =  MvcPathUtil.getDirectoryFile(inv, directoryPath);
                 if (!tempHome.exists()) {
                     directoryFile = null;
                 } else {
