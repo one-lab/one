@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Map;
 
-import static oracle.jdbc.OracleTypes.*;
+//import static oracle.jdbc.OracleTypes.*;
 
 /**
  * User: Chunliang.Han
