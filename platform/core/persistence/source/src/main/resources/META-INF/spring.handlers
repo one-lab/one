@@ -1,1 +1,1 @@
-http\://com.sinosoft.one/schema/data/jpa=com.sinosoft.one.data.jpa.repository.config.OneJpaRepositoryNameSpaceHandler
+http\://www.springframework.org/schema/data/jpa=org.springframework.data.jpa.repository.config.OneDataJpaRepositoryNameSpaceHandler

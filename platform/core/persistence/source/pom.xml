@@ -9,7 +9,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>data</artifactId>
-    <version>1.0.5-RELEASE</version>
+    <version>1.11.6-SNAPSHORT</version>
     <name>One :: Data</name>
 
     <properties>
@@ -27,7 +27,7 @@
        <dependency>
            <groupId>org.springframework.data</groupId>
            <artifactId>spring-data-jpa</artifactId>
-           <version>1.1.0.RELEASE</version>
+           <version>1.11.6.RELEASE</version>
        </dependency>
 
         <!-- Logging (SLF4J + JCL bridge) -->
@@ -235,13 +235,6 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
-        <!--one-arch4-->
-        <!--<dependency>-->
-            <!--<groupId>com.sinosoft.one.plugins</groupId>-->
-            <!--<artifactId>arch4</artifactId>-->
-            <!--<version>4.2.7</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>

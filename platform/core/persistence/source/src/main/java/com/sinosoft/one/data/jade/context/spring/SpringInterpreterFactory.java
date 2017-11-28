@@ -17,7 +17,6 @@ package com.sinosoft.one.data.jade.context.spring;
 
 import com.sinosoft.one.data.jade.statement.*;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -32,17 +31,15 @@ import java.util.Map;
  */
 public class SpringInterpreterFactory implements InterpreterFactory, ApplicationContextAware {
 
+    public static SpringInterpreterFactory instance;
+
     private DefaultInterpreterFactory interpreterFactory;
 
-    private ListableBeanFactory beanFactory;
+    private ApplicationContext beanFactory;
 
     public SpringInterpreterFactory() {
+        this.instance = this;
     }
-
-    public SpringInterpreterFactory(ListableBeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
-    }
-
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.beanFactory = applicationContext;

@@ -31,7 +31,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
@@ -44,7 +43,6 @@ import java.util.*;
  * @author 王志亮 [qieqie.wang@gmail.com]
  * @author 廖涵 [in355hz@gmail.com]
  */
-@Transactional(readOnly = true)
 public class DataAccessImpl implements DataAccess, Repository {
 
     private Log log = LogFactory.getLog(DataAccessImpl.class);
@@ -102,7 +100,6 @@ public class DataAccessImpl implements DataAccess, Repository {
     /**
      * 更新 2012-08-16
      */
-    @Transactional
     public int update(String sql, Object[] args, KeyHolder generatedKeyHolder) {
         log.info(sql);
         Session session = em.unwrap(Session.class);
