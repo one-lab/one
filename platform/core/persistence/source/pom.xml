@@ -9,7 +9,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>data</artifactId>
-    <version>1.11.6-SNAPSHORT</version>
+    <version>1.11.6-SNAPSHOT</version>
     <name>One :: Data</name>
 
     <properties>
