@@ -136,7 +136,7 @@ public class BeanPropertyRowMapper implements RowMapper {
                 }
                 String columnName = getColumnName(pd.getName(), pd.getReadMethod());
                 if (columnName != null){
-                    this.mappedFields.put(columnName, pd);
+                    this.mappedFields.put(columnName.toLowerCase(), pd);
                 }
             }
         }
