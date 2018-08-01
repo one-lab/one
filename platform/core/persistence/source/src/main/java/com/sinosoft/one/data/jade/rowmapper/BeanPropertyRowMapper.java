@@ -17,6 +17,8 @@
 package com.sinosoft.one.data.jade.rowmapper;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -39,6 +41,8 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.util.Assert;
+
+import javax.persistence.Column;
 
 /**
  * {@link org.springframework.jdbc.core.RowMapper} implementation that converts a row into a new instance
@@ -130,8 +134,32 @@ public class BeanPropertyRowMapper implements RowMapper {
                         this.mappedFields.put(underscoredName, pd);
                     }
                 }
+                String columnName = getColumnName(pd.getName(), pd.getReadMethod());
+                if (columnName != null){
+                    this.mappedFields.put(columnName, pd);
+                }
             }
         }
+    }
+
+    private String getColumnName(String name, Method readMethod) {
+        try {
+            if (readMethod != null){
+                Column column = readMethod.getAnnotation(Column.class);
+                if (column != null){
+                    return column.name();
+                }
+            }
+            Field field = mappedClass.getDeclaredField(name);
+            if (field != null){
+                Column column = field.getAnnotation(Column.class);
+                if (column != null){
+                    return column.name();
+                }
+            }
+        } catch (NoSuchFieldException e) {
+        }
+        return null;
     }
 
     /**
